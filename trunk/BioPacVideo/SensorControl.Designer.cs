@@ -135,6 +135,7 @@
             this.IDB_OK.TabIndex = 9;
             this.IDB_OK.Text = "OK";
             this.IDB_OK.UseVisualStyleBackColor = true;
+            this.IDB_OK.Click += new System.EventHandler(this.IDB_OK_Click);
             // 
             // IDT_CONTRAST
             // 

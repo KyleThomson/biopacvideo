@@ -84,6 +84,13 @@ namespace BioPacVideo
             Video.YRes = BioIni.IniReadValue("Video", "YRes", 240);
             Video.Quant = BioIni.IniReadValue("Video", "Quant", 4);
             Video.KeyFrames = BioIni.IniReadValue("Video", "KeyFrames", 100);
+            for (int i = 0; i < 16; i++)
+            {
+                Video.Brightness[i] = BioIni.IniReadValue("Video", string.Format("Bright{0}", i), 50);
+                Video.Contrast[i] = BioIni.IniReadValue("Video", string.Format("Contrast{0}", i), 50);
+                Video.Hue[i] = BioIni.IniReadValue("Video", string.Format("Hue{0}", i), 50);
+                Video.Saturation[i] = BioIni.IniReadValue("Video", string.Format("Satur{0}", i), 50);
+            }
             
         }
 
@@ -115,6 +122,13 @@ namespace BioPacVideo
             BioIni.IniWriteValue("Video", "YRes", Video.YRes);
             BioIni.IniWriteValue("Video", "Quant", Video.Quant);
             BioIni.IniWriteValue("Video", "KeyFrames", Video.KeyFrames);
+            for (int i = 0; i < 16; i++)
+            {
+                BioIni.IniWriteValue("Video", string.Format("Bright{0}", i), Video.Brightness[i]);
+                BioIni.IniWriteValue("Video", string.Format("Contrast{0}", i), Video.Contrast[i]);
+                BioIni.IniWriteValue("Video", string.Format("Hue{0}", i), Video.Hue[i]);
+                BioIni.IniWriteValue("Video", string.Format("Satur{0}", i), Video.Saturation[i]);
+            }
         }
 
 
@@ -326,16 +340,18 @@ namespace BioPacVideo
 
         private void videoSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            VideoSettings frm = new VideoSettings();
+            VideoSettings frm = new VideoSettings();         
             frm.ShowDialog(this);
+            UpdateINI(BioIni);
             frm.Dispose();
         }
 
         private void sensorControlToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        {            
             SensorControl frm = new SensorControl(IDC_RATSELECT.SelectedIndex);
             frm.ShowDialog(this);
+            UpdateINI(BioIni);
             frm.Dispose();
-        }
+        }   
     }
 }
