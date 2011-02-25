@@ -84,9 +84,8 @@ int initSDK()
 		if (ErrorVal != SUCCEEDED)
 			return ErrorVal;
 	}
-	else
-		return 3;
-	return 1;	
+	else return 3;
+	return 1; //Succeeded
 }
 int StartSDK(void)
 {
@@ -98,6 +97,31 @@ int StartSDK(void)
 			return res;	
 	}
 	return 1;
+}
+
+int SetContrast(int Chan, long Contrast)
+{
+	int DevNum = Chan / 4;
+	int Switch = Chan % 4;
+	pDVPSDK->AdvDVP_SetContrast(DevNum,Switch,Contrast);
+}
+int SetBrightness(int Chan, long Brightness)
+{
+	int DevNum = Chan / 4;
+	int Switch = Chan % 4;
+	pDVPSDK->AdvDVP_SetBrightness(DevNum,Switch,Brightness);
+}
+int SetHue(int Chan, long Hue)
+{
+	int DevNum = Chan / 4;
+	int Switch = Chan % 4;
+	pDVPSDK->AdvDVP_SetHue(DevNum,Switch,Hue);
+}
+int SetSaturation(int Chan, long Saturation)
+{
+	int DevNum = Chan / 4;
+	int Switch = Chan % 4;
+	pDVPSDK->AdvDVP_SetSaturation(DevNum,Switch,Saturation);
 }
 
 int GetDeviceCount()
@@ -130,19 +154,24 @@ int SetFrameRate(int Frate)
 int StartCapture()
 {
 	int res;
+
 	for (int i = 0; i < nDevCount; i++)
 	{
-		res = pDVPSDK->AdvDVP_Start(i,Switching,NULL,NULL);		
-		if (res !=  SUCCEEDED) 
+		if (pDVPSDK->AdvDVP_GetCapState(i) == STOPPED)
 		{
-			return res;
-		}
-	}	
-	for (int i = 0; i < nDevCount*MAXMUXS; i++)
-	{
+			pDVPSDK->AdvDVP_SetNewFrameCallback(i, (int)NewFrameCallback);
+			//Start Video Capture 	
+			res = pDVPSDK->AdvDVP_Start(i,Switching,NULL,NULL);		
+			if (res !=  SUCCEEDED) 
+			{
+				return res;
+			}
+		}	
+		for (int i = 0; i < nDevCount*MAXMUXS; i++)
+		{
 
+		}
 	}
-	
 }
 
 
@@ -185,13 +214,13 @@ void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFl
 		if (hAVIFile[nChNum] == NULL)
 		{
 			CFileStatus cFileStatus;
-			if (CFile::GetStatus(SavePath, cFileStatus) == TRUE)
+//			if (CFile::GetStatus(SavePath, cFileStatus) == TRUE)
 			{
 				char FileName[MAX_PATH];
 				sprintf(FileName, "%s\\Stream%02d_%04d.avi", SavePath, nChNum, nFileIndex[nChNum]);				
 				hAVIFile[nChNum] = pDVPEncSDK->AdvDVP_CreateAVIFile(FileName, nWidth[nDevNum], nHeight[nDevNum], nEncFrameRate[nChNum]);
 			}
-		}
+		}		
 
 		//First frame of the video file must be key frame.
 		if (dwCompFlags == AVIIF_KEYFRAME)
@@ -217,6 +246,9 @@ void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFl
 	}
 }
 
+
+	
+
 void StreamReadEnd(int nChNum)
 {
 	//Close AVI file
@@ -226,3 +258,143 @@ void StreamReadEnd(int nChNum)
 		hAVIFile[nChNum] = NULL;
 	}
 }
+void SetVideoRes(int XRes, int YRes)
+{
+	for (int i=0; i<nDevCount*MAXMUXS; i++)
+	{
+		pDVPEncSDK->AdvDVP_SetVideoResolution(i,XRes,YRes);
+	}
+}
+
+void SetVideoQuant(int Quant)
+{
+	for (int i=0; i<nDevCount*MAXMUXS; i++)
+	{
+		pDVPEncSDK->AdvDVP_SetVideoQuant(i,Quant);
+	}
+}
+
+void SetKeyInterval(int KeyInt)
+{
+	for (int i=0; i<nDevCount*MAXMUXS; i++)
+	{
+		pDVPEncSDK->AdvDVP_SetVideoKeyInterval(i,KeyInt);
+	}
+}
+
+int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf)
+{
+	int nChNum;
+	if (nID != ID_NEW_FRAME)
+	{
+		nChNum = (nDevNum*MAXMUXS)+nMuxChan;
+      if (*(pBuf+1) & 0x08 ) // FIFO overrun
+      {
+         return 1;
+      }
+		if (*(pBuf+1) & 0x02) {
+			//Videoframe notify local nosignal, we will not give new frames form this channel until the signal is recoverd.
+			//We don't render this frame, because this frame is nosignal frame.		
+			return 1;
+		}
+      // Add by boxu for testing whether the graphics card support YUYV
+
+      /*
+
+      // Add end
+		BITMAPINFOHEADER bih;
+		//Render the data of each channel to the corresponding preview window
+		if (SelChan == (nDevNum*4 + nMuxChan))		
+		memset(&bih, 0, sizeof(bih));
+		bih.biSize = sizeof(bih);
+		bih.biWidth = nWidth[nDevNum];
+		bih.biHeight = nHeight[nDevNum];
+		bih.biPlanes = 1;
+		bih.biBitCount = 16;
+		bih.biCompression = MKFOURCC('Y','U','Y','2');
+		bih.biSizeImage = nHeight[nDevNum] * nWidth[nDevNum] * 2;
+    
+		BOOL bRetVal = DrawDibDraw(DrawDib_ID[nDevNum],
+					hdcStill,
+					0,
+					0,
+					lStillWidth,
+					lStillHeight,
+					&bih,
+					pBuf,
+					0,
+					0,
+					nWidth[nDevNum],
+					nHeight[nDevNum],
+					0);
+		if ( !bRetVal )
+			TRACE( _T( "DrawDibDraw Failed!\n" ) );
+		::ReleaseDC(hPreviewWnd[nChNum], hdcStill);*/ 
+
+
+	//Encode the video frame
+	if (pDVPEncSDK)
+	{
+		if (pDVPEncSDK->AdvDVP_GetState(nChNum) == ENC_RUNNING) {
+			int Ret = pDVPEncSDK->AdvDVP_VideoEncode(nChNum, (LPVOID)pBuf, nBufSize, bKeyFrame[nChNum]);
+			if ((EncoderState)Ret == ENC_BUFFERFULL)
+			{
+				if (bKeyFrame[nChNum])
+					TRACE(_T("Channel %d: Enocde I-frame, Buffer full!\n"), nChNum);
+				else
+					TRACE(_T("Channel %d: Encode P-frame, Buffer full!\n"), nChNum);
+			}
+			else if (Ret != ENC_SUCCEEDED)
+			{
+				if (bKeyFrame[nChNum])
+					TRACE(_T("Channel %d: Enocde I-frame failed!\n"), nChNum);
+				else
+					TRACE(_T("Channel %d: Encode P-frame failed!\n"), nChNum);
+			}
+			else
+			{
+				bKeyFrame[nChNum] = FALSE;
+			}
+		}
+	}
+
+	//Calculate the number of frames for each channel
+	if (bStartTime[nChNum]) {
+		start_time[nChNum] = time(NULL);
+		nFrameCount[nChNum] = 0;
+		bStartTime[nChNum] = FALSE;
+	}
+	end_time[nChNum] = time(NULL);
+	nFrameCount[nChNum]++;
+	return 1;
+}
+}
+
+
+void CloseRecording()
+{
+		for (int i=0; i<nDevCount; i++)
+		{
+			if (pDVPSDK->AdvDVP_GetCapState(i) == RUNNING)
+				pDVPSDK->AdvDVP_Stop(i);
+		}
+		for (int i=0; i<nDevCount*MAXMUXS; i++)
+		{
+			if (pDVPEncSDK->AdvDVP_GetState(i) == ENC_RUNNING)
+				pDVPEncSDK->AdvDVP_StopVideoEncode(i);
+
+			pDVPEncSDK->AdvDVP_CloseEncoder(i);
+		}
+
+		pDVPEncSDK->AdvDVP_CloseSDK();
+		pDVPSDK->AdvDVP_CloseSDK();
+		delete pDVPSDK;
+		delete pDVPEncSDK;
+
+	if (hEncDll)
+		FreeLibrary(hEncDll);
+
+	if (hDll)
+		FreeLibrary(hDll);
+}
+

@@ -49,5 +49,17 @@ namespace BioPacVideo
         [DllImport(@".\VideoWrapper.dll")]
         public static extern int GetDeviceCount();
 
+        [DllImport(@".\VideoWrapper.dll")]
+        public static extern int SetContrast(int Chan, int Contrast);
+
+        [DllImport(@".\VideoWrapper.dll")]
+        public static extern int SetBrightness(int Chan, int Contrast);
+
+        [DllImport(@".\VideoWrapper.dll")]
+        public static extern int SetHue(int Chan, int Contrast);
+
+        [DllImport(@".\VideoWrapper.dll")]
+        public static extern int SetSaturation(int Chan, int Contrast);
+
     }
 }

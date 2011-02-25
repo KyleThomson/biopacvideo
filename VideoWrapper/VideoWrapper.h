@@ -19,10 +19,42 @@ extern "C" _declspec(dllexport) int GetDeviceCount();
 extern "C" _declspec(dllexport) int GetSampleRate(int *Frate);
 extern "C" _declspec(dllexport) int SetSampleRate(int Frate);
 extern "C" _declspec(dllexport) int StartCapture();
-//extern "C" _declspec(dllexport)
+extern "C" _declspec(dllexport) void CloseRecording();
+extern "C" _declspec(dllexport) void SetVideoQuant(int Quant);
+extern "C" _declspec(dllexport) void SetVideoRes(int XRes, int YRes);
+extern "C" _declspec(dllexport) void SetKeyInterval(int KeyInt);
+extern "C" _declspec(dllexport) int SetContrast(int Chan, long Contrast);
+extern "C" _declspec(dllexport) int SetBrightness(int Chan, long Brightness);
+extern "C" _declspec(dllexport) int SetHue(int Chan, long Hue);
+extern "C" _declspec(dllexport) int SetSaturation(int Chan, long Saturation);
+
 
 int nDevCount;
-int Switching = 0; 
+int SelChan = 0;
+int Switching = 4; 
+
+int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
+
+typedef enum
+{
+	ENC_STOPPED			= 1,
+	ENC_RUNNING			= 2,
+	ENC_UNINITIALIZED	= -1,
+} EncoderState;
+
+typedef enum
+{
+	ENC_SUCCEEDED		= 1,
+	ENC_FAILED			= 0,
+	ENC_SDKINITFAILED	= -1,
+	ENC_ENCINITFAILED	= -2,
+	ENC_PARAMERROR		= -3,
+	ENC_ENCNUMERROR		= -4,
+	ENC_BUFFERFULL		= -5
+} EncRes;
+
+
+
 
 class CVideoWrapperApp : public CWinApp
 {

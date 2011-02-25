@@ -16,6 +16,7 @@ namespace BioPacVideo
         public int YRes;
         public int KeyFrames;
         public int Quant;
+        public bool SDK_Running; 
         public int[] Contrast;
         public int[] Brightness;
         public int[] Hue;
@@ -26,6 +27,7 @@ namespace BioPacVideo
             Brightness = new int[16];
             Hue = new int[16];
             Saturation = new int[16];
+            SDK_Running = false;
         }
         public static VideoTemplate Instance
         {
@@ -37,7 +39,7 @@ namespace BioPacVideo
         public void initVideo()
         {
             Res =  (AdvantechCodes.tagRes) VideoWrapper.initSDK();
-            Res = (AdvantechCodes.tagRes)VideoWrapper.StartSDK();
+            Res = (AdvantechCodes.tagRes) VideoWrapper.StartSDK();
             Device_Count = VideoWrapper.GetDeviceCount();
         }
         
@@ -45,6 +47,12 @@ namespace BioPacVideo
         {
             return Res_text[(int)Res + 6];
         }
-            
+        public void SetSensorControls(int Chan)
+        {
+            VideoWrapper.SetContrast(Chan, Contrast[Chan]);
+            VideoWrapper.SetBrightness(Chan, Brightness[Chan]);
+            VideoWrapper.SetHue(Chan, Hue[Chan]);
+            VideoWrapper.SetSaturation(Chan, Saturation[Chan]);
+        }            
     }
 }

@@ -30,21 +30,30 @@ namespace BioPacVideo
         private void IDS_CONTRAST_Scroll(object sender, EventArgs e)
         {
             IDT_CONTRAST.Text = IDS_CONTRAST.Value.ToString();
+            Video.Contrast[ChanNum] = IDS_CONTRAST.Value;
         }
 
         private void IDS_BRIGHTNESS_Scroll(object sender, EventArgs e)
         {
             IDT_BRIGHTNESS.Text = IDS_BRIGHTNESS.Value.ToString();
+            Video.Brightness[ChanNum] = IDS_BRIGHTNESS.Value;
         }
 
         private void IDS_SATURATION_Scroll(object sender, EventArgs e)
         {
             IDT_SATURATION.Text = IDS_SATURATION.Value.ToString();
+            Video.Saturation[ChanNum] = IDS_SATURATION.Value;
         }
 
         private void IDS_HUE_Scroll(object sender, EventArgs e)
         {
             IDT_HUE.Text = IDS_HUE.Value.ToString();
+            Video.Hue[ChanNum] = IDS_HUE.Value;
+        }
+
+        private void IDB_OK_Click(object sender, EventArgs e)
+        {            
+            this.Close();
         }
     }
 }
