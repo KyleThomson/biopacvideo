@@ -32,6 +32,7 @@ namespace BioPacVideo
         private bool[] DigitalChannel;
         private int MaxDrawSize;
         Thread AcqThread = null;
+        Thread FeederTestThread = null;        
         public String Filename;
         public String RecordingDirectory;
         private BinaryWriter BinaryFileID;
@@ -491,12 +492,25 @@ namespace BioPacVideo
          *      Feeder Fucnctions
          *      
          * ************************************************************/
-        public void ClearFeeders()
+        private void FeederTestThreadDefinition()
         {
             for (int i = 0; i < 8; i++)
             {
                 FeederTest[i] = false;
             }
+            for (uint i = 0; i < 2; i++)
+            {
+                MPCLASS.setDigitalIO(i, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
+                Thread.Sleep(1000);
+                MPCLASS.setDigitalIO(i, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
+            }            
         }
+        public void RunFeederTest()
+        {
+            FeederTestThread = new Thread(new ThreadStart(FeederTestThreadDefinition));
+            FeederTestThread.Start();
+            while (FeederTestThread.IsAlive) { };
+        }
+
     }
 }

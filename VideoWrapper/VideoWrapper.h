@@ -27,11 +27,14 @@ extern "C" _declspec(dllexport) int SetContrast(int Chan, long Contrast);
 extern "C" _declspec(dllexport) int SetBrightness(int Chan, long Brightness);
 extern "C" _declspec(dllexport) int SetHue(int Chan, long Hue);
 extern "C" _declspec(dllexport) int SetSaturation(int Chan, long Saturation);
+extern "C" _declspec(dllexport) void SetFName(char* FName, int FileStart);
+
 
 
 int nDevCount;
 int SelChan = 0;
 int Switching = 4; 
+int FileStart = 0;
 
 int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
 

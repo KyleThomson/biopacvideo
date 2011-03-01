@@ -45,6 +45,7 @@ int nEncKeyInterval[MAXDEVS*MAXMUXS];
 int nFrameCount[MAXDEVS*MAXMUXS];
 int nFileIndex[MAXDEVS*MAXMUXS];
 INT64 nAccumulatedSize[MAXDEVS*MAXMUXS];
+char SaveName[256];
 
 int Global_Frate;
 typedef int (WINAPI* ptr_func1)(void **pp);
@@ -217,7 +218,7 @@ void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFl
 //			if (CFile::GetStatus(SavePath, cFileStatus) == TRUE)
 			{
 				char FileName[MAX_PATH];
-				sprintf(FileName, "%s\\Stream%02d_%04d.avi", SavePath, nChNum, nFileIndex[nChNum]);				
+				sprintf(FileName, "%s%02d_%04d.avi", SaveName, nChNum, FileStart);						
 				hAVIFile[nChNum] = pDVPEncSDK->AdvDVP_CreateAVIFile(FileName, nWidth[nDevNum], nHeight[nDevNum], nEncFrameRate[nChNum]);
 			}
 		}		
@@ -398,3 +399,8 @@ void CloseRecording()
 		FreeLibrary(hDll);
 }
 
+void SetFName(char FName[256], int FStart)
+{
+	memcpy(&SaveName,&FName, 256);
+	FileStart = FStart;
+}

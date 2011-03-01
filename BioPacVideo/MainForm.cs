@@ -167,6 +167,9 @@ namespace BioPacVideo
                     RecordingDir = MP.RecordingDirectory + "\\" + DateString;
                     Directory.CreateDirectory(RecordingDir);
                     MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
+                    Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
+                    Video.FileStart = 1;
+                   // Video.SetFileName();
                     WriteOnce = new IniFile(RecordingDir + "\\" + DateString + "_Settings.txt");
                     UpdateINI(WriteOnce);
                     RecordingButton.Text = "Stop Recording";
@@ -178,7 +181,6 @@ namespace BioPacVideo
                     MP.isrecording = true;
                     MP.isrecording = MP.StartRecording();
                     RunDisplayThread = true;
-                    
                     ThreadDisplay.Start();
                 }
                 else

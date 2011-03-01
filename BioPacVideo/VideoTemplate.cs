@@ -15,6 +15,8 @@ namespace BioPacVideo
         public int XRes;
         public int YRes;
         public int KeyFrames;
+        public String FileName;
+        public int FileStart;
         public int Quant;
         public bool SDK_Running; 
         public int[] Contrast;
@@ -53,6 +55,12 @@ namespace BioPacVideo
             VideoWrapper.SetBrightness(Chan, Brightness[Chan]);
             VideoWrapper.SetHue(Chan, Hue[Chan]);
             VideoWrapper.SetSaturation(Chan, Saturation[Chan]);
-        }            
+        }
+        public void SetFileName()
+        {
+            StringBuilder N = new StringBuilder(256);
+            N.Append(FileName);
+            VideoWrapper.SetFName(N, FileStart);
+        }
     }
 }

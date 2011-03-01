@@ -26,14 +26,14 @@ namespace BioPacVideo
         {
             CheckBox TempBox;
             //Reset Test
-            MP.ClearFeeders();
+            
             for (int i = 0; i < 8; i++)
             {
                 TempBox = TestBoxes[i] as CheckBox;
                 TempBox.Text = string.Format("Feeder {0} -", i + 1);
                 TempBox.Checked = false;
             }
-            //Run Test
+            MP.RunFeederTest();
             for (int i = 0; i < 8; i++)
             {
                 TempBox = TestBoxes[i] as CheckBox;
