@@ -61,5 +61,14 @@ namespace BioPacVideo
         [DllImport(@".\VideoWrapper.dll")]
         public static extern int SetSaturation(int Chan, int Contrast);
 
+        [DllImport(@".\VideoWrapper.dll")]
+        public static extern void SetFName(StringBuilder FName, int FStart);
+
+        [DllImport(@".\VideoWrapper.dll")]
+        public static extern void CloseRecording();
+
+        [DllImport(@".\VideoWrapper.dll")]
+        public static extern void StartCapture();
+
     }
 }
