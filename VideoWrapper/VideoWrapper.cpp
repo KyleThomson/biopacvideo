@@ -10,6 +10,7 @@
 
 
 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -19,7 +20,7 @@
 using namespace std;
 typedef queue<LPVOID> LPQUEUE;
 #define MAXMUXS 4
-#define MAXDEVS 2
+#define MAXDEVS 4
 #define ID_NEW_FRAME 37810
 #define ID_MUX0_NEW_FRAME 37800
 #define ID_MUX1_NEW_FRAME 37801
@@ -45,7 +46,7 @@ int nEncKeyInterval[MAXDEVS*MAXMUXS];
 int nFrameCount[MAXDEVS*MAXMUXS];
 int nFileIndex[MAXDEVS*MAXMUXS];
 INT64 nAccumulatedSize[MAXDEVS*MAXMUXS];
-char SaveName[256];
+char* SaveName;
 
 int Global_Frate;
 typedef int (WINAPI* ptr_func1)(void **pp);
@@ -55,6 +56,15 @@ HINSTANCE hDll;
 HINSTANCE hEncDll;
 IDVP7010BDLL *pDVPSDK = NULL;
 IDVP7010BEncDLL *pDVPEncSDK = NULL;
+
+
+void StreamReadBegin(int nChNum);	//Begin Video Stream Read Callback function
+void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFlags);	//Video Stream Read Callback function
+void StreamReadEnd(int nChNum);		//End Video Stream Read Callback function
+//StreamRead callback function sturcture
+STREAMREAD_STRUCT StreamRead = {StreamReadBegin,
+								StreamReadProc,
+								StreamReadEnd};
 
 
 int initSDK()
@@ -90,13 +100,21 @@ int initSDK()
 }
 int StartSDK(void)
 {
-	int res = pDVPSDK->AdvDVP_InitSDK();
+	int res = pDVPSDK->AdvDVP_InitSDK();	
 	if (res == SUCCEEDED)
 	{
 		res = pDVPSDK->AdvDVP_GetNoOfDevices(&nDevCount);
 		if (res != SUCCEEDED)
 			return res;	
 	}
+	res = pDVPEncSDK->AdvDVP_InitSDK();
+	if (res == SUCCEEDED)
+	{
+		res = pDVPSDK->AdvDVP_GetNoOfDevices(&nDevCount);
+		if (res != SUCCEEDED)
+			return res;	
+	}
+
 	return 1;
 }
 
@@ -104,25 +122,26 @@ int SetContrast(int Chan, long Contrast)
 {
 	int DevNum = Chan / 4;
 	int Switch = Chan % 4;
-	pDVPSDK->AdvDVP_SetContrast(DevNum,Switch,Contrast);
+	return pDVPSDK->AdvDVP_SetContrast(DevNum,Switch,Contrast);
 }
 int SetBrightness(int Chan, long Brightness)
 {
 	int DevNum = Chan / 4;
 	int Switch = Chan % 4;
-	pDVPSDK->AdvDVP_SetBrightness(DevNum,Switch,Brightness);
+	return pDVPSDK->AdvDVP_SetBrightness(DevNum,Switch,Brightness);
 }
 int SetHue(int Chan, long Hue)
 {
 	int DevNum = Chan / 4;
 	int Switch = Chan % 4;
-	pDVPSDK->AdvDVP_SetHue(DevNum,Switch,Hue);
+	return pDVPSDK->AdvDVP_SetHue(DevNum,Switch,Hue);
 }
 int SetSaturation(int Chan, long Saturation)
 {
 	int DevNum = Chan / 4;
 	int Switch = Chan % 4;
-	pDVPSDK->AdvDVP_SetSaturation(DevNum,Switch,Saturation);
+	return pDVPSDK->AdvDVP_SetSaturation(DevNum,Switch,Saturation);
+	
 }
 
 int GetDeviceCount()
@@ -146,8 +165,8 @@ int SetFrameRate(int Frate)
 	int res;
 	Global_Frate = Frate;
 	for (int i = 0; i < nDevCount; i++)
-	{
-		res = pDVPSDK->AdvDVP_SetFrameRate(i, Switching, Frate);
+	{		
+		res = pDVPSDK->AdvDVP_SetFrameRate(i, Switching, Frate);	
 	}
 	return res;
 }
@@ -170,20 +189,14 @@ int StartCapture()
 		}	
 		for (int i = 0; i < nDevCount*MAXMUXS; i++)
 		{
-
+			pDVPEncSDK->AdvDVP_SetStreamReadCB(&StreamRead);
+			pDVPEncSDK->AdvDVP_StartVideoEncode(i);
 		}
 	}
 }
 
 
-void StreamReadBegin(int nChNum);	//Begin Video Stream Read Callback function
-void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFlags);	//Video Stream Read Callback function
-void StreamReadEnd(int nChNum);		//End Video Stream Read Callback function
 
-//StreamRead callback function sturcture
-STREAMREAD_STRUCT StreamRead = {StreamReadBegin,
-								StreamReadProc,
-								StreamReadEnd};
 
 
 void StreamReadBegin(int nChNum)
@@ -196,59 +209,40 @@ void StreamReadBegin(int nChNum)
 void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFlags)
 {
 	int nDevNum = nChNum/MAXMUXS;
-	if (bSave[nDevNum])
+	nAccumulatedSize[nChNum] += lBufSize;
+	if (nAccumulatedSize[nChNum] >= 1900*MBYTE && dwCompFlags == AVIIF_KEYFRAME)	//The size limit of the AVI file is 2GB
 	{
-		nAccumulatedSize[nChNum] += lBufSize;
-		if (nAccumulatedSize[nChNum] >= 1900*MBYTE && dwCompFlags == AVIIF_KEYFRAME)	//The size limit of the AVI file is 2GB
-		{
-			nAccumulatedSize[nChNum] = 0;
-			nFileIndex[nChNum]++;
-			//Close AVI file
-			if (hAVIFile[nChNum])
-			{
-				pDVPEncSDK->AdvDVP_CloseAVIFile(hAVIFile[nChNum]);
-				hAVIFile[nChNum] = NULL;
-			}
-		}
-
-		//Create AVI file
-		if (hAVIFile[nChNum] == NULL)
-		{
-			CFileStatus cFileStatus;
-//			if (CFile::GetStatus(SavePath, cFileStatus) == TRUE)
-			{
-				char FileName[MAX_PATH];
-				sprintf(FileName, "%s%02d_%04d.avi", SaveName, nChNum, FileStart);						
-				hAVIFile[nChNum] = pDVPEncSDK->AdvDVP_CreateAVIFile(FileName, nWidth[nDevNum], nHeight[nDevNum], nEncFrameRate[nChNum]);
-			}
-		}		
-
-		//First frame of the video file must be key frame.
-		if (dwCompFlags == AVIIF_KEYFRAME)
-		{
-			bStartSave[nChNum] = TRUE;
-		}
-
-		//Write AVI file
-		if (hAVIFile[nChNum] && bStartSave[nChNum])
-		{
-			pDVPEncSDK->AdvDVP_WriteAVIFile(hAVIFile[nChNum], pStreamBuf, lBufSize, dwCompFlags);
-		}
-	}
-	else
-	{
+		nAccumulatedSize[nChNum] = 0;
+		nFileIndex[nChNum]++;
 		//Close AVI file
 		if (hAVIFile[nChNum])
 		{
 			pDVPEncSDK->AdvDVP_CloseAVIFile(hAVIFile[nChNum]);
 			hAVIFile[nChNum] = NULL;
-			bStartSave[nChNum] = FALSE;
 		}
+	}
+	//Create AVI file (if closed or unopened)
+	if (hAVIFile[nChNum] == NULL)
+	{
+		CFileStatus cFileStatus;
+		char FileName[MAX_PATH];
+		SaveName = "C:\\Test";
+		sprintf(FileName, "%s%02d_%04d.avi", SaveName, nChNum, FileStart);						
+		hAVIFile[nChNum] = pDVPEncSDK->AdvDVP_CreateAVIFile(FileName, nWidth[nDevNum], nHeight[nDevNum], 7);		
+	}		
+	//First frame of the video file must be key frame.
+	if (dwCompFlags == AVIIF_KEYFRAME)
+	{
+		bStartSave[nChNum] = TRUE;
+	}
+
+	//Write AVI file
+	if (hAVIFile[nChNum] && bStartSave[nChNum])
+	{
+		pDVPEncSDK->AdvDVP_WriteAVIFile(hAVIFile[nChNum], pStreamBuf, lBufSize, dwCompFlags);
 	}
 }
 
-
-	
 
 void StreamReadEnd(int nChNum)
 {
@@ -259,28 +253,54 @@ void StreamReadEnd(int nChNum)
 		hAVIFile[nChNum] = NULL;
 	}
 }
-void SetVideoRes(int XRes, int YRes)
+
+
+int SetVideoRes(int XRes, int YRes)
 {
+	for (int i = 0; i < nDevCount; i++) //Set Video res per device
+	{
+		switch(XRes) 
+		{
+			case 640:
+			pDVPSDK->AdvDVP_SetResolution(i,SIZEQVGA);
+			break;
+			case 320:
+			pDVPSDK->AdvDVP_SetResolution(i,SIZEVGA);
+			break;
+			case 160:
+				pDVPSDK->AdvDVP_SetResolution(i,SIZESUBQVGA);
+			break;
+		}
+	}
+	//Set the resolution per camera for encoding	
 	for (int i=0; i<nDevCount*MAXMUXS; i++)
 	{
-		pDVPEncSDK->AdvDVP_SetVideoResolution(i,XRes,YRes);
+		pDVPEncSDK->AdvDVP_SetVideoResolution(i,XRes,YRes);		
+	} 
+	for (int i=0; i<nDevCount; i++) //Set the capture resolution for all devices. C# rocks. 
+	{
+		nWidth[i] = XRes;
+		nHeight[i] = YRes;
 	}
+	return 1;
 }
-
-void SetVideoQuant(int Quant)
+	
+int SetVideoQuant(int Quant)
 {
 	for (int i=0; i<nDevCount*MAXMUXS; i++)
 	{
 		pDVPEncSDK->AdvDVP_SetVideoQuant(i,Quant);
 	}
+	return 1;
 }
 
-void SetKeyInterval(int KeyInt)
+int SetKeyInterval(int KeyInt)
 {
 	for (int i=0; i<nDevCount*MAXMUXS; i++)
 	{
 		pDVPEncSDK->AdvDVP_SetVideoKeyInterval(i,KeyInt);
 	}
+	return 1;
 }
 
 int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf)
@@ -293,11 +313,11 @@ int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSiz
       {
          return 1;
       }
-		if (*(pBuf+1) & 0x02) {
+	/*	if (*(pBuf+1) & 0x02) {
 			//Videoframe notify local nosignal, we will not give new frames form this channel until the signal is recoverd.
 			//We don't render this frame, because this frame is nosignal frame.		
 			return 1;
-		}
+		}*/ //Render this frame, for video recording 
       // Add by boxu for testing whether the graphics card support YUYV
 
       /*
@@ -372,7 +392,7 @@ int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSiz
 }
 
 
-void CloseRecording()
+int  CloseRecording(void)
 {
 		for (int i=0; i<nDevCount; i++)
 		{
@@ -397,10 +417,12 @@ void CloseRecording()
 
 	if (hDll)
 		FreeLibrary(hDll);
+	return 1;
 }
 
-void SetFName(char FName[256], int FStart)
+void SetFName(LPTSTR FName, int FStart)
 {
-	memcpy(&SaveName,&FName, 256);
+	SaveName = new char[256];
+	//SaveName = FName;
 	FileStart = FStart;
 }

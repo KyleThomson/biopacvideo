@@ -42,7 +42,9 @@ namespace BioPacVideo
         {
             Res =  (AdvantechCodes.tagRes) VideoWrapper.initSDK();
             Res = (AdvantechCodes.tagRes) VideoWrapper.StartSDK();
-            Device_Count = VideoWrapper.GetDeviceCount();
+            Device_Count = VideoWrapper.GetDeviceCount(); 
+            VideoWrapper.SetVideoQuant((short) Quant);
+
         }
         
         public string GetResText()
@@ -58,9 +60,20 @@ namespace BioPacVideo
         }
         public void SetFileName()
         {
-            StringBuilder N = new StringBuilder(256);
-            N.Append(FileName);
-            VideoWrapper.SetFName(N, FileStart);
+            StringBuilder X = new StringBuilder(256);
+            X.Append(FileName);
+            VideoWrapper.SetFName(X, FileStart);
+        }
+        public void StartRecording()
+        {
+            VideoWrapper.StartCapture();
+        }
+        public void LoadSettings()
+        {
+            //VideoWrapper.SetVideoQuant(Quant);
+            VideoWrapper.SetVideoRes(XRes, YRes);
+            VideoWrapper.SetKeyInterval(KeyFrames);
+            VideoWrapper.SetSampleRate(30);            
         }
     }
 }
