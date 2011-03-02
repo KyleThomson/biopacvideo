@@ -166,19 +166,21 @@ namespace BioPacVideo
                     DateString = string.Format("{0:yyyy}{0:MM}{0:dd}", DateTime.Now);
                     RecordingDir = MP.RecordingDirectory + "\\" + DateString;
                     Directory.CreateDirectory(RecordingDir);
-                    MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
-                    Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
-                    Video.FileStart = 1;
-                   // Video.SetFileName();
+                    MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;                  
                     WriteOnce = new IniFile(RecordingDir + "\\" + DateString + "_Settings.txt");
                     UpdateINI(WriteOnce);
+                    //Video Stuff
+                    Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
+                    Video.FileStart = 1;
+                    //Video.SetFileName();
+                    Video.LoadSettings();
+                    Video.StartRecording();
                     RecordingButton.Text = "Stop Recording";
                     RecordingStatus.Text = "Recording";
                     IDM_SELECTCHANNELS.Enabled = false;
                     IDM_SETTINGS.Enabled = false;
                     IDM_DISCONNECTBIOPAC.Enabled = false;
-                    RecordingButton.BackColor = Color.Red;
-                    MP.isrecording = true;
+                    RecordingButton.BackColor = Color.Red;                    
                     MP.isrecording = MP.StartRecording();
                     RunDisplayThread = true;
                     ThreadDisplay.Start();

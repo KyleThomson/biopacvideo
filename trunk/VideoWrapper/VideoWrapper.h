@@ -13,21 +13,21 @@
 // CVideoWrapperApp
 // See VideoWrapper.cpp for the implementation of this class
 //
-extern "C" _declspec(dllexport) int initSDK(void);
-extern "C" _declspec(dllexport) int StartSDK(void);
-extern "C" _declspec(dllexport) int GetDeviceCount();
-extern "C" _declspec(dllexport) int GetSampleRate(int *Frate);
-extern "C" _declspec(dllexport) int SetSampleRate(int Frate);
-extern "C" _declspec(dllexport) int StartCapture();
-extern "C" _declspec(dllexport) void CloseRecording();
-extern "C" _declspec(dllexport) void SetVideoQuant(int Quant);
-extern "C" _declspec(dllexport) void SetVideoRes(int XRes, int YRes);
-extern "C" _declspec(dllexport) void SetKeyInterval(int KeyInt);
-extern "C" _declspec(dllexport) int SetContrast(int Chan, long Contrast);
-extern "C" _declspec(dllexport) int SetBrightness(int Chan, long Brightness);
+extern "C" __declspec(dllexport) int initSDK(void);
+extern "C" __declspec(dllexport) int StartSDK(void);
+extern "C" __declspec(dllexport) int GetDeviceCount(void);
+extern "C" __declspec(dllexport) int SetVideoQuant(int Quant);
+extern "C" __declspec(dllexport) int SetContrast(int Chan, long Contrast);
+extern "C" __declspec(dllexport) int SetBrightness(int Chan, long Brightness);
 extern "C" _declspec(dllexport) int SetHue(int Chan, long Hue);
 extern "C" _declspec(dllexport) int SetSaturation(int Chan, long Saturation);
-extern "C" _declspec(dllexport) void SetFName(char* FName, int FileStart);
+extern "C" _declspec(dllexport) int SetKeyInterval(int KeyInt);
+extern "C" _declspec(dllexport) int SetVideoRes(int XRes, int YRes);
+extern "C" _declspec(dllexport) int SetSampleRate(int Frate);
+extern "C" _declspec(dllexport) int StartCapture(void);
+extern "C" _declspec(dllexport) int CloseRecording(void);
+extern "C" _declspec(dllexport) void SetFName(LPTSTR FName, int FileStart);
+extern "C" _declspec(dllexport) int GetSampleRate(int *Frate);
 
 
 
@@ -56,7 +56,14 @@ typedef enum
 	ENC_BUFFERFULL		= -5
 } EncRes;
 
-
+typedef enum 
+{
+	SIZEFULLPAL=0,
+	SIZED1,
+	SIZEVGA,
+	SIZEQVGA,
+	SIZESUBQVGA
+} VideoSize;
 
 
 class CVideoWrapperApp : public CWinApp
@@ -107,14 +114,6 @@ typedef enum tagAnalogVideoFormat
     Video_SECAM_B    = 0x00001000
 } AnalogVideoFormat;
 
-typedef enum 
-{
-	SIZEFULLPAL=0,
-	SIZED1,
-	SIZEVGA,
-	SIZEQVGA,
-	SIZESUBQVGA
-} VideoSize;
 
 typedef enum
 {
