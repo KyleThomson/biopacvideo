@@ -141,6 +141,9 @@ namespace BioPacVideo
                 Invoked();
                 TickCount++;
                 TickCountLabel.Text = string.Format("Buffer: {0}%", MP.buffull);
+                IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
+                IDT_VIDEOSTATUS.Text = Video.EncoderResult();
+
             }
         }
 
@@ -172,9 +175,11 @@ namespace BioPacVideo
                     //Video Stuff
                     Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
                     Video.FileStart = 1;
-                    //Video.SetFileName();
+                    Video.SetFileName();
                     Video.LoadSettings();
                     Video.StartRecording();
+                    IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
+                    IDT_VIDEOSTATUS.Text = Video.GetResText();
                     RecordingButton.Text = "Stop Recording";
                     RecordingStatus.Text = "Recording";
                     IDM_SELECTCHANNELS.Enabled = false;
@@ -191,10 +196,12 @@ namespace BioPacVideo
                     RecordingStatus.Text = "Not Recording";
                     MP.isrecording = false;
                     MP.StopRecording();
+                    Video.StopRecording();
                     IDM_SELECTCHANNELS.Enabled = true;
                     IDM_SETTINGS.Enabled = true;
                     IDM_DISCONNECTBIOPAC.Enabled = true;
-                    RecordingButton.Text = "Start Recording";
+                    IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
+                    RecordingButton.Text = "Start Recording";                    
                     RecordingButton.BackColor = Color.Green;
                 }
             }
@@ -251,6 +258,8 @@ namespace BioPacVideo
             UpdateINI(BioIni);
             MPLastMessage.Text = MPTemplate.MPRET[(int)MP.MPReturn];
         }
+
+
         private void disconnectBioPacToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MP.isconnected)
@@ -268,6 +277,8 @@ namespace BioPacVideo
             }
             MPLastMessage.Text = MPTemplate.MPRET[(int)MP.MPReturn];
         }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -298,6 +309,7 @@ namespace BioPacVideo
         {                   
             this.Dispose();
         }
+
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RecordSettings frm = new RecordSettings(MP.SampleRate, MP.DisplayLength, MP.Voltage);
@@ -337,9 +349,7 @@ namespace BioPacVideo
             
             Video.initVideo();            
             IDT_DEVICECOUNT.Text = string.Format("Device Count ({0})",Video.Device_Count);
-            IDT_VIDEOSTATUS.Text = Video.GetResText();
-            //Video.Init_SDK();
-            //IDT_VIDEOSTATUS.Text = Video.GetResText();
+            IDT_VIDEOSTATUS.Text = Video.GetResText();            
         }
 
         private void videoSettingsToolStripMenuItem_Click(object sender, EventArgs e)

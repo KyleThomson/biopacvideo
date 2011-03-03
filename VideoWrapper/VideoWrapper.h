@@ -23,18 +23,21 @@ extern "C" _declspec(dllexport) int SetHue(int Chan, long Hue);
 extern "C" _declspec(dllexport) int SetSaturation(int Chan, long Saturation);
 extern "C" _declspec(dllexport) int SetKeyInterval(int KeyInt);
 extern "C" _declspec(dllexport) int SetVideoRes(int XRes, int YRes);
-extern "C" _declspec(dllexport) int SetSampleRate(int Frate);
+extern "C" _declspec(dllexport) int SetFrameRate(int Frate);
 extern "C" _declspec(dllexport) int StartCapture(void);
 extern "C" _declspec(dllexport) int CloseRecording(void);
 extern "C" _declspec(dllexport) void SetFName(LPTSTR FName, int FileStart);
 extern "C" _declspec(dllexport) int GetSampleRate(int *Frate);
-
-
+extern "C" _declspec(dllexport) int GetEncoderStatus();
+extern "C" _declspec(dllexport) int GetEncRes();
+extern "C" _declspec(dllexport) int StartEncoding();
+extern "C" _declspec(dllexport) int SetNTSC();
 
 int nDevCount;
 int SelChan = 0;
 int Switching = 4; 
 int FileStart = 0;
+
 
 int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
 
@@ -53,8 +56,13 @@ typedef enum
 	ENC_ENCINITFAILED	= -2,
 	ENC_PARAMERROR		= -3,
 	ENC_ENCNUMERROR		= -4,
-	ENC_BUFFERFULL		= -5
+	ENC_BUFFERFULL		= -5,
+	ENC_BFRAMEFAIL_I      = -6,
+	ENC_BFRAMEFAIL_P      = -7
+
 } EncRes;
+
+int LastEncRes;
 
 typedef enum 
 {

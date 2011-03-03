@@ -114,7 +114,23 @@ int StartSDK(void)
 		if (res != SUCCEEDED)
 			return res;	
 	}
-
+	for (int i = 0; i < nDevCount*MAXMUXS; i++)
+	{
+		LastEncRes = pDVPEncSDK->AdvDVP_InitEncoder(i, ENC_BUF_SIZE);
+		if (LastEncRes != 1)
+			return LastEncRes;
+	}
+	return 1;
+}
+	
+int SetVideoQuant(int Quant)
+{
+	for (int i=0; i<nDevCount*MAXMUXS; i++)
+	{
+		LastEncRes = pDVPEncSDK->AdvDVP_SetVideoQuant(i,Quant);
+		if (LastEncRes != 1)
+			return LastEncRes;
+	}
 	return 1;
 }
 
@@ -140,8 +156,12 @@ int SetSaturation(int Chan, long Saturation)
 {
 	int DevNum = Chan / 4;
 	int Switch = Chan % 4;
-	return pDVPSDK->AdvDVP_SetSaturation(DevNum,Switch,Saturation);
-	
+	return pDVPSDK->AdvDVP_SetSaturation(DevNum,Switch,Saturation);	
+}
+
+int GetEncoderStatus()
+{
+	return pDVPEncSDK->AdvDVP_GetState(0);
 }
 
 int GetDeviceCount()
@@ -179,23 +199,35 @@ int StartCapture()
 	{
 		if (pDVPSDK->AdvDVP_GetCapState(i) == STOPPED)
 		{
-			pDVPSDK->AdvDVP_SetNewFrameCallback(i, (int)NewFrameCallback);
-			//Start Video Capture 	
-			res = pDVPSDK->AdvDVP_Start(i,Switching,NULL,NULL);		
+			res = pDVPSDK->AdvDVP_SetNewFrameCallback(i, (int)NewFrameCallback);
 			if (res !=  SUCCEEDED) 
 			{
 				return res;
 			}
-		}	
-		for (int i = 0; i < nDevCount*MAXMUXS; i++)
+			//Start Video Capture 	
+			res = pDVPSDK->AdvDVP_Start(i,3,NULL,NULL);		
+			if (res !=  SUCCEEDED) 
+			{
+				return res;
+			}
+		}			
+	}
+	return res;
+
+}
+int StartEncoding()
+{	
+	for (int i = 0; i < nDevCount*MAXMUXS; i++)
+	{
+		pDVPEncSDK->AdvDVP_SetStreamReadCB(&StreamRead);		
+		LastEncRes = pDVPEncSDK->AdvDVP_StartVideoEncode(i);
+		if (LastEncRes !=  SUCCEEDED) 
 		{
-			pDVPEncSDK->AdvDVP_SetStreamReadCB(&StreamRead);
-			pDVPEncSDK->AdvDVP_StartVideoEncode(i);
+			return LastEncRes;
 		}
 	}
+	return 1;
 }
-
-
 
 
 
@@ -223,11 +255,10 @@ void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFl
 	}
 	//Create AVI file (if closed or unopened)
 	if (hAVIFile[nChNum] == NULL)
-	{
-		CFileStatus cFileStatus;
+	{		
 		char FileName[MAX_PATH];
-		SaveName = "C:\\Test";
-		sprintf(FileName, "%s%02d_%04d.avi", SaveName, nChNum, FileStart);						
+		//sprintf(SaveName, "C:\\Test");
+		sprintf(FileName, "%02d_%04d.avi", nChNum, FileStart);						
 		hAVIFile[nChNum] = pDVPEncSDK->AdvDVP_CreateAVIFile(FileName, nWidth[nDevNum], nHeight[nDevNum], 7);		
 	}		
 	//First frame of the video file must be key frame.
@@ -239,17 +270,22 @@ void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFl
 	//Write AVI file
 	if (hAVIFile[nChNum] && bStartSave[nChNum])
 	{
-		pDVPEncSDK->AdvDVP_WriteAVIFile(hAVIFile[nChNum], pStreamBuf, lBufSize, dwCompFlags);
+		LastEncRes = pDVPEncSDK->AdvDVP_WriteAVIFile(hAVIFile[nChNum], pStreamBuf, lBufSize, dwCompFlags);
 	}
+
 }
 
+int GetEncRes()
+{
+	return LastEncRes;
+}
 
 void StreamReadEnd(int nChNum)
 {
 	//Close AVI file
 	if (hAVIFile[nChNum])
 	{
-		pDVPEncSDK->AdvDVP_CloseAVIFile(hAVIFile[nChNum]);
+		LastEncRes = pDVPEncSDK->AdvDVP_CloseAVIFile(hAVIFile[nChNum]);
 		hAVIFile[nChNum] = NULL;
 	}
 }
@@ -262,10 +298,10 @@ int SetVideoRes(int XRes, int YRes)
 		switch(XRes) 
 		{
 			case 640:
-			pDVPSDK->AdvDVP_SetResolution(i,SIZEQVGA);
+				pDVPSDK->AdvDVP_SetResolution(i,SIZEQVGA);
 			break;
 			case 320:
-			pDVPSDK->AdvDVP_SetResolution(i,SIZEVGA);
+				pDVPSDK->AdvDVP_SetResolution(i,SIZEVGA);
 			break;
 			case 160:
 				pDVPSDK->AdvDVP_SetResolution(i,SIZESUBQVGA);
@@ -275,7 +311,9 @@ int SetVideoRes(int XRes, int YRes)
 	//Set the resolution per camera for encoding	
 	for (int i=0; i<nDevCount*MAXMUXS; i++)
 	{
-		pDVPEncSDK->AdvDVP_SetVideoResolution(i,XRes,YRes);		
+		LastEncRes = pDVPEncSDK->AdvDVP_SetVideoResolution(i,XRes,YRes);		
+		if (LastEncRes != 1)
+			return LastEncRes;
 	} 
 	for (int i=0; i<nDevCount; i++) //Set the capture resolution for all devices. C# rocks. 
 	{
@@ -284,21 +322,15 @@ int SetVideoRes(int XRes, int YRes)
 	}
 	return 1;
 }
-	
-int SetVideoQuant(int Quant)
-{
-	for (int i=0; i<nDevCount*MAXMUXS; i++)
-	{
-		pDVPEncSDK->AdvDVP_SetVideoQuant(i,Quant);
-	}
-	return 1;
-}
+
 
 int SetKeyInterval(int KeyInt)
 {
 	for (int i=0; i<nDevCount*MAXMUXS; i++)
 	{
-		pDVPEncSDK->AdvDVP_SetVideoKeyInterval(i,KeyInt);
+		LastEncRes = pDVPEncSDK->AdvDVP_SetVideoKeyInterval(i,KeyInt);
+		if (LastEncRes != 1)
+			return LastEncRes;
 	}
 	return 1;
 }
@@ -351,6 +383,11 @@ int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSiz
 		if ( !bRetVal )
 			TRACE( _T( "DrawDibDraw Failed!\n" ) );
 		::ReleaseDC(hPreviewWnd[nChNum], hdcStill);*/ 
+	}
+	else
+	{
+		nChNum = (nDevNum*MAXMUXS);
+	}
 
 
 	//Encode the video frame
@@ -360,17 +397,14 @@ int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSiz
 			int Ret = pDVPEncSDK->AdvDVP_VideoEncode(nChNum, (LPVOID)pBuf, nBufSize, bKeyFrame[nChNum]);
 			if ((EncoderState)Ret == ENC_BUFFERFULL)
 			{
-				if (bKeyFrame[nChNum])
-					TRACE(_T("Channel %d: Enocde I-frame, Buffer full!\n"), nChNum);
-				else
-					TRACE(_T("Channel %d: Encode P-frame, Buffer full!\n"), nChNum);
+				LastEncRes = Ret;
 			}
 			else if (Ret != ENC_SUCCEEDED)
 			{
 				if (bKeyFrame[nChNum])
-					TRACE(_T("Channel %d: Enocde I-frame failed!\n"), nChNum);
+					LastEncRes = -6;
 				else
-					TRACE(_T("Channel %d: Encode P-frame failed!\n"), nChNum);
+					LastEncRes = -7;
 			}
 			else
 			{
@@ -380,7 +414,8 @@ int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSiz
 	}
 
 	//Calculate the number of frames for each channel
-	if (bStartTime[nChNum]) {
+	if (bStartTime[nChNum]) 
+	{
 		start_time[nChNum] = time(NULL);
 		nFrameCount[nChNum] = 0;
 		bStartTime[nChNum] = FALSE;
@@ -388,25 +423,28 @@ int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSiz
 	end_time[nChNum] = time(NULL);
 	nFrameCount[nChNum]++;
 	return 1;
-}
-}
+	}
 
 
 int  CloseRecording(void)
 {
-		for (int i=0; i<nDevCount; i++)
-		{
-			if (pDVPSDK->AdvDVP_GetCapState(i) == RUNNING)
-				pDVPSDK->AdvDVP_Stop(i);
-		}
+		
 		for (int i=0; i<nDevCount*MAXMUXS; i++)
 		{
 			if (pDVPEncSDK->AdvDVP_GetState(i) == ENC_RUNNING)
 				pDVPEncSDK->AdvDVP_StopVideoEncode(i);
-
-			pDVPEncSDK->AdvDVP_CloseEncoder(i);
+			//pDVPEncSDK->AdvDVP_CloseEncoder(i);
 		}
+		/*for (int i=0; i<nDevCount; i++)
+		{
+			if (pDVPSDK->AdvDVP_GetCapState(i) == RUNNING)
+				pDVPSDK->AdvDVP_Stop(i);
+		}*/
+	return 1;
+}
 
+void FreeCaptureDevice()
+{
 		pDVPEncSDK->AdvDVP_CloseSDK();
 		pDVPSDK->AdvDVP_CloseSDK();
 		delete pDVPSDK;
@@ -417,7 +455,6 @@ int  CloseRecording(void)
 
 	if (hDll)
 		FreeLibrary(hDll);
-	return 1;
 }
 
 void SetFName(LPTSTR FName, int FStart)
@@ -425,4 +462,13 @@ void SetFName(LPTSTR FName, int FStart)
 	SaveName = new char[256];
 	//SaveName = FName;
 	FileStart = FStart;
+}
+
+int SetNTSC()
+{
+	for (int i = 0; i < nDevCount; i++)
+	{
+		pDVPSDK->AdvDVP_SetVideoFormat(i, Video_NTSC_M);
+	}
+	return 1;
 }

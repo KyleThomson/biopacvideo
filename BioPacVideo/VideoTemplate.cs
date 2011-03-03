@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using System.Linq;
 using System.Text;
 
@@ -42,8 +43,10 @@ namespace BioPacVideo
         {
             Res =  (AdvantechCodes.tagRes) VideoWrapper.initSDK();
             Res = (AdvantechCodes.tagRes) VideoWrapper.StartSDK();
-            Device_Count = VideoWrapper.GetDeviceCount(); 
-            VideoWrapper.SetVideoQuant((short) Quant);
+            Device_Count = VideoWrapper.GetDeviceCount();           
+            VideoWrapper.SetNTSC();
+            VideoWrapper.SetVideoRes(XRes, YRes);
+            VideoWrapper.StartCapture();    
 
         }
         
@@ -65,15 +68,63 @@ namespace BioPacVideo
             VideoWrapper.SetFName(X, FileStart);
         }
         public void StartRecording()
-        {
-            VideoWrapper.StartCapture();
+        {            
+            VideoWrapper.StartEncoding();            
         }
-        public void LoadSettings()
+
+        public string EncoderStatus()
         {
-            //VideoWrapper.SetVideoQuant(Quant);
-            VideoWrapper.SetVideoRes(XRes, YRes);
-            VideoWrapper.SetKeyInterval(KeyFrames);
-            VideoWrapper.SetSampleRate(30);            
+            switch (VideoWrapper.GetEncoderStatus())
+            {
+                case 1:
+                    return "ENCODER STOPPED";                    
+                case 2:
+                    return "ENCODER RUNNING";                    
+                case -1:
+                    return "UNINITIALIZED";                   
+                default:
+                    return "UNKNOWN ERROR";                    
+            }
+        }
+        public string EncoderResult()
+        {
+            switch (VideoWrapper.GetEncRes())
+            {
+                case 1:
+                    return "ENCODER SUCCEEDED";
+                case 0:
+                    return "ENCODER FAILED";
+                case -1:
+                    return "SDK INIT FAILED";
+                case -2:
+                    return "ENCODER INIT FAILED";
+                case -3:
+                    return "ENCODER PARAMETER ERROR";
+                case -4:
+                    return "ENOCDER NUM ERROR";
+                case -5:
+                    return "ENCODER BUFFER FULL";
+                case -6:
+                    return "ENCODE OF I-FRAME FAILED";
+                case -7:
+                    return "ENCODE OF P-FRAME FAILED";
+                default:
+                    return "UNKNOWN STATUS";
+            }
+        }
+
+
+        public void LoadSettings()
+        {            
+            VideoWrapper.SetVideoQuant(Quant);
+            VideoWrapper.SetKeyInterval(KeyFrames);            
+            int SRate = 30;            
+            VideoWrapper.SetFrameRate(SRate);            
+        }
+
+        public void StopRecording()
+        {
+            VideoWrapper.CloseRecording();
         }
     }
 }

@@ -51,7 +51,7 @@ namespace BioPacVideo
 
 
         [DllImport(@".\VideoWrapper.dll")]
-        public static extern int SetVideoQuant(Int16 Quant);
+        public static extern int SetVideoQuant(int Quant);
 
         [DllImport(@".\VideoWrapper.dll")]
         public static extern int SetContrast(int Chan, int Contrast);
@@ -74,7 +74,7 @@ namespace BioPacVideo
         public static extern int SetVideoRes(int XRes, int YRes);
 
         [DllImport(@".\VideoWrapper.dll")]
-        public static extern int SetSampleRate(int Frate);
+        public static extern int SetFrameRate(int Frate);
 
         [DllImport(@".\VideoWrapper.dll")]
         public static extern int CloseRecording();
@@ -86,6 +86,16 @@ namespace BioPacVideo
         public static extern int SetFName(StringBuilder FName, int FStart);
         //public static extern int SetFName([MarshalAs(UnmanagedType.LPStr)]string FName, int FStart);
 
+        [DllImport(@".\VideoWrapper.dll")]
+        public static extern int GetEncoderStatus();
 
+        [DllImport(@".\VideoWrapper.dll")]
+        public static extern int GetEncRes();
+
+        [DllImport(@".\VideoWrapper.dll")]
+        public static extern int StartEncoding();
+
+        [DllImport(@".\VideoWrapper.dll")]
+        public static extern int SetNTSC();
     }
 }
