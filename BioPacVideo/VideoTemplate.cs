@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
@@ -9,7 +11,7 @@ namespace BioPacVideo
     class VideoTemplate
     {
         public static string[] Res_text = new string[] { "INPUTERROR", "DEVICENUMERROR", "NOSAMPLE", "NODEVICES", "PARAMERROR", "SDKINITFAILED", 
-            "FAILED", "SUCCCEEDED","DLL FAILED TO LOAD","FAILED TO CALL"};
+            "FAILED", "SUCCCEEDED","DLL FAILED TO LOAD","FAILED TO CALL","NO VIDEO PRESENT"};
         public AdvantechCodes.tagRes Res;
         static readonly VideoTemplate instance = new VideoTemplate(); //Create Constant instance.        
         public int Device_Count;
@@ -18,11 +20,12 @@ namespace BioPacVideo
         public int KeyFrames;
         public String FileName;
         public int FileStart;
-        public int Quant;
-        public bool SDK_Running; 
+        public int Quant;        
         public int[] Contrast;
         public int[] Brightness;
         public int[] Hue;
+        public bool CapSDKStatus;
+        public bool EncSDKStatus;
         public int[] Saturation; 
         public VideoTemplate()
         {
@@ -30,7 +33,9 @@ namespace BioPacVideo
             Brightness = new int[16];
             Hue = new int[16];
             Saturation = new int[16];
-            SDK_Running = false;
+            CapSDKStatus = false;
+            EncSDKStatus = false;
+
         }
         public static VideoTemplate Instance
         {
@@ -41,15 +46,34 @@ namespace BioPacVideo
         }
         public void initVideo()
         {
+
             Res =  (AdvantechCodes.tagRes) VideoWrapper.initSDK();
             Res = (AdvantechCodes.tagRes) VideoWrapper.StartSDK();
             Device_Count = VideoWrapper.GetDeviceCount();           
             VideoWrapper.SetNTSC();
             VideoWrapper.SetVideoRes(XRes, YRes);
-            VideoWrapper.StartCapture();    
+            int SRate = 30;
+            VideoWrapper.SetFrameRate(SRate);   
+            Res = (AdvantechCodes.tagRes)VideoWrapper.StartCapture(); 
+  
 
         }
-        
+        public Bitmap GetSnap()
+        {
+            //AdvantechCodes.BITMAPINFOHEADER Header;
+            Bitmap BMP = new Bitmap("NoSignal.Bmp");
+            IntPtr pDF = new IntPtr();
+            //Res = (AdvantechCodes.tagRes)VideoWrapper.GetSnapShot(0, ref pDF);
+            pDF = VideoWrapper.GetSnapShot(0);
+            if (pDF != null)
+            {
+                 BMP = new Bitmap(XRes, YRes, XRes*3, PixelFormat.Format24bppRgb, pDF);
+                
+            }
+            return BMP;
+            
+
+        }
         public string GetResText()
         {
             return Res_text[(int)Res + 6];
@@ -69,7 +93,7 @@ namespace BioPacVideo
         }
         public void StartRecording()
         {            
-            VideoWrapper.StartEncoding();            
+            //VideoWrapper.StartEncoding();            
         }
 
         public string EncoderStatus()
@@ -84,6 +108,20 @@ namespace BioPacVideo
                     return "UNINITIALIZED";                   
                 default:
                     return "UNKNOWN ERROR";                    
+            }
+        }
+        public string CaptureStatus()
+        {
+            switch (VideoWrapper.GetCaptureStatus())
+            {
+                case 2:
+                    return "CAPTURE RUNNING";
+                case 1:
+                    return "CAPTURE STOPPED";
+                case -1:
+                    return "CAPTURE FAIL";
+                default:
+                    return "UNKNOWN";
             }
         }
         public string EncoderResult()
@@ -116,15 +154,14 @@ namespace BioPacVideo
 
         public void LoadSettings()
         {            
-            VideoWrapper.SetVideoQuant(Quant);
-            VideoWrapper.SetKeyInterval(KeyFrames);            
-            int SRate = 30;            
-            VideoWrapper.SetFrameRate(SRate);            
+            //VideoWrapper.SetVideoQuant(Quant);
+            //VideoWrapper.SetKeyInterval(KeyFrames);            
+                 
         }
 
         public void StopRecording()
         {
-            VideoWrapper.CloseRecording();
+          //  VideoWrapper.CloseRecording();
         }
     }
 }

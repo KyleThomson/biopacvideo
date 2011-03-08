@@ -26,6 +26,7 @@ namespace BioPacVideo
         int TickCount = 0;
         FolderBrowserDialog FBD;
         RatTemplate[] Rats;
+        Bitmap Still;
         //Timer UpdateTimer;
         Thread ThreadDisplay;        
         Graphics g;
@@ -44,7 +45,7 @@ namespace BioPacVideo
                 MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             BioIni = new IniFile(Directory.GetCurrentDirectory()+"\\BioPacVideo.ini");
-            MP = MPTemplate.Instance;
+            MP = MPTemplate.Instance;            
             Video = VideoTemplate.Instance;
             Feeder = new FeederTemplate();
             Rats = RatTemplate.NewInitArray(16);
@@ -141,8 +142,8 @@ namespace BioPacVideo
                 Invoked();
                 TickCount++;
                 TickCountLabel.Text = string.Format("Buffer: {0}%", MP.buffull);
-                IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
-                IDT_VIDEOSTATUS.Text = Video.EncoderResult();
+                //IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
+                //IDT_VIDEOSTATUS.Text = Video.CaptureStatus();
 
             }
         }
@@ -152,6 +153,10 @@ namespace BioPacVideo
             while (MP.Drawing) { };
             if (g != null)
             g.DrawImage(MP.offscreen, 50, this.Height-300);
+            Still = Video.GetSnap();
+            g.DrawImage(Still, 10, 60, 160, 120);
+            IDT_VIDEOSTATUS.Text = Video.GetResText();
+            IDS_ENCODERSTATUS.Text = Video.CaptureStatus();
         }
 
         private void RecordingButton_Click(object sender, EventArgs e)
@@ -159,7 +164,7 @@ namespace BioPacVideo
             IniFile WriteOnce; 
             if (MP.isconnected)
             {
-                if (!MP.isrecording)
+                if (!MP.isrecording || !Video.CapSDKStatus)
                 {
                     // UpdateTimer.Enabled = true;
                     //Start Recording   
@@ -178,7 +183,7 @@ namespace BioPacVideo
                     Video.SetFileName();
                     Video.LoadSettings();
                     Video.StartRecording();
-                    IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
+                    //IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
                     IDT_VIDEOSTATUS.Text = Video.GetResText();
                     RecordingButton.Text = "Stop Recording";
                     RecordingStatus.Text = "Recording";
@@ -200,15 +205,23 @@ namespace BioPacVideo
                     IDM_SELECTCHANNELS.Enabled = true;
                     IDM_SETTINGS.Enabled = true;
                     IDM_DISCONNECTBIOPAC.Enabled = true;
-                    IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
+                    //IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
                     RecordingButton.Text = "Start Recording";                    
                     RecordingButton.BackColor = Color.Green;
                 }
             }
             else
             {
-                MessageBox.Show("Please Connect BioPac MP150.", "BioPac Not Connected",
-                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                if (!MP.isconnected)
+                {
+                    MessageBox.Show("Please Connect BioPac MP150.", "BioPac Not Connected",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                if (!Video.CapSDKStatus)
+                {
+                    MessageBox.Show("Please Initialize Video Card.", "Video Card Not Initialized.",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             MPLastMessage.Text = MPTemplate.MPRET[(int)MP.MPReturn];
         }
@@ -347,10 +360,18 @@ namespace BioPacVideo
         private void IDB_TESTVIDEO_Click(object sender, EventArgs e)
         {
             
-            Video.initVideo();            
-            IDT_DEVICECOUNT.Text = string.Format("Device Count ({0})",Video.Device_Count);
-            IDT_VIDEOSTATUS.Text = Video.GetResText();            
+          
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
+            Bitmap Still = Video.GetSnap();
+            g.DrawImage(Still, 10, 100, 640, 480);
+            IDT_VIDEOSTATUS.Text = Video.GetResText();
+            IDS_ENCODERSTATUS.Text = Video.CaptureStatus();
+        }   
+        
 
         private void videoSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -366,6 +387,96 @@ namespace BioPacVideo
             frm.ShowDialog(this);
             UpdateINI(BioIni);
             frm.Dispose();
-        }   
+        }
+
+        private void IDB_GENERALTEST_Click(object sender, EventArgs e)
+        {
+            int i;
+            VideoWrapper.testout(out i);
+            MessageBox.Show(i.ToString());
+        }
+
+        private void initializeVideoCardToolStripMenuItem_Click(object sender, EventArgs e)
+        {           
+            Video.initVideo();
+            IDT_DEVICECOUNT.Text = string.Format("Device Count ({0})", Video.Device_Count);
+            IDT_VIDEOSTATUS.Text = Video.GetResText();
+            if (IDT_VIDEOSTATUS.Text == "SUCCEEDED")
+            {
+                Video.CapSDKStatus = true;
+            }
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            {
+                IniFile WriteOnce;
+                if (MP.isconnected)
+                {
+                    if (!MP.isrecording || !Video.CapSDKStatus)
+                    {
+                        // UpdateTimer.Enabled = true;
+                        //Start Recording   
+                        MP.InitializeDisplay(this.Width, this.Height);
+                        ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
+                        string DateString, RecordingDir;
+                        DateString = string.Format("{0:yyyy}{0:MM}{0:dd}", DateTime.Now);
+                        RecordingDir = MP.RecordingDirectory + "\\" + DateString;
+                        Directory.CreateDirectory(RecordingDir);
+                        MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
+                        WriteOnce = new IniFile(RecordingDir + "\\" + DateString + "_Settings.txt");
+                        UpdateINI(WriteOnce);
+                        //Video Stuff
+                        Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
+                        Video.FileStart = 1;
+                        Video.SetFileName();
+                        Video.LoadSettings();
+                        Video.StartRecording();
+                        //IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
+                        IDT_VIDEOSTATUS.Text = Video.GetResText();
+                        RecordingButton.Text = "Stop Recording";
+                        RecordingStatus.Text = "Recording";
+                        IDM_SELECTCHANNELS.Enabled = false;
+                        IDM_SETTINGS.Enabled = false;
+                        IDM_DISCONNECTBIOPAC.Enabled = false;
+                        RecordingButton.BackColor = Color.Red;
+                        MP.isrecording = MP.StartRecording();
+                        RunDisplayThread = true;
+                        ThreadDisplay.Start();
+                    }
+                    else
+                    {
+                        RunDisplayThread = false;
+                        RecordingStatus.Text = "Not Recording";
+                        MP.isrecording = false;
+                        MP.StopRecording();
+                        Video.StopRecording();
+                        IDM_SELECTCHANNELS.Enabled = true;
+                        IDM_SETTINGS.Enabled = true;
+                        IDM_DISCONNECTBIOPAC.Enabled = true;
+                        //IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
+                        RecordingButton.Text = "Start Recording";
+                        RecordingButton.BackColor = Color.Green;
+                    }
+                }
+                else
+                {
+                    if (!MP.isconnected)
+                    {
+                        MessageBox.Show("Please Connect BioPac MP150.", "BioPac Not Connected",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    if (!Video.CapSDKStatus)
+                    {
+                        MessageBox.Show("Please Initialize Video Card.", "Video Card Not Initialized.",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                MPLastMessage.Text = MPTemplate.MPRET[(int)MP.MPReturn];
+            }
+
+
+        }
+       
     }
 }
