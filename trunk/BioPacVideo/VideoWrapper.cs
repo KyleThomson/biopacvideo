@@ -8,8 +8,25 @@ namespace BioPacVideo
 {
     class AdvantechCodes
     {
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        public struct BITMAPINFOHEADER
+        {
+            public UInt32 biSize;
+            public Int32 biWidth;
+            public Int32 biHeight;
+            public Int16 biPlanes;
+            public Int16 biBitCount;
+            public UInt32 biCompression;
+            public UInt32 biSizeImage;
+            public Int32 biXPelsPerMeter;
+            public Int32 biYPelsPerMeter;
+            public UInt32 biClrUsed;
+            public UInt32 biClrImportant;
+        }
+
         public enum tagRes
         {
+            NO_VIDEO_PRESENT = 4,
             CALL_FAIL = 3,
             DLL_FAIL = 2,
             SUCCEEDED = 1,
@@ -63,9 +80,10 @@ namespace BioPacVideo
         public static extern int SetHue(int Chan, int Contrast);
 
         [DllImport(@".\VideoWrapper.dll")]
-        public static extern int SetSaturation(int Chan, int Contrast);      
+        public static extern int SetSaturation(int Chan, int Contrast);
 
-   
+        [DllImport(@".\VideoWrapper.dll")]
+        public static extern void testout(out int test);
 
         [DllImport(@".\VideoWrapper.dll")]
         public static extern int SetKeyInterval(int KeyInt);
@@ -81,13 +99,24 @@ namespace BioPacVideo
 
         [DllImport(@".\VideoWrapper.dll")]
         public static extern int StartCapture();
+
         
+
+        /*[DllImport(@".\VideoWrapper.dll")]
+        public static extern int GetSnapShot(int Chan, ref IntPtr Ptr);*/
+
+        [DllImport(@".\VideoWrapper.dll")]
+        public static extern IntPtr GetSnapShot(int Chan);
+
         [DllImport(@".\VideoWrapper.dll")]
         public static extern int SetFName(StringBuilder FName, int FStart);
         //public static extern int SetFName([MarshalAs(UnmanagedType.LPStr)]string FName, int FStart);
 
         [DllImport(@".\VideoWrapper.dll")]
         public static extern int GetEncoderStatus();
+
+        [DllImport(@".\VideoWrapper.dll")]
+        public static extern int GetCaptureStatus();
 
         [DllImport(@".\VideoWrapper.dll")]
         public static extern int GetEncRes();

@@ -26,7 +26,7 @@ typedef queue<LPVOID> LPQUEUE;
 #define ID_MUX1_NEW_FRAME 37801
 #define ID_MUX2_NEW_FRAME 37802
 #define ID_MUX3_NEW_FRAME 37803
-
+ 
 const INT64 MBYTE = 1024*1024;   // 1MB
 
 HANDLE hAVIFile[MAXDEVS*MAXMUXS];
@@ -69,6 +69,16 @@ STREAMREAD_STRUCT StreamRead = {StreamReadBegin,
 
 int initSDK()
 {
+	for (int i=0; i<MAXDEVS*MAXMUXS; i++)
+	{
+		start_time[i] = 0;
+		end_time[i] = 0;
+		nFrameCount[i] = 0;
+		bStartTime[i] = TRUE;
+		bEncInited[i] = FALSE;
+		bKeyFrame[i] = TRUE; 	
+		hAVIFile[i] = NULL;
+	}
 	int ErrorVal;			
 	hDll = LoadLibrary(TEXT("D:\\WINDOWS\\system32\\DVP7010B.dll"));
 	if (hDll)
@@ -81,10 +91,10 @@ int initSDK()
 	{
 		ErrorVal = AdvDVP_CreateSDKInstence((void **)&pDVPSDK);
 		if (ErrorVal != SUCCEEDED)
-			return ErrorVal;
+			return -1;
 	}
 	else return 3;	
-	hEncDll = LoadLibrary(TEXT("D:\\WINDOWS\\system32\\DVP7010BEnc.dll"));
+/*	hEncDll = LoadLibrary(TEXT("D:\\WINDOWS\\system32\\DVP7010BEnc.dll"));
 	if (hEncDll)
 	{
 		AdvDVP_CreateEncSDKInstence = (ptr_func1)GetProcAddress(hEncDll, (LPCSTR)"AdvDVP_CreateEncSDKInstence");
@@ -95,7 +105,7 @@ int initSDK()
 		if (ErrorVal != SUCCEEDED)
 			return ErrorVal;
 	}
-	else return 3;
+	else return 3;*/
 	return 1; //Succeeded
 }
 int StartSDK(void)
@@ -107,7 +117,7 @@ int StartSDK(void)
 		if (res != SUCCEEDED)
 			return res;	
 	}
-	res = pDVPEncSDK->AdvDVP_InitSDK();
+	/*res = pDVPEncSDK->AdvDVP_InitSDK();
 	if (res == SUCCEEDED)
 	{
 		res = pDVPSDK->AdvDVP_GetNoOfDevices(&nDevCount);
@@ -119,7 +129,8 @@ int StartSDK(void)
 		LastEncRes = pDVPEncSDK->AdvDVP_InitEncoder(i, ENC_BUF_SIZE);
 		if (LastEncRes != 1)
 			return LastEncRes;
-	}
+	}*/
+	Sleep(500);
 	return 1;
 }
 	
@@ -133,6 +144,138 @@ int SetVideoQuant(int Quant)
 	}
 	return 1;
 }
+
+#define LIMIT(x)  ( (x) > 0xffff ? 0xff : ( (x) <= 0xff ? 0 : ( (x) >> 8 ) ) )
+//Transform the color space from YUY2 to RGB24 
+void YUYVtoRGB24(int width, int height, unsigned char *src, unsigned char *dst)
+{
+	int line, col, linewidth;
+	int y, yy;
+	int u, v;
+	int vr, ug, vg, ub;
+	int r, g, b;
+	unsigned char *py, *pu, *pv;
+
+	linewidth = width - (width >> 1);
+	py = src+((height-1)*width*2);
+	pu = py + 1;
+	pv = py + 3;
+
+	y = *py;
+	yy = y << 8;
+	u = *pu - 128;
+	ug =   88 * u;
+	ub =  454 * u;
+	v = *pv - 128;
+	vg =  183 * v;
+	vr =  359 * v;
+
+	for (line = height-1; line >= 0; line--) {
+		py = src+(line*width*2);
+		pu = py + 1;
+		pv = py + 3;
+		for (col = 0; col < width; col++) {
+			r = LIMIT(yy +      vr);
+			g = LIMIT(yy - ug - vg);
+			b = LIMIT(yy + ub     );
+
+			*dst++ = b;
+			*dst++ = g;
+			*dst++ = r;
+			
+			py += 2;
+			y = *py;
+			yy = y << 8;
+			if ( (col & 1) == 1) {
+			  pu += 4; // skip yvy every second y
+			  pv += 4; // skip yuy every second y
+			}
+			u = *pu - 128;
+			ug =   88 * u;
+			ub =  454 * u;
+			v = *pv - 128;
+			vg =  183 * v;
+			vr =  359 * v;
+		} // ..for col 
+	} /* ..for line */
+}
+BYTE *pDstBuf;
+int p; 
+void testout(int* test)
+{
+    p = 10;	
+	test = &p;
+}
+
+//int GetSnapShot(int Chan, BITMAPINFOHEADER* Bih, BYTE** Ptr)
+/*int GetSnapShot(int Chan, BYTE** Ptr)
+{
+	int nDevNum = Chan/4;
+	int ChanSel = Chan%4;
+	int res;
+	long lSize = nWidth[nDevNum]*nHeight[nDevNum]*2;
+	BYTE *pBuf = new BYTE[lSize];
+	BOOL WTF;
+	pDVPSDK->AdvDVP_IsVideoPresent(0,&WTF);
+	/*if (!WTF)
+	{
+		return 4;
+	}
+	if (pDVPSDK->AdvDVP_GetCapState(0) == RUNNING) 
+	{
+	res = pDVPSDK->AdvDVP_GetCurFrameBuffer(0, 0, &lSize, pBuf);
+	if (res != SUCCEEDED)
+	{
+		delete pBuf;
+		pBuf = NULL;
+		return NULL;
+	}
+
+	long lDstSize = nWidth[nDevNum]*nHeight[nDevNum]*3;
+	pDstBuf = new BYTE[lDstSize];
+	YUYVtoRGB24(nWidth[nDevNum], nHeight[nDevNum], pBuf, pDstBuf);
+	delete pBuf;
+	pBuf = NULL;
+	
+	Ptr = &pDstBuf;
+	return res;
+	}
+	else return -2;
+}*/
+
+BYTE* GetSnapShot(int Chan)
+{
+	int nDevNum = Chan/4;
+	int ChanSel = Chan%4;
+	int res;
+	long lSize = nWidth[nDevNum]*nHeight[nDevNum]*2;
+	BYTE *pBuf = new BYTE[lSize];
+	BOOL WTF;
+	pDVPSDK->AdvDVP_IsVideoPresent(0,&WTF);
+	/*if (!WTF)
+	{
+		return 4;
+	}*/
+	if (pDVPSDK->AdvDVP_GetCapState(0) == RUNNING) 
+	{
+	res = pDVPSDK->AdvDVP_GetCurFrameBuffer(0, 0, &lSize, pBuf);
+	if (res != SUCCEEDED)
+	{
+		delete pBuf;
+		pBuf = NULL;
+		return NULL;
+	}
+
+	long lDstSize = nWidth[nDevNum]*nHeight[nDevNum]*3;
+	pDstBuf = new BYTE[lDstSize];
+	YUYVtoRGB24(nWidth[nDevNum], nHeight[nDevNum], pBuf, pDstBuf);
+	delete pBuf;
+	pBuf = NULL;		
+	return pDstBuf;
+	}
+	else return NULL;
+}
+
 
 int SetContrast(int Chan, long Contrast)
 {
@@ -164,6 +307,11 @@ int GetEncoderStatus()
 	return pDVPEncSDK->AdvDVP_GetState(0);
 }
 
+int GetCaptureStatus()
+{
+	return pDVPSDK->AdvDVP_GetCapState(0);
+}
+
 int GetDeviceCount()
 {
 	return nDevCount;
@@ -186,7 +334,7 @@ int SetFrameRate(int Frate)
 	Global_Frate = Frate;
 	for (int i = 0; i < nDevCount; i++)
 	{		
-		res = pDVPSDK->AdvDVP_SetFrameRate(i, Switching, Frate);	
+		res = pDVPSDK->AdvDVP_SetFrameRate(i, Switching-1, Frate);	
 	}
 	return res;
 }
@@ -194,22 +342,24 @@ int SetFrameRate(int Frate)
 int StartCapture()
 {
 	int res;
-
+	//pDVPSDK->AdvDVP_SetVideoInput(0,0);
 	for (int i = 0; i < nDevCount; i++)
 	{
 		if (pDVPSDK->AdvDVP_GetCapState(i) == STOPPED)
 		{
-			res = pDVPSDK->AdvDVP_SetNewFrameCallback(i, (int)NewFrameCallback);
+			res = 1;
+			//res = pDVPSDK->AdvDVP_SetNewFrameCallback(i, (int)NewFrameCallback);
 			if (res !=  SUCCEEDED) 
 			{
 				return res;
 			}
 			//Start Video Capture 	
-			res = pDVPSDK->AdvDVP_Start(i,3,NULL,NULL);		
+			res = pDVPSDK->AdvDVP_Start(i,0,NULL,NULL);		
 			if (res !=  SUCCEEDED) 
 			{
 				return res;
 			}
+			Sleep(500);
 		}			
 	}
 	return res;
@@ -280,6 +430,8 @@ int GetEncRes()
 	return LastEncRes;
 }
 
+
+
 void StreamReadEnd(int nChNum)
 {
 	//Close AVI file
@@ -293,28 +445,32 @@ void StreamReadEnd(int nChNum)
 
 int SetVideoRes(int XRes, int YRes)
 {
+	int res;
 	for (int i = 0; i < nDevCount; i++) //Set Video res per device
 	{
 		switch(XRes) 
 		{
 			case 640:
-				pDVPSDK->AdvDVP_SetResolution(i,SIZEQVGA);
+				res = pDVPSDK->AdvDVP_SetResolution(i,SIZEVGA);
 			break;
 			case 320:
-				pDVPSDK->AdvDVP_SetResolution(i,SIZEVGA);
+				res = pDVPSDK->AdvDVP_SetResolution(i,SIZEQVGA);
 			break;
 			case 160:
-				pDVPSDK->AdvDVP_SetResolution(i,SIZESUBQVGA);
+				res = pDVPSDK->AdvDVP_SetResolution(i,SIZESUBQVGA);
+			break;
+			default:
+				res = pDVPSDK->AdvDVP_SetResolution(i,SIZEQVGA);
 			break;
 		}
 	}
 	//Set the resolution per camera for encoding	
-	for (int i=0; i<nDevCount*MAXMUXS; i++)
+/*	for (int i=0; i<nDevCount*MAXMUXS; i++)
 	{
 		LastEncRes = pDVPEncSDK->AdvDVP_SetVideoResolution(i,XRes,YRes);		
 		if (LastEncRes != 1)
 			return LastEncRes;
-	} 
+	} */
 	for (int i=0; i<nDevCount; i++) //Set the capture resolution for all devices. C# rocks. 
 	{
 		nWidth[i] = XRes;
@@ -335,9 +491,10 @@ int SetKeyInterval(int KeyInt)
 	return 1;
 }
 
-int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf)
+//int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf)
+int NewFrameCallback(int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf)
 {
-	int nChNum;
+	/*int nChNum;
 	if (nID != ID_NEW_FRAME)
 	{
 		nChNum = (nDevNum*MAXMUXS)+nMuxChan;
@@ -345,11 +502,11 @@ int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSiz
       {
          return 1;
       }
-	/*	if (*(pBuf+1) & 0x02) {
+	if (*(pBuf+1) & 0x02) {
 			//Videoframe notify local nosignal, we will not give new frames form this channel until the signal is recoverd.
 			//We don't render this frame, because this frame is nosignal frame.		
 			return 1;
-		}*/ //Render this frame, for video recording 
+		} //Render this frame, for video recording 
       // Add by boxu for testing whether the graphics card support YUYV
 
       /*
@@ -382,16 +539,16 @@ int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSiz
 					0);
 		if ( !bRetVal )
 			TRACE( _T( "DrawDibDraw Failed!\n" ) );
-		::ReleaseDC(hPreviewWnd[nChNum], hdcStill);*/ 
+		::ReleaseDC(hPreviewWnd[nChNum], hdcStill);
 	}
 	else
 	{
 		nChNum = (nDevNum*MAXMUXS);
-	}
+	}*/
 
 
 	//Encode the video frame
-	if (pDVPEncSDK)
+	/*if (pDVPEncSDK)
 	{
 		if (pDVPEncSDK->AdvDVP_GetState(nChNum) == ENC_RUNNING) {
 			int Ret = pDVPEncSDK->AdvDVP_VideoEncode(nChNum, (LPVOID)pBuf, nBufSize, bKeyFrame[nChNum]);
@@ -411,17 +568,17 @@ int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSiz
 				bKeyFrame[nChNum] = FALSE;
 			}
 		}
-	}
+	}*/
 
 	//Calculate the number of frames for each channel
-	if (bStartTime[nChNum]) 
+	/*if (bStartTime[nChNum]) 
 	{
 		start_time[nChNum] = time(NULL);
 		nFrameCount[nChNum] = 0;
 		bStartTime[nChNum] = FALSE;
 	}
 	end_time[nChNum] = time(NULL);
-	nFrameCount[nChNum]++;
+	nFrameCount[nChNum]++;*/
 	return 1;
 	}
 

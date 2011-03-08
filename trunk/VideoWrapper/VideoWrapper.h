@@ -8,7 +8,7 @@
 #endif
 
 #include "resource.h"		// main symbols
-
+#include <vfw.h>
 
 // CVideoWrapperApp
 // See VideoWrapper.cpp for the implementation of this class
@@ -29,17 +29,24 @@ extern "C" _declspec(dllexport) int CloseRecording(void);
 extern "C" _declspec(dllexport) void SetFName(LPTSTR FName, int FileStart);
 extern "C" _declspec(dllexport) int GetSampleRate(int *Frate);
 extern "C" _declspec(dllexport) int GetEncoderStatus();
+extern "C" _declspec(dllexport) int GetCaptureStatus();
 extern "C" _declspec(dllexport) int GetEncRes();
 extern "C" _declspec(dllexport) int StartEncoding();
 extern "C" _declspec(dllexport) int SetNTSC();
-
+//extern "C" _declspec(dllexport) int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
+//extern "C" _declspec(dllexport) int GetSnapShot(int Chan, BITMAPINFOHEADER* Bih, BYTE** Ptr);
+//extern "C" _declspec(dllexport) int GetSnapShot(int Chan, BYTE** Ptr);
+extern "C" _declspec(dllexport) BYTE* GetSnapShot(int Chan);
+extern "C" _declspec(dllexport) void testout(int* test);
 int nDevCount;
 int SelChan = 0;
 int Switching = 4; 
 int FileStart = 0;
 
+//int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
+int NewFrameCallback(int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
 
-int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
+
 
 typedef enum
 {
