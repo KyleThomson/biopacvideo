@@ -24,7 +24,7 @@ extern "C" _declspec(dllexport) int SetSaturation(int Chan, long Saturation);
 extern "C" _declspec(dllexport) int SetKeyInterval(int KeyInt);
 extern "C" _declspec(dllexport) int SetVideoRes(int XRes, int YRes);
 extern "C" _declspec(dllexport) int SetFrameRate(int Frate);
-extern "C" _declspec(dllexport) int StartCapture(void);
+extern "C" _declspec(dllexport) int StartCapture(int Func_Ptr);
 extern "C" _declspec(dllexport) int CloseRecording(void);
 extern "C" _declspec(dllexport) void SetFName(LPTSTR FName, int FileStart);
 extern "C" _declspec(dllexport) int GetSampleRate(int *Frate);
@@ -33,7 +33,7 @@ extern "C" _declspec(dllexport) int GetCaptureStatus();
 extern "C" _declspec(dllexport) int GetEncRes();
 extern "C" _declspec(dllexport) int StartEncoding();
 extern "C" _declspec(dllexport) int SetNTSC();
-//extern "C" _declspec(dllexport) int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
+extern "C" _declspec(dllexport) int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
 //extern "C" _declspec(dllexport) int GetSnapShot(int Chan, BITMAPINFOHEADER* Bih, BYTE** Ptr);
 //extern "C" _declspec(dllexport) int GetSnapShot(int Chan, BYTE** Ptr);
 extern "C" _declspec(dllexport) BYTE* GetSnapShot(int Chan);
@@ -44,7 +44,7 @@ int Switching = 4;
 int FileStart = 0;
 
 //int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
-int NewFrameCallback(int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
+//t NewFrameCallback(int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
 
 
 

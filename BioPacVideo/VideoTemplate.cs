@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
@@ -11,10 +12,11 @@ namespace BioPacVideo
     class VideoTemplate
     {
         public static string[] Res_text = new string[] { "INPUTERROR", "DEVICENUMERROR", "NOSAMPLE", "NODEVICES", "PARAMERROR", "SDKINITFAILED", 
-            "FAILED", "SUCCCEEDED","DLL FAILED TO LOAD","FAILED TO CALL","NO VIDEO PRESENT"};
+            "FAILED", "SUCCCEEDED","DLL FAILED TO LOAD","FAILED TO CALL","NO VIDEO PRESENT","CALLBACK RUN"};
         public AdvantechCodes.tagRes Res;
         static readonly VideoTemplate instance = new VideoTemplate(); //Create Constant instance.        
         public int Device_Count;
+        public delegate int Funky(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, IntPtr pBuf);
         public int XRes;
         public int YRes;
         public int KeyFrames;
@@ -46,7 +48,8 @@ namespace BioPacVideo
         }
         public void initVideo()
         {
-
+            Funky X = new Funky(VideoWrapper.NewFrameCallback);
+            IntPtr C = Marshal.GetFunctionPointerForDelegate(X);
             Res =  (AdvantechCodes.tagRes) VideoWrapper.initSDK();
             Res = (AdvantechCodes.tagRes) VideoWrapper.StartSDK();
             Device_Count = VideoWrapper.GetDeviceCount();           
@@ -54,16 +57,17 @@ namespace BioPacVideo
             VideoWrapper.SetVideoRes(XRes, YRes);
             int SRate = 30;
             VideoWrapper.SetFrameRate(SRate);   
-            Res = (AdvantechCodes.tagRes)VideoWrapper.StartCapture(); 
+            Res = (AdvantechCodes.tagRes)VideoWrapper.StartCapture(C);
+            MessageBox.Show(C.ToString() + "   " + VideoWrapper.GetEncRes().ToString()+ "   " + X.ToString());
   
 
         }
+             
         public Bitmap GetSnap()
         {
             //AdvantechCodes.BITMAPINFOHEADER Header;
             Bitmap BMP = new Bitmap("NoSignal.Bmp");
-            IntPtr pDF = new IntPtr();
-            //Res = (AdvantechCodes.tagRes)VideoWrapper.GetSnapShot(0, ref pDF);
+            IntPtr pDF = new IntPtr();    
             pDF = VideoWrapper.GetSnapShot(0);
             if (pDF != null)
             {
@@ -99,7 +103,7 @@ namespace BioPacVideo
         public string EncoderStatus()
         {
             switch (VideoWrapper.GetEncoderStatus())
-            {
+            {             
                 case 1:
                     return "ENCODER STOPPED";                    
                 case 2:
@@ -128,6 +132,8 @@ namespace BioPacVideo
         {
             switch (VideoWrapper.GetEncRes())
             {
+                case 5:
+                    return "CALLBACK RUN";
                 case 1:
                     return "ENCODER SUCCEEDED";
                 case 0:
