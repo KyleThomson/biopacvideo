@@ -339,22 +339,23 @@ int SetFrameRate(int Frate)
 	return res;
 }
 
-int StartCapture()
+int StartCapture(int Func_Ptr)
 {
-	int res;
-	//pDVPSDK->AdvDVP_SetVideoInput(0,0);
+	int res;	
+	pDVPSDK->AdvDVP_SetVideoInput(0,0);	
 	for (int i = 0; i < nDevCount; i++)
 	{
 		if (pDVPSDK->AdvDVP_GetCapState(i) == STOPPED)
 		{
 			res = 1;
-			//res = pDVPSDK->AdvDVP_SetNewFrameCallback(i, (int)NewFrameCallback);
-			if (res !=  SUCCEEDED) 
+			//res = pDVPSDK->AdvDVP_SetNewFrameCallback(i, Func_Ptr);
+			LastEncRes = Func_Ptr;
+	 		if (res !=  SUCCEEDED) 
 			{
 				return res;
 			}
-			//Start Video Capture 	
-			res = pDVPSDK->AdvDVP_Start(i,0,NULL,NULL);		
+			//Start Video Capture 
+			res = pDVPSDK->AdvDVP_Start(i,3,NULL,NULL);
 			if (res !=  SUCCEEDED) 
 			{
 				return res;
@@ -491,9 +492,10 @@ int SetKeyInterval(int KeyInt)
 	return 1;
 }
 
-//int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf)
-int NewFrameCallback(int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf)
+int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf)
+//int NewFrameCallback(int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf)
 {
+	LastEncRes = 5;
 	/*int nChNum;
 	if (nID != ID_NEW_FRAME)
 	{

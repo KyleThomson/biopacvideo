@@ -8,24 +8,10 @@ namespace BioPacVideo
 {
     class AdvantechCodes
     {
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public struct BITMAPINFOHEADER
-        {
-            public UInt32 biSize;
-            public Int32 biWidth;
-            public Int32 biHeight;
-            public Int16 biPlanes;
-            public Int16 biBitCount;
-            public UInt32 biCompression;
-            public UInt32 biSizeImage;
-            public Int32 biXPelsPerMeter;
-            public Int32 biYPelsPerMeter;
-            public UInt32 biClrUsed;
-            public UInt32 biClrImportant;
-        }
 
         public enum tagRes
         {
+            CALLBACK_RUN = 5,
             NO_VIDEO_PRESENT = 4,
             CALL_FAIL = 3,
             DLL_FAIL = 2,
@@ -98,7 +84,7 @@ namespace BioPacVideo
         public static extern int CloseRecording();
 
         [DllImport(@".\VideoWrapper.dll")]
-        public static extern int StartCapture();
+        public static extern int StartCapture(IntPtr X);
 
         
 
@@ -126,5 +112,8 @@ namespace BioPacVideo
 
         [DllImport(@".\VideoWrapper.dll")]
         public static extern int SetNTSC();
+
+        [DllImport(@".\VideoWrapper.dll")]
+        public static extern int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, IntPtr pBuf);
     }
 }
