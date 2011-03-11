@@ -33,18 +33,13 @@ extern "C" _declspec(dllexport) int GetCaptureStatus();
 extern "C" _declspec(dllexport) int GetEncRes();
 extern "C" _declspec(dllexport) int StartEncoding();
 extern "C" _declspec(dllexport) int SetNTSC();
-extern "C" _declspec(dllexport) int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
-//extern "C" _declspec(dllexport) int GetSnapShot(int Chan, BITMAPINFOHEADER* Bih, BYTE** Ptr);
-//extern "C" _declspec(dllexport) int GetSnapShot(int Chan, BYTE** Ptr);
+extern "C" _declspec(dllexport) int __cdecl NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
 extern "C" _declspec(dllexport) BYTE* GetSnapShot(int Chan);
 extern "C" _declspec(dllexport) void testout(int* test);
 int nDevCount;
 int SelChan = 0;
 int Switching = 4; 
 int FileStart = 0;
-
-//int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
-//t NewFrameCallback(int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
 
 
 

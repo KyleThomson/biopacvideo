@@ -19,6 +19,7 @@
 
 using namespace std;
 typedef queue<LPVOID> LPQUEUE;
+
 #define MAXMUXS 4
 #define MAXDEVS 4
 #define ID_NEW_FRAME 37810
@@ -348,7 +349,7 @@ int StartCapture(int Func_Ptr)
 		if (pDVPSDK->AdvDVP_GetCapState(i) == STOPPED)
 		{
 			res = 1;
-			//res = pDVPSDK->AdvDVP_SetNewFrameCallback(i, Func_Ptr);
+			res = pDVPSDK->AdvDVP_SetNewFrameCallback(i, (int)NewFrameCallback);
 			LastEncRes = Func_Ptr;
 	 		if (res !=  SUCCEEDED) 
 			{
@@ -492,10 +493,10 @@ int SetKeyInterval(int KeyInt)
 	return 1;
 }
 
-int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf)
+int __cdecl NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf)
 //int NewFrameCallback(int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf)
 {
-	LastEncRes = 5;
+	LastEncRes = nID;
 	/*int nChNum;
 	if (nID != ID_NEW_FRAME)
 	{
