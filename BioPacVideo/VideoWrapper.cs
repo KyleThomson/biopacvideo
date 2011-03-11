@@ -56,34 +56,34 @@ namespace BioPacVideo
         [DllImport(@".\VideoWrapper.dll")]
         public static extern int SetVideoQuant(int Quant);
 
-        [DllImport(@".\VideoWrapper.dll")]
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SetContrast(int Chan, int Contrast);
 
-        [DllImport(@".\VideoWrapper.dll")]
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SetBrightness(int Chan, int Contrast);
 
-        [DllImport(@".\VideoWrapper.dll")]
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SetHue(int Chan, int Contrast);
 
-        [DllImport(@".\VideoWrapper.dll")]
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SetSaturation(int Chan, int Contrast);
 
-        [DllImport(@".\VideoWrapper.dll")]
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void testout(out int test);
 
         [DllImport(@".\VideoWrapper.dll")]
         public static extern int SetKeyInterval(int KeyInt);
 
-        [DllImport(@".\VideoWrapper.dll")]
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SetVideoRes(int XRes, int YRes);
 
-        [DllImport(@".\VideoWrapper.dll")]
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SetFrameRate(int Frate);
 
-        [DllImport(@".\VideoWrapper.dll")]
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int CloseRecording();
 
-        [DllImport(@".\VideoWrapper.dll")]
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int StartCapture(IntPtr X);
 
         
@@ -113,7 +113,7 @@ namespace BioPacVideo
         [DllImport(@".\VideoWrapper.dll")]
         public static extern int SetNTSC();
 
-        [DllImport(@".\VideoWrapper.dll")]
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, IntPtr pBuf);
     }
 }
