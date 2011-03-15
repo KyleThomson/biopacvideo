@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
@@ -23,40 +24,58 @@ namespace BioPacVideo
         MPTemplate MP;
         VideoTemplate Video;
         FeederTemplate Feeder;
+        Pen BoxPen;
         int TickCount = 0;
         FolderBrowserDialog FBD;
         RatTemplate[] Rats;
-        Bitmap Still;
-        //Timer UpdateTimer;
+        Bitmap Still;                
         Thread ThreadDisplay;        
         Graphics g;
         bool RunDisplayThread; 
         public MainForm()
         {
             InitializeComponent();
+            MP = MPTemplate.Instance;
+            Video = VideoTemplate.Instance;
+            Feeder = new FeederTemplate();
+            BoxPen = new Pen(Brushes.Black, 4);            
+            BioIni = new IniFile(Directory.GetCurrentDirectory() + "\\BioPacVideo.ini"); 
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             for (int i = 0; i < 16; i++)
             {
                 IDC_RATSELECT.Items.Add(string.Format("Rat {0}", i + 1));
             }
+            //Load mpdev
             if (!File.Exists(@".\mpdev.dll"))
             {
                 MessageBox.Show("mpdev.dll not found in " + Directory.GetCurrentDirectory() + "\nBioPac will not connect without this file!", "Missing DLL File",
                 MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-            BioIni = new IniFile(Directory.GetCurrentDirectory()+"\\BioPacVideo.ini");
-            MP = MPTemplate.Instance;            
-            Video = VideoTemplate.Instance;
-            Feeder = new FeederTemplate();
+            else
+            {
+                MP.isconnected = MP.Connect();
+                if (!MP.isconnected)
+                {
+                    MessageBox.Show("BioPac failed to connect.\nError was " + MPTemplate.MPRET[(int)MP.MPReturn], "BioPac Comnmunication Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    IDT_BIOPACSTAT.Text = "BioPac Connected";
+                }
+                IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
+            }                           
             Rats = RatTemplate.NewInitArray(16);
             g = this.CreateGraphics();
-            MP.FileCount = 0;
-            
+            Still = new Bitmap("NoSignal.Bmp");
+            MP.FileCount = 0;            
             RecordingButton.BackColor = Color.Green;
             ReadINI(BioIni); //Read Presets from INI file
-            IDC_RATSELECT.SelectedIndex = MP.SelectedChannel-1;
+            IDC_RATSELECT.SelectedIndex = MP.SelectedChannel-1;            
         }
         
+
+        //Read INI presets 
         private void ReadINI(IniFile BioIni)
         {
             MP.RecordingDirectory = BioIni.IniReadValue("General", "RecDirectory", Directory.GetCurrentDirectory());
@@ -94,7 +113,7 @@ namespace BioPacVideo
             }
             
         }
-
+        //Write INI file - used for settings and saving recording settings in recording directory
         private void UpdateINI(IniFile BioIni)
         {
             BioIni.IniWriteValue("General", "RecDirectory", MP.RecordingDirectory);
@@ -133,31 +152,45 @@ namespace BioPacVideo
         }
 
 
+        protected override void  OnPaint(PaintEventArgs e)
+        {
+            
+            g.DrawRectangle(BoxPen, 320, 50, 324, 244);            
+            // Release handle to device context.
+            
+            base.OnPaint(e);
+        }
         private void DisplayThread()
         {
             while (RunDisplayThread)
             {
                 Thread.Sleep(30);
-                MPLastMessage.Text = MPTemplate.MPRET[(int)MP.MPReturn];
+                IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
                 Invoked();
                 TickCount++;
-                TickCountLabel.Text = string.Format("Buffer: {0}%", MP.buffull);
-                //IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
-                //IDT_VIDEOSTATUS.Text = Video.CaptureStatus();
-
-            }
+                TickCountLabel.Text = string.Format("Buffer: {0}%", MP.buffull);         
+           }
         }
 
         private void Invoked()
-        {
+        {            
             while (MP.Drawing) { };
-            if (g != null)
+            Still.Dispose();       
             g.DrawImage(MP.offscreen, 50, this.Height-300);
-            Still = Video.GetSnap();
-            Still.RotateFlip(RotateFlipType.RotateNoneFlipY);
-            g.DrawImage(Still, 10, 60, 160, 120);
+            Video.pDF = VideoWrapper.GetCurrentBuffer();
+            if (Video.pDF != null)
+            {
+                Still = new Bitmap(Video.XRes, Video.YRes, Video.XRes * 3, PixelFormat.Format24bppRgb, Video.pDF);
+                Still.RotateFlip(RotateFlipType.RotateNoneFlipY);
+            }
+            else
+            {
+                Still = new Bitmap("NoSignal.Bmp");
+            }
+            g.DrawImage(Still, 322, 52, 320, 240);            
             IDT_VIDEOSTATUS.Text = Video.GetResText();
-            IDS_ENCODERSTATUS.Text = Video.CaptureStatus();
+            IDT_ENCODERRESULT.Text = Video.EncoderStatus();
+            IDT_ENCODERSTATUS.Text = VideoWrapper.GetEncRes().ToString();
         }
 
         private void RecordingButton_Click(object sender, EventArgs e)
@@ -167,7 +200,6 @@ namespace BioPacVideo
             {
                 if (!MP.isrecording)
                 {
-                    // UpdateTimer.Enabled = true;
                     //Start Recording   
                     MP.InitializeDisplay(this.Width, this.Height);
                     ThreadDisplay = new Thread(new ThreadStart(DisplayThread)); 
@@ -179,15 +211,16 @@ namespace BioPacVideo
                     WriteOnce = new IniFile(RecordingDir + "\\" + DateString + "_Settings.txt");
                     UpdateINI(WriteOnce);
                     //Video Stuff
+                    
                     Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
                     Video.FileStart = 1;
-                    Video.SetFileName();
-                    Video.LoadSettings();
+                    Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString);
+                    Video.LoadSettings();                    
                     Video.StartRecording();
                     //IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
                     IDT_VIDEOSTATUS.Text = Video.GetResText();
                     RecordingButton.Text = "Stop Recording";
-                    RecordingStatus.Text = "Recording";
+                    IDT_BIOPACRECORDINGSTAT.Text = "Recording";
                     IDM_SELECTCHANNELS.Enabled = false;
                     IDM_SETTINGS.Enabled = false;
                     IDM_DISCONNECTBIOPAC.Enabled = false;
@@ -199,7 +232,7 @@ namespace BioPacVideo
                 else
                 {                    
                     RunDisplayThread = false;
-                    RecordingStatus.Text = "Not Recording";
+                    IDT_BIOPACRECORDINGSTAT.Text = "Not Recording";
                     MP.isrecording = false;
                     MP.StopRecording();
                     Video.StopRecording();
@@ -224,7 +257,7 @@ namespace BioPacVideo
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            MPLastMessage.Text = MPTemplate.MPRET[(int)MP.MPReturn];
+            IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
         }
 
         private void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -256,9 +289,9 @@ namespace BioPacVideo
             }
             else
             {
-                BioPacStat.Text = "BioPac Connected";
+                IDT_BIOPACSTAT.Text = "BioPac Connected";
             }
-            MPLastMessage.Text = MPTemplate.MPRET[(int)MP.MPReturn];
+            IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
         }
 
 
@@ -270,7 +303,7 @@ namespace BioPacVideo
             MP.RecordAC = frm.AC();
             frm.Dispose();
             UpdateINI(BioIni);
-            MPLastMessage.Text = MPTemplate.MPRET[(int)MP.MPReturn];
+            IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
         }
 
 
@@ -287,9 +320,9 @@ namespace BioPacVideo
             }
             else
             {
-                BioPacStat.Text = "BioPac Not Connected";
+                IDT_BIOPACSTAT.Text = "BioPac Not Connected";
             }
-            MPLastMessage.Text = MPTemplate.MPRET[(int)MP.MPReturn];
+            IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
         }
 
 
@@ -297,6 +330,7 @@ namespace BioPacVideo
         {
             if (disposing)
             {
+                RunDisplayThread = false;                
                 if (MP.isrecording)
                 {
                     MP.StopRecording();
@@ -333,7 +367,7 @@ namespace BioPacVideo
             MP.Voltage = frm.Voltage();
             frm.Dispose();
             UpdateINI(BioIni);
-            MPLastMessage.Text = MPTemplate.MPRET[(int)MP.MPReturn];
+            IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
         }
         private void setFeedingProtocolToolStripMenuItem_Click(object sender, EventArgs e)
         {           
@@ -348,6 +382,7 @@ namespace BioPacVideo
         private void IDC_RATSELECT_SelectedIndexChanged(object sender, EventArgs e)
         {
             MP.SelectedChannel = IDC_RATSELECT.SelectedIndex + 1;
+            Video.SelectChannel(IDC_RATSELECT.SelectedIndex);
             MP.ClearDisplay();
         }
 
@@ -357,21 +392,7 @@ namespace BioPacVideo
             frm.ShowDialog(this);
             frm.Dispose();
         }
-
-        private void IDB_TESTVIDEO_Click(object sender, EventArgs e)
-        {
-            
-          
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            
-            Bitmap Still = Video.GetSnap();
-            g.DrawImage(Still, 10, 100, 640, 480);
-            IDT_VIDEOSTATUS.Text = Video.GetResText();
-            IDS_ENCODERSTATUS.Text = Video.CaptureStatus();
-        }   
+    
         
 
         private void videoSettingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -390,23 +411,22 @@ namespace BioPacVideo
             frm.Dispose();
         }
 
-        private void IDB_GENERALTEST_Click(object sender, EventArgs e)
-        {
-            int i;
-            VideoWrapper.testout(out i);
-            MessageBox.Show(i.ToString());
-        }
 
         private void initializeVideoCardToolStripMenuItem_Click(object sender, EventArgs e)
-        {           
-            Video.initVideo();
-            IDT_DEVICECOUNT.Text = string.Format("Device Count ({0})", Video.Device_Count);
-            IDT_VIDEOSTATUS.Text = Video.GetResText();
-            if (Video.Res == (AdvantechCodes.tagRes.SUCCEEDED))
+        {   
+            if (!Video.CapSDKStatus)
             {
-                Video.CapSDKStatus = true;
-            }                      
-
+                Video.initVideo();
+                IDT_DEVICECOUNT.Text = string.Format("Device Count ({0})", Video.Device_Count);
+                IDT_VIDEOSTATUS.Text = Video.GetResText();
+                if (Video.Res == (AdvantechCodes.tagRes.SUCCEEDED))
+                {
+                    Video.CapSDKStatus = true;
+                }
+                Video.initEncoder();
+            }
+            
+            
         }
     }
 }

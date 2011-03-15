@@ -16,19 +16,21 @@ namespace BioPacVideo
         public AdvantechCodes.tagRes Res;
         static readonly VideoTemplate instance = new VideoTemplate(); //Create Constant instance.        
         public int Device_Count;
-        public delegate int Funky(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, IntPtr pBuf);
-        public int XRes;
-        public int YRes;
-        public int KeyFrames;
-        public String FileName;
-        public int FileStart;
-        public int Quant;        
-        public int[] Contrast;
-        public int[] Brightness;
-        public int[] Hue;
+        public IntPtr pDF;
         public bool CapSDKStatus;
         public bool EncSDKStatus;
+        public int XRes;
+        public int YRes;        
+        public String FileName;
+        public int FileStart;
+        public int Quant;
+        public int KeyFrames;
+        public int[] Contrast;
+        public int[] Brightness;
+        public int[] Hue;       
         public int[] Saturation; 
+
+
         public VideoTemplate()
         {
             Contrast = new int[16];
@@ -37,6 +39,7 @@ namespace BioPacVideo
             Saturation = new int[16];
             CapSDKStatus = false;
             EncSDKStatus = false;
+            pDF = new IntPtr();
 
         }
         public static VideoTemplate Instance
@@ -47,27 +50,28 @@ namespace BioPacVideo
             }
         }
         public void initVideo()
-        {
-            Funky X = new Funky(VideoWrapper.NewFrameCallback);
-            IntPtr C = Marshal.GetFunctionPointerForDelegate(X);
-            Res =  (AdvantechCodes.tagRes) VideoWrapper.initSDK();
-            Res = (AdvantechCodes.tagRes) VideoWrapper.StartSDK();
+        {          
+            Res =  (AdvantechCodes.tagRes) VideoWrapper.initCaptureSDK();
+            Res = (AdvantechCodes.tagRes) VideoWrapper.StartCaptureSDK();
             Device_Count = VideoWrapper.GetDeviceCount();           
             VideoWrapper.SetNTSC();
-            VideoWrapper.SetVideoRes(XRes, YRes);
+            VideoWrapper.SetCaptureRes(XRes, YRes);
             int SRate = 30;
             VideoWrapper.SetFrameRate(SRate);   
-            Res = (AdvantechCodes.tagRes)VideoWrapper.StartCapture(C);
-            MessageBox.Show(C.ToString() + "   " + VideoWrapper.GetEncRes().ToString()+ "   " + X.ToString());
-  
-
+            Res = (AdvantechCodes.tagRes)VideoWrapper.StartCapture();
+            pDF = VideoWrapper.GetCurrentBuffer();
+            //MessageBox.Show(VideoWrapper.GetEncRes().ToString());
         }
+        public void initEncoder()
+        {
+            VideoWrapper.initEncoderSDK();
+            VideoWrapper.StartEncoderSDK();
+        }      
              
         public Bitmap GetSnap()
         {
             //AdvantechCodes.BITMAPINFOHEADER Header;
-            Bitmap BMP = new Bitmap("NoSignal.Bmp");
-            IntPtr pDF = new IntPtr();    
+            Bitmap BMP = new Bitmap("NoSignal.Bmp");              
             pDF = VideoWrapper.GetSnapShot(0);
             if (pDF != null)
             {
@@ -89,17 +93,18 @@ namespace BioPacVideo
             VideoWrapper.SetHue(Chan, Hue[Chan]);
             VideoWrapper.SetSaturation(Chan, Saturation[Chan]);
         }
-        public void SetFileName()
-        {
-            StringBuilder X = new StringBuilder(256);
-            X.Append(FileName);
-            VideoWrapper.SetFName(X, FileStart);
+        public void SetFileName(string FName)
+        {                        
+            VideoWrapper.SetFName(FName, 0);
         }
         public void StartRecording()
         {            
-            //VideoWrapper.StartEncoding();            
+            VideoWrapper.StartEncoding();            
         }
-
+        public void SelectChannel(int Chan)
+        {
+            VideoWrapper.SelectChannel(Chan);
+        }
         public string EncoderStatus()
         {
             switch (VideoWrapper.GetEncoderStatus())
@@ -160,14 +165,14 @@ namespace BioPacVideo
 
         public void LoadSettings()
         {            
-            //VideoWrapper.SetVideoQuant(Quant);
-            //VideoWrapper.SetKeyInterval(KeyFrames);            
+            VideoWrapper.SetVideoQuant(Quant);
+            VideoWrapper.SetKeyInterval(KeyFrames);            
                  
         }
 
         public void StopRecording()
         {
-          //  VideoWrapper.CloseRecording();
+          VideoWrapper.CloseRecording();
         }
     }
 }

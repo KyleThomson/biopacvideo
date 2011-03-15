@@ -13,33 +13,44 @@
 // CVideoWrapperApp
 // See VideoWrapper.cpp for the implementation of this class
 //
-extern "C" __declspec(dllexport) int initSDK(void);
-extern "C" __declspec(dllexport) int StartSDK(void);
+//SDK Open/Close Functions
+extern "C" __declspec(dllexport) int initCaptureSDK(void);
+extern "C" __declspec(dllexport) int StartCaptureSDK(void);
+extern "C" __declspec(dllexport) int initEncoderSDK(void);
+extern "C" __declspec(dllexport) int StartEncoderSDK(void);
+extern "C" __declspec(dllexport) void FreeCaptureDevice(void);
+
+//Capture Functions
+extern "C" _declspec(dllexport) int StartCapture();
+extern "C" _declspec(dllexport) int StartEncoding();
+extern "C" _declspec(dllexport) int CloseRecording(void);
+extern "C" _declspec(dllexport) int GetEncoderStatus(void);
+extern "C" _declspec(dllexport) int GetCaptureStatus(void);
+extern "C" _declspec(dllexport) int GetEncRes();
+extern "C" _declspec(dllexport) int __cdecl NewFrameCallback(int empty, int nID, int nDevNum, int nMuxChan,   int nBufSize, BYTE* pBuf);
+extern "C" _declspec(dllexport) BYTE* GetSnapShot(int Chan);
+extern "C" _declspec(dllexport) BYTE* GetCurrentBuffer();
 extern "C" __declspec(dllexport) int GetDeviceCount(void);
+
+
+//Setting Functions
 extern "C" __declspec(dllexport) int SetVideoQuant(int Quant);
 extern "C" __declspec(dllexport) int SetContrast(int Chan, long Contrast);
 extern "C" __declspec(dllexport) int SetBrightness(int Chan, long Brightness);
 extern "C" _declspec(dllexport) int SetHue(int Chan, long Hue);
 extern "C" _declspec(dllexport) int SetSaturation(int Chan, long Saturation);
 extern "C" _declspec(dllexport) int SetKeyInterval(int KeyInt);
-extern "C" _declspec(dllexport) int SetVideoRes(int XRes, int YRes);
+extern "C" _declspec(dllexport) int SetCaptureRes(int XRes, int YRes);
+extern "C" _declspec(dllexport) int SetEncoderRes();
 extern "C" _declspec(dllexport) int SetFrameRate(int Frate);
-extern "C" _declspec(dllexport) int StartCapture(int Func_Ptr);
-extern "C" _declspec(dllexport) int CloseRecording(void);
-extern "C" _declspec(dllexport) void SetFName(LPTSTR FName, int FileStart);
-extern "C" _declspec(dllexport) int GetSampleRate(int *Frate);
-extern "C" _declspec(dllexport) int GetEncoderStatus();
-extern "C" _declspec(dllexport) int GetCaptureStatus();
-extern "C" _declspec(dllexport) int GetEncRes();
-extern "C" _declspec(dllexport) int StartEncoding();
+extern "C" _declspec(dllexport) void SetFName(LPSTR FName, int FileStart);
+extern "C" _declspec(dllexport) int GetSampleRate(void);
 extern "C" _declspec(dllexport) int SetNTSC();
-extern "C" _declspec(dllexport) int __cdecl NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf);
-extern "C" _declspec(dllexport) BYTE* GetSnapShot(int Chan);
-extern "C" _declspec(dllexport) void testout(int* test);
-int nDevCount;
-int SelChan = 0;
-int Switching = 4; 
-int FileStart = 0;
+extern "C" _declspec(dllexport) void SetSwitching(int Switch);
+extern "C" _declspec(dllexport) void SelectChannel(int Chan);
+
+
+
 
 
 
