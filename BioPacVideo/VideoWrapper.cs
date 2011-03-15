@@ -43,17 +43,22 @@ namespace BioPacVideo
     }
     class VideoWrapper
     {
-        [DllImport(@".\VideoWrapper.dll")]
-        public static extern int initSDK();
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int initCaptureSDK();
 
-        [DllImport(@".\VideoWrapper.dll")]
-        public static extern int StartSDK();        
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int StartCaptureSDK();
 
-        [DllImport(@".\VideoWrapper.dll")]
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int initEncoderSDK();
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int StartEncoderSDK();     
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int GetDeviceCount();
 
-
-        [DllImport(@".\VideoWrapper.dll")]
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SetVideoQuant(int Quant);
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
@@ -67,53 +72,57 @@ namespace BioPacVideo
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SetSaturation(int Chan, int Contrast);
-
+ 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void testout(out int test);
-
-        [DllImport(@".\VideoWrapper.dll")]
         public static extern int SetKeyInterval(int KeyInt);
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int SetVideoRes(int XRes, int YRes);
+        public static extern int SetCaptureRes(int XRes, int YRes);
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SetEncoderRes();
+
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SetFrameRate(int Frate);
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int GetFrameRate();
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int CloseRecording();
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int StartCapture(IntPtr X);
-
-        
-
-        /*[DllImport(@".\VideoWrapper.dll")]
-        public static extern int GetSnapShot(int Chan, ref IntPtr Ptr);*/
-
-        [DllImport(@".\VideoWrapper.dll")]
-        public static extern IntPtr GetSnapShot(int Chan);
-
-        [DllImport(@".\VideoWrapper.dll")]
-        public static extern int SetFName(StringBuilder FName, int FStart);
-        //public static extern int SetFName([MarshalAs(UnmanagedType.LPStr)]string FName, int FStart);
-
-        [DllImport(@".\VideoWrapper.dll")]
-        public static extern int GetEncoderStatus();
-
-        [DllImport(@".\VideoWrapper.dll")]
-        public static extern int GetCaptureStatus();
-
-        [DllImport(@".\VideoWrapper.dll")]
-        public static extern int GetEncRes();
-
-        [DllImport(@".\VideoWrapper.dll")]
-        public static extern int StartEncoding();
-
-        [DllImport(@".\VideoWrapper.dll")]
-        public static extern int SetNTSC();
+        public static extern int StartCapture();
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int NewFrameCallback(int lParam, int nID, int nDevNum, int nMuxChan, int nBufSize, IntPtr pBuf);
+        public static extern IntPtr GetCurrentBuffer();
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SetNTSC(); //Sets all devices to NTSC
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SelectChannel(int Chan); //Selects Channel for output
+        
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr GetSnapShot(int Chan);
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SetFName([MarshalAs(UnmanagedType.LPStr)]string FName, int FStart);
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int GetEncoderStatus();
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int GetCaptureStatus();
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int GetEncRes();
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int StartEncoding();
+
+       
+      
     }
 }
