@@ -39,7 +39,7 @@ namespace BioPacVideo
         private FileStream BinaryFile;
         public int SelectedChannel;
         public int samplesize;
-        public bool Drawing;
+        public bool ClearDisplay;
         private float Xmax;
         private float Ymax;
         public int FileCount;
@@ -309,6 +309,13 @@ namespace BioPacVideo
         private void drawbuffer()
         {            
             PointF[] WaveC;
+            if (ClearDisplay)
+            {
+                lock(g)
+                g.Clear(Color.White);
+                CurPointPos = 0;
+                ClearDisplay = false;
+            }
             int SamplesLeft;
             if (samplesize + CurPointPos > MaxDrawSize)
             {
@@ -346,6 +353,7 @@ namespace BioPacVideo
                     }
                 }
             }
+            lock (g)
             g.DrawLines(wavePen, WaveC);
             //Drawing = false;
         }
@@ -391,24 +399,15 @@ namespace BioPacVideo
             else
                 return false;
         }
-
-        public void ClearDisplay()
-        {
-            if (g != null)
-            {
-                while (Drawing) { };
-                g.Clear(Color.White);
-                CurPointPos = 0;
-            }
-        }
-
+        
+       
 
         public bool StartRecording()
         {
             AcqThread = new Thread(new ThreadStart(RecordingThread)); //Initialize recording thread
             isrecording = true;
             g = Graphics.FromImage(offscreen);
-            ClearDisplay();
+            ClearDisplay = true;
             Ymax = Convert.ToSingle(g.VisibleClipBounds.Height);
             Xmax = Convert.ToSingle(g.VisibleClipBounds.Width);         
             PointSpacing = Convert.ToSingle(Xmax / MaxDrawSize);
@@ -480,8 +479,7 @@ namespace BioPacVideo
             while (AcqThread.IsAlive)
             {
                 //Pause to wait for thread to close
-            }
-            while (Drawing) { };
+            }            
             updateheader();
             MPReturn = MPCLASS.stopAcquisition();
             BinaryFile.Close();
@@ -511,6 +509,5 @@ namespace BioPacVideo
             FeederTestThread.Start();
             while (FeederTestThread.IsAlive) { };
         }
-
     }
 }

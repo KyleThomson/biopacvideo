@@ -1,4 +1,4 @@
-// VideoWrapper.cpp : Defines the initialization routines for the DLL.
+// VideoWraper.cpp : Defines the initialization routines for the DLL.
 //
 
 #include "stdafx.h"
@@ -26,7 +26,6 @@ typedef queue<LPVOID> LPQUEUE;
 #define ID_MUX0_NEW_FRAME 37800
 #define ID_MUX1_NEW_FRAME 37801
 #define ID_MUX2_NEW_FRAME 37802
-#define ID_MUX3_NEW_FRAME 37803
  
 const INT64 MBYTE = 1024*1024;   // 1MB
 
@@ -310,7 +309,7 @@ int StartEncoding()
 
 void StreamReadBegin(int nChNum)
 {
-	nFileIndex[nChNum] = 0;
+	nFileIndex[nChNum] = FileStart;
 	nAccumulatedSize[nChNum] = 0;
 	bStartSave[nChNum] = FALSE;
 }
@@ -322,8 +321,7 @@ void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFl
 	if (nAccumulatedSize[nChNum] >= 1900*MBYTE && dwCompFlags == AVIIF_KEYFRAME)	//The size limit of the AVI file is 2GB
 	{
 		nAccumulatedSize[nChNum] = 0;
-		nFileIndex[nChNum]++;
-		//Close AVI file
+		nFileIndex[nChNum]++;		
 		if (hAVIFile[nChNum])
 		{
 			pDVPEncSDK->AdvDVP_CloseAVIFile(hAVIFile[nChNum]);
@@ -334,7 +332,7 @@ void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFl
 	if (hAVIFile[nChNum] == NULL)
 	{		
 		char FileName[MAX_PATH];		
-		sprintf_s(FileName, "%s_%02d_%04d.avi", SaveName, nChNum, FileStart);						
+		sprintf_s(FileName, "%s_%02d_%04d.avi", SaveName, nChNum, nFileIndex[nChNum]);						
 		hAVIFile[nChNum] = pDVPEncSDK->AdvDVP_CreateAVIFile(FileName, nWidth[nDevNum], nHeight[nDevNum], (int)(Global_Frate/Switching));		
 	}		
 	//First frame of the video file must be key frame.
