@@ -120,9 +120,7 @@ namespace BioPacVideo
         public static extern int GetEncRes();
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int StartEncoding();
-
-       
+        public static extern int StartEncoding();       
       
     }
 }

@@ -152,32 +152,16 @@ namespace BioPacVideo
         }
 
 
-        protected override void  OnPaint(PaintEventArgs e)
-        {
-            
-            g.DrawRectangle(BoxPen, 320, 50, 324, 244);            
-            // Release handle to device context.
-            
-            base.OnPaint(e);
-        }
+       
         private void DisplayThread()
-        {
+        {            
             while (RunDisplayThread)
             {
                 Thread.Sleep(30);
                 IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
-                Invoked();
-                TickCount++;
-                TickCountLabel.Text = string.Format("Buffer: {0}%", MP.buffull);         
-           }
-        }
-
-        private void Invoked()
-        {            
-            while (MP.Drawing) { };
-            Still.Dispose();       
-            g.DrawImage(MP.offscreen, 50, this.Height-300);
-            Video.pDF = VideoWrapper.GetCurrentBuffer();
+                Still.Dispose();       
+                g.DrawImage(MP.offscreen, 50, this.Height-300);
+                Video.pDF = VideoWrapper.GetCurrentBuffer();
             if (Video.pDF != null)
             {
                 Still = new Bitmap(Video.XRes, Video.YRes, Video.XRes * 3, PixelFormat.Format24bppRgb, Video.pDF);
@@ -186,12 +170,16 @@ namespace BioPacVideo
             else
             {
                 Still = new Bitmap("NoSignal.Bmp");
-            }
-            g.DrawImage(Still, 322, 52, 320, 240);            
+            }            
+            g.DrawImage(Still, 322, 52, 320, 240);
             IDT_VIDEOSTATUS.Text = Video.GetResText();
             IDT_ENCODERRESULT.Text = Video.EncoderStatus();
             IDT_ENCODERSTATUS.Text = VideoWrapper.GetEncRes().ToString();
+                TickCount++;
+                TickCountLabel.Text = string.Format("Buffer: {0}%", MP.buffull);         
+           }
         }
+       
 
         private void RecordingButton_Click(object sender, EventArgs e)
         {
@@ -383,7 +371,7 @@ namespace BioPacVideo
         {
             MP.SelectedChannel = IDC_RATSELECT.SelectedIndex + 1;
             Video.SelectChannel(IDC_RATSELECT.SelectedIndex);
-            MP.ClearDisplay();
+            MP.ClearDisplay = true;
         }
 
         private void testFeedersToolStripMenuItem_Click(object sender, EventArgs e)
