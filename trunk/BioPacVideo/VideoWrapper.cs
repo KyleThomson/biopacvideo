@@ -7,9 +7,8 @@ using System.Runtime.InteropServices;
 namespace BioPacVideo
 {
     class AdvantechCodes
-    {
-
-        public enum tagRes
+    {        
+        public enum tagRes //Last Capture Result from the video card, with a few added
         {
             CALLBACK_RUN = 5,
             NO_VIDEO_PRESENT = 4,
@@ -24,7 +23,7 @@ namespace BioPacVideo
             DEVICENUMERROR = -5,
             INPUTERROR = -6,
         }
-        public enum CapState
+        public enum CapState //Current Status of Capture
         {
             STOPPED = 1,
             RUNNING = 2,
@@ -32,7 +31,7 @@ namespace BioPacVideo
             UNKNOWNSTATE = -2
         }
 
-        public enum VideoSize
+        public enum VideoSize 
         {
             FULLPAL = 0, // (PAL: 768x576)
             SIZED1, // (NTSC: 720x480, PAL: 720x576)
@@ -43,6 +42,7 @@ namespace BioPacVideo
     }
     class VideoWrapper
     {
+        //Imports from DLL, see DLL for definition. Also, CDECL is the needed calling convention so callbacks work. 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int initCaptureSDK();
 
@@ -96,7 +96,7 @@ namespace BioPacVideo
         public static extern int StartCapture();
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr GetCurrentBuffer();
+        public static extern IntPtr GetCurrentBuffer(); //Sends the pointer from DLL to a buffer of data
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SetNTSC(); //Sets all devices to NTSC

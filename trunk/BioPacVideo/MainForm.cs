@@ -34,18 +34,17 @@ namespace BioPacVideo
         bool RunDisplayThread; 
         public MainForm()
         {
-            InitializeComponent();
-            MP = MPTemplate.Instance;
-            Video = VideoTemplate.Instance;
-            Feeder = new FeederTemplate();
+            InitializeComponent(); //Default code
+            MP = MPTemplate.Instance; //Pull Instance from MP Template - So we only have a single instance in all code
+            Video = VideoTemplate.Instance; //Same for Video
+            Feeder = new FeederTemplate(); //Only one instance of this is needed
             BoxPen = new Pen(Brushes.Black, 4);            
             BioIni = new IniFile(Directory.GetCurrentDirectory() + "\\BioPacVideo.ini"); 
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             for (int i = 0; i < 16; i++)
             {
                 IDC_RATSELECT.Items.Add(string.Format("Rat {0}", i + 1));
-            }
-            //Load mpdev
+            }            
             if (!File.Exists(@".\mpdev.dll"))
             {
                 MessageBox.Show("mpdev.dll not found in " + Directory.GetCurrentDirectory() + "\nBioPac will not connect without this file!", "Missing DLL File",

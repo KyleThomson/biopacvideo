@@ -452,6 +452,7 @@ namespace BioPacVideo
                 MPReturn = MPCLASS.receiveMPData(rec_buffer, BuffSize, out received);
                 if (MPReturn != MPCODE.MPSUCCESS)
                 {
+                    MessageBox.Show(MPCLASS.getMPDaemonLastError().ToString());
                     return;
                 }
                 Buffer.BlockCopy(rec_buffer, 0, byte_buffer, 0, (int)received * 8);
