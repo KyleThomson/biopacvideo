@@ -204,7 +204,7 @@ namespace BioPacVideo
                     Video.FileStart = 1;
                     Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString);
                     Video.LoadSettings();                    
-                    Video.StartRecording();
+                    
                     //IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
                     IDT_VIDEOSTATUS.Text = Video.GetResText();
                     RecordingButton.Text = "Stop Recording";
@@ -212,7 +212,8 @@ namespace BioPacVideo
                     IDM_SELECTCHANNELS.Enabled = false;
                     IDM_SETTINGS.Enabled = false;
                     IDM_DISCONNECTBIOPAC.Enabled = false;
-                    RecordingButton.BackColor = Color.Red;                    
+                    RecordingButton.BackColor = Color.Red;
+                    Video.StartRecording();
                     MP.isrecording = MP.StartRecording();
                     RunDisplayThread = true;
                     ThreadDisplay.Start();
