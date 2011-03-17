@@ -100,7 +100,7 @@ namespace BioPacVideo
         public void StartRecording()
         {            
             VideoWrapper.StartEncoding();            
-        }
+        } 
         public void SelectChannel(int Chan)
         {
             VideoWrapper.SelectChannel(Chan);
