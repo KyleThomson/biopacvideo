@@ -1,6 +1,5 @@
 // MP_wrapper.h : main header file for the MP_wrapper DLL
 //
-
 #pragma once
 
 #ifndef __AFXWIN_H__
@@ -8,6 +7,15 @@
 #endif
 
 #include "resource.h"		// main symbols
+
+
+extern "C" __declspec(dllexport) int InitRecording();
+extern "C" __declspec(dllexport) void RecordingThread();
+extern "C" __declspec(dllexport) int SetSamplingRate();
+extern "C" __declspec(dllexport) int SetRecordingChannels(short Chans);
+extern "C" __declspec(dllexport) int 
+
+
 
 
 // CMP_wrapperApp
@@ -25,3 +33,5 @@ public:
 
 	DECLARE_MESSAGE_MAP()
 };
+
+
