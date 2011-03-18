@@ -57,6 +57,7 @@ IDVP7010BDLL *pDVPSDK = NULL;
 IDVP7010BEncDLL *pDVPEncSDK = NULL;
 //Globals
 int Global_Frate;
+bool VideoPresent[4] = {false, false, false, false};
 long lDstSize;
 bool EncoderRunning;
 bool NoSig = true;
@@ -328,12 +329,17 @@ void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFl
 			hAVIFile[nChNum] = NULL;
 		}
 	}
+	int Pres = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		if (VideoPresent[i]) Pres++;
+	}
 	//Create AVI file (if closed or unopened)
 	if (hAVIFile[nChNum] == NULL)
 	{		
 		char FileName[MAX_PATH];		
 		sprintf_s(FileName, "%s_%02d_%04d.avi", SaveName, nChNum, nFileIndex[nChNum]);						
-		hAVIFile[nChNum] = pDVPEncSDK->AdvDVP_CreateAVIFile(FileName, nWidth[nDevNum], nHeight[nDevNum], (int)(Global_Frate/Switching));		
+		hAVIFile[nChNum] = pDVPEncSDK->AdvDVP_CreateAVIFile(FileName, nWidth[nDevNum], nHeight[nDevNum], (int)(30/Pres));		
 	}		
 	//First frame of the video file must be key frame.
 	if (dwCompFlags == AVIIF_KEYFRAME)
@@ -374,6 +380,7 @@ void StreamReadEnd(int nChNum)
 int __cdecl NewFrameCallback(int empty, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf)
 {			
 	LastEncRes =nID;
+	VideoPresent[nMuxChan] = true;
 	if ((nDevNum == SelDevice) && (nMuxChan == SelChan))	
 	{						
 		if (*(pBuf+1) & 0x02) 		
