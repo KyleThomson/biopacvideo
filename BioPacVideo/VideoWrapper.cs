@@ -81,8 +81,7 @@ namespace BioPacVideo
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SetEncoderRes();
-
-
+        
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SetFrameRate(int Frate);
 
