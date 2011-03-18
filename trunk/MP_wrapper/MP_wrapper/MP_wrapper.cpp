@@ -4,8 +4,40 @@
 #include "stdafx.h"
 #include "MP_wrapper.h"
 #include "mpdev.h"
+int retval;
+BOOL C[16];
 
+int SetRecordingChannels(short Chans)
+{
+	
+	for (int i = 0; i < 16; i++)
+	{
+		if (Chans&(1 << i)) 
+		{
+			C[i] = true;
+		}
+		else
+		{
+			C[i] = false;
+		}
+	}
+}
 
+int InitRecording()
+{
+	retval = setAcqChannels(&C[0]);
+	if(retval != MPSUCCESS)
+	{	
+		return retval;
+	}
+
+	retval =  startMPAcqDaemon();
+	if(retval != MPSUCCESS)
+	{		
+		stopAcquisition();
+
+		return retval;
+	}
 
 //
 //TODO: If this DLL is dynamically linked against the MFC DLLs,
