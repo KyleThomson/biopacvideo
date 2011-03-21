@@ -9,12 +9,18 @@
 #include "resource.h"		// main symbols
 
 
-extern "C" __declspec(dllexport) int InitRecording();
-extern "C" __declspec(dllexport) void RecordingThread();
-extern "C" __declspec(dllexport) int SetSamplingRate();
-extern "C" __declspec(dllexport) int SetRecordingChannels(short Chans);
-extern "C" __declspec(dllexport) int 
+extern "C" __declspec(dllexport) int ConnectBioPac(void);
+extern "C" __declspec(dllexport) int DisconnectBioPac(void);
+extern "C" __declspec(dllexport) int InitRecording(void);
+extern "C" __declspec(dllexport) void RecordingThread(void);
+extern "C" __declspec(dllexport) void Set_SamplingRate(int Rate);
+extern "C" __declspec(dllexport) void SetRecordingChannels(short Chans);
+extern "C" __declspec(dllexport) void SetFileName(LPTSTR Fname);
+extern "C" __declspec(dllexport) int EndRecording();
 
+extern "C" __declspec(dllexport) int LastDaemonError(void);
+extern "C" __declspec(dllexport) int RecordingStatus(void);
+//extern "C" __declspec(dllexport) 
 
 
 

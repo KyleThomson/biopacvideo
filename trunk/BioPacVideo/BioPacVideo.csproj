@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MPDevWrapper.cs" />
     <Compile Include="FeederForm.cs">
       <SubType>Form</SubType>
     </Compile>
