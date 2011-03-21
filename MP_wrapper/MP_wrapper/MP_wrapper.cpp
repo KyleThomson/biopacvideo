@@ -6,8 +6,10 @@
 #include "mpdev.h"
 int retval;
 BOOL C[16];
+bool isRecording = false;
+int SRate = 500;
 
-int SetRecordingChannels(short Chans)
+void SetRecordingChannels(short Chans)
 {
 	
 	for (int i = 0; i < 16; i++)
@@ -21,24 +23,62 @@ int SetRecordingChannels(short Chans)
 			C[i] = false;
 		}
 	}
+
 }
 
-int InitRecording()
+int ConnectBioPac()
+{
+	retval = connectMPDev(MP150, MPUDP, "auto");
+	return retval;
+}
+
+int DisconnectBioPac()
+{
+	retval = disconnectMPDev();
+	return retval;
+}
+
+
+
+
+
+void Set_SamplingRate(int Rate)
+{
+	SRate = Rate;
+	return;
+}
+
+
+
+int InitRecording(void)
 {
 	retval = setAcqChannels(&C[0]);
 	if(retval != MPSUCCESS)
 	{	
 		return retval;
 	}
-
+	retval = setSampleRate(1000/SRate);
+	if(retval != MPSUCCESS)
+	{	
+		return retval;
+	}
 	retval =  startMPAcqDaemon();
 	if(retval != MPSUCCESS)
 	{		
-		stopAcquisition();
-
-		return retval;
+		stopAcquisition();		
 	}
+	return retval;
+}
 
+
+int RecordingStatus(void)
+{
+	return retval;
+}
+int LastDaemonError(void)
+{
+	return getMPDaemonLastError();
+}
 //
 //TODO: If this DLL is dynamically linked against the MFC DLLs,
 //		any functions exported from this DLL which call into
@@ -92,3 +132,5 @@ BOOL CMP_wrapperApp::InitInstance()
 
 	return TRUE;
 }
+
+
