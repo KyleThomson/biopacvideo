@@ -25,9 +25,10 @@ namespace BioPacVideo
         public static string[] MPRET = new string[] {"NULL", "SUCCESS", "DRIVERERROR", "DLLBUSY","INVALIDPARAM", "MP_NOT_CONNECTED","MPREADY","PRETRIGGER",
     "TRIGGER","BUSY","NOACTIVECHANNELS","COMERROR", "INVTYPE", "NO_NETWORK_CONNECT", "OVERWROTESAMPLES","MEMERROR",
     "SOCKETERROR","UNDERFLOW","PRESETERROR","XMLERROR" };
+        static EventWaitHandle _DrawHandle = new AutoResetEvent(false);
+        public EventWaitHandle _DisplayHandle = new AutoResetEvent(false);
         public bool isrecording = false;
-        public bool isconnected = false;
-        public int buffull;
+        public bool isconnected = false;        
         public bool[] FeederTest;
         private bool[] DigitalChannel;
         private int MaxDrawSize;
@@ -38,6 +39,7 @@ namespace BioPacVideo
         private BinaryWriter BinaryFileID;
         private FileStream BinaryFile;
         public int SelectedChannel;
+        public bool IsFileWriting;
         public int samplesize;
         public bool ClearDisplay;
         private float Xmax;
@@ -66,6 +68,7 @@ namespace BioPacVideo
         public int SampleRate;
         public int DisplayLength;
         private Single PointSpacing;
+        public TimeSpan Buftime;
         private int samplecount;
         private long[] ChannelDataSizeLocation;
         private int AcqChan;        
@@ -307,36 +310,46 @@ namespace BioPacVideo
         }
 
         private void drawbuffer()
-        {            
+        {
             PointF[] WaveC;
-            if (ClearDisplay)
+            while (true)
             {
-                lock(g)
-                g.Clear(Color.White);
-                CurPointPos = 0;
-                ClearDisplay = false;
-            }
-            int SamplesLeft;
-            if (samplesize + CurPointPos > MaxDrawSize)
-            {
-                SamplesLeft = (samplesize + CurPointPos - MaxDrawSize);
-                g.Clear(Color.White);
-                CurPointPos = 0;
-            }
-            else
-            {
-                SamplesLeft = samplesize;
-            }
-            WaveC = new PointF[SamplesLeft];
-            int SamplePos = 0;
-            for (int i = 0; i < last_received; i++)
-            {
-                //BinaryFileID.Write(buffer[i]);
-                if (((i + 1) % AcqChan) == (SelectedChannel % AcqChan))
+                _DrawHandle.WaitOne();
+                if (ClearDisplay)
                 {
-                    if (SamplesLeft < samplesize)
+                    lock (g)
+                        g.Clear(Color.White);
+                    CurPointPos = 0;
+                    ClearDisplay = false;
+                }
+                int SamplesLeft;
+                if (samplesize + CurPointPos > MaxDrawSize)
+                {
+                    SamplesLeft = (samplesize + CurPointPos - MaxDrawSize);
+                    g.Clear(Color.White);
+                    CurPointPos = 0;
+                }
+                else
+                {
+                    SamplesLeft = samplesize;
+                }
+                WaveC = new PointF[SamplesLeft];
+                int SamplePos = 0;
+                for (int i = 0; i < last_received; i++)
+                {                    
+                    if (((i + 1) % AcqChan) == (SelectedChannel % AcqChan))
                     {
-                        if (i / AcqChan >= samplesize - SamplesLeft)
+                        if (SamplesLeft < samplesize)
+                        {
+                            if (i / AcqChan >= samplesize - SamplesLeft)
+                            {
+                                PointF TempPoint = new PointF(CurPointPos * PointSpacing, ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax));
+                                WaveC[SamplePos] = TempPoint;
+                                SamplePos++;
+                                CurPointPos++;
+                            }
+                        }
+                        else
                         {
                             PointF TempPoint = new PointF(CurPointPos * PointSpacing, ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax));
                             WaveC[SamplePos] = TempPoint;
@@ -344,18 +357,15 @@ namespace BioPacVideo
                             CurPointPos++;
                         }
                     }
-                    else
-                    {
-                        PointF TempPoint = new PointF(CurPointPos * PointSpacing, ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax));
-                        WaveC[SamplePos] = TempPoint;
-                        SamplePos++;
-                        CurPointPos++;
-                    }
+                }
+                if (SamplePos > 2)
+                {
+                    lock (g)
+                        g.DrawLines(wavePen, WaveC);
+                    _DisplayHandle.Set();
+              
                 }
             }
-            lock (g)
-            g.DrawLines(wavePen, WaveC);
-            //Drawing = false;
         }
 
         private void updateheader()
@@ -399,9 +409,7 @@ namespace BioPacVideo
             else
                 return false;
         }
-        
-       
-
+      
         public bool StartRecording()
         {
             AcqThread = new Thread(new ThreadStart(RecordingThread)); //Initialize recording thread
@@ -410,9 +418,7 @@ namespace BioPacVideo
             ClearDisplay = true;
             Ymax = Convert.ToSingle(g.VisibleClipBounds.Height);
             Xmax = Convert.ToSingle(g.VisibleClipBounds.Width);         
-            PointSpacing = Convert.ToSingle(Xmax / MaxDrawSize);
-            open_ACQ_file();
-            writeheader();
+            PointSpacing = Convert.ToSingle(Xmax / MaxDrawSize);         
             samplecount = 0;
             MPReturn = MPCLASS.setDigitalAcqChannels(DigitalChannel);
             MPReturn = MPCLASS.setSampleRate(1000 / SampleRate);
@@ -433,42 +439,68 @@ namespace BioPacVideo
             return true;
         }
 
+        public bool StartWriting()
+        {
+            open_ACQ_file();
+            writeheader();
+            IsFileWriting = true;
+            return true;
+        }
+        public void StopWriting()
+        {
+            isrecording = false;
+            while (AcqThread.IsAlive)
+            {
+                //Pause to wait for thread to close
+            }
+            updateheader();
+            BinaryFile.Close();
+            AcqThread = new Thread(new ThreadStart(RecordingThread)); //Initialize recording thread
+            AcqThread.Start();
+        }
+
+
+
+/******************************************************************************
+ * 
+ *                  RECORDING THREAD!
+ *                  
+ * ****************************************************************************/
+
         private void RecordingThread()
         {
             uint received;         
-            AcqChan = TotChan();
+            AcqChan = TotChan();            
             Thread BuffDraw = new Thread(new ThreadStart(drawbuffer));
-            BuffSize = ((uint)(SampleRate/UpdateSpeed))*(uint)AcqChan * 10;
+            BuffDraw.Start();
+            BuffSize = ((uint)(SampleRate/UpdateSpeed))*(uint)AcqChan;
             rec_buffer = new double[BuffSize];
             draw_buffer = new double[BuffSize];
-            byte_buffer = new byte[BuffSize * 8];    
-            //start the acquisition
-            MPReturn = MPCLASS.startAcquisition();
-
+            byte_buffer = new byte[BuffSize * 8];                
+            MPReturn = MPCLASS.startAcquisition();            
             if (MPReturn != MPCODE.MPSUCCESS)
                 return;
             while (isrecording)
-            {                
-                MPReturn = MPCLASS.receiveMPData(rec_buffer, BuffSize, out received);
+            {                                
+                MPReturn = MPCLASS.receiveMPData(rec_buffer, BuffSize, out received);                                
                 if (MPReturn != MPCODE.MPSUCCESS)
                 {
                     MessageBox.Show(MPCLASS.getMPDaemonLastError().ToString());
                     return;
                 }
-                Buffer.BlockCopy(rec_buffer, 0, byte_buffer, 0, (int)received * 8);
-                BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin);
-                BinaryFileID.Write(byte_buffer);
-                CurrentWriteLoc = BinaryFile.Position;
-                buffull = (int)((100* received) / BuffSize);
+                if (IsFileWriting)
+                {
+                    Buffer.BlockCopy(rec_buffer, 0, byte_buffer, 0, (int)received * 8);
+                    BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin);
+                    BinaryFileID.Write(byte_buffer);
+                    CurrentWriteLoc = BinaryFile.Position;
+                }
                 last_received = received;
                 samplesize = (int)last_received / AcqChan;
                 samplecount += samplesize;
-               if (!BuffDraw.IsAlive) 
-                {                
-                        Buffer.BlockCopy(rec_buffer, 0, draw_buffer, 0, (int)received * 8);                        
-                        BuffDraw = new Thread(new ThreadStart(drawbuffer));
-                        BuffDraw.Start();
-                }
+                //Handle Feeding ()
+                Buffer.BlockCopy(rec_buffer, 0, draw_buffer, 0, (int)received * 8);                        
+                _DrawHandle.Set();                                       
                 
             }
             return;
@@ -501,7 +533,7 @@ namespace BioPacVideo
             {
                 MPCLASS.setDigitalIO(i, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
                 Thread.Sleep(1000);
-                MPCLASS.setDigitalIO(i, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
+                MPCLASS.setDigitalIO(i, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);                
             }            
         }
         public void RunFeederTest()

@@ -32,19 +32,37 @@ namespace BioPacVideo
         Thread ThreadDisplay;        
         Graphics g;
         bool RunDisplayThread; 
-        public MainForm()
+
+
+
+
+
+        public MainForm() //Form Constructior
         {
+            //********** INIT VARIABLES ****************
             InitializeComponent(); //Default code
             MP = MPTemplate.Instance; //Pull Instance from MP Template - So we only have a single instance in all code
             Video = VideoTemplate.Instance; //Same for Video
             Feeder = new FeederTemplate(); //Only one instance of this is needed
             BoxPen = new Pen(Brushes.Black, 4);            
-            BioIni = new IniFile(Directory.GetCurrentDirectory() + "\\BioPacVideo.ini"); 
+            BioIni = new IniFile(Directory.GetCurrentDirectory() + "\\BioPacVideo.ini");
+            Rats = RatTemplate.NewInitArray(16);
+            g = this.CreateGraphics();            
+            
+            
+            
+            //***************** LOAD SETTINGS *****************
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            ReadINI(BioIni); //Read Presets from INI file
+
+
+            //Start EEG and Video functions
+            MP.InitializeDisplay(this.Width, this.Height);   
             for (int i = 0; i < 16; i++)
             {
                 IDC_RATSELECT.Items.Add(string.Format("Rat {0}", i + 1));
             }            
+            
             if (!File.Exists(@".\mpdev.dll"))
             {
                 MessageBox.Show("mpdev.dll not found in " + Directory.GetCurrentDirectory() + "\nBioPac will not connect without this file!", "Missing DLL File",
@@ -56,21 +74,30 @@ namespace BioPacVideo
                 if (!MP.isconnected)
                 {
                     MessageBox.Show("BioPac failed to connect.\nError was " + MPTemplate.MPRET[(int)MP.MPReturn], "BioPac Comnmunication Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                 
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
+                    MP.StartRecording();
                     IDT_BIOPACSTAT.Text = "BioPac Connected";
                 }
                 IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
             }                           
-            Rats = RatTemplate.NewInitArray(16);
-            g = this.CreateGraphics();
             Still = new Bitmap("NoSignal.Bmp");
             MP.FileCount = 0;            
-            RecordingButton.BackColor = Color.Green;
-            ReadINI(BioIni); //Read Presets from INI file
-            IDC_RATSELECT.SelectedIndex = MP.SelectedChannel-1;            
+            RecordingButton.BackColor = Color.Green;            
+            IDC_RATSELECT.SelectedIndex = MP.SelectedChannel-1;
+            Video.initVideo();
+            IDT_DEVICECOUNT.Text = string.Format("Device Count ({0})", Video.Device_Count);
+            IDT_VIDEOSTATUS.Text = Video.GetResText();
+            if (Video.Res == (AdvantechCodes.tagRes.SUCCEEDED))
+            {
+                Video.CapSDKStatus = true;
+            }
+            ThreadDisplay = new Thread(new ThreadStart(DisplayThread)); 
+            RunDisplayThread = true;
+            ThreadDisplay.Start();
         }
         
 
@@ -156,7 +183,7 @@ namespace BioPacVideo
         {            
             while (RunDisplayThread)
             {
-                Thread.Sleep(30);
+                MP._DisplayHandle.WaitOne();
                 IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
                 Still.Dispose();       
                 g.DrawImage(MP.offscreen, 50, this.Height-300);
@@ -174,8 +201,8 @@ namespace BioPacVideo
             IDT_VIDEOSTATUS.Text = Video.GetResText();
             IDT_ENCODERRESULT.Text = Video.EncoderStatus();
             IDT_ENCODERSTATUS.Text = VideoWrapper.GetEncRes().ToString();
-                TickCount++;
-                TickCountLabel.Text = string.Format("Buffer: {0}%", MP.buffull);         
+
+            TickCountLabel.Text = MP.Buftime.ToString();    
            }
         }
        
@@ -185,11 +212,10 @@ namespace BioPacVideo
             IniFile WriteOnce;
             if (MP.isconnected && Video.CapSDKStatus)
             {
-                if (!MP.isrecording)
+                if (!MP.IsFileWriting)
                 {
                     //Start Recording   
-                    MP.InitializeDisplay(this.Width, this.Height);
-                    ThreadDisplay = new Thread(new ThreadStart(DisplayThread)); 
+                    Video.initEncoder();                                    
                     string DateString, RecordingDir;
                     DateString = string.Format("{0:yyyy}{0:MM}{0:dd}", DateTime.Now);
                     RecordingDir = MP.RecordingDirectory + "\\" + DateString;
@@ -213,17 +239,14 @@ namespace BioPacVideo
                     IDM_DISCONNECTBIOPAC.Enabled = false;
                     RecordingButton.BackColor = Color.Red;
                     Video.StartRecording();
-                    MP.isrecording = MP.StartRecording();
-                    RunDisplayThread = true;
-                    ThreadDisplay.Start();
+                    MP.isrecording = MP.StartWriting();                   
                 }
                 else
-                {                    
-                    RunDisplayThread = false;
+                {                                        
                     IDT_BIOPACRECORDINGSTAT.Text = "Not Recording";
                     MP.isrecording = false;
-                    MP.StopRecording();
-                    Video.StopRecording();
+                    MP.StopWriting();
+                    Video.StopEncoding();
                     IDM_SELECTCHANNELS.Enabled = true;
                     IDM_SETTINGS.Enabled = true;
                     IDM_DISCONNECTBIOPAC.Enabled = true;
@@ -410,8 +433,7 @@ namespace BioPacVideo
                 if (Video.Res == (AdvantechCodes.tagRes.SUCCEEDED))
                 {
                     Video.CapSDKStatus = true;
-                }
-                Video.initEncoder();
+                }                
             }
             
             
