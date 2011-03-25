@@ -23,6 +23,7 @@ extern "C" __declspec(dllexport) void FreeCaptureDevice(void);
 //Capture Functions
 extern "C" _declspec(dllexport) int StartCapture();
 extern "C" _declspec(dllexport) int StartEncoding();
+extern "C" _declspec(dllexport) int StopEncoding();
 extern "C" _declspec(dllexport) int CloseRecording(void);
 extern "C" _declspec(dllexport) int GetEncoderStatus(void);
 extern "C" _declspec(dllexport) int GetCaptureStatus(void);

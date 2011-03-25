@@ -49,18 +49,24 @@ namespace BioPacVideo
                 return instance;
             }
         }
-        public void initVideo()
+        public bool initVideo()
         {          
             Res =  (AdvantechCodes.tagRes) VideoWrapper.initCaptureSDK();
+            if (Res != AdvantechCodes.tagRes.SUCCEEDED)
+                return false;
             Res = (AdvantechCodes.tagRes) VideoWrapper.StartCaptureSDK();
+            if (Res != AdvantechCodes.tagRes.SUCCEEDED)
+                return false;
             Device_Count = VideoWrapper.GetDeviceCount();           
             VideoWrapper.SetNTSC();
             VideoWrapper.SetCaptureRes(XRes, YRes);
             int SRate = 30;
             VideoWrapper.SetFrameRate(SRate);   
             Res = (AdvantechCodes.tagRes)VideoWrapper.StartCapture();
+            if (Res != AdvantechCodes.tagRes.SUCCEEDED)
+                return false;            
             pDF = VideoWrapper.GetCurrentBuffer();
-            //MessageBox.Show(VideoWrapper.GetEncRes().ToString());
+            return true;
         }
         public void initEncoder()
         {
@@ -98,7 +104,7 @@ namespace BioPacVideo
             VideoWrapper.SetFName(FName, 0);
         }
         public void StartRecording()
-        {            
+        {                        
             VideoWrapper.StartEncoding();            
         } 
         public void SelectChannel(int Chan)
@@ -106,8 +112,8 @@ namespace BioPacVideo
             VideoWrapper.SelectChannel(Chan);
         }
         public string EncoderStatus()
-        {
-            switch (VideoWrapper.GetEncoderStatus())
+        {            
+            /*switch (VideoWrapper.GetEncoderStatus())
             {             
                 case 1:
                     return "ENCODER STOPPED";                    
@@ -117,7 +123,8 @@ namespace BioPacVideo
                     return "UNINITIALIZED";                   
                 default:
                     return "UNKNOWN ERROR";                    
-            }
+            }*/
+            return "NOPE";
         }
         public string CaptureStatus()
         {
@@ -160,6 +167,10 @@ namespace BioPacVideo
                 default:
                     return "UNKNOWN STATUS";
             }
+        }
+        public void StopEncoding()
+        {
+            VideoWrapper.StopEncoding();
         }
 
 

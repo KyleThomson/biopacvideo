@@ -6,7 +6,7 @@
 #include <vfw.h>
 #include <time.h>
 #include <queue>
-
+#include <math.h>
 
 
 
@@ -94,7 +94,7 @@ int initCaptureSDK()
 		hAVIFile[i] = NULL;
 	}
 	int ErrorVal;			
-	hDll = LoadLibrary(TEXT("D:\\WINDOWS\\system32\\DVP7010B.dll"));
+	hDll = LoadLibrary(TEXT(".\\DVP7010B.dll"));
 	if (hDll)
 	{
 		AdvDVP_CreateSDKInstence = (ptr_func1)GetProcAddress(hDll, (LPCSTR)"AdvDVP_CreateSDKInstance");
@@ -115,7 +115,7 @@ int initCaptureSDK()
 int initEncoderSDK(void)
 {
 	int ErrorVal;
-	hEncDll = LoadLibrary(TEXT("D:\\WINDOWS\\system32\\DVP7010BEnc.dll"));
+	hEncDll = LoadLibrary(TEXT(".\\DVP7010BEnc.dll"));
 	if (hEncDll)
 	{
 		AdvDVP_CreateEncSDKInstence = (ptr_func1)GetProcAddress(hEncDll, (LPCSTR)"AdvDVP_CreateEncSDKInstence");
@@ -294,6 +294,8 @@ int StartCapture()
 }
 int StartEncoding()
 {	
+	for (int i = 0; i < 4; i++)
+		VideoPresent[i] = false;
 	for (int i = 0; i < nDevCount*MAXMUXS; i++)
 	{
 		pDVPEncSDK->AdvDVP_SetStreamReadCB(&StreamRead);		
@@ -433,14 +435,21 @@ int __cdecl NewFrameCallback(int empty, int nID, int nDevNum, int nMuxChan, int 
 	return 1;
 }
 
+int StopEncoding(void)
+{
+	for (int i=0; i<nDevCount*MAXMUXS; i++)
+	{
+		if (pDVPEncSDK->AdvDVP_GetState(i) == ENC_RUNNING)
+			pDVPEncSDK->AdvDVP_StopVideoEncode(i);				
+	}
+	return 1;
+}
 
 int  CloseRecording(void)
 {
 		
 		for (int i=0; i<nDevCount*MAXMUXS; i++)
-		{
-			if (pDVPEncSDK->AdvDVP_GetState(i) == ENC_RUNNING)
-				pDVPEncSDK->AdvDVP_StopVideoEncode(i);
+		{			
 				pDVPEncSDK->AdvDVP_CloseEncoder(i);
 		}
 		for (int i=0; i<nDevCount; i++)
