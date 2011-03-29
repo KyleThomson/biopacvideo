@@ -24,8 +24,7 @@ namespace BioPacVideo
         MPTemplate MP;
         VideoTemplate Video;
         FeederTemplate Feeder;
-        Pen BoxPen;
-        int TickCount = 0;
+        Pen BoxPen;        
         FolderBrowserDialog FBD;
         RatTemplate[] Rats;
         Bitmap Still;                
@@ -100,6 +99,7 @@ namespace BioPacVideo
             ThreadDisplay.Start();
         }
         
+
 
         //Read INI presets 
         private void ReadINI(IniFile BioIni)
@@ -200,9 +200,7 @@ namespace BioPacVideo
             g.DrawImage(Still, 322, 52, 320, 240);
             IDT_VIDEOSTATUS.Text = Video.GetResText();
             IDT_ENCODERRESULT.Text = Video.EncoderStatus();
-            IDT_ENCODERSTATUS.Text = VideoWrapper.GetEncRes().ToString();
-
-            TickCountLabel.Text = MP.Buftime.ToString();    
+            IDT_ENCODERSTATUS.Text = VideoWrapper.GetEncRes().ToString();            
            }
         }
        
@@ -250,7 +248,8 @@ namespace BioPacVideo
                     IDM_SELECTCHANNELS.Enabled = true;
                     IDM_SETTINGS.Enabled = true;
                     IDM_DISCONNECTBIOPAC.Enabled = true;
-                    //IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
+                    IDT_ENCODERSTATUS.Text = Video.EncoderStatus();
+                    IDT_ENCODERRESULT.Text = Video.EncoderResult();
                     RecordingButton.Text = "Start Recording";                    
                     RecordingButton.BackColor = Color.Green;
                 }

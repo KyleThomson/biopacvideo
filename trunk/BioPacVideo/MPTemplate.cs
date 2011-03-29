@@ -67,7 +67,7 @@ namespace BioPacVideo
         public bool[] RecordAC = new bool[16];
         public int SampleRate;
         public int DisplayLength;
-        private Single PointSpacing;
+        private Single PointSpacing;        
         public TimeSpan Buftime;
         private int samplecount;
         private long[] ChannelDataSizeLocation;
@@ -154,9 +154,9 @@ namespace BioPacVideo
         {
             BinaryFileID.Seek(0, SeekOrigin.Begin);
             //Extended Header
-            BinaryFileID.Write((short)0); //nItemHeaderLen - Not used
-            BinaryFileID.Write((Int32)45); //File Version
-            BinaryFileID.Write((Int32)13104); //Extended Header Length
+            BinaryFileID.Write((short)4660); //nItemHeaderLen - Not used
+            BinaryFileID.Write((Int32)38); //File Version
+            BinaryFileID.Write((Int32)1894); //Extended Header Length
             BinaryFileID.Write((short)TotChan()); //Number of Channels 
             BinaryFileID.Write((short)0); //Horizontal Scale Type, Time in Seconds
             BinaryFileID.Write((short)SelectedChannel); //Currently Selected Channel
@@ -171,14 +171,10 @@ namespace BioPacVideo
             BinaryFileID.Write((double)0); //Initial Time Offset in Miliseconds
             BinaryFileID.Write((short)0); //Do Not Autoscale after transforms
 
-            char[] C = new char[40];
-            string S = "Seconds";
-            for (int i = 0; i < S.Length; i++) C[i] = S[i];
+            char[] C = new char[40];            
             BinaryFileID.Write(C); //Horizontal Units Tet
 
-            C = new char[10];
-            S = "Sec";
-            for (int i = 0; i < S.Length; i++) C[i] = S[i];
+            C = new char[10];      
             BinaryFileID.Write(C); //Horizontal Units Text Abbreviated
 
 
@@ -186,8 +182,8 @@ namespace BioPacVideo
             BinaryFileID.Write((short)1); //Enable grid Display
             BinaryFileID.Write((short)1); //Enable marker display
             BinaryFileID.Write((short)1); //Enable draft plotting
-            BinaryFileID.Write((short)0); //Display Mode 0: Scope 1: Chart
-            BinaryFileID.Write((short)0); //Reserved
+            BinaryFileID.Write((short)1); //Display Mode 0: Scope 1: Chart
+            BinaryFileID.Write((short)1); //Reserved
 
             BinaryFileID.Write((short)0); // BShowToolBar
             BinaryFileID.Write((short)0); //BShowChannelButtons 
@@ -197,28 +193,28 @@ namespace BioPacVideo
             BinaryFileID.Write((short)SelectedChannel); //CurXChannel
             BinaryFileID.Write((short)0); //MmtPrecision
             BinaryFileID.Write((short)0); //Number of Measurement rows
-            for (int i = 0; i < 40; i++) BinaryFileID.Write((short)0); //Measurement Functions
-            for (int i = 0; i < 40; i++) BinaryFileID.Write((short)0); //Measurement Channels
+            for (int i = 0; i < 40; i++) BinaryFileID.Write((short)1); //Measurement Functions
+            for (int i = 0; i < 40; i++) BinaryFileID.Write((ushort)0xFFFF); //Measurement Channels
             for (int i = 0; i < 40; i++) BinaryFileID.Write((short)0); //Measurement Calculation Operand 1
             for (int i = 0; i < 40; i++) BinaryFileID.Write((short)0); //Measurement Calculation Operand 2
             for (int i = 0; i < 40; i++) BinaryFileID.Write((short)0); //Measurement Calculation Operation
             for (int i = 0; i < 40; i++) BinaryFileID.Write((double)0); //Measurement Channels - Constant
-            BinaryFileID.Write((Int32)0); //New grid with minor line
-            BinaryFileID.Write((Int32)0); //COLORREF
-            BinaryFileID.Write((Int32)0); //COLORREF
+            BinaryFileID.Write((Int32)1); //New grid with minor line
+            BinaryFileID.Write((Int32)9474192); //COLORREF
+            BinaryFileID.Write((Int32)14671839); //COLORREF
             BinaryFileID.Write((short)0); //Major Grid Style
             BinaryFileID.Write((short)0); //Minor Grid Style
-            BinaryFileID.Write((short)0); //Major Grid Width
-            BinaryFileID.Write((short)0); //Minor Grid Width
+            BinaryFileID.Write((short)1); //Major Grid Width
+            BinaryFileID.Write((short)1); //Minor Grid Width
             BinaryFileID.Write((Int32)0); //Locked/Unlocked gridLines
             BinaryFileID.Write((Int32)0); //show Gridlines
             BinaryFileID.Write((double)0); // start point to draw grid
             for (int i = 0; i < 60; i++) BinaryFileID.Write((double)0); // Offset of Vertical Value per channel
             BinaryFileID.Write((double)0); // Horizontal Grid Spacing
-            for (int i = 0; i < 60; i++) BinaryFileID.Write((double)0); //Vertical grid spacing per channel
-            BinaryFileID.Write((Int32)0); //Enable Wavetools 
-            //Get Current File Position, this is where we start writting data.
-            BinaryFileID.Write((short)0); //digital precision fr units in Horizontal Axis
+            for (int i = 0; i < 60; i++) BinaryFileID.Write((double)4); //Vertical grid spacing per channel
+            BinaryFileID.Write((Int32)0); //Enable Wavetools          
+            //Verision 3.7.3 and above
+            /*BinaryFileID.Write((short)0); //digital precision fr units in Horizontal Axis
             //Version 3.8.1 and above
             for (int i = 0; i < 20; i++) BinaryFileID.Write((byte)0); //Reserved
             BinaryFileID.Write((Int32)0); //Overlap Mode
@@ -238,50 +234,57 @@ namespace BioPacVideo
             for (int i = 0; i < 40; i++) BinaryFileID.Write((Int32)0);
             for (int i = 0; i < 40; i++) BinaryFileID.Write((Int32)0);
             for (int i = 0; i < 40; i++) BinaryFileID.Write((Int32)0);
-            for (int i = 0; i < 40; i++) BinaryFileID.Write((Int32)0);
-
+            for (int i = 0; i < 40; i++) BinaryFileID.Write((Int32)0);*/                
             ChannelDataSizeLocation = new long[16];
 
             //Per Channel Data Section
             for (int Chanloop = 0; Chanloop < TotChan(); Chanloop++)
-            {
-                BinaryFileID.Write((Int32)262); //Channel Header Size
-                BinaryFileID.Write((short)GetChan(Chanloop) + 1); //Number of Channel
+            {                
+                BinaryFileID.Write((Int32)252); //Channel Header Size
+                BinaryFileID.Write((short)GetChan(Chanloop)); //Number of Channel
                 C = new char[40];
-                BinaryFileID.Write(C); //Comment Text
-                BinaryFileID.Write((Int32)0); //Color
-                BinaryFileID.Write((short)0); //Display option
+                BinaryFileID.Write(C); //Comment Text                
+                //RGB
+                BinaryFileID.Write((char)255); //Color
+                BinaryFileID.Write((char)0); //Color
+                BinaryFileID.Write((char)0); //Color
+                BinaryFileID.Write((char)0); //Color
+
+                BinaryFileID.Write((short)2); //Display option
                 BinaryFileID.Write((double)0); // Amplitude Offset (volts)
-                BinaryFileID.Write((double)0); // Amplitude scale (volts/div)
+                BinaryFileID.Write((double)0.25); // Amplitude scale (volts/div)
                 C = new char[20];
+                C[0] = 'm'; C[1] = 'V';
                 BinaryFileID.Write(C); //Units Text
                 ChannelDataSizeLocation[GetChan(Chanloop)] = BinaryFile.Position;
                 BinaryFileID.Write((Int32)0); //Number of DataSamples 
-                BinaryFileID.Write((double)0); //Units/count
+                BinaryFileID.Write((double)1.52587890625e-005); //Units/count
                 BinaryFileID.Write((double)0); //Units
-                BinaryFileID.Write((short)Chanloop);  //Channel Order 
-                BinaryFileID.Write((short)2); //Channel Partition Size
+                BinaryFileID.Write((short)Chanloop+1);  //Channel Order 
+                BinaryFileID.Write((short)1092); //Channel Partition Size
                 //Version 3.0 and above
                 BinaryFileID.Write((short)0); //PlotMode
                 BinaryFileID.Write((double)0); // vMid
                 //Version 3.7.0 and above
                 C = new char[128];
                 BinaryFileID.Write(C); //szDescription
-                BinaryFileID.Write((short)0); //Channel Divider of main frequency
-                //Version 3.7.3 
+                BinaryFileID.Write((short)1); //Channel Divider of main frequency
+                /*//Version 3.7.3 
                 BinaryFileID.Write((short)0); //digital of precision for units in  Vertical Axis for each channel
                 //Version 3.8.2 
                 BinaryFileID.Write((Int32)0); //Active Segment Color
-                BinaryFileID.Write((Int32)0); // Active Segment Style
+                BinaryFileID.Write((Int32)0); // Active Segment Style*/                
             }
             //Foreign Data Packet
-            BinaryFileID.Write((short)4); //Total Length of Foreign Data Packet
+            BinaryFileID.Write((short)8); //Total Length of Foreign Data Packet
             BinaryFileID.Write((short)0); //Foreign Data Packet Size
+            BinaryFileID.Write((short)0); //Empty
+            BinaryFileID.Write((short)0); //Empty
 
             for (int i = 0; i < TotChan(); i++)
             {
-                BinaryFileID.Write((short)8); //Channel Data Size in Bytes (2 for int 16, 8 for double)
-                BinaryFileID.Write((short)1); //Channel Data Type 1 = double, 2 = int
+                BinaryFileID.Write((short)2); //Channel Data Size in Bytes (2 for int 16, 8 for double)
+                BinaryFileID.Write((short)2); //Channel Data Type 1 = double, 2 = int
             }
             CurrentWriteLoc = BinaryFile.Position;
         }
@@ -345,7 +348,7 @@ namespace BioPacVideo
                             {
                                 PointF TempPoint = new PointF(CurPointPos * PointSpacing, ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax));
                                 WaveC[SamplePos] = TempPoint;
-                                SamplePos++;
+                                SamplePos++;    
                                 CurPointPos++;
                             }
                         }

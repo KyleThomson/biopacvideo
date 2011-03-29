@@ -539,7 +539,10 @@ int SetNTSC()
 
 int GetEncoderStatus()
 {
-	return pDVPEncSDK->AdvDVP_GetState(0);
+	if (pDVPEncSDK)
+		return pDVPEncSDK->AdvDVP_GetState(0);
+	else
+		return -3;	
 }
 
 int GetCaptureStatus()
