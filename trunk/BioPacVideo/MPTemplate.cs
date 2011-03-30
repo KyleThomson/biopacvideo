@@ -161,7 +161,7 @@ namespace BioPacVideo
             BinaryFileID.Write((short)SelectedChannel); //Currently Selected Channel
             BinaryFileID.Write((double)(1000 / SampleRate)); //Number of miliseconds per sample
             BinaryFileID.Write((double)0); //Current Time Offset
-            BinaryFileID.Write((double)(DisplayLength * 1000)); //Time Scale in miliseconds per division
+            BinaryFileID.Write((double)2000); //Time Scale in miliseconds per division
             BinaryFileID.Write((double)0); //Cursor 1 Position
             BinaryFileID.Write((double)0); //Cursor 2 Position
             BinaryFileID.Write((double)0); //RECT = size and position. Set to 0 for default.
@@ -214,7 +214,7 @@ namespace BioPacVideo
             BinaryFileID.Write((Int32)0); //show Gridlines
             BinaryFileID.Write((double)0); // start point to draw grid
             for (int i = 0; i < 60; i++) BinaryFileID.Write((double)0); // Offset of Vertical Value per channel
-            BinaryFileID.Write((double)0); // Horizontal Grid Spacing
+            BinaryFileID.Write((double)4); // Horizontal Grid Spacing
             for (int i = 0; i < 60; i++) BinaryFileID.Write((double)4); //Vertical grid spacing per channel
             BinaryFileID.Write((Int32)0); //Enable Wavetools          
             //Verision 3.7.3 and above
@@ -284,8 +284,8 @@ namespace BioPacVideo
 
             for (int i = 0; i < TotChan(); i++)
             {
-                BinaryFileID.Write((short)8); //Channel Data Size in Bytes (2 for int 16, 8 for double)
-                BinaryFileID.Write((short)1); //Channel Data Type 1 = double, 2 = int
+                BinaryFileID.Write((short)2); //Channel Data Size in Bytes (2 for int 16, 8 for double)
+                BinaryFileID.Write((short)2); //Channel Data Type 1 = double, 2 = int
             }
             CurrentWriteLoc = BinaryFile.Position;
         }
@@ -403,7 +403,7 @@ namespace BioPacVideo
                 return false;
             }
             return true;
-        }
+        } 
 
         public bool Disconnect()
         {
@@ -477,6 +477,7 @@ namespace BioPacVideo
             BuffSize = ((uint)(SampleRate/UpdateSpeed))*(uint)AcqChan;
             rec_buffer = new double[BuffSize];
             draw_buffer = new double[BuffSize];
+            Int16[] transbuffer = new Int16[BuffSize];
             byte_buffer = new byte[BuffSize * 8];                
             MPReturn = MPCLASS.startAcquisition();            
             if (MPReturn != MPCODE.MPSUCCESS)
@@ -491,7 +492,11 @@ namespace BioPacVideo
                 }
                 if (IsFileWriting)
                 {
-                    Buffer.BlockCopy(rec_buffer, 0, byte_buffer, 0, (int)received * 8);
+                    for (int j = 0; j < BuffSize; j++)
+                    {
+                        transbuffer[j] = Convert.ToInt16(rec_buffer[j] * 1000);
+                    }
+                    Buffer.BlockCopy(transbuffer, 0, byte_buffer, 0, (int)received * 2);
                     BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin);
                     BinaryFileID.Write(byte_buffer);
                     CurrentWriteLoc = BinaryFile.Position;
