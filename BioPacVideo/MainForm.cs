@@ -88,6 +88,7 @@ namespace BioPacVideo
             RecordingButton.BackColor = Color.Green;            
             IDC_RATSELECT.SelectedIndex = MP.SelectedChannel-1;
             Video.initVideo();
+            Video.FileStart = 0;
             IDT_DEVICECOUNT.Text = string.Format("Device Count ({0})", Video.Device_Count);
             IDT_VIDEOSTATUS.Text = Video.GetResText();
             if (Video.Res == (AdvantechCodes.tagRes.SUCCEEDED))
@@ -96,12 +97,12 @@ namespace BioPacVideo
             }
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread)); 
             RunDisplayThread = true;
-            ThreadDisplay.Start();
+            ThreadDisplay.Start(); 
         }
         
 
 
-        //Read INI presets 
+        //Read presets from INI file
         private void ReadINI(IniFile BioIni)
         {
             MP.RecordingDirectory = BioIni.IniReadValue("General", "RecDirectory", Directory.GetCurrentDirectory());
@@ -139,6 +140,7 @@ namespace BioPacVideo
             }
             
         }
+
         //Write INI file - used for settings and saving recording settings in recording directory
         private void UpdateINI(IniFile BioIni)
         {
@@ -224,8 +226,8 @@ namespace BioPacVideo
                     //Video Stuff
                     
                     Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
-                    Video.FileStart = 1;
-                    Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString);
+                    Video.FileStart = Video.FileStart+1;
+                    Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString, Video.FileStart);
                     Video.LoadSettings();                    
                     
                     //IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
