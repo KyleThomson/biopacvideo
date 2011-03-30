@@ -158,7 +158,6 @@ int StartEncoderSDK()
 		if (LastEncRes != 1)
 			return LastEncRes;
 	}
-	Sleep(500);
 	return 1;
 }
 

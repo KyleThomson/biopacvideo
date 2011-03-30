@@ -53,7 +53,7 @@ namespace BioPacVideo
 
         //GRAPHICS VARIABLES
         int CurPointPos;
-        int UpdateSpeed = 23;
+        int UpdateSpeed = 30;
         Pen wavePen;
         Pen TimePen;
         private uint last_received;
@@ -67,8 +67,7 @@ namespace BioPacVideo
         public bool[] RecordAC = new bool[16];
         public int SampleRate;
         public int DisplayLength;
-        private Single PointSpacing;        
-        public TimeSpan Buftime;
+        private Single PointSpacing;         
         private int samplecount;
         private long[] ChannelDataSizeLocation;
         private int AcqChan;        
@@ -171,29 +170,34 @@ namespace BioPacVideo
             BinaryFileID.Write((double)0); //Initial Time Offset in Miliseconds
             BinaryFileID.Write((short)0); //Do Not Autoscale after transforms
 
-            char[] C = new char[40];            
+            byte[] C = new byte[40];            
             BinaryFileID.Write(C); //Horizontal Units Tet
 
-            C = new char[10];      
+            C = new byte[10];      
             BinaryFileID.Write(C); //Horizontal Units Text Abbreviated
 
 
             BinaryFileID.Write((short)0); //Keep File in Memory
             BinaryFileID.Write((short)1); //Enable grid Display
             BinaryFileID.Write((short)1); //Enable marker display
-            BinaryFileID.Write((short)1); //Enable draft plotting
-            BinaryFileID.Write((short)1); //Display Mode 0: Scope 1: Chart
+            BinaryFileID.Write((short)0); //Enable draft plotting
+            BinaryFileID.Write((short)1); //Display Mode 0: Scope 1: bytet
             BinaryFileID.Write((short)1); //Reserved
 
-            BinaryFileID.Write((short)0); // BShowToolBar
-            BinaryFileID.Write((short)0); //BShowChannelButtons 
-            BinaryFileID.Write((short)0); //BShowMeasurements
-            BinaryFileID.Write((short)0); //BShowMarkers
+            BinaryFileID.Write((short)1); // BShowToolBar
+            BinaryFileID.Write((short)1); //BShowChannelButtons 
+            BinaryFileID.Write((short)1); //BShowMeasurements
+            BinaryFileID.Write((short)1); //BShowMarkers
             BinaryFileID.Write((short)0); //BShowJournal
             BinaryFileID.Write((short)SelectedChannel); //CurXChannel
-            BinaryFileID.Write((short)0); //MmtPrecision
-            BinaryFileID.Write((short)0); //Number of Measurement rows
-            for (int i = 0; i < 40; i++) BinaryFileID.Write((short)1); //Measurement Functions
+            BinaryFileID.Write((short)5); //MmtPrecision
+            BinaryFileID.Write((short)1); //Number of Measurement rows
+            BinaryFileID.Write((short)15);
+            BinaryFileID.Write((short)16);
+            BinaryFileID.Write((short)17);
+            BinaryFileID.Write((short)18);
+            BinaryFileID.Write((short)5);
+            for (int i = 0; i < 35; i++) BinaryFileID.Write((short)1); //Measurement Functions
             for (int i = 0; i < 40; i++) BinaryFileID.Write((ushort)0xFFFF); //Measurement Channels
             for (int i = 0; i < 40; i++) BinaryFileID.Write((short)0); //Measurement Calculation Operand 1
             for (int i = 0; i < 40; i++) BinaryFileID.Write((short)0); //Measurement Calculation Operand 2
@@ -235,38 +239,35 @@ namespace BioPacVideo
             for (int i = 0; i < 40; i++) BinaryFileID.Write((Int32)0);
             for (int i = 0; i < 40; i++) BinaryFileID.Write((Int32)0);
             for (int i = 0; i < 40; i++) BinaryFileID.Write((Int32)0);*/                
-            ChannelDataSizeLocation = new long[16];
-
+            ChannelDataSizeLocation = new long[16];            
             //Per Channel Data Section
             for (int Chanloop = 0; Chanloop < TotChan(); Chanloop++)
             {                
-                BinaryFileID.Write((Int32)252); //Channel Header Size
-                BinaryFileID.Write((short)GetChan(Chanloop)); //Number of Channel
-                C = new char[40];
-                BinaryFileID.Write(C); //Comment Text                
+                BinaryFileID.Write((Int32)252); //Channel Header Size                
+                BinaryFileID.Write((short)(GetChan(Chanloop)+1)); //Number of Channel                
+                C = new byte[40];                
+                C[0] = (byte)'E'; C[1] = (byte)'E'; C[2] = (byte)'G';
+                C[3] = (byte)'1'; C[4] = (byte)'0'; C[5] = (byte)'0'; C[6] = (byte)'C';
+                BinaryFileID.Write(C); //Comment Text                           
                 //RGB
-                BinaryFileID.Write((char)255); //Color
-                BinaryFileID.Write((char)0); //Color
-                BinaryFileID.Write((char)0); //Color
-                BinaryFileID.Write((char)0); //Color
-
+                BinaryFileID.Write((Int32)255);
                 BinaryFileID.Write((short)2); //Display option
                 BinaryFileID.Write((double)0); // Amplitude Offset (volts)
                 BinaryFileID.Write((double)0.25); // Amplitude scale (volts/div)
-                C = new char[20];
-                C[0] = 'm'; C[1] = 'V';
+                C = new byte[20];
+                C[0] = (byte)'m'; C[1] = (byte)'V';
                 BinaryFileID.Write(C); //Units Text
                 ChannelDataSizeLocation[GetChan(Chanloop)] = BinaryFile.Position;
                 BinaryFileID.Write((Int32)0); //Number of DataSamples 
                 BinaryFileID.Write((double)1.52587890625e-005); //Units/count
                 BinaryFileID.Write((double)0); //Units
-                BinaryFileID.Write((short)Chanloop+1);  //Channel Order 
+                BinaryFileID.Write((short)(Chanloop+1));  //Channel Order 
                 BinaryFileID.Write((short)1092); //Channel Partition Size
                 //Version 3.0 and above
                 BinaryFileID.Write((short)0); //PlotMode
                 BinaryFileID.Write((double)0); // vMid
                 //Version 3.7.0 and above
-                C = new char[128];
+                C = new byte[128];
                 BinaryFileID.Write(C); //szDescription
                 BinaryFileID.Write((short)1); //Channel Divider of main frequency
                 /*//Version 3.7.3 
@@ -283,8 +284,8 @@ namespace BioPacVideo
 
             for (int i = 0; i < TotChan(); i++)
             {
-                BinaryFileID.Write((short)2); //Channel Data Size in Bytes (2 for int 16, 8 for double)
-                BinaryFileID.Write((short)2); //Channel Data Type 1 = double, 2 = int
+                BinaryFileID.Write((short)8); //Channel Data Size in Bytes (2 for int 16, 8 for double)
+                BinaryFileID.Write((short)1); //Channel Data Type 1 = double, 2 = int
             }
             CurrentWriteLoc = BinaryFile.Position;
         }
@@ -376,7 +377,7 @@ namespace BioPacVideo
             for (int i = 0; i < TotChan(); i++)
             {
                 BinaryFile.Seek(ChannelDataSizeLocation[GetChan(i)], SeekOrigin.Begin);
-                BinaryFileID.Write((Int32)samplecount);
+                BinaryFileID.Write((Int32)(samplecount));
             }
             //Add write foreign data crap here
         }
@@ -421,9 +422,10 @@ namespace BioPacVideo
             ClearDisplay = true;
             Ymax = Convert.ToSingle(g.VisibleClipBounds.Height);
             Xmax = Convert.ToSingle(g.VisibleClipBounds.Width);         
-            PointSpacing = Convert.ToSingle(Xmax / MaxDrawSize);         
-            samplecount = 0;
+            PointSpacing = Convert.ToSingle(Xmax / MaxDrawSize);                     
             MPReturn = MPCLASS.setDigitalAcqChannels(DigitalChannel);
+            if (this.MPReturn != MPCODE.MPSUCCESS)
+                return false;
             MPReturn = MPCLASS.setSampleRate(1000 / SampleRate);
             if (this.MPReturn != MPCODE.MPSUCCESS)
                 return false;
@@ -445,22 +447,17 @@ namespace BioPacVideo
         public bool StartWriting()
         {
             open_ACQ_file();
+            samplecount = 0;
             writeheader();
             IsFileWriting = true;
             return true;
         }
         public void StopWriting()
-        {
-            isrecording = false;
-            while (AcqThread.IsAlive)
-            {
-                //Pause to wait for thread to close
-            }
+        {            
             updateheader();
             BinaryFile.Close();
-            isrecording = true;
-            AcqThread = new Thread(new ThreadStart(RecordingThread)); //Initialize recording thread
-            AcqThread.Start();
+            IsFileWriting = false;
+            isrecording = true;         
         }
 
 

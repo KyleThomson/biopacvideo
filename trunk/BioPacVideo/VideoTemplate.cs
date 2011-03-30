@@ -88,10 +88,16 @@ namespace BioPacVideo
             
 
         }
+
         public string GetResText()
         {
-            return Res_text[(int)Res + 6];
+            if ((int)Res < 7)
+                return Res_text[(int)Res + 6];
+            else
+                return ("UNKNOWN ERROR: " + Res.ToString());
         }
+
+
         public void SetSensorControls(int Chan)
         {
             VideoWrapper.SetContrast(Chan, Contrast[Chan]);
@@ -99,9 +105,10 @@ namespace BioPacVideo
             VideoWrapper.SetHue(Chan, Hue[Chan]);
             VideoWrapper.SetSaturation(Chan, Saturation[Chan]);
         }
-        public void SetFileName(string FName)
+
+        public void SetFileName(string FName, int FStart)
         {                        
-            VideoWrapper.SetFName(FName, 0);
+            VideoWrapper.SetFName(FName, FStart);
         }
         public void StartRecording()
         {                        
