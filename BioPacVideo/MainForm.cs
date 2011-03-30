@@ -241,8 +241,7 @@ namespace BioPacVideo
                 }
                 else
                 {                                        
-                    IDT_BIOPACRECORDINGSTAT.Text = "Not Recording";
-                    MP.isrecording = false;
+                    IDT_BIOPACRECORDINGSTAT.Text = "Not Recording";                    
                     MP.StopWriting();
                     Video.StopEncoding();
                     IDM_SELECTCHANNELS.Enabled = true;
@@ -269,11 +268,7 @@ namespace BioPacVideo
             }
             IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
         }
-
-        private void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            
-        }
+        
         private void selectDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FBD = new FolderBrowserDialog();

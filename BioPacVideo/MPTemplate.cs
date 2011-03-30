@@ -458,6 +458,7 @@ namespace BioPacVideo
             }
             updateheader();
             BinaryFile.Close();
+            isrecording = true;
             AcqThread = new Thread(new ThreadStart(RecordingThread)); //Initialize recording thread
             AcqThread.Start();
         }
@@ -506,19 +507,17 @@ namespace BioPacVideo
                 _DrawHandle.Set();                                       
                 
             }
+            MPReturn = MPCLASS.stopAcquisition(); 
             return;
         }
-
         public void StopRecording()
         {
             isrecording = false;
             while (AcqThread.IsAlive)
             {
                 //Pause to wait for thread to close
-            }            
-            updateheader();
-            MPReturn = MPCLASS.stopAcquisition();
-            BinaryFile.Close();
+            }                     
+                       
         }
 
         /**************************************************************

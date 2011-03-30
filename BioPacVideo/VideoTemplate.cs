@@ -113,18 +113,19 @@ namespace BioPacVideo
         }
         public string EncoderStatus()
         {            
-            /*switch (VideoWrapper.GetEncoderStatus())
+            switch (VideoWrapper.GetEncoderStatus())
             {             
                 case 1:
                     return "ENCODER STOPPED";                    
                 case 2:
                     return "ENCODER RUNNING";                    
                 case -1:
-                    return "UNINITIALIZED";                   
+                    return "UNINITIALIZED";       
+                case -3:
+                    return "ENCODER DLL NOT LOADED";
                 default:
                     return "UNKNOWN ERROR";                    
-            }*/
-            return "NOPE";
+            }            
         }
         public string CaptureStatus()
         {
