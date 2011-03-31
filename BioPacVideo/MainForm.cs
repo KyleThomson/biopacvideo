@@ -110,6 +110,7 @@ namespace BioPacVideo
             MP.SelectedChannel = BioIni.IniReadValue("BioPac", "Selected Channel", 1);            
             MP.DisplayLength = BioIni.IniReadValue("BioPac", "DisplayLength", 10);
             MP.Voltage = BioIni.IniReadValue("BioPac", "Voltage(mV)", 500);
+            MP.Gain = BioIni.IniReadValue("BioPac", "Gain", 20000);
             BioIni.IniReadValue("Feeder", "Breakfast", out Feeder.Breakfast);
             BioIni.IniReadValue("Feeder", "Lunch", out Feeder.Lunch);
             BioIni.IniReadValue("Feeder", "Dinner", out Feeder.Dinner);
@@ -149,6 +150,7 @@ namespace BioPacVideo
             BioIni.IniWriteValue("BioPac", "SampleRate", MP.SampleRate.ToString());
             BioIni.IniWriteValue("BioPac", "DisplayLength", MP.DisplayLength.ToString());
             BioIni.IniWriteValue("BioPac", "Voltage(mV)", MP.Voltage.ToString());
+            BioIni.IniWriteValue("BioPac", "Gain", MP.Gain.ToString());
             BioIni.IniWriteValue("Feeder", "Breakfast", Feeder.Breakfast.ToString());
             BioIni.IniWriteValue("Feeder", "Lunch", Feeder.Lunch.ToString());
             BioIni.IniWriteValue("Feeder", "Dinner", Feeder.Dinner.ToString());
@@ -367,11 +369,12 @@ namespace BioPacVideo
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RecordSettings frm = new RecordSettings(MP.SampleRate, MP.DisplayLength, MP.Voltage);
+            RecordSettings frm = new RecordSettings(MP.SampleRate, MP.DisplayLength, MP.Voltage, MP.Gain);
             frm.ShowDialog(this);
             MP.SampleRate = frm.SampleRate();
             MP.DisplayLength = frm.DisplayLength();
             MP.Voltage = frm.Voltage();
+            MP.Gain = frm.Gain();
             frm.Dispose();
             UpdateINI(BioIni);
             IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];

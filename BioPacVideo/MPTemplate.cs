@@ -39,6 +39,7 @@ namespace BioPacVideo
         private BinaryWriter BinaryFileID;
         private FileStream BinaryFile;
         public int SelectedChannel;
+        public int Gain;
         public bool IsFileWriting;
         public int samplesize;
         public bool ClearDisplay;
@@ -477,7 +478,7 @@ namespace BioPacVideo
             BuffSize = ((uint)(SampleRate/UpdateSpeed))*(uint)AcqChan;
             rec_buffer = new double[BuffSize];
             draw_buffer = new double[BuffSize];
-            Int16[] transbuffer = new Int16[BuffSize];
+            Int16 transbuffer = new Int16();
             byte_buffer = new byte[BuffSize * 8];                
             MPReturn = MPCLASS.startAcquisition();            
             if (MPReturn != MPCODE.MPSUCCESS)
@@ -492,13 +493,13 @@ namespace BioPacVideo
                 }
                 if (IsFileWriting)
                 {
+
+                    BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin); 
                     for (int j = 0; j < BuffSize; j++)
                     {
-                        transbuffer[j] = Convert.ToInt16(rec_buffer[j] * 1000);
-                    }
-                    Buffer.BlockCopy(transbuffer, 0, byte_buffer, 0, (int)received * 2);
-                    BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin);
-                    BinaryFileID.Write(byte_buffer);
+                        transbuffer = Convert.ToInt16(rec_buffer[j] * Gain);
+                        BinaryFileID.Write(transbuffer);
+                    }                    
                     CurrentWriteLoc = BinaryFile.Position;
                 }
                 last_received = received;

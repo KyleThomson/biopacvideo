@@ -15,7 +15,9 @@ namespace BioPacVideo
         public static int[] SampleRateList = new int[] { 250, 500, 1000, 2000, 2500, 5000, 10000 };
         public static int[] DisplayLengthSize = new int[] { 1, 5, 10, 30, 60 };
         public static int[] VoltageSettings = new int[] { 1, 10, 50, 100, 250, 500, 1000, 2000 };
-        public RecordSettings(int SR, int DL, int VL)
+        public static int[] GainSettings = new int[] { 5000, 10000, 20000, 50000 };
+
+        public RecordSettings(int SR, int DL, int VL, int GN)
         {
             InitializeComponent();
             for (int i=0; i < SampleRateList.Length;i++)
@@ -23,6 +25,11 @@ namespace BioPacVideo
                 ID_SRATE.Items.Add(string.Format("{0} Hz",SampleRateList[i]));
             }
             ID_SRATE.SelectedIndex = Array.IndexOf(SampleRateList, SR);
+            for (int i = 0; i < GainSettings.Length; i++)
+            {
+                ID_GAIN.Items.Add(string.Format("{0}", GainSettings[i]));
+            }
+            ID_GAIN.SelectedIndex = Array.IndexOf(GainSettings, GN);
             for (int i = 0; i < DisplayLengthSize.Length; i++)
             {
                 ID_DWS.Items.Add(string.Format("{0} seconds",DisplayLengthSize[i]));
@@ -49,6 +56,10 @@ namespace BioPacVideo
         public int Voltage()
         {
             return VoltageSettings[IDC_MINMAXV.SelectedIndex];
+        }
+        public int Gain()
+        {            
+            return GainSettings[ID_GAIN.SelectedIndex];
         }
 
         private void ID_OK_Click(object sender, EventArgs e)
