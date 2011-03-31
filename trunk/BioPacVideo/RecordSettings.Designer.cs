@@ -35,6 +35,8 @@
             this.ID_OK = new System.Windows.Forms.Button();
             this.IDC_MINMAXV = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.ID_GAIN = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // ID_SRATE
@@ -44,7 +46,7 @@
             this.ID_SRATE.Location = new System.Drawing.Point(12, 46);
             this.ID_SRATE.Name = "ID_SRATE";
             this.ID_SRATE.Size = new System.Drawing.Size(121, 21);
-            this.ID_SRATE.TabIndex = 0;        
+            this.ID_SRATE.TabIndex = 0;
             // 
             // label1
             // 
@@ -101,11 +103,31 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "Min/Max Voltage";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(151, 84);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(29, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Gain";
+            // 
+            // ID_GAIN
+            // 
+            this.ID_GAIN.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ID_GAIN.FormattingEnabled = true;
+            this.ID_GAIN.Location = new System.Drawing.Point(154, 100);
+            this.ID_GAIN.Name = "ID_GAIN";
+            this.ID_GAIN.Size = new System.Drawing.Size(121, 21);
+            this.ID_GAIN.TabIndex = 8;
+            // 
             // RecordSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(329, 178);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.ID_GAIN);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.IDC_MINMAXV);
             this.Controls.Add(this.ID_OK);
@@ -129,6 +151,8 @@
         private System.Windows.Forms.Button ID_OK;
         public System.Windows.Forms.ComboBox IDC_MINMAXV;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        public System.Windows.Forms.ComboBox ID_GAIN;
 
     }
 }
