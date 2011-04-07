@@ -12,6 +12,7 @@ namespace BioPacVideo
     
     public partial class RecordSettings : Form
     {
+           
         public static int[] SampleRateList = new int[] { 250, 500, 1000, 2000, 2500, 5000, 10000 };
         public static int[] DisplayLengthSize = new int[] { 1, 5, 10, 30, 60 };
         public static int[] VoltageSettings = new int[] { 1, 10, 50, 100, 250, 500, 1000, 2000 };

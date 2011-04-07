@@ -54,6 +54,7 @@ namespace BioPacVideo
                 Video.XRes = 160;
                 Video.YRes = 120;
             }
+            VideoWrapper.SetCaptureRes(Video.XRes, Video.YRes);
             this.Close();
         }
     }
