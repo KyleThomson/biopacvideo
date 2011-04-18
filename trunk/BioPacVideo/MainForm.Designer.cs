@@ -48,18 +48,22 @@ namespace BioPacVideo
             this.testFeedersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setFeedingProtocolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusBar = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_BIOPACSTAT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_BIOPACRECORDINGSTAT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_MPLASTMESSAGE = new System.Windows.Forms.ToolStripStatusLabel();
             this.TickCountLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_VIDEOSTATUS = new System.Windows.Forms.ToolStripStatusLabel();
+            this.IDT_VIDEORESULT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_DEVICECOUNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_ENCODERSTATUS = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_ENCODERRESULT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDC_RATSELECT = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.IDT_VIDEORESULT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.bioPacEnabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.videoCaptureEnabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -67,7 +71,7 @@ namespace BioPacVideo
             // RecordingButton
             // 
             this.RecordingButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RecordingButton.Location = new System.Drawing.Point(12, 27);
+            this.RecordingButton.Location = new System.Drawing.Point(12, 37);
             this.RecordingButton.Name = "RecordingButton";
             this.RecordingButton.Size = new System.Drawing.Size(240, 46);
             this.RecordingButton.TabIndex = 0;
@@ -84,7 +88,7 @@ namespace BioPacVideo
             this.automaticFeederToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1393, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1284, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -129,7 +133,9 @@ namespace BioPacVideo
             this.videoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.initializeVideoCardToolStripMenuItem,
             this.videoSettingsToolStripMenuItem,
-            this.sensorControlToolStripMenuItem});
+            this.sensorControlToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.videoCaptureEnabledToolStripMenuItem});
             this.videoToolStripMenuItem.Name = "videoToolStripMenuItem";
             this.videoToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
             this.videoToolStripMenuItem.Text = "Video";
@@ -137,7 +143,7 @@ namespace BioPacVideo
             // initializeVideoCardToolStripMenuItem
             // 
             this.initializeVideoCardToolStripMenuItem.Name = "initializeVideoCardToolStripMenuItem";
-            this.initializeVideoCardToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.initializeVideoCardToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.initializeVideoCardToolStripMenuItem.Text = "Initialize Video Card";
             this.initializeVideoCardToolStripMenuItem.Click += new System.EventHandler(this.initializeVideoCardToolStripMenuItem_Click);
             // 
@@ -145,14 +151,14 @@ namespace BioPacVideo
             // 
             this.videoSettingsToolStripMenuItem.Name = "videoSettingsToolStripMenuItem";
             this.videoSettingsToolStripMenuItem.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.videoSettingsToolStripMenuItem.Size = new System.Drawing.Size(208, 20);
+            this.videoSettingsToolStripMenuItem.Size = new System.Drawing.Size(223, 20);
             this.videoSettingsToolStripMenuItem.Text = "Video Settings";
             this.videoSettingsToolStripMenuItem.Click += new System.EventHandler(this.videoSettingsToolStripMenuItem_Click);
             // 
             // sensorControlToolStripMenuItem
             // 
             this.sensorControlToolStripMenuItem.Name = "sensorControlToolStripMenuItem";
-            this.sensorControlToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.sensorControlToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.sensorControlToolStripMenuItem.Text = "Sensor Control";
             this.sensorControlToolStripMenuItem.Click += new System.EventHandler(this.sensorControlToolStripMenuItem_Click);
             // 
@@ -162,7 +168,9 @@ namespace BioPacVideo
             this.initializeBioPacToolStripMenuItem,
             this.IDM_DISCONNECTBIOPAC,
             this.IDM_SETTINGS,
-            this.IDM_SELECTCHANNELS});
+            this.IDM_SELECTCHANNELS,
+            this.toolStripSeparator2,
+            this.bioPacEnabledToolStripMenuItem});
             this.bioPacToolStripMenuItem.Name = "bioPacToolStripMenuItem";
             this.bioPacToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.bioPacToolStripMenuItem.Text = "BioPac";
@@ -233,9 +241,15 @@ namespace BioPacVideo
             this.IDT_ENCODERRESULT});
             this.StatusBar.Location = new System.Drawing.Point(0, 630);
             this.StatusBar.Name = "StatusBar";
-            this.StatusBar.Size = new System.Drawing.Size(1393, 26);
+            this.StatusBar.Size = new System.Drawing.Size(1284, 26);
             this.StatusBar.TabIndex = 3;
             this.StatusBar.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(77, 21);
+            this.toolStripStatusLabel1.Text = "MP150 Status:";
             // 
             // IDT_BIOPACSTAT
             // 
@@ -289,6 +303,17 @@ namespace BioPacVideo
             this.IDT_VIDEOSTATUS.Size = new System.Drawing.Size(123, 21);
             this.IDT_VIDEOSTATUS.Text = "VIDEO STATUS";
             // 
+            // IDT_VIDEORESULT
+            // 
+            this.IDT_VIDEORESULT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.IDT_VIDEORESULT.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.IDT_VIDEORESULT.Name = "IDT_VIDEORESULT";
+            this.IDT_VIDEORESULT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
+            this.IDT_VIDEORESULT.Size = new System.Drawing.Size(122, 21);
+            this.IDT_VIDEORESULT.Text = "VIDEO RESULT";
+            // 
             // IDT_DEVICECOUNT
             // 
             this.IDT_DEVICECOUNT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
@@ -340,29 +365,36 @@ namespace BioPacVideo
             this.label1.TabIndex = 5;
             this.label1.Text = "Select Animal";
             // 
-            // toolStripStatusLabel1
+            // toolStripSeparator2
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(77, 21);
-            this.toolStripStatusLabel1.Text = "MP150 Status:";
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
             // 
-            // IDT_VIDEORESULT
+            // bioPacEnabledToolStripMenuItem
             // 
-            this.IDT_VIDEORESULT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.IDT_VIDEORESULT.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-            this.IDT_VIDEORESULT.Name = "IDT_VIDEORESULT";
-            this.IDT_VIDEORESULT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_VIDEORESULT.Size = new System.Drawing.Size(122, 21);
-            this.IDT_VIDEORESULT.Text = "VIDEO RESULT";
+            this.bioPacEnabledToolStripMenuItem.Name = "bioPacEnabledToolStripMenuItem";
+            this.bioPacEnabledToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.bioPacEnabledToolStripMenuItem.Text = "BioPac Enabled";
+            this.bioPacEnabledToolStripMenuItem.Click += new System.EventHandler(this.bioPacEnabledToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(180, 6);
+            // 
+            // videoCaptureEnabledToolStripMenuItem
+            // 
+            this.videoCaptureEnabledToolStripMenuItem.Name = "videoCaptureEnabledToolStripMenuItem";
+            this.videoCaptureEnabledToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.videoCaptureEnabledToolStripMenuItem.Text = "Video Capture Enabled";
+            this.videoCaptureEnabledToolStripMenuItem.Click += new System.EventHandler(this.videoCaptureEnabledToolStripMenuItem_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1393, 656);
+            this.ClientSize = new System.Drawing.Size(1284, 656);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.IDC_RATSELECT);
             this.Controls.Add(this.StatusBar);
@@ -414,6 +446,10 @@ namespace BioPacVideo
         internal System.Windows.Forms.ToolStripStatusLabel IDT_ENCODERSTATUS;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel IDT_VIDEORESULT;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem videoCaptureEnabledToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem bioPacEnabledToolStripMenuItem;
     }
 }
 

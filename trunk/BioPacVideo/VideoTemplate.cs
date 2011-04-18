@@ -19,6 +19,7 @@ namespace BioPacVideo
         public IntPtr pDF;
         public bool CapSDKStatus;
         public bool EncSDKStatus;
+        public bool Enabled;
         public int XRes;
         public int YRes;        
         public String FileName;

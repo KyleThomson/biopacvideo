@@ -40,6 +40,7 @@ namespace BioPacVideo
         private FileStream BinaryFile;
         public int SelectedChannel;
         public int Gain;
+        public bool Enabled;
         public bool IsFileWriting;
         public int samplesize;
         public bool ClearDisplay;
@@ -497,6 +498,8 @@ namespace BioPacVideo
                     BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin); 
                     for (int j = 0; j < BuffSize; j++)
                     {
+                        rec_buffer[j] = Math.Min(rec_buffer[j], (double)Int16.MaxValue);
+                        rec_buffer[j] = Math.Max(rec_buffer[j], (double)Int16.MinValue);
                         transbuffer = Convert.ToInt16(rec_buffer[j] * Gain);
                         BinaryFileID.Write(transbuffer);
                     }                    

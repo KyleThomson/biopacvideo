@@ -67,7 +67,7 @@ namespace BioPacVideo
                 MessageBox.Show("mpdev.dll not found in " + Directory.GetCurrentDirectory() + "\nBioPac will not connect without this file!", "Missing DLL File",
                 MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-            else
+            else if (MP.Enabled)
             {
                 MP.isconnected = MP.Connect();
                 if (!MP.isconnected)
@@ -82,8 +82,9 @@ namespace BioPacVideo
                     IDT_BIOPACSTAT.Text = "BioPac Connected";
                 }
                 IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
-            }                           
-            Still = new Bitmap("NoSignal.Bmp");
+            }
+            bioPacEnabledToolStripMenuItem.Checked = MP.Enabled;
+            //Still = new Bitmap("NoSignal.Bmp");
             MP.FileCount = 0;            
             RecordingButton.BackColor = Color.Green;            
             IDC_RATSELECT.SelectedIndex = MP.SelectedChannel-1;
@@ -91,10 +92,15 @@ namespace BioPacVideo
             Video.FileStart = 0;
             IDT_DEVICECOUNT.Text = string.Format("Device Count ({0})", Video.Device_Count);
             IDT_VIDEOSTATUS.Text = Video.GetResText();
-            if (Video.Res == (AdvantechCodes.tagRes.SUCCEEDED))
+            if (Video.Enabled & (Video.Res == (AdvantechCodes.tagRes.SUCCEEDED)))
             {
                 Video.CapSDKStatus = true;
             }
+            else
+            {
+                Video.Enabled = false;
+            }
+            videoCaptureEnabledToolStripMenuItem.Checked = Video.Enabled;
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread)); 
             RunDisplayThread = true;
             ThreadDisplay.Start(); 
@@ -111,6 +117,7 @@ namespace BioPacVideo
             MP.DisplayLength = BioIni.IniReadValue("BioPac", "DisplayLength", 10);
             MP.Voltage = BioIni.IniReadValue("BioPac", "Voltage(mV)", 500);
             MP.Gain = BioIni.IniReadValue("BioPac", "Gain", 20000);
+            MP.Enabled = BioIni.IniReadValue("BioPac", "Enabled", true);
             BioIni.IniReadValue("Feeder", "Breakfast", out Feeder.Breakfast);
             BioIni.IniReadValue("Feeder", "Lunch", out Feeder.Lunch);
             BioIni.IniReadValue("Feeder", "Dinner", out Feeder.Dinner);
@@ -128,6 +135,7 @@ namespace BioPacVideo
                 Rats[i].Injection = BioIni.IniReadValue("Rats", string.Format("Rat{0} Injection", i));
                 Rats[i].FirstSeizure = BioIni.IniReadValue("Rats", string.Format("Rat{0} FirstSeizure", i));
             }
+            Video.Enabled = BioIni.IniReadValue("Video", "Enabled", true);
             Video.XRes = BioIni.IniReadValue("Video", "XRes", 320);
             Video.YRes = BioIni.IniReadValue("Video", "YRes", 240);
             Video.Quant = BioIni.IniReadValue("Video", "Quant", 4);
@@ -151,6 +159,7 @@ namespace BioPacVideo
             BioIni.IniWriteValue("BioPac", "DisplayLength", MP.DisplayLength.ToString());
             BioIni.IniWriteValue("BioPac", "Voltage(mV)", MP.Voltage.ToString());
             BioIni.IniWriteValue("BioPac", "Gain", MP.Gain.ToString());
+            BioIni.IniWriteValue("BioPac", "Enabled", MP.Enabled);
             BioIni.IniWriteValue("Feeder", "Breakfast", Feeder.Breakfast.ToString());
             BioIni.IniWriteValue("Feeder", "Lunch", Feeder.Lunch.ToString());
             BioIni.IniWriteValue("Feeder", "Dinner", Feeder.Dinner.ToString());
@@ -168,6 +177,7 @@ namespace BioPacVideo
                BioIni.IniWriteValue("Rats", string.Format("Rat{0} Injection", i), Rats[i].Injection.ToShortDateString());
                BioIni.IniWriteValue("Rats", string.Format("Rat{0} FirstSeizure", i), Rats[i].FirstSeizure.ToShortDateString());
             }
+            BioIni.IniWriteValue("Video", "Enabled", Video.Enabled);
             BioIni.IniWriteValue("Video", "XRes", Video.XRes);
             BioIni.IniWriteValue("Video", "YRes", Video.YRes);
             BioIni.IniWriteValue("Video", "Quant", Video.Quant);
@@ -436,6 +446,30 @@ namespace BioPacVideo
             }
             
             
+        }
+
+        private void bioPacEnabledToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bioPacEnabledToolStripMenuItem.Checked = !bioPacEnabledToolStripMenuItem.Checked;
+            MP.Enabled = bioPacEnabledToolStripMenuItem.Checked;
+            if (MP.Enabled)
+            {
+                if (MP.IsFileWriting)
+                    MP.StopWriting();
+                if (MP.isconnected)
+                    MP.Disconnect();
+            }
+        }
+
+        private void videoCaptureEnabledToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            videoCaptureEnabledToolStripMenuItem.Checked = !videoCaptureEnabledToolStripMenuItem.Checked;
+            Video.Enabled = videoCaptureEnabledToolStripMenuItem.Checked;
+            if (Video.Enabled)
+            {
+                Video.StopEncoding();
+                Video.StopRecording();
+            }
         }
     }
 }
