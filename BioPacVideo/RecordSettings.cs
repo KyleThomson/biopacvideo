@@ -12,15 +12,18 @@ namespace BioPacVideo
     
     public partial class RecordSettings : Form
     {
-           
+        MPTemplate MP;   
         public static int[] SampleRateList = new int[] { 250, 500, 1000, 2000, 2500, 5000, 10000 };
         public static int[] DisplayLengthSize = new int[] { 1, 5, 10, 30, 60 };
         public static int[] VoltageSettings = new int[] { 1, 10, 50, 100, 250, 500, 1000, 2000 };
         public static int[] GainSettings = new int[] { 5000, 10000, 20000, 50000 };
-
+        public static string[] ModeSettings = new string[] {"NORM", "ALPHA"};
+        public static double[] LPFilterSettings = new double[] { .1, 1 };
+        public static string[] HPFilterSettings = new string[] { "OFF", "ON" };
         public RecordSettings(int SR, int DL, int VL, int GN)
         {
             InitializeComponent();
+            MP = MPTemplate.Instance; //Pull Instance from MP Template - So we only have a single instance in all code
             for (int i=0; i < SampleRateList.Length;i++)
             {
                 ID_SRATE.Items.Add(string.Format("{0} Hz",SampleRateList[i]));
