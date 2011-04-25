@@ -20,8 +20,8 @@ namespace BioPacVideo
 {
     public partial class MainForm : Form
     {
-        IniFile BioIni;
-        MPTemplate MP;
+        IniFile BioIni; //Main Ini File
+        MPTemplate MP; 
         VideoTemplate Video;
         FeederTemplate Feeder;
         Pen BoxPen;        
@@ -44,9 +44,9 @@ namespace BioPacVideo
             Video = VideoTemplate.Instance; //Same for Video
             Feeder = new FeederTemplate(); //Only one instance of this is needed
             BoxPen = new Pen(Brushes.Black, 4);            
-            BioIni = new IniFile(Directory.GetCurrentDirectory() + "\\BioPacVideo.ini");
+            BioIni = new IniFile(Directory.GetCurrentDirectory() + "\\BioPacVideo.ini"); //Standard Ini Settings
             Rats = RatTemplate.NewInitArray(16);
-            g = this.CreateGraphics();            
+            g = this.CreateGraphics();  //Plot window          
             
             
             
@@ -251,7 +251,7 @@ namespace BioPacVideo
                     IDM_DISCONNECTBIOPAC.Enabled = false;
                     RecordingButton.BackColor = Color.Red;
                     Video.StartRecording();
-                    MP.isrecording = MP.StartWriting();                   
+                    MP.isstreaming = MP.StartWriting();                   
                 }
                 else
                 {                                        
@@ -350,7 +350,7 @@ namespace BioPacVideo
             if (disposing)
             {
                 RunDisplayThread = false;                
-                if (MP.isrecording)
+                if (MP.isstreaming)
                 {
                     MP.StopRecording();
                 }
