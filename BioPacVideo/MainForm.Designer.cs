@@ -39,11 +39,15 @@ namespace BioPacVideo
             this.initializeVideoCardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.videoSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sensorControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.videoCaptureEnabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bioPacToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.initializeBioPacToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.IDM_DISCONNECTBIOPAC = new System.Windows.Forms.ToolStripMenuItem();
             this.IDM_SETTINGS = new System.Windows.Forms.ToolStripMenuItem();
             this.IDM_SELECTCHANNELS = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.bioPacEnabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.automaticFeederToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testFeedersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setFeedingProtocolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,10 +64,6 @@ namespace BioPacVideo
             this.IDT_ENCODERRESULT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDC_RATSELECT = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.bioPacEnabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.videoCaptureEnabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -162,6 +162,18 @@ namespace BioPacVideo
             this.sensorControlToolStripMenuItem.Text = "Sensor Control";
             this.sensorControlToolStripMenuItem.Click += new System.EventHandler(this.sensorControlToolStripMenuItem_Click);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(180, 6);
+            // 
+            // videoCaptureEnabledToolStripMenuItem
+            // 
+            this.videoCaptureEnabledToolStripMenuItem.Name = "videoCaptureEnabledToolStripMenuItem";
+            this.videoCaptureEnabledToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.videoCaptureEnabledToolStripMenuItem.Text = "Video Capture Enabled";
+            this.videoCaptureEnabledToolStripMenuItem.Click += new System.EventHandler(this.videoCaptureEnabledToolStripMenuItem_Click);
+            // 
             // bioPacToolStripMenuItem
             // 
             this.bioPacToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -203,6 +215,18 @@ namespace BioPacVideo
             this.IDM_SELECTCHANNELS.Text = "Select Channels";
             this.IDM_SELECTCHANNELS.Click += new System.EventHandler(this.selectChannelsToolStripMenuItem_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
+            // 
+            // bioPacEnabledToolStripMenuItem
+            // 
+            this.bioPacEnabledToolStripMenuItem.Name = "bioPacEnabledToolStripMenuItem";
+            this.bioPacEnabledToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.bioPacEnabledToolStripMenuItem.Text = "BioPac Enabled";
+            this.bioPacEnabledToolStripMenuItem.Click += new System.EventHandler(this.bioPacEnabledToolStripMenuItem_Click);
+            // 
             // automaticFeederToolStripMenuItem
             // 
             this.automaticFeederToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -239,7 +263,7 @@ namespace BioPacVideo
             this.IDT_DEVICECOUNT,
             this.IDT_ENCODERSTATUS,
             this.IDT_ENCODERRESULT});
-            this.StatusBar.Location = new System.Drawing.Point(0, 630);
+            this.StatusBar.Location = new System.Drawing.Point(0, 864);
             this.StatusBar.Name = "StatusBar";
             this.StatusBar.Size = new System.Drawing.Size(1284, 26);
             this.StatusBar.TabIndex = 3;
@@ -365,36 +389,12 @@ namespace BioPacVideo
             this.label1.TabIndex = 5;
             this.label1.Text = "Select Animal";
             // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
-            // 
-            // bioPacEnabledToolStripMenuItem
-            // 
-            this.bioPacEnabledToolStripMenuItem.Name = "bioPacEnabledToolStripMenuItem";
-            this.bioPacEnabledToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.bioPacEnabledToolStripMenuItem.Text = "BioPac Enabled";
-            this.bioPacEnabledToolStripMenuItem.Click += new System.EventHandler(this.bioPacEnabledToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(180, 6);
-            // 
-            // videoCaptureEnabledToolStripMenuItem
-            // 
-            this.videoCaptureEnabledToolStripMenuItem.Name = "videoCaptureEnabledToolStripMenuItem";
-            this.videoCaptureEnabledToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.videoCaptureEnabledToolStripMenuItem.Text = "Video Capture Enabled";
-            this.videoCaptureEnabledToolStripMenuItem.Click += new System.EventHandler(this.videoCaptureEnabledToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1284, 656);
+            this.ClientSize = new System.Drawing.Size(1284, 890);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.IDC_RATSELECT);
             this.Controls.Add(this.StatusBar);

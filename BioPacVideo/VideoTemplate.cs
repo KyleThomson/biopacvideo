@@ -54,7 +54,9 @@ namespace BioPacVideo
         {          
             Res =  (AdvantechCodes.tagRes) VideoWrapper.initCaptureSDK();
             if (Res != AdvantechCodes.tagRes.SUCCEEDED)
+            {
                 return false;
+            }
             Res = (AdvantechCodes.tagRes) VideoWrapper.StartCaptureSDK();
             if (Res != AdvantechCodes.tagRes.SUCCEEDED)
                 return false;

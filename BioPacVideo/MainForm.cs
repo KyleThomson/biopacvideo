@@ -199,6 +199,7 @@ namespace BioPacVideo
             {
                 MP._DisplayHandle.WaitOne();
                 IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
+                if (Still != null)
                 Still.Dispose();       
                 g.DrawImage(MP.offscreen, 50, this.Height-300);
                 Video.pDF = VideoWrapper.GetCurrentBuffer();
@@ -209,7 +210,7 @@ namespace BioPacVideo
             }
             else
             {
-                Still = new Bitmap("NoSignal.Bmp");
+                 Still = new Bitmap("NoSignal.Bmp");
             }            
             g.DrawImage(Still, 322, 52, 320, 240);
             IDT_VIDEOSTATUS.Text = Video.GetResText();
@@ -379,12 +380,8 @@ namespace BioPacVideo
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RecordSettings frm = new RecordSettings(MP.SampleRate, MP.DisplayLength, MP.Voltage, MP.Gain);
-            frm.ShowDialog(this);
-            MP.SampleRate = frm.SampleRate();
-            MP.DisplayLength = frm.DisplayLength();
-            MP.Voltage = frm.Voltage();
-            MP.Gain = frm.Gain();
+            RecordSettings frm = new RecordSettings();
+            frm.ShowDialog(this);         
             frm.Dispose();
             UpdateINI(BioIni);
             IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
