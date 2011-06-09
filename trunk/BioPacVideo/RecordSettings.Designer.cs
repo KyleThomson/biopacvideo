@@ -202,7 +202,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ID_SRATE);
             this.Name = "RecordSettings";
-            this.Text = "Biopac Record Settings";
+            this.Text = " ";
             this.ResumeLayout(false);
             this.PerformLayout();
 

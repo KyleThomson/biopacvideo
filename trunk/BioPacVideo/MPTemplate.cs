@@ -492,7 +492,7 @@ namespace BioPacVideo
                 //If this fails, the recieved will be smaller than the buffsize, but you have bigger issues. 
                 if (MPReturn != MPCODE.MPSUCCESS) //Make sure we were successful in getting the buffer. 
                 {
-                    MessageBox.Show(MPCLASS.getMPDaemonLastError().ToString());
+                    MessageBox.Show(MPReturn.ToString() + "   " + MPCLASS.getMPDaemonLastError().ToString());
                     MPReturn = MPCLASS.stopAcquisition(); //Have to restart the aquisition. 
                     return;
                 }

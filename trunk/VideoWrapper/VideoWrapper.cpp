@@ -15,13 +15,13 @@
 #define new DEBUG_NEW
 #endif
 
-#define ENC_BUF_SIZE 1024*1024*3*10
+#define ENC_BUF_SIZE 1024*1024*3*10 
 
 using namespace std;
 typedef queue<LPVOID> LPQUEUE;
 
 #define MAXMUXS 4
-#define MAXDEVS 4
+#define MAXDEVS 8
 #define ID_NEW_FRAME 37810
 #define ID_MUX0_NEW_FRAME 37800
 #define ID_MUX1_NEW_FRAME 37801
@@ -64,7 +64,7 @@ bool NoSig = true;
 char* SaveName;
 BYTE* pDstBuf;
 BYTE* ExtPtr;
-BYTE* P2Buff = new BYTE[640*480*2];
+BYTE* P2Buff = new BYTE[640*480*MAXDEVS*MAXMUXS*2];
 int nDevCount;
 int SelChan = 0;
 int SelDevice = 0;
@@ -139,7 +139,7 @@ int StartCaptureSDK(void)
 		if (res != SUCCEEDED)
 			return res;	
 	}	
-	Sleep(500);
+	Sleep(100);
 	return 1;
 }
 int StartEncoderSDK()
@@ -266,6 +266,7 @@ BYTE* GetSnapShot(int Chan)
 
 int StartCapture()
 {
+	//Start up Capture device, assuming the API is initialized
 	int res;				
 	for (int i = 0; i < nDevCount; i++)
 	{
@@ -278,16 +279,17 @@ int StartCapture()
 				return res;
 			}
 			//Start Video Capture 
-			res = pDVPSDK->AdvDVP_Start(i,Switching-1,NULL,NULL);
+			res = pDVPSDK->AdvDVP_Start(i,Switching-1,NULL,NULL); //Device Number, Number of Channels to switch between,
+			//NULLs are for handles to windows - won't use these. 
 			if (res !=  SUCCEEDED) 
 			{
 				return res;
 			}
-			Sleep(500);
+			Sleep(100);
 		}			
 		
 	}
-	lDstSize = nWidth[0]*nHeight[0]*3;	
+	lDstSize= nWidth[0]*nHeight[0]*3;	
 	pDstBuf = new BYTE[lDstSize];
 	return res;
 }
