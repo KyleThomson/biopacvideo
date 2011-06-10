@@ -97,7 +97,7 @@ namespace BioPacVideo
                 Video.CapSDKStatus = true;
             }
             else
-            {
+            {                
                 Video.Enabled = false;
             }
             videoCaptureEnabledToolStripMenuItem.Checked = Video.Enabled;
@@ -230,32 +230,40 @@ namespace BioPacVideo
                     //Start Recording   
                     Video.initEncoder();                                    
                     string DateString, RecordingDir;
-                    DateString = string.Format("{0:yyyy}{0:MM}{0:dd}", DateTime.Now);
+                    //Set up recording name based on date and time
+                    DateString = string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", DateTime.Now);
                     RecordingDir = MP.RecordingDirectory + "\\" + DateString;
                     Directory.CreateDirectory(RecordingDir);
-                    MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;                  
+                    
+                    MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
+
+                    //Write INI file once, so we save all the settings                    
                     WriteOnce = new IniFile(RecordingDir + "\\" + DateString + "_Settings.txt");
                     UpdateINI(WriteOnce);
-                    //Video Stuff
-                    
+
+                    //Video Stuff                    
                     Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
                     Video.FileStart = Video.FileStart+1;
                     Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString, Video.FileStart);
-                    Video.LoadSettings();                    
-                    
-                    //IDS_ENCODERSTATUS.Text = Video.EncoderStatus();
+                    Video.LoadSettings();                                                            
                     IDT_VIDEOSTATUS.Text = Video.GetResText();
+
+                    
+                    //Visual Stuff, so we know we are recording. 
                     RecordingButton.Text = "Stop Recording";
                     IDT_BIOPACRECORDINGSTAT.Text = "Recording";
                     IDM_SELECTCHANNELS.Enabled = false;
                     IDM_SETTINGS.Enabled = false;
                     IDM_DISCONNECTBIOPAC.Enabled = false;
                     RecordingButton.BackColor = Color.Red;
+
+                    //Start the actual recording
                     Video.StartRecording();
                     MP.isstreaming = MP.StartWriting();                   
                 }
                 else
                 {                                        
+                    //End Recording
                     IDT_BIOPACRECORDINGSTAT.Text = "Not Recording";                    
                     MP.StopWriting();
                     Video.StopEncoding();
@@ -370,12 +378,12 @@ namespace BioPacVideo
         
         ~MainForm()
         {                
-            this.Dispose();
+            this.Dispose(true);
         }
 
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {                   
-            this.Dispose();
+            this.Dispose(true);
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -459,14 +467,14 @@ namespace BioPacVideo
         }
 
         private void videoCaptureEnabledToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            videoCaptureEnabledToolStripMenuItem.Checked = !videoCaptureEnabledToolStripMenuItem.Checked;
-            Video.Enabled = videoCaptureEnabledToolStripMenuItem.Checked;
+        {           
             if (Video.Enabled)
             {
                 Video.StopEncoding();
                 Video.StopRecording();
             }
+            videoCaptureEnabledToolStripMenuItem.Checked = !videoCaptureEnabledToolStripMenuItem.Checked;
+            Video.Enabled = videoCaptureEnabledToolStripMenuItem.Checked;
         }
     }
 }
