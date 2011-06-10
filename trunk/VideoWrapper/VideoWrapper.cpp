@@ -81,6 +81,7 @@ STREAMREAD_STRUCT StreamRead = {StreamReadBegin,
 								StreamReadEnd};
 
 
+//Create instance of the Capture Library
 int initCaptureSDK()
 {
 	for (int i=0; i<MAXDEVS*MAXMUXS; i++)
@@ -112,6 +113,22 @@ int initCaptureSDK()
 	return 1; //Succeeded
 }
 
+//Initialize Capture library, download device count
+int StartCaptureSDK(void)
+{
+	int res = pDVPSDK->AdvDVP_InitSDK();	
+	if (res == SUCCEEDED)
+	{
+		res = pDVPSDK->AdvDVP_GetNoOfDevices(&nDevCount);
+		if (res != SUCCEEDED)
+			return res;	
+	}	
+	Sleep(100);
+	return 1;
+}
+
+
+//Create an instance of the encoder library
 int initEncoderSDK(void)
 {
 	int ErrorVal;
@@ -130,18 +147,7 @@ int initEncoderSDK(void)
 	return 1; //Succeeded
 }
 
-int StartCaptureSDK(void)
-{
-	int res = pDVPSDK->AdvDVP_InitSDK();	
-	if (res == SUCCEEDED)
-	{
-		res = pDVPSDK->AdvDVP_GetNoOfDevices(&nDevCount);
-		if (res != SUCCEEDED)
-			return res;	
-	}	
-	Sleep(100);
-	return 1;
-}
+//Initialize an Encoder for each channel. 
 int StartEncoderSDK()
 {
 	int res;
