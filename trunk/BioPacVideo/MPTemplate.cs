@@ -71,7 +71,8 @@ namespace BioPacVideo
         private Single PointSpacing;         
         private int samplecount;
         private long[] ChannelDataSizeLocation;
-        private int AcqChan;        
+        private int AcqChan;
+        private int VoltageSpacing;
 
 
 
@@ -99,7 +100,7 @@ namespace BioPacVideo
 
         public void InitializeDisplay(int X, int Y)
         {
-            offscreen = new Bitmap((int)(X - 100), (int)(240));
+            offscreen = new Bitmap((int)(X - 100), Y-300);
             MaxDrawSize = SampleRate * DisplayLength;
 
             WaveCords = new PointF[MaxDrawSize];
@@ -350,7 +351,7 @@ namespace BioPacVideo
                         {
                             if (i / AcqChan >= samplesize - SamplesLeft)
                             {
-                                PointF TempPoint = new PointF(CurPointPos * PointSpacing, ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax));
+                                PointF TempPoint = new PointF(CurPointPos * PointSpacing, VoltageSpacing * ((i % AcqChan) + (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax/(AcqChan+1)));
                                 WaveC[i % AcqChan][SamplePos] = TempPoint;
                                 if (i % AcqChan == AcqChan - 1)
                                 {
@@ -361,7 +362,7 @@ namespace BioPacVideo
                         }
                         else
                         {
-                            PointF TempPoint = new PointF(CurPointPos * PointSpacing, 10* (i % AcqChan) + ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax));
+                            PointF TempPoint = new PointF(CurPointPos * PointSpacing, VoltageSpacing * ((i % AcqChan) + (float)0.5) +  ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax/(AcqChan+1)));
                             WaveC[i % AcqChan][SamplePos] = TempPoint;
                             if (i % AcqChan == AcqChan-1) 
                             {
@@ -481,6 +482,7 @@ namespace BioPacVideo
         {
             uint received;         
             AcqChan = TotChan();  //How many channels are we going to acquire   
+            VoltageSpacing =(int)(Ymax / (AcqChan+1));
             Thread BuffDraw = new Thread(new ThreadStart(drawbuffer)); //Set up thread for buffering 
             BuffDraw.Start(); //and then start it 
             BuffSize = ((uint)(SampleRate/UpdateSpeed))*(uint)AcqChan; //Need to determine the right buffer size.

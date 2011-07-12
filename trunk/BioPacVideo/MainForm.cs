@@ -54,7 +54,7 @@ namespace BioPacVideo
 
 
             //Start EEG and Video functions
-            MP.InitializeDisplay(this.Width, this.Height);   
+            MP.InitializeDisplay(this.Width, this.Height);            
             for (int i = 0; i < 16; i++)
             {
                 IDC_RATSELECT.Items.Add(string.Format("Rat {0}", i + 1));
@@ -115,8 +115,7 @@ namespace BioPacVideo
             MP.DisplayLength = BioIni.IniReadValue("BioPac", "DisplayLength", 10);
             MP.Voltage = BioIni.IniReadValue("BioPac", "Voltage(mV)", 500);
             MP.Gain = BioIni.IniReadValue("BioPac", "Gain", 20000);
-            MP.Enabled = BioIni.IniReadValue("BioPac", "Enabled", true);
-            BioIni.IniReadValue("Feeder", "Breakfast", out Feeder.Breakfast);
+            MP.Enabled = BioIni.IniReadValue("BioPac", "Enabled", true);            BioIni.IniReadValue("Feeder", "Breakfast", out Feeder.Breakfast);
             BioIni.IniReadValue("Feeder", "Lunch", out Feeder.Lunch);
             BioIni.IniReadValue("Feeder", "Dinner", out Feeder.Dinner);
             Feeder.PelletsPerGram = BioIni.IniReadValue("Feeder", "PelletsPerGram", 0);
@@ -199,7 +198,7 @@ namespace BioPacVideo
                 IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
                 if (Still != null)
                 Still.Dispose();       
-                g.DrawImage(MP.offscreen, 50, this.Height-300);
+                g.DrawImage(MP.offscreen, 50, this.RecordingButton.Location.Y+200);
                 Video.pDF = VideoWrapper.GetCurrentBuffer();
             if (Video.pDF != null)
             {
@@ -210,7 +209,7 @@ namespace BioPacVideo
             {
                  Still = new Bitmap("NoSignal.Bmp");
             }            
-            g.DrawImage(Still, 322, 52, 320, 240);
+            g.DrawImage(Still, 322, 52, 120, 80);
             IDT_VIDEOSTATUS.Text = Video.GetResText();
             IDT_ENCODERRESULT.Text = Video.EncoderStatus();
             IDT_ENCODERSTATUS.Text = VideoWrapper.GetEncRes().ToString();            
