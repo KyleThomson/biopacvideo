@@ -24,14 +24,14 @@ namespace BioPacVideo
         MPTemplate MP; 
         VideoTemplate Video;
         FeederTemplate Feeder;
-        Pen BoxPen;        
+        Pen BoxPen;
         FolderBrowserDialog FBD;
         RatTemplate[] Rats;
         Bitmap Still;                
         Thread ThreadDisplay;        
         Graphics g;
         bool RunDisplayThread; 
-
+        
 
 
 
@@ -47,8 +47,6 @@ namespace BioPacVideo
             BioIni = new IniFile(Directory.GetCurrentDirectory() + "\\BioPacVideo.ini"); //Standard Ini Settings
             Rats = RatTemplate.NewInitArray(16);
             g = this.CreateGraphics();  //Plot window          
-            
-            
             
             //***************** LOAD SETTINGS *****************
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);

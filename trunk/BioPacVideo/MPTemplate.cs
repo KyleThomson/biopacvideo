@@ -315,7 +315,7 @@ namespace BioPacVideo
   
         private void drawbuffer()
         {
-            PointF[] WaveC;
+            PointF[][] WaveC;
             while (true)
             {
                 _DrawHandle.WaitOne();
@@ -337,35 +337,44 @@ namespace BioPacVideo
                 {
                     SamplesLeft = samplesize;
                 }
-                WaveC = new PointF[SamplesLeft];
+                WaveC = new PointF[AcqChan][];
+                for (int i = 0; i < AcqChan; i++)
+                {
+                    WaveC[i] = new PointF[SamplesLeft];
+                }
                 int SamplePos = 0;
                 for (int i = 0; i < last_received; i++)
-                {                    
-                    if (((i + 1) % AcqChan) == (SelectedChannel % AcqChan))
-                    {
+                {                                       
+                    
                         if (SamplesLeft < samplesize)
                         {
                             if (i / AcqChan >= samplesize - SamplesLeft)
                             {
                                 PointF TempPoint = new PointF(CurPointPos * PointSpacing, ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax));
-                                WaveC[SamplePos] = TempPoint;
-                                SamplePos++;    
-                                CurPointPos++;
+                                WaveC[i % AcqChan][SamplePos] = TempPoint;
+                                if (i % AcqChan == AcqChan - 1)
+                                {
+                                    SamplePos++;
+                                    CurPointPos++;
+                                }
                             }
                         }
                         else
                         {
-                            PointF TempPoint = new PointF(CurPointPos * PointSpacing, ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax));
-                            WaveC[SamplePos] = TempPoint;
-                            SamplePos++;
-                            CurPointPos++;
-                        }
-                    }
+                            PointF TempPoint = new PointF(CurPointPos * PointSpacing, 10* (i % AcqChan) + ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax));
+                            WaveC[i % AcqChan][SamplePos] = TempPoint;
+                            if (i % AcqChan == AcqChan-1) 
+                            {
+                                SamplePos++;
+                                CurPointPos++;
+                            }
+                        }                    
                 }
                 if (SamplePos > 2)
                 {
                     lock (g)
-                        g.DrawLines(wavePen, WaveC);
+                        for (int i = 0; i < AcqChan; i++)
+                            g.DrawLines(wavePen, WaveC[i]);
                     _DisplayHandle.Set();
               
                 }
