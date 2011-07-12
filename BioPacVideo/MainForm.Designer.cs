@@ -374,7 +374,7 @@ namespace BioPacVideo
             // IDC_RATSELECT
             // 
             this.IDC_RATSELECT.FormattingEnabled = true;
-            this.IDC_RATSELECT.Location = new System.Drawing.Point(12, 112);
+            this.IDC_RATSELECT.Location = new System.Drawing.Point(261, 52);
             this.IDC_RATSELECT.Name = "IDC_RATSELECT";
             this.IDC_RATSELECT.Size = new System.Drawing.Size(154, 21);
             this.IDC_RATSELECT.TabIndex = 4;
@@ -383,7 +383,7 @@ namespace BioPacVideo
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 96);
+            this.label1.Location = new System.Drawing.Point(258, 36);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(71, 13);
             this.label1.TabIndex = 5;
@@ -400,9 +400,13 @@ namespace BioPacVideo
             this.Controls.Add(this.StatusBar);
             this.Controls.Add(this.RecordingButton);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "BioPac Video Recording";
+            this.TopMost = true;
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.StatusBar.ResumeLayout(false);
