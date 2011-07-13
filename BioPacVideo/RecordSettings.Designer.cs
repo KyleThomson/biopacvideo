@@ -126,6 +126,7 @@
             this.ID_GAIN.Name = "ID_GAIN";
             this.ID_GAIN.Size = new System.Drawing.Size(121, 21);
             this.ID_GAIN.TabIndex = 8;
+            this.ID_GAIN.SelectedIndexChanged += new System.EventHandler(this.ID_GAIN_SelectedIndexChanged);
             // 
             // comboBox1
             // 
