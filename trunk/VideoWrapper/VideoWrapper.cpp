@@ -290,8 +290,7 @@ int StartCapture()
 			if (res !=  SUCCEEDED) 
 			{
 				return res;
-			}
-			Sleep(100);
+			}			
 		}			
 		
 	}

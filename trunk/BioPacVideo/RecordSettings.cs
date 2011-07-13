@@ -16,7 +16,7 @@ namespace BioPacVideo
         public static int[] SampleRateList = new int[] { 250, 500, 1000, 2000, 2500, 5000, 10000 };
         public static int[] DisplayLengthSize = new int[] { 1, 5, 10, 30, 60 };
         public static int[] VoltageSettings = new int[] { 1, 10, 50, 100, 250, 500, 1000, 2000 };
-        public static int[] GainSettings = new int[] { 5000, 10000, 20000, 50000 };
+        public static int[] GainSettings = new int[] { 1000, 2000, 5000, 10000 };
         public static string[] ModeSettings = new string[] {"NORM", "ALPHA"};
         public static double[] LPFilterSettings = new double[] { .1, 1 };
         public static string[] HPFilterSettings = new string[] { "OFF", "ON" };
@@ -60,6 +60,11 @@ namespace BioPacVideo
             this.Close();
         }
 
+        private void ID_GAIN_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+
+        }
         
 
     }

@@ -427,6 +427,7 @@ namespace BioPacVideo
         public bool StartRecording()
         {
             AcqThread = new Thread(new ThreadStart(RecordingThread)); //Initialize recording thread
+            AcqThread.Priority = ThreadPriority.Highest;
             isstreaming = true;
             g = Graphics.FromImage(offscreen);
             ClearDisplay = true;
@@ -481,6 +482,8 @@ namespace BioPacVideo
         private void RecordingThread()
         {
             uint received;         
+            DateTime Start = DateTime.Now;
+            TimeSpan Elapsed;
             AcqChan = TotChan();  //How many channels are we going to acquire   
             VoltageSpacing =(int)(Ymax / (AcqChan+1));
             Thread BuffDraw = new Thread(new ThreadStart(drawbuffer)); //Set up thread for buffering 
@@ -492,15 +495,18 @@ namespace BioPacVideo
             Int16 transbuffer = new Int16();  //Translational buffer to write bytes instead of doubles.             
             MPReturn = MPCLASS.startAcquisition();  //Start actual acquisition        
             if (MPReturn != MPCODE.MPSUCCESS) //If acquisition fails, error out. 
-            {
-                MessageBox.Show("Acquisition failed to start.");
-                return;
+            { 
             }
             while (isstreaming) //Thread stopping variable - set to false to end the recording thread. 
-            {                                
+            {
+                Thread.Sleep(3);
+                Elapsed = DateTime.Now - Start;
+                Console.WriteLine("Time Elapsed: {0} ms",Elapsed.Milliseconds);
+                
                 MPReturn = MPCLASS.receiveMPData(rec_buffer, BuffSize, out received); //Get the latest buffer
                 //This function pauses until the buffer is full - making the 'recieved' variable somewhat useless.                 
                 //If this fails, the recieved will be smaller than the buffsize, but you have bigger issues. 
+                Start = DateTime.Now;
                 if (MPReturn != MPCODE.MPSUCCESS) //Make sure we were successful in getting the buffer. 
                 {
                     MessageBox.Show(MPReturn.ToString() + "   " + MPCLASS.getMPDaemonLastError().ToString());
