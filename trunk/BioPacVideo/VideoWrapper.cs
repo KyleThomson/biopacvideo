@@ -95,7 +95,7 @@ namespace BioPacVideo
         public static extern int StartCapture();
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr GetCurrentBuffer(); //Sends the pointer from DLL to a buffer of data
+        public static extern IntPtr GetCurrentBuffer(int Cam); //Sends the pointer from DLL to a buffer of data
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SetNTSC(); //Sets all devices to NTSC

@@ -29,8 +29,8 @@ namespace BioPacVideo
         public int[] Contrast;
         public int[] Brightness;
         public int[] Hue;       
-        public int[] Saturation; 
-
+        public int[] Saturation;
+        public int[] CameraAssociation;
 
         public VideoTemplate()
         {
@@ -38,6 +38,7 @@ namespace BioPacVideo
             Brightness = new int[16];
             Hue = new int[16];
             Saturation = new int[16];
+            CameraAssociation = new int[16];
             CapSDKStatus = false;
             EncSDKStatus = false;
             pDF = new IntPtr();
@@ -68,7 +69,7 @@ namespace BioPacVideo
             Res = (AdvantechCodes.tagRes)VideoWrapper.StartCapture();
             if (Res != AdvantechCodes.tagRes.SUCCEEDED)
                 return false;            
-            pDF = VideoWrapper.GetCurrentBuffer();
+            pDF = VideoWrapper.GetCurrentBuffer(0);
             return true;
         }
         public void initEncoder()

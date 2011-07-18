@@ -90,6 +90,7 @@ namespace BioPacVideo
             Video.FileStart = 0;
             IDT_DEVICECOUNT.Text = string.Format("Device Count ({0})", Video.Device_Count);
             IDT_VIDEOSTATUS.Text = Video.GetResText();
+            Console.WriteLine(Video.GetResText());
             if (Video.Enabled & (Video.Res == (AdvantechCodes.tagRes.SUCCEEDED)))
             {
                 Video.CapSDKStatus = true;
@@ -139,6 +140,7 @@ namespace BioPacVideo
             Video.KeyFrames = BioIni.IniReadValue("Video", "KeyFrames", 100);
             for (int i = 0; i < 16; i++)
             {
+                Video.CameraAssociation[i] = BioIni.IniReadValue("Video", string.Format("Camera{0}", i), i);
                 Video.Brightness[i] = BioIni.IniReadValue("Video", string.Format("Bright{0}", i), 50);
                 Video.Contrast[i] = BioIni.IniReadValue("Video", string.Format("Contrast{0}", i), 50);
                 Video.Hue[i] = BioIni.IniReadValue("Video", string.Format("Hue{0}", i), 50);
@@ -181,6 +183,7 @@ namespace BioPacVideo
             BioIni.IniWriteValue("Video", "KeyFrames", Video.KeyFrames);
             for (int i = 0; i < 16; i++)
             {
+                BioIni.IniWriteValue("Video", string.Format("Camera{0}", i), Video.CameraAssociation[i]);
                 BioIni.IniWriteValue("Video", string.Format("Bright{0}", i), Video.Brightness[i]);
                 BioIni.IniWriteValue("Video", string.Format("Contrast{0}", i), Video.Contrast[i]);
                 BioIni.IniWriteValue("Video", string.Format("Hue{0}", i), Video.Hue[i]);
@@ -197,19 +200,23 @@ namespace BioPacVideo
                 MP._DisplayHandle.WaitOne();
                 IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
                 if (Still != null)
-                Still.Dispose();       
-                g.DrawImage(MP.offscreen, 50, this.RecordingButton.Location.Y+200);
-                Video.pDF = VideoWrapper.GetCurrentBuffer();
-            if (Video.pDF != null)
-            {
-                Still = new Bitmap(Video.XRes, Video.YRes, Video.XRes * 3, PixelFormat.Format24bppRgb, Video.pDF);
-                Still.RotateFlip(RotateFlipType.RotateNoneFlipY);
-            }
-            else
-            {
-                 Still = new Bitmap("NoSignal.Bmp");
-            }            
-            g.DrawImage(Still, 322, 52, 120, 80);
+                
+                g.DrawImage(MP.offscreen, 30, 280);
+                for (int i = 0; i < MP.TotChan(); i++)
+                {
+                    Video.pDF = VideoWrapper.GetCurrentBuffer(Video.CameraAssociation[i]);
+                    if (Video.pDF != null)
+                    {
+                        Still = new Bitmap(Video.XRes, Video.YRes, Video.XRes * 3, PixelFormat.Format24bppRgb, Video.pDF);
+                        Still.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                    }
+                    else
+                    {
+                        Still = new Bitmap("NoSignal.Bmp");
+                    }
+                    g.DrawImage(Still, 132+(i%8)*162, 32+(float)Math.Floor((decimal)(i/8))*122, 160, 120);
+                    Still.Dispose();       
+                }
             IDT_VIDEOSTATUS.Text = Video.GetResText();
             IDT_ENCODERRESULT.Text = Video.EncoderStatus();
             IDT_ENCODERSTATUS.Text = VideoWrapper.GetEncRes().ToString();            
@@ -256,14 +263,16 @@ namespace BioPacVideo
 
                     //Start the actual recording
                     Video.StartRecording();
-                    MP.isstreaming = MP.StartWriting();                   
+                    Console.WriteLine(DateTime.Now.TimeOfDay.ToString());
+                    MP.isstreaming = MP.StartWriting();
+                    Console.WriteLine(DateTime.Now.TimeOfDay.ToString());
                 }
                 else
                 {                                        
                     //End Recording
                     IDT_BIOPACRECORDINGSTAT.Text = "Not Recording";                    
-                    MP.StopWriting();
-                    Video.StopEncoding();
+                    MP.StopWriting();                    
+                    Video.StopEncoding();                    
                     IDM_SELECTCHANNELS.Enabled = true;
                     IDM_SETTINGS.Enabled = true;
                     IDM_DISCONNECTBIOPAC.Enabled = true;
@@ -371,6 +380,7 @@ namespace BioPacVideo
                 }
                 base.Dispose(disposing);
             }
+            Console.WriteLine(System.Diagnostics.Process.GetCurrentProcess().Threads.Count.ToString());
         }    
         
         ~MainForm()
@@ -441,10 +451,11 @@ namespace BioPacVideo
                 Video.initVideo();
                 IDT_DEVICECOUNT.Text = string.Format("Device Count ({0})", Video.Device_Count);
                 IDT_VIDEOSTATUS.Text = Video.GetResText();
+                Console.WriteLine(Video.GetResText());
                 if (Video.Res == (AdvantechCodes.tagRes.SUCCEEDED))
                 {
                     Video.CapSDKStatus = true;
-                }                
+                }                         
             }
             
             
@@ -472,6 +483,14 @@ namespace BioPacVideo
             }
             videoCaptureEnabledToolStripMenuItem.Checked = !videoCaptureEnabledToolStripMenuItem.Checked;
             Video.Enabled = videoCaptureEnabledToolStripMenuItem.Checked;
+        }
+
+        private void cameraAssociationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CameraAssc C = new CameraAssc();
+            C.ShowDialog(this);
+            UpdateINI(BioIni);
+            C.Dispose();
         }
     }
 }

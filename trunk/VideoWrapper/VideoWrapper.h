@@ -30,7 +30,7 @@ extern "C" _declspec(dllexport) int GetCaptureStatus(void);
 extern "C" _declspec(dllexport) int GetEncRes();
 extern "C" _declspec(dllexport) int __cdecl NewFrameCallback(int empty, int nID, int nDevNum, int nMuxChan,   int nBufSize, BYTE* pBuf);
 extern "C" _declspec(dllexport) BYTE* GetSnapShot(int Chan);
-extern "C" _declspec(dllexport) BYTE* GetCurrentBuffer();
+extern "C" _declspec(dllexport) BYTE* GetCurrentBuffer(int Cam);
 extern "C" __declspec(dllexport) int GetDeviceCount(void);
 
 
