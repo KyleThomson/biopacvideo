@@ -224,7 +224,7 @@ void YUYVtoRGB24(int width, int height, unsigned char *src, unsigned char *dst)
 }
 
 
-BYTE* GetCurrentBuffer()
+BYTE* GetCurrentBuffer(int Cam)
 {
 	if (NoSig) 
 	{
@@ -232,9 +232,9 @@ BYTE* GetCurrentBuffer()
 	}
 	else
 	{
-		YUYVtoRGB24(nWidth[0], nHeight[0], P2Buff, pDstBuf);		
+		YUYVtoRGB24(nWidth[0], nHeight[0], P2Buff+(Cam*nWidth[0]*nHeight[0]*2), pDstBuf+(Cam*nWidth[0]*nHeight[0]*3));		
 		return pDstBuf;
-	}
+	}	
 }
 
 
@@ -271,7 +271,7 @@ BYTE* GetSnapShot(int Chan)
 
 
 int StartCapture()
-{
+{	
 	//Start up Capture device, assuming the API is initialized
 	int res;				
 	for (int i = 0; i < nDevCount; i++)
@@ -295,7 +295,8 @@ int StartCapture()
 		
 	}
 	lDstSize= nWidth[0]*nHeight[0]*3;	
-	pDstBuf = new BYTE[lDstSize];
+	//Create a final buffer for all cameras
+	pDstBuf = new BYTE[lDstSize*MAXDEVS*MAXMUXS];
 	return res;
 }
 int StartEncoding()
@@ -389,18 +390,16 @@ int __cdecl NewFrameCallback(int empty, int nID, int nDevNum, int nMuxChan, int 
 {			
 	LastEncRes =nID;
 	VideoPresent[nMuxChan] = true;
-	if ((nDevNum == SelDevice) && (nMuxChan == SelChan))	
-	{						
-		if (*(pBuf+1) & 0x02) 		
-		{
-			NoSig = true;		
-		}
-		else 
-		{
-			NoSig = false;
-			memcpy(P2Buff,pBuf,nBufSize);		
-		}
-    }  	
+					
+	if (*(pBuf+1) & 0x02) 		
+	{
+		NoSig = true;		
+	}
+	else 
+	{
+		NoSig = false;
+		memcpy(P2Buff+nWidth[0]*nHeight[0]*2*(nDevNum*MAXMUXS+nMuxChan),pBuf,nBufSize);		
+	}    
 	int nChNum;
 	
     if (nID != ID_NEW_FRAME)

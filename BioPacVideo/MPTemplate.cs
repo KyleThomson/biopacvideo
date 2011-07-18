@@ -100,7 +100,7 @@ namespace BioPacVideo
 
         public void InitializeDisplay(int X, int Y)
         {
-            offscreen = new Bitmap((int)(X - 100), Y-300);
+            offscreen = new Bitmap((int)(X - 60), Y-350);
             MaxDrawSize = SampleRate * DisplayLength;
 
             WaveCords = new PointF[MaxDrawSize];
@@ -108,7 +108,7 @@ namespace BioPacVideo
 
 
 
-        int TotChan()
+        public int TotChan()
         {
             int Tot = 0;
             for (int i = 0; i < 16; i++)
@@ -501,7 +501,7 @@ namespace BioPacVideo
             {
                 Thread.Sleep(3);
                 Elapsed = DateTime.Now - Start;
-                Console.WriteLine("Time Elapsed: {0} ms",Elapsed.Milliseconds);
+                //Console.WriteLine("Time Elapsed: {0} ms",Elapsed.Milliseconds);
                 
                 MPReturn = MPCLASS.receiveMPData(rec_buffer, BuffSize, out received); //Get the latest buffer
                 //This function pauses until the buffer is full - making the 'recieved' variable somewhat useless.                 

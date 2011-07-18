@@ -66,6 +66,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CameraAssc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CameraAssc.Designer.cs">
+      <DependentUpon>CameraAssc.cs</DependentUpon>
+    </Compile>
     <Compile Include="FeederForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,6 +123,9 @@
       <DependentUpon>VideoSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="VideoWrapper.cs" />
+    <EmbeddedResource Include="CameraAssc.resx">
+      <DependentUpon>CameraAssc.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FeederForm.resx">
       <DependentUpon>FeederForm.cs</DependentUpon>
     </EmbeddedResource>
