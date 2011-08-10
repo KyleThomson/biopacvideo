@@ -14,10 +14,12 @@ namespace BioPacVideo
     {
         ArrayList TestBoxes;
         MPTemplate MP;
+        FeederTemplate Feeder;
         public FeederTester()
         {
             InitializeComponent();
             MP = MPTemplate.Instance;
+            Feeder = FeederTemplate.Instance;
             TestBoxes = new ArrayList();
             MakeList();
         }
@@ -33,11 +35,10 @@ namespace BioPacVideo
                 TempBox.Text = string.Format("Feeder {0} -", i + 1);
                 TempBox.Checked = false;
             }
-            MP.RunFeederTest();
+            Feeder.AddCommand(1, 1);
             for (int i = 0; i < 8; i++)
             {
-                TempBox = TestBoxes[i] as CheckBox;
-                //MP.Test(i)
+                TempBox = TestBoxes[i] as CheckBox;                
                 if (MP.FeederTest[i])                    
                 {
                     TempBox.Checked = true;

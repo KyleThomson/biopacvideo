@@ -63,8 +63,6 @@ namespace BioPacVideo
             this.IDT_DEVICECOUNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_ENCODERSTATUS = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_ENCODERRESULT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.IDC_RATSELECT = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -380,34 +378,12 @@ namespace BioPacVideo
             this.IDT_ENCODERRESULT.Size = new System.Drawing.Size(139, 21);
             this.IDT_ENCODERRESULT.Text = "ENCODER RESULT";
             // 
-            // IDC_RATSELECT
-            // 
-            this.IDC_RATSELECT.FormattingEnabled = true;
-            this.IDC_RATSELECT.Location = new System.Drawing.Point(12, 138);
-            this.IDC_RATSELECT.Name = "IDC_RATSELECT";
-            this.IDC_RATSELECT.Size = new System.Drawing.Size(154, 21);
-            this.IDC_RATSELECT.TabIndex = 4;
-            this.IDC_RATSELECT.Visible = false;
-            this.IDC_RATSELECT.SelectedIndexChanged += new System.EventHandler(this.IDC_RATSELECT_SelectedIndexChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 122);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(71, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Select Animal";
-            this.label1.Visible = false;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1284, 887);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.IDC_RATSELECT);
             this.Controls.Add(this.StatusBar);
             this.Controls.Add(this.RecordingButton);
             this.Controls.Add(this.menuStrip1);
@@ -417,6 +393,7 @@ namespace BioPacVideo
             this.Name = "MainForm";
             this.Text = "BioPac Video Recording";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.StatusBar.ResumeLayout(false);
@@ -449,8 +426,6 @@ namespace BioPacVideo
         private System.Windows.Forms.ToolStripStatusLabel IDT_MPLASTMESSAGE;
         private System.Windows.Forms.ToolStripStatusLabel TickCountLabel;
         private System.Windows.Forms.ToolStripMenuItem setFeedingProtocolToolStripMenuItem;
-        private System.Windows.Forms.ComboBox IDC_RATSELECT;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripStatusLabel IDT_VIDEOSTATUS;
         private System.Windows.Forms.ToolStripStatusLabel IDT_DEVICECOUNT;
         private System.Windows.Forms.ToolStripMenuItem videoSettingsToolStripMenuItem;

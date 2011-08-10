@@ -41,6 +41,8 @@
             this.IDT_BRIGHTNESS = new System.Windows.Forms.TextBox();
             this.IDT_SATURATION = new System.Windows.Forms.TextBox();
             this.IDT_HUE = new System.Windows.Forms.TextBox();
+            this.ChanSelect = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.IDS_CONTRAST)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.IDS_BRIGHTNESS)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.IDS_SATURATION)).BeginInit();
@@ -51,7 +53,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 6);
+            this.label1.Location = new System.Drawing.Point(8, 43);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(57, 16);
             this.label1.TabIndex = 1;
@@ -59,7 +61,7 @@
             // 
             // IDS_CONTRAST
             // 
-            this.IDS_CONTRAST.Location = new System.Drawing.Point(89, 6);
+            this.IDS_CONTRAST.Location = new System.Drawing.Point(85, 39);
             this.IDS_CONTRAST.Maximum = 100;
             this.IDS_CONTRAST.Name = "IDS_CONTRAST";
             this.IDS_CONTRAST.Size = new System.Drawing.Size(371, 42);
@@ -71,7 +73,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 32);
+            this.label2.Location = new System.Drawing.Point(8, 65);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(71, 16);
             this.label2.TabIndex = 3;
@@ -81,7 +83,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(12, 58);
+            this.label3.Location = new System.Drawing.Point(8, 91);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(68, 16);
             this.label3.TabIndex = 4;
@@ -91,7 +93,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(12, 84);
+            this.label4.Location = new System.Drawing.Point(8, 117);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(33, 16);
             this.label4.TabIndex = 5;
@@ -99,7 +101,7 @@
             // 
             // IDS_BRIGHTNESS
             // 
-            this.IDS_BRIGHTNESS.Location = new System.Drawing.Point(89, 32);
+            this.IDS_BRIGHTNESS.Location = new System.Drawing.Point(85, 65);
             this.IDS_BRIGHTNESS.Maximum = 100;
             this.IDS_BRIGHTNESS.Name = "IDS_BRIGHTNESS";
             this.IDS_BRIGHTNESS.Size = new System.Drawing.Size(371, 42);
@@ -109,7 +111,7 @@
             // 
             // IDS_SATURATION
             // 
-            this.IDS_SATURATION.Location = new System.Drawing.Point(89, 58);
+            this.IDS_SATURATION.Location = new System.Drawing.Point(85, 91);
             this.IDS_SATURATION.Maximum = 100;
             this.IDS_SATURATION.Name = "IDS_SATURATION";
             this.IDS_SATURATION.Size = new System.Drawing.Size(371, 42);
@@ -119,7 +121,7 @@
             // 
             // IDS_HUE
             // 
-            this.IDS_HUE.Location = new System.Drawing.Point(89, 84);
+            this.IDS_HUE.Location = new System.Drawing.Point(85, 117);
             this.IDS_HUE.Maximum = 100;
             this.IDS_HUE.Name = "IDS_HUE";
             this.IDS_HUE.Size = new System.Drawing.Size(371, 42);
@@ -129,7 +131,7 @@
             // 
             // IDB_OK
             // 
-            this.IDB_OK.Location = new System.Drawing.Point(453, 110);
+            this.IDB_OK.Location = new System.Drawing.Point(455, 143);
             this.IDB_OK.Name = "IDB_OK";
             this.IDB_OK.Size = new System.Drawing.Size(75, 23);
             this.IDB_OK.TabIndex = 9;
@@ -140,7 +142,7 @@
             // IDT_CONTRAST
             // 
             this.IDT_CONTRAST.Enabled = false;
-            this.IDT_CONTRAST.Location = new System.Drawing.Point(466, 6);
+            this.IDT_CONTRAST.Location = new System.Drawing.Point(462, 39);
             this.IDT_CONTRAST.Name = "IDT_CONTRAST";
             this.IDT_CONTRAST.Size = new System.Drawing.Size(48, 20);
             this.IDT_CONTRAST.TabIndex = 10;
@@ -148,7 +150,7 @@
             // IDT_BRIGHTNESS
             // 
             this.IDT_BRIGHTNESS.Enabled = false;
-            this.IDT_BRIGHTNESS.Location = new System.Drawing.Point(466, 32);
+            this.IDT_BRIGHTNESS.Location = new System.Drawing.Point(462, 65);
             this.IDT_BRIGHTNESS.Name = "IDT_BRIGHTNESS";
             this.IDT_BRIGHTNESS.Size = new System.Drawing.Size(48, 20);
             this.IDT_BRIGHTNESS.TabIndex = 11;
@@ -156,7 +158,7 @@
             // IDT_SATURATION
             // 
             this.IDT_SATURATION.Enabled = false;
-            this.IDT_SATURATION.Location = new System.Drawing.Point(466, 58);
+            this.IDT_SATURATION.Location = new System.Drawing.Point(462, 91);
             this.IDT_SATURATION.Name = "IDT_SATURATION";
             this.IDT_SATURATION.Size = new System.Drawing.Size(48, 20);
             this.IDT_SATURATION.TabIndex = 12;
@@ -164,16 +166,38 @@
             // IDT_HUE
             // 
             this.IDT_HUE.Enabled = false;
-            this.IDT_HUE.Location = new System.Drawing.Point(466, 84);
+            this.IDT_HUE.Location = new System.Drawing.Point(462, 117);
             this.IDT_HUE.Name = "IDT_HUE";
             this.IDT_HUE.Size = new System.Drawing.Size(48, 20);
             this.IDT_HUE.TabIndex = 13;
+            // 
+            // ChanSelect
+            // 
+            this.ChanSelect.FormattingEnabled = true;
+            this.ChanSelect.Location = new System.Drawing.Point(106, 13);
+            this.ChanSelect.Name = "ChanSelect";
+            this.ChanSelect.Size = new System.Drawing.Size(121, 21);
+            this.ChanSelect.TabIndex = 14;
+            this.ChanSelect.SelectedIndexChanged += new System.EventHandler(this.chansel_SelectedIndexChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(3, 13);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(97, 16);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "Select Camera";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // SensorControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(540, 142);
+            this.ClientSize = new System.Drawing.Size(877, 272);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.ChanSelect);
             this.Controls.Add(this.IDT_HUE);
             this.Controls.Add(this.IDT_SATURATION);
             this.Controls.Add(this.IDT_BRIGHTNESS);
@@ -213,5 +237,7 @@
         private System.Windows.Forms.TextBox IDT_BRIGHTNESS;
         private System.Windows.Forms.TextBox IDT_SATURATION;
         private System.Windows.Forms.TextBox IDT_HUE;
+        private System.Windows.Forms.ComboBox ChanSelect;
+        private System.Windows.Forms.Label label5;
     }
 }

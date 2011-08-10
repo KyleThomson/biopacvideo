@@ -30,7 +30,9 @@ namespace BioPacVideo
         Bitmap Still;                
         Thread ThreadDisplay;        
         Graphics g;
-        bool RunDisplayThread; 
+        bool RunDisplayThread;
+        private DateTime Timing; 
+        
         
 
 
@@ -39,10 +41,10 @@ namespace BioPacVideo
         public MainForm() //Form Constructior
         {
             //********** INIT VARIABLES ****************
-            InitializeComponent(); //Default code
+            InitializeComponent(); //Default code                        
             MP = MPTemplate.Instance; //Pull Instance from MP Template - So we only have a single instance in all code
             Video = VideoTemplate.Instance; //Same for Video
-            Feeder = new FeederTemplate(); //Only one instance of this is needed
+            Feeder = FeederTemplate.Instance; //Same for Feeders
             BoxPen = new Pen(Brushes.Black, 4);            
             BioIni = new IniFile(Directory.GetCurrentDirectory() + "\\BioPacVideo.ini"); //Standard Ini Settings
             Rats = RatTemplate.NewInitArray(16);
@@ -50,15 +52,11 @@ namespace BioPacVideo
             
             //***************** LOAD SETTINGS *****************
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            ReadINI(BioIni); //Read Presets from INI file
-
+            ReadINI(BioIni); //Read Presets from INI file                        
 
             //Start EEG and Video functions
             MP.InitializeDisplay(this.Width, this.Height);            
-            for (int i = 0; i < 16; i++)
-            {
-                IDC_RATSELECT.Items.Add(string.Format("Rat {0}", i + 1));
-            }            
+         
             
             if (!File.Exists(@".\mpdev.dll"))
             {
@@ -85,7 +83,7 @@ namespace BioPacVideo
             //Still = new Bitmap("NoSignal.Bmp");
             MP.FileCount = 0;            
             RecordingButton.BackColor = Color.Green;            
-            IDC_RATSELECT.SelectedIndex = MP.SelectedChannel-1;
+   
             Video.initVideo();
             Video.FileStart = 0;
             IDT_DEVICECOUNT.Text = string.Format("Device Count ({0})", Video.Device_Count);
@@ -104,7 +102,12 @@ namespace BioPacVideo
             RunDisplayThread = true;
             ThreadDisplay.Start(); 
         }
-        
+        private void TimerCheckThread()
+        {
+            //If 12AM, restart recording. 
+            ///HOW THE FUCK DO I RESTART             
+            //If 5 PM, 11 PM, or 5 AM, feed.
+        }
 
 
         //Read presets from INI file
@@ -138,7 +141,7 @@ namespace BioPacVideo
             Video.YRes = BioIni.IniReadValue("Video", "YRes", 240);
             Video.Quant = BioIni.IniReadValue("Video", "Quant", 4);
             Video.KeyFrames = BioIni.IniReadValue("Video", "KeyFrames", 100);
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 32; i++)
             {
                 Video.CameraAssociation[i] = BioIni.IniReadValue("Video", string.Format("Camera{0}", i), i);
                 Video.Brightness[i] = BioIni.IniReadValue("Video", string.Format("Bright{0}", i), 50);
@@ -181,7 +184,7 @@ namespace BioPacVideo
             BioIni.IniWriteValue("Video", "YRes", Video.YRes);
             BioIni.IniWriteValue("Video", "Quant", Video.Quant);
             BioIni.IniWriteValue("Video", "KeyFrames", Video.KeyFrames);
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 32; i++)
             {
                 BioIni.IniWriteValue("Video", string.Format("Camera{0}", i), Video.CameraAssociation[i]);
                 BioIni.IniWriteValue("Video", string.Format("Bright{0}", i), Video.Brightness[i]);
@@ -250,7 +253,7 @@ namespace BioPacVideo
                     Video.FileStart = Video.FileStart+1;
                     Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString, Video.FileStart);
                     Video.LoadSettings();                                                            
-                    IDT_VIDEOSTATUS.Text = Video.GetResText();
+                    IDT_VIDEOSTATUS.Text = Video.GetResText();  
 
                     
                     //Visual Stuff, so we know we are recording. 
@@ -263,16 +266,17 @@ namespace BioPacVideo
 
                     //Start the actual recording
                     Video.StartRecording();
-                    Console.WriteLine(DateTime.Now.TimeOfDay.ToString());
-                    MP.isstreaming = MP.StartWriting();
-                    Console.WriteLine(DateTime.Now.TimeOfDay.ToString());
+                    Timing = DateTime.Now;
+                    Console.WriteLine(Timing.ToString());
+                    MP.isstreaming = MP.StartWriting();                    
                 }
                 else
                 {                                        
                     //End Recording
                     IDT_BIOPACRECORDINGSTAT.Text = "Not Recording";                    
                     MP.StopWriting();                    
-                    Video.StopEncoding();                    
+                    Video.StopEncoding();
+                    Console.WriteLine((DateTime.Now-Timing).ToString());
                     IDM_SELECTCHANNELS.Enabled = true;
                     IDM_SETTINGS.Enabled = true;
                     IDM_DISCONNECTBIOPAC.Enabled = true;
@@ -411,13 +415,7 @@ namespace BioPacVideo
             UpdateINI(BioIni);           
         }
 
-        private void IDC_RATSELECT_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            MP.SelectedChannel = IDC_RATSELECT.SelectedIndex + 1;
-            Video.SelectChannel(IDC_RATSELECT.SelectedIndex);
-            MP.ClearDisplay = true;
-        }
-
+    
         private void testFeedersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FeederTester frm = new FeederTester();
@@ -437,7 +435,7 @@ namespace BioPacVideo
 
         private void sensorControlToolStripMenuItem_Click(object sender, EventArgs e)
         {            
-            SensorControl frm = new SensorControl(IDC_RATSELECT.SelectedIndex);
+            SensorControl frm = new SensorControl();
             frm.ShowDialog(this);
             UpdateINI(BioIni);
             frm.Dispose();
@@ -491,6 +489,11 @@ namespace BioPacVideo
             C.ShowDialog(this);
             UpdateINI(BioIni);
             C.Dispose();
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
