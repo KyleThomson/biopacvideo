@@ -204,6 +204,7 @@
             this.Controls.Add(this.ID_SRATE);
             this.Name = "RecordSettings";
             this.Text = " ";
+            this.Load += new System.EventHandler(this.RecordSettings_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

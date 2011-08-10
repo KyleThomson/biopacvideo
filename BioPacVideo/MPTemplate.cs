@@ -33,7 +33,7 @@ namespace BioPacVideo
         private bool[] DigitalChannel;
         private int MaxDrawSize;
         Thread AcqThread = null;
-        Thread FeederTestThread = null;        
+        FeederTemplate Feeder;     
         public String Filename;
         public String RecordingDirectory;
         private BinaryWriter BinaryFileID;
@@ -81,6 +81,7 @@ namespace BioPacVideo
         {
             wavePen = new Pen(Color.Black);
             TimePen = new Pen(Color.Red);
+            Feeder = FeederTemplate.Instance;            
             CurPointPos = 0;
             FeederTest = new bool[8];
             DigitalChannel = new bool[16];
@@ -387,11 +388,10 @@ namespace BioPacVideo
             for (int i = 0; i < TotChan(); i++)
             {
                 BinaryFile.Seek(ChannelDataSizeLocation[GetChan(i)], SeekOrigin.Begin);
-                BinaryFileID.Write((Int32)(samplecount));
+                BinaryFileID.Write((Int32)(samplecount));   
             }
             //Add write foreign data crap here
         }
-
 
 
 
@@ -498,8 +498,7 @@ namespace BioPacVideo
             { 
             }
             while (isstreaming) //Thread stopping variable - set to false to end the recording thread. 
-            {
-                Thread.Sleep(3);
+            {                
                 Elapsed = DateTime.Now - Start;
                 //Console.WriteLine("Time Elapsed: {0} ms",Elapsed.Milliseconds);
                 
@@ -527,6 +526,20 @@ namespace BioPacVideo
                     }                    
                     CurrentWriteLoc = BinaryFile.Position;  //Update the current location.
                 }
+                if (Feeder.CommandSize > 0)
+                {
+                    for (int k = 0; k < 5; k++)
+
+                    {
+                        bool x =(Feeder.Commands[Feeder.CurCommand]&(k^2)) > 0;
+                        MPCLASS.setDigitalIO((uint)k, x, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
+                    }
+                    MPCLASS.setDigitalIO(5, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
+                    Thread.Sleep(1);
+                    MPCLASS.setDigitalIO(5, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
+                    Feeder.CommandSize--;
+                    Feeder.CurCommand++;
+                }
                 last_received = received;
                 samplesize = (int)last_received / AcqChan;
                 samplecount += samplesize;
@@ -547,30 +560,6 @@ namespace BioPacVideo
             }                     
                        
         }
-
-        /**************************************************************
-         * 
-         *      Feeder Fucnctions
-         *      
-         * ************************************************************/
-        private void FeederTestThreadDefinition()
-        {
-            for (int i = 0; i < 8; i++)
-            {
-                FeederTest[i] = false;
-            }
-            for (uint i = 0; i < 2; i++)
-            {
-                MPCLASS.setDigitalIO(i, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
-                Thread.Sleep(1000);
-                MPCLASS.setDigitalIO(i, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);                
-            }            
-        }
-        public void RunFeederTest()
-        {
-            FeederTestThread = new Thread(new ThreadStart(FeederTestThreadDefinition));
-            FeederTestThread.Start();
-            while (FeederTestThread.IsAlive) { };
-        }
+    
     }
-}
+}  

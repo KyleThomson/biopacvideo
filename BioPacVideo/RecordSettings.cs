@@ -65,6 +65,11 @@ namespace BioPacVideo
 
 
         }
+
+        private void RecordSettings_Load(object sender, EventArgs e)
+        {
+
+        }
         
 
     }

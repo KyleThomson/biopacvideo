@@ -34,11 +34,11 @@ namespace BioPacVideo
 
         public VideoTemplate()
         {
-            Contrast = new int[16];
-            Brightness = new int[16];
-            Hue = new int[16];
-            Saturation = new int[16];
-            CameraAssociation = new int[16];
+            Contrast = new int[32];
+            Brightness = new int[32];
+            Hue = new int[32];
+            Saturation = new int[32];
+            CameraAssociation = new int[32];
             CapSDKStatus = false;
             EncSDKStatus = false;
             pDF = new IntPtr();
