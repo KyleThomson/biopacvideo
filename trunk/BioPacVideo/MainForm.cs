@@ -28,7 +28,8 @@ namespace BioPacVideo
         FolderBrowserDialog FBD;
         RatTemplate[] Rats;
         Bitmap Still;                
-        Thread ThreadDisplay;        
+        Thread ThreadDisplay;
+        private Thread TimerThread;
         Graphics g;
         bool RunDisplayThread;
         private DateTime Timing; 
@@ -98,14 +99,56 @@ namespace BioPacVideo
                 Video.Enabled = false;
             }
             videoCaptureEnabledToolStripMenuItem.Checked = Video.Enabled;
-            ThreadDisplay = new Thread(new ThreadStart(DisplayThread)); 
+            ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
+            TimerThread = new Thread(new ThreadStart(TimerCheckThread));
             RunDisplayThread = true;
-            ThreadDisplay.Start(); 
+            ThreadDisplay.Start();
+            TimerThread.Start();
         }
         private void TimerCheckThread()
         {
-            //If 12AM, restart recording. 
-            ///HOW THE FUCK DO I RESTART             
+            IniFile WriteOnce;
+            string DateString, RecordingDir;  
+            //If 12AM, restart recording.             
+            if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0))
+            {
+                MP.StopWriting();
+                Video.StopEncoding();
+                DateString = string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", DateTime.Now);
+                RecordingDir = MP.RecordingDirectory + "\\" + DateString;
+                Directory.CreateDirectory(RecordingDir);
+                MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
+                //Write INI file once, so we save all the settings                    
+                WriteOnce = new IniFile(RecordingDir + "\\" + DateString + "_Settings.txt");
+                UpdateINI(WriteOnce);
+                //Video Stuff                    
+                Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
+                Video.FileStart = Video.FileStart + 1;
+                Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString, Video.FileStart);
+                MP.StartWriting();
+                Video.StartRecording();
+                Thread.Sleep(120000);
+            }
+            if ((DateTime.Now.TimeOfDay.Hours == 17) & (DateTime.Now.TimeOfDay.Minutes == 0))
+            {
+                //Breakfast
+                MessageBox.Show("I GOT BREAKFAST");
+                Thread.Sleep(120000);
+            }
+            if ((DateTime.Now.TimeOfDay.Hours == 23) & (DateTime.Now.TimeOfDay.Minutes == 0))
+            {
+
+                MessageBox.Show("I GOT LUNCH");
+                Thread.Sleep(120000);
+                //Lunch
+            }
+            if ((DateTime.Now.TimeOfDay.Hours == 5) & (DateTime.Now.TimeOfDay.Minutes == 0))
+            {
+                MessageBox.Show("I GOT ME SOME DINRAR!!!LOLZ");
+                Thread.Sleep(120000);
+                //YOU ARE A DINRAR
+            }
+            Thread.Sleep(10000);
             //If 5 PM, 11 PM, or 5 AM, feed.
         }
 
@@ -230,13 +273,13 @@ namespace BioPacVideo
         private void RecordingButton_Click(object sender, EventArgs e)
         {
             IniFile WriteOnce;
+            string DateString, RecordingDir;         
             if (MP.isconnected && Video.CapSDKStatus)
             {
                 if (!MP.IsFileWriting)
                 {
                     //Start Recording   
                     Video.initEncoder();                                    
-                    string DateString, RecordingDir;
                     //Set up recording name based on date and time
                     DateString = string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", DateTime.Now);
                     RecordingDir = MP.RecordingDirectory + "\\" + DateString;
