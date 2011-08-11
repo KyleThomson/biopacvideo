@@ -548,6 +548,7 @@ namespace BioPacVideo
                 _DrawHandle.Set();                                       
                 
             }
+            BuffDraw.Abort();            
             MPReturn = MPCLASS.stopAcquisition();  //We won't get here unless the thread stops. 
             return;
         }

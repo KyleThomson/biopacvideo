@@ -123,6 +123,9 @@ namespace BioPacVideo
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int StopEncoding();
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetChanAssoc(int Chan, int Camera, bool Recording);
       
     }
 }

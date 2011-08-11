@@ -45,7 +45,10 @@ int nEncQuant[MAXDEVS*MAXMUXS];
 int nEncKeyInterval[MAXDEVS*MAXMUXS];
 int nFrameCount[MAXDEVS*MAXMUXS];
 int nFileIndex[MAXDEVS*MAXMUXS];
-int Pres[MAXDEVS];
+bool Pres[MAXDEVS][MAXMUXS];
+int Present[MAXDEVS];
+bool CamIsRecording[MAXDEVS*MAXMUXS];
+int CamAssoc[MAXDEVS*MAXMUXS];	
 INT64 nAccumulatedSize[MAXDEVS*MAXMUXS];
 
 
@@ -58,7 +61,6 @@ IDVP7010BDLL *pDVPSDK = NULL;
 IDVP7010BEncDLL *pDVPEncSDK = NULL;
 //Globals
 int Global_Frate;
-bool VideoPresent[4] = {false, false, false, false};
 long lDstSize;
 bool EncoderRunning;
 bool NoSig = true;
@@ -94,6 +96,13 @@ int initCaptureSDK()
 		bEncInited[i] = FALSE;
 		bKeyFrame[i] = TRUE; 	
 		hAVIFile[i] = NULL;
+	}
+	for (int i=0; i<MAXDEVS; i++)
+	{
+		for (int j=0; j<MAXMUXS; j++)
+		{
+			Pres[i][j] = false;
+		}
 	}
 	int ErrorVal;			
 	hDll = LoadLibrary(TEXT(".\\DVP7010B.dll"));
@@ -301,9 +310,18 @@ int StartCapture()
 	return res;
 }
 int StartEncoding()
-{	
-	for (int i = 0; i < 4; i++)
-		VideoPresent[i] = false;
+{		
+	int ptemp;
+	for (int i = 0; i < MAXDEVS; i++)
+	{
+		ptemp = 0;
+	    for(int j = 0; j < MAXMUXS; j++)
+		{
+			if (Pres[i][j])
+				ptemp++;
+		}
+		Present[i] = ptemp;
+	}	
 	for (int i = 0; i < nDevCount*MAXMUXS; i++)
 	{
 		pDVPEncSDK->AdvDVP_SetStreamReadCB(&StreamRead);		
@@ -338,18 +356,13 @@ void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFl
 			pDVPEncSDK->AdvDVP_CloseAVIFile(hAVIFile[nChNum]);
 			hAVIFile[nChNum] = NULL;
 		}
-	}
-	int Pres = 0;
-	for (int i = 0; i < 4; i++)
-	{
-		if (VideoPresent[i]) Pres++;
-	}
+	}	
 	//Create AVI file (if closed or unopened)
 	if (hAVIFile[nChNum] == NULL)
 	{		
 		char FileName[MAX_PATH];		
-		sprintf_s(FileName, "%s_%02d_%04d.avi", SaveName, nChNum, nFileIndex[nChNum]);						
-		hAVIFile[nChNum] = pDVPEncSDK->AdvDVP_CreateAVIFile(FileName, nWidth[nDevNum], nHeight[nDevNum], 30);		
+		sprintf_s(FileName, "%s_%02d_%04d.avi", SaveName, CamAssoc[nChNum], nFileIndex[nChNum]);						
+		hAVIFile[nChNum] = pDVPEncSDK->AdvDVP_CreateAVIFile(FileName, nWidth[nDevNum], nHeight[nDevNum], (int)(30/Present[nDevNum]));		
 	}		
 	//First frame of the video file must be key frame.
 	if (dwCompFlags == AVIIF_KEYFRAME)
@@ -388,10 +401,9 @@ void StreamReadEnd(int nChNum)
 
 
 int __cdecl NewFrameCallback(int empty, int nID, int nDevNum, int nMuxChan, int nBufSize, BYTE* pBuf)
-{			
+{	
 	LastEncRes =nID;
-	VideoPresent[nMuxChan] = true;
-					
+	Pres[nDevNum][nMuxChan] = true;					
 	if (*(pBuf+1) & 0x02) 		
 	{
 		NoSig = true;		
@@ -561,6 +573,11 @@ int GetDeviceCount()
 	return nDevCount;
 }
 
+void SetChanAssoc(int Chan, int Camera, bool Recording)
+{
+	CamAssoc[Camera] = Chan;
+	CamIsRecording[Camera] = Recording;
+}
 
 int GetFrameRate()
 {

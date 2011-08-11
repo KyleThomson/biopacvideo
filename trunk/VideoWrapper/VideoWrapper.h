@@ -49,6 +49,7 @@ extern "C" _declspec(dllexport) int GetSampleRate(void);
 extern "C" _declspec(dllexport) int SetNTSC();
 extern "C" _declspec(dllexport) void SetSwitching(int Switch);
 extern "C" _declspec(dllexport) void SelectChannel(int Chan);
+extern "C" _declspec(dllexport) void SetChanAssoc(int Chan, int Camera, bool Recording);
 
 
 
@@ -209,7 +210,7 @@ public:
 	virtual int AdvDVP_SetVideoResolution(int nEncNum, int nWidth, int nHeight) PURE;
 	virtual int AdvDVP_GetVideoResolution(int nEncNum, int *nWidth, int *nHeight) PURE;
 	virtual int AdvDVP_SetVideoKeyInterval(int nEncNum, int nKeyInterval) PURE;
-	virtual int AdvDVP_GetVideoKeyInterval(int nEncNum, int *nKeyInterval) PURE;
+	virtual int AdvDVP_GetVideoKeyInterval(int nEncNum, int *nKeyInterval) PURE;	
 	virtual int AdvDVP_StartVideoEncode(int nEncNum) PURE;
 	virtual int AdvDVP_VideoEncode(int nEncNum, LPVOID lpInBuf, int InBufSize, BOOL bKeyFrame) PURE;
 	virtual int AdvDVP_StopVideoEncode(int nEncNum) PURE;

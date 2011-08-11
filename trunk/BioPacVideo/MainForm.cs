@@ -109,48 +109,52 @@ namespace BioPacVideo
         {
             IniFile WriteOnce;
             string DateString, RecordingDir;  
-            //If 12AM, restart recording.             
-            if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0))
+            //If 12AM, restart recording. 
+            
+            while (true)
             {
-                MP.StopWriting();
-                Video.StopEncoding();
-                DateString = string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", DateTime.Now);
-                RecordingDir = MP.RecordingDirectory + "\\" + DateString;
-                Directory.CreateDirectory(RecordingDir);
-                MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
-                //Write INI file once, so we save all the settings                    
-                WriteOnce = new IniFile(RecordingDir + "\\" + DateString + "_Settings.txt");
-                UpdateINI(WriteOnce);
-                //Video Stuff                    
-                Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
-                Video.FileStart = Video.FileStart + 1;
-                Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString, Video.FileStart);
-                MP.StartWriting();
-                Video.StartRecording();
-                Thread.Sleep(120000);
-            }
-            if ((DateTime.Now.TimeOfDay.Hours == 17) & (DateTime.Now.TimeOfDay.Minutes == 0))
-            {
-                //Breakfast
-                MessageBox.Show("I GOT BREAKFAST");
-                Thread.Sleep(120000);
-            }
-            if ((DateTime.Now.TimeOfDay.Hours == 23) & (DateTime.Now.TimeOfDay.Minutes == 0))
-            {
+                if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0))
+                {
+                    MP.StopWriting();
+                    Video.StopEncoding();
+                    DateString = string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", DateTime.Now);
+                    RecordingDir = MP.RecordingDirectory + "\\" + DateString;
+                    Directory.CreateDirectory(RecordingDir);
+                    MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
+                    //Write INI file once, so we save all the settings                    
+                    WriteOnce = new IniFile(RecordingDir + "\\" + DateString + "_Settings.txt");
+                    UpdateINI(WriteOnce);
+                    //Video Stuff                    
+                    Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
+                    Video.FileStart = Video.FileStart + 1;
+                    Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString, Video.FileStart);
+                    MP.StartWriting();
+                    Video.StartRecording();
+                    Thread.Sleep(120000);
+                }
+                if ((DateTime.Now.TimeOfDay.Hours == 10) & (DateTime.Now.TimeOfDay.Minutes == 55))
+                {
+                    //Breakfast
+                    MessageBox.Show("I GOT BREAKFAST");
+                    Thread.Sleep(120000);
+                }
+                if ((DateTime.Now.TimeOfDay.Hours == 23) & (DateTime.Now.TimeOfDay.Minutes == 0))
+                {
 
-                MessageBox.Show("I GOT LUNCH");
-                Thread.Sleep(120000);
-                //Lunch
+                    MessageBox.Show("I GOT LUNCH");
+                    Thread.Sleep(120000);
+                    //Lunch
+                }
+                if ((DateTime.Now.TimeOfDay.Hours == 5) & (DateTime.Now.TimeOfDay.Minutes == 0))
+                {
+                    MessageBox.Show("I GOT ME SOME DINRAR!!!LOLZ");
+                    Thread.Sleep(120000);
+                    //YOU ARE A DINRAR
+                }
+                Thread.Sleep(10000);
+                //If 5 PM, 11 PM, or 5 AM, feed.
             }
-            if ((DateTime.Now.TimeOfDay.Hours == 5) & (DateTime.Now.TimeOfDay.Minutes == 0))
-            {
-                MessageBox.Show("I GOT ME SOME DINRAR!!!LOLZ");
-                Thread.Sleep(120000);
-                //YOU ARE A DINRAR
-            }
-            Thread.Sleep(10000);
-            //If 5 PM, 11 PM, or 5 AM, feed.
-        }
+      }
 
 
         //Read presets from INI file
@@ -410,7 +414,8 @@ namespace BioPacVideo
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
+            {                
+                TimerThread.Abort();
                 RunDisplayThread = false;                
                 if (MP.isstreaming)
                 {
