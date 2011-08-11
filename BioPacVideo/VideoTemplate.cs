@@ -14,6 +14,7 @@ namespace BioPacVideo
         public static string[] Res_text = new string[] { "INPUTERROR", "DEVICENUMERROR", "NOSAMPLE", "NODEVICES", "PARAMERROR", "SDKINITFAILED", 
             "FAILED", "SUCCCEEDED","DLL FAILED TO LOAD","FAILED TO CALL","NO VIDEO PRESENT","CALLBACK RUN"};
         public AdvantechCodes.tagRes Res;
+        private MPTemplate MP;
         static readonly VideoTemplate instance = new VideoTemplate(); //Create Constant instance.        
         public int Device_Count;
         public IntPtr pDF;
@@ -42,6 +43,7 @@ namespace BioPacVideo
             CapSDKStatus = false;
             EncSDKStatus = false;
             pDF = new IntPtr();
+            MP = MPTemplate.Instance;
 
         }
         public static VideoTemplate Instance
@@ -50,6 +52,16 @@ namespace BioPacVideo
             {
                 return instance;
             }
+        }
+        public void UpdateCameraAssoc()
+        {
+            for (int i = 0; i < 32; i++)
+            {
+                if (MP.RecordAC[CameraAssociation[i]])
+                    VideoWrapper.SetChanAssoc(CameraAssociation[i], i, true);
+                else
+                    VideoWrapper.SetChanAssoc(CameraAssociation[i], i, false);
+            }            
         }
         public bool initVideo()
         {          
