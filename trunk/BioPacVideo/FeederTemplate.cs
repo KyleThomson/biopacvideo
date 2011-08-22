@@ -13,7 +13,7 @@ namespace BioPacVideo
         public TimeSpan Dinner; //Dinner Time, in seconds
         public double PelletsPerGram;        
         public bool Enabled;
-        public int[] Commands;
+        public Queue<byte> Commands;
         public int CommandSize = 0;
         public int CurCommand=0;
         public static FeederTemplate Instance
@@ -25,15 +25,14 @@ namespace BioPacVideo
         }
 
         public FeederTemplate()
-        {            
-            Commands = new int[16]; 
+        {
+            Commands = new Queue<byte>();
         }
         public void AddCommand(int Feeder, int Pellets)
         {
-            Commands[0] = Feeder;
-            Commands[1] = Pellets;
-            CurCommand = 0;
-            CommandSize = 1;           
+            Commands.Enqueue((byte)Feeder);
+            Commands.Enqueue((byte)Pellets);
+            Commands.Enqueue(255);      
         }
 
 
