@@ -65,7 +65,7 @@ namespace BioPacVideo
         public double[] rec_buffer;
         private double[] draw_buffer;        
         public MPCODE MPReturn;
-        public bool[] RecordAC = new bool[16];
+        public bool[] RecordAC = new bool[17];
         public int SampleRate;
         public int DisplayLength;
         private Single PointSpacing;         
@@ -81,7 +81,8 @@ namespace BioPacVideo
         {
             wavePen = new Pen(Color.Black);
             TimePen = new Pen(Color.Red);
-            Feeder = FeederTemplate.Instance;            
+            Feeder = FeederTemplate.Instance;
+            RecordAC[16] = false;
             CurPointPos = 0;
             FeederTest = new bool[8];
             DigitalChannel = new bool[16];
@@ -528,15 +529,16 @@ namespace BioPacVideo
                 }
                 if (Feeder.CommandSize > 0)
                 {
-                    for (int k = 0; k < 5; k++)
-
+                    byte v;
+                    v = Feeder.Commands.Dequeue();                        
+                    for (int k = 0; k < 5; k++)                       
                     {
-                        bool x =(Feeder.Commands[Feeder.CurCommand]&(k^2)) > 0;
+                        bool x =(v&(k^2)) > 0;
                         MPCLASS.setDigitalIO((uint)k, x, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
                     }
                     MPCLASS.setDigitalIO(5, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
                     Thread.Sleep(1);
-                    MPCLASS.setDigitalIO(5, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
+                    MPCLASS.setDigitalIO(5, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); 
                     Feeder.CommandSize--;
                     Feeder.CurCommand++;
                 }
@@ -553,8 +555,8 @@ namespace BioPacVideo
             return;
         }
         public void StopRecording()
-        {
-            isstreaming = false;
+            {
+                isstreaming = false;
             while (AcqThread.IsAlive)
             {
                 //Pause to wait for thread to close

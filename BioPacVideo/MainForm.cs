@@ -101,6 +101,7 @@ namespace BioPacVideo
             videoCaptureEnabledToolStripMenuItem.Checked = Video.Enabled;
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
             TimerThread = new Thread(new ThreadStart(TimerCheckThread));
+            Video.UpdateCameraAssoc();
             RunDisplayThread = true;
             ThreadDisplay.Start();
             TimerThread.Start();
@@ -132,20 +133,20 @@ namespace BioPacVideo
                     Video.StartRecording();
                     Thread.Sleep(120000);
                 }
-                if ((DateTime.Now.TimeOfDay.Hours == 10) & (DateTime.Now.TimeOfDay.Minutes == 55))
+                if ((DateTime.Now.TimeOfDay.Hours == Feeder.Breakfast.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Breakfast.Minutes))
                 {
                     //Breakfast
                     MessageBox.Show("I GOT BREAKFAST");
                     Thread.Sleep(120000);
                 }
-                if ((DateTime.Now.TimeOfDay.Hours == 23) & (DateTime.Now.TimeOfDay.Minutes == 0))
+                if ((DateTime.Now.TimeOfDay.Hours == Feeder.Lunch.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Lunch.Minutes))
                 {
 
                     MessageBox.Show("I GOT LUNCH");
                     Thread.Sleep(120000);
                     //Lunch
                 }
-                if ((DateTime.Now.TimeOfDay.Hours == 5) & (DateTime.Now.TimeOfDay.Minutes == 0))
+                if ((DateTime.Now.TimeOfDay.Hours == Feeder.Dinner.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Dinner.Minutes))
                 {
                     MessageBox.Show("I GOT ME SOME DINRAR!!!LOLZ");
                     Thread.Sleep(120000);
@@ -190,7 +191,7 @@ namespace BioPacVideo
             Video.KeyFrames = BioIni.IniReadValue("Video", "KeyFrames", 100);
             for (int i = 0; i < 32; i++)
             {
-                Video.CameraAssociation[i] = BioIni.IniReadValue("Video", string.Format("Camera{0}", i), i);
+                Video.CameraAssociation[i] = BioIni.IniReadValue("Video", string.Format("Camera{0}", i), 16);
                 Video.Brightness[i] = BioIni.IniReadValue("Video", string.Format("Bright{0}", i), 50);
                 Video.Contrast[i] = BioIni.IniReadValue("Video", string.Format("Contrast{0}", i), 50);
                 Video.Hue[i] = BioIni.IniReadValue("Video", string.Format("Hue{0}", i), 50);
@@ -244,17 +245,21 @@ namespace BioPacVideo
 
        
         private void DisplayThread()
-        {            
+        {
+            int Cm; //To hold current camera. 
             while (RunDisplayThread)
             {
                 MP._DisplayHandle.WaitOne();
                 IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
-                if (Still != null)
-                
-                g.DrawImage(MP.offscreen, 30, 280);
+                if (Still != null)                    
+                    g.DrawImage(MP.offscreen, 30, 280);
+                Cm = 0;
                 for (int i = 0; i < MP.TotChan(); i++)
                 {
-                    Video.pDF = VideoWrapper.GetCurrentBuffer(Video.CameraAssociation[i]);
+                    while (MP.RecordAC[Cm] == false)
+                        Cm++;
+                    Video.pDF = VideoWrapper.GetCurrentBuffer(Video.CameraAssociation[Cm]);
+                    Cm++;
                     if (Video.pDF != null)
                     {
                         Still = new Bitmap(Video.XRes, Video.YRes, Video.XRes * 3, PixelFormat.Format24bppRgb, Video.pDF);
@@ -431,8 +436,7 @@ namespace BioPacVideo
                     components.Dispose();
                 }
                 base.Dispose(disposing);
-            }
-            Console.WriteLine(System.Diagnostics.Process.GetCurrentProcess().Threads.Count.ToString());
+            }            
         }    
         
         ~MainForm()
@@ -536,6 +540,7 @@ namespace BioPacVideo
             CameraAssc C = new CameraAssc();
             C.ShowDialog(this);
             UpdateINI(BioIni);
+            Video.UpdateCameraAssoc();
             C.Dispose();
         }
 
