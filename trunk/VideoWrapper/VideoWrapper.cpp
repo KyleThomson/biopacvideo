@@ -356,7 +356,7 @@ void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFl
 	if (hAVIFile[nChNum] == NULL)
 	{		
 		char FileName[MAX_PATH];		
-		sprintf_s(FileName, "%s_%02d_%04d.avi", SaveName, CamAssoc[nChNum], nFileIndex[nChNum]);						
+		sprintf_s(FileName, "%s_%02d_%04d.avi", SaveName, nChNum, nFileIndex[nChNum]);						
 		hAVIFile[nChNum] = pDVPEncSDK->AdvDVP_CreateAVIFile(FileName, nWidth[nDevNum], nHeight[nDevNum], (int)(30/Present[nDevNum]));		
 	}		
 	//First frame of the video file must be key frame.
@@ -408,12 +408,8 @@ int __cdecl NewFrameCallback(int empty, int nID, int nDevNum, int nMuxChan, int 
 		NoSig = false;
 		memcpy(P2Buff+nWidth[0]*nHeight[0]*2*(nDevNum*MAXMUXS+nMuxChan),pBuf,nBufSize);		
 	}    
-	int nChNum;
-	
-    if (nID != ID_NEW_FRAME)
-	{
-	  nChNum = (nDevNum*MAXMUXS)+nMuxChan;
-	}
+	int nChNum;	
+	nChNum = (nDevNum*MAXMUXS)+nMuxChan;
 	if ((pDVPEncSDK))
 	{
 		if (pDVPEncSDK->AdvDVP_GetState(nChNum) == ENC_RUNNING) {			
