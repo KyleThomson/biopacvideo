@@ -57,10 +57,10 @@ namespace BioPacVideo
         {
             for (int i = 0; i < 32; i++)
             {
-                if (MP.RecordAC[CameraAssociation[i]])
+             //   if (MP.RecordAC[CameraAssociation[i]])
                     VideoWrapper.SetChanAssoc(CameraAssociation[i], i, true);
-                else
-                    VideoWrapper.SetChanAssoc(CameraAssociation[i], i, false);
+              //  else
+                //    VideoWrapper.SetChanAssoc(CameraAssociation[i], i, false);
             }            
         }
         public bool initVideo()
