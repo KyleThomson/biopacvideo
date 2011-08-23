@@ -270,7 +270,7 @@ namespace BioPacVideo
                         Still = new Bitmap("NoSignal.Bmp");
                     }
                     g.DrawImage(Still, 132+(i%8)*162, 32+(float)Math.Floor((decimal)(i/8))*122, 160, 120);
-                    Still.Dispose();       
+                    Still.Dispose();
                 }
             IDT_VIDEOSTATUS.Text = Video.GetResText();
             IDT_ENCODERRESULT.Text = Video.EncoderStatus();

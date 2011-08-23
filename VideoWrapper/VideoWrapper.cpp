@@ -233,18 +233,13 @@ void YUYVtoRGB24(int width, int height, unsigned char *src, unsigned char *dst)
 	} /* ..for line */
 }
 
-
+//Sends a pointer to the main program, which is the current snap shot in RGB24 format. 
 BYTE* GetCurrentBuffer(int Cam)
 {
-	if (NoSig) 
-	{
-		return NULL;
-	}
-	else
-	{
+	
 		YUYVtoRGB24(nWidth[0], nHeight[0], P2Buff+(Cam*nWidth[0]*nHeight[0]*2), pDstBuf+(Cam*nWidth[0]*nHeight[0]*3));		
-		return pDstBuf;
-	}	
+		return pDstBuf+(Cam*nWidth[0]*nHeight[0]*3);
+	
 }
 
 
