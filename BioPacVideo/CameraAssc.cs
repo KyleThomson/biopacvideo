@@ -45,7 +45,7 @@ namespace BioPacVideo
         }
         private void DisplayThread()
         {
-            while (this.Visible)
+            while (true)
             {
                 Thread.Sleep(30);
                 pDF = VideoWrapper.GetCurrentBuffer(Cam);                
@@ -70,6 +70,8 @@ namespace BioPacVideo
 
         private void FinishButton_Click(object sender, EventArgs e)
         {
+            ThreadDisplay.Abort();
+
             this.Close();
         }
     }
