@@ -39,7 +39,7 @@ namespace BioPacVideo
             Brightness = new int[32];
             Hue = new int[32];
             Saturation = new int[32];
-            CameraAssociation = new int[32];
+            CameraAssociation = new int[16];
             CapSDKStatus = false;
             EncSDKStatus = false;
             pDF = new IntPtr();
@@ -52,16 +52,17 @@ namespace BioPacVideo
             {
                 return instance;
             }
-        }
+        }       
         public void UpdateCameraAssoc()
         {
-            for (int i = 0; i < 32; i++)
+            for (int i = 0; i < 16; i++)
             {
-             //   if (MP.RecordAC[CameraAssociation[i]])
-                    VideoWrapper.SetChanAssoc(CameraAssociation[i], i, true);
-              //  else
-                //    VideoWrapper.SetChanAssoc(CameraAssociation[i], i, false);
-            }            
+                if (MP.RecordAC[i])
+                {
+                    VideoWrapper.SetChanAssoc(i, CameraAssociation[i], true);
+                }
+            }
+                                     
         }
         public bool initVideo()
         {          

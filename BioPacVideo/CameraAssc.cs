@@ -71,8 +71,12 @@ namespace BioPacVideo
         private void FinishButton_Click(object sender, EventArgs e)
         {
             ThreadDisplay.Abort();
-
             this.Close();
+        }
+
+        private void ChanSel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
