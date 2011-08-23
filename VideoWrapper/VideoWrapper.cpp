@@ -308,7 +308,12 @@ int StartCapture()
 	return res;
 }
 int StartEncoding()
-{		
+{	
+	EncPos = 0;
+	for (int i=0; i<MAXDEVS*MAXMUXS; i++)
+	{		
+		CamEnc[i] = -1;
+	}
 	int ptemp;
 	for (int i = 0; i < MAXDEVS; i++)
 	{
@@ -320,6 +325,7 @@ int StartEncoding()
 		}
 		Present[i] = ptemp;
 	}	
+
 	for (int i = 0; i < 16; i++)
 	{
 		pDVPEncSDK->AdvDVP_SetStreamReadCB(&StreamRead);		
@@ -401,6 +407,8 @@ int __cdecl NewFrameCallback(int empty, int nID, int nDevNum, int nMuxChan, int 
 {	
 	LastEncRes =nID;
 	Pres[nDevNum][nMuxChan] = true;					
+	int nChNum;	
+	nChNum = (nDevNum*MAXMUXS)+nMuxChan;
 	if (*(pBuf+1) & 0x02) 		
 	{
 		NoSig = true;		
@@ -409,33 +417,36 @@ int __cdecl NewFrameCallback(int empty, int nID, int nDevNum, int nMuxChan, int 
 	{
 		NoSig = false;
 		memcpy(P2Buff+nWidth[0]*nHeight[0]*2*(nDevNum*MAXMUXS+nMuxChan),pBuf,nBufSize);		
-	}    
-	int nChNum;	
-	nChNum = (nDevNum*MAXMUXS)+nMuxChan;
-	if ((pDVPEncSDK))
-	{
-		if (CamEnc[nChNum] = -1) 
+		if (CamEnc[nChNum] == -1) 
 		{
 			CamEnc[nChNum] = EncPos;
 			CamDeref[EncPos] = CamAssoc[nChNum];
 			EncPos++;
 		}
-		if (pDVPEncSDK->AdvDVP_GetState(nChNum) == ENC_RUNNING) {			
-			int Ret = pDVPEncSDK->AdvDVP_VideoEncode(CamEnc[nChNum], (LPVOID)pBuf, nBufSize, bKeyFrame[nChNum]);
-			if ((EncoderState)Ret == ENC_BUFFERFULL)
-			{
-				LastEncRes = Ret;
-			}
-			else if (Ret != ENC_SUCCEEDED)
-			{
-				if (bKeyFrame[nChNum])
-					LastEncRes = -6;
+	}    
+	
+	if ((pDVPEncSDK))
+	{
+		if (CamEnc[nChNum] != -1)
+		{
+			if (pDVPEncSDK->AdvDVP_GetState(CamEnc[nChNum]) == ENC_RUNNING) 
+			{			
+				int Ret = pDVPEncSDK->AdvDVP_VideoEncode(CamEnc[nChNum], (LPVOID)pBuf, nBufSize, bKeyFrame[CamEnc[nChNum]]);
+				if ((EncoderState)Ret == ENC_BUFFERFULL)
+				{
+					LastEncRes = Ret;
+				}
+				else if (Ret != ENC_SUCCEEDED)
+				{
+					if (bKeyFrame[CamEnc[nChNum]])
+						LastEncRes = -6;
+					else
+						LastEncRes = -7;
+				}
 				else
-					LastEncRes = -7;
-			}
-			else
-			{
-				bKeyFrame[nChNum] = FALSE;
+				{
+					bKeyFrame[CamEnc[nChNum]] = FALSE;
+				}
 			}
 		}
 	}
