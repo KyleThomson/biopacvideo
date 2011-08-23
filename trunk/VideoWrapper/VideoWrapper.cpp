@@ -46,9 +46,11 @@ int nEncKeyInterval[MAXDEVS*MAXMUXS];
 int nFrameCount[MAXDEVS*MAXMUXS];
 int nFileIndex[MAXDEVS*MAXMUXS];
 bool Pres[MAXDEVS][MAXMUXS];
+int CamEnc[MAXDEVS*MAXMUXS];
 int Present[MAXDEVS];
 bool CamIsRecording[MAXDEVS*MAXMUXS];
 int CamAssoc[MAXDEVS*MAXMUXS];	
+int CamDeref[16];
 INT64 nAccumulatedSize[MAXDEVS*MAXMUXS];
 
 
@@ -73,7 +75,7 @@ int SelChan = 0;
 int SelDevice = 0;
 int Switching = 4; 
 int FileStart = 0;
-
+int EncPos = 0;
 
 void StreamReadBegin(int nChNum);	//Begin Video Stream Read Callback function
 void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFlags);	//Video Stream Read Callback function
@@ -96,6 +98,7 @@ int initCaptureSDK()
 		bEncInited[i] = FALSE;
 		bKeyFrame[i] = TRUE; 	
 		hAVIFile[i] = NULL;
+		CamEnc[i] = -1;
 	}
 	for (int i=0; i<MAXDEVS; i++)
 	{
@@ -317,7 +320,7 @@ int StartEncoding()
 		}
 		Present[i] = ptemp;
 	}	
-	for (int i = 0; i < nDevCount*MAXMUXS; i++)
+	for (int i = 0; i < 16; i++)
 	{
 		pDVPEncSDK->AdvDVP_SetStreamReadCB(&StreamRead);		
 		LastEncRes = pDVPEncSDK->AdvDVP_StartVideoEncode(i);
@@ -339,8 +342,7 @@ void StreamReadBegin(int nChNum)
 }
 
 void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFlags)
-{	
-	int nDevNum = nChNum/MAXMUXS;
+{		
 	nAccumulatedSize[nChNum] += lBufSize;
 	if (nAccumulatedSize[nChNum] >= 1900*MBYTE && dwCompFlags == AVIIF_KEYFRAME)	//The size limit of the AVI file is 2GB
 	{
@@ -351,13 +353,13 @@ void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFl
 			pDVPEncSDK->AdvDVP_CloseAVIFile(hAVIFile[nChNum]);
 			hAVIFile[nChNum] = NULL;
 		}
-	}	
-	//Create AVI file (if closed or unopened)
+	}		
+	//Create AVI file (if closed or unopened)	
 	if (hAVIFile[nChNum] == NULL)
 	{		
 		char FileName[MAX_PATH];		
-		sprintf_s(FileName, "%s_%02d_%04d.avi", SaveName, nChNum, nFileIndex[nChNum]);						
-		hAVIFile[nChNum] = pDVPEncSDK->AdvDVP_CreateAVIFile(FileName, nWidth[nDevNum], nHeight[nDevNum], (int)(30/Present[nDevNum]));		
+		sprintf_s(FileName, "%s_%02d_%04d.avi", SaveName, CamDeref[nChNum], nFileIndex[nChNum]);						
+		hAVIFile[nChNum] = pDVPEncSDK->AdvDVP_CreateAVIFile(FileName, nWidth[0], nHeight[0], (int)(30/Present[0]));		
 	}		
 	//First frame of the video file must be key frame.
 	if (dwCompFlags == AVIIF_KEYFRAME)
@@ -412,8 +414,14 @@ int __cdecl NewFrameCallback(int empty, int nID, int nDevNum, int nMuxChan, int 
 	nChNum = (nDevNum*MAXMUXS)+nMuxChan;
 	if ((pDVPEncSDK))
 	{
+		if (CamEnc[nChNum] = -1) 
+		{
+			CamEnc[nChNum] = EncPos;
+			CamDeref[EncPos] = CamAssoc[nChNum];
+			EncPos++;
+		}
 		if (pDVPEncSDK->AdvDVP_GetState(nChNum) == ENC_RUNNING) {			
-			int Ret = pDVPEncSDK->AdvDVP_VideoEncode(nChNum, (LPVOID)pBuf, nBufSize, bKeyFrame[nChNum]);
+			int Ret = pDVPEncSDK->AdvDVP_VideoEncode(CamEnc[nChNum], (LPVOID)pBuf, nBufSize, bKeyFrame[nChNum]);
 			if ((EncoderState)Ret == ENC_BUFFERFULL)
 			{
 				LastEncRes = Ret;
@@ -457,7 +465,7 @@ int StopEncoding(void)
 int  CloseRecording(void)
 {
 		
-		for (int i=0; i<nDevCount*MAXMUXS; i++)
+		for (int i=0; i<16; i++)
 		{			
 				pDVPEncSDK->AdvDVP_CloseEncoder(i);
 		}
