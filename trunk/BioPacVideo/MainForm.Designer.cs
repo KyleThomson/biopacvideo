@@ -63,6 +63,10 @@ namespace BioPacVideo
             this.IDT_DEVICECOUNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_ENCODERSTATUS = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_ENCODERRESULT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.VoltScale = new System.Windows.Forms.ComboBox();
+            this.TimeScale = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -378,12 +382,52 @@ namespace BioPacVideo
             this.IDT_ENCODERRESULT.Size = new System.Drawing.Size(139, 21);
             this.IDT_ENCODERRESULT.Text = "ENCODER RESULT";
             // 
+            // VoltScale
+            // 
+            this.VoltScale.FormattingEnabled = true;
+            this.VoltScale.Location = new System.Drawing.Point(12, 115);
+            this.VoltScale.Name = "VoltScale";
+            this.VoltScale.Size = new System.Drawing.Size(109, 21);
+            this.VoltScale.TabIndex = 4;
+            this.VoltScale.SelectedIndexChanged += new System.EventHandler(this.VoltScale_SelectedIndexChanged);
+            // 
+            // TimeScale
+            // 
+            this.TimeScale.FormattingEnabled = true;
+            this.TimeScale.Location = new System.Drawing.Point(12, 155);
+            this.TimeScale.Name = "TimeScale";
+            this.TimeScale.Size = new System.Drawing.Size(109, 21);
+            this.TimeScale.TabIndex = 5;
+            this.TimeScale.SelectedIndexChanged += new System.EventHandler(this.TimeScale_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 139);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(60, 13);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Time Scale";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 99);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(55, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Volt Scale";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1284, 887);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.TimeScale);
+            this.Controls.Add(this.VoltScale);
             this.Controls.Add(this.StatusBar);
             this.Controls.Add(this.RecordingButton);
             this.Controls.Add(this.menuStrip1);
@@ -440,6 +484,10 @@ namespace BioPacVideo
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem bioPacEnabledToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cameraAssociationsToolStripMenuItem;
+        private System.Windows.Forms.ComboBox VoltScale;
+        private System.Windows.Forms.ComboBox TimeScale;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }
 

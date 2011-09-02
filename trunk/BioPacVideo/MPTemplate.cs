@@ -108,7 +108,12 @@ namespace BioPacVideo
             WaveCords = new PointF[MaxDrawSize];
         }
 
-
+        public void ResetDisplaySize()
+        {
+            MaxDrawSize = SampleRate * DisplayLength;
+            WaveCords = new PointF[MaxDrawSize];
+            PointSpacing = Convert.ToSingle(Xmax / MaxDrawSize);                     
+        }
 
         public int TotChan()
         {
@@ -353,7 +358,7 @@ namespace BioPacVideo
                         {
                             if (i / AcqChan >= samplesize - SamplesLeft)
                             {
-                                PointF TempPoint = new PointF(CurPointPos * PointSpacing, VoltageSpacing * ((i % AcqChan) + (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax/(AcqChan+1)));
+                                PointF TempPoint = new PointF(CurPointPos * PointSpacing, VoltageSpacing * ((i % AcqChan) + (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax/(AcqChan)));
                                 WaveC[i % AcqChan][SamplePos] = TempPoint;
                                 if (i % AcqChan == AcqChan - 1)
                                 {
@@ -364,7 +369,7 @@ namespace BioPacVideo
                         }
                         else
                         {
-                            PointF TempPoint = new PointF(CurPointPos * PointSpacing, VoltageSpacing * ((i % AcqChan) + (float)0.5) +  ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax/(AcqChan+1)));
+                            PointF TempPoint = new PointF(CurPointPos * PointSpacing, VoltageSpacing * ((i % AcqChan) + (float)0.5) +  ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax/(AcqChan)));
                             WaveC[i % AcqChan][SamplePos] = TempPoint;
                             if (i % AcqChan == AcqChan-1) 
                             {
@@ -528,7 +533,7 @@ namespace BioPacVideo
                     CurrentWriteLoc = BinaryFile.Position;  //Update the current location.
                 }
                 if (Feeder.CommandSize > 0)
-                {
+                { 
                     byte v;
                     v = Feeder.Commands.Dequeue();                        
                     for (int k = 0; k < 5; k++)                       
