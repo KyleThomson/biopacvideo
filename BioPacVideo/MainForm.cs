@@ -32,9 +32,10 @@ namespace BioPacVideo
         private Thread TimerThread;
         Graphics g;
         bool RunDisplayThread;
-        private DateTime Timing; 
-        
-        
+        private DateTime Timing;
+
+        public static int[] VoltageSettings = new int[] { 1, 10, 50, 100, 250, 500, 1000, 2000, 3000, 4000, 5000};
+        public static int[] DisplayLengthSize = new int[] { 1, 5, 10, 30, 60 };
 
 
 
@@ -56,8 +57,18 @@ namespace BioPacVideo
             ReadINI(BioIni); //Read Presets from INI file                        
 
             //Start EEG and Video functions
-            MP.InitializeDisplay(this.Width, this.Height);            
-         
+            MP.InitializeDisplay(this.Width, this.Height);
+            for (int i = 0; i < VoltageSettings.Length; i++)
+            {
+                if (VoltageSettings[i] < 1000)
+                    VoltScale.Items.Add(string.Format("-{0} / {0} mV", VoltageSettings[i]));
+                else
+                    VoltScale.Items.Add(string.Format("-{0} / {0} V", VoltageSettings[i] / 1000));
+            }
+            for (int i = 0; i < DisplayLengthSize.Length; i++)
+            {
+                TimeScale.Items.Add(string.Format("{0} seconds", DisplayLengthSize[i]));
+            }
             
             if (!File.Exists(@".\mpdev.dll"))
             {
@@ -103,6 +114,8 @@ namespace BioPacVideo
             TimerThread = new Thread(new ThreadStart(TimerCheckThread));
             Video.UpdateCameraAssoc();
             RunDisplayThread = true;
+            VoltScale.SelectedIndex = Array.IndexOf(VoltageSettings, MP.Voltage);
+            TimeScale.SelectedIndex = Array.IndexOf(DisplayLengthSize, MP.DisplayLength); 
             ThreadDisplay.Start();
             TimerThread.Start();
         }
@@ -550,6 +563,17 @@ namespace BioPacVideo
         private void MainForm_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void VoltScale_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            MP.Voltage = VoltageSettings[VoltScale.SelectedIndex];
+        }
+
+        private void TimeScale_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            MP.DisplayLength = DisplayLengthSize[TimeScale.SelectedIndex];
+            MP.ResetDisplaySize();
         }
     }
 }
