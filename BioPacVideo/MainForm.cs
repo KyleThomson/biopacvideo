@@ -488,6 +488,7 @@ namespace BioPacVideo
         {
             FeederTester frm = new FeederTester();
             frm.ShowDialog(this);
+            frm.Kill();
             frm.Dispose();
         }
     
