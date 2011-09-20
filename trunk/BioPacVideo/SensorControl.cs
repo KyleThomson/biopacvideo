@@ -107,6 +107,11 @@ namespace BioPacVideo
             IDT_BRIGHTNESS.Text = IDS_BRIGHTNESS.Value.ToString();
             IDT_SATURATION.Text = IDS_SATURATION.Value.ToString();
         }
+
+        private void SensorControl_Load(object sender, EventArgs e)
+        {
+
+        }
         
     }
 }

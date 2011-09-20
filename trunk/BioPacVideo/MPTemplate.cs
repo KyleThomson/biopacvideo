@@ -535,7 +535,7 @@ namespace BioPacVideo
                 if (Feeder.CommandSize > 0)
                 { 
                     byte v;
-                    v = Feeder.Commands.Dequeue();                        
+                    v = Feeder.GetTopCommand();                 
                     for (int k = 0; k < 5; k++)                       
                     {
                         bool x =(v&(k^2)) > 0;

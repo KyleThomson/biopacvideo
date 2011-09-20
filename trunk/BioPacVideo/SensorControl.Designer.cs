@@ -213,6 +213,7 @@
             this.Controls.Add(this.label1);
             this.Name = "SensorControl";
             this.Text = "SensorControl";
+            this.Load += new System.EventHandler(this.SensorControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.IDS_CONTRAST)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.IDS_BRIGHTNESS)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.IDS_SATURATION)).EndInit();

@@ -29,13 +29,17 @@
         private void InitializeComponent()
         {
             this.IDC_RUNTEST = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.FeederNum = new System.Windows.Forms.TextBox();
+            this.PelletsNum = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.ChanSel = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // IDC_RUNTEST
             // 
-            this.IDC_RUNTEST.Location = new System.Drawing.Point(12, 202);
+            this.IDC_RUNTEST.Location = new System.Drawing.Point(12, 205);
             this.IDC_RUNTEST.Name = "IDC_RUNTEST";
             this.IDC_RUNTEST.Size = new System.Drawing.Size(127, 33);
             this.IDC_RUNTEST.TabIndex = 0;
@@ -43,33 +47,73 @@
             this.IDC_RUNTEST.UseVisualStyleBackColor = true;
             this.IDC_RUNTEST.Click += new System.EventHandler(this.IDC_RUNTEST_Click);
             // 
-            // textBox1
+            // FeederNum
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 41);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 1;
+            this.FeederNum.Location = new System.Drawing.Point(12, 135);
+            this.FeederNum.Name = "FeederNum";
+            this.FeederNum.Size = new System.Drawing.Size(100, 20);
+            this.FeederNum.TabIndex = 1;
             // 
-            // textBox2
+            // PelletsNum
             // 
-            this.textBox2.Location = new System.Drawing.Point(12, 85);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 2;
+            this.PelletsNum.Location = new System.Drawing.Point(12, 179);
+            this.PelletsNum.Name = "PelletsNum";
+            this.PelletsNum.Size = new System.Drawing.Size(100, 20);
+            this.PelletsNum.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 119);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(40, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Feeder";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(9, 163);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(38, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Pellets";
+            // 
+            // ChanSel
+            // 
+            this.ChanSel.FormattingEnabled = true;
+            this.ChanSel.Location = new System.Drawing.Point(12, 78);
+            this.ChanSel.Name = "ChanSel";
+            this.ChanSel.Size = new System.Drawing.Size(121, 21);
+            this.ChanSel.TabIndex = 5;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(9, 62);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(43, 13);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Camera";
             // 
             // FeederTester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(678, 247);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.ChanSel);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.PelletsNum);
+            this.Controls.Add(this.FeederNum);
             this.Controls.Add(this.IDC_RUNTEST);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FeederTester";
             this.Text = "Feeder Test";
+            this.Load += new System.EventHandler(this.FeederTester_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -78,7 +122,11 @@
         #endregion
 
         private System.Windows.Forms.Button IDC_RUNTEST;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox FeederNum;
+        private System.Windows.Forms.TextBox PelletsNum;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox ChanSel;
+        private System.Windows.Forms.Label label3;
     }
 }
