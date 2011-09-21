@@ -86,6 +86,7 @@
             this.ChanSel.Name = "ChanSel";
             this.ChanSel.Size = new System.Drawing.Size(121, 21);
             this.ChanSel.TabIndex = 5;
+            this.ChanSel.SelectedIndexChanged += new System.EventHandler(this.ChanSel_SelectedIndexChanged);
             // 
             // label3
             // 

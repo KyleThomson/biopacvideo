@@ -543,9 +543,7 @@ namespace BioPacVideo
                     }
                     MPCLASS.setDigitalIO(5, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
                     Thread.Sleep(1);
-                    MPCLASS.setDigitalIO(5, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); 
-                    Feeder.CommandSize--;
-                    Feeder.CurCommand++;
+                    MPCLASS.setDigitalIO(5, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);                    
                 }
                 last_received = received;
                 samplesize = (int)last_received / AcqChan;
