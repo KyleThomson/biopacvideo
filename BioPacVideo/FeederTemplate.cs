@@ -42,7 +42,7 @@ namespace BioPacVideo
         }
         public void Execute()
         {
-            Commands.Enqueue(255);
+            Commands.Enqueue((byte)255);
             CommandSize = Commands.Count;
         }
 
