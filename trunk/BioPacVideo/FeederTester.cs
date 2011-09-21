@@ -15,7 +15,7 @@ namespace BioPacVideo
 {
     public partial class FeederTester : Form
     {
-        ArrayList TestBoxes;
+     
         MPTemplate MP;
         FeederTemplate Feeder;
         VideoTemplate Video;        
@@ -58,8 +58,12 @@ namespace BioPacVideo
 
         private void IDC_RUNTEST_Click(object sender, EventArgs e)
         {
-            Feeder.AddCommand(Convert.ToInt32(FeederNum.Text), Convert.ToInt32(PelletsNum.Text));
-            Feeder.Execute();
+            int F, P;
+            if (int.TryParse(FeederNum.Text, out F) & int.TryParse(PelletsNum.Text, out P))
+            {
+                Feeder.AddCommand((byte)F, (byte)P);
+                Feeder.Execute();
+            }
         }
         public void Kill()
         {

@@ -535,16 +535,19 @@ namespace BioPacVideo
                 if (Feeder.CommandSize > 0)
                 { 
                     byte v;
+                    string s = "";
                     v = Feeder.GetTopCommand();                 
-                    for (int k = 0; k < 5; k++)                       
+                    for (uint k = 0; k < 5; k++)                       
                     {
-                        bool x =(v&(k^2)) > 0;
-                        MPCLASS.setDigitalIO((uint)k, x, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
+                        bool x =!((v&(k^2)) > 0);       
+                        if (!x) {s = s + "1";} else {s = s + "0";}
+                        MPCLASS.setDigitalIO(k, x, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
                     }
-                    MPCLASS.setDigitalIO(5, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
+                    MPCLASS.setDigitalIO(7, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
                     Thread.Sleep(1);
-                    MPCLASS.setDigitalIO(5, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);                    
-                }
+                    MPCLASS.setDigitalIO(7, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
+                    MessageBox.Show(s); 
+                }                
                 last_received = received;
                 samplesize = (int)last_received / AcqChan;
                 samplecount += samplesize;
