@@ -26,21 +26,24 @@ namespace BioPacVideo
 
         public FeederTemplate()
         {
-            Commands = new Queue<byte>();
+            Commands = new Queue<byte>();                        
         }
         public byte GetTopCommand()
         {
-            return Commands.Dequeue();
+            CommandSize--;
+            return Commands.Dequeue();            
 
         }
         public void AddCommand(int Feeder, int Pellets)
         {
             Commands.Enqueue((byte)Feeder);
-            Commands.Enqueue((byte)Pellets);    
+            Commands.Enqueue((byte)Pellets);
+            CommandSize = Commands.Count;
         }
         public void Execute()
         {
             Commands.Enqueue(255);
+            CommandSize = Commands.Count;
         }
 
     }

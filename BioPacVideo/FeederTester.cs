@@ -30,8 +30,11 @@ namespace BioPacVideo
             MP = MPTemplate.Instance;
             Video = VideoTemplate.Instance;
             Feeder = FeederTemplate.Instance;
-            g = this.CreateGraphics();
-            TestBoxes = new ArrayList();
+            g = this.CreateGraphics();            
+            for (int i = 0; i < 32; i++)
+            {
+                ChanSel.Items.Add("Camera " + i + 1.ToString());
+            }
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
             ThreadDisplay.Start();
            
@@ -65,6 +68,11 @@ namespace BioPacVideo
         private void FeederTester_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void ChanSel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Chan = ChanSel.SelectedIndex;
         }
     }
 }
