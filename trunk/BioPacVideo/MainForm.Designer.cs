@@ -53,20 +53,19 @@ namespace BioPacVideo
             this.testFeedersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setFeedingProtocolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusBar = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_BIOPACSTAT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_BIOPACRECORDINGSTAT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_MPLASTMESSAGE = new System.Windows.Forms.ToolStripStatusLabel();
-            this.TickCountLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_VIDEOSTATUS = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_VIDEORESULT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_DEVICECOUNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_ENCODERSTATUS = new System.Windows.Forms.ToolStripStatusLabel();
-            this.IDT_ENCODERRESULT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.IDT_FEEDST = new System.Windows.Forms.ToolStripStatusLabel();
             this.VoltScale = new System.Windows.Forms.ComboBox();
             this.TimeScale = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.IDT_ENCSTAT = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -91,7 +90,7 @@ namespace BioPacVideo
             this.automaticFeederToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1284, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1446, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -264,27 +263,21 @@ namespace BioPacVideo
             // StatusBar
             // 
             this.StatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
             this.IDT_BIOPACSTAT,
             this.IDT_BIOPACRECORDINGSTAT,
             this.IDT_MPLASTMESSAGE,
-            this.TickCountLabel,
             this.IDT_VIDEOSTATUS,
             this.IDT_VIDEORESULT,
             this.IDT_DEVICECOUNT,
             this.IDT_ENCODERSTATUS,
-            this.IDT_ENCODERRESULT});
+            this.IDT_ENCSTAT,
+            this.IDT_FEEDST});
             this.StatusBar.Location = new System.Drawing.Point(0, 861);
             this.StatusBar.Name = "StatusBar";
-            this.StatusBar.Size = new System.Drawing.Size(1284, 26);
+            this.StatusBar.Size = new System.Drawing.Size(1446, 26);
             this.StatusBar.TabIndex = 3;
             this.StatusBar.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(77, 21);
-            this.toolStripStatusLabel1.Text = "MP150 Status:";
+            this.StatusBar.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.StatusBar_ItemClicked);
             // 
             // IDT_BIOPACSTAT
             // 
@@ -320,12 +313,6 @@ namespace BioPacVideo
             this.IDT_MPLASTMESSAGE.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
             this.IDT_MPLASTMESSAGE.Size = new System.Drawing.Size(107, 21);
             this.IDT_MPLASTMESSAGE.Text = "NO STATUS";
-            // 
-            // TickCountLabel
-            // 
-            this.TickCountLabel.Name = "TickCountLabel";
-            this.TickCountLabel.Size = new System.Drawing.Size(97, 21);
-            this.TickCountLabel.Text = "Video Card Status:";
             // 
             // IDT_VIDEOSTATUS
             // 
@@ -371,16 +358,16 @@ namespace BioPacVideo
             this.IDT_ENCODERSTATUS.Size = new System.Drawing.Size(140, 21);
             this.IDT_ENCODERSTATUS.Text = "ENCODER STATUS";
             // 
-            // IDT_ENCODERRESULT
+            // IDT_FEEDST
             // 
-            this.IDT_ENCODERRESULT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+            this.IDT_FEEDST.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
                         | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
                         | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.IDT_ENCODERRESULT.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-            this.IDT_ENCODERRESULT.Name = "IDT_ENCODERRESULT";
-            this.IDT_ENCODERRESULT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_ENCODERRESULT.Size = new System.Drawing.Size(139, 21);
-            this.IDT_ENCODERRESULT.Text = "ENCODER RESULT";
+            this.IDT_FEEDST.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.IDT_FEEDST.Name = "IDT_FEEDST";
+            this.IDT_FEEDST.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
+            this.IDT_FEEDST.Size = new System.Drawing.Size(130, 21);
+            this.IDT_FEEDST.Text = "FEEDER STATUS";
             // 
             // VoltScale
             // 
@@ -418,12 +405,23 @@ namespace BioPacVideo
             this.label3.TabIndex = 8;
             this.label3.Text = "Volt Scale";
             // 
+            // IDT_ENCSTAT
+            // 
+            this.IDT_ENCSTAT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.IDT_ENCSTAT.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.IDT_ENCSTAT.Name = "IDT_ENCSTAT";
+            this.IDT_ENCSTAT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
+            this.IDT_ENCSTAT.Size = new System.Drawing.Size(139, 21);
+            this.IDT_ENCSTAT.Text = "ENCODER RESULT";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1284, 887);
+            this.ClientSize = new System.Drawing.Size(1446, 887);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.TimeScale);
@@ -468,16 +466,14 @@ namespace BioPacVideo
         private System.Windows.Forms.ToolStripStatusLabel IDT_BIOPACRECORDINGSTAT;
         private System.Windows.Forms.ToolStripMenuItem IDM_SETTINGS;
         private System.Windows.Forms.ToolStripStatusLabel IDT_MPLASTMESSAGE;
-        private System.Windows.Forms.ToolStripStatusLabel TickCountLabel;
         private System.Windows.Forms.ToolStripMenuItem setFeedingProtocolToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel IDT_VIDEOSTATUS;
         private System.Windows.Forms.ToolStripStatusLabel IDT_DEVICECOUNT;
         private System.Windows.Forms.ToolStripMenuItem videoSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sensorControlToolStripMenuItem;
-        internal System.Windows.Forms.ToolStripStatusLabel IDT_ENCODERRESULT;
+        internal System.Windows.Forms.ToolStripStatusLabel IDT_FEEDST;
         private System.Windows.Forms.ToolStripMenuItem initializeVideoCardToolStripMenuItem;
         internal System.Windows.Forms.ToolStripStatusLabel IDT_ENCODERSTATUS;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel IDT_VIDEORESULT;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem videoCaptureEnabledToolStripMenuItem;
@@ -488,6 +484,7 @@ namespace BioPacVideo
         private System.Windows.Forms.ComboBox TimeScale;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        internal System.Windows.Forms.ToolStripStatusLabel IDT_ENCSTAT;
     }
 }
 
