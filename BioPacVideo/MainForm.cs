@@ -25,8 +25,7 @@ namespace BioPacVideo
         VideoTemplate Video;
         FeederTemplate Feeder;
         Pen BoxPen;
-        FolderBrowserDialog FBD;
-        RatTemplate[] Rats;
+        FolderBrowserDialog FBD;        
         Bitmap Still;                
         Thread ThreadDisplay;
         private Thread TimerThread;
@@ -49,7 +48,7 @@ namespace BioPacVideo
             Feeder = FeederTemplate.Instance; //Same for Feeders
             BoxPen = new Pen(Brushes.Black, 4);            
             BioIni = new IniFile(Directory.GetCurrentDirectory() + "\\BioPacVideo.ini"); //Standard Ini Settings
-            Rats = RatTemplate.NewInitArray(16);
+            
             g = this.CreateGraphics();  //Plot window          
             
             //***************** LOAD SETTINGS *****************
@@ -127,7 +126,7 @@ namespace BioPacVideo
             
             while (true)
             {
-                if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0))
+                if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0) & MP.IsFileWriting)
                 {
                     MP.StopWriting();
                     Video.StopEncoding();
@@ -148,20 +147,18 @@ namespace BioPacVideo
                 }
                 if ((DateTime.Now.TimeOfDay.Hours == Feeder.Breakfast.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Breakfast.Minutes))
                 {
-                    //Breakfast
-                    MessageBox.Show("I GOT BREAKFAST");
+                    Feeder.GoMeal();
                     Thread.Sleep(120000);
                 }
                 if ((DateTime.Now.TimeOfDay.Hours == Feeder.Lunch.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Lunch.Minutes))
                 {
-
-                    MessageBox.Show("I GOT LUNCH");
+                    Feeder.GoMeal();
                     Thread.Sleep(120000);
                     //Lunch
                 }
                 if ((DateTime.Now.TimeOfDay.Hours == Feeder.Dinner.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Dinner.Minutes))
                 {
-                    MessageBox.Show("I GOT ME SOME DINRAR!!!LOLZ");
+                    Feeder.GoMeal();
                     Thread.Sleep(120000);
                     //YOU ARE A DINRAR
                 }
@@ -191,11 +188,11 @@ namespace BioPacVideo
             }
             for (int i = 0; i < 16; i++)
             {
-                Rats[i].Weight = BioIni.IniReadValue("Rats", string.Format("Rat{0} (g)", i), (double)0);
-                Rats[i].Medication = BioIni.IniReadValue("Rats", string.Format("Rat{0}Medicate", i), true);
-                Rats[i].Surgery = BioIni.IniReadValue("Rats", string.Format("Rat{0} Surgery", i));
-                Rats[i].Injection = BioIni.IniReadValue("Rats", string.Format("Rat{0} Injection", i));
-                Rats[i].FirstSeizure = BioIni.IniReadValue("Rats", string.Format("Rat{0} FirstSeizure", i));
+                Feeder.Rats[i].Weight = BioIni.IniReadValue("Rats", string.Format("Rat{0} (g)", i), (double)0);
+                Feeder.Rats[i].Medication = BioIni.IniReadValue("Rats", string.Format("Rat{0}Medicate", i), true);
+                Feeder.Rats[i].Surgery = BioIni.IniReadValue("Rats", string.Format("Rat{0} Surgery", i));
+                Feeder.Rats[i].Injection = BioIni.IniReadValue("Rats", string.Format("Rat{0} Injection", i));
+                Feeder.Rats[i].FirstSeizure = BioIni.IniReadValue("Rats", string.Format("Rat{0} FirstSeizure", i));
             }
             Video.Enabled = BioIni.IniReadValue("Video", "Enabled", true);
             Video.XRes = BioIni.IniReadValue("Video", "XRes", 320);
@@ -235,11 +232,11 @@ namespace BioPacVideo
             }
             for (int i = 0; i < 16; i++)
             {
-               BioIni.IniWriteValue("Rats", string.Format("Rat{0} (g)", i), Rats[i].Weight.ToString());
-               BioIni.IniWriteValue("Rats", string.Format("Rat{0}Medicate", i), Rats[i].Medication);
-               BioIni.IniWriteValue("Rats", string.Format("Rat{0} Surgery", i), Rats[i].Surgery.ToShortDateString());
-               BioIni.IniWriteValue("Rats", string.Format("Rat{0} Injection", i), Rats[i].Injection.ToShortDateString());
-               BioIni.IniWriteValue("Rats", string.Format("Rat{0} FirstSeizure", i), Rats[i].FirstSeizure.ToShortDateString());
+               BioIni.IniWriteValue("Rats", string.Format("Rat{0} (g)", i), Feeder.Rats[i].Weight.ToString());
+               BioIni.IniWriteValue("Rats", string.Format("Rat{0}Medicate", i), Feeder.Rats[i].Medication);
+               BioIni.IniWriteValue("Rats", string.Format("Rat{0} Surgery", i), Feeder.Rats[i].Surgery.ToShortDateString());
+               BioIni.IniWriteValue("Rats", string.Format("Rat{0} Injection", i), Feeder.Rats[i].Injection.ToShortDateString());
+               BioIni.IniWriteValue("Rats", string.Format("Rat{0} FirstSeizure", i), Feeder.Rats[i].FirstSeizure.ToShortDateString());
             }
             BioIni.IniWriteValue("Video", "Enabled", Video.Enabled);
             BioIni.IniWriteValue("Video", "XRes", Video.XRes);
@@ -289,7 +286,8 @@ namespace BioPacVideo
                     Still.Dispose();
                 }
             IDT_VIDEOSTATUS.Text = Video.GetResText();
-            IDT_ENCODERRESULT.Text = Video.EncoderStatus();
+            IDT_ENCSTAT.Text = Video.EncoderStatus();
+            IDT_FEEDST.Text = Feeder.StateText;
             IDT_ENCODERSTATUS.Text = VideoWrapper.GetEncRes().ToString();            
            }
         }
@@ -349,7 +347,7 @@ namespace BioPacVideo
                     IDM_SETTINGS.Enabled = true;
                     IDM_DISCONNECTBIOPAC.Enabled = true;
                     IDT_ENCODERSTATUS.Text = Video.EncoderStatus();
-                    IDT_ENCODERRESULT.Text = Video.EncoderResult();
+                    IDT_FEEDST.Text = Video.EncoderResult();
                     RecordingButton.Text = "Start Recording";                    
                     RecordingButton.BackColor = Color.Green;
                 }
@@ -475,9 +473,9 @@ namespace BioPacVideo
         }
         private void setFeedingProtocolToolStripMenuItem_Click(object sender, EventArgs e)
         {           
-            FeederForm frm = new FeederForm(Rats, Feeder);
+            FeederForm frm = new FeederForm(Feeder.Rats, Feeder);
             frm.ShowDialog(this);
-            Rats = frm.ReturnRats();
+            Feeder.Rats = frm.ReturnRats();
             Feeder = frm.ReturnFeeder();
             frm.Dispose();
             UpdateINI(BioIni);           
@@ -575,6 +573,11 @@ namespace BioPacVideo
         {
             MP.DisplayLength = DisplayLengthSize[TimeScale.SelectedIndex];
             MP.ResetDisplaySize();
+        }
+
+        private void StatusBar_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
         }
     }
 }

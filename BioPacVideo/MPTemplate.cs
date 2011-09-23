@@ -532,22 +532,48 @@ namespace BioPacVideo
                     }                    
                     CurrentWriteLoc = BinaryFile.Position;  //Update the current location.
                 }
-                if (Feeder.CommandSize > 0)
+                /*bool a,b;
+                MPCLASS.getDigitalIO(5, out a, MPCLASS.DIGITALOPT.READ_LOW_BITS);
+                MPCLASS.getDigitalIO(6, out b, MPCLASS.DIGITALOPT.READ_LOW_BITS);
+                if (a && b)
+                {
+                    Feeder.State = 3;
+                    Feeder.StateText = "READY";
+                }
+                if (!a && b)
+                {
+                    Feeder.State = 1;
+                    Feeder.StateText = "RECEIVING";
+                }
+                if (a && !b)
+                {
+                    Feeder.State = 2;
+                    Feeder.StateText = "EXECUTING";
+                }
+                if (!a && !b)
+                {
+                    Feeder.State = 0;
+                    Feeder.StateText = "ERROR";
+                }*/
+                if ((Feeder.CommandSize > 0) && Feeder.CommandReady && (Feeder.gap == 0))
                 { 
-                    byte v;
-                    string s = "";
-                    v = Feeder.GetTopCommand();                 
-                    for (uint k = 0; k < 5; k++)                       
+                    byte v;                    
+                    v = Feeder.GetTopCommand();
+                    Feeder.gap++;
+                    for (byte k = 0; k < 5; k++)                       
                     {
-                        bool x =!((v&(k^2)) > 0);       
-                        if (!x) {s = s + "1";} else {s = s + "0";}
-                        MPCLASS.setDigitalIO(k, x, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
+                        bool x =!((v&(1 << k)) > 0);                               
+                        MPCLASS.setDigitalIO((uint)k, x, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
                     }
                     MPCLASS.setDigitalIO(7, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
                     Thread.Sleep(1);
-                    MPCLASS.setDigitalIO(7, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);
-                    MessageBox.Show(s); 
-                }                
+                    MPCLASS.setDigitalIO(7, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS);                    
+                }
+                else if (Feeder.gap > 0)
+                {
+                    Feeder.gap++;
+                    if (Feeder.gap == 4) { Feeder.gap = 0; }
+                }
                 last_received = received;
                 samplesize = (int)last_received / AcqChan;
                 samplecount += samplesize;

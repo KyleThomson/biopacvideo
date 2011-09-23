@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace BioPacVideo
 {
@@ -13,10 +14,16 @@ namespace BioPacVideo
         public TimeSpan Dinner; //Dinner Time, in seconds
         public double PelletsPerGram;        
         public bool Enabled;
+        public int State;
+        public string StateText;
         private Queue<byte> Commands;
-        public int CommandSize = 0;
-        public int CurCommand=0;
-        public static FeederTemplate Instance
+        public int CommandSize = 0;  //Number of commands left to run. 
+        public bool CommandReady; //Set once all commands queued.
+        public int gap = 0;
+        public RatTemplate[] Rats;
+
+
+        public static FeederTemplate Instance        
         {
             get
             {
@@ -26,13 +33,18 @@ namespace BioPacVideo
 
         public FeederTemplate()
         {
-            Commands = new Queue<byte>();                        
+            Commands = new Queue<byte>();
+            CommandReady = false; 
+            State = 3;
+            StateText = "READY";
+            Rats = RatTemplate.NewInitArray(16);
         }
         public byte GetTopCommand()
         {
             CommandSize--;
-            return Commands.Dequeue();            
-
+            byte v = Commands.Dequeue();
+            if (v == 255) { CommandReady = false; }
+            return v;
         }
         public void AddCommand(int Feeder, int Pellets)
         {
@@ -44,6 +56,36 @@ namespace BioPacVideo
         {
             Commands.Enqueue((byte)255);
             CommandSize = Commands.Count;
+            CommandReady = true;
+        }
+        public void GoMeal()
+        {
+            int MealSize;
+            string s = "";
+            int a, b, tmp;
+            Random random = new Random();
+            DateTime Start = DateTime.Now;
+            int[] RatVec = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+            for (int j = 0; j < 1000; j++)
+            {
+                a = random.Next(0, 15);
+                b = random.Next(0, 15);
+                tmp = RatVec[a];
+                RatVec[a] = RatVec[b];
+                RatVec[b] = tmp;
+            }
+            for (int RC = 0; RC < 16; RC++)
+            {
+                if (Rats[RatVec[RC]].Weight > 0)
+                {
+                    MealSize = (int)Math.Ceiling(Rats[RatVec[RC]].Weight / 15);
+                    AddCommand(RatVec[RC], MealSize);
+                    s = s + RatVec[RC].ToString() + " - " + MealSize.ToString() + Environment.NewLine;
+                }
+
+            }
+            Execute();
+            MessageBox.Show(s);           
         }
 
     }

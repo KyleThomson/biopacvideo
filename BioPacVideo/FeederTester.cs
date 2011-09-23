@@ -40,7 +40,7 @@ namespace BioPacVideo
            
         }
         private void DisplayThread()
-        {  
+       {  
             while (true)
             {
                 Thread.Sleep(30);
@@ -51,7 +51,7 @@ namespace BioPacVideo
                     Still.RotateFlip(RotateFlipType.RotateNoneFlipY);
                 }
                 if (this.Visible)
-                    g.DrawImage(Still, 550, 20, 320, 240);
+                    g.DrawImage(Still, 250, 20, 160, 120);
                 Still.Dispose();
             }
         }
@@ -59,12 +59,32 @@ namespace BioPacVideo
         private void IDC_RUNTEST_Click(object sender, EventArgs e)
         {
             int F, P;
+            DateTime Start;
+            TimeSpan Elapsed;
+            Start = DateTime.Now;
             if (int.TryParse(FeederNum.Text, out F) & int.TryParse(PelletsNum.Text, out P))
             {
                 Feeder.AddCommand((byte)F, (byte)P);
                 Feeder.Execute();
             }
+            /*Feeder.AddCommand((byte)3, (byte)3);
+            Feeder.AddCommand((byte)2, (byte)3);
+            Feeder.AddCommand((byte)1, (byte)3);
+            Feeder.AddCommand((byte)0, (byte)3);           
+            Feeder.Execute();*/
+           /* while (Feeder.State != 2) 
+            {
+            }
+            Elapsed = DateTime.Now - Start;
+            Start = DateTime.Now;
+            StatusBox.Text += Environment.NewLine + "Command Pass took " + Elapsed.TotalMilliseconds + " ms";
+            while (Feeder.State != 3)
+            {
+            }
+            Elapsed = DateTime.Now - Start;
+            StatusBox.Text += Environment.NewLine + "Execution took " + Elapsed.TotalSeconds + " s";            */
         }
+                   
         public void Kill()
         {
             ThreadDisplay.Abort();
