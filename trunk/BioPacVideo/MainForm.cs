@@ -139,6 +139,7 @@ namespace BioPacVideo
                     UpdateINI(WriteOnce);
                     //Video Stuff                    
                     Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
+                    Feeder.SetLogName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString + "_Feeder.log");
                     Video.FileStart = Video.FileStart + 1;
                     Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString, Video.FileStart);
                     MP.StartWriting();
@@ -309,7 +310,7 @@ namespace BioPacVideo
                     Directory.CreateDirectory(RecordingDir);
                     
                     MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
-
+                    Feeder.SetLogName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString + "_Feeder.log");
                     //Write INI file once, so we save all the settings                    
                     WriteOnce = new IniFile(RecordingDir + "\\" + DateString + "_Settings.txt");
                     UpdateINI(WriteOnce);
