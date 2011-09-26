@@ -36,50 +36,34 @@
             this.IDC_DINNER = new System.Windows.Forms.TextBox();
             this.IDC_RAT1 = new System.Windows.Forms.TextBox();
             this.IDC_RAT2 = new System.Windows.Forms.TextBox();
-            this.IDX_RAT1 = new System.Windows.Forms.CheckBox();
-            this.IDX_RAT2 = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.IDX_RAT4 = new System.Windows.Forms.CheckBox();
-            this.IDX_RAT3 = new System.Windows.Forms.CheckBox();
             this.IDC_RAT4 = new System.Windows.Forms.TextBox();
             this.IDC_RAT3 = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.IDX_RAT6 = new System.Windows.Forms.CheckBox();
-            this.IDX_RAT5 = new System.Windows.Forms.CheckBox();
             this.IDC_RAT6 = new System.Windows.Forms.TextBox();
             this.IDC_RAT5 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.IDX_RAT8 = new System.Windows.Forms.CheckBox();
-            this.IDX_RAT7 = new System.Windows.Forms.CheckBox();
             this.IDC_RAT8 = new System.Windows.Forms.TextBox();
             this.IDC_RAT7 = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
-            this.IDX_RAT10 = new System.Windows.Forms.CheckBox();
-            this.IDX_RAT9 = new System.Windows.Forms.CheckBox();
             this.IDC_RAT10 = new System.Windows.Forms.TextBox();
             this.IDC_RAT9 = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.IDX_RAT12 = new System.Windows.Forms.CheckBox();
-            this.IDX_RAT11 = new System.Windows.Forms.CheckBox();
             this.IDC_RAT12 = new System.Windows.Forms.TextBox();
             this.IDC_RAT11 = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
-            this.IDX_RAT16 = new System.Windows.Forms.CheckBox();
-            this.IDX_RAT15 = new System.Windows.Forms.CheckBox();
             this.IDC_RAT16 = new System.Windows.Forms.TextBox();
             this.IDC_RAT15 = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
-            this.IDX_RAT14 = new System.Windows.Forms.CheckBox();
-            this.IDX_RAT13 = new System.Windows.Forms.CheckBox();
             this.IDC_RAT14 = new System.Windows.Forms.TextBox();
             this.IDC_RAT13 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -97,6 +81,38 @@
             this.IDC_PPG = new System.Windows.Forms.TextBox();
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
+            this.IDX_RAT1 = new System.Windows.Forms.TextBox();
+            this.IDX_RAT2 = new System.Windows.Forms.TextBox();
+            this.IDX_RAT3 = new System.Windows.Forms.TextBox();
+            this.IDX_RAT4 = new System.Windows.Forms.TextBox();
+            this.IDX_RAT8 = new System.Windows.Forms.TextBox();
+            this.IDX_RAT7 = new System.Windows.Forms.TextBox();
+            this.IDX_RAT6 = new System.Windows.Forms.TextBox();
+            this.IDX_RAT5 = new System.Windows.Forms.TextBox();
+            this.IDX_RAT12 = new System.Windows.Forms.TextBox();
+            this.IDX_RAT11 = new System.Windows.Forms.TextBox();
+            this.IDX_RAT10 = new System.Windows.Forms.TextBox();
+            this.IDX_RAT9 = new System.Windows.Forms.TextBox();
+            this.IDX_RAT16 = new System.Windows.Forms.TextBox();
+            this.IDX_RAT15 = new System.Windows.Forms.TextBox();
+            this.IDX_RAT14 = new System.Windows.Forms.TextBox();
+            this.IDX_RAT13 = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.label35 = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label37 = new System.Windows.Forms.Label();
+            this.label38 = new System.Windows.Forms.Label();
+            this.label39 = new System.Windows.Forms.Label();
+            this.label40 = new System.Windows.Forms.Label();
+            this.label41 = new System.Windows.Forms.Label();
+            this.label42 = new System.Windows.Forms.Label();
+            this.label43 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // IDC_BREAKFAST
@@ -166,28 +182,6 @@
             this.IDC_RAT2.TabIndex = 7;
             this.IDC_RAT2.LostFocus += new System.EventHandler(this.IDC_RAT2_FocusLeave);
             // 
-            // IDX_RAT1
-            // 
-            this.IDX_RAT1.AutoSize = true;
-            this.IDX_RAT1.Location = new System.Drawing.Point(96, 125);
-            this.IDX_RAT1.Name = "IDX_RAT1";
-            this.IDX_RAT1.Size = new System.Drawing.Size(89, 17);
-            this.IDX_RAT1.TabIndex = 8;
-            this.IDX_RAT1.Text = "Unmedicated";
-            this.IDX_RAT1.UseVisualStyleBackColor = true;
-            this.IDX_RAT1.CheckedChanged += new System.EventHandler(this.IDX_RAT1_CheckedChanged);
-            // 
-            // IDX_RAT2
-            // 
-            this.IDX_RAT2.AutoSize = true;
-            this.IDX_RAT2.Location = new System.Drawing.Point(274, 126);
-            this.IDX_RAT2.Name = "IDX_RAT2";
-            this.IDX_RAT2.Size = new System.Drawing.Size(89, 17);
-            this.IDX_RAT2.TabIndex = 9;
-            this.IDX_RAT2.Text = "Unmedicated";
-            this.IDX_RAT2.UseVisualStyleBackColor = true;
-            this.IDX_RAT2.CheckedChanged += new System.EventHandler(this.IDX_RAT2_CheckedChanged);
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -224,28 +218,6 @@
             this.label7.TabIndex = 16;
             this.label7.Text = "Rat 3";
             // 
-            // IDX_RAT4
-            // 
-            this.IDX_RAT4.AutoSize = true;
-            this.IDX_RAT4.Location = new System.Drawing.Point(633, 127);
-            this.IDX_RAT4.Name = "IDX_RAT4";
-            this.IDX_RAT4.Size = new System.Drawing.Size(89, 17);
-            this.IDX_RAT4.TabIndex = 15;
-            this.IDX_RAT4.Text = "Unmedicated";
-            this.IDX_RAT4.UseVisualStyleBackColor = true;
-            this.IDX_RAT4.CheckedChanged += new System.EventHandler(this.IDX_RAT4_CheckedChanged);
-            // 
-            // IDX_RAT3
-            // 
-            this.IDX_RAT3.AutoSize = true;
-            this.IDX_RAT3.Location = new System.Drawing.Point(455, 126);
-            this.IDX_RAT3.Name = "IDX_RAT3";
-            this.IDX_RAT3.Size = new System.Drawing.Size(89, 17);
-            this.IDX_RAT3.TabIndex = 14;
-            this.IDX_RAT3.Text = "Unmedicated";
-            this.IDX_RAT3.UseVisualStyleBackColor = true;
-            this.IDX_RAT3.CheckedChanged += new System.EventHandler(this.IDX_RAT3_CheckedChanged);
-            // 
             // IDC_RAT4
             // 
             this.IDC_RAT4.Location = new System.Drawing.Point(551, 124);
@@ -279,28 +251,6 @@
             this.label9.Size = new System.Drawing.Size(33, 13);
             this.label9.TabIndex = 22;
             this.label9.Text = "Rat 5";
-            // 
-            // IDX_RAT6
-            // 
-            this.IDX_RAT6.AutoSize = true;
-            this.IDX_RAT6.Location = new System.Drawing.Point(274, 169);
-            this.IDX_RAT6.Name = "IDX_RAT6";
-            this.IDX_RAT6.Size = new System.Drawing.Size(89, 17);
-            this.IDX_RAT6.TabIndex = 21;
-            this.IDX_RAT6.Text = "Unmedicated";
-            this.IDX_RAT6.UseVisualStyleBackColor = true;
-            this.IDX_RAT6.CheckedChanged += new System.EventHandler(this.IDX_RAT6_CheckedChanged);
-            // 
-            // IDX_RAT5
-            // 
-            this.IDX_RAT5.AutoSize = true;
-            this.IDX_RAT5.Location = new System.Drawing.Point(94, 170);
-            this.IDX_RAT5.Name = "IDX_RAT5";
-            this.IDX_RAT5.Size = new System.Drawing.Size(89, 17);
-            this.IDX_RAT5.TabIndex = 20;
-            this.IDX_RAT5.Text = "Unmedicated";
-            this.IDX_RAT5.UseVisualStyleBackColor = true;
-            this.IDX_RAT5.CheckedChanged += new System.EventHandler(this.IDX_RAT5_CheckedChanged);
             // 
             // IDC_RAT6
             // 
@@ -336,28 +286,6 @@
             this.label11.TabIndex = 28;
             this.label11.Text = "Rat 7";
             // 
-            // IDX_RAT8
-            // 
-            this.IDX_RAT8.AutoSize = true;
-            this.IDX_RAT8.Location = new System.Drawing.Point(633, 170);
-            this.IDX_RAT8.Name = "IDX_RAT8";
-            this.IDX_RAT8.Size = new System.Drawing.Size(89, 17);
-            this.IDX_RAT8.TabIndex = 27;
-            this.IDX_RAT8.Text = "Unmedicated";
-            this.IDX_RAT8.UseVisualStyleBackColor = true;
-            this.IDX_RAT8.CheckedChanged += new System.EventHandler(this.IDX_RAT8_CheckedChanged);
-            // 
-            // IDX_RAT7
-            // 
-            this.IDX_RAT7.AutoSize = true;
-            this.IDX_RAT7.Location = new System.Drawing.Point(455, 169);
-            this.IDX_RAT7.Name = "IDX_RAT7";
-            this.IDX_RAT7.Size = new System.Drawing.Size(89, 17);
-            this.IDX_RAT7.TabIndex = 26;
-            this.IDX_RAT7.Text = "Unmedicated";
-            this.IDX_RAT7.UseVisualStyleBackColor = true;
-            this.IDX_RAT7.CheckedChanged += new System.EventHandler(this.IDX_RAT7_CheckedChanged);
-            // 
             // IDC_RAT8
             // 
             this.IDC_RAT8.Location = new System.Drawing.Point(551, 167);
@@ -391,28 +319,6 @@
             this.label13.Size = new System.Drawing.Size(33, 13);
             this.label13.TabIndex = 34;
             this.label13.Text = "Rat 9";
-            // 
-            // IDX_RAT10
-            // 
-            this.IDX_RAT10.AutoSize = true;
-            this.IDX_RAT10.Location = new System.Drawing.Point(274, 210);
-            this.IDX_RAT10.Name = "IDX_RAT10";
-            this.IDX_RAT10.Size = new System.Drawing.Size(89, 17);
-            this.IDX_RAT10.TabIndex = 33;
-            this.IDX_RAT10.Text = "Unmedicated";
-            this.IDX_RAT10.UseVisualStyleBackColor = true;
-            this.IDX_RAT10.CheckedChanged += new System.EventHandler(this.IDX_RAT10_CheckedChanged);
-            // 
-            // IDX_RAT9
-            // 
-            this.IDX_RAT9.AutoSize = true;
-            this.IDX_RAT9.Location = new System.Drawing.Point(96, 209);
-            this.IDX_RAT9.Name = "IDX_RAT9";
-            this.IDX_RAT9.Size = new System.Drawing.Size(89, 17);
-            this.IDX_RAT9.TabIndex = 32;
-            this.IDX_RAT9.Text = "Unmedicated";
-            this.IDX_RAT9.UseVisualStyleBackColor = true;
-            this.IDX_RAT9.CheckedChanged += new System.EventHandler(this.IDX_RAT9_CheckedChanged);
             // 
             // IDC_RAT10
             // 
@@ -448,28 +354,6 @@
             this.label15.TabIndex = 40;
             this.label15.Text = "Rat 11";
             // 
-            // IDX_RAT12
-            // 
-            this.IDX_RAT12.AutoSize = true;
-            this.IDX_RAT12.Location = new System.Drawing.Point(633, 213);
-            this.IDX_RAT12.Name = "IDX_RAT12";
-            this.IDX_RAT12.Size = new System.Drawing.Size(89, 17);
-            this.IDX_RAT12.TabIndex = 39;
-            this.IDX_RAT12.Text = "Unmedicated";
-            this.IDX_RAT12.UseVisualStyleBackColor = true;
-            this.IDX_RAT12.CheckedChanged += new System.EventHandler(this.IDX_RAT12_CheckedChanged);
-            // 
-            // IDX_RAT11
-            // 
-            this.IDX_RAT11.AutoSize = true;
-            this.IDX_RAT11.Location = new System.Drawing.Point(455, 212);
-            this.IDX_RAT11.Name = "IDX_RAT11";
-            this.IDX_RAT11.Size = new System.Drawing.Size(89, 17);
-            this.IDX_RAT11.TabIndex = 38;
-            this.IDX_RAT11.Text = "Unmedicated";
-            this.IDX_RAT11.UseVisualStyleBackColor = true;
-            this.IDX_RAT11.CheckedChanged += new System.EventHandler(this.IDX_RAT11_CheckedChanged);
-            // 
             // IDC_RAT12
             // 
             this.IDC_RAT12.Location = new System.Drawing.Point(551, 210);
@@ -504,28 +388,6 @@
             this.label17.TabIndex = 52;
             this.label17.Text = "Rat 15";
             // 
-            // IDX_RAT16
-            // 
-            this.IDX_RAT16.AutoSize = true;
-            this.IDX_RAT16.Location = new System.Drawing.Point(634, 255);
-            this.IDX_RAT16.Name = "IDX_RAT16";
-            this.IDX_RAT16.Size = new System.Drawing.Size(89, 17);
-            this.IDX_RAT16.TabIndex = 51;
-            this.IDX_RAT16.Text = "Unmedicated";
-            this.IDX_RAT16.UseVisualStyleBackColor = true;
-            this.IDX_RAT16.CheckedChanged += new System.EventHandler(this.IDX_RAT16_CheckedChanged);
-            // 
-            // IDX_RAT15
-            // 
-            this.IDX_RAT15.AutoSize = true;
-            this.IDX_RAT15.Location = new System.Drawing.Point(456, 254);
-            this.IDX_RAT15.Name = "IDX_RAT15";
-            this.IDX_RAT15.Size = new System.Drawing.Size(89, 17);
-            this.IDX_RAT15.TabIndex = 50;
-            this.IDX_RAT15.Text = "Unmedicated";
-            this.IDX_RAT15.UseVisualStyleBackColor = true;
-            this.IDX_RAT15.CheckedChanged += new System.EventHandler(this.IDX_RAT15_CheckedChanged);
-            // 
             // IDC_RAT16
             // 
             this.IDC_RAT16.Location = new System.Drawing.Point(552, 252);
@@ -559,28 +421,6 @@
             this.label19.Size = new System.Drawing.Size(39, 13);
             this.label19.TabIndex = 46;
             this.label19.Text = "Rat 13";
-            // 
-            // IDX_RAT14
-            // 
-            this.IDX_RAT14.AutoSize = true;
-            this.IDX_RAT14.Location = new System.Drawing.Point(275, 252);
-            this.IDX_RAT14.Name = "IDX_RAT14";
-            this.IDX_RAT14.Size = new System.Drawing.Size(89, 17);
-            this.IDX_RAT14.TabIndex = 45;
-            this.IDX_RAT14.Text = "Unmedicated";
-            this.IDX_RAT14.UseVisualStyleBackColor = true;
-            this.IDX_RAT14.CheckedChanged += new System.EventHandler(this.IDX_RAT14_CheckedChanged);
-            // 
-            // IDX_RAT13
-            // 
-            this.IDX_RAT13.AutoSize = true;
-            this.IDX_RAT13.Location = new System.Drawing.Point(97, 251);
-            this.IDX_RAT13.Name = "IDX_RAT13";
-            this.IDX_RAT13.Size = new System.Drawing.Size(89, 17);
-            this.IDX_RAT13.TabIndex = 44;
-            this.IDX_RAT13.Text = "Unmedicated";
-            this.IDX_RAT13.UseVisualStyleBackColor = true;
-            this.IDX_RAT13.CheckedChanged += new System.EventHandler(this.IDX_RAT13_CheckedChanged);
             // 
             // IDC_RAT14
             // 
@@ -735,11 +575,301 @@
             this.label27.TabIndex = 68;
             this.label27.Text = "Feeder Settings";
             // 
+            // IDX_RAT1
+            // 
+            this.IDX_RAT1.Location = new System.Drawing.Point(94, 123);
+            this.IDX_RAT1.Name = "IDX_RAT1";
+            this.IDX_RAT1.ShortcutsEnabled = false;
+            this.IDX_RAT1.Size = new System.Drawing.Size(76, 20);
+            this.IDX_RAT1.TabIndex = 69;
+            // 
+            // IDX_RAT2
+            // 
+            this.IDX_RAT2.Location = new System.Drawing.Point(274, 123);
+            this.IDX_RAT2.Name = "IDX_RAT2";
+            this.IDX_RAT2.Size = new System.Drawing.Size(76, 20);
+            this.IDX_RAT2.TabIndex = 70;
+            // 
+            // IDX_RAT3
+            // 
+            this.IDX_RAT3.Location = new System.Drawing.Point(453, 123);
+            this.IDX_RAT3.Name = "IDX_RAT3";
+            this.IDX_RAT3.Size = new System.Drawing.Size(76, 20);
+            this.IDX_RAT3.TabIndex = 71;
+            // 
+            // IDX_RAT4
+            // 
+            this.IDX_RAT4.Location = new System.Drawing.Point(633, 123);
+            this.IDX_RAT4.Name = "IDX_RAT4";
+            this.IDX_RAT4.Size = new System.Drawing.Size(76, 20);
+            this.IDX_RAT4.TabIndex = 72;
+            // 
+            // IDX_RAT8
+            // 
+            this.IDX_RAT8.Location = new System.Drawing.Point(633, 166);
+            this.IDX_RAT8.Name = "IDX_RAT8";
+            this.IDX_RAT8.Size = new System.Drawing.Size(76, 20);
+            this.IDX_RAT8.TabIndex = 76;
+            // 
+            // IDX_RAT7
+            // 
+            this.IDX_RAT7.Location = new System.Drawing.Point(453, 167);
+            this.IDX_RAT7.Name = "IDX_RAT7";
+            this.IDX_RAT7.Size = new System.Drawing.Size(76, 20);
+            this.IDX_RAT7.TabIndex = 75;
+            // 
+            // IDX_RAT6
+            // 
+            this.IDX_RAT6.Location = new System.Drawing.Point(274, 166);
+            this.IDX_RAT6.Name = "IDX_RAT6";
+            this.IDX_RAT6.Size = new System.Drawing.Size(76, 20);
+            this.IDX_RAT6.TabIndex = 74;
+            // 
+            // IDX_RAT5
+            // 
+            this.IDX_RAT5.Location = new System.Drawing.Point(94, 166);
+            this.IDX_RAT5.Name = "IDX_RAT5";
+            this.IDX_RAT5.Size = new System.Drawing.Size(76, 20);
+            this.IDX_RAT5.TabIndex = 73;
+            // 
+            // IDX_RAT12
+            // 
+            this.IDX_RAT12.Location = new System.Drawing.Point(634, 210);
+            this.IDX_RAT12.Name = "IDX_RAT12";
+            this.IDX_RAT12.Size = new System.Drawing.Size(76, 20);
+            this.IDX_RAT12.TabIndex = 80;
+            // 
+            // IDX_RAT11
+            // 
+            this.IDX_RAT11.Location = new System.Drawing.Point(454, 210);
+            this.IDX_RAT11.Name = "IDX_RAT11";
+            this.IDX_RAT11.Size = new System.Drawing.Size(76, 20);
+            this.IDX_RAT11.TabIndex = 79;
+            // 
+            // IDX_RAT10
+            // 
+            this.IDX_RAT10.Location = new System.Drawing.Point(274, 207);
+            this.IDX_RAT10.Name = "IDX_RAT10";
+            this.IDX_RAT10.Size = new System.Drawing.Size(76, 20);
+            this.IDX_RAT10.TabIndex = 78;
+            // 
+            // IDX_RAT9
+            // 
+            this.IDX_RAT9.Location = new System.Drawing.Point(94, 207);
+            this.IDX_RAT9.Name = "IDX_RAT9";
+            this.IDX_RAT9.Size = new System.Drawing.Size(76, 20);
+            this.IDX_RAT9.TabIndex = 77;
+            // 
+            // IDX_RAT16
+            // 
+            this.IDX_RAT16.Location = new System.Drawing.Point(634, 252);
+            this.IDX_RAT16.Name = "IDX_RAT16";
+            this.IDX_RAT16.Size = new System.Drawing.Size(76, 20);
+            this.IDX_RAT16.TabIndex = 84;
+            // 
+            // IDX_RAT15
+            // 
+            this.IDX_RAT15.Location = new System.Drawing.Point(453, 252);
+            this.IDX_RAT15.Name = "IDX_RAT15";
+            this.IDX_RAT15.Size = new System.Drawing.Size(76, 20);
+            this.IDX_RAT15.TabIndex = 83;
+            // 
+            // IDX_RAT14
+            // 
+            this.IDX_RAT14.Location = new System.Drawing.Point(275, 249);
+            this.IDX_RAT14.Name = "IDX_RAT14";
+            this.IDX_RAT14.Size = new System.Drawing.Size(76, 20);
+            this.IDX_RAT14.TabIndex = 82;
+            // 
+            // IDX_RAT13
+            // 
+            this.IDX_RAT13.Location = new System.Drawing.Point(95, 249);
+            this.IDX_RAT13.Name = "IDX_RAT13";
+            this.IDX_RAT13.Size = new System.Drawing.Size(76, 20);
+            this.IDX_RAT13.TabIndex = 81;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(97, 108);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(70, 13);
+            this.label28.TabIndex = 85;
+            this.label28.Text = "Medication %";
+            this.label28.Click += new System.EventHandler(this.label28_Click);
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(97, 151);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(70, 13);
+            this.label29.TabIndex = 86;
+            this.label29.Text = "Medication %";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(97, 191);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(70, 13);
+            this.label30.TabIndex = 87;
+            this.label30.Text = "Medication %";
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(97, 233);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(70, 13);
+            this.label31.TabIndex = 88;
+            this.label31.Text = "Medication %";
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(277, 232);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(70, 13);
+            this.label32.TabIndex = 92;
+            this.label32.Text = "Medication %";
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(277, 190);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(70, 13);
+            this.label33.TabIndex = 91;
+            this.label33.Text = "Medication %";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(277, 150);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(70, 13);
+            this.label34.TabIndex = 90;
+            this.label34.Text = "Medication %";
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(277, 107);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(70, 13);
+            this.label35.TabIndex = 89;
+            this.label35.Text = "Medication %";
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(451, 232);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(70, 13);
+            this.label36.TabIndex = 96;
+            this.label36.Text = "Medication %";
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(451, 190);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(70, 13);
+            this.label37.TabIndex = 95;
+            this.label37.Text = "Medication %";
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(451, 150);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(70, 13);
+            this.label38.TabIndex = 94;
+            this.label38.Text = "Medication %";
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(451, 107);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(70, 13);
+            this.label39.TabIndex = 93;
+            this.label39.Text = "Medication %";
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(631, 233);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(70, 13);
+            this.label40.TabIndex = 100;
+            this.label40.Text = "Medication %";
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(631, 191);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(70, 13);
+            this.label41.TabIndex = 99;
+            this.label41.Text = "Medication %";
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(631, 151);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(70, 13);
+            this.label42.TabIndex = 98;
+            this.label42.Text = "Medication %";
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(631, 108);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(70, 13);
+            this.label43.TabIndex = 97;
+            this.label43.Text = "Medication %";
+            // 
             // FeederForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(762, 452);
+            this.Controls.Add(this.label40);
+            this.Controls.Add(this.label41);
+            this.Controls.Add(this.label42);
+            this.Controls.Add(this.label43);
+            this.Controls.Add(this.label36);
+            this.Controls.Add(this.label37);
+            this.Controls.Add(this.label38);
+            this.Controls.Add(this.label39);
+            this.Controls.Add(this.label32);
+            this.Controls.Add(this.label33);
+            this.Controls.Add(this.label34);
+            this.Controls.Add(this.label35);
+            this.Controls.Add(this.label31);
+            this.Controls.Add(this.label30);
+            this.Controls.Add(this.label29);
+            this.Controls.Add(this.label28);
+            this.Controls.Add(this.IDX_RAT16);
+            this.Controls.Add(this.IDX_RAT15);
+            this.Controls.Add(this.IDX_RAT14);
+            this.Controls.Add(this.IDX_RAT13);
+            this.Controls.Add(this.IDX_RAT12);
+            this.Controls.Add(this.IDX_RAT11);
+            this.Controls.Add(this.IDX_RAT10);
+            this.Controls.Add(this.IDX_RAT9);
+            this.Controls.Add(this.IDX_RAT8);
+            this.Controls.Add(this.IDX_RAT7);
+            this.Controls.Add(this.IDX_RAT6);
+            this.Controls.Add(this.IDX_RAT5);
+            this.Controls.Add(this.IDX_RAT4);
+            this.Controls.Add(this.IDX_RAT3);
+            this.Controls.Add(this.IDX_RAT2);
+            this.Controls.Add(this.IDX_RAT1);
             this.Controls.Add(this.label27);
             this.Controls.Add(this.label26);
             this.Controls.Add(this.IDC_PPG);
@@ -757,50 +887,34 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label17);
-            this.Controls.Add(this.IDX_RAT16);
-            this.Controls.Add(this.IDX_RAT15);
             this.Controls.Add(this.IDC_RAT16);
             this.Controls.Add(this.IDC_RAT15);
             this.Controls.Add(this.label18);
             this.Controls.Add(this.label19);
-            this.Controls.Add(this.IDX_RAT14);
-            this.Controls.Add(this.IDX_RAT13);
             this.Controls.Add(this.IDC_RAT14);
             this.Controls.Add(this.IDC_RAT13);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.label15);
-            this.Controls.Add(this.IDX_RAT12);
-            this.Controls.Add(this.IDX_RAT11);
             this.Controls.Add(this.IDC_RAT12);
             this.Controls.Add(this.IDC_RAT11);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label13);
-            this.Controls.Add(this.IDX_RAT10);
-            this.Controls.Add(this.IDX_RAT9);
             this.Controls.Add(this.IDC_RAT10);
             this.Controls.Add(this.IDC_RAT9);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label11);
-            this.Controls.Add(this.IDX_RAT8);
-            this.Controls.Add(this.IDX_RAT7);
             this.Controls.Add(this.IDC_RAT8);
             this.Controls.Add(this.IDC_RAT7);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.IDX_RAT6);
-            this.Controls.Add(this.IDX_RAT5);
             this.Controls.Add(this.IDC_RAT6);
             this.Controls.Add(this.IDC_RAT5);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.IDX_RAT4);
-            this.Controls.Add(this.IDX_RAT3);
             this.Controls.Add(this.IDC_RAT4);
             this.Controls.Add(this.IDC_RAT3);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.IDX_RAT2);
-            this.Controls.Add(this.IDX_RAT1);
             this.Controls.Add(this.IDC_RAT2);
             this.Controls.Add(this.IDC_RAT1);
             this.Controls.Add(this.label3);
@@ -826,50 +940,34 @@
         private System.Windows.Forms.TextBox IDC_DINNER;
         private System.Windows.Forms.TextBox IDC_RAT1;
         private System.Windows.Forms.TextBox IDC_RAT2;
-        private System.Windows.Forms.CheckBox IDX_RAT1;
-        private System.Windows.Forms.CheckBox IDX_RAT2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.CheckBox IDX_RAT4;
-        private System.Windows.Forms.CheckBox IDX_RAT3;
         private System.Windows.Forms.TextBox IDC_RAT4;
         private System.Windows.Forms.TextBox IDC_RAT3;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.CheckBox IDX_RAT6;
-        private System.Windows.Forms.CheckBox IDX_RAT5;
         private System.Windows.Forms.TextBox IDC_RAT6;
         private System.Windows.Forms.TextBox IDC_RAT5;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.CheckBox IDX_RAT8;
-        private System.Windows.Forms.CheckBox IDX_RAT7;
         private System.Windows.Forms.TextBox IDC_RAT8;
         private System.Windows.Forms.TextBox IDC_RAT7;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.CheckBox IDX_RAT10;
-        private System.Windows.Forms.CheckBox IDX_RAT9;
         private System.Windows.Forms.TextBox IDC_RAT10;
         private System.Windows.Forms.TextBox IDC_RAT9;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.CheckBox IDX_RAT12;
-        private System.Windows.Forms.CheckBox IDX_RAT11;
         private System.Windows.Forms.TextBox IDC_RAT12;
         private System.Windows.Forms.TextBox IDC_RAT11;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.CheckBox IDX_RAT16;
-        private System.Windows.Forms.CheckBox IDX_RAT15;
         private System.Windows.Forms.TextBox IDC_RAT16;
         private System.Windows.Forms.TextBox IDC_RAT15;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.CheckBox IDX_RAT14;
-        private System.Windows.Forms.CheckBox IDX_RAT13;
         private System.Windows.Forms.TextBox IDC_RAT14;
         private System.Windows.Forms.TextBox IDC_RAT13;
         private System.Windows.Forms.Button button1;
@@ -887,5 +985,37 @@
         private System.Windows.Forms.TextBox IDC_PPG;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.TextBox IDX_RAT1;
+        private System.Windows.Forms.TextBox IDX_RAT2;
+        private System.Windows.Forms.TextBox IDX_RAT3;
+        private System.Windows.Forms.TextBox IDX_RAT4;
+        private System.Windows.Forms.TextBox IDX_RAT8;
+        private System.Windows.Forms.TextBox IDX_RAT7;
+        private System.Windows.Forms.TextBox IDX_RAT6;
+        private System.Windows.Forms.TextBox IDX_RAT5;
+        private System.Windows.Forms.TextBox IDX_RAT12;
+        private System.Windows.Forms.TextBox IDX_RAT11;
+        private System.Windows.Forms.TextBox IDX_RAT10;
+        private System.Windows.Forms.TextBox IDX_RAT9;
+        private System.Windows.Forms.TextBox IDX_RAT16;
+        private System.Windows.Forms.TextBox IDX_RAT15;
+        private System.Windows.Forms.TextBox IDX_RAT14;
+        private System.Windows.Forms.TextBox IDX_RAT13;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.Label label43;
     }
 }
