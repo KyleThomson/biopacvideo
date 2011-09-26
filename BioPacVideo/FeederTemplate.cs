@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 
 namespace BioPacVideo
 {
@@ -21,7 +22,8 @@ namespace BioPacVideo
         public bool CommandReady; //Set once all commands queued.
         public int gap = 0;
         public RatTemplate[] Rats;
-
+        public StreamWriter log;
+        private string LogFileName;
 
         public static FeederTemplate Instance        
         {
@@ -38,6 +40,7 @@ namespace BioPacVideo
             State = 3;
             StateText = "READY";
             Rats = RatTemplate.NewInitArray(16);
+            LogFileName = "";
         }
         public byte GetTopCommand()
         {
@@ -45,6 +48,26 @@ namespace BioPacVideo
             byte v = Commands.Dequeue();
             if (v == 255) { CommandReady = false; }
             return v;
+        }
+        public void SetLogName(string FName)
+        {
+            LogFileName = FName;
+        }
+        private void Log(string Command)
+        {
+            if (LogFileName == "") { return; }
+            if (!File.Exists(LogFileName))
+            {
+                log = new StreamWriter(LogFileName);
+            }
+            else
+            {
+                log = File.AppendText(LogFileName);
+            }
+
+            // Write to the file:
+            log.WriteLine(DateTime.Now.ToString() + "  " + Command);
+            log.Close();
         }
         public void AddCommand(int Feeder, int Pellets)
         {
@@ -61,10 +84,11 @@ namespace BioPacVideo
         public void GoMeal()
         {
             int MealSize;
-            string s = "";
+            int Feeder;
+            string Medi; 
             int a, b, tmp;
             Random random = new Random();
-            DateTime Start = DateTime.Now;
+            DateTime Start = DateTime.Now;            
             int[] RatVec = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
             for (int j = 0; j < 1000; j++)
             {
@@ -79,13 +103,29 @@ namespace BioPacVideo
                 if (Rats[RatVec[RC]].Weight > 0)
                 {
                     MealSize = (int)Math.Ceiling(Rats[RatVec[RC]].Weight / 15);
+                    Feeder = RatVec[RC] * 2;
+                    if (random.Next(1, 100) > Rats[RatVec[RC]].Medication)
+                    {
+                        Feeder = Feeder + 1;
+                        Medi = "Unmedicated";
+                    }
+                    else
+                    {
+                        Medi = "Medicated";
+                    }
+                    
+                    while (MealSize > 30)
+                    {
+                        AddCommand(RatVec[RC], 30);
+                        Log("Feeder: " + RatVec[RC] + "  Pellets: 30 " + Medi);
+                        MealSize -= 30;
+                    }
                     AddCommand(RatVec[RC], MealSize);
-                    s = s + RatVec[RC].ToString() + " - " + MealSize.ToString() + Environment.NewLine;
+                    Log("Feeder: " + RatVec[RC].ToString() + "  Pellets: " + MealSize.ToString() + " " + Medi);                    
                 }
 
             }
-            Execute();
-            MessageBox.Show(s);           
+            Execute();            
         }
 
     }

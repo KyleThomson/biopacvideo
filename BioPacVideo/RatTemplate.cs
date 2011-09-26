@@ -11,14 +11,14 @@ namespace BioPacVideo
         public DateTime FirstSeizure;
         public DateTime Injection;
         public DateTime Surgery;
-        public bool Medication;
+        public int Medication;
         public RatTemplate()
         {
             Weight = new double();
             FirstSeizure = new DateTime();
             Injection = new DateTime();
             Surgery = new DateTime();
-            Medication = new bool();
+            Medication = new int();
         }
         static public RatTemplate[] NewInitArray(ulong num)
         {

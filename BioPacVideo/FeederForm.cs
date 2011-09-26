@@ -48,7 +48,7 @@ namespace BioPacVideo
                 if (AllRats[i].Weight > 0)
                 {
                     TempBox.Text = string.Format("{0:0.0}", AllRats[i].Weight);
-                    TempCheck.Checked = AllRats[i].Medication;
+                    TempCheck.Text = AllRats[i].Medication.ToString();
                                            
                     if (TempCheck.Checked)
                         TempCheck.Text = "Medicated";
@@ -71,12 +71,13 @@ namespace BioPacVideo
             if (!Startup)
             {
                 TextBox TempBox;
-                CheckBox TempCheck;
+                TextBox TempCheck;
                 Double Weight;
+                int Percent;
                 for (int i = 0; i < 16; i++)
                 {
                     TempBox = WeightBoxes[i] as TextBox;
-                    TempCheck = MedicatedBoxes[i] as CheckBox;
+                    TempCheck = MedicatedBoxes[i] as TextBox;
                     if (Double.TryParse(TempBox.Text, out Weight))
                     {
                         AllRats[i].Weight = Weight;
@@ -84,12 +85,12 @@ namespace BioPacVideo
                     if (AllRats[i].Weight > 0)
                     {
                         TempCheck.Enabled = true;
-                        AllRats[i].Medication = TempCheck.Checked;
+                        if (int.TryParse(TempBox.Text, out Percent))
+                        {
+                            AllRats[i].Medication = Percent;
+                        }
                         TempBox.Text = string.Format("{0:0.0}", AllRats[i].Weight);
-                        if (TempCheck.Checked)
-                            TempCheck.Text = "Medicated";
-                        else
-                            TempCheck.Text = "Unmedicated";
+                        
                     }
                     else
                     {
@@ -251,68 +252,68 @@ namespace BioPacVideo
             MedicatedBoxes.Add(IDX_RAT15);
             MedicatedBoxes.Add(IDX_RAT16);
         }
-        private void IDX_RAT1_CheckedChanged(object sender, EventArgs e)
+        private void IDX_RAT1_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
-        private void IDX_RAT2_CheckedChanged(object sender, EventArgs e)
+        private void IDX_RAT2_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
-        private void IDX_RAT3_CheckedChanged(object sender, EventArgs e)
+        private void IDX_RAT3_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
-        private void IDX_RAT4_CheckedChanged(object sender, EventArgs e)
+        private void IDX_RAT4_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
-        private void IDX_RAT5_CheckedChanged(object sender, EventArgs e)
+        private void IDX_RAT5_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
-        private void IDX_RAT6_CheckedChanged(object sender, EventArgs e)
+        private void IDX_RAT6_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
 
-        private void IDX_RAT7_CheckedChanged(object sender, EventArgs e)
+        private void IDX_RAT7_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
-        private void IDX_RAT8_CheckedChanged(object sender, EventArgs e)
+        private void IDX_RAT8_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
-        private void IDX_RAT10_CheckedChanged(object sender, EventArgs e)
+        private void IDX_RAT10_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
-        private void IDX_RAT11_CheckedChanged(object sender, EventArgs e)
+        private void IDX_RAT11_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
-        private void IDX_RAT12_CheckedChanged(object sender, EventArgs e)
+        private void IDX_RAT12_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
-        private void IDX_RAT9_CheckedChanged(object sender, EventArgs e)
+        private void IDX_RAT9_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
-        private void IDX_RAT13_CheckedChanged(object sender, EventArgs e)
+        private void IDX_RAT13_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
-        private void IDX_RAT14_CheckedChanged(object sender, EventArgs e)
+        private void IDX_RAT14_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
-        private void IDX_RAT15_CheckedChanged(object sender, EventArgs e)
+        private void IDX_RAT15_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
-        private void IDX_RAT16_CheckedChanged(object sender, EventArgs e)
+        private void IDX_RAT16_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
@@ -383,6 +384,11 @@ namespace BioPacVideo
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void label28_Click(object sender, EventArgs e)
+        {
+
         } 
     }
 }
