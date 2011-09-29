@@ -27,6 +27,7 @@ namespace BioPacVideo
         public int FileStart;
         public int Quant;
         public int KeyFrames;
+        public bool EncoderStarted = false;
         public int[] Contrast;
         public int[] Brightness;
         public int[] Hue;       
@@ -89,6 +90,7 @@ namespace BioPacVideo
         {
             VideoWrapper.initEncoderSDK();
             VideoWrapper.StartEncoderSDK();
+            EncoderStarted = true;
         }      
              
         public Bitmap GetSnap()
