@@ -303,7 +303,8 @@ namespace BioPacVideo
                 if (!MP.IsFileWriting)
                 {
                     //Start Recording   
-                    Video.initEncoder();                                    
+                    if (!Video.EncoderStarted)
+                        Video.initEncoder();                                    
                     //Set up recording name based on date and time
                     DateString = string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", DateTime.Now);
                     RecordingDir = MP.RecordingDirectory + "\\" + DateString;
@@ -319,7 +320,7 @@ namespace BioPacVideo
                     Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
                     Video.FileStart = Video.FileStart+1;
                     Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString, Video.FileStart);
-                    Video.LoadSettings();                                                            
+                  //  Video.LoadSettings();                                                            
                     IDT_VIDEOSTATUS.Text = Video.GetResText();  
 
                     

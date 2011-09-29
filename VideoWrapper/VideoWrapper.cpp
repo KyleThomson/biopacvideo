@@ -325,16 +325,17 @@ int StartEncoding()
 		}
 		Present[i] = ptemp;
 	}	
-
+	pDVPEncSDK->AdvDVP_SetStreamReadCB(&StreamRead);		
 	for (int i = 0; i < 16; i++)
 	{
-		pDVPEncSDK->AdvDVP_SetStreamReadCB(&StreamRead);		
+	
 		LastEncRes = pDVPEncSDK->AdvDVP_StartVideoEncode(i);
 		if (LastEncRes !=  SUCCEEDED) 
 		{
 			return LastEncRes;
 		}
 	}	
+		
 	return 1;
 }
 
