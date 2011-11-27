@@ -132,6 +132,9 @@ namespace BioPacVideo
                     Video.StopEncoding();
                     DateString = string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", DateTime.Now);
                     RecordingDir = MP.RecordingDirectory + "\\" + DateString;
+                    MP.StopRecording();
+                    Thread.Sleep(1000);
+                    MP.StartRecording();
                     Directory.CreateDirectory(RecordingDir);
                     MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
                     //Write INI file once, so we save all the settings                    
@@ -164,7 +167,7 @@ namespace BioPacVideo
                     //YOU ARE A DINRAR
                 }
                 Thread.Sleep(10000);
-                //If 5 PM, 11 PM, or 5 AM, feed.
+                //If it is feed time,
             }
       }
 

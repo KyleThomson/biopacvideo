@@ -86,10 +86,10 @@ namespace BioPacVideo
             int MealSize;
             int Feeder;
             string Medi; 
-            int a, b, tmp;
+            //int a, b, tmp;
             Random random = new Random();
             DateTime Start = DateTime.Now;            
-            int[] RatVec = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+            /*int[] RatVec = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
             for (int j = 0; j < 1000; j++)
             {
                 a = random.Next(0, 15);
@@ -97,14 +97,14 @@ namespace BioPacVideo
                 tmp = RatVec[a];
                 RatVec[a] = RatVec[b];
                 RatVec[b] = tmp;
-            }
+            }*/
             for (int RC = 0; RC < 16; RC++)
             {
-                if (Rats[RatVec[RC]].Weight > 0)
+                if (Rats[RC].Weight > 0)
                 {
-                    MealSize = (int)Math.Ceiling(Rats[RatVec[RC]].Weight / 15);
-                    Feeder = RatVec[RC] * 2;
-                    if (random.Next(1, 100) > Rats[RatVec[RC]].Medication)
+                    MealSize = (int)Math.Ceiling(Rats[RC].Weight*0.02);
+                    Feeder = RC * 2;
+                    if (random.Next(1, 100) > Rats[RC].Medication)
                     {
                         Feeder = Feeder + 1;
                         Medi = "Unmedicated";
@@ -116,12 +116,12 @@ namespace BioPacVideo
                     
                     while (MealSize > 30)
                     {
-                        AddCommand(RatVec[RC], 30);
-                        Log("Feeder: " + RatVec[RC] + "  Pellets: 30 " + Medi);
+                        AddCommand(Feeder, 30);
+                        Log("Feeder: " + Feeder + "  Pellets: 30 " + Medi);
                         MealSize -= 30;
                     }
-                    AddCommand(RatVec[RC], MealSize);
-                    Log("Feeder: " + RatVec[RC].ToString() + "  Pellets: " + MealSize.ToString() + " " + Medi);                    
+                    AddCommand(Feeder, MealSize);
+                    Log("Feeder: " + Feeder.ToString() + "  Pellets: " + MealSize.ToString() + " " + Medi);                    
                 }
 
             }

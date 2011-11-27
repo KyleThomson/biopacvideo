@@ -31,7 +31,7 @@ namespace BioPacVideo
             MedicatedBoxes = new ArrayList();
             MakeArrays();    
             TextBox TempBox;
-            CheckBox TempCheck;
+            TextBox TempCheck;
             if (Feeder.Breakfast != TimeSpan.MaxValue)
                 IDC_BREAKFAST.Text = Feeder.Breakfast.ToString();
             if (Feeder.Lunch != TimeSpan.MaxValue)
@@ -43,22 +43,18 @@ namespace BioPacVideo
             for (int i = 0; i < 16; i++)
             {      
                 TempBox = WeightBoxes[i] as TextBox;
-                TempCheck = MedicatedBoxes[i] as CheckBox;
+                TempCheck = MedicatedBoxes[i] as TextBox;
                 IDC_RATLIST.Items.Add(String.Format("Rat{0}", i + 1));
                 if (AllRats[i].Weight > 0)
                 {
                     TempBox.Text = string.Format("{0:0.0}", AllRats[i].Weight);
                     TempCheck.Text = AllRats[i].Medication.ToString();
-                                           
-                    if (TempCheck.Checked)
-                        TempCheck.Text = "Medicated";
-                    else
-                        TempCheck.Text = "Unmedicated";
+                                                               
                 }
                 else
                 {
                     TempBox.Text = "";
-                    TempCheck.Enabled = false;
+                    //TempCheck.Enabled = false;
                 }                
             }
             Startup = false;
@@ -85,7 +81,7 @@ namespace BioPacVideo
                     if (AllRats[i].Weight > 0)
                     {
                         TempCheck.Enabled = true;
-                        if (int.TryParse(TempBox.Text, out Percent))
+                        if (int.TryParse(TempCheck.Text, out Percent))
                         {
                             AllRats[i].Medication = Percent;
                         }
