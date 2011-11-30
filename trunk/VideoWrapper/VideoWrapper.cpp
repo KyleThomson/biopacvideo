@@ -475,16 +475,22 @@ int StopEncoding(void)
 	{
 		nFileIndex[i] = 0;
 	}
+	for (int i=0; i<16; i++)
+	{			
+		pDVPEncSDK->AdvDVP_CloseEncoder(i);
+	}
+	for (int i = 0; i < nDevCount*MAXMUXS; i++)
+	{
+		LastEncRes = pDVPEncSDK->AdvDVP_InitEncoder(i, ENC_BUF_SIZE);
+		if (LastEncRes != 1)
+			return LastEncRes;
+	}
 	return 1;
 }
 
 int  CloseRecording(void)
 {
-		
-		for (int i=0; i<16; i++)
-		{			
-				pDVPEncSDK->AdvDVP_CloseEncoder(i);
-		}
+				
 		for (int i=0; i<nDevCount; i++)
 		{
 			if (pDVPSDK->AdvDVP_GetCapState(i) == RUNNING)
