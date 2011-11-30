@@ -133,7 +133,9 @@ namespace BioPacVideo
                     DateString = string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", DateTime.Now);
                     RecordingDir = MP.RecordingDirectory + "\\" + DateString;
                     MP.StopRecording();
+                    MP.Disconnect();
                     Thread.Sleep(1000);
+                    MP.Connect();
                     MP.StartRecording();
                     Directory.CreateDirectory(RecordingDir);
                     MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
@@ -267,7 +269,7 @@ namespace BioPacVideo
             while (RunDisplayThread)
             {
                 MP._DisplayHandle.WaitOne();
-                IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
+                IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];                
                 if (Still != null)                    
                     g.DrawImage(MP.offscreen, 30, 280);
                 Cm = 0;
