@@ -21,7 +21,8 @@ namespace SeizurePlayback
         public MainForm()
         {
             InitializeComponent();
-            ACQ = new ACQReader();                        
+            ACQ = new ACQReader();
+            ACQ.initDisplay(EEGPanel.Size.Width, EEGPanel.Size.Height);           
             string[] args = new string[] {""
                 //,"--vout-filter=deinterlace", "--deinterlace-mode=blend"
             };
@@ -106,83 +107,8 @@ namespace SeizurePlayback
         
 
 
-        private void TimeBar_Scroll(object sender, EventArgs e)
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                if (player[i] != null)
-                {
-                    player[i].seek(TimeBar.Value);
-                }
-            }
-        }
-        private void drawbuffer()
-        {
-            PointF[][] WaveC;
-            while (true)
-            {
-                _DrawHandle.WaitOne();
-                if (ClearDisplay)
-                {
-                    lock (g)
-                        g.Clear(Color.White);
-                    CurPointPos = 0;
-                    ClearDisplay = false;
-                }
-                int SamplesLeft;
-                if (samplesize + CurPointPos > MaxDrawSize)
-                {
-                    SamplesLeft = (samplesize + CurPointPos - MaxDrawSize);
-                    g.Clear(Color.White);
-                    CurPointPos = 0;
-                }
-                else
-                {
-                    SamplesLeft = samplesize;
-                }
-                WaveC = new PointF[AcqChan][];
-                for (int i = 0; i < AcqChan; i++)
-                {
-                    WaveC[i] = new PointF[SamplesLeft];
-                }
-                int SamplePos = 0;
-                for (int i = 0; i < last_received; i++)
-                {
-
-                    if (SamplesLeft < samplesize)
-                    {
-                        if (i / AcqChan >= samplesize - SamplesLeft)
-                        {
-                            PointF TempPoint = new PointF(CurPointPos * PointSpacing, VoltageSpacing * ((i % AcqChan) + (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax / (AcqChan)));
-                            WaveC[i % AcqChan][SamplePos] = TempPoint;
-                            if (i % AcqChan == AcqChan - 1)
-                            {
-                                SamplePos++;
-                                CurPointPos++;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        PointF TempPoint = new PointF(CurPointPos * PointSpacing, VoltageSpacing * ((i % AcqChan) + (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax / (AcqChan)));
-                        WaveC[i % AcqChan][SamplePos] = TempPoint;
-                        if (i % AcqChan == AcqChan - 1)
-                        {
-                            SamplePos++;
-                            CurPointPos++;
-                        }
-                    }
-                }
-                if (SamplePos > 2)
-                {
-                    lock (g)
-                        for (int i = 0; i < AcqChan; i++)
-                            g.DrawLines(wavePen, WaveC[i]);
-                    _DisplayHandle.Set();
-
-                }
-            }
-        }
+        
+ 
 
         private void test_Click(object sender, EventArgs e)
         {

@@ -18,13 +18,20 @@ namespace SeizurePlayback
         private int ChanLenHeader;
         private int ForeignHeader;
         private int DataStart;
+        private int MaxDrawSize;
+        private float PointSpacing;
+        private int DisplayLength;
         private int SampleSize;
+        private int VoltageSpacing;
+        private int Ymax;
+        public Bitmap offscreen;
         
         Graphics g;
         public ACQReader()
         {
             Chans = new int();            
             SampleRate = 1000;
+            DisplayLength = 30;
         }
 
         void openACQ()
@@ -58,16 +65,19 @@ namespace SeizurePlayback
             {
                 data[i%Chans][i/Chans] = FID.ReadInt16();
             }
-        }        
+        }   
+        public void initDisplay(int X, int Y)
+        {
+            offscreen = new Bitmap(X,Y);
+            MaxDrawSize = SampleRate * DisplayLength;
+            PointSpacing = Convert.ToSingle(X / MaxDrawSize);
+            Ymax = Y;
+            VoltageSpacing = (int)(Ymax / (AcqChan + 1));
+        }
         private void drawbuffer()
         {
-            PointF[][] WaveC;
-            while (true)
-            {
-               
-                    g.Clear(Color.White);
-                
-                
+            PointF[][] WaveC;                           
+             g.Clear(Color.White);
                 WaveC = new PointF[Chans][];
                 for (int i = 0; i < Chans; i++)
                 {
@@ -79,13 +89,10 @@ namespace SeizurePlayback
                     for (int i = 0; i < SampleSize; i++)
                     {
                    
-                        PointF TempPoint = new PointF(i * PointSpacing, VoltageSpacing * ((i % Chans) + (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(data[j][i]), Ymax / (AcqChan)));
+                        PointF TempPoint = new PointF(i * PointSpacing, VoltageSpacing * ((i % Chans) + (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(data[j][i]), Ymax / (Chans)));
                         WaveC[j][i] = TempPoint;                        
-                    }
-                }                
-                
-                g.DrawLines(wavePen, WaveC[j]);                 
-                    
+                    }                                
+                    g.DrawLines(wavePen, WaveC[j]);                                     
                 }
             }
 
