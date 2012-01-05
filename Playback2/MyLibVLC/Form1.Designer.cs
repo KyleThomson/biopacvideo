@@ -38,6 +38,7 @@ namespace SeizurePlayback
             this.test = new System.Windows.Forms.Button();
             this.Rewind = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.TimeLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             this.SuspendLayout();
             // 
@@ -138,12 +139,24 @@ namespace SeizurePlayback
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // TimeLabel
+            // 
+            this.TimeLabel.AutoSize = true;
+            this.TimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TimeLabel.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.TimeLabel.Location = new System.Drawing.Point(12, 6);
+            this.TimeLabel.Name = "TimeLabel";
+            this.TimeLabel.Size = new System.Drawing.Size(53, 24);
+            this.TimeLabel.TabIndex = 17;
+            this.TimeLabel.Text = "Time";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1194, 775);
+            this.Controls.Add(this.TimeLabel);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.Rewind);
             this.Controls.Add(this.test);
@@ -179,6 +192,7 @@ namespace SeizurePlayback
         private System.Windows.Forms.Button test;
         private System.Windows.Forms.Button Rewind;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label TimeLabel;
     }
 }
 
