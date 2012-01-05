@@ -103,7 +103,10 @@ namespace SeizurePlayback
         {
             LibVlc.libvlc_media_player_set_time(Handle, time);
         }
-
+        public long getpos()
+        {
+            return LibVlc.libvlc_media_player_get_time(Handle);
+        }
         public void EncSeizureFromNow(int length)
         {
             int frame; 

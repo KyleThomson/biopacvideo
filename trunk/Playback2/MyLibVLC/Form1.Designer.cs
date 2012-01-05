@@ -36,12 +36,13 @@ namespace SeizurePlayback
             this.Pause = new System.Windows.Forms.Button();
             this.TimeBar = new System.Windows.Forms.TrackBar();
             this.test = new System.Windows.Forms.Button();
+            this.Rewind = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             this.SuspendLayout();
             // 
             // Play
             // 
-            this.Play.Enabled = false;
             this.Play.ForeColor = System.Drawing.SystemColors.Control;
             this.Play.Location = new System.Drawing.Point(338, 552);
             this.Play.Name = "Play";
@@ -53,7 +54,6 @@ namespace SeizurePlayback
             // 
             // Stop
             // 
-            this.Stop.Enabled = false;
             this.Stop.ForeColor = System.Drawing.SystemColors.Control;
             this.Stop.Location = new System.Drawing.Point(338, 610);
             this.Stop.Name = "Stop";
@@ -87,7 +87,6 @@ namespace SeizurePlayback
             // 
             // Pause
             // 
-            this.Pause.Enabled = false;
             this.Pause.ForeColor = System.Drawing.SystemColors.Control;
             this.Pause.Location = new System.Drawing.Point(338, 581);
             this.Pause.Name = "Pause";
@@ -117,12 +116,36 @@ namespace SeizurePlayback
             this.test.UseVisualStyleBackColor = true;
             this.test.Click += new System.EventHandler(this.test_Click);
             // 
+            // Rewind
+            // 
+            this.Rewind.ForeColor = System.Drawing.SystemColors.Control;
+            this.Rewind.Location = new System.Drawing.Point(419, 581);
+            this.Rewind.Name = "Rewind";
+            this.Rewind.Size = new System.Drawing.Size(75, 23);
+            this.Rewind.TabIndex = 15;
+            this.Rewind.Text = "Rewind 60s";
+            this.Rewind.UseVisualStyleBackColor = true;
+            this.Rewind.Click += new System.EventHandler(this.Rewind_Click);
+            // 
+            // button1
+            // 
+            this.button1.ForeColor = System.Drawing.SystemColors.Control;
+            this.button1.Location = new System.Drawing.Point(419, 552);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 16;
+            this.button1.Text = "Speed Up";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1194, 775);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.Rewind);
             this.Controls.Add(this.test);
             this.Controls.Add(this.TimeBar);
             this.Controls.Add(this.Pause);
@@ -154,6 +177,8 @@ namespace SeizurePlayback
         private System.Windows.Forms.Button Pause;
         private System.Windows.Forms.TrackBar TimeBar;
         private System.Windows.Forms.Button test;
+        private System.Windows.Forms.Button Rewind;
+        private System.Windows.Forms.Button button1;
     }
 }
 
