@@ -60,12 +60,12 @@ namespace BioPacVideo
             this.IDT_VIDEORESULT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_DEVICECOUNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_ENCODERSTATUS = new System.Windows.Forms.ToolStripStatusLabel();
+            this.IDT_ENCSTAT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_FEEDST = new System.Windows.Forms.ToolStripStatusLabel();
             this.VoltScale = new System.Windows.Forms.ComboBox();
             this.TimeScale = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.IDT_ENCSTAT = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -358,6 +358,17 @@ namespace BioPacVideo
             this.IDT_ENCODERSTATUS.Size = new System.Drawing.Size(140, 21);
             this.IDT_ENCODERSTATUS.Text = "ENCODER STATUS";
             // 
+            // IDT_ENCSTAT
+            // 
+            this.IDT_ENCSTAT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.IDT_ENCSTAT.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.IDT_ENCSTAT.Name = "IDT_ENCSTAT";
+            this.IDT_ENCSTAT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
+            this.IDT_ENCSTAT.Size = new System.Drawing.Size(139, 21);
+            this.IDT_ENCSTAT.Text = "ENCODER RESULT";
+            // 
             // IDT_FEEDST
             // 
             this.IDT_FEEDST.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
@@ -404,17 +415,6 @@ namespace BioPacVideo
             this.label3.Size = new System.Drawing.Size(55, 13);
             this.label3.TabIndex = 8;
             this.label3.Text = "Volt Scale";
-            // 
-            // IDT_ENCSTAT
-            // 
-            this.IDT_ENCSTAT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.IDT_ENCSTAT.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-            this.IDT_ENCSTAT.Name = "IDT_ENCSTAT";
-            this.IDT_ENCSTAT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_ENCSTAT.Size = new System.Drawing.Size(139, 21);
-            this.IDT_ENCSTAT.Text = "ENCODER RESULT";
             // 
             // MainForm
             // 

@@ -86,6 +86,7 @@ namespace BioPacVideo
             CurPointPos = 0;
             FeederTest = new bool[8];
             DigitalChannel = new bool[16];
+            wavePen = new Pen(Color.Black);
             for (int i = 0; i < 16; i++)
             {
                 DigitalChannel[i] = false;

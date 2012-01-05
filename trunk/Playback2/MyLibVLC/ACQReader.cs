@@ -18,6 +18,7 @@ namespace SeizurePlayback
         private int ExtLenHeader;
         private int ChanLenHeader;
         private int ForeignHeader;
+        public int FileTime;
         public int Position;
         private int DataStart;
         private int MaxDrawSize;
@@ -54,9 +55,11 @@ namespace SeizurePlayback
             Chans = (int)FID.ReadInt16();                      
             FILE.Seek(ExtLenHeader, SeekOrigin.Begin);
             ChanLenHeader =FID.ReadInt32();
-            FILE.Seek(ExtLenHeader + (ChanLenHeader*Chans), SeekOrigin.Begin);
+            FILE.Seek(ExtLenHeader + (ChanLenHeader*Chans), SeekOrigin.Begin);            
             ForeignHeader = FID.ReadInt32();
             DataStart = ForeignHeader + 4 * Chans + (ChanLenHeader *Chans) + ExtLenHeader;
+            FileTime = (int)((FILE.Length - (long)DataStart) / (2 * Chans * SampleRate));
+            
             Position = 0;
             Loaded = true;
             VoltageSpacing = (int)(Ymax / (Chans+.5));
