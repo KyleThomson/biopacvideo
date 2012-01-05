@@ -105,6 +105,7 @@ namespace SeizurePlayback
             this.TimeBar.Name = "TimeBar";
             this.TimeBar.Size = new System.Drawing.Size(646, 42);
             this.TimeBar.TabIndex = 13;
+            this.TimeBar.Scroll += new System.EventHandler(this.TimeBar_Scroll);
             // 
             // test
             // 

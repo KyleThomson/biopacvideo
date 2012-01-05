@@ -86,8 +86,8 @@ namespace SeizurePlayback
                             ACQ.drawbuffer();
                         g.DrawImage(ACQ.offscreen, 10, 20);
                         g.DrawLine(new Pen(Color.Red, 3), new Point(10+(1180 *Step) / 30, 20), new Point(10+(1180 * Step)/30, 520));
-                        ACQ.Position += 5;
-                        Step +=5;                        
+                        ACQ.Position += 10;
+                        Step +=10;                        
                     }
                     else
                     {
@@ -180,7 +180,9 @@ namespace SeizurePlayback
             AVIFiles = Directory.GetFiles(Path, "*.avi");            
             ACQ.openACQ(FName[0]);
             AVILengths = new long[AVIFiles.Length];
-            BaseName = AVIFiles[0].Substring(Path.Length+1,15);          
+            BaseName = AVIFiles[0].Substring(Path.Length+1,15);
+            TimeBar.Minimum = 0;
+            TimeBar.Maximum = ACQ.FileTime;
         }
 
         
@@ -260,7 +262,13 @@ namespace SeizurePlayback
             ACQ.Position -= 60;
             if (player.IsPlaying)
                 player.seek(player.getpos() - 60 * 1000);
-            Step = 30;
+            Step = 99;
+        }
+
+        private void TimeBar_Scroll(object sender, EventArgs e)
+        {
+            ACQ.Position = TimeBar.Value;
+            Redraw = true;
         }
     }
 }
