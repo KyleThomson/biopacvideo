@@ -45,15 +45,29 @@ namespace SeizurePlayback
             ThreadDisplay.Start();
             
         }
+ 
         private void DisplayThread()
         {
           
            int Delay = 0;
+           // int h,m,s;
            Stopwatch st = new Stopwatch();
             while (true)
             {
                 if (ACQ.Loaded)
                 {
+                    
+                    //TimeLabel.Text = string.Format("{0:00}:{0:00}:{0:00}", h, m, s);
+                    if (TimeLabel.InvokeRequired)
+                    {
+                        TimeLabel.Invoke(new MethodInvoker(delegate {
+                            int h, m, s;
+                            h = ACQ.Position / 3600;
+                            m = (ACQ.Position - (h * 3600)) / 60;
+                            s = ACQ.Position - h * 3600 - m * 60;
+                            TimeLabel.Text = string.Format("{0:00}:", h) + string.Format("{0:00}:", m) + string.Format("{0:00}", s);
+                        }));
+                    }
 
                     if (!RealTime)
                     {
@@ -66,7 +80,7 @@ namespace SeizurePlayback
                         }
                         else
                         {
-                            Thread.Sleep(100);
+                            Thread.Sleep(50);
                         }
                         if (Redraw)
                             ACQ.drawbuffer();
