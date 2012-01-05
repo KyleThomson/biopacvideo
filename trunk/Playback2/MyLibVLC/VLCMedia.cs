@@ -99,9 +99,9 @@ namespace SeizurePlayback
             if (ret == -1)
                 throw new VlcException();
         }
-        public void seek(int time)
+        public void seek(long time)
         {
-            LibVlc.libvlc_media_player_set_time(Handle, time * 1000);
+            LibVlc.libvlc_media_player_set_time(Handle, time);
         }
 
         public void EncSeizureFromNow(int length)

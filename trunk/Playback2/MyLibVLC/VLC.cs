@@ -22,6 +22,10 @@ namespace SeizurePlayback
         public static extern IntPtr libvlc_media_new_location(IntPtr p_instance,
           [MarshalAs(UnmanagedType.LPStr)] string psz_mrl);
 
+
+        [DllImport("libvlc")]
+        public static extern Int64 libvlc_media_get_duration(IntPtr p_meta_desc);
+
         [DllImport("libvlc")]
         public static extern void libvlc_media_release(IntPtr p_meta_desc);
 
@@ -129,6 +133,10 @@ namespace SeizurePlayback
         public void Dispose()
         {
             LibVlc.libvlc_media_release(Handle);
+        }
+        public Int64 GetDuration()
+        {
+            return (LibVlc.libvlc_media_get_duration(Handle));
         }
     }
 
