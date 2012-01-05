@@ -20,12 +20,14 @@ namespace SeizurePlayback
         string[] AVIFiles;
         int[] AVINums;
         bool RealTime;
+        bool Redraw;
         long[] AVILengths;
         Thread ThreadDisplay;
         VlcMedia media;
         string Path;
         string BaseName;            
         Graphics g;
+        int Step = 30;
         float[] Rates = { 0.25F, 0.5F, 1, 2, 5, 10, 20, 30, 50, 100 };
         public MainForm()
         {
@@ -45,7 +47,7 @@ namespace SeizurePlayback
         }
         private void DisplayThread()
         {
-           int Step = 30;
+          
            int Delay = 0;
            Stopwatch st = new Stopwatch();
             while (true)
@@ -55,20 +57,19 @@ namespace SeizurePlayback
 
                     if (!RealTime)
                     {
-                        if (Step == 30)
+                        if (Step >= 30)
                         {
-                            st.Start();
-                            ACQ.ReadData(ACQ.Position, 30);
-                            ACQ.drawbuffer();
+                         
+                            ACQ.ReadData(ACQ.Position, 30);                         
                             Step = 0;
-                            st.Stop();
-                            Console.WriteLine("Elapsed " + st.Elapsed.TotalMilliseconds.ToString());
-                            st.Reset();
+                            Redraw = true;
                         }
                         else
                         {
                             Thread.Sleep(100);
                         }
+                        if (Redraw)
+                            ACQ.drawbuffer();
                         g.DrawImage(ACQ.offscreen, 10, 20);
                         g.DrawLine(new Pen(Color.Red, 3), new Point(10+(1180 *Step) / 30, 20), new Point(10+(1180 * Step)/30, 520));
                         ACQ.Position += 5;
@@ -77,16 +78,18 @@ namespace SeizurePlayback
                     else
                     {
                         st.Start();
-                        if (Step == 30)
+                        if (Step >= 30)
                         {
                          
                             ACQ.ReadData(ACQ.Position, 30);
-                            ACQ.drawbuffer();
+                            Redraw = true;
                             Step = 0;                                                        
                         }
                         else
                         {                            
                         }
+                        if (Redraw)
+                            ACQ.drawbuffer();
                         g.DrawImage(ACQ.offscreen, 10, 20);
                         g.DrawLine(new Pen(Color.Red, 3), new Point(10 + (1180 * Step) / 30, 20), new Point(10 + (1180 * Step) / 30, 520));
                         ACQ.Position += 1;
@@ -99,7 +102,7 @@ namespace SeizurePlayback
                         else
                         {
                             Thread.Sleep(1000 - ((int)st.ElapsedMilliseconds + Delay));                                
-                                Delay = 0;
+                            Delay = 0;
                         }
                         st.Reset();
                     }
@@ -155,7 +158,7 @@ namespace SeizurePlayback
             return player;
         }
         private void Open_Click(object sender, EventArgs e)
-        {
+        {   
             FBD = new FolderBrowserDialog();
             FBD.ShowDialog();
             Path = FBD.SelectedPath;
@@ -196,6 +199,7 @@ namespace SeizurePlayback
                     
                     ACQ.SelectedChan = (int)((float)ACQ.Chans * (float)(((float)e.Y - 30F) / 500F));
                     RealTime = true;
+                    Redraw = true;
                     long TimeSeek = ACQ.Position * 1000;
                     bool AVILoaded = false;
                     while (!AVILoaded) 
@@ -228,6 +232,21 @@ namespace SeizurePlayback
                                                     
                     }
                 }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ACQ.SelectedChan = -1;
+            RealTime = false;
+            
+        }
+
+        private void Rewind_Click(object sender, EventArgs e)
+        {
+            ACQ.Position -= 60;
+            if (player.IsPlaying)
+                player.seek(player.getpos() - 60 * 1000);
+            Step = 30;
         }
     }
 }
