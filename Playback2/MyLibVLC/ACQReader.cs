@@ -11,19 +11,24 @@ namespace SeizurePlayback
         public string FullName;
         public Int16[][] data;        
         public int Chans;
+        public int SelectedChan;
         private int SampleRate;
         private BinaryReader FID;
         private FileStream FILE;
         private int ExtLenHeader;
         private int ChanLenHeader;
         private int ForeignHeader;
+        public int Position;
         private int DataStart;
         private int MaxDrawSize;
         private float PointSpacing;
         private int DisplayLength;
         private int SampleSize;
+        public bool Loaded;
+        Pen WavePen, SelectedPen;
         private int VoltageSpacing;
         private int Ymax;
+        private int Voltage;
         public Bitmap offscreen;
         
         Graphics g;
@@ -32,23 +37,31 @@ namespace SeizurePlayback
             Chans = new int();            
             SampleRate = 1000;
             DisplayLength = 30;
+            Voltage = 2000*1000;                        
+            WavePen = new Pen(Color.Black);
+            SelectedPen = new Pen(Color.Red);
+            SelectedChan = -1;
         }
 
-        void openACQ()
+        public void openACQ(string FName)
         { //open File for reading
-            FILE = new FileStream(FullName, FileMode.Open);
+            FullName = FName;
+            FILE = new FileStream(FullName, FileMode.Open);            
             FID = new BinaryReader(FILE);
             //Get header info
             FILE.Seek(6, SeekOrigin.Begin);
-            ExtLenHeader = FID.ReadInt32();         
-            Chans = (int)FID.ReadInt16();
+            ExtLenHeader = FID.ReadInt32();            
+            Chans = (int)FID.ReadInt16();                      
             FILE.Seek(ExtLenHeader, SeekOrigin.Begin);
             ChanLenHeader =FID.ReadInt32();
             FILE.Seek(ExtLenHeader + (ChanLenHeader*Chans), SeekOrigin.Begin);
             ForeignHeader = FID.ReadInt32();
             DataStart = ForeignHeader + 4 * Chans + (ChanLenHeader *Chans) + ExtLenHeader;
+            Position = 0;
+            Loaded = true;
+            VoltageSpacing = (int)(Ymax / (Chans+.5));
         }
-        void ReadData(int TimeStart, int Length) // In seconds
+        public void ReadData(int TimeStart, int Length) // In seconds
         {
             long SeekPoint;
             data = new Int16[Chans][];
@@ -63,18 +76,32 @@ namespace SeizurePlayback
             //Pull Data from file
             for (int i = 0; i < Length * Chans *  SampleRate; i++)
             {
-                data[i%Chans][i/Chans] = FID.ReadInt16();
+                data[i % Chans][i / Chans] = FID.ReadInt16();
             }
         }   
         public void initDisplay(int X, int Y)
         {
             offscreen = new Bitmap(X,Y);
             MaxDrawSize = SampleRate * DisplayLength;
-            PointSpacing = Convert.ToSingle(X / MaxDrawSize);
-            Ymax = Y;
-            VoltageSpacing = (int)(Ymax / (AcqChan + 1));
+            PointSpacing = (float)X / MaxDrawSize;
+            Ymax = Y;            
+            g = Graphics.FromImage(offscreen);
+            g.Clear(Color.White);            
         }
-        private void drawbuffer()
+        private float ScaleVoltsToPixel(float volt, float pixelHeight)
+        {
+            float maxPixel = (pixelHeight * .15F);
+            float minPixel = (pixelHeight * .95F);
+
+            float m = (maxPixel - minPixel) / (65536);
+            float b = 2^15;
+            float result = (m * volt) + b;
+            //result = (result > maxPixel) ? maxPixel: result;
+            //result = (result < minPixel) ? minPixel: result;
+            return (result);
+        }
+
+        public void drawbuffer()
         {
             PointF[][] WaveC;                           
              g.Clear(Color.White);
@@ -89,12 +116,15 @@ namespace SeizurePlayback
                     for (int i = 0; i < SampleSize; i++)
                     {
                    
-                        PointF TempPoint = new PointF(i * PointSpacing, VoltageSpacing * ((i % Chans) + (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(data[j][i]), Ymax / (Chans)));
+                        PointF TempPoint = new PointF(i * PointSpacing, VoltageSpacing * (j + (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(data[j][i]), Ymax / (Chans)));
                         WaveC[j][i] = TempPoint;                        
-                    }                                
-                    g.DrawLines(wavePen, WaveC[j]);                                     
-                }
-            }
+                    }                    
+                    if (j == SelectedChan) 
+                        g.DrawLines(SelectedPen, WaveC[j]);                                     
+                    else
+                        g.DrawLines(WavePen, WaveC[j]);                                     
+                }                
+            }        
 
     }
 } 
