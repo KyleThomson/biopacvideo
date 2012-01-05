@@ -70,8 +70,8 @@ namespace SeizurePlayback
             {
                 data[i] = new Int16[SampleSize];
             }
-            //Seek to data point
-            SeekPoint = TimeStart * Chans * SampleRate + DataStart; 
+            //Seek to data point, 2 because they are 2 bytes each, dumbass.
+            SeekPoint = 2*TimeStart * Chans * SampleRate + DataStart; 
             FILE.Seek(SeekPoint, SeekOrigin.Begin);
             //Pull Data from file
             for (int i = 0; i < Length * Chans *  SampleRate; i++)
