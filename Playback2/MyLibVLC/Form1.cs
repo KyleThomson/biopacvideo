@@ -216,7 +216,9 @@ namespace SeizurePlayback
                     ACQ.SelectedChan = (int)((float)ACQ.Chans * (float)(((float)e.Y - 30F) / 500F));
                     RealTime = true;
                     Redraw = true;
-                    long TimeSeek = ACQ.Position * 1000;
+                    //Frame rate is actually 30.3, but listed as 30 in the avi. To seek to the proper time, need to adjust for that factor.
+                    //Switch to float to do decimal math, switch back to integer for actual ms. 
+                    long TimeSeek = (int)((float)ACQ.Position * 1000F * 1.01F); 
                     bool AVILoaded = false;
                     while (!AVILoaded) 
                     {
