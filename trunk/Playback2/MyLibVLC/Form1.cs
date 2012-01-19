@@ -176,6 +176,8 @@ namespace SeizurePlayback
             FBD = new FolderBrowserDialog();
             FBD.ShowDialog();
             Path = FBD.SelectedPath;
+            if (FBD.SelectedPath != "")
+            {
             string[] FName = Directory.GetFiles(Path, "*.acq");
             AVIFiles = Directory.GetFiles(Path, "*.avi");            
             ACQ.openACQ(FName[0]);
@@ -183,6 +185,7 @@ namespace SeizurePlayback
             BaseName = AVIFiles[0].Substring(Path.Length+1,15);
             TimeBar.Minimum = 0;
             TimeBar.Maximum = ACQ.FileTime;
+            }
         }
 
         
@@ -208,7 +211,7 @@ namespace SeizurePlayback
         }
         private void MyMouseClick(Object sender, MouseEventArgs e)
         {
-            int FNum = 1;
+            int FNum =1;
             if (ACQ.Loaded)
                 if ((e.X > 10) && (e.X < 1180) && (e.Y > 20) && (e.Y < 520))
                 {
@@ -220,10 +223,11 @@ namespace SeizurePlayback
                     //Switch to float to do decimal math, switch back to integer for actual ms. 
                     long TimeSeek = (int)((float)ACQ.Position * 1000F * 1.01F); 
                     bool AVILoaded = false;
+                    bool pass = false;
                     while (!AVILoaded) 
                     {
-                        string Fname = Path + "\\" + BaseName + string.Format("_{0:d2}", ACQ.SelectedChan) + string.Format("_{0:d4}.avi", FNum);                        
-                        Console.WriteLine(Fname);
+                         
+                         string Fname = Path + "\\" + BaseName + string.Format("_{0:d2}", ACQ.SelectedChan) + string.Format("_{0:d4}.avi", FNum);                                                                           
                          media = new VlcMedia(instance, Fname);                            
                         if (player == null)
                         {
@@ -261,9 +265,9 @@ namespace SeizurePlayback
 
         private void Rewind_Click(object sender, EventArgs e)
         {
-            ACQ.Position -= 60;
-            if (player.IsPlaying)
-                player.seek(player.getpos() - 60 * 1000);
+            ACQ.Position -= 30;
+            if (player != null) 
+                player.seek(player.getpos() - 30 * 1000);
             Step = 99;
         }
 
@@ -271,6 +275,30 @@ namespace SeizurePlayback
         {
             ACQ.Position = TimeBar.Value;
             Redraw = true;
+        }
+
+        private void Recompress_Click(object sender, EventArgs e)
+        {
+            string Command;
+            string[] AVIR;
+            Process Recomp;
+            if (MessageBox.Show("Are you sure?", "Confirm Recompress", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                AVIR = Directory.GetFiles(Path, "*.avi");   
+                for (int i = 0; i < AVIR.Length; i++)
+                {
+                    Command =  AVIR[i] + " -o " + Path + "\\temp.avi --crf 38 --keyint 250";
+                    Recomp = new Process();
+                    Recomp.StartInfo = new ProcessStartInfo("C:\\x264\\x264.exe", Command);
+                    Recomp.Start();
+                    Recomp.WaitForExit();
+                    if (File.Exists(Path + "\\temp.avi"))
+                    {
+                        File.Delete(AVIR[i]);
+                        File.Move(Path + "\\temp.avi", AVIR[i]);
+                    }
+                }
+            }
         }
     }
 }

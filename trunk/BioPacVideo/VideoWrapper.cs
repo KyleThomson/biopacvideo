@@ -89,6 +89,9 @@ namespace BioPacVideo
         public static extern int GetFrameRate();
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ResetFileNumber();
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int CloseRecording();
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]

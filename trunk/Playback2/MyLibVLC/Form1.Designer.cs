@@ -39,6 +39,7 @@ namespace SeizurePlayback
             this.Rewind = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.TimeLabel = new System.Windows.Forms.Label();
+            this.Recompress = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             this.SuspendLayout();
             // 
@@ -151,12 +152,24 @@ namespace SeizurePlayback
             this.TimeLabel.TabIndex = 17;
             this.TimeLabel.Text = "Time";
             // 
+            // Recompress
+            // 
+            this.Recompress.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.Recompress.Location = new System.Drawing.Point(338, 639);
+            this.Recompress.Name = "Recompress";
+            this.Recompress.Size = new System.Drawing.Size(75, 23);
+            this.Recompress.TabIndex = 18;
+            this.Recompress.Text = "Recompress";
+            this.Recompress.UseVisualStyleBackColor = true;
+            this.Recompress.Click += new System.EventHandler(this.Recompress_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1194, 775);
+            this.Controls.Add(this.Recompress);
             this.Controls.Add(this.TimeLabel);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.Rewind);
@@ -194,6 +207,7 @@ namespace SeizurePlayback
         private System.Windows.Forms.Button Rewind;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label TimeLabel;
+        private System.Windows.Forms.Button Recompress;
     }
 }
 
