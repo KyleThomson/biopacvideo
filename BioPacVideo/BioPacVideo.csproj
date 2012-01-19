@@ -126,18 +126,23 @@
     <Compile Include="VideoWrapper.cs" />
     <EmbeddedResource Include="CameraAssc.resx">
       <DependentUpon>CameraAssc.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FeederForm.resx">
       <DependentUpon>FeederForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FeederTester.resx">
       <DependentUpon>FeederTester.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ChannelSelect.resx">
       <DependentUpon>ChannelSelect.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -150,12 +155,15 @@
     </Compile>
     <EmbeddedResource Include="RecordSettings.resx">
       <DependentUpon>RecordSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SensorControl.resx">
       <DependentUpon>SensorControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="VideoSettings.resx">
       <DependentUpon>VideoSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

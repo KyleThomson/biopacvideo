@@ -105,12 +105,12 @@ namespace BioPacVideo
                     MealSize = (int)Math.Ceiling(Rats[RC].Weight*0.02);
                     Feeder = RC * 2;
                     if (random.Next(1, 100) > Rats[RC].Medication)
-                    {
-                        Feeder = Feeder + 1;
+                    {                     
                         Medi = "Unmedicated";
                     }
                     else
                     {
+                        Feeder = Feeder + 1;
                         Medi = "Medicated";
                     }
                     

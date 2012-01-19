@@ -400,7 +400,13 @@ void StreamReadEnd(int nChNum)
 }
 
 
-
+void ResetFileNumber()
+{
+	for (int i = 0;  i < 32; i++)
+	{
+		nFileIndex[i] = 1;
+	}
+}
 
 
 

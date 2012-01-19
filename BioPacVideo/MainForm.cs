@@ -133,7 +133,7 @@ namespace BioPacVideo
                     DateString = string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", DateTime.Now);
                     RecordingDir = MP.RecordingDirectory + "\\" + DateString;
                     MP.StopRecording();
-                    MP.Disconnect();
+                    MP.Disconnect();                    
                     Thread.Sleep(1000);
                     MP.Connect();
                     MP.StartRecording();
@@ -145,7 +145,7 @@ namespace BioPacVideo
                     //Video Stuff                    
                     Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
                     Feeder.SetLogName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString + "_Feeder.log");
-                    Video.FileStart = Video.FileStart + 1;
+                    Video.FileStart = 1;
                     Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString, Video.FileStart);
                     MP.StartWriting();
                     Video.StartRecording();
