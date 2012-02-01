@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 
+
 namespace SeizurePlayback
 {
     public partial class MainForm : Form
@@ -19,33 +20,63 @@ namespace SeizurePlayback
         ACQReader ACQ;        
         string[] AVIFiles;
         int[] AVINums;
+        int[] SeizureCount;
+        int HighlightStart, HighlightEnd;
+        bool Highlighting;
         bool RealTime;
         bool Redraw;
         long[] AVILengths;
         Thread ThreadDisplay;
         VlcMedia media;
         string Path;
-        string BaseName;            
+        string BaseName;
+        bool Paused;
         Graphics g;
-        int Step = 30;
+        int Step;
+        bool ignore_change;
+        string CurrentAVI;
+        int MaxDispSize;
+        float Subtractor;
+        Mygraph graph;
         float[] Rates = { 0.25F, 0.5F, 1, 2, 5, 10, 20, 30, 50, 100 };
         public MainForm()
         {
             InitializeComponent();
-            ACQ = new ACQReader();
-            g = this.CreateGraphics();
-            ACQ.initDisplay(1180,500);
-            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MyMouseClick);
+
+            //Create Instances
+            graph = new Mygraph(); //Small Class for containing EEG area. 
+            ACQ = new ACQReader(); //Class to read from ACQ file
+            g = this.CreateGraphics(); //Graphics object for main form
             string[] args = new string[] {""
                 //,"--vout-filter=deinterlace", "--deinterlace-mode=blend"
             };
-
             instance = new VlcInstance(args);
+            CurrentAVI = ""; //No default AVI loaded            
+            SeizureCount = new int[16]; //Create Array for Seizure Counts; 
+            for (int i = 0; i < 16; i++) SeizureCount[i] = 0; //Initialize to Zero. 
+
+            //Graphics area of the form to display the EEG. It would be better if these were dynamically resized. 
+            //I don't have time for that shit.
+            graph.X1 = 5;
+            graph.X2 = 1420;
+            graph.Y1 = 6;
+            graph.Y2 = 460;          
+                           
+            ACQ.initDisplay(graph.X2-graph.X1, graph.Y2-graph.Y1);    //Create the graphics box to display EEG.         
+            TimeBox.SelectedIndex = 0; //Default Time Scale
+            Step = MaxDispSize; //Setting Step to max display size makes sure the image refreshes. 
+
+            //Add Mouse Handlers
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MyMouseUp);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownHandler);
+
+            //Start up the display thread. 
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
-            ThreadDisplay.Start();
-            
+            ThreadDisplay.Start();            
         }
- 
+
+        
+        //Handles drawing the EEG to the screen. VLC handles the video independently. 
         private void DisplayThread()
         {
           
@@ -56,75 +87,100 @@ namespace SeizurePlayback
             {
                 if (ACQ.Loaded)
                 {
-                    
-                    //TimeLabel.Text = string.Format("{0:00}:{0:00}:{0:00}", h, m, s);
-                    if (TimeLabel.InvokeRequired)
-                    {
-                        TimeLabel.Invoke(new MethodInvoker(delegate {
-                            int h, m, s;
-                            h = ACQ.Position / 3600;
-                            m = (ACQ.Position - (h * 3600)) / 60;
-                            s = ACQ.Position - h * 3600 - m * 60;
-                            TimeLabel.Text = string.Format("{0:00}:", h) + string.Format("{0:00}:", m) + string.Format("{0:00}", s);
-                        }));
-                    }
-
-                    if (!RealTime)
-                    {
-                        if (Step >= 30)
+                    if (!Paused)
+                    {                        
+                        if (TimeLabel.InvokeRequired)
                         {
-                         
-                            ACQ.ReadData(ACQ.Position, 30);                         
-                            Step = 0;
-                            Redraw = true;
+                            TimeLabel.Invoke(new MethodInvoker(delegate
+                            {
+                                int h, m, s;
+                                h = ACQ.Position / 3600;
+                                m = (ACQ.Position - (h * 3600)) / 60;
+                                s = ACQ.Position - h * 3600 - m * 60;
+                                //C# sucks at handling string formating.
+                                TimeLabel.Text = string.Format("{0:00}:", h) + string.Format("{0:00}:", m) + string.Format("{0:00}", s);
+                            }));
+                        }
+
+                        if (TimeBar.InvokeRequired)
+                        {
+                            TimeBar.Invoke(new MethodInvoker(delegate
+                            {
+                                ignore_change = true;
+                                TimeBar.Value = Math.Min(ACQ.Position, TimeBar.Maximum);
+                            }));
+                        }
+                        if (!RealTime)
+                        {
+                            if (Step >= MaxDispSize)
+                            {
+                                if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
+                                    Paused = true;                                
+                                Step = 0;
+                                Redraw = true;
+                            }
+                            else
+                            {
+                                Thread.Sleep(1500 / MaxDispSize);
+                            }
+                            if (Redraw)
+                                ACQ.drawbuffer();
+                            g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
+                            g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
+                            ACQ.Position += 10;
+                            Step += 10;
                         }
                         else
                         {
-                            Thread.Sleep(50);
+                            st.Start();
+                            if (Step >= MaxDispSize)
+                            {
+
+                                if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
+                                    Paused = true;
+                                Redraw = true;
+                                Step = 0;
+                            }
+                            if (Redraw)
+                                ACQ.drawbuffer();
+                            g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
+                            g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
+                            ACQ.Position += 1;
+                            Step += 1;
+                            st.Stop();
+                            if (st.ElapsedMilliseconds > 1000)
+                            {
+                                Delay = (int)st.ElapsedMilliseconds - 1000;
+                            }
+                            else
+                            {
+                                Thread.Sleep(1000 - ((int)st.ElapsedMilliseconds + Delay));
+                                Delay = 0;
+                            }
+                            st.Reset();
                         }
-                        if (Redraw)
-                            ACQ.drawbuffer();
-                        g.DrawImage(ACQ.offscreen, 10, 20);
-                        g.DrawLine(new Pen(Color.Red, 3), new Point(10+(1180 *Step) / 30, 20), new Point(10+(1180 * Step)/30, 520));
-                        ACQ.Position += 10;
-                        Step +=10;                        
-                    }
+                    } //if !Paused
                     else
                     {
-                        st.Start();
-                        if (Step >= 30)
+                        if (Highlighting)
                         {
-                         
-                            ACQ.ReadData(ACQ.Position, 30);
-                            Redraw = true;
-                            Step = 0;                                                        
-                        }
-                        else
-                        {                            
-                        }
-                        if (Redraw)
+                            int X = System.Windows.Forms.Cursor.Position.X;
+                            HighlightEnd = (int)((float)MaxDispSize * (float)(X - graph.X1) / (graph.X2 - graph.X1));
+                            ACQ.sethighlight(HighlightStart, HighlightEnd);
                             ACQ.drawbuffer();
-                        g.DrawImage(ACQ.offscreen, 10, 20);
-                        g.DrawLine(new Pen(Color.Red, 3), new Point(10 + (1180 * Step) / 30, 20), new Point(10 + (1180 * Step) / 30, 520));
-                        ACQ.Position += 1;
-                        Step += 1;
-                        st.Stop();
-                        if (st.ElapsedMilliseconds > 1000)
-                        {
-                            Delay = (int)st.ElapsedMilliseconds - 1000;
+                            g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
+                            Thread.Sleep(30);
                         }
-                        else
-                        {
-                            Thread.Sleep(1000 - ((int)st.ElapsedMilliseconds + Delay));                                
-                            Delay = 0;
-                        }
-                        st.Reset();
                     }
+                } //if ACQLoaded
+                else
+                {
+                    g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
+                    Thread.Sleep(100);
                 }
-                   
             } 
         }
-
+        
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             ThreadDisplay.Abort();
@@ -135,26 +191,22 @@ namespace SeizurePlayback
 
         private void Play_Click(object sender, EventArgs e)
         {
-            Play.Enabled = false;
-            Pause.Enabled = true;
-            Stop.Enabled = true;
+            Paused = false;
+            if (player != null & RealTime)
+                player.Play();            
+            QuitHighlight();
              
         }
 
         private void Pause_Click(object sender, EventArgs e)
         {
-            Play.Enabled = true;
-            Pause.Enabled = true;
-            Stop.Enabled = true;
-           
+            Paused = true;
+            if (player != null)
+                player.Pause();
+            
         }
 
-        private void Stop_Click(object sender, EventArgs e)
-        {
-            Play.Enabled = true;
-            Pause.Enabled = false;
-            Stop.Enabled = false;      
-        }
+      
       
         private VlcMediaPlayer LoadFile(VlcMediaPlayer player, string FileName)
         {          
@@ -165,10 +217,7 @@ namespace SeizurePlayback
                 else
                     player.Media = media;
             }
-
-            Play.Enabled = true;
-            Pause.Enabled = false;
-            Stop.Enabled = false;
+                        
             return player;
         }
         private void Open_Click(object sender, EventArgs e)
@@ -194,64 +243,95 @@ namespace SeizurePlayback
         
  
 
-        private void test_Click(object sender, EventArgs e)
+           
+        private void MouseDownHandler(object sender, MouseEventArgs e)
         {
-            TimeBar.Maximum = (int)(player.GetLengthMs()/1000);
-            TimeBar.SmallChange = (int)(TimeBar.Maximum * 0.01);
-            TimeBar.LargeChange = (int)(TimeBar.Maximum * 0.1);
-        }
-
-        private void Enc1_Click(object sender, EventArgs e)
-        {
-            int Length;
-            if (int.TryParse("60", out Length))                
-            {                
-                player.EncSeizureFromNow(Length);
+            if ((e.X > graph.X1) && (e.X < graph.X2) && (e.Y > graph.Y1) && (e.Y < graph.Y2))
+            {                   
+                Paused = true;                
+                ACQ.SelectedChan = (int)((float)ACQ.Chans * (float)(((float)e.Y - (float)graph.Y1) / (float)(graph.Y2-graph.Y1)));
+                HighlightStart = (int)((float)MaxDispSize * (float)(e.X-graph.X1)/(graph.X2 - graph.X1));
+                Highlighting = true;
+                HighlightEnd = HighlightStart;
+                ACQ.sethighlight(HighlightStart, HighlightEnd);
+                if (player != null)
+                    player.Pause();
             }
         }
-        private void MyMouseClick(Object sender, MouseEventArgs e)
+        private void QuitHighlight()
         {
-            int FNum =1;
+            Highlighting = false;
+            HighlightEnd = HighlightStart = 0;
+            ACQ.EndHighlight();
+        }
+        private void MyMouseUp(Object sender, MouseEventArgs e)
+        {            
             if (ACQ.Loaded)
-                if ((e.X > 10) && (e.X < 1180) && (e.Y > 20) && (e.Y < 520))
+                if ((e.X > graph.X1) && (e.X < graph.X2) && (e.Y > graph.Y1) && (e.Y < graph.Y2))
                 {
-                    
-                    ACQ.SelectedChan = (int)((float)ACQ.Chans * (float)(((float)e.Y - 30F) / 500F));
-                    RealTime = true;
-                    Redraw = true;
-                    //Frame rate is actually 30.3, but listed as 30 in the avi. To seek to the proper time, need to adjust for that factor.
-                    //Switch to float to do decimal math, switch back to integer for actual ms. 
-                    long TimeSeek = (int)((float)ACQ.Position * 1000F * 1.01F); 
-                    bool AVILoaded = false;
-                    bool pass = false;
-                    while (!AVILoaded) 
+                    if ((HighlightEnd - HighlightStart) < 3)
                     {
-                         
-                         string Fname = Path + "\\" + BaseName + string.Format("_{0:d2}", ACQ.SelectedChan) + string.Format("_{0:d4}.avi", FNum);                                                                           
-                         media = new VlcMedia(instance, Fname);                            
-                        if (player == null)
+                        QuitHighlight();
+                        Paused = false;
+                        int FNum = 1;
+                        ACQ.SelectedChan = (int)((float)ACQ.Chans * (float)(((float)e.Y - (float)graph.Y1) / (float)(graph.Y2 - graph.Y1)));
+                        int XStart = (int)((float)MaxDispSize * (float)(e.X - graph.X1) / (graph.X2 - graph.X1));
+                        ACQ.Position = ACQ.Position - Step + XStart;
+                        Step = XStart;
+                        RealTime = true;
+                        Redraw = true;
+                        //Frame rate is actually 30.3, but listed as 30 in the avi. To seek to the proper time, need to adjust for that factor.
+                        //Switch to float to do decimal math, switch back to integer for actual ms. 
+                        long TimeSeek = (int)((float)ACQ.Position * 1000F * 1.01F);
+                        bool AVILoaded = false;
+                        bool pass = false;
+                        Subtractor = 0;                                               
+                        while (!AVILoaded)
                         {
-                            player = new VlcMediaPlayer(media);
-                            player.Drawable = VideoPanel.Handle;
+
+                            CurrentAVI = "";   
+                            string Fname = Path + "\\" + BaseName + string.Format("_{0:d2}", ACQ.SelectedChan) + string.Format("_{0:d4}.avi", FNum);
+                            while (!File.Exists(Fname) && !pass)
+                            {
+                                FNum++;
+                                if (FNum == 30)
+                                    pass = true;
+                            }
+                            if (pass)
+                            {
+                                break;
+                            }
+                            media = new VlcMedia(instance, Fname);
+                            
+                            if (player == null)
+                            {                                
+                                player = new VlcMediaPlayer(media);
+                                player.Drawable = VideoPanel.Handle;
+                            }
+                            else
+                                player.Media = media;
+                            player.Play();
+                            while (player.GetLengthMs() == 0)
+                            { }
+                            if (player.GetLengthMs() < TimeSeek)
+                            {
+                                TimeSeek = TimeSeek - player.GetLengthMs();
+                                Subtractor += player.GetLengthMs()/1000;
+                                player.Stop();
+                                FNum++;
+                                media.Dispose();
+                            }
+                            else
+                            {
+                                AVILoaded = true;
+                                CurrentAVI = Fname;
+                                player.seek(TimeSeek);
+                            }
                         }
-                        else
-                        player.Media = media;
-                        player.Play();
-                        while (player.GetLengthMs() == 0)
-                        { }
-                        if (player.GetLengthMs() < TimeSeek)
-                        {
-                            TimeSeek = TimeSeek - player.GetLengthMs();
-                            player.Stop();
-                            FNum++;
-                            media.Dispose();
-                        }
-                        else
-                        {
-                            AVILoaded = true;
-                            player.seek(TimeSeek);
-                        }
-                                                    
+                    }
+                    else
+                    {
+                        Highlighting = false;
                     }
                 }
         }
@@ -260,45 +340,74 @@ namespace SeizurePlayback
         {
             ACQ.SelectedChan = -1;
             RealTime = false;
+            if (player != null) 
+                player.Stop();                
             
         }
 
         private void Rewind_Click(object sender, EventArgs e)
         {
-            ACQ.Position -= 30;
+            ACQ.Position -= MaxDispSize;
             if (player != null) 
-                player.seek(player.getpos() - 30 * 1000);
-            Step = 99;
+                player.seek(player.getpos() - MaxDispSize * 1000);
+            Step = MaxDispSize;
         }
 
         private void TimeBar_Scroll(object sender, EventArgs e)
         {
-            ACQ.Position = TimeBar.Value;
-            Redraw = true;
+            if (!ignore_change)
+            {
+                ACQ.Position = TimeBar.Value;
+                Step = MaxDispSize;                
+            }
+            else
+            {
+                ignore_change = false;
+            }
+        }
+        
+
+        private void TimeBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int[] TimeScales = {30, 60, 120, 300, 600};
+            MaxDispSize = TimeScales[TimeBox.SelectedIndex];
+            Rewind.Text = "Rewind " + MaxDispSize.ToString() + "s";
+            Step = MaxDispSize;
+            ACQ.SetDispLength(MaxDispSize);            
         }
 
-        private void Recompress_Click(object sender, EventArgs e)
+        
+
+        private void SzCaptureButton_Click(object sender, EventArgs e)
         {
-            string Command;
-            string[] AVIR;
-            Process Recomp;
-            if (MessageBox.Show("Are you sure?", "Confirm Recompress", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            int StartTime;                
+            if (CurrentAVI != "")
             {
-                AVIR = Directory.GetFiles(Path, "*.avi");   
-                for (int i = 0; i < AVIR.Length; i++)
+                StartTime = (ACQ.Position - Step + HighlightStart);                
+                string outfile = CurrentAVI.Substring(CurrentAVI.Length - 27, 18);
+                string FPath = CurrentAVI.Substring(0, CurrentAVI.LastIndexOf("\\")+1) + "Seizure";
+                SeizureCount[ACQ.SelectedChan]++;
+                if (!Directory.Exists(FPath))
                 {
-                    Command =  AVIR[i] + " -o " + Path + "\\temp.avi --crf 38 --keyint 250";
-                    Recomp = new Process();
-                    Recomp.StartInfo = new ProcessStartInfo("C:\\x264\\x264.exe", Command);
-                    Recomp.Start();
-                    Recomp.WaitForExit();
-                    if (File.Exists(Path + "\\temp.avi"))
-                    {
-                        File.Delete(AVIR[i]);
-                        File.Move(Path + "\\temp.avi", AVIR[i]);
-                    }
+                    Directory.CreateDirectory(FPath);
                 }
+                int length = (int)((float)(HighlightEnd - HighlightStart + 1) * 1.01F);
+                outfile = FPath + "\\" + outfile + "_S" + SeizureCount[ACQ.SelectedChan].ToString();
+                ACQ.DumpData(outfile + ".dat", ACQ.SelectedChan, StartTime, HighlightEnd - HighlightStart + 1);
+                player.EncodeSeizure((int)((float)StartTime * 1.01F - Subtractor), length, CurrentAVI, outfile + ".avi");
             }
+        }
+
+        private void TimeJump_TextChanged(object sender, EventArgs e)
+        {
+             TimeSpan TestTime;
+             if (TimeSpan.TryParse(TimeJump.Text, out TestTime))
+             {
+                 TimeJump.Text = TestTime.ToString();
+                 ACQ.Position = TestTime.Hours * 3600 + TestTime.Minutes * 60 + TestTime.Seconds;
+                 Step = MaxDispSize;
+                 RealTime = true;
+             }
         }
     }
 }
