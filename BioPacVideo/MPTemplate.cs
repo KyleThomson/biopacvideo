@@ -295,8 +295,8 @@ namespace BioPacVideo
 
             for (int i = 0; i < TotChan(); i++)
             {
-                BinaryFileID.Write((short)2); //Channel Data Size in Bytes (2 for int 16, 8 for double)
-                BinaryFileID.Write((short)2); //Channel Data Type 1 = double, 2 = int
+                BinaryFileID.Write((short)4); //Channel Data Size in Bytes (2 for int 16, 8 for double, 4 for int32)
+                BinaryFileID.Write((short)3); //Channel Data Type 1 = double, 2 = int16, 3 = int32
             }
             CurrentWriteLoc = BinaryFile.Position;
         }
@@ -499,7 +499,7 @@ namespace BioPacVideo
             rec_buffer = new double[BuffSize]; //Place to copy the buffer of recieved data 
             draw_buffer = new double[BuffSize]; //Place to copy the buffer to, for drawing 
             //Need that so we can do thread-safe operations. 
-            Int16 transbuffer = new Int16();  //Translational buffer to write bytes instead of doubles.             
+            Int32 transbuffer = new Int32();  //Translational buffer to write bytes instead of doubles.             
             MPReturn = MPCLASS.startAcquisition();  //Start actual acquisition        
             if (MPReturn != MPCODE.MPSUCCESS) //If acquisition fails, error out. 
             { 
@@ -525,10 +525,10 @@ namespace BioPacVideo
                     BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin); //Make sure the File writting is in the right place
                     for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
                     {
-                        rec_buffer[j] = Math.Min(rec_buffer[j], (double)Int16.MaxValue/Gain); //Make sure we don't exceed the maxes
-                        rec_buffer[j] = Math.Max(rec_buffer[j], (double)Int16.MinValue/Gain);//Make sure we don't exceed the minmum
-                        transbuffer = Convert.ToInt16(rec_buffer[j] * Gain); //Convert the value
-                        BinaryFileID.Write((Int16)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
+                        rec_buffer[j] = Math.Min(rec_buffer[j], (double)Int32.MaxValue/Gain); //Make sure we don't exceed the maxes
+                        rec_buffer[j] = Math.Max(rec_buffer[j], (double)Int32.MinValue/Gain);//Make sure we don't exceed the minmum
+                        transbuffer = Convert.ToInt32(rec_buffer[j] * Gain); //Convert the value
+                        BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
                         //better safe than sorry. 
                     }                    
                     CurrentWriteLoc = BinaryFile.Position;  //Update the current location.

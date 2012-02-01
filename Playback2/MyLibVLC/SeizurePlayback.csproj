@@ -6,9 +6,9 @@
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3EA5C550-DD0C-4E38-964E-18CF17668B48}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyLibVLC</RootNamespace>
+    <RootNamespace>SeizurePlayback</RootNamespace>
     <AssemblyName>MyLibVLC</AssemblyName>
     <StartupObject>
     </StartupObject>
@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ACQReader.cs" />
+    <Compile Include="graph.cs" />
     <Compile Include="VLCMedia.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

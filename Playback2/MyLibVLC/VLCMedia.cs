@@ -106,28 +106,22 @@ namespace SeizurePlayback
         public long getpos()
         {
             return LibVlc.libvlc_media_player_get_time(Handle);
-        }
-        public void EncSeizureFromNow(int length)
-        {
-            int frame; 
-            long ms;
-            if (playing & !paused)
-            {
-                ms = LibVlc.libvlc_media_player_get_time(Handle);
-                frame = (int)((ms * fps)/1000);
-                EncodeSeizure(frame, length);
-            }
-        }
+        }        
             
-        private void EncodeSeizure(int frame, int length)
+        public void EncodeSeizure(int StartTime, int length, string infile, string outfile)
         {
             Process p = new Process();
-            string CmdString;
-            SeizureCount++;
-            CmdString = " " + FPath + "\\" + FName;
-            CmdString += " -o " + FPath + "\\S" + SeizureCount + "_" + FName;
-            CmdString += " --seek " + frame + " --frames " + (length * fps).ToString();
-            CmdString += " --keyint 25 --crf 12";
+            int h, m, s;
+
+            string CmdString;            
+            CmdString = " " + infile;
+            CmdString += " -o " + outfile;
+            h = StartTime / 3600;
+            m = (StartTime - (h * 3600)) / 60;
+            s = StartTime - h * 3600 - m * 60;
+            string stime = string.Format("{0:00}:", h) + string.Format("{0:00}:", m) + string.Format("{0:00}", s);
+            CmdString += " --starttime " + stime + " --frames " + (length * fps).ToString();
+            CmdString += " --keyint 25 --crf 24";
             //MessageBox.Show(CmdString);
             p.StartInfo.Arguments = CmdString;
             p.StartInfo.FileName = "C:\\x264\\x264.exe";
