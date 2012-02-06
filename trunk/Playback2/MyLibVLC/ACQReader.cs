@@ -9,7 +9,7 @@ namespace SeizurePlayback
     class ACQReader
     {
         public string FullName;
-        public Int16[][] data;        
+        public Int32[][] data;        
         public int Chans;
         public int SelectedChan;
         public int SampleRate;
@@ -33,6 +33,7 @@ namespace SeizurePlayback
         private int VoltageSpacing;
         private int Xmax,Ymax;
         private int Voltage;
+        private int DataType;
         public Bitmap offscreen;
         
         Graphics g;
@@ -59,8 +60,11 @@ namespace SeizurePlayback
             Chans = (int)FID.ReadInt16();                      
             FILE.Seek(ExtLenHeader, SeekOrigin.Begin);
             ChanLenHeader =FID.ReadInt32();
-            FILE.Seek(ExtLenHeader + (ChanLenHeader*Chans), SeekOrigin.Begin);            
+            FILE.Seek(ExtLenHeader + (ChanLenHeader*Chans), SeekOrigin.Begin);       
+     
             ForeignHeader = FID.ReadInt32();
+            FILE.Seek(ForeignHeader + ExtLenHeader + (ChanLenHeader * Chans), SeekOrigin.Begin);
+            DataType = FID.ReadInt16();
             DataStart = ForeignHeader + 4 * Chans + (ChanLenHeader *Chans) + ExtLenHeader;
             FileTime = (int)((FILE.Length - (long)DataStart) / (2 * Chans * SampleRate));
             
@@ -71,24 +75,39 @@ namespace SeizurePlayback
         public bool ReadData(int TimeStart, int Length) // In seconds
         {
             long SeekPoint;
-            data = new Int16[Chans][];
+            data = new Int32[Chans][];
             SampleSize = SampleRate * Length;
             for (int i = 0; i < Chans; i++)
             {
-                data[i] = new Int16[SampleSize];
+                data[i] = new Int32[SampleSize];
             }
             //Seek to data point, 2 because they are 2 bytes each, dumbass.
             SeekPoint = 2*TimeStart * Chans * SampleRate + DataStart; 
             FILE.Seek(SeekPoint, SeekOrigin.Begin);
             //Pull Data from file
-            for (int i = 0; i < Length * Chans *  SampleRate; i++)
+            if (DataType == 4)
             {
-                if (FILE.Position >= EOF)
+                for (int i = 0; i < Length * Chans * SampleRate; i++)
                 {
-                    SampleSize = (i-1)/Chans;
-                    return false;
+                    if (FILE.Position >= EOF)
+                    {
+                        SampleSize = (i - 1) / Chans;
+                        return false;
+                    }
+                    data[i % Chans][i / Chans] = FID.ReadInt32();
                 }
-                data[i % Chans][i / Chans] = FID.ReadInt16();
+            }
+            else
+            {
+                for (int i = 0; i < Length * Chans * SampleRate; i++)
+                {
+                    if (FILE.Position >= EOF)
+                    {
+                        SampleSize = (i - 1) / Chans;
+                        return false;
+                    }
+                    data[i % Chans][i / Chans] = (Int32)FID.ReadInt16();
+                }
             }
             return true;
         }
@@ -122,25 +141,40 @@ namespace SeizurePlayback
         {
             int SeekPoint;
             FileStream FOUT = new FileStream(Fname, FileMode.Create);
-            BinaryWriter FOUT_ID = new BinaryWriter(FOUT);
-            data = new Int16[Chans][];
+            BinaryWriter FOUT_ID = new BinaryWriter(FOUT);            
+            data = new Int32[Chans][];
             SampleSize = SampleRate * Length;
             for (int i = 0; i < Chans; i++)
             {
-                data[i] = new Int16[SampleSize];
+                data[i] = new Int32[SampleSize];
             }
             //Seek to data point, 2 because they are 2 bytes each, dumbass.
-            SeekPoint = 2 * St * Chans * SampleRate + DataStart;
+            SeekPoint = DataType * St * Chans * SampleRate + DataStart;
             FILE.Seek(SeekPoint, SeekOrigin.Begin);
             //Pull Data from file
-            for (int i = 0; i < Length * Chans * SampleRate; i++)
+            if (DataType == 4)
             {
-                data[i % Chans][i / Chans] = FID.ReadInt16();
+                for (int i = 0; i < Length * Chans * SampleRate; i++)
+                {
+                    data[i % Chans][i / Chans] = FID.ReadInt32();
+                }
+                for (int j = 0; j < SampleSize; j++)
+                {
+                    FOUT_ID.Write(data[Chan][j]);
+                }
             }
-            for (int j = 0; j < SampleSize; j++)
+            else
             {
-                FOUT_ID.Write(data[Chan][j]);
+                for (int i = 0; i < Length * Chans * SampleRate; i++)
+                {
+                    data[i % Chans][i / Chans] = (Int32)FID.ReadInt16();
+                }
+                for (int j = 0; j < SampleSize; j++)
+                {
+                    FOUT_ID.Write(data[Chan][j]);
+                }
             }
+
             FOUT_ID.Close();
             FOUT.Close();
         }
