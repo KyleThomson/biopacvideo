@@ -10,9 +10,12 @@ namespace BioPacVideo
     public class FeederTemplate
     {
         static readonly FeederTemplate instance = new FeederTemplate();
-        public TimeSpan Breakfast; //Breakfast time, in  seconds
-        public TimeSpan Lunch; //Lunch time, in seconds
-        public TimeSpan Dinner; //Dinner Time, in seconds
+        public TimeSpan Meal1; //Breakfast time, in  seconds
+        public TimeSpan Meal2; //Lunch time, in seconds
+        public TimeSpan Meal3; //Dinner Time, in seconds
+        public TimeSpan Meal4;
+        public TimeSpan Meal5;
+        public TimeSpan Meal6;
         public double PelletsPerGram;        
         public bool Enabled;
         public int State;
@@ -102,7 +105,7 @@ namespace BioPacVideo
             {
                 if (Rats[RC].Weight > 0)
                 {
-                    MealSize = (int)Math.Ceiling(Rats[RC].Weight*0.02);
+                    MealSize = (int)Math.Ceiling(Rats[RC].Weight*PelletsPerGram);
                     Feeder = RC * 2;
                     if (random.Next(1, 100) > Rats[RC].Medication)
                     {                     
