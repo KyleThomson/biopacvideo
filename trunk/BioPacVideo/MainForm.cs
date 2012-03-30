@@ -10,6 +10,7 @@ using System.Text;
 using System.IO;
 using System.Windows.Forms;
 using System.Threading;
+using System.Management;
 
 using Ini;
 
@@ -30,6 +31,7 @@ namespace BioPacVideo
         Thread ThreadDisplay;
         private Thread TimerThread;
         Graphics g;
+        DriveInfo DI;
         bool RunDisplayThread;
         private DateTime Timing;
 
@@ -117,65 +119,67 @@ namespace BioPacVideo
             TimeScale.SelectedIndex = Array.IndexOf(DisplayLengthSize, MP.DisplayLength); 
             ThreadDisplay.Start();
             TimerThread.Start();
+           
         }
         private void TimerCheckThread()
         {
-            IniFile WriteOnce;
-            string DateString, RecordingDir;  
-            //If 12AM, restart recording. 
-            
+                       
             while (true)
             {
+                //If 12AM, restart recording. 
                 if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0) & MP.IsFileWriting)
                 {
-                    MP.StopWriting();
-                    Video.StopEncoding();
-                    DateString = string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", DateTime.Now);
-                    RecordingDir = MP.RecordingDirectory + "\\" + DateString;
-                    MP.StopRecording();
-                    MP.Disconnect();                    
-                    Thread.Sleep(1000);
-                    MP.Connect();
-                    MP.StartRecording();
-                    Directory.CreateDirectory(RecordingDir);
-                    MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
-                    //Write INI file once, so we save all the settings                    
-                    WriteOnce = new IniFile(RecordingDir + "\\" + DateString + "_Settings.txt");
-                    UpdateINI(WriteOnce);
-                    //Video Stuff                    
-                    Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
-                    Feeder.SetLogName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString + "_Feeder.log");
-                    Video.FileStart = 1;
-                    Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString, Video.FileStart);
-                    MP.StartWriting();
-                    Video.StartRecording();
+
+                    StopRecording();
+                    StartRecording();
                     Thread.Sleep(120000);
                 }
-                if ((DateTime.Now.TimeOfDay.Hours == Feeder.Breakfast.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Breakfast.Minutes))
+                if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal1.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal1.Minutes))
                 {
                     Feeder.GoMeal();
                     Thread.Sleep(120000);
                 }
-                if ((DateTime.Now.TimeOfDay.Hours == Feeder.Lunch.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Lunch.Minutes))
+                if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal2.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal2.Minutes))
                 {
                     Feeder.GoMeal();
                     Thread.Sleep(120000);
                     //Lunch
                 }
-                if ((DateTime.Now.TimeOfDay.Hours == Feeder.Dinner.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Dinner.Minutes))
+                if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal3.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal3.Minutes))
                 {
                     Feeder.GoMeal();
                     Thread.Sleep(120000);
-                    //YOU ARE A DINRAR
+                    //Dinner
                 }
+                if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal4.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal4.Minutes))
+                {
+                    Feeder.GoMeal();
+                    Thread.Sleep(120000);
+                    //Brunch
+                } 
+                if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal5.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal5.Minutes))
+                {
+                    Feeder.GoMeal();
+                    Thread.Sleep(120000);
+                    //Midnight Snack 
+                }
+                if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal6.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal6.Minutes))
+                {
+                    Feeder.GoMeal();
+                    Thread.Sleep(120000);
+                    //Hobbits 2nd Lunch
+                    //PO - TA - TOES
+                }
+           
                 Thread.Sleep(10000);
-                //If it is feed time,
+                
             }
       }
        
         private void DisplayThread()
         {
             int Cm; //To hold current camera. 
+            DI = new DriveInfo(MP.RecordingDirectory.Substring(0, 3));
             while (RunDisplayThread)
             {
                 MP._DisplayHandle.WaitOne();
@@ -201,6 +205,11 @@ namespace BioPacVideo
                     g.DrawImage(Still, 132+(i%8)*162, 32+(float)Math.Floor((decimal)(i/8))*122, 160, 120);
                     Still.Dispose();
                 }
+                if ((DI.AvailableFreeSpace / DI.TotalSize) < .01 && MP.IsFileWriting)
+                {
+                    MessageBox.Show((IWin32Window)null, "You are out of space. Recording Stopped.");
+                    StopRecording();
+                }
             IDT_VIDEOSTATUS.Text = Video.GetResText();
             IDT_ENCSTAT.Text = Video.EncoderStatus();
             IDT_FEEDST.Text = Feeder.StateText;
@@ -217,10 +226,14 @@ namespace BioPacVideo
             MP.DisplayLength = BioIni.IniReadValue("BioPac", "DisplayLength", 10);
             MP.Voltage = BioIni.IniReadValue("BioPac", "Voltage(mV)", 500);
             MP.Gain = BioIni.IniReadValue("BioPac", "Gain", 20000);
-            MP.Enabled = BioIni.IniReadValue("BioPac", "Enabled", true); BioIni.IniReadValue("Feeder", "Breakfast", out Feeder.Breakfast);
-            BioIni.IniReadValue("Feeder", "Lunch", out Feeder.Lunch);
-            BioIni.IniReadValue("Feeder", "Dinner", out Feeder.Dinner);
-            Feeder.PelletsPerGram = BioIni.IniReadValue("Feeder", "PelletsPerGram", 0);
+            MP.Enabled = BioIni.IniReadValue("BioPac", "Enabled", true); 
+            BioIni.IniReadValue("Feeder", "Meal1", out Feeder.Meal1);
+            BioIni.IniReadValue("Feeder", "Meal2", out Feeder.Meal2);
+            BioIni.IniReadValue("Feeder", "Meal3", out Feeder.Meal3);
+            BioIni.IniReadValue("Feeder", "Meal4", out Feeder.Meal3);
+            BioIni.IniReadValue("Feeder", "Meal5", out Feeder.Meal3);
+            BioIni.IniReadValue("Feeder", "Meal6", out Feeder.Meal3);
+            Feeder.PelletsPerGram = BioIni.IniReadValue("Feeder", "PelletsPerGram", 0.02);
             Feeder.Enabled = BioIni.IniReadValue("Feeder", "Enabled", true);
             for (int i = 0; i < 16; i++)
             {
@@ -261,9 +274,12 @@ namespace BioPacVideo
             BioIni.IniWriteValue("BioPac", "Voltage(mV)", MP.Voltage.ToString());
             BioIni.IniWriteValue("BioPac", "Gain", MP.Gain.ToString());
             BioIni.IniWriteValue("BioPac", "Enabled", MP.Enabled);
-            BioIni.IniWriteValue("Feeder", "Breakfast", Feeder.Breakfast.ToString());
-            BioIni.IniWriteValue("Feeder", "Lunch", Feeder.Lunch.ToString());
-            BioIni.IniWriteValue("Feeder", "Dinner", Feeder.Dinner.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal1", Feeder.Meal1.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal2", Feeder.Meal1.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal3", Feeder.Meal1.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal4", Feeder.Meal1.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal5", Feeder.Meal1.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal6", Feeder.Meal1.ToString());
             BioIni.IniWriteValue("Feeder", "PelletsPerGram", Feeder.PelletsPerGram.ToString());
             BioIni.IniWriteValue("Feeder", "Enabled", Feeder.Enabled);
             for (int i = 0; i < 16; i++)
@@ -294,37 +310,50 @@ namespace BioPacVideo
                 BioIni.IniWriteValue("Video", string.Format("Satur{0}", i), Video.Saturation[i]);
             }
         }
+        private void StartRecording()
+        {
+            IniFile WriteOnce;
+            string DateString, RecordingDir;   
+            //Start Recording   
+            if (!Video.EncoderStarted)
+                Video.initEncoder();
+            //Set up recording name based on date and time
+            DateString = string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", DateTime.Now);
+            RecordingDir = MP.RecordingDirectory + "\\" + DateString;
+            Directory.CreateDirectory(RecordingDir);
+
+            MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
+            Feeder.SetLogName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString + "_Feeder.log");
+            //Write INI file once, so we save all the settings                    
+            WriteOnce = new IniFile(RecordingDir + "\\" + DateString + "_Settings.txt");
+            UpdateINI(WriteOnce);
+            //Video Stuff              
+            Video.FileStart = 1;
+            Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;            
+            Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString, Video.FileStart);
+            Video.StartRecording();
+            MP.isstreaming = MP.StartWriting();                                
+        }
+
+        private void StopRecording()
+        {
+            MP.StopWriting();
+            Video.StopEncoding();
+            MP.StopRecording();
+            MP.Disconnect();
+            Thread.Sleep(1000);
+            MP.Connect();
+            MP.StartRecording();
+        }
 
         private void RecordingButton_Click(object sender, EventArgs e)
         {
-            IniFile WriteOnce;
-            string DateString, RecordingDir;         
+               
             if (MP.isconnected && Video.CapSDKStatus)
             {
                 if (!MP.IsFileWriting)
-                {
-                    //Start Recording   
-                    if (!Video.EncoderStarted)
-                        Video.initEncoder();                                    
-                    //Set up recording name based on date and time
-                    DateString = string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", DateTime.Now);
-                    RecordingDir = MP.RecordingDirectory + "\\" + DateString;
-                    Directory.CreateDirectory(RecordingDir);
-                    
-                    MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
-                    Feeder.SetLogName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString + "_Feeder.log");
-                    //Write INI file once, so we save all the settings                    
-                    WriteOnce = new IniFile(RecordingDir + "\\" + DateString + "_Settings.txt");
-                    UpdateINI(WriteOnce);
-
-                    //Video Stuff                    
-                    Video.FileName = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
-                    Video.FileStart = Video.FileStart+1;
-                    Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString, Video.FileStart);
-                  //  Video.LoadSettings();                                                            
-                    IDT_VIDEOSTATUS.Text = Video.GetResText();  
-
-                    
+                {            
+                    IDT_VIDEOSTATUS.Text = Video.GetResText();                      
                     //Visual Stuff, so we know we are recording. 
                     RecordingButton.Text = "Stop Recording";
                     IDT_BIOPACRECORDINGSTAT.Text = "Recording";
@@ -332,20 +361,16 @@ namespace BioPacVideo
                     IDM_SETTINGS.Enabled = false;
                     IDM_DISCONNECTBIOPAC.Enabled = false;
                     RecordingButton.BackColor = Color.Red;
-
-                    //Start the actual recording
-                    Video.StartRecording();
-                    Timing = DateTime.Now;
-                    Console.WriteLine(Timing.ToString());
-                    MP.isstreaming = MP.StartWriting();                    
+                    //Start the actual recording                    
+                    StartRecording();                                                                   
                 }
                 else
                 {                                        
                     //End Recording
-                    IDT_BIOPACRECORDINGSTAT.Text = "Not Recording";                    
-                    MP.StopWriting();                    
-                    Video.StopEncoding();
-                    Console.WriteLine((DateTime.Now-Timing).ToString());
+                    StopRecording();
+
+
+                    IDT_BIOPACRECORDINGSTAT.Text = "Not Recording";                                           
                     IDM_SELECTCHANNELS.Enabled = true;
                     IDM_SETTINGS.Enabled = true;
                     IDM_DISCONNECTBIOPAC.Enabled = true;
@@ -581,6 +606,12 @@ namespace BioPacVideo
         private void StatusBar_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
+        }
+
+        private void zoomToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ZoomWindow X = new ZoomWindow();
+            X.ShowDialog(this);
         }
     }
 }

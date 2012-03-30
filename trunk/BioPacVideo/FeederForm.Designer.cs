@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.IDC_BREAKFAST = new System.Windows.Forms.TextBox();
+            this.IDC_Meal1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.IDC_LUNCH = new System.Windows.Forms.TextBox();
+            this.IDC_Meal2 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.IDC_DINNER = new System.Windows.Forms.TextBox();
+            this.IDC_Meal3 = new System.Windows.Forms.TextBox();
             this.IDC_RAT1 = new System.Windows.Forms.TextBox();
             this.IDC_RAT2 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -113,58 +113,64 @@
             this.label41 = new System.Windows.Forms.Label();
             this.label42 = new System.Windows.Forms.Label();
             this.label43 = new System.Windows.Forms.Label();
+            this.IDC_Meal6 = new System.Windows.Forms.TextBox();
+            this.IDC_Meal4 = new System.Windows.Forms.TextBox();
+            this.IDC_Meal5 = new System.Windows.Forms.TextBox();
+            this.label44 = new System.Windows.Forms.Label();
+            this.label45 = new System.Windows.Forms.Label();
+            this.label46 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // IDC_BREAKFAST
+            // IDC_Meal1
             // 
-            this.IDC_BREAKFAST.Location = new System.Drawing.Point(12, 47);
-            this.IDC_BREAKFAST.Name = "IDC_BREAKFAST";
-            this.IDC_BREAKFAST.Size = new System.Drawing.Size(75, 20);
-            this.IDC_BREAKFAST.TabIndex = 0;
-            this.IDC_BREAKFAST.LostFocus += new System.EventHandler(this.IDC_BREAKFAST_TextChanged);
+            this.IDC_Meal1.Location = new System.Drawing.Point(12, 47);
+            this.IDC_Meal1.Name = "IDC_Meal1";
+            this.IDC_Meal1.Size = new System.Drawing.Size(75, 20);
+            this.IDC_Meal1.TabIndex = 0;
+            this.IDC_Meal1.LostFocus += new System.EventHandler(this.IDC_Meal1_TextChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 32);
+            this.label1.Location = new System.Drawing.Point(17, 32);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(52, 13);
+            this.label1.Size = new System.Drawing.Size(39, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Breakfast";
+            this.label1.Text = "Meal 1";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(119, 32);
+            this.label2.Location = new System.Drawing.Point(92, 32);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(37, 13);
+            this.label2.Size = new System.Drawing.Size(39, 13);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Lunch";
+            this.label2.Text = "Meal 2";
             // 
-            // IDC_LUNCH
+            // IDC_Meal2
             // 
-            this.IDC_LUNCH.Location = new System.Drawing.Point(103, 47);
-            this.IDC_LUNCH.Name = "IDC_LUNCH";
-            this.IDC_LUNCH.Size = new System.Drawing.Size(75, 20);
-            this.IDC_LUNCH.TabIndex = 2;
-            this.IDC_LUNCH.LostFocus += new System.EventHandler(this.IDC_LUNCH_TextChanged);
+            this.IDC_Meal2.Location = new System.Drawing.Point(92, 48);
+            this.IDC_Meal2.Name = "IDC_Meal2";
+            this.IDC_Meal2.Size = new System.Drawing.Size(75, 20);
+            this.IDC_Meal2.TabIndex = 2;
+            this.IDC_Meal2.LostFocus += new System.EventHandler(this.IDC_Meal2_TextChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(213, 32);
+            this.label3.Location = new System.Drawing.Point(173, 32);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(38, 13);
+            this.label3.Size = new System.Drawing.Size(39, 13);
             this.label3.TabIndex = 5;
-            this.label3.Text = "Dinner";
+            this.label3.Text = "Meal 3";
+            this.IDC_Meal3.LostFocus += new System.EventHandler(this.IDC_Meal3_TextChanged);
             // 
-            // IDC_DINNER
+            // IDC_Meal3
             // 
-            this.IDC_DINNER.Location = new System.Drawing.Point(195, 47);
-            this.IDC_DINNER.Name = "IDC_DINNER";
-            this.IDC_DINNER.Size = new System.Drawing.Size(75, 20);
-            this.IDC_DINNER.TabIndex = 4;
-            this.IDC_DINNER.LostFocus += new System.EventHandler(this.IDC_DINNER_TextChanged);
+            this.IDC_Meal3.Location = new System.Drawing.Point(173, 48);
+            this.IDC_Meal3.Name = "IDC_Meal3";
+            this.IDC_Meal3.Size = new System.Drawing.Size(75, 20);
+            this.IDC_Meal3.TabIndex = 4;
             // 
             // IDC_RAT1
             // 
@@ -531,7 +537,7 @@
             // IDX_FEEDERENABLE
             // 
             this.IDX_FEEDERENABLE.AutoSize = true;
-            this.IDX_FEEDERENABLE.Location = new System.Drawing.Point(410, 50);
+            this.IDX_FEEDERENABLE.Location = new System.Drawing.Point(634, 47);
             this.IDX_FEEDERENABLE.Name = "IDX_FEEDERENABLE";
             this.IDX_FEEDERENABLE.Size = new System.Drawing.Size(100, 17);
             this.IDX_FEEDERENABLE.TabIndex = 64;
@@ -542,7 +548,7 @@
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(286, 31);
+            this.label25.Location = new System.Drawing.Point(524, 31);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(85, 13);
             this.label25.TabIndex = 65;
@@ -550,7 +556,7 @@
             // 
             // IDC_PPG
             // 
-            this.IDC_PPG.Location = new System.Drawing.Point(289, 47);
+            this.IDC_PPG.Location = new System.Drawing.Point(527, 47);
             this.IDC_PPG.Name = "IDC_PPG";
             this.IDC_PPG.Size = new System.Drawing.Size(100, 20);
             this.IDC_PPG.TabIndex = 66;
@@ -833,11 +839,68 @@
             this.label43.TabIndex = 97;
             this.label43.Text = "Medication %";
             // 
+            // IDC_Meal6
+            // 
+            this.IDC_Meal6.Location = new System.Drawing.Point(416, 48);
+            this.IDC_Meal6.Name = "IDC_Meal6";
+            this.IDC_Meal6.Size = new System.Drawing.Size(75, 20);
+            this.IDC_Meal6.TabIndex = 101;
+            this.IDC_Meal6.LostFocus += new System.EventHandler(this.IDC_Meal6_TextChanged);
+            // 
+            // IDC_Meal4
+            // 
+            this.IDC_Meal4.Location = new System.Drawing.Point(254, 48);
+            this.IDC_Meal4.Name = "IDC_Meal4";
+            this.IDC_Meal4.Size = new System.Drawing.Size(75, 20);
+            this.IDC_Meal4.TabIndex = 101;
+            this.IDC_Meal4.LostFocus += new System.EventHandler(this.IDC_Meal4_TextChanged);
+            // 
+            // IDC_Meal5
+            // 
+            this.IDC_Meal5.Location = new System.Drawing.Point(335, 48);
+            this.IDC_Meal5.Name = "IDC_Meal5";
+            this.IDC_Meal5.Size = new System.Drawing.Size(75, 20);
+            this.IDC_Meal5.TabIndex = 102;
+            this.IDC_Meal5.LostFocus += new System.EventHandler(this.IDC_Meal5_TextChanged);
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(251, 31);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(39, 13);
+            this.label44.TabIndex = 103;
+            this.label44.Text = "Meal 4";
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Location = new System.Drawing.Point(332, 32);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(39, 13);
+            this.label45.TabIndex = 104;
+            this.label45.Text = "Meal 5";
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(416, 32);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(39, 13);
+            this.label46.TabIndex = 105;
+            this.label46.Text = "Meal 6";
+            // 
             // FeederForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(762, 452);
+            this.Controls.Add(this.label46);
+            this.Controls.Add(this.label45);
+            this.Controls.Add(this.label44);
+            this.Controls.Add(this.IDC_Meal5);
+            this.Controls.Add(this.IDC_Meal4);
+            this.Controls.Add(this.IDC_Meal6);
             this.Controls.Add(this.label40);
             this.Controls.Add(this.label41);
             this.Controls.Add(this.label42);
@@ -918,11 +981,11 @@
             this.Controls.Add(this.IDC_RAT2);
             this.Controls.Add(this.IDC_RAT1);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.IDC_DINNER);
+            this.Controls.Add(this.IDC_Meal3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.IDC_LUNCH);
+            this.Controls.Add(this.IDC_Meal2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.IDC_BREAKFAST);
+            this.Controls.Add(this.IDC_Meal1);
             this.Name = "FeederForm";
             this.Text = "Feeder Control Form";
             this.ResumeLayout(false);
@@ -932,12 +995,12 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox IDC_BREAKFAST;
+        private System.Windows.Forms.TextBox IDC_Meal1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox IDC_LUNCH;
+        private System.Windows.Forms.TextBox IDC_Meal2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox IDC_DINNER;
+        private System.Windows.Forms.TextBox IDC_Meal3;
         private System.Windows.Forms.TextBox IDC_RAT1;
         private System.Windows.Forms.TextBox IDC_RAT2;
         private System.Windows.Forms.Label label4;
@@ -1017,5 +1080,11 @@
         private System.Windows.Forms.Label label41;
         private System.Windows.Forms.Label label42;
         private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.TextBox IDC_Meal6;
+        private System.Windows.Forms.TextBox IDC_Meal4;
+        private System.Windows.Forms.TextBox IDC_Meal5;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.Label label46;
     }
 }

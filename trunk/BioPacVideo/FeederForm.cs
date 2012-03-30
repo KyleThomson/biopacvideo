@@ -32,12 +32,18 @@ namespace BioPacVideo
             MakeArrays();    
             TextBox TempBox;
             TextBox TempCheck;
-            if (Feeder.Breakfast != TimeSpan.MaxValue)
-                IDC_BREAKFAST.Text = Feeder.Breakfast.ToString();
-            if (Feeder.Lunch != TimeSpan.MaxValue)
-                IDC_LUNCH.Text = Feeder.Lunch.ToString();
-            if (Feeder.Dinner != TimeSpan.MaxValue)
-                IDC_DINNER.Text = Feeder.Dinner.ToString();
+            if (Feeder.Meal1 != TimeSpan.MaxValue)
+                IDC_Meal1.Text = Feeder.Meal1.ToString();
+            if (Feeder.Meal2 != TimeSpan.MaxValue)
+                IDC_Meal2.Text = Feeder.Meal2.ToString();
+            if (Feeder.Meal3 != TimeSpan.MaxValue)
+                IDC_Meal3.Text = Feeder.Meal3.ToString();
+            if (Feeder.Meal4 != TimeSpan.MaxValue)
+                IDC_Meal4.Text = Feeder.Meal4.ToString();
+            if (Feeder.Meal5 != TimeSpan.MaxValue)
+                IDC_Meal5.Text = Feeder.Meal5.ToString();
+            if (Feeder.Meal6 != TimeSpan.MaxValue)
+                IDC_Meal6.Text = Feeder.Meal6.ToString();
             IDX_FEEDERENABLE.Checked = Feeder.Enabled;
             IDC_PPG.Text = string.Format("{0:0.00}", Feeder.PelletsPerGram);
             for (int i = 0; i < 16; i++)
@@ -156,41 +162,42 @@ namespace BioPacVideo
             else
                 IDC_INJECTION.Text = "";
         }
-        private void IDC_BREAKFAST_TextChanged(object sender, EventArgs e)
+        private void IDC_Meal1_TextChanged(object sender, EventArgs e)
         {
             TimeSpan TestTime;
-            if (TimeSpan.TryParse(IDC_BREAKFAST.Text, out TestTime))
+            if (TimeSpan.TryParse(IDC_Meal1.Text, out TestTime))
             {
-                IDC_BREAKFAST.Text = TestTime.ToString();
-                Feeder.Breakfast = TestTime;
+                IDC_Meal1.Text = TestTime.ToString();
+                Feeder.Meal1 = TestTime;
             }
             else
-                IDC_BREAKFAST.Text = Feeder.Breakfast.ToString();
+                IDC_Meal1.Text = Feeder.Meal1.ToString();
 
         }
-        private void IDC_LUNCH_TextChanged(object sender, EventArgs e)
+        private void IDC_Meal2_TextChanged(object sender, EventArgs e)
         {
             TimeSpan TestTime;
-            if (TimeSpan.TryParse(IDC_LUNCH.Text, out TestTime))
+            if (TimeSpan.TryParse(IDC_Meal2.Text, out TestTime))
             {
-                IDC_LUNCH.Text = TestTime.ToString();
-                Feeder.Lunch = TestTime;
+                IDC_Meal2.Text = TestTime.ToString();
+                Feeder.Meal2 = TestTime;
             }
             else
-                IDC_LUNCH.Text = Feeder.Lunch.ToString();
+                IDC_Meal2.Text = Feeder.Meal2.ToString();
         }
 
-        private void IDC_DINNER_TextChanged(object sender, EventArgs e)
+        private void IDC_Meal3_TextChanged(object sender, EventArgs e)
         {
             TimeSpan TestTime;
-            if (TimeSpan.TryParse(IDC_DINNER.Text, out TestTime))
+            if (TimeSpan.TryParse(IDC_Meal3.Text, out TestTime))
             {
-                IDC_DINNER.Text = TestTime.ToString();
-                Feeder.Dinner = TestTime;
+                IDC_Meal3.Text = TestTime.ToString();
+                Feeder.Meal3 = TestTime;
             }
             else
-                IDC_DINNER.Text = Feeder.Dinner.ToString();
+                IDC_Meal3.Text = Feeder.Meal3.ToString();
         }
+
         private void IDX_FEEDERENABLE_CheckedChanged(object sender, EventArgs e)
         {
             Feeder.Enabled = IDX_FEEDERENABLE.Checked;
@@ -385,6 +392,46 @@ namespace BioPacVideo
         private void label28_Click(object sender, EventArgs e)
         {
 
-        } 
-    }
+        }
+
+        private void IDC_Meal4_TextChanged(object sender, EventArgs e)
+        {
+                TimeSpan TestTime;
+                if (TimeSpan.TryParse(IDC_Meal4.Text, out TestTime))
+                {
+                    IDC_Meal4.Text = TestTime.ToString();
+                    Feeder.Meal4 = TestTime;
+                }
+                else
+                    IDC_Meal4.Text = Feeder.Meal4.ToString();
+            
+        }
+
+        private void IDC_Meal5_TextChanged(object sender, EventArgs e)
+        {
+            
+            TimeSpan TestTime;
+            if (TimeSpan.TryParse(IDC_Meal5.Text, out TestTime))
+            {
+                IDC_Meal5.Text = TestTime.ToString();
+                Feeder.Meal5 = TestTime;
+            }
+            else
+                IDC_Meal5.Text = Feeder.Meal5.ToString();
+            
+        }
+
+        private void IDC_Meal6_TextChanged(object sender, EventArgs e)
+        {
+            TimeSpan TestTime;
+            if (TimeSpan.TryParse(IDC_Meal6.Text, out TestTime))
+            {
+                IDC_Meal6.Text = TestTime.ToString();
+                Feeder.Meal6 = TestTime;
+            }
+            else
+                IDC_Meal6.Text = Feeder.Meal6.ToString();
+        }
+
+         }
 }
