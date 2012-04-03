@@ -45,7 +45,7 @@ namespace BioPacVideo
             if (Feeder.Meal6 != TimeSpan.MaxValue)
                 IDC_Meal6.Text = Feeder.Meal6.ToString();
             IDX_FEEDERENABLE.Checked = Feeder.Enabled;
-            IDC_PPG.Text = string.Format("{0:0.00}", Feeder.PelletsPerGram);
+            IDC_PPG.Text = string.Format("{0:0.000}", Feeder.PelletsPerGram);
             for (int i = 0; i < 16; i++)
             {      
                 TempBox = WeightBoxes[i] as TextBox;

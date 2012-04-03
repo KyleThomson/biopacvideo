@@ -19,6 +19,9 @@ namespace SeizurePlayback
         FolderBrowserDialog FBD;
         ACQReader ACQ;        
         string[] AVIFiles;
+        bool SuppressChange;
+        int[] ChanPos;
+        CheckBox[] VisChecks; 
         int[] AVINums;
         int[] SeizureCount;
         int HighlightStart, HighlightEnd;
@@ -32,6 +35,7 @@ namespace SeizurePlayback
         string BaseName;
         bool Paused;
         Graphics g;
+        bool doublesize;
         int Step;
         bool ignore_change;
         string CurrentAVI;
@@ -60,8 +64,26 @@ namespace SeizurePlayback
             graph.X1 = 5;
             graph.X2 = 1420;
             graph.Y1 = 6;
-            graph.Y2 = 460;          
-                           
+            graph.Y2 = 460;
+            ChanPos = new int[16];
+            VisChecks = new CheckBox[16];
+            VisChecks[0] = VisChan1;
+            VisChecks[1] = VisChan2;
+            VisChecks[2] = VisChan3;
+            VisChecks[3] = VisChan4;
+            VisChecks[4] = VisChan5;
+            VisChecks[5] = VisChan6;
+            VisChecks[6] = VisChan7;
+            VisChecks[7] = VisChan8;
+            VisChecks[8] = VisChan9;
+            VisChecks[9] = VisChan10;
+            VisChecks[10] = VisChan11;
+            VisChecks[11] = VisChan12;
+            VisChecks[12] = VisChan13;
+            VisChecks[13] = VisChan14;
+            VisChecks[14] = VisChan15;
+            VisChecks[15] = VisChan16;
+            
             ACQ.initDisplay(graph.X2-graph.X1, graph.Y2-graph.Y1);    //Create the graphics box to display EEG.         
             TimeBox.SelectedIndex = 0; //Default Time Scale
             Step = MaxDispSize; //Setting Step to max display size makes sure the image refreshes. 
@@ -227,13 +249,25 @@ namespace SeizurePlayback
             Path = FBD.SelectedPath;
             if (FBD.SelectedPath != "")
             {
-            string[] FName = Directory.GetFiles(Path, "*.acq");
-            AVIFiles = Directory.GetFiles(Path, "*.avi");            
-            ACQ.openACQ(FName[0]);
-            AVILengths = new long[AVIFiles.Length];
-            BaseName = AVIFiles[0].Substring(Path.Length+1,15);
-            TimeBar.Minimum = 0;
-            TimeBar.Maximum = ACQ.FileTime;
+                string[] FName = Directory.GetFiles(Path, "*.acq");
+                AVIFiles = Directory.GetFiles(Path, "*.avi");            
+                ACQ.openACQ(FName[0]);
+                ACQ.VisibleChans = ACQ.Chans;
+                AVILengths = new long[AVIFiles.Length];
+                BaseName = AVIFiles[0].Substring(Path.Length+1,15);                
+                TimeBar.Minimum = 0;
+                TimeBar.Maximum = ACQ.FileTime;                
+                SuppressChange = true;
+                for (int i = 0; i < ACQ.Chans; i++)
+                {
+                    VisChecks[i].Checked = true;
+                    ChanPos[i] = i;
+                }
+                for (int i = ACQ.Chans; i < 16; i++)
+                {
+                    VisChecks[i].Visible = false;
+                }
+                SuppressChange = false;
             }
         }
 
@@ -256,7 +290,8 @@ namespace SeizurePlayback
                 ACQ.sethighlight(HighlightStart, HighlightEnd);
                 if (player != null)
                     player.Pause();
-            }
+            }          
+            
         }
         private void QuitHighlight()
         {
@@ -274,15 +309,16 @@ namespace SeizurePlayback
                         QuitHighlight();
                         Paused = false;
                         int FNum = 1;
-                        ACQ.SelectedChan = (int)((float)ACQ.Chans * (float)(((float)e.Y - (float)graph.Y1) / (float)(graph.Y2 - graph.Y1)));
+                        int TempChan = (int)((float)ACQ.VisibleChans * (float)(((float)e.Y - (float)graph.Y1) / (float)(graph.Y2 - graph.Y1)));
                         int XStart = (int)((float)MaxDispSize * (float)(e.X - graph.X1) / (graph.X2 - graph.X1));
+                        ACQ.SelectedChan = ChanPos[TempChan];
                         ACQ.Position = ACQ.Position - Step + XStart;
                         Step = XStart;
                         RealTime = true;
                         Redraw = true;
                         //Frame rate is actually 30.3, but listed as 30 in the avi. To seek to the proper time, need to adjust for that factor.
                         //Switch to float to do decimal math, switch back to integer for actual ms. 
-                        long TimeSeek = (int)((float)ACQ.Position * 1000F * 1.01F);
+                        long TimeSeek = (int)((float)ACQ.Position * 1000F * 1.0098F);
                         bool AVILoaded = false;
                         bool pass = false;
                         Subtractor = 0;                                               
@@ -294,6 +330,7 @@ namespace SeizurePlayback
                             while (!File.Exists(Fname) && !pass)
                             {
                                 FNum++;
+                                Fname = Path + "\\" + BaseName + string.Format("_{0:d2}", ACQ.SelectedChan) + string.Format("_{0:d4}.avi", FNum);
                                 if (FNum == 30)
                                     pass = true;
                             }
@@ -409,6 +446,67 @@ namespace SeizurePlayback
                  RealTime = true;
              }
         }
+
+        private void VisChan_CheckedChanged(object sender, EventArgs e)
+        {
+            int VChan; 
+            if (!SuppressChange)
+            {
+                VChan = 0; 
+                for (int i = 0; i < 16; i++)
+                {
+                    if (VisChecks[i].Checked)
+                    {
+                        ACQ.HideChan[i] = false;
+                        ChanPos[VChan] = i;
+                        VChan++;                        
+                    }
+                    else
+                    {
+                        ACQ.HideChan[i] = true;
+                    }                    
+                }
+                ACQ.VisibleChans = VChan;
+                ACQ.ResetScale();
+                Step = MaxDispSize;
+            }
+        }
+
+        private void ZoomScale_Scroll(object sender, EventArgs e)
+        {
+            ACQ.Zoom = (float)ZoomScale.Value / 10;
+        }
+
+        private void VideoPanel_Click(object sender, EventArgs e)
+        {
+            if (!doublesize)
+            {
+                VideoPanel.Height = 720;
+                VideoPanel.Width = 960;
+                VideoPanel.Location = new Point(VideoPanel.Location.X, VideoPanel.Location.Y - 360);             
+            }
+            else
+            {
+                VideoPanel.Width = 480;
+                VideoPanel.Height = 360;
+                VideoPanel.Location = new Point(VideoPanel.Location.X, VideoPanel.Location.Y + 360);             
+            }
+            doublesize = !doublesize;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
         

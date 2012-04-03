@@ -9,7 +9,9 @@ namespace SeizurePlayback
     class ACQReader
     {
         public string FullName;
-        public Int32[][] data;        
+        public Int32[][] data;
+        public bool[] HideChan;
+        public int VisibleChans; 
         public int Chans;
         public int SelectedChan;
         public int SampleRate;
@@ -18,11 +20,12 @@ namespace SeizurePlayback
         private int ExtLenHeader;
         private int ChanLenHeader;
         long EOF;
+        public float Zoom; 
         private int ForeignHeader;
         public int FileTime;
         public int Position;
         private int DataStart;
-        private int MaxDrawSize;
+        private int MaxDrawSize; 
         private float PointSpacing;
         private int DisplayLength;
         private int SampleSize;
@@ -39,7 +42,9 @@ namespace SeizurePlayback
         Graphics g;
         public ACQReader()
         {
-            Chans = new int();            
+            Zoom = 1; 
+            Chans = new int();
+            HideChan = new bool[16];
             SampleRate = 500;            
             Voltage = 2000*1000;                        
             WavePen = new Pen(Color.Black);
@@ -66,8 +71,7 @@ namespace SeizurePlayback
             FILE.Seek(ForeignHeader + ExtLenHeader + (ChanLenHeader * Chans), SeekOrigin.Begin);
             DataType = FID.ReadInt16();
             DataStart = ForeignHeader + 4 * Chans + (ChanLenHeader *Chans) + ExtLenHeader;
-            FileTime = (int)((FILE.Length - (long)DataStart) / (2 * Chans * SampleRate));
-            
+            FileTime = (int)((FILE.Length - (long)DataStart) / (DataType * Chans * SampleRate));
             Position = 0;
             Loaded = true;
             VoltageSpacing = (int)(Ymax / (Chans+.5));
@@ -82,7 +86,7 @@ namespace SeizurePlayback
                 data[i] = new Int32[SampleSize];
             }
             //Seek to data point, 2 because they are 2 bytes each, dumbass.
-            SeekPoint = 2*TimeStart * Chans * SampleRate + DataStart; 
+            SeekPoint = DataType*TimeStart * Chans * SampleRate + DataStart; 
             FILE.Seek(SeekPoint, SeekOrigin.Begin);
             //Pull Data from file
             if (DataType == 4)
@@ -125,6 +129,10 @@ namespace SeizurePlayback
             g = Graphics.FromImage(offscreen);
             g.Clear(Color.White);            
         }
+        public void ResetScale()
+        {
+            VoltageSpacing = (int)(Ymax / (VisibleChans + .5));
+        }
         private float ScaleVoltsToPixel(float volt, float pixelHeight)
         {
             float maxPixel = (pixelHeight * .15F);
@@ -132,7 +140,7 @@ namespace SeizurePlayback
 
             float m = (maxPixel - minPixel) / (65536);
             float b = 2^15;
-            float result = (m * volt) + b;
+            float result = ((m * volt) + b)*Zoom;
             //result = (result > maxPixel) ? maxPixel: result;
             //result = (result < minPixel) ? minPixel: result;
             return (result);
@@ -190,12 +198,13 @@ namespace SeizurePlayback
         }
         public void drawbuffer()
         {
+            int NotDisp;
             PointF[][] WaveC;                           
              g.Clear(Color.White);
              if (HL)
              {                                  
                  SolidBrush myBrush = new SolidBrush(System.Drawing.Color.LightGreen);                    
-                 g.FillRectangle(myBrush, new Rectangle((int)(HLS * PointSpacing * SampleRate), (int)(VoltageSpacing * (SelectedChan + 0.5F)), (int)((HLE - HLS) * PointSpacing * SampleRate), (Ymax / Chans)));                 
+                 g.FillRectangle(myBrush, new Rectangle((int)(HLS * PointSpacing * SampleRate), (int)(VoltageSpacing * (SelectedChan + 0.5F)), (int)((HLE - HLS) * PointSpacing * SampleRate), (Ymax / VisibleChans)));                 
                  
              }
                 WaveC = new PointF[Chans][];
@@ -203,19 +212,26 @@ namespace SeizurePlayback
                 {
                     WaveC[i] = new PointF[SampleSize];
                 }
-                
+                NotDisp = 0; 
                 for (int j = 0; j < Chans; j++)
-                {                                       
-                    for (int i = 0; i < SampleSize; i++)
+                {
+                    if (!HideChan[j])
                     {
-                   
-                        PointF TempPoint = new PointF((float)i * PointSpacing, VoltageSpacing * (j + (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(data[j][i]), Ymax / (Chans)));
-                        WaveC[j][i] = TempPoint;                        
-                    }                    
-                    if (j == SelectedChan) 
-                        g.DrawLines(SelectedPen, WaveC[j]);                                     
+                        for (int i = 0; i < SampleSize; i++)
+                        {
+
+                            PointF TempPoint = new PointF((float)i * PointSpacing, VoltageSpacing * ((j - NotDisp) + (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(data[j][i]), Ymax / VisibleChans));
+                            WaveC[j][i] = TempPoint;
+                        }
+                        if (j == SelectedChan)
+                            g.DrawLines(SelectedPen, WaveC[j]);
+                        else
+                            g.DrawLines(WavePen, WaveC[j]);
+                    }
                     else
-                        g.DrawLines(WavePen, WaveC[j]);                                     
+                    {
+                        NotDisp++;
+                    }
                 }                
             }        
 

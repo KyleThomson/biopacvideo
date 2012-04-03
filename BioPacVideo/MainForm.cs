@@ -205,11 +205,11 @@ namespace BioPacVideo
                     g.DrawImage(Still, 132+(i%8)*162, 32+(float)Math.Floor((decimal)(i/8))*122, 160, 120);
                     Still.Dispose();
                 }
-                if ((DI.AvailableFreeSpace / DI.TotalSize) < .01 && MP.IsFileWriting)
+                /*if ((long)(DI.AvailableFreeSpace / DI.TotalSize) < .01 && MP.IsFileWriting)
                 {
                     MessageBox.Show((IWin32Window)null, "You are out of space. Recording Stopped.");
                     StopRecording();
-                }
+                }*/
             IDT_VIDEOSTATUS.Text = Video.GetResText();
             IDT_ENCSTAT.Text = Video.EncoderStatus();
             IDT_FEEDST.Text = Feeder.StateText;
@@ -230,9 +230,9 @@ namespace BioPacVideo
             BioIni.IniReadValue("Feeder", "Meal1", out Feeder.Meal1);
             BioIni.IniReadValue("Feeder", "Meal2", out Feeder.Meal2);
             BioIni.IniReadValue("Feeder", "Meal3", out Feeder.Meal3);
-            BioIni.IniReadValue("Feeder", "Meal4", out Feeder.Meal3);
-            BioIni.IniReadValue("Feeder", "Meal5", out Feeder.Meal3);
-            BioIni.IniReadValue("Feeder", "Meal6", out Feeder.Meal3);
+            BioIni.IniReadValue("Feeder", "Meal4", out Feeder.Meal4);
+            BioIni.IniReadValue("Feeder", "Meal5", out Feeder.Meal5);
+            BioIni.IniReadValue("Feeder", "Meal6", out Feeder.Meal6);
             Feeder.PelletsPerGram = BioIni.IniReadValue("Feeder", "PelletsPerGram", 0.02);
             Feeder.Enabled = BioIni.IniReadValue("Feeder", "Enabled", true);
             for (int i = 0; i < 16; i++)
@@ -275,11 +275,11 @@ namespace BioPacVideo
             BioIni.IniWriteValue("BioPac", "Gain", MP.Gain.ToString());
             BioIni.IniWriteValue("BioPac", "Enabled", MP.Enabled);
             BioIni.IniWriteValue("Feeder", "Meal1", Feeder.Meal1.ToString());
-            BioIni.IniWriteValue("Feeder", "Meal2", Feeder.Meal1.ToString());
-            BioIni.IniWriteValue("Feeder", "Meal3", Feeder.Meal1.ToString());
-            BioIni.IniWriteValue("Feeder", "Meal4", Feeder.Meal1.ToString());
-            BioIni.IniWriteValue("Feeder", "Meal5", Feeder.Meal1.ToString());
-            BioIni.IniWriteValue("Feeder", "Meal6", Feeder.Meal1.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal2", Feeder.Meal2.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal3", Feeder.Meal3.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal4", Feeder.Meal4.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal5", Feeder.Meal5.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal6", Feeder.Meal6.ToString());
             BioIni.IniWriteValue("Feeder", "PelletsPerGram", Feeder.PelletsPerGram.ToString());
             BioIni.IniWriteValue("Feeder", "Enabled", Feeder.Enabled);
             for (int i = 0; i < 16; i++)
@@ -610,8 +610,8 @@ namespace BioPacVideo
 
         private void zoomToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ZoomWindow X = new ZoomWindow();
-            X.ShowDialog(this);
+            //ZoomWindow X = new ZoomWindow();
+            //X.ShowDialog(this);
         }
     }
 }
