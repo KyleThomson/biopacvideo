@@ -7,6 +7,7 @@ namespace BioPacVideo
 {
     public class RatTemplate
     {
+        public string ID;
         public double Weight;
         public DateTime FirstSeizure;
         public DateTime Injection;
@@ -18,7 +19,7 @@ namespace BioPacVideo
             FirstSeizure = new DateTime();
             Injection = new DateTime();
             Surgery = new DateTime();
-            Medication = new int();
+            Medication = new int();            
         }
         static public RatTemplate[] NewInitArray(ulong num)
         {

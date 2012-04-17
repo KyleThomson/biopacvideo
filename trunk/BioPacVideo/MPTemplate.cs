@@ -257,8 +257,12 @@ namespace BioPacVideo
                 BinaryFileID.Write((Int32)252); //Channel Header Size                
                 BinaryFileID.Write((short)(GetChan(Chanloop)+1)); //Number of Channel                
                 C = new byte[40];                
-                C[0] = (byte)'E'; C[1] = (byte)'E'; C[2] = (byte)'G';
-                C[3] = (byte)'1'; C[4] = (byte)'0'; C[5] = (byte)'0'; C[6] = (byte)'C';
+                /*C[0] = (byte)'E'; C[1] = (byte)'E'; C[2] = (byte)'G';
+                C[3] = (byte)'1'; C[4] = (byte)'0'; C[5] = (byte)'0'; C[6] = (byte)'C';*/
+                for (int i = 0; i < Feeder.Rats[Chanloop].ID.Length; i++)
+                {
+                    C[i] = (byte)Feeder.Rats[Chanloop].ID[i];
+                }                
                 BinaryFileID.Write(C); //Comment Text                           
                 //RGB
                 BinaryFileID.Write((Int32)255);
@@ -325,6 +329,8 @@ namespace BioPacVideo
         private void drawbuffer()
         {
             PointF[][] WaveC;
+            Font F = new Font("Arial",10); 
+            SolidBrush B = new SolidBrush(Color.Red);
             while (true)
             {
                 _DrawHandle.WaitOne();
@@ -332,6 +338,8 @@ namespace BioPacVideo
                 {
                     lock (g)
                         g.Clear(Color.White);
+                    for (int i = 0; i < AcqChan; i++)
+                        g.DrawString(Feeder.Rats[i].ID, F, B, new PointF(1, (i+.25F) * (Ymax / AcqChan)));
                     CurPointPos = 0;
                     ClearDisplay = false;
                 }
@@ -340,6 +348,8 @@ namespace BioPacVideo
                 {
                     SamplesLeft = (samplesize + CurPointPos - MaxDrawSize);
                     g.Clear(Color.White);
+                    for (int i = 0; i < AcqChan; i++)
+                        g.DrawString(Feeder.Rats[i].ID, F, B, new PointF(1, (i+.25F) * (Ymax / AcqChan)));
                     CurPointPos = 0;
                 }
                 else

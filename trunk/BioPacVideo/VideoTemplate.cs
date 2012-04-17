@@ -18,6 +18,7 @@ namespace BioPacVideo
         static readonly VideoTemplate instance = new VideoTemplate(); //Create Constant instance.        
         public int Device_Count;
         public IntPtr pDF;
+        public int LengthWise;
         public bool CapSDKStatus;
         public bool EncSDKStatus;
         public bool Enabled;

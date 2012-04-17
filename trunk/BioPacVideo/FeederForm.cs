@@ -16,7 +16,8 @@ namespace BioPacVideo
         private FeederTemplate Feeder;
         private bool Startup;
         ArrayList WeightBoxes;
-        ArrayList MedicatedBoxes; 
+        ArrayList MedicatedBoxes;
+        ArrayList IDBoxes;
 
 
         //CONSTRUCTOR
@@ -29,9 +30,11 @@ namespace BioPacVideo
             Feeder = Pass_feeder;
             WeightBoxes = new ArrayList();
             MedicatedBoxes = new ArrayList();
+            IDBoxes = new ArrayList();
             MakeArrays();    
             TextBox TempBox;
             TextBox TempCheck;
+            TextBox TempID;
             if (Feeder.Meal1 != TimeSpan.MaxValue)
                 IDC_Meal1.Text = Feeder.Meal1.ToString();
             if (Feeder.Meal2 != TimeSpan.MaxValue)
@@ -50,6 +53,8 @@ namespace BioPacVideo
             {      
                 TempBox = WeightBoxes[i] as TextBox;
                 TempCheck = MedicatedBoxes[i] as TextBox;
+                TempID = IDBoxes[i] as TextBox;
+                TempID.Text = AllRats[i].ID;
                 IDC_RATLIST.Items.Add(String.Format("Rat{0}", i + 1));
                 if (AllRats[i].Weight > 0)
                 {
@@ -74,12 +79,14 @@ namespace BioPacVideo
             {
                 TextBox TempBox;
                 TextBox TempCheck;
+                TextBox TempID;
                 Double Weight;
                 int Percent;
                 for (int i = 0; i < 16; i++)
                 {
                     TempBox = WeightBoxes[i] as TextBox;
                     TempCheck = MedicatedBoxes[i] as TextBox;
+                    TempID = IDBoxes[i] as TextBox;
                     if (Double.TryParse(TempBox.Text, out Weight))
                     {
                         AllRats[i].Weight = Weight;
@@ -254,133 +261,25 @@ namespace BioPacVideo
             MedicatedBoxes.Add(IDX_RAT14);
             MedicatedBoxes.Add(IDX_RAT15);
             MedicatedBoxes.Add(IDX_RAT16);
-        }
-        private void IDX_RAT1_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDX_RAT2_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDX_RAT3_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDX_RAT4_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDX_RAT5_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDX_RAT6_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
+            IDBoxes.Add(RATID1);
+            IDBoxes.Add(RATID2);
+            IDBoxes.Add(RATID3);
+            IDBoxes.Add(RATID4);
+            IDBoxes.Add(RATID5);
+            IDBoxes.Add(RATID6);
+            IDBoxes.Add(RATID7);
+            IDBoxes.Add(RATID8);
+            IDBoxes.Add(RATID9);
+            IDBoxes.Add(RATID10);
+            IDBoxes.Add(RATID11);
+            IDBoxes.Add(RATID12);
+            IDBoxes.Add(RATID13);
+            IDBoxes.Add(RATID14);
+            IDBoxes.Add(RATID15);
+            IDBoxes.Add(RATID16);
 
-        private void IDX_RAT7_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
         }
-        private void IDX_RAT8_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDX_RAT10_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDX_RAT11_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDX_RAT12_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDX_RAT9_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDX_RAT13_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDX_RAT14_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDX_RAT15_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDX_RAT16_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDC_RAT1_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDC_RAT2_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDC_RAT3_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDC_RAT4_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDC_RAT5_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDC_RAT6_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDC_RAT7_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDC_RAT8_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDC_RAT9_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDC_RAT10_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDC_RAT11_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDC_RAT12_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDC_RAT13_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDC_RAT14_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDC_RAT15_FocusLeave(object sender, EventArgs e)
-        {
-            updateBoxes();
-        }
-        private void IDC_RAT16_FocusLeave(object sender, EventArgs e)
+        private void IDX_RAT_FocusLeave(object sender, EventArgs e)
         {
             updateBoxes();
         }
@@ -431,6 +330,11 @@ namespace BioPacVideo
             }
             else
                 IDC_Meal6.Text = Feeder.Meal6.ToString();
+        }
+
+        private void RATID1_TextChanged(object sender, EventArgs e)
+        {
+
         }
 
          }
