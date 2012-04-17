@@ -184,7 +184,7 @@ namespace BioPacVideo
             {
                 MP._DisplayHandle.WaitOne();
                 IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];                
-                if (Still != null)                    
+                //if (Still != null)                    
                     g.DrawImage(MP.offscreen, 30, 280);
                 Cm = 0;
                 for (int i = 0; i < MP.TotChan(); i++)
@@ -197,12 +197,13 @@ namespace BioPacVideo
                     {
                         Still = new Bitmap(Video.XRes, Video.YRes, Video.XRes * 3, PixelFormat.Format24bppRgb, Video.pDF);
                         Still.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                     
                     }
                     else
                     {
-                        Still = new Bitmap("NoSignal.Bmp");
+                       Still = new Bitmap("NoSignal.Bmp");
                     }
-                    g.DrawImage(Still, 132+(i%8)*162, 32+(float)Math.Floor((decimal)(i/8))*122, 160, 120);
+                    g.DrawImage(Still, 132+(i%Video.LengthWise)*162, 32+(float)Math.Floor((decimal)(i/Video.LengthWise))*122, 160, 120);
                     Still.Dispose();
                 }
                 /*if ((long)(DI.AvailableFreeSpace / DI.TotalSize) < .01 && MP.IsFileWriting)
@@ -241,6 +242,7 @@ namespace BioPacVideo
             }
             for (int i = 0; i < 16; i++)
             {
+                Feeder.Rats[i].ID = BioIni.IniReadValue("Rats", string.Format("Rat{0} ID", i), string.Format("Rat{0}", i));
                 Feeder.Rats[i].Weight = BioIni.IniReadValue("Rats", string.Format("Rat{0} (g)", i), (double)0);
                 Feeder.Rats[i].Medication = BioIni.IniReadValue("Rats", string.Format("Rat{0}Medicate", i), 100);
                 Feeder.Rats[i].Surgery = BioIni.IniReadValue("Rats", string.Format("Rat{0} Surgery", i));
@@ -249,6 +251,7 @@ namespace BioPacVideo
             }
             Video.Enabled = BioIni.IniReadValue("Video", "Enabled", true);
             Video.XRes = BioIni.IniReadValue("Video", "XRes", 320);
+            Video.LengthWise = BioIni.IniReadValue("Video", "LengthWise", 8);
             Video.YRes = BioIni.IniReadValue("Video", "YRes", 240);
             Video.Quant = BioIni.IniReadValue("Video", "Quant", 4);
             Video.KeyFrames = BioIni.IniReadValue("Video", "KeyFrames", 100);
@@ -288,6 +291,7 @@ namespace BioPacVideo
             }
             for (int i = 0; i < 16; i++)
             {
+                BioIni.IniWriteValue("Rats", string.Format("Rat{0} ID", i), Feeder.Rats[i].ID);
                 BioIni.IniWriteValue("Rats", string.Format("Rat{0} (g)", i), Feeder.Rats[i].Weight.ToString());
                 BioIni.IniWriteValue("Rats", string.Format("Rat{0}Medicate", i), Feeder.Rats[i].Medication);
                 BioIni.IniWriteValue("Rats", string.Format("Rat{0} Surgery", i), Feeder.Rats[i].Surgery.ToShortDateString());
@@ -295,6 +299,7 @@ namespace BioPacVideo
                 BioIni.IniWriteValue("Rats", string.Format("Rat{0} FirstSeizure", i), Feeder.Rats[i].FirstSeizure.ToShortDateString());
             }
             BioIni.IniWriteValue("Video", "Enabled", Video.Enabled);
+            BioIni.IniWriteValue("Video", "LengthWise", Video.LengthWise);
             BioIni.IniWriteValue("Video", "XRes", Video.XRes);
             BioIni.IniWriteValue("Video", "YRes", Video.YRes);
             BioIni.IniWriteValue("Video", "Quant", Video.Quant);

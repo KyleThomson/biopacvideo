@@ -28,6 +28,13 @@ namespace BioPacVideo
             {
                 V3.Checked = true;
             }
+            if (Video.LengthWise == 4)
+            {
+                comboBox1.SelectedIndex = 0;
+            }else 
+            {
+                comboBox1.SelectedIndex = 1;
+            }
             IDT_KEYINT.Text = Video.KeyFrames.ToString();
             IDT_QUANT.Text = Video.Quant.ToString();
         }
@@ -56,6 +63,19 @@ namespace BioPacVideo
             }
             VideoWrapper.SetCaptureRes(Video.XRes, Video.YRes);
             this.Close();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedIndex == 0)
+            {
+                Video.LengthWise = 4;
+            }
+            else
+            {
+                Video.LengthWise = 8;
+            }
+
         }
     }
 }

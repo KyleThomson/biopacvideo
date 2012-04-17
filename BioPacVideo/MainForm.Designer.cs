@@ -90,7 +90,7 @@ namespace BioPacVideo
             this.automaticFeederToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1446, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1286, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -240,24 +240,24 @@ namespace BioPacVideo
             // automaticFeederToolStripMenuItem
             // 
             this.automaticFeederToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.testFeedersToolStripMenuItem,
-            this.setFeedingProtocolToolStripMenuItem});
+            this.setFeedingProtocolToolStripMenuItem,
+            this.testFeedersToolStripMenuItem});
             this.automaticFeederToolStripMenuItem.Name = "automaticFeederToolStripMenuItem";
-            this.automaticFeederToolStripMenuItem.Size = new System.Drawing.Size(104, 20);
-            this.automaticFeederToolStripMenuItem.Text = "Automatic Feeder";
+            this.automaticFeederToolStripMenuItem.Size = new System.Drawing.Size(92, 20);
+            this.automaticFeederToolStripMenuItem.Text = "Animal Settings";
             // 
             // testFeedersToolStripMenuItem
             // 
             this.testFeedersToolStripMenuItem.Name = "testFeedersToolStripMenuItem";
-            this.testFeedersToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.testFeedersToolStripMenuItem.Text = "Test Feeders";
+            this.testFeedersToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.testFeedersToolStripMenuItem.Text = "Feeder Test";
             this.testFeedersToolStripMenuItem.Click += new System.EventHandler(this.testFeedersToolStripMenuItem_Click);
             // 
             // setFeedingProtocolToolStripMenuItem
             // 
             this.setFeedingProtocolToolStripMenuItem.Name = "setFeedingProtocolToolStripMenuItem";
-            this.setFeedingProtocolToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.setFeedingProtocolToolStripMenuItem.Text = "Set Feeding Protocol";
+            this.setFeedingProtocolToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.setFeedingProtocolToolStripMenuItem.Text = "Animal Settings";
             this.setFeedingProtocolToolStripMenuItem.Click += new System.EventHandler(this.setFeedingProtocolToolStripMenuItem_Click);
             // 
             // StatusBar
@@ -274,7 +274,7 @@ namespace BioPacVideo
             this.IDT_FEEDST});
             this.StatusBar.Location = new System.Drawing.Point(0, 861);
             this.StatusBar.Name = "StatusBar";
-            this.StatusBar.Size = new System.Drawing.Size(1446, 26);
+            this.StatusBar.Size = new System.Drawing.Size(1286, 26);
             this.StatusBar.TabIndex = 3;
             this.StatusBar.Text = "statusStrip1";
             this.StatusBar.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.StatusBar_ItemClicked);
@@ -421,7 +421,7 @@ namespace BioPacVideo
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1446, 887);
+            this.ClientSize = new System.Drawing.Size(1286, 887);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.TimeScale);
