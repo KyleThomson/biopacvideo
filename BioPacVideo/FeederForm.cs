@@ -69,6 +69,7 @@ namespace BioPacVideo
                 }                
             }
             Startup = false;
+            updateBoxes();
             IDC_RATLIST.SelectedIndex = 0;                     
         }
 
@@ -87,6 +88,7 @@ namespace BioPacVideo
                     TempBox = WeightBoxes[i] as TextBox;
                     TempCheck = MedicatedBoxes[i] as TextBox;
                     TempID = IDBoxes[i] as TextBox;
+                    AllRats[i].ID = TempID.Text;
                     if (Double.TryParse(TempBox.Text, out Weight))
                     {
                         AllRats[i].Weight = Weight;
@@ -330,11 +332,6 @@ namespace BioPacVideo
             }
             else
                 IDC_Meal6.Text = Feeder.Meal6.ToString();
-        }
-
-        private void RATID1_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
          }

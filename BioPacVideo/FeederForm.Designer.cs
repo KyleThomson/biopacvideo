@@ -752,7 +752,7 @@
             this.RATID1.Name = "RATID1";
             this.RATID1.Size = new System.Drawing.Size(76, 20);
             this.RATID1.TabIndex = 106;
-            this.RATID1.TextChanged += new System.EventHandler(this.RATID1_TextChanged);
+            this.RATID1.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // RATID2
             // 
@@ -760,6 +760,7 @@
             this.RATID2.Name = "RATID2";
             this.RATID2.Size = new System.Drawing.Size(76, 20);
             this.RATID2.TabIndex = 107;
+            this.RATID2.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // RATID3
             // 
@@ -767,6 +768,7 @@
             this.RATID3.Name = "RATID3";
             this.RATID3.Size = new System.Drawing.Size(76, 20);
             this.RATID3.TabIndex = 108;
+            this.RATID3.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // RATID4
             // 
@@ -774,6 +776,7 @@
             this.RATID4.Name = "RATID4";
             this.RATID4.Size = new System.Drawing.Size(76, 20);
             this.RATID4.TabIndex = 109;
+            this.RATID4.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // RATID5
             // 
@@ -858,6 +861,20 @@
             this.RATID16.Name = "RATID16";
             this.RATID16.Size = new System.Drawing.Size(76, 20);
             this.RATID16.TabIndex = 121;
+            this.RATID5.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
+            this.RATID6.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
+            this.RATID7.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
+            this.RATID8.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
+            this.RATID9.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
+            this.RATID10.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
+            this.RATID11.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
+            this.RATID12.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
+            this.RATID13.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
+            this.RATID14.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
+            this.RATID15.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
+            this.RATID16.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
+
+
             // 
             // FeederForm
             // 

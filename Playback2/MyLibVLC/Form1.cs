@@ -28,6 +28,7 @@ namespace SeizurePlayback
         bool Highlighting;
         bool RealTime;
         bool Redraw;
+        System.IO.StreamWriter SzTxt; 
         long[] AVILengths;
         Thread ThreadDisplay;
         VlcMedia media;
@@ -170,7 +171,7 @@ namespace SeizurePlayback
                             ACQ.Position += 1;
                             Step += 1;
                             st.Stop();
-                            if (st.ElapsedMilliseconds > 1000)
+                            if ((st.ElapsedMilliseconds+Delay) > 1000)
                             {
                                 Delay = (int)st.ElapsedMilliseconds - 1000;
                             }
@@ -207,6 +208,7 @@ namespace SeizurePlayback
         {
             ThreadDisplay.Abort();
             if (player != null) player.Dispose();
+            if (SzTxt != null) SzTxt.Close();
             instance.Dispose();            
         }
 
@@ -256,7 +258,14 @@ namespace SeizurePlayback
                 AVILengths = new long[AVIFiles.Length];
                 BaseName = AVIFiles[0].Substring(Path.Length+1,15);                
                 TimeBar.Minimum = 0;
-                TimeBar.Maximum = ACQ.FileTime;                
+                TimeBar.Maximum = ACQ.FileTime;
+                string FPath = AVIFiles[0].Substring(0, AVIFiles[0].LastIndexOf("\\") + 1) + "Seizure";                
+
+                if (!Directory.Exists(FPath))
+                {
+                    Directory.CreateDirectory(FPath);
+                }
+                SzTxt = new System.IO.StreamWriter(FPath + "\\" + BaseName + ".txt");
                 SuppressChange = true;
                 for (int i = 0; i < ACQ.Chans; i++)
                 {
@@ -282,8 +291,9 @@ namespace SeizurePlayback
         {
             if ((e.X > graph.X1) && (e.X < graph.X2) && (e.Y > graph.Y1) && (e.Y < graph.Y2))
             {                   
-                Paused = true;                
-                ACQ.SelectedChan = (int)((float)ACQ.Chans * (float)(((float)e.Y - (float)graph.Y1) / (float)(graph.Y2-graph.Y1)));
+                Paused = true;
+                int TempChan = (int)((float)ACQ.VisibleChans * (float)(((float)e.Y - (float)graph.Y1) / (float)(graph.Y2 - graph.Y1)));
+                ACQ.SelectedChan = ChanPos[TempChan];                
                 HighlightStart = (int)((float)MaxDispSize * (float)(e.X-graph.X1)/(graph.X2 - graph.X1));
                 Highlighting = true;
                 HighlightEnd = HighlightStart;
@@ -318,7 +328,7 @@ namespace SeizurePlayback
                         Redraw = true;
                         //Frame rate is actually 30.3, but listed as 30 in the avi. To seek to the proper time, need to adjust for that factor.
                         //Switch to float to do decimal math, switch back to integer for actual ms. 
-                        long TimeSeek = (int)((float)ACQ.Position * 1000F * 1.0098F);
+                        long TimeSeek = (int)((float)ACQ.Position * 1000F * 1.0095F);
                         bool AVILoaded = false;
                         bool pass = false;
                         Subtractor = 0;                                               
@@ -353,7 +363,7 @@ namespace SeizurePlayback
                             if (player.GetLengthMs() < TimeSeek)
                             {
                                 TimeSeek = TimeSeek - player.GetLengthMs();
-                                Subtractor += player.GetLengthMs()/1000;
+                                Subtractor += player.GetLengthMs();
                                 player.Stop();
                                 FNum++;
                                 media.Dispose();
@@ -384,7 +394,7 @@ namespace SeizurePlayback
 
         private void Rewind_Click(object sender, EventArgs e)
         {
-            ACQ.Position -= MaxDispSize;
+            ACQ.Position = Math.Max(0, ACQ.Position - MaxDispSize);
             if (player != null) 
                 player.seek(player.getpos() - MaxDispSize * 1000);
             Step = MaxDispSize;
@@ -418,20 +428,22 @@ namespace SeizurePlayback
         private void SzCaptureButton_Click(object sender, EventArgs e)
         {
             int StartTime;                
-            if (CurrentAVI != "")
+            if ((CurrentAVI != "") && (ACQ.SelectedChan != -1))
             {
                 StartTime = (ACQ.Position - Step + HighlightStart);                
                 string outfile = CurrentAVI.Substring(CurrentAVI.Length - 27, 18);
-                string FPath = CurrentAVI.Substring(0, CurrentAVI.LastIndexOf("\\")+1) + "Seizure";
-                SeizureCount[ACQ.SelectedChan]++;
-                if (!Directory.Exists(FPath))
-                {
-                    Directory.CreateDirectory(FPath);
-                }
-                int length = (int)((float)(HighlightEnd - HighlightStart + 1) * 1.01F);
+                string FPath = CurrentAVI.Substring(0, CurrentAVI.LastIndexOf("\\")+1) + "Seizure";                
+                SeizureCount[ACQ.SelectedChan]++;                
+                TimeSpan t = TimeSpan.FromSeconds( StartTime );
+
+                string answer = string.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours,t.Minutes, t.Seconds);
+                SzTxt.WriteLine(ACQ.SelectedChan.ToString() + "   " + SeizureCount[ACQ.SelectedChan].ToString() + "   "
+                    + answer + "   " + (HighlightEnd - HighlightStart + 1).ToString());
+                
+                int length = (int)((float)(HighlightEnd - HighlightStart + 1) * 1.01F);                
                 outfile = FPath + "\\" + outfile + "_S" + SeizureCount[ACQ.SelectedChan].ToString();
                 ACQ.DumpData(outfile + ".dat", ACQ.SelectedChan, StartTime, HighlightEnd - HighlightStart + 1);
-                player.EncodeSeizure((int)((float)StartTime * 1.01F - Subtractor), length, CurrentAVI, outfile + ".avi");
+                player.EncodeSeizure((int)((((float)StartTime * 1000 * 1.0095F) - Subtractor)/1000), length, CurrentAVI, outfile + ".avi");
             }
         }
 

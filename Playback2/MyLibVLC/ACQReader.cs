@@ -11,6 +11,7 @@ namespace SeizurePlayback
         public string FullName;
         public Int32[][] data;
         public bool[] HideChan;
+        public string[] ID;
         public int VisibleChans; 
         public int Chans;
         public int SelectedChan;
@@ -44,6 +45,7 @@ namespace SeizurePlayback
         {
             Zoom = 1; 
             Chans = new int();
+            ID = new string[16];
             HideChan = new bool[16];
             SampleRate = 500;            
             Voltage = 2000*1000;                        
@@ -54,6 +56,7 @@ namespace SeizurePlayback
 
         public void openACQ(string FName)
         { //open File for reading
+            byte CharN; 
             FullName = FName;
             FILE = new FileStream(FullName, FileMode.Open);            
             FID = new BinaryReader(FILE);
@@ -65,6 +68,17 @@ namespace SeizurePlayback
             Chans = (int)FID.ReadInt16();                      
             FILE.Seek(ExtLenHeader, SeekOrigin.Begin);
             ChanLenHeader =FID.ReadInt32();
+            for (int i = 0; i < Chans; i++)
+            {
+                ID[i] = "";
+                FILE.Seek(ExtLenHeader + ChanLenHeader * i + 6, SeekOrigin.Begin);
+                CharN = FID.ReadByte();
+                while (CharN != 0)
+                {
+                    ID[i] += (char)CharN;
+                    CharN = FID.ReadByte();
+                }
+            }
             FILE.Seek(ExtLenHeader + (ChanLenHeader*Chans), SeekOrigin.Begin);       
      
             ForeignHeader = FID.ReadInt32();
@@ -199,12 +213,14 @@ namespace SeizurePlayback
         public void drawbuffer()
         {
             int NotDisp;
-            PointF[][] WaveC;                           
+            PointF[][] WaveC;
+            Font F = new Font("Arial", 10);
+            SolidBrush B = new SolidBrush(Color.Red);           
              g.Clear(Color.White);
              if (HL)
              {                                  
                  SolidBrush myBrush = new SolidBrush(System.Drawing.Color.LightGreen);                    
-                 g.FillRectangle(myBrush, new Rectangle((int)(HLS * PointSpacing * SampleRate), (int)(VoltageSpacing * (SelectedChan + 0.5F)), (int)((HLE - HLS) * PointSpacing * SampleRate), (Ymax / VisibleChans)));                 
+                 g.FillRectangle(myBrush, new Rectangle((int)(HLS * PointSpacing * SampleRate), (int)(VoltageSpacing * (SelectedChan + 0.25F)), (int)((HLE - HLS) * PointSpacing * SampleRate), (Ymax / VisibleChans)));                 
                  
              }
                 WaveC = new PointF[Chans][];
@@ -216,7 +232,8 @@ namespace SeizurePlayback
                 for (int j = 0; j < Chans; j++)
                 {
                     if (!HideChan[j])
-                    {
+                    {                        
+                          g.DrawString(ID[j], F, B, new PointF(1, .25F + (j-NotDisp) * (Ymax / Chans)));
                         for (int i = 0; i < SampleSize; i++)
                         {
 

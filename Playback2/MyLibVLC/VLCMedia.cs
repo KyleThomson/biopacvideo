@@ -111,20 +111,11 @@ namespace SeizurePlayback
         public void EncodeSeizure(int StartTime, int length, string infile, string outfile)
         {
             Process p = new Process();
-            int h, m, s;
-
-            string CmdString;            
-            CmdString = " " + infile;
-            CmdString += " -o " + outfile;
-            h = StartTime / 3600;
-            m = (StartTime - (h * 3600)) / 60;
-            s = StartTime - h * 3600 - m * 60;
-            string stime = string.Format("{0:00}:", h) + string.Format("{0:00}:", m) + string.Format("{0:00}", s);
-            CmdString += " --starttime " + stime + " --frames " + (length * fps).ToString();
-            CmdString += " --keyint 25 --crf 24";
-            //MessageBox.Show(CmdString);
+            string CmdString = " -y -ss " + StartTime.ToString() + " -t " + length.ToString();            
+            CmdString += " -i " + infile;
+            CmdString += " -sameq " + outfile;                        
             p.StartInfo.Arguments = CmdString;
-            p.StartInfo.FileName = "C:\\x264\\x264.exe";
+            p.StartInfo.FileName = "C:\\x264\\ffmpeg.exe";
             p.Start();
             p.WaitForExit();
 
