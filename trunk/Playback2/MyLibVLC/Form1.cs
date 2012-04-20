@@ -427,7 +427,8 @@ namespace SeizurePlayback
 
         private void SzCaptureButton_Click(object sender, EventArgs e)
         {
-            int StartTime;                
+            int StartTime;
+            string Notes; 
             if ((CurrentAVI != "") && (ACQ.SelectedChan != -1))
             {
                 StartTime = (ACQ.Position - Step + HighlightStart);                
@@ -435,13 +436,16 @@ namespace SeizurePlayback
                 string FPath = CurrentAVI.Substring(0, CurrentAVI.LastIndexOf("\\")+1) + "Seizure";                
                 SeizureCount[ACQ.SelectedChan]++;                
                 TimeSpan t = TimeSpan.FromSeconds( StartTime );
-
+                SzPrompt Frm = new SzPrompt();
+                Frm.ShowDialog();
+                Notes = Frm.Notes;
+                Frm.Dispose();
                 string answer = string.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours,t.Minutes, t.Seconds);
-                SzTxt.WriteLine(ACQ.SelectedChan.ToString() + "   " + SeizureCount[ACQ.SelectedChan].ToString() + "   "
-                    + answer + "   " + (HighlightEnd - HighlightStart + 1).ToString());
-                
+                outfile += "_S" + SeizureCount[ACQ.SelectedChan].ToString();
+                SzTxt.WriteLine((ACQ.SelectedChan+1).ToString() + ", " + ACQ.ID[ACQ.SelectedChan] +  ", " + SeizureCount[ACQ.SelectedChan].ToString() + ", "
+                    + answer + ", " + (HighlightEnd - HighlightStart + 1).ToString() + ", " + Notes + ", " + outfile);                
                 int length = (int)((float)(HighlightEnd - HighlightStart + 1) * 1.01F);                
-                outfile = FPath + "\\" + outfile + "_S" + SeizureCount[ACQ.SelectedChan].ToString();
+                outfile = FPath + "\\" + outfile;
                 ACQ.DumpData(outfile + ".dat", ACQ.SelectedChan, StartTime, HighlightEnd - HighlightStart + 1);
                 player.EncodeSeizure((int)((((float)StartTime * 1000 * 1.0095F) - Subtractor)/1000), length, CurrentAVI, outfile + ".avi");
             }
