@@ -69,6 +69,9 @@ namespace SeizurePlayback
         public static extern int libvlc_media_player_play(IntPtr player);
 
         [DllImport("libvlc")]
+        public static extern int libvlc_media_player_is_seekable(IntPtr player);
+
+        [DllImport("libvlc")]
         public static extern void libvlc_media_player_pause(IntPtr player);
 
         [DllImport("libvlc")]

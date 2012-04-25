@@ -25,8 +25,8 @@ namespace SeizurePlayback
         }
 
         public long GetLengthMs()
-        {
-            return LibVlc.libvlc_media_player_get_length(Handle);
+        {            
+                return LibVlc.libvlc_media_player_get_length(Handle);            
         }
 
         public void Dispose()
@@ -101,7 +101,11 @@ namespace SeizurePlayback
         }
         public void seek(long time)
         {
-            LibVlc.libvlc_media_player_set_time(Handle, time);
+            if (LibVlc.libvlc_media_player_is_seekable(Handle) != 0)
+                LibVlc.libvlc_media_player_set_time(Handle, time);
+            else
+                MessageBox.Show("Cannot Seek.");
+
         }
         public long getpos()
         {

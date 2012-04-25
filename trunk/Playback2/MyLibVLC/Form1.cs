@@ -194,6 +194,19 @@ namespace SeizurePlayback
                             g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
                             Thread.Sleep(30);
                         }
+                        else
+                        {
+                            if (Step >= MaxDispSize)
+                            {
+
+                                if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
+                                    Paused = true;
+                                ACQ.drawbuffer();
+                                Step = 0;
+                            }
+                            g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
+                            Thread.Sleep(100);
+                        }
                     }
                 } //if ACQLoaded
                 else
@@ -201,6 +214,7 @@ namespace SeizurePlayback
                     g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
                     Thread.Sleep(100);
                 }
+                
             } 
         }
         
@@ -247,6 +261,7 @@ namespace SeizurePlayback
         private void Open_Click(object sender, EventArgs e)
         {   
             FBD = new FolderBrowserDialog();
+            Paused = true;
             FBD.ShowDialog();
             Path = FBD.SelectedPath;
             if (FBD.SelectedPath != "")
@@ -255,6 +270,7 @@ namespace SeizurePlayback
                 AVIFiles = Directory.GetFiles(Path, "*.avi");            
                 ACQ.openACQ(FName[0]);
                 ACQ.VisibleChans = ACQ.Chans;
+                ACQ.SetDispLength(MaxDispSize);  
                 AVILengths = new long[AVIFiles.Length];
                 BaseName = AVIFiles[0].Substring(Path.Length+1,15);                
                 TimeBar.Minimum = 0;
@@ -328,7 +344,7 @@ namespace SeizurePlayback
                         Redraw = true;
                         //Frame rate is actually 30.3, but listed as 30 in the avi. To seek to the proper time, need to adjust for that factor.
                         //Switch to float to do decimal math, switch back to integer for actual ms. 
-                        long TimeSeek = (int)((float)ACQ.Position * 1000F * 1.0095F);
+                        long TimeSeek = (int)((float)ACQ.Position * 1000F * 1.0096F);
                         bool AVILoaded = false;
                         bool pass = false;
                         Subtractor = 0;                                               
@@ -508,6 +524,57 @@ namespace SeizurePlayback
                 VideoPanel.Location = new Point(VideoPanel.Location.X, VideoPanel.Location.Y + 360);             
             }
             doublesize = !doublesize;
+        }
+
+        private void CompressFinish_Click(object sender, EventArgs e)
+        {
+            DialogResult result;
+            Process Recomp;
+            string Command;                       
+            string SOut;            
+            int Dur = 0;
+            result = MessageBox.Show("Warning: This process takes 10-20 hours and is irreversable", "Compression Start", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                result = MessageBox.Show("Are you sure?", "Compression Start", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    if (player != null)
+                    {
+                        player.Stop();
+                        player.Dispose();
+                    }                    
+                    for (int i = 0; i < AVIFiles.Length; i++)
+                    {                        
+                        Command = "-i " + AVIFiles[i] + " -vcodec libx264 -crf 33 -coder 0 -an ";
+                        Command += Path + "\\temp.avi";
+                        Recomp = new Process();
+                        Recomp.StartInfo = new ProcessStartInfo("C:\\x264\\ffmpeg.exe", Command);
+                        Recomp.StartInfo.CreateNoWindow = true;
+                        Recomp.StartInfo.UseShellExecute = false;
+                        Recomp.StartInfo.RedirectStandardOutput = true;
+                        Recomp.Start();                        
+                        /*while (Dur == 0)
+                        {
+                            SOut = Recomp.StandardOutput.ReadLine();
+                            if (SOut.IndexOf("Duration: ") != -1)
+                            {
+                                MessageBox.Show("OMG HI");
+                                Dur = 3; 
+                            }
+                        }*/
+                        while (!Recomp.HasExited)
+                        {                            
+                            //Recomp.StandardOutput
+                        }
+                        /*if (File.Exists(Path + "\\temp.avi"))
+                        {
+                            File.Delete(AVIFiles[i]);
+                            File.Move(Path + "\\temp.avi", AVIFiles[i]);
+                        } */
+                    }
+                }
+            }
         }
 
 
