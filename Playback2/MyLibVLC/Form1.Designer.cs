@@ -62,6 +62,7 @@ namespace SeizurePlayback
             this.VisChan9 = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.ZoomScale = new System.Windows.Forms.TrackBar();
+            this.CompressFinish = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.SuspendLayout();
@@ -455,12 +456,24 @@ namespace SeizurePlayback
             this.ZoomScale.Value = 10;
             this.ZoomScale.Scroll += new System.EventHandler(this.ZoomScale_Scroll);
             // 
+            // CompressFinish
+            // 
+            this.CompressFinish.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.CompressFinish.Location = new System.Drawing.Point(1097, 787);
+            this.CompressFinish.Name = "CompressFinish";
+            this.CompressFinish.Size = new System.Drawing.Size(156, 23);
+            this.CompressFinish.TabIndex = 44;
+            this.CompressFinish.Text = "Compress Directory";
+            this.CompressFinish.UseVisualStyleBackColor = true;
+            this.CompressFinish.Click += new System.EventHandler(this.CompressFinish_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1424, 845);
+            this.Controls.Add(this.CompressFinish);
             this.Controls.Add(this.VideoPanel);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.VisChan16);
@@ -547,6 +560,7 @@ namespace SeizurePlayback
         private System.Windows.Forms.CheckBox VisChan9;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TrackBar ZoomScale;
+        private System.Windows.Forms.Button CompressFinish;
     }
 }
 

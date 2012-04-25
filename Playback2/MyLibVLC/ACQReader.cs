@@ -46,8 +46,7 @@ namespace SeizurePlayback
             Zoom = 1; 
             Chans = new int();
             ID = new string[16];
-            HideChan = new bool[16];
-            SampleRate = 500;            
+            HideChan = new bool[16];            
             Voltage = 2000*1000;                        
             WavePen = new Pen(Color.Black);
             SelectedPen = new Pen(Color.Red);
@@ -60,12 +59,14 @@ namespace SeizurePlayback
             FullName = FName;
             FILE = new FileStream(FullName, FileMode.Open);            
             FID = new BinaryReader(FILE);
-            FILE.Seek(0, SeekOrigin.End);
+            FILE.Seek(0, SeekOrigin.End);            
             EOF = FILE.Position;
             //Get header info            
             FILE.Seek(6, SeekOrigin.Begin);
-            ExtLenHeader = FID.ReadInt32();            
-            Chans = (int)FID.ReadInt16();                      
+            ExtLenHeader = FID.ReadInt32();                        
+            Chans = (int)FID.ReadInt16();
+            FILE.Seek(16, SeekOrigin.Begin);
+            SampleRate = (int)(1000/FID.ReadDouble());            
             FILE.Seek(ExtLenHeader, SeekOrigin.Begin);
             ChanLenHeader =FID.ReadInt32();
             for (int i = 0; i < Chans; i++)
@@ -83,7 +84,7 @@ namespace SeizurePlayback
      
             ForeignHeader = FID.ReadInt32();
             FILE.Seek(ForeignHeader + ExtLenHeader + (ChanLenHeader * Chans), SeekOrigin.Begin);
-            DataType = FID.ReadInt16();
+            DataType = 4; // FID.ReadInt16();
             DataStart = ForeignHeader + 4 * Chans + (ChanLenHeader *Chans) + ExtLenHeader;
             FileTime = (int)((FILE.Length - (long)DataStart) / (DataType * Chans * SampleRate));
             Position = 0;
