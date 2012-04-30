@@ -101,11 +101,9 @@ namespace SeizurePlayback
         }
         public void seek(long time)
         {
-            if (LibVlc.libvlc_media_player_is_seekable(Handle) != 0)
+            
                 LibVlc.libvlc_media_player_set_time(Handle, time);
-            else
-                MessageBox.Show("Cannot Seek.");
-
+            
         }
         public long getpos()
         {

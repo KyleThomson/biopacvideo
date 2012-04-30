@@ -63,6 +63,7 @@ namespace SeizurePlayback
             this.label3 = new System.Windows.Forms.Label();
             this.ZoomScale = new System.Windows.Forms.TrackBar();
             this.CompressFinish = new System.Windows.Forms.Button();
+            this.RvwSz = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.SuspendLayout();
@@ -90,7 +91,7 @@ namespace SeizurePlayback
             // Open
             // 
             this.Open.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.Open.Location = new System.Drawing.Point(1016, 476);
+            this.Open.Location = new System.Drawing.Point(854, 476);
             this.Open.Name = "Open";
             this.Open.Size = new System.Drawing.Size(156, 23);
             this.Open.TabIndex = 3;
@@ -112,7 +113,7 @@ namespace SeizurePlayback
             // TimeBar
             // 
             this.TimeBar.LargeChange = 1;
-            this.TimeBar.Location = new System.Drawing.Point(498, 647);
+            this.TimeBar.Location = new System.Drawing.Point(498, 695);
             this.TimeBar.Maximum = 9;
             this.TimeBar.Name = "TimeBar";
             this.TimeBar.Size = new System.Drawing.Size(924, 42);
@@ -133,7 +134,7 @@ namespace SeizurePlayback
             // button1
             // 
             this.button1.ForeColor = System.Drawing.SystemColors.Control;
-            this.button1.Location = new System.Drawing.Point(1097, 532);
+            this.button1.Location = new System.Drawing.Point(1097, 537);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 16;
@@ -183,7 +184,7 @@ namespace SeizurePlayback
             // SzCaptureButton
             // 
             this.SzCaptureButton.ForeColor = System.Drawing.SystemColors.Control;
-            this.SzCaptureButton.Location = new System.Drawing.Point(1016, 563);
+            this.SzCaptureButton.Location = new System.Drawing.Point(854, 508);
             this.SzCaptureButton.Name = "SzCaptureButton";
             this.SzCaptureButton.Size = new System.Drawing.Size(156, 23);
             this.SzCaptureButton.TabIndex = 20;
@@ -194,7 +195,7 @@ namespace SeizurePlayback
             // DetectionLoadButton
             // 
             this.DetectionLoadButton.ForeColor = System.Drawing.SystemColors.Control;
-            this.DetectionLoadButton.Location = new System.Drawing.Point(1016, 592);
+            this.DetectionLoadButton.Location = new System.Drawing.Point(1016, 566);
             this.DetectionLoadButton.Name = "DetectionLoadButton";
             this.DetectionLoadButton.Size = new System.Drawing.Size(156, 23);
             this.DetectionLoadButton.TabIndex = 21;
@@ -204,7 +205,7 @@ namespace SeizurePlayback
             // button2
             // 
             this.button2.ForeColor = System.Drawing.SystemColors.Control;
-            this.button2.Location = new System.Drawing.Point(1016, 621);
+            this.button2.Location = new System.Drawing.Point(1016, 595);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 22;
@@ -214,7 +215,7 @@ namespace SeizurePlayback
             // button3
             // 
             this.button3.ForeColor = System.Drawing.SystemColors.Control;
-            this.button3.Location = new System.Drawing.Point(1097, 621);
+            this.button3.Location = new System.Drawing.Point(1097, 595);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 23;
@@ -244,7 +245,7 @@ namespace SeizurePlayback
             // 
             this.VisChan1.AutoSize = true;
             this.VisChan1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan1.Location = new System.Drawing.Point(1098, 695);
+            this.VisChan1.Location = new System.Drawing.Point(502, 743);
             this.VisChan1.Name = "VisChan1";
             this.VisChan1.Size = new System.Drawing.Size(74, 17);
             this.VisChan1.TabIndex = 26;
@@ -256,7 +257,7 @@ namespace SeizurePlayback
             // 
             this.VisChan2.AutoSize = true;
             this.VisChan2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan2.Location = new System.Drawing.Point(1099, 718);
+            this.VisChan2.Location = new System.Drawing.Point(503, 766);
             this.VisChan2.Name = "VisChan2";
             this.VisChan2.Size = new System.Drawing.Size(74, 17);
             this.VisChan2.TabIndex = 27;
@@ -268,7 +269,7 @@ namespace SeizurePlayback
             // 
             this.VisChan3.AutoSize = true;
             this.VisChan3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan3.Location = new System.Drawing.Point(1099, 741);
+            this.VisChan3.Location = new System.Drawing.Point(503, 789);
             this.VisChan3.Name = "VisChan3";
             this.VisChan3.Size = new System.Drawing.Size(74, 17);
             this.VisChan3.TabIndex = 28;
@@ -280,7 +281,7 @@ namespace SeizurePlayback
             // 
             this.VisChan4.AutoSize = true;
             this.VisChan4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan4.Location = new System.Drawing.Point(1099, 764);
+            this.VisChan4.Location = new System.Drawing.Point(503, 812);
             this.VisChan4.Name = "VisChan4";
             this.VisChan4.Size = new System.Drawing.Size(74, 17);
             this.VisChan4.TabIndex = 29;
@@ -292,7 +293,7 @@ namespace SeizurePlayback
             // 
             this.VisChan5.AutoSize = true;
             this.VisChan5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan5.Location = new System.Drawing.Point(1180, 695);
+            this.VisChan5.Location = new System.Drawing.Point(584, 743);
             this.VisChan5.Name = "VisChan5";
             this.VisChan5.Size = new System.Drawing.Size(74, 17);
             this.VisChan5.TabIndex = 30;
@@ -304,7 +305,7 @@ namespace SeizurePlayback
             // 
             this.VisChan6.AutoSize = true;
             this.VisChan6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan6.Location = new System.Drawing.Point(1179, 718);
+            this.VisChan6.Location = new System.Drawing.Point(583, 766);
             this.VisChan6.Name = "VisChan6";
             this.VisChan6.Size = new System.Drawing.Size(74, 17);
             this.VisChan6.TabIndex = 31;
@@ -316,7 +317,7 @@ namespace SeizurePlayback
             // 
             this.VisChan7.AutoSize = true;
             this.VisChan7.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan7.Location = new System.Drawing.Point(1179, 741);
+            this.VisChan7.Location = new System.Drawing.Point(583, 789);
             this.VisChan7.Name = "VisChan7";
             this.VisChan7.Size = new System.Drawing.Size(74, 17);
             this.VisChan7.TabIndex = 32;
@@ -328,7 +329,7 @@ namespace SeizurePlayback
             // 
             this.VisChan8.AutoSize = true;
             this.VisChan8.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan8.Location = new System.Drawing.Point(1179, 764);
+            this.VisChan8.Location = new System.Drawing.Point(583, 812);
             this.VisChan8.Name = "VisChan8";
             this.VisChan8.Size = new System.Drawing.Size(74, 17);
             this.VisChan8.TabIndex = 33;
@@ -340,7 +341,7 @@ namespace SeizurePlayback
             // 
             this.VisChan16.AutoSize = true;
             this.VisChan16.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan16.Location = new System.Drawing.Point(1341, 764);
+            this.VisChan16.Location = new System.Drawing.Point(745, 812);
             this.VisChan16.Name = "VisChan16";
             this.VisChan16.Size = new System.Drawing.Size(80, 17);
             this.VisChan16.TabIndex = 41;
@@ -352,7 +353,7 @@ namespace SeizurePlayback
             // 
             this.VisChan15.AutoSize = true;
             this.VisChan15.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan15.Location = new System.Drawing.Point(1341, 741);
+            this.VisChan15.Location = new System.Drawing.Point(745, 789);
             this.VisChan15.Name = "VisChan15";
             this.VisChan15.Size = new System.Drawing.Size(80, 17);
             this.VisChan15.TabIndex = 40;
@@ -364,7 +365,7 @@ namespace SeizurePlayback
             // 
             this.VisChan14.AutoSize = true;
             this.VisChan14.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan14.Location = new System.Drawing.Point(1341, 718);
+            this.VisChan14.Location = new System.Drawing.Point(745, 766);
             this.VisChan14.Name = "VisChan14";
             this.VisChan14.Size = new System.Drawing.Size(80, 17);
             this.VisChan14.TabIndex = 39;
@@ -376,7 +377,7 @@ namespace SeizurePlayback
             // 
             this.VisChan13.AutoSize = true;
             this.VisChan13.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan13.Location = new System.Drawing.Point(1342, 695);
+            this.VisChan13.Location = new System.Drawing.Point(746, 743);
             this.VisChan13.Name = "VisChan13";
             this.VisChan13.Size = new System.Drawing.Size(80, 17);
             this.VisChan13.TabIndex = 38;
@@ -388,7 +389,7 @@ namespace SeizurePlayback
             // 
             this.VisChan12.AutoSize = true;
             this.VisChan12.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan12.Location = new System.Drawing.Point(1261, 764);
+            this.VisChan12.Location = new System.Drawing.Point(665, 812);
             this.VisChan12.Name = "VisChan12";
             this.VisChan12.Size = new System.Drawing.Size(80, 17);
             this.VisChan12.TabIndex = 37;
@@ -400,7 +401,7 @@ namespace SeizurePlayback
             // 
             this.VisChan11.AutoSize = true;
             this.VisChan11.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan11.Location = new System.Drawing.Point(1261, 741);
+            this.VisChan11.Location = new System.Drawing.Point(665, 789);
             this.VisChan11.Name = "VisChan11";
             this.VisChan11.Size = new System.Drawing.Size(80, 17);
             this.VisChan11.TabIndex = 36;
@@ -412,7 +413,7 @@ namespace SeizurePlayback
             // 
             this.VisChan10.AutoSize = true;
             this.VisChan10.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan10.Location = new System.Drawing.Point(1261, 718);
+            this.VisChan10.Location = new System.Drawing.Point(665, 766);
             this.VisChan10.Name = "VisChan10";
             this.VisChan10.Size = new System.Drawing.Size(80, 17);
             this.VisChan10.TabIndex = 35;
@@ -424,7 +425,7 @@ namespace SeizurePlayback
             // 
             this.VisChan9.AutoSize = true;
             this.VisChan9.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan9.Location = new System.Drawing.Point(1260, 695);
+            this.VisChan9.Location = new System.Drawing.Point(664, 743);
             this.VisChan9.Name = "VisChan9";
             this.VisChan9.Size = new System.Drawing.Size(74, 17);
             this.VisChan9.TabIndex = 34;
@@ -459,7 +460,7 @@ namespace SeizurePlayback
             // CompressFinish
             // 
             this.CompressFinish.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.CompressFinish.Location = new System.Drawing.Point(1097, 787);
+            this.CompressFinish.Location = new System.Drawing.Point(854, 537);
             this.CompressFinish.Name = "CompressFinish";
             this.CompressFinish.Size = new System.Drawing.Size(156, 23);
             this.CompressFinish.TabIndex = 44;
@@ -467,12 +468,24 @@ namespace SeizurePlayback
             this.CompressFinish.UseVisualStyleBackColor = true;
             this.CompressFinish.Click += new System.EventHandler(this.CompressFinish_Click);
             // 
+            // RvwSz
+            // 
+            this.RvwSz.ForeColor = System.Drawing.SystemColors.Control;
+            this.RvwSz.Location = new System.Drawing.Point(1016, 476);
+            this.RvwSz.Name = "RvwSz";
+            this.RvwSz.Size = new System.Drawing.Size(156, 23);
+            this.RvwSz.TabIndex = 45;
+            this.RvwSz.Text = "Review Seizures";
+            this.RvwSz.UseVisualStyleBackColor = true;
+            this.RvwSz.Click += new System.EventHandler(this.RvwSz_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1424, 845);
+            this.Controls.Add(this.RvwSz);
             this.Controls.Add(this.CompressFinish);
             this.Controls.Add(this.VideoPanel);
             this.Controls.Add(this.label3);
@@ -561,6 +574,7 @@ namespace SeizurePlayback
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TrackBar ZoomScale;
         private System.Windows.Forms.Button CompressFinish;
+        private System.Windows.Forms.Button RvwSz;
     }
 }
 
