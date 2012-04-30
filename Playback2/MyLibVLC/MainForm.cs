@@ -28,6 +28,8 @@ namespace SeizurePlayback
         bool Highlighting;
         bool RealTime;
         bool Redraw;
+        string[] SzInfo;
+        int SzInfoIndex;
         System.IO.StreamWriter SzTxt; 
         long[] AVILengths;
         Thread ThreadDisplay;
@@ -37,6 +39,7 @@ namespace SeizurePlayback
         bool Paused;
         Graphics g;
         bool doublesize;
+        SzRvwFrm SRF; 
         int Step;
         bool ignore_change;
         string CurrentAVI;
@@ -112,7 +115,7 @@ namespace SeizurePlayback
                 {
                     if (!Paused)
                     {                        
-                        if (TimeLabel.InvokeRequired)
+                        if (TimeLabel.InvokeRequired) //Need to invoke timer label to change it
                         {
                             TimeLabel.Invoke(new MethodInvoker(delegate
                             {
@@ -125,7 +128,7 @@ namespace SeizurePlayback
                             }));
                         }
 
-                        if (TimeBar.InvokeRequired)
+                        if (TimeBar.InvokeRequired) //Once again, need to do an invoke to handle from a separate thread
                         {
                             TimeBar.Invoke(new MethodInvoker(delegate
                             {
@@ -262,11 +265,13 @@ namespace SeizurePlayback
         {   
             FBD = new FolderBrowserDialog();
             Paused = true;
-            FBD.ShowDialog();
+            FBD.ShowDialog();            
             Path = FBD.SelectedPath;
             if (FBD.SelectedPath != "")
             {
                 string[] FName = Directory.GetFiles(Path, "*.acq");
+                SzInfo = new string[500];
+                SzInfoIndex = 0;
                 AVIFiles = Directory.GetFiles(Path, "*.avi");            
                 ACQ.openACQ(FName[0]);
                 ACQ.VisibleChans = ACQ.Chans;
@@ -275,13 +280,37 @@ namespace SeizurePlayback
                 BaseName = AVIFiles[0].Substring(Path.Length+1,15);                
                 TimeBar.Minimum = 0;
                 TimeBar.Maximum = ACQ.FileTime;
+                SzInfoIndex = 0;
                 string FPath = AVIFiles[0].Substring(0, AVIFiles[0].LastIndexOf("\\") + 1) + "Seizure";                
 
                 if (!Directory.Exists(FPath))
                 {
                     Directory.CreateDirectory(FPath);
                 }
-                SzTxt = new System.IO.StreamWriter(FPath + "\\" + BaseName + ".txt");
+                if (File.Exists(FPath + "\\" + BaseName + ".txt"))
+                {
+                    
+                    int j;
+                    StreamReader TmpTxt = new StreamReader(FPath + "\\" + BaseName + ".txt");                         
+                    while (!TmpTxt.EndOfStream)
+                    {
+                        SzInfo[SzInfoIndex] = TmpTxt.ReadLine();
+                        int.TryParse(SzInfo[SzInfoIndex].Substring(0,2), out j);
+                        SeizureCount[j]++;
+                        SzInfoIndex++;
+                    }
+                    TmpTxt.Dispose();
+                    SzTxt = new System.IO.StreamWriter(FPath + "\\" + BaseName + ".txt");
+                    for (int k = 0; k < SzInfoIndex; k++)
+                    {
+                        SzTxt.WriteLine(SzInfo[k]);
+                    }
+                }
+                else
+                {
+                    SzTxt = new System.IO.StreamWriter(FPath + "\\" + BaseName + ".txt");
+                }
+                SzTxt.AutoFlush = true;
                 SuppressChange = true;
                 for (int i = 0; i < ACQ.Chans; i++)
                 {
@@ -332,71 +361,76 @@ namespace SeizurePlayback
                 {
                     if ((HighlightEnd - HighlightStart) < 3)
                     {
-                        QuitHighlight();
-                        Paused = false;
-                        int FNum = 1;
+                                                
                         int TempChan = (int)((float)ACQ.VisibleChans * (float)(((float)e.Y - (float)graph.Y1) / (float)(graph.Y2 - graph.Y1)));
                         int XStart = (int)((float)MaxDispSize * (float)(e.X - graph.X1) / (graph.X2 - graph.X1));
                         ACQ.SelectedChan = ChanPos[TempChan];
                         ACQ.Position = ACQ.Position - Step + XStart;
                         Step = XStart;
+                        SeekToCurrentPos();
+                        QuitHighlight();
+                        Paused = false;
                         RealTime = true;
-                        Redraw = true;
-                        //Frame rate is actually 30.3, but listed as 30 in the avi. To seek to the proper time, need to adjust for that factor.
-                        //Switch to float to do decimal math, switch back to integer for actual ms. 
-                        long TimeSeek = (int)((float)ACQ.Position * 1000F * 1.0096F);
-                        bool AVILoaded = false;
-                        bool pass = false;
-                        Subtractor = 0;                                               
-                        while (!AVILoaded)
-                        {
-
-                            CurrentAVI = "";   
-                            string Fname = Path + "\\" + BaseName + string.Format("_{0:d2}", ACQ.SelectedChan) + string.Format("_{0:d4}.avi", FNum);
-                            while (!File.Exists(Fname) && !pass)
-                            {
-                                FNum++;
-                                Fname = Path + "\\" + BaseName + string.Format("_{0:d2}", ACQ.SelectedChan) + string.Format("_{0:d4}.avi", FNum);
-                                if (FNum == 30)
-                                    pass = true;
-                            }
-                            if (pass)
-                            {
-                                break;
-                            }
-                            media = new VlcMedia(instance, Fname);
-                            
-                            if (player == null)
-                            {                                
-                                player = new VlcMediaPlayer(media);
-                                player.Drawable = VideoPanel.Handle;
-                            }
-                            else
-                                player.Media = media;
-                            player.Play();
-                            while (player.GetLengthMs() == 0)
-                            { }
-                            if (player.GetLengthMs() < TimeSeek)
-                            {
-                                TimeSeek = TimeSeek - player.GetLengthMs();
-                                Subtractor += player.GetLengthMs();
-                                player.Stop();
-                                FNum++;
-                                media.Dispose();
-                            }
-                            else
-                            {
-                                AVILoaded = true;
-                                CurrentAVI = Fname;
-                                player.seek(TimeSeek);
-                            }
-                        }
                     }
                     else
                     {
                         Highlighting = false;
                     }
                 }
+        }
+        private void SeekToCurrentPos()
+        {
+            int FNum = 1;
+            Redraw = true;
+            //Frame rate is actually 30.3, but listed as 30 in the avi. To seek to the proper time, need to adjust for that factor.
+            //Switch to float to do decimal math, switch back to integer for actual ms. 
+            long TimeSeek = (int)((float)ACQ.Position * 1000F * 1.00957F);
+            bool AVILoaded = false;
+            bool pass = false;
+            Subtractor = 0;
+            while (!AVILoaded)
+            {
+
+                CurrentAVI = "";
+                string Fname = Path + "\\" + BaseName + string.Format("_{0:d2}", ACQ.SelectedChan) + string.Format("_{0:d4}.avi", FNum);
+                while (!File.Exists(Fname) && !pass)
+                {
+                    FNum++;
+                    Fname = Path + "\\" + BaseName + string.Format("_{0:d2}", ACQ.SelectedChan) + string.Format("_{0:d4}.avi", FNum);
+                    if (FNum == 30)
+                        pass = true;
+                }
+                if (pass)
+                {
+                    break;
+                }
+                media = new VlcMedia(instance, Fname);
+
+                if (player == null)
+                {
+                    player = new VlcMediaPlayer(media);
+                    player.Drawable = VideoPanel.Handle;
+                }
+                else
+                    player.Media = media;
+                player.Play();
+                while (player.GetLengthMs() == 0)
+                { }
+                if (player.GetLengthMs() < TimeSeek)
+                {
+                    TimeSeek = TimeSeek - player.GetLengthMs();
+                    Subtractor += player.GetLengthMs();
+                    player.Stop();
+                    FNum++;
+                    media.Dispose();
+                }
+                else
+                {
+                    AVILoaded = true;
+                    CurrentAVI = Fname;
+                    player.seek(TimeSeek);
+                }
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -458,8 +492,12 @@ namespace SeizurePlayback
                 Frm.Dispose();
                 string answer = string.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours,t.Minutes, t.Seconds);
                 outfile += "_S" + SeizureCount[ACQ.SelectedChan].ToString();
-                SzTxt.WriteLine((ACQ.SelectedChan+1).ToString() + ", " + ACQ.ID[ACQ.SelectedChan] +  ", " + SeizureCount[ACQ.SelectedChan].ToString() + ", "
-                    + answer + ", " + (HighlightEnd - HighlightStart + 1).ToString() + ", " + Notes + ", " + outfile);                
+                string Sz = (ACQ.SelectedChan+1).ToString() + ", " + ACQ.ID[ACQ.SelectedChan] +  ", " + SeizureCount[ACQ.SelectedChan].ToString() + ", "
+                    + answer + ", " + (HighlightEnd - HighlightStart + 1).ToString() + " , " + Notes + " , " + outfile;
+                SzTxt.WriteLine(Sz);                
+                if (SRF != null) { SRF.Add(Sz); }
+                SzInfo[SzInfoIndex] = Sz;
+                SzInfoIndex++;
                 int length = (int)((float)(HighlightEnd - HighlightStart + 1) * 1.01F);                
                 outfile = FPath + "\\" + outfile;
                 ACQ.DumpData(outfile + ".dat", ACQ.SelectedChan, StartTime, HighlightEnd - HighlightStart + 1);
@@ -528,55 +566,34 @@ namespace SeizurePlayback
 
         private void CompressFinish_Click(object sender, EventArgs e)
         {
-            DialogResult result;
-            Process Recomp;
-            string Command;                       
-            string SOut;            
-            int Dur = 0;
-            result = MessageBox.Show("Warning: This process takes 10-20 hours and is irreversable", "Compression Start", MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes)
+            if (player != null)
             {
-                result = MessageBox.Show("Are you sure?", "Compression Start", MessageBoxButtons.YesNo);
-                if (result == DialogResult.Yes)
-                {
-                    if (player != null)
-                    {
-                        player.Stop();
-                        player.Dispose();
-                    }                    
-                    for (int i = 0; i < AVIFiles.Length; i++)
-                    {                        
-                        Command = "-i " + AVIFiles[i] + " -vcodec libx264 -crf 33 -coder 0 -an ";
-                        Command += Path + "\\temp.avi";
-                        Recomp = new Process();
-                        Recomp.StartInfo = new ProcessStartInfo("C:\\x264\\ffmpeg.exe", Command);
-                        Recomp.StartInfo.CreateNoWindow = true;
-                        Recomp.StartInfo.UseShellExecute = false;
-                        Recomp.StartInfo.RedirectStandardOutput = true;
-                        Recomp.Start();                        
-                        /*while (Dur == 0)
-                        {
-                            SOut = Recomp.StandardOutput.ReadLine();
-                            if (SOut.IndexOf("Duration: ") != -1)
-                            {
-                                MessageBox.Show("OMG HI");
-                                Dur = 3; 
-                            }
-                        }*/
-                        while (!Recomp.HasExited)
-                        {                            
-                            //Recomp.StandardOutput
-                        }
-                        /*if (File.Exists(Path + "\\temp.avi"))
-                        {
-                            File.Delete(AVIFiles[i]);
-                            File.Move(Path + "\\temp.avi", AVIFiles[i]);
-                        } */
-                    }
-                }
+                player.Stop();
+                player.Dispose();
             }
+            Compression Frm = new Compression(Path);
+            Frm.ShowDialog(this);
+            Frm.Dispose();
         }
 
+        private void RvwSz_Click(object sender, EventArgs e)
+        {
+            SRF = new SzRvwFrm(this);
+            for (int i = 0; i < SzInfoIndex; i++)
+            {
+                SRF.Add(SzInfo[i]);
+            }
+            SRF.Show();
+        }
+        public void ChildSend(TimeSpan Time, int Channel)
+        {
+            ACQ.SelectedChan = Channel;
+            Paused = false;
+            RealTime = true;
+            ACQ.Position = (int)Time.TotalSeconds;
+            Step = MaxDispSize;
+            SeekToCurrentPos();                        
+        }
 
 
 
