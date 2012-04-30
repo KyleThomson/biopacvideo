@@ -60,8 +60,7 @@ namespace SeizurePlayback
             };
             instance = new VlcInstance(args);
             CurrentAVI = ""; //No default AVI loaded            
-            SeizureCount = new int[16]; //Create Array for Seizure Counts; 
-            for (int i = 0; i < 16; i++) SeizureCount[i] = 0; //Initialize to Zero. 
+            SeizureCount = new int[16]; //Create Array for Seizure Counts;             
 
             //Graphics area of the form to display the EEG. It would be better if these were dynamically resized. 
             //I don't have time for that shit.
@@ -269,6 +268,7 @@ namespace SeizurePlayback
             Path = FBD.SelectedPath;
             if (FBD.SelectedPath != "")
             {
+                for (int i = 0; i < 16; i++) SeizureCount[i] = 0; //Initialize to Zero. 
                 string[] FName = Directory.GetFiles(Path, "*.acq");
                 SzInfo = new string[500];
                 SzInfoIndex = 0;
@@ -291,12 +291,14 @@ namespace SeizurePlayback
                 {
                     
                     int j;
+                    string[] TmpStr;
                     StreamReader TmpTxt = new StreamReader(FPath + "\\" + BaseName + ".txt");                         
                     while (!TmpTxt.EndOfStream)
                     {
                         SzInfo[SzInfoIndex] = TmpTxt.ReadLine();
-                        int.TryParse(SzInfo[SzInfoIndex].Substring(0,2), out j);
-                        SeizureCount[j]++;
+                        TmpStr = SzInfo[SzInfoIndex].Split(',');
+                        int.TryParse(TmpStr[0], out j);
+                        SeizureCount[j-1]++;
                         SzInfoIndex++;
                     }
                     TmpTxt.Dispose();
@@ -593,6 +595,16 @@ namespace SeizurePlayback
             ACQ.Position = (int)Time.TotalSeconds;
             Step = MaxDispSize;
             SeekToCurrentPos();                        
+        }
+
+        private void DetectionLoadButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void PMButton_Click(object sender, EventArgs e)
+        {
+
         }
 
 

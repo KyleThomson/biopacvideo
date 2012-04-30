@@ -64,6 +64,7 @@ namespace SeizurePlayback
             this.ZoomScale = new System.Windows.Forms.TrackBar();
             this.CompressFinish = new System.Windows.Forms.Button();
             this.RvwSz = new System.Windows.Forms.Button();
+            this.PMButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.SuspendLayout();
@@ -71,7 +72,7 @@ namespace SeizurePlayback
             // Play
             // 
             this.Play.ForeColor = System.Drawing.SystemColors.Control;
-            this.Play.Location = new System.Drawing.Point(1016, 534);
+            this.Play.Location = new System.Drawing.Point(832, 505);
             this.Play.Name = "Play";
             this.Play.Size = new System.Drawing.Size(75, 23);
             this.Play.TabIndex = 0;
@@ -91,7 +92,7 @@ namespace SeizurePlayback
             // Open
             // 
             this.Open.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.Open.Location = new System.Drawing.Point(854, 476);
+            this.Open.Location = new System.Drawing.Point(669, 479);
             this.Open.Name = "Open";
             this.Open.Size = new System.Drawing.Size(156, 23);
             this.Open.TabIndex = 3;
@@ -102,7 +103,7 @@ namespace SeizurePlayback
             // Pause
             // 
             this.Pause.ForeColor = System.Drawing.SystemColors.Control;
-            this.Pause.Location = new System.Drawing.Point(1016, 505);
+            this.Pause.Location = new System.Drawing.Point(832, 479);
             this.Pause.Name = "Pause";
             this.Pause.Size = new System.Drawing.Size(75, 23);
             this.Pause.TabIndex = 0;
@@ -123,7 +124,7 @@ namespace SeizurePlayback
             // Rewind
             // 
             this.Rewind.ForeColor = System.Drawing.SystemColors.Control;
-            this.Rewind.Location = new System.Drawing.Point(1097, 503);
+            this.Rewind.Location = new System.Drawing.Point(913, 479);
             this.Rewind.Name = "Rewind";
             this.Rewind.Size = new System.Drawing.Size(75, 23);
             this.Rewind.TabIndex = 15;
@@ -134,7 +135,7 @@ namespace SeizurePlayback
             // button1
             // 
             this.button1.ForeColor = System.Drawing.SystemColors.Control;
-            this.button1.Location = new System.Drawing.Point(1097, 537);
+            this.button1.Location = new System.Drawing.Point(912, 504);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 16;
@@ -146,7 +147,7 @@ namespace SeizurePlayback
             // 
             this.TimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TimeLabel.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.TimeLabel.Location = new System.Drawing.Point(1285, 473);
+            this.TimeLabel.Location = new System.Drawing.Point(530, 476);
             this.TimeLabel.Name = "TimeLabel";
             this.TimeLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.TimeLabel.Size = new System.Drawing.Size(127, 24);
@@ -164,7 +165,7 @@ namespace SeizurePlayback
             "2m",
             "5m",
             "10m"});
-            this.TimeBox.Location = new System.Drawing.Point(1178, 500);
+            this.TimeBox.Location = new System.Drawing.Point(498, 539);
             this.TimeBox.Name = "TimeBox";
             this.TimeBox.Size = new System.Drawing.Size(161, 21);
             this.TimeBox.TabIndex = 18;
@@ -175,7 +176,7 @@ namespace SeizurePlayback
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label1.Location = new System.Drawing.Point(1174, 473);
+            this.label1.Location = new System.Drawing.Point(499, 507);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(105, 24);
             this.label1.TabIndex = 19;
@@ -184,7 +185,7 @@ namespace SeizurePlayback
             // SzCaptureButton
             // 
             this.SzCaptureButton.ForeColor = System.Drawing.SystemColors.Control;
-            this.SzCaptureButton.Location = new System.Drawing.Point(854, 508);
+            this.SzCaptureButton.Location = new System.Drawing.Point(669, 508);
             this.SzCaptureButton.Name = "SzCaptureButton";
             this.SzCaptureButton.Size = new System.Drawing.Size(156, 23);
             this.SzCaptureButton.TabIndex = 20;
@@ -195,17 +196,18 @@ namespace SeizurePlayback
             // DetectionLoadButton
             // 
             this.DetectionLoadButton.ForeColor = System.Drawing.SystemColors.Control;
-            this.DetectionLoadButton.Location = new System.Drawing.Point(1016, 566);
+            this.DetectionLoadButton.Location = new System.Drawing.Point(831, 536);
             this.DetectionLoadButton.Name = "DetectionLoadButton";
             this.DetectionLoadButton.Size = new System.Drawing.Size(156, 23);
             this.DetectionLoadButton.TabIndex = 21;
             this.DetectionLoadButton.Text = "Load Detection File";
             this.DetectionLoadButton.UseVisualStyleBackColor = true;
+            this.DetectionLoadButton.Click += new System.EventHandler(this.DetectionLoadButton_Click);
             // 
             // button2
             // 
             this.button2.ForeColor = System.Drawing.SystemColors.Control;
-            this.button2.Location = new System.Drawing.Point(1016, 595);
+            this.button2.Location = new System.Drawing.Point(831, 566);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 22;
@@ -215,7 +217,7 @@ namespace SeizurePlayback
             // button3
             // 
             this.button3.ForeColor = System.Drawing.SystemColors.Control;
-            this.button3.Location = new System.Drawing.Point(1097, 595);
+            this.button3.Location = new System.Drawing.Point(912, 566);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 23;
@@ -227,7 +229,7 @@ namespace SeizurePlayback
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label2.Location = new System.Drawing.Point(1178, 589);
+            this.label2.Location = new System.Drawing.Point(500, 631);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(105, 24);
             this.label2.TabIndex = 24;
@@ -235,7 +237,7 @@ namespace SeizurePlayback
             // 
             // TimeJump
             // 
-            this.TimeJump.Location = new System.Drawing.Point(1178, 621);
+            this.TimeJump.Location = new System.Drawing.Point(497, 658);
             this.TimeJump.Name = "TimeJump";
             this.TimeJump.Size = new System.Drawing.Size(161, 20);
             this.TimeJump.TabIndex = 25;
@@ -438,7 +440,7 @@ namespace SeizurePlayback
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label3.Location = new System.Drawing.Point(1178, 534);
+            this.label3.Location = new System.Drawing.Point(500, 566);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(104, 24);
             this.label3.TabIndex = 42;
@@ -446,7 +448,7 @@ namespace SeizurePlayback
             // 
             // ZoomScale
             // 
-            this.ZoomScale.Location = new System.Drawing.Point(1169, 563);
+            this.ZoomScale.Location = new System.Drawing.Point(498, 599);
             this.ZoomScale.Maximum = 20;
             this.ZoomScale.Minimum = 1;
             this.ZoomScale.Name = "ZoomScale";
@@ -460,7 +462,7 @@ namespace SeizurePlayback
             // CompressFinish
             // 
             this.CompressFinish.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.CompressFinish.Location = new System.Drawing.Point(854, 537);
+            this.CompressFinish.Location = new System.Drawing.Point(669, 537);
             this.CompressFinish.Name = "CompressFinish";
             this.CompressFinish.Size = new System.Drawing.Size(156, 23);
             this.CompressFinish.TabIndex = 44;
@@ -471,7 +473,7 @@ namespace SeizurePlayback
             // RvwSz
             // 
             this.RvwSz.ForeColor = System.Drawing.SystemColors.Control;
-            this.RvwSz.Location = new System.Drawing.Point(1016, 476);
+            this.RvwSz.Location = new System.Drawing.Point(669, 566);
             this.RvwSz.Name = "RvwSz";
             this.RvwSz.Size = new System.Drawing.Size(156, 23);
             this.RvwSz.TabIndex = 45;
@@ -479,12 +481,24 @@ namespace SeizurePlayback
             this.RvwSz.UseVisualStyleBackColor = true;
             this.RvwSz.Click += new System.EventHandler(this.RvwSz_Click);
             // 
+            // PMButton
+            // 
+            this.PMButton.ForeColor = System.Drawing.SystemColors.Control;
+            this.PMButton.Location = new System.Drawing.Point(669, 595);
+            this.PMButton.Name = "PMButton";
+            this.PMButton.Size = new System.Drawing.Size(156, 23);
+            this.PMButton.TabIndex = 46;
+            this.PMButton.Text = "Project Manager";
+            this.PMButton.UseVisualStyleBackColor = true;
+            this.PMButton.Click += new System.EventHandler(this.PMButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1424, 845);
+            this.Controls.Add(this.PMButton);
             this.Controls.Add(this.RvwSz);
             this.Controls.Add(this.CompressFinish);
             this.Controls.Add(this.VideoPanel);
@@ -575,6 +589,7 @@ namespace SeizurePlayback
         private System.Windows.Forms.TrackBar ZoomScale;
         private System.Windows.Forms.Button CompressFinish;
         private System.Windows.Forms.Button RvwSz;
+        private System.Windows.Forms.Button PMButton;
     }
 }
 
