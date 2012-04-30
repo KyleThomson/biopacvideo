@@ -82,6 +82,12 @@
     <Compile Include="Compression.Designer.cs">
       <DependentUpon>Compression.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProjectManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProjectManager.Designer.cs">
+      <DependentUpon>ProjectManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="SzRvwFrm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +116,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Compression.resx">
       <DependentUpon>Compression.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProjectManager.resx">
+      <DependentUpon>ProjectManager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SzRvwFrm.resx">
       <DependentUpon>SzRvwFrm.cs</DependentUpon>

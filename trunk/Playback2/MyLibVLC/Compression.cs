@@ -38,9 +38,9 @@ namespace SeizurePlayback
                     TotalLabel.Invoke((MethodInvoker)delegate { TotalLabel.Text = "Total Progress: " + (i + 1).ToString() + " of " + AVIFiles.Length.ToString();});                    
                     Recomp = new Process();
                     Recomp.StartInfo = new ProcessStartInfo("C:\\x264\\ffmpeg.exe", Command);
-                    Recomp.StartInfo.CreateNoWindow = true;
-                    Recomp.StartInfo.UseShellExecute = false;
-                    Recomp.StartInfo.RedirectStandardOutput = true;
+                    //Recomp.StartInfo.CreateNoWindow = true;
+                    //Recomp.StartInfo.UseShellExecute = false;
+                    //Recomp.StartInfo.RedirectStandardOutput = true;
                     Recomp.Start();
                     /*while (Dur == 0)
                     {
