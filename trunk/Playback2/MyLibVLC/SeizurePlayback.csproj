@@ -82,6 +82,7 @@
     <Compile Include="Compression.Designer.cs">
       <DependentUpon>Compression.cs</DependentUpon>
     </Compile>
+    <Compile Include="Project.cs" />
     <Compile Include="ProjectManager.cs">
       <SubType>Form</SubType>
     </Compile>

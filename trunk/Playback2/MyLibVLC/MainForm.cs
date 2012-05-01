@@ -604,7 +604,8 @@ namespace SeizurePlayback
 
         private void PMButton_Click(object sender, EventArgs e)
         {
-
+            ProjectManager PM = new ProjectManager();
+            PM.Show(this);
         }
 
 
