@@ -15,6 +15,18 @@ namespace SeizurePlayback
             DateTime.TryParse(b, out dt);
         }
     }
+    class MealType
+    {
+        public DateTime d;
+        public string type;
+        public int pelletcount;
+        public MealType(string a, string b, string c)
+        {
+            DateTime.TryParse(a, out d);
+            type = b;
+            int.TryParse(c, out pelletcount);
+        }
+    }
     class SeizureType
     {
         public TimeSpan t;
@@ -24,6 +36,7 @@ namespace SeizurePlayback
         {
             DateTime.TryParse(a, out d);
             TimeSpan.TryParse(b, out t);
+            Console.WriteLine(t);
             c = Notes;
         }   
     }
@@ -32,8 +45,8 @@ namespace SeizurePlayback
         public string ID;
         public List<WeightType> WeightInfo;
         public List<SeizureType> Sz;
-        public DateTime Death;
-        public DateTime FirstSz;
+        public DateTime Death;        
+        
         public int Group;
         public AnimalType()
         {
@@ -73,11 +86,13 @@ namespace SeizurePlayback
         {
             StreamWriter F = new StreamWriter(Filename);
             string s;
+            string answer;
             foreach (AnimalType A in Animals)
             {
                 foreach (SeizureType S in A.Sz)
                 {
-                    s = A.ID + ", sz, " + S.d.ToString() + ", " + S.t.ToString() + ", " + S.Notes;
+                    answer = string.Format("{0:D2}:{1:D2}:{2:D2}", S.t.Hours, S.t.Minutes, S.t.Seconds);
+                    s = A.ID + ", sz, " + S.d.ToShortDateString() + ", " + answer + ", " + S.Notes;
                     F.WriteLine(s);
                 }
                 foreach (WeightType W in A.WeightInfo)
@@ -85,6 +100,7 @@ namespace SeizurePlayback
                     s = A.ID + ", wt, " + W.wt.ToString() + ", " + W.dt.ToString();
                 }
             }
+            F.Close();
         }
         private int FindAnimal(string An) //Finds an Animal Index, or creates a new one if not found
         {
@@ -105,6 +121,43 @@ namespace SeizurePlayback
             }
             return CurrentAnimal;
         }
+        public string[] Get_Seizures(string A)
+        {
+            string[] Szs;
+            int i = 0;
+            int idx = FindAnimal(A);
+            string answer;
+            Szs = new string[Animals[idx].Sz.Count];
+            foreach (SeizureType S in Animals[idx].Sz)
+            {
+                answer =  string.Format("{0:D2}:{1:D2}:{2:D2}", S.t.Hours, S.t.Minutes, S.t.Seconds);
+                Szs[i] = S.d.ToShortDateString() + " " + answer;
+                i++;
+            }
+
+            return Szs;
+
+        }
+        public void Sort()
+        {
+            Animals.Sort(delegate(AnimalType A1, AnimalType A2) { return string.Compare(A1.ID, A2.ID); });
+            foreach (AnimalType A in Animals)
+            {
+                A.Sz.Sort(delegate(SeizureType S1, SeizureType S2) { return DateTime.Compare(S1.d, S2.d); });
+            }
+        }
+        public string[] Get_Animals()
+        {
+            string[] X;
+            X = new string[Animals.Count];
+            int i = 0;
+            foreach (AnimalType A in Animals)
+            {
+                X[i] = A.ID;
+                i++;
+            }
+            return X;
+        }
 
         public void ImportSzFile(string File)
         {            
@@ -114,9 +167,9 @@ namespace SeizurePlayback
             string str;
             string F = File.Substring(File.LastIndexOf('\\'));
             int y,m, d;
-            int.TryParse(F.Substring(0, 4), out y);
-            int.TryParse(F.Substring(4, 2), out m);
-            int.TryParse(F.Substring(6, 2), out d);
+            int.TryParse(F.Substring(1, 4), out y);
+            int.TryParse(F.Substring(5, 2), out m);
+            int.TryParse(F.Substring(7, 2), out d);
             dt = new DateTime(y, m, d);
             StreamReader TmpTxt = new StreamReader(File);
             while (!TmpTxt.EndOfStream)
@@ -124,6 +177,7 @@ namespace SeizurePlayback
                 str = TmpTxt.ReadLine();
                 TmpStr = str.Split(',');
                 CurrentAnimal = FindAnimal(TmpStr[1]);
+                Console.WriteLine(TmpStr[3]);
                 SeizureType S = new SeizureType(dt.ToString(), TmpStr[3], TmpStr[5]);
                 Animals[CurrentAnimal].Sz.Add(S);
             }
@@ -134,21 +188,23 @@ namespace SeizurePlayback
             string[] data;
             data = L.Split(',');
             int CurrentAnimal = FindAnimal(data[0]);            
-            data[1].Replace("  ", string.Empty);            
+            data[1].Replace(" ", string.Empty);            
             switch (data[1])
             {
-                case "wt":
+                case " wt":
                     WeightType W = new WeightType(data[2], data[3]);
                     Animals[CurrentAnimal].WeightInfo.Add(W);
                     break;
-                case "sz":
+                case " sz":
                     SeizureType S = new SeizureType(data[2], data[3], data[4]);
                     Animals[CurrentAnimal].Sz.Add(S);
                     break;
-                case "gp":
+                case " gp":
 
                     break;
-
+                default:
+                    Console.WriteLine(data[1] + ": ERROR IN COMPARE");
+                    break;
             }                            
             
 

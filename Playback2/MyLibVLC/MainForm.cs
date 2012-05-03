@@ -46,11 +46,12 @@ namespace SeizurePlayback
         int MaxDispSize;
         float Subtractor;
         Mygraph graph;
+        float VideoOffset;
         float[] Rates = { 0.25F, 0.5F, 1, 2, 5, 10, 20, 30, 50, 100 };
         public MainForm()
         {
             InitializeComponent();
-
+            VideoOffset = 0.009F;
             //Create Instances
             graph = new Mygraph(); //Small Class for containing EEG area. 
             ACQ = new ACQReader(); //Class to read from ACQ file
@@ -386,7 +387,7 @@ namespace SeizurePlayback
             Redraw = true;
             //Frame rate is actually 30.3, but listed as 30 in the avi. To seek to the proper time, need to adjust for that factor.
             //Switch to float to do decimal math, switch back to integer for actual ms. 
-            long TimeSeek = (int)((float)ACQ.Position * 1000F * 1.00957F);
+            long TimeSeek = (int)((float)ACQ.Position * 1000F * (1F+VideoOffset));
             bool AVILoaded = false;
             bool pass = false;
             Subtractor = 0;
@@ -503,7 +504,7 @@ namespace SeizurePlayback
                 int length = (int)((float)(HighlightEnd - HighlightStart + 1) * 1.01F);                
                 outfile = FPath + "\\" + outfile;
                 ACQ.DumpData(outfile + ".dat", ACQ.SelectedChan, StartTime, HighlightEnd - HighlightStart + 1);
-                player.EncodeSeizure((int)((((float)StartTime * 1000 * 1.0095F) - Subtractor)/1000), length, CurrentAVI, outfile + ".avi");
+                player.EncodeSeizure((int)((((float)StartTime * 1000 * (1F + VideoOffset)) - Subtractor)/1000), length, CurrentAVI, outfile + ".avi");
             }
         }
 
