@@ -30,5 +30,9 @@ namespace SeizurePlayback
             int.TryParse(SArray[0], out C);
             Prnt.ChildSend(t, C-1);
         }
+        private void SzBox_MouseDown(object sender, EventArgs e)
+        {
+
+        }
     }
 }

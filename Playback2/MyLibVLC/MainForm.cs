@@ -255,7 +255,7 @@ namespace SeizurePlayback
             {
                 if (player == null)
                     player = new VlcMediaPlayer(media);
-                else
+                else                    
                     player.Media = media;
             }
                         
