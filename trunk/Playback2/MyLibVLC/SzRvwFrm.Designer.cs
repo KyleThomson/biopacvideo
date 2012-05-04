@@ -39,6 +39,7 @@
             this.SzBox.Size = new System.Drawing.Size(304, 199);
             this.SzBox.TabIndex = 0;
             this.SzBox.SelectedIndexChanged += new System.EventHandler(this.SzBox_SelectedIndexChanged);
+            this.SzBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SzBox_MouseDown);
             // 
             // SzRvwFrm
             // 
