@@ -77,5 +77,27 @@ namespace SeizurePlayback
                 SzList.Items.Add(S[i]);
             }
         }
+
+        private void ProjectManager_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void importFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (pjt != null)
+            {
+                OpenFileDialog F = new OpenFileDialog();
+                //F.Filter = "*.txt";            
+                F.InitialDirectory = "D:\\";
+                if (F.ShowDialog() == DialogResult.OK)
+                {
+                    //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
+                    pjt.ImportSzFile(F.FileName);
+                }
+                UpdateLists();
+                pjt.Save();
+            }
+        }
     }
 }

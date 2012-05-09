@@ -30,9 +30,9 @@
         {
             this.TotProgress = new System.Windows.Forms.ProgressBar();
             this.TotalLabel = new System.Windows.Forms.Label();
-            this.progressBar2 = new System.Windows.Forms.ProgressBar();
+            this.CurFileProg = new System.Windows.Forms.ProgressBar();
             this.CurrentLabel = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.FailCountLbl = new System.Windows.Forms.Label();
             this.StartComp = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -52,12 +52,12 @@
             this.TotalLabel.TabIndex = 1;
             this.TotalLabel.Text = "Total Progress:";
             // 
-            // progressBar2
+            // CurFileProg
             // 
-            this.progressBar2.Location = new System.Drawing.Point(12, 78);
-            this.progressBar2.Name = "progressBar2";
-            this.progressBar2.Size = new System.Drawing.Size(419, 23);
-            this.progressBar2.TabIndex = 2;
+            this.CurFileProg.Location = new System.Drawing.Point(12, 78);
+            this.CurFileProg.Name = "CurFileProg";
+            this.CurFileProg.Size = new System.Drawing.Size(419, 23);
+            this.CurFileProg.TabIndex = 2;
             // 
             // CurrentLabel
             // 
@@ -68,15 +68,15 @@
             this.CurrentLabel.TabIndex = 3;
             this.CurrentLabel.Text = "Current File: ";
             // 
-            // label3
+            // FailCountLbl
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(9, 104);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(110, 9);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Progress Bar Not Implemented";
+            this.FailCountLbl.AutoSize = true;
+            this.FailCountLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FailCountLbl.Location = new System.Drawing.Point(9, 104);
+            this.FailCountLbl.Name = "FailCountLbl";
+            this.FailCountLbl.Size = new System.Drawing.Size(48, 9);
+            this.FailCountLbl.TabIndex = 4;
+            this.FailCountLbl.Text = "Fail Count: 0";
             // 
             // StartComp
             // 
@@ -94,9 +94,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(548, 134);
             this.Controls.Add(this.StartComp);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.FailCountLbl);
             this.Controls.Add(this.CurrentLabel);
-            this.Controls.Add(this.progressBar2);
+            this.Controls.Add(this.CurFileProg);
             this.Controls.Add(this.TotalLabel);
             this.Controls.Add(this.TotProgress);
             this.Name = "Compression";
@@ -110,9 +110,9 @@
 
         private System.Windows.Forms.ProgressBar TotProgress;
         private System.Windows.Forms.Label TotalLabel;
-        private System.Windows.Forms.ProgressBar progressBar2;
+        private System.Windows.Forms.ProgressBar CurFileProg;
         private System.Windows.Forms.Label CurrentLabel;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label FailCountLbl;
         private System.Windows.Forms.Button StartComp;
 
     }

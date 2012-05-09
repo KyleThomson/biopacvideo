@@ -22,13 +22,16 @@ namespace SeizurePlayback
         }
         private void SzBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TimeSpan t; 
-            int C;
-            string s = (string)SzBox.Items[SzBox.SelectedIndex];
-            string [] SArray = s.Split(',');            
-            TimeSpan.TryParse(SArray[3], out t);
-            int.TryParse(SArray[0], out C);
-            Prnt.ChildSend(t, C-1);
+            if (SzBox.SelectedIndex != -1)
+            {
+                TimeSpan t;
+                int C;
+                string s = (string)SzBox.Items[SzBox.SelectedIndex];
+                string[] SArray = s.Split(',');
+                TimeSpan.TryParse(SArray[3], out t);
+                int.TryParse(SArray[0], out C);
+                Prnt.ChildSend(t, C - 1);
+            }
         }
         private void SzBox_MouseDown(object sender, EventArgs e)
         {
