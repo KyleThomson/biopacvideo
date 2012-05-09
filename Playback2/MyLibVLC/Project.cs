@@ -27,11 +27,22 @@ namespace SeizurePlayback
             int.TryParse(c, out pelletcount);
         }
     }
+    class FileType
+    {
+        List<string> AnimalIDs;
+        int Chans;
+        DateTime Start;
+        TimeSpan Duration;
+
+    }
+        
     class SeizureType
     {
         public TimeSpan t;
         public DateTime d;
         public string Notes;
+        public DateTime Directory;
+        public string file;
         public SeizureType(string a, string b, string c)
         {
             DateTime.TryParse(a, out d);
@@ -58,8 +69,8 @@ namespace SeizurePlayback
     {
         public string P;
         public string Filename;
-        List<AnimalType> Animals;
-        List<DateTime> Files;         
+        List<FileType> Files;
+        List<AnimalType> Animals;                 
         public Project(string Inpt)
         {
             Filename = Inpt;
@@ -82,6 +93,7 @@ namespace SeizurePlayback
             F.Dispose();
             }
         }
+        
         public void Save()
         {
             StreamWriter F = new StreamWriter(Filename);
@@ -92,7 +104,7 @@ namespace SeizurePlayback
                 foreach (SeizureType S in A.Sz)
                 {
                     answer = string.Format("{0:D2}:{1:D2}:{2:D2}", S.t.Hours, S.t.Minutes, S.t.Seconds);
-                    s = A.ID + ", sz, " + S.d.ToShortDateString() + ", " + answer + ", " + S.Notes;
+                    s ="An," + A.ID + ", sz, " + S.d.ToShortDateString() + ", " + answer + ", " + S.Notes;
                     F.WriteLine(s);
                 }
                 foreach (WeightType W in A.WeightInfo)
@@ -187,26 +199,46 @@ namespace SeizurePlayback
         {
             string[] data;
             data = L.Split(',');
-            int CurrentAnimal = FindAnimal(data[0]);            
-            data[1].Replace(" ", string.Empty);            
-            switch (data[1])
+            //Data format - Record Type - Record Start
+            //Record types - An = Animal, Fl = File, 
+            if (data[0].IndexOf("Fl") != -1)
             {
-                case " wt":
-                    WeightType W = new WeightType(data[2], data[3]);
-                    Animals[CurrentAnimal].WeightInfo.Add(W);
-                    break;
-                case " sz":
-                    SeizureType S = new SeizureType(data[2], data[3], data[4]);
-                    Animals[CurrentAnimal].Sz.Add(S);
-                    break;
-                case " gp":
 
-                    break;
-                default:
-                    Console.WriteLine(data[1] + ": ERROR IN COMPARE");
-                    break;
-            }                            
-            
+                DateTime TempDate;
+                try
+                {
+                    TempDate = DateTime.ParseExact(data[0], "yyyyMMdd-hhmmss", null);
+                    FileType F = new FileType();
+                    Files.Add(F);                                     
+                }
+                catch
+                {
+                    Console.WriteLine("FAILURE IN DATE PARSE");
+                }
+
+            }
+            else if (data[0].IndexOf("An") != -1)
+            {
+                int CurrentAnimal = FindAnimal(data[2]);
+                //data[2].Replace(" ", string.Empty);            
+                switch (data[2])
+                {
+                    case " wt":
+                        WeightType W = new WeightType(data[3], data[4]);
+                        Animals[CurrentAnimal].WeightInfo.Add(W);
+                        break;
+                    case " sz":
+                        SeizureType S = new SeizureType(data[3], data[4], data[5]);
+                        Animals[CurrentAnimal].Sz.Add(S);
+                        break;
+                    case " gp":
+
+                        break;
+                    default:
+                        Console.WriteLine(data[2] + ": ERROR IN COMPARE");
+                        break;
+                }
+            }
 
         }
         
