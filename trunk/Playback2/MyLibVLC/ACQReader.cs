@@ -52,7 +52,11 @@ namespace SeizurePlayback
             SelectedPen = new Pen(Color.Red);
             SelectedChan = -1;
         }
-
+        public void closeACQ()
+        {
+            FILE.Close();
+            FID.Close();
+        }
         public void openACQ(string FName)
         { //open File for reading
             byte CharN; 

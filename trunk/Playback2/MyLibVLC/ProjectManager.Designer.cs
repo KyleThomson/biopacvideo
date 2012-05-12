@@ -39,14 +39,10 @@
             this.measurementsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.weightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tempHumidityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.AnimalList = new System.Windows.Forms.ListBox();
-            this.SzList = new System.Windows.Forms.ListBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.WtMeasure = new System.Windows.Forms.ListBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.FileList = new System.Windows.Forms.ListBox();
+            this.SecondList = new System.Windows.Forms.ListBox();
+            this.MainList = new System.Windows.Forms.ListBox();
+            this.MainSelect = new System.Windows.Forms.ComboBox();
+            this.SecondSelect = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -86,6 +82,7 @@
             this.selectProjectToolStripMenuItem.Name = "selectProjectToolStripMenuItem";
             this.selectProjectToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.selectProjectToolStripMenuItem.Text = "&Open Project";
+            this.selectProjectToolStripMenuItem.Click += new System.EventHandler(this.selectProjectToolStripMenuItem_Click);
             // 
             // importFileToolStripMenuItem
             // 
@@ -134,92 +131,60 @@
             this.tempHumidityToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.tempHumidityToolStripMenuItem.Text = "Temp/Humidity";
             // 
-            // AnimalList
+            // SecondList
             // 
-            this.AnimalList.FormattingEnabled = true;
-            this.AnimalList.Location = new System.Drawing.Point(139, 66);
-            this.AnimalList.Name = "AnimalList";
-            this.AnimalList.Size = new System.Drawing.Size(120, 264);
-            this.AnimalList.TabIndex = 1;
+            this.SecondList.FormattingEnabled = true;
+            this.SecondList.Location = new System.Drawing.Point(178, 66);
+            this.SecondList.Name = "SecondList";
+            this.SecondList.Size = new System.Drawing.Size(185, 264);
+            this.SecondList.TabIndex = 1;
+            this.SecondList.SelectedIndexChanged += new System.EventHandler(this.SecondList_SelectedIndexChanged);
             // 
-            // SzList
+            // MainList
             // 
-            this.SzList.FormattingEnabled = true;
-            this.SzList.Location = new System.Drawing.Point(265, 66);
-            this.SzList.Name = "SzList";
-            this.SzList.Size = new System.Drawing.Size(145, 264);
-            this.SzList.TabIndex = 2;
+            this.MainList.FormattingEnabled = true;
+            this.MainList.Location = new System.Drawing.Point(12, 66);
+            this.MainList.Name = "MainList";
+            this.MainList.Size = new System.Drawing.Size(160, 264);
+            this.MainList.TabIndex = 7;
+            this.MainList.SelectedIndexChanged += new System.EventHandler(this.MainList_SelectedIndexChanged);
             // 
-            // label1
+            // MainSelect
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(139, 50);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Animal";
+            this.MainSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MainSelect.FormattingEnabled = true;
+            this.MainSelect.Items.AddRange(new object[] {
+            "Files",
+            "Animals"});
+            this.MainSelect.Location = new System.Drawing.Point(12, 39);
+            this.MainSelect.Name = "MainSelect";
+            this.MainSelect.Size = new System.Drawing.Size(160, 21);
+            this.MainSelect.TabIndex = 8;
+            this.MainSelect.SelectedIndexChanged += new System.EventHandler(this.MainSelect_SelectedIndexChanged);
             // 
-            // label2
+            // SecondSelect
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(262, 50);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(47, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Seizures";
-            // 
-            // WtMeasure
-            // 
-            this.WtMeasure.FormattingEnabled = true;
-            this.WtMeasure.Location = new System.Drawing.Point(416, 66);
-            this.WtMeasure.Name = "WtMeasure";
-            this.WtMeasure.Size = new System.Drawing.Size(93, 264);
-            this.WtMeasure.TabIndex = 5;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(413, 50);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(41, 13);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "Weight";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 50);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(42, 13);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "File List";
-            // 
-            // FileList
-            // 
-            this.FileList.FormattingEnabled = true;
-            this.FileList.Location = new System.Drawing.Point(12, 66);
-            this.FileList.Name = "FileList";
-            this.FileList.Size = new System.Drawing.Size(120, 264);
-            this.FileList.TabIndex = 7;
+            this.SecondSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SecondSelect.FormattingEnabled = true;
+            this.SecondSelect.Location = new System.Drawing.Point(178, 39);
+            this.SecondSelect.Name = "SecondSelect";
+            this.SecondSelect.Size = new System.Drawing.Size(185, 21);
+            this.SecondSelect.TabIndex = 9;
+            this.SecondSelect.SelectedIndexChanged += new System.EventHandler(this.SecondSelect_SelectedIndexChanged);
             // 
             // ProjectManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(705, 393);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.FileList);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.WtMeasure);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.SzList);
-            this.Controls.Add(this.AnimalList);
+            this.Controls.Add(this.SecondSelect);
+            this.Controls.Add(this.MainSelect);
+            this.Controls.Add(this.MainList);
+            this.Controls.Add(this.SecondList);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "ProjectManager";
             this.Text = "Project Manager";
-            this.Load += new System.EventHandler(this.ProjectManager_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -239,14 +204,10 @@
         private System.Windows.Forms.ToolStripMenuItem measurementsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem weightToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tempHumidityToolStripMenuItem;
-        private System.Windows.Forms.ListBox AnimalList;
-        private System.Windows.Forms.ListBox SzList;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ListBox WtMeasure;
+        private System.Windows.Forms.ListBox SecondList;
         private System.Windows.Forms.ToolStripMenuItem newProjectToolStripMenuItem;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ListBox FileList;
+        private System.Windows.Forms.ListBox MainList;
+        private System.Windows.Forms.ComboBox MainSelect;
+        private System.Windows.Forms.ComboBox SecondSelect;
     }
 }

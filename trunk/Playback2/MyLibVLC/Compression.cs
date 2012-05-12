@@ -100,7 +100,7 @@ namespace SeizurePlayback
                     TotProgress.Invoke((MethodInvoker) delegate { TotProgress.Increment(1); } );
                     fail = false; 
                 }
-                StartComp.Enabled = true;
+                //StartComp.Enabled = true;
         }
         private void button1_Click(object sender, EventArgs e)
         {
