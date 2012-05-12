@@ -65,6 +65,8 @@ namespace SeizurePlayback
             this.CompressFinish = new System.Windows.Forms.Button();
             this.RvwSz = new System.Windows.Forms.Button();
             this.PMButton = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.OffsetBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.SuspendLayout();
@@ -492,12 +494,33 @@ namespace SeizurePlayback
             this.PMButton.UseVisualStyleBackColor = true;
             this.PMButton.Click += new System.EventHandler(this.PMButton_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label4.Location = new System.Drawing.Point(675, 631);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(57, 24);
+            this.label4.TabIndex = 47;
+            this.label4.Text = "Offset";
+            // 
+            // OffsetBox
+            // 
+            this.OffsetBox.Location = new System.Drawing.Point(669, 658);
+            this.OffsetBox.Name = "OffsetBox";
+            this.OffsetBox.Size = new System.Drawing.Size(161, 20);
+            this.OffsetBox.TabIndex = 48;
+            this.OffsetBox.LostFocus += new System.EventHandler(this.OffsetBox_TextChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1424, 845);
+            this.Controls.Add(this.OffsetBox);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.PMButton);
             this.Controls.Add(this.RvwSz);
             this.Controls.Add(this.CompressFinish);
@@ -590,6 +613,8 @@ namespace SeizurePlayback
         private System.Windows.Forms.Button CompressFinish;
         private System.Windows.Forms.Button RvwSz;
         private System.Windows.Forms.Button PMButton;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox OffsetBox;
     }
 }
 

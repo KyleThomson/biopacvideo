@@ -14,7 +14,8 @@ namespace SeizurePlayback
         Project pjt; 
         public ProjectManager()
         {
-            InitializeComponent();            
+            InitializeComponent();
+            MainSelect.SelectedIndex = 0;
         }
       private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)        
         {
@@ -37,20 +38,72 @@ namespace SeizurePlayback
                 pjt = new Project(F.FileName);
                 pjt.Open();
             }
-            UpdateLists();
+            UpdateMainList();
         }
 
-        private void UpdateLists()
+        private void UpdateMainList()
         {
+            if (pjt == null)
+                return;
             pjt.Sort();
-            AnimalList.Items.Clear();
-            string[] A = pjt.Get_Animals();
-            for (int i = 0; i < A.Length; i++)
-            {
-                AnimalList.Items.Add(A[i]);
+            MainList.Items.Clear();
+            if (MainSelect.SelectedIndex == 0) //Files
+            {                    
+                    string[] Fl = pjt.Get_Files();
+                    for (int i = 0; i < Fl.Length; i++)
+                    {
+                        MainList.Items.Add(Fl[i]);
+                    }                                       
+            }
+            else if (MainSelect.SelectedIndex == 1) //Animals
+            {                
+                string[] A = pjt.Get_Animals();
+                for (int i = 0; i < A.Length; i++)
+                {
+                    MainList.Items.Add(A[i]);
+                }
+               
             }
         }
-
+        private void UpdateSecondList()
+        {
+            if (pjt == null)
+                return;            
+            SecondList.Items.Clear();
+            if (MainSelect.SelectedIndex == 0) //Files
+            {
+                
+            }
+            else if (MainSelect.SelectedIndex == 1) //Animals
+            {            
+                if (MainList.SelectedIndex != -1)
+                {
+                    if (SecondSelect.SelectedIndex == 0)
+                    {
+                        SecondList.Items.Clear();
+                        string[] S = pjt.Get_Seizures((string)MainList.Items[MainList.SelectedIndex]);
+                        for (int i = 0; i < S.Length; i++)
+                        {
+                            SecondList.Items.Add(S[i]);
+                        }
+                    }
+                    else if (SecondSelect.SelectedIndex == 1)
+                    {
+                        //Get weights
+                    }
+                    else if (SecondSelect.SelectedIndex == 2)
+                    {
+                        SecondList.Items.Clear();
+                        string[] S = pjt.Get_Meals((string)MainList.Items[MainList.SelectedIndex]);
+                        for (int i = 0; i < S.Length; i++)
+                        {
+                            SecondList.Items.Add(S[i]);
+                        }
+                    }
+                }
+            }
+        }
+        
         private void importSeizureToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (pjt != null)
@@ -63,41 +116,60 @@ namespace SeizurePlayback
                     //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
                     pjt.ImportSzFile(F.FileName);
                 }
-                UpdateLists();
+                UpdateMainList();
                 pjt.Save();
             }
         }
 
-        private void AnimalList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SzList.Items.Clear();
-            string[] S = pjt.Get_Seizures((string)AnimalList.Items[AnimalList.SelectedIndex]);
-            for (int i = 0; i < S.Length; i++)
-            {
-                SzList.Items.Add(S[i]);
-            }
+        private void SecondList_SelectedIndexChanged(object sender, EventArgs e)
+        {              
         }
 
-        private void ProjectManager_Load(object sender, EventArgs e)
-        {
-
-        }
-
+        
         private void importFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (pjt != null)
             {
-                OpenFileDialog F = new OpenFileDialog();
-                //F.Filter = "*.txt";            
-                F.InitialDirectory = "D:\\";
-                if (F.ShowDialog() == DialogResult.OK)
-                {
-                    //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
-                    pjt.ImportSzFile(F.FileName);
-                }
-                UpdateLists();
+
+                FolderBrowserDialog F = new FolderBrowserDialog();                
+                if (F.ShowDialog(this) == DialogResult.OK)
+                {                    
+                    pjt.ImportDirectory(F.SelectedPath);
+                }                
+                UpdateMainList();
                 pjt.Save();
             }
         }
+
+        private void MainList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateSecondList();
+        }
+
+        private void MainSelect_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (MainSelect.SelectedIndex == 0)
+            {
+                SecondSelect.Items.Clear();
+                SecondSelect.Items.Add("Animals");
+                SecondSelect.SelectedIndex = 0;
+            }
+            else if (MainSelect.SelectedIndex == 1)
+            {
+                SecondSelect.Items.Clear();
+                SecondSelect.Items.Add("Seizures");
+                SecondSelect.Items.Add("Weights");
+                SecondSelect.Items.Add("Meals");
+                SecondSelect.SelectedIndex = 0;
+            }
+            UpdateMainList();
+        }
+
+        private void SecondSelect_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateSecondList();
+        }
+        
+
     }
 }

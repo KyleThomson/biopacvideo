@@ -52,6 +52,7 @@ namespace SeizurePlayback
         {
             InitializeComponent();
             VideoOffset = 0.009F;
+            OffsetBox.Text = VideoOffset.ToString();
             //Create Instances
             graph = new Mygraph(); //Small Class for containing EEG area. 
             ACQ = new ACQReader(); //Class to read from ACQ file
@@ -575,8 +576,7 @@ namespace SeizurePlayback
                 player.Dispose();
             }
             Compression Frm = new Compression(Path);
-            Frm.ShowDialog(this);
-            Frm.Dispose();
+            Frm.Show();            
         }
 
         private void RvwSz_Click(object sender, EventArgs e)
@@ -608,6 +608,13 @@ namespace SeizurePlayback
             ProjectManager PM = new ProjectManager();
             PM.Show(this);
         }
+
+        private void OffsetBox_TextChanged(object sender, EventArgs e)
+        {
+            float.TryParse(OffsetBox.Text, out VideoOffset);
+        }
+
+        
 
 
 
