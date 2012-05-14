@@ -42,6 +42,7 @@ namespace BioPacVideo
         public int Gain;
         public bool Enabled;
         public bool IsFileWriting;
+        bool FileStop;
         public int samplesize;
         public bool ClearDisplay;
         private float Xmax;
@@ -402,12 +403,11 @@ namespace BioPacVideo
 
         private void updateheader()
         {
-            for (int i = 0; i < TotChan(); i++)
+            for (int i = 0; i < TotChan(); i++) //for each channel update the header info
             {
                 BinaryFile.Seek(ChannelDataSizeLocation[GetChan(i)], SeekOrigin.Begin);
                 BinaryFileID.Write((Int32)(samplecount));   
-            }
-            //Add write foreign data crap here
+            }            
         }
 
 
@@ -474,6 +474,7 @@ namespace BioPacVideo
 
         public bool StartWriting()
         {
+            while (FileStop) { }; //Don't Open file if we are still waiting to write! 
             open_ACQ_file();
             samplecount = 0;
             writeheader();
@@ -481,10 +482,8 @@ namespace BioPacVideo
             return true;
         }
         public void StopWriting()
-        {            
-            updateheader();
-            BinaryFile.Close();
-            IsFileWriting = false;
+        {
+            FileStop = true; //Send info to thread to stop file write after the next buffer finishes 
             isstreaming = true;         
         }
 
@@ -498,9 +497,7 @@ namespace BioPacVideo
 
         private void RecordingThread()
         {
-            uint received;         
-            DateTime Start = DateTime.Now;
-            TimeSpan Elapsed;
+            uint received;                     
             AcqChan = TotChan();  //How many channels are we going to acquire   
             VoltageSpacing =(int)(Ymax / (AcqChan+1));
             Thread BuffDraw = new Thread(new ThreadStart(drawbuffer)); //Set up thread for buffering 
@@ -515,24 +512,28 @@ namespace BioPacVideo
             { 
             }
             while (isstreaming) //Thread stopping variable - set to false to end the recording thread. 
-            {                
-                Elapsed = DateTime.Now - Start;
-                //Console.WriteLine("Time Elapsed: {0} ms",Elapsed.Milliseconds);
-                
+            {                                                                
                 MPReturn = MPCLASS.receiveMPData(rec_buffer, BuffSize, out received); //Get the latest buffer
                 //This function pauses until the buffer is full - making the 'recieved' variable somewhat useless.                 
-                //If this fails, the recieved will be smaller than the buffsize, but you have bigger issues. 
-                Start = DateTime.Now;
+                //If this fails, the recieved will be smaller than the buffsize, but you have bigger issues.                 
                 if (MPReturn != MPCODE.MPSUCCESS) //Make sure we were successful in getting the buffer. 
                 {
                     MessageBox.Show(MPReturn.ToString() + "   " + MPCLASS.getMPDaemonLastError().ToString());
                     MPReturn = MPCLASS.stopAcquisition(); //Have to restart the aquisition. 
                     return;
                 }
+                if (FileStop) //Stop before we write the next buffer         
+                {
+                    updateheader(); //Write sample total
+                    BinaryFile.Close(); //Close 
+                    IsFileWriting = false;
+                    FileStop = false;
+                }
+                last_received = received; //For the draw buffer
                 if (IsFileWriting) //If we are writing to the file, we want to handle it immediately. 
                 {
 
-                    BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin); //Make sure the File writting is in the right place
+                    BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin); //Make sure the File writting is in the right place                    
                     for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
                     {
                         rec_buffer[j] = Math.Min(rec_buffer[j], (double)Int32.MaxValue/Gain); //Make sure we don't exceed the maxes
@@ -541,7 +542,16 @@ namespace BioPacVideo
                         BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
                         //better safe than sorry. 
                     }                    
-                    CurrentWriteLoc = BinaryFile.Position;  //Update the current location.
+                    CurrentWriteLoc = BinaryFile.Position;  //Update the current location.                    
+                    samplesize = (int)last_received / AcqChan;
+                    samplecount += samplesize;
+                    if (FileStop) //Need to have thread safe file closing! Oops!                        
+                    {
+                        updateheader(); //Write sample total
+                        BinaryFile.Close(); //Close 
+                        IsFileWriting = false;
+                        FileStop = false;                        
+                    }
                 }
                 /*bool a,b;
                 MPCLASS.getDigitalIO(5, out a, MPCLASS.DIGITALOPT.READ_LOW_BITS);
@@ -585,9 +595,7 @@ namespace BioPacVideo
                     Feeder.gap++;
                     if (Feeder.gap == 4) { Feeder.gap = 0; }
                 }
-                last_received = received;
-                samplesize = (int)last_received / AcqChan;
-                samplecount += samplesize;
+                
                 //Handle Feeding ()
                 Buffer.BlockCopy(rec_buffer, 0, draw_buffer, 0, (int)received * 8);                        
                 _DrawHandle.Set();                                       
