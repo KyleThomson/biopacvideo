@@ -340,7 +340,39 @@ namespace SeizurePlayback
                 Animals[CurrentAnimal].Sz.Add(S);
             }
         }
-
+        public void ExportData(string Fname)
+        {
+            //Open File
+            StreamWriter F = new StreamWriter(Fname);
+            F.AutoFlush = true;
+            //
+            Sort();
+            int c;
+            string st;
+            DateTime Earliest = Files[0].Start.Date;
+            DateTime Latest = Files[Files.Count - 1].Start.Date;
+            st = "Animal";
+            for (DateTime i = Earliest; i <= Latest; i=i.AddDays(1))
+            {
+                st += "," + i.ToShortDateString();
+                Console.WriteLine(st);
+            }
+            F.WriteLine(st);
+            foreach (AnimalType A in Animals)
+            {                
+                st = A.ID;
+                for (DateTime i = Earliest; i <= Latest; i=i.AddDays(1))
+                {
+                    c = 0;
+                    foreach (SeizureType S in A.Sz)
+                    {
+                        if (DateTime.Compare(i.Date, S.d.Date) == 0) c++;                             
+                    }
+                    st += "," + c;
+                }
+                F.WriteLine(st);    
+            }
+        }
         void ParseLine(string L)
         {
             string[] data;

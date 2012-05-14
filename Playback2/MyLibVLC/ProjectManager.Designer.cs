@@ -34,6 +34,7 @@
             this.selectProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.seizuresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importSeizureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.plottingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.measurementsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,7 +55,7 @@
             this.measurementsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(705, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(409, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -94,9 +95,18 @@
             // exportDataToolStripMenuItem
             // 
             this.exportDataToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.exportDataToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.seizuresToolStripMenuItem});
             this.exportDataToolStripMenuItem.Name = "exportDataToolStripMenuItem";
             this.exportDataToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.exportDataToolStripMenuItem.Text = "&Export Data";
+            this.exportDataToolStripMenuItem.Click += new System.EventHandler(this.exportDataToolStripMenuItem_Click);
+            // 
+            // seizuresToolStripMenuItem
+            // 
+            this.seizuresToolStripMenuItem.Name = "seizuresToolStripMenuItem";
+            this.seizuresToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.seizuresToolStripMenuItem.Text = "Seizures";
             // 
             // importSeizureToolStripMenuItem
             // 
@@ -176,7 +186,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(705, 393);
+            this.ClientSize = new System.Drawing.Size(409, 393);
             this.Controls.Add(this.SecondSelect);
             this.Controls.Add(this.MainSelect);
             this.Controls.Add(this.MainList);
@@ -209,5 +219,6 @@
         private System.Windows.Forms.ListBox MainList;
         private System.Windows.Forms.ComboBox MainSelect;
         private System.Windows.Forms.ComboBox SecondSelect;
+        private System.Windows.Forms.ToolStripMenuItem seizuresToolStripMenuItem;
     }
 }
