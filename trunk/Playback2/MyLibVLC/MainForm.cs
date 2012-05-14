@@ -279,7 +279,8 @@ namespace SeizurePlayback
                 ACQ.VisibleChans = ACQ.Chans;
                 ACQ.SetDispLength(MaxDispSize);  
                 AVILengths = new long[AVIFiles.Length];
-                BaseName = AVIFiles[0].Substring(Path.Length+1,15);                
+                BaseName = AVIFiles[0].Substring(Path.Length+1,15);
+                MainForm.ActiveForm.Text += " - " + BaseName.Substring(4, 2) + "/"  + BaseName.Substring(6,2) + "/" + BaseName.Substring(0,4);
                 TimeBar.Minimum = 0;
                 TimeBar.Maximum = ACQ.FileTime;
                 SzInfoIndex = 0;
