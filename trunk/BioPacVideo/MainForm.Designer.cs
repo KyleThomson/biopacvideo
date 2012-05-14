@@ -50,8 +50,8 @@ namespace BioPacVideo
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.bioPacEnabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.automaticFeederToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.testFeedersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setFeedingProtocolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.testFeedersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusBar = new System.Windows.Forms.StatusStrip();
             this.IDT_BIOPACSTAT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_BIOPACRECORDINGSTAT = new System.Windows.Forms.ToolStripStatusLabel();
@@ -246,19 +246,19 @@ namespace BioPacVideo
             this.automaticFeederToolStripMenuItem.Size = new System.Drawing.Size(92, 20);
             this.automaticFeederToolStripMenuItem.Text = "Animal Settings";
             // 
-            // testFeedersToolStripMenuItem
-            // 
-            this.testFeedersToolStripMenuItem.Name = "testFeedersToolStripMenuItem";
-            this.testFeedersToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.testFeedersToolStripMenuItem.Text = "Feeder Test";
-            this.testFeedersToolStripMenuItem.Click += new System.EventHandler(this.testFeedersToolStripMenuItem_Click);
-            // 
             // setFeedingProtocolToolStripMenuItem
             // 
             this.setFeedingProtocolToolStripMenuItem.Name = "setFeedingProtocolToolStripMenuItem";
-            this.setFeedingProtocolToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.setFeedingProtocolToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.setFeedingProtocolToolStripMenuItem.Text = "Animal Settings";
             this.setFeedingProtocolToolStripMenuItem.Click += new System.EventHandler(this.setFeedingProtocolToolStripMenuItem_Click);
+            // 
+            // testFeedersToolStripMenuItem
+            // 
+            this.testFeedersToolStripMenuItem.Name = "testFeedersToolStripMenuItem";
+            this.testFeedersToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.testFeedersToolStripMenuItem.Text = "Feeder Test";
+            this.testFeedersToolStripMenuItem.Click += new System.EventHandler(this.testFeedersToolStripMenuItem_Click);
             // 
             // StatusBar
             // 

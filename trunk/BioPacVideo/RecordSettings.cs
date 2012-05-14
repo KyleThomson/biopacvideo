@@ -70,6 +70,11 @@ namespace BioPacVideo
         {
 
         }
+
+        private void ID_SRATE_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
         
 
     }
