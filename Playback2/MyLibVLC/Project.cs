@@ -12,6 +12,21 @@ using System.Windows.Forms;
 
 namespace SeizurePlayback
 {
+    public class ExportType
+    {
+        public bool Sz;
+        public bool Pellet;
+        public bool Med;
+        public bool wt;
+        public ExportType()
+        {
+            Sz = false;
+            Pellet = false;
+            Med = false;
+            wt = false;
+        }
+
+    }
     class WeightType
     {
         public double wt;
@@ -75,9 +90,7 @@ namespace SeizurePlayback
         public string ID;
         public List<WeightType> WeightInfo;
         public List<SeizureType> Sz;
-        public List<MealType> Meals;
-        public DateTime Death;        
-        
+        public List<MealType> Meals;                
         public int Group;
         public AnimalType()
         {
@@ -342,7 +355,7 @@ namespace SeizurePlayback
                 Animals[CurrentAnimal].Sz.Add(S);
             }
         }
-        public void ExportData(string Fname)
+        public void ExportData(string Fname, ExportType E)
         {
             //Open File
             StreamWriter F = new StreamWriter(Fname);
@@ -363,16 +376,42 @@ namespace SeizurePlayback
             foreach (AnimalType A in Animals)
             {                
                 st = A.ID;
-                for (DateTime i = Earliest; i <= Latest; i=i.AddDays(1))
+                if (E.Sz)
                 {
-                    c = 0;
-                    foreach (SeizureType S in A.Sz)
+                    for (DateTime i = Earliest; i <= Latest; i=i.AddDays(1))
                     {
-                        if (DateTime.Compare(i.Date, S.d.Date) == 0) c++;                             
+                        c = 0;                                        
+                        foreach (SeizureType S in A.Sz)
+                        {
+                            if (DateTime.Compare(i.Date, S.d.Date) == 0) c++;                             
+                        }
+                        st += "," + c;
                     }
-                    st += "," + c;
+                    F.WriteLine(st);    
                 }
-                F.WriteLine(st);    
+                if (E.Pellet)
+                {
+                    for (DateTime i = Earliest; i <= Latest; i=i.AddDays(1))
+                    {
+                        c = 0;                                        
+                        foreach (MealType M in A.Meals)
+                        {
+                            if (DateTime.Compare(i.Date, M.d.Date) == 0) 
+                            {
+                                if (M.type == "M")
+                                {
+                                    c+= M.pelletcount;
+                                }
+                                else
+                                {
+                                    c-= M.pelletcount;
+                                }
+                            }
+                        }
+                        st += "," + c;
+                    }
+                    F.WriteLine(st);    
+                }
             }
         }
         void ParseLine(string L)
