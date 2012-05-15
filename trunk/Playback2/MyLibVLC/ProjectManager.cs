@@ -172,13 +172,13 @@ namespace SeizurePlayback
 
         private void exportDataToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveFileDialog F = new SaveFileDialog();
-            F.DefaultExt = ".pjt";
-            F.InitialDirectory = "D:\\";
-            if (F.ShowDialog() == DialogResult.OK)
+            if (pjt != null)
             {
-                pjt.ExportData(F.FileName);
-            }     
-        }             
+                Exporter F = new Exporter(pjt);
+                F.ShowDialog(this);
+                F.Dispose();
+            }
+
+        }
     }
 }

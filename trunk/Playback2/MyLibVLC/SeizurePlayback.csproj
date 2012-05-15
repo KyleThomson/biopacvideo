@@ -82,6 +82,12 @@
     <Compile Include="Compression.Designer.cs">
       <DependentUpon>Compression.cs</DependentUpon>
     </Compile>
+    <Compile Include="Exporter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Exporter.Designer.cs">
+      <DependentUpon>Exporter.cs</DependentUpon>
+    </Compile>
     <Compile Include="Project.cs" />
     <Compile Include="ProjectManager.cs">
       <SubType>Form</SubType>
@@ -111,6 +117,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Exporter.resx">
+      <DependentUpon>Exporter.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MainForm.cs</DependentUpon>
