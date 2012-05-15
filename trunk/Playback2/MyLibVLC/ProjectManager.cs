@@ -180,5 +180,10 @@ namespace SeizurePlayback
             }
 
         }
+
+        private void tempHumidityToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

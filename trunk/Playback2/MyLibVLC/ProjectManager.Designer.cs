@@ -33,6 +33,7 @@
             this.newProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importSeizureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.plottingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.measurementsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,7 +43,6 @@
             this.MainList = new System.Windows.Forms.ListBox();
             this.MainSelect = new System.Windows.Forms.ComboBox();
             this.SecondSelect = new System.Windows.Forms.ComboBox();
-            this.exportDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -91,6 +91,14 @@
             this.importFileToolStripMenuItem.Text = "Add Directory";
             this.importFileToolStripMenuItem.Click += new System.EventHandler(this.importFileToolStripMenuItem_Click);
             // 
+            // exportDataToolStripMenuItem
+            // 
+            this.exportDataToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.exportDataToolStripMenuItem.Name = "exportDataToolStripMenuItem";
+            this.exportDataToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.exportDataToolStripMenuItem.Text = "&Export Data";
+            this.exportDataToolStripMenuItem.Click += new System.EventHandler(this.exportDataToolStripMenuItem_Click);
+            // 
             // importSeizureToolStripMenuItem
             // 
             this.importSeizureToolStripMenuItem.Name = "importSeizureToolStripMenuItem";
@@ -115,14 +123,15 @@
             // weightToolStripMenuItem
             // 
             this.weightToolStripMenuItem.Name = "weightToolStripMenuItem";
-            this.weightToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.weightToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.weightToolStripMenuItem.Text = "&Weight";
             // 
             // tempHumidityToolStripMenuItem
             // 
             this.tempHumidityToolStripMenuItem.Name = "tempHumidityToolStripMenuItem";
-            this.tempHumidityToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.tempHumidityToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.tempHumidityToolStripMenuItem.Text = "Temp/Humidity";
+            this.tempHumidityToolStripMenuItem.Click += new System.EventHandler(this.tempHumidityToolStripMenuItem_Click);
             // 
             // SecondList
             // 
@@ -164,14 +173,6 @@
             this.SecondSelect.Size = new System.Drawing.Size(185, 21);
             this.SecondSelect.TabIndex = 9;
             this.SecondSelect.SelectedIndexChanged += new System.EventHandler(this.SecondSelect_SelectedIndexChanged);
-            // 
-            // exportDataToolStripMenuItem
-            // 
-            this.exportDataToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.exportDataToolStripMenuItem.Name = "exportDataToolStripMenuItem";
-            this.exportDataToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.exportDataToolStripMenuItem.Text = "&Export Data";
-            this.exportDataToolStripMenuItem.Click += new System.EventHandler(this.exportDataToolStripMenuItem_Click);
             // 
             // ProjectManager
             // 
