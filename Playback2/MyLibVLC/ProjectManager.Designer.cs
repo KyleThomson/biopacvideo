@@ -33,8 +33,6 @@
             this.newProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.seizuresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importSeizureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.plottingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.measurementsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,6 +42,7 @@
             this.MainList = new System.Windows.Forms.ListBox();
             this.MainSelect = new System.Windows.Forms.ComboBox();
             this.SecondSelect = new System.Windows.Forms.ComboBox();
+            this.exportDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -91,22 +90,6 @@
             this.importFileToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.importFileToolStripMenuItem.Text = "Add Directory";
             this.importFileToolStripMenuItem.Click += new System.EventHandler(this.importFileToolStripMenuItem_Click);
-            // 
-            // exportDataToolStripMenuItem
-            // 
-            this.exportDataToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.exportDataToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.seizuresToolStripMenuItem});
-            this.exportDataToolStripMenuItem.Name = "exportDataToolStripMenuItem";
-            this.exportDataToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.exportDataToolStripMenuItem.Text = "&Export Data";
-            this.exportDataToolStripMenuItem.Click += new System.EventHandler(this.exportDataToolStripMenuItem_Click);
-            // 
-            // seizuresToolStripMenuItem
-            // 
-            this.seizuresToolStripMenuItem.Name = "seizuresToolStripMenuItem";
-            this.seizuresToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.seizuresToolStripMenuItem.Text = "Seizures";
             // 
             // importSeizureToolStripMenuItem
             // 
@@ -182,6 +165,14 @@
             this.SecondSelect.TabIndex = 9;
             this.SecondSelect.SelectedIndexChanged += new System.EventHandler(this.SecondSelect_SelectedIndexChanged);
             // 
+            // exportDataToolStripMenuItem
+            // 
+            this.exportDataToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.exportDataToolStripMenuItem.Name = "exportDataToolStripMenuItem";
+            this.exportDataToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.exportDataToolStripMenuItem.Text = "&Export Data";
+            this.exportDataToolStripMenuItem.Click += new System.EventHandler(this.exportDataToolStripMenuItem_Click);
+            // 
             // ProjectManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -209,7 +200,6 @@
         private System.Windows.Forms.ToolStripMenuItem selectProjectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem importFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem plottingToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exportDataToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem importSeizureToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem measurementsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem weightToolStripMenuItem;
@@ -219,6 +209,6 @@
         private System.Windows.Forms.ListBox MainList;
         private System.Windows.Forms.ComboBox MainSelect;
         private System.Windows.Forms.ComboBox SecondSelect;
-        private System.Windows.Forms.ToolStripMenuItem seizuresToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportDataToolStripMenuItem;
     }
 }

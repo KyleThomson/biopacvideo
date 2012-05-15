@@ -57,15 +57,17 @@ namespace SeizurePlayback
     {
         public TimeSpan t;        
         public DateTime d;
-        public string Notes;
-        public DateTime Directory;
+        public int length;
+        public string Notes;       
         public string file;        
-        public SeizureType(string a, string b, string c)
+        public SeizureType(string a, string b, string c, string e, string f)
         {
-            DateTime.TryParse(a, out d);
+            DateTime.TryParse(a, out d);            
             TimeSpan.TryParse(b, out t);
-            t = t + TimeSpan.FromSeconds(d.TimeOfDay.TotalSeconds);            
-            c = Notes;
+            t = t + TimeSpan.FromSeconds(d.TimeOfDay.TotalSeconds);
+            int.TryParse(e, out length);
+            file = f;            
+            Notes = c;
         }   
     }
     class AnimalType
@@ -84,7 +86,7 @@ namespace SeizurePlayback
             Meals = new List<MealType>();
         }
     }
-    class Project
+    public class Project
     {
         public string P;
         public string Filename;
@@ -134,7 +136,7 @@ namespace SeizurePlayback
                 foreach (SeizureType S in A.Sz)
                 {
                     answer = string.Format("{0:D2}:{1:D2}:{2:D2}", S.t.Hours, S.t.Minutes, S.t.Seconds);
-                    s ="An," + A.ID + ", sz, " + S.d.ToShortDateString() + ", " + answer + ", " + S.Notes;
+                    s ="An," + A.ID + ", sz, " + S.d.ToString() + ", " + answer + ", " + S.Notes + "," + S.length + "," + S.file;
                     F.WriteLine(s);
                 }
                 foreach (WeightType W in A.WeightInfo)
@@ -170,7 +172,7 @@ namespace SeizurePlayback
             }
             return CurrentAnimal;
         }
-        public string[] Get_Seizures(string A)
+        public string[] Get_Seizures(string A) //Get the seizure info for display
         {
             string[] Szs;
             int i = 0;
@@ -187,7 +189,7 @@ namespace SeizurePlayback
             return Szs;
 
         }
-        public string[] Get_Meals(string A) //Dump the meal info to a list of strings
+        public string[] Get_Meals(string A) //Get the meal info for display
         {
             string[] Ms;
             int i = 0;
@@ -202,7 +204,7 @@ namespace SeizurePlayback
         }
 
 
-        public void Sort()
+        public void Sort() //Sort the entire database
         {
             Files.Sort(delegate(FileType F1, FileType F2) { return DateTime.Compare(F1.Start, F2.Start); });
             Animals.Sort(delegate(AnimalType A1, AnimalType A2) { return string.Compare(A1.ID, A2.ID); });
@@ -328,7 +330,7 @@ namespace SeizurePlayback
             string[] TmpStr;            
             int CurrentAnimal;
             string str;
-            string F = File.Substring(File.LastIndexOf('\\')+1);
+            string F = File.Substring(File.LastIndexOf('\\')+1);            
             dt = ConvertFileToDT(F);
             StreamReader TmpTxt = new StreamReader(File);
             while (!TmpTxt.EndOfStream)
@@ -336,7 +338,7 @@ namespace SeizurePlayback
                 str = TmpTxt.ReadLine();
                 TmpStr = str.Split(',');
                 CurrentAnimal = FindAnimal(TmpStr[1]);                
-                SeizureType S = new SeizureType(dt.ToString(), TmpStr[3], TmpStr[5]);
+                SeizureType S = new SeizureType(dt.ToString(), TmpStr[3], TmpStr[5], TmpStr[4], TmpStr[6]);
                 Animals[CurrentAnimal].Sz.Add(S);
             }
         }
@@ -415,7 +417,7 @@ namespace SeizurePlayback
                         Animals[CurrentAnimal].WeightInfo.Add(W);
                         break;
                     case " sz":
-                        SeizureType S = new SeizureType(data[3], data[4], data[5]);
+                        SeizureType S = new SeizureType(data[3], data[4], data[5], data[6], data[7]);
                         Animals[CurrentAnimal].Sz.Add(S);
                         break;
                     case " ml":
