@@ -15,10 +15,12 @@ namespace SeizurePlayback
     {
         string [] AVIFiles;
         string Path;
+        StreamWriter Test;
         Thread CT;
         Stopwatch st;
         TimeSpan Length;
         int LastCount;
+        bool Discard;
         public Compression(string P)
         {
             InitializeComponent();
@@ -36,6 +38,7 @@ namespace SeizurePlayback
             {
 
                 X = e.Data.ToString();
+                Test.WriteLine(X);
                 if (X.IndexOf("Duration: ") != -1)
                 {
                     TimeSpan.TryParse(X.Substring(X.IndexOf("Duration: ") + 10, 10), out Length);
@@ -52,14 +55,16 @@ namespace SeizurePlayback
                     }
                 }
                 st.Reset();
-                st.Start();
+                st.Start();                
             }
-        }
+        }        
         private void CompThread()
         {   
              Process Recomp;
           
             string Command;
+            Test = new StreamWriter("E:\\TEST.TXT");
+            Test.AutoFlush = true;
             bool fail = false;
             int failcount = 0;
             st = new Stopwatch();
@@ -68,24 +73,30 @@ namespace SeizurePlayback
                     LastCount = 0;
                     Command = "-i " + AVIFiles[i] + " -y -vcodec libx264 -crf 33 -coder 0 -an ";
                     Command += Path + "\\temp.avi";
+                    Test.WriteLine(Command);
                     CurFileProg.Invoke((MethodInvoker)delegate { CurFileProg.Value = 0; });
                     CurrentLabel.Invoke( (MethodInvoker) delegate{ CurrentLabel.Text = "Current File: " + AVIFiles[i];});
                     TotalLabel.Invoke((MethodInvoker)delegate { TotalLabel.Text = "Total Progress: " + (i + 1).ToString() + " of " + AVIFiles.Length.ToString(); });                    
                     Recomp = new Process();
-                    Recomp.StartInfo = new ProcessStartInfo("C:\\x264\\ffmpeg.exe", Command);
+                    Recomp.StartInfo = new ProcessStartInfo("C:\\x264\\ffmpeg.exe", Command);                    
                     Recomp.StartInfo.CreateNoWindow = true;
                     Recomp.StartInfo.UseShellExecute = false;
                     Recomp.StartInfo.RedirectStandardOutput = true;
-                    Recomp.StartInfo.RedirectStandardError = true;                    
-                    Recomp.ErrorDataReceived += new DataReceivedEventHandler(process_OutputDataReceived); 
+                    Recomp.StartInfo.RedirectStandardError = true;
+                    Discard = false;
+                    Recomp.ErrorDataReceived += new DataReceivedEventHandler(process_OutputDataReceived);
+                    Recomp.OutputDataReceived += new DataReceivedEventHandler(process_OutputDataReceived); 
                     Recomp.Start();
+                    Recomp.BeginOutputReadLine();
                     Recomp.BeginErrorReadLine();                    
                     st.Start();
                     while (!Recomp.WaitForExit(1000))
-                    {                                            
+                    {                        
                         if (st.ElapsedMilliseconds > 300000)
                         {
-                            
+                            Test.WriteLine("***********");
+                            Test.WriteLine("FAIL");
+                            Test.WriteLine("***********");
                             Recomp.Kill();
                             fail = true;
                             failcount++;
@@ -101,6 +112,7 @@ namespace SeizurePlayback
                     fail = false; 
                 }
                 //StartComp.Enabled = true;
+                Test.Close();
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -117,6 +129,11 @@ namespace SeizurePlayback
                 CT.Start();
 
             }
+        }
+
+        private void Compression_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

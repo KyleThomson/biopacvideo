@@ -530,6 +530,8 @@ namespace BioPacVideo
                     FileStop = false;
                 }
                 last_received = received; //For the draw buffer
+                samplesize = (int)last_received / AcqChan;
+                samplecount += samplesize;
                 if (IsFileWriting) //If we are writing to the file, we want to handle it immediately. 
                 {
 
@@ -543,8 +545,7 @@ namespace BioPacVideo
                         //better safe than sorry. 
                     }                    
                     CurrentWriteLoc = BinaryFile.Position;  //Update the current location.                    
-                    samplesize = (int)last_received / AcqChan;
-                    samplecount += samplesize;
+                    
                     if (FileStop) //Need to have thread safe file closing! Oops!                        
                     {
                         updateheader(); //Write sample total
