@@ -101,6 +101,7 @@
             this.Controls.Add(this.TotProgress);
             this.Name = "Compression";
             this.Text = "Compression Manager";
+            this.Load += new System.EventHandler(this.Compression_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
