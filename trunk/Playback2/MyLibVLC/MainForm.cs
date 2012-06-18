@@ -653,17 +653,15 @@ namespace SeizurePlayback
 
         }
 
-        
-
-
-
-
-
-
-
-
-
-
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            Step = MaxDispSize;
+            graph.X2 = MainForm.ActiveForm.Size.Width;
+            graph.Y2 = MainForm.ActiveForm.Size.Height - 420;
+            ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);    //Create the graphics box to display EEG.       
+            VideoPanel.Location = new Point(VideoPanel.Location.X, MainForm.ActiveForm.Height - 400);
+            TimeBar.Size = new Size(MainForm.ActiveForm.Size.Width - TimeBar.Location.X - 5, TimeBar.Size.Height);
+       }
 
 
 
