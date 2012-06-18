@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace SeizurePlayback
 {
 
-    class VlcMediaPlayer : IDisposable
+    public class VlcMediaPlayer : IDisposable
     {
         internal IntPtr Handle;
         private IntPtr drawable;
@@ -112,14 +112,7 @@ namespace SeizurePlayback
             
         public void EncodeSeizure(int StartTime, int length, string infile, string outfile)
         {
-            Process p = new Process();
-            string CmdString = " -y -ss " + StartTime.ToString() + " -t " + length.ToString();            
-            CmdString += " -i " + infile;
-            CmdString += " -sameq " + outfile;                        
-            p.StartInfo.Arguments = CmdString;
-            p.StartInfo.FileName = "C:\\x264\\ffmpeg.exe";
-            p.Start();
-            p.WaitForExit();
+           
 
         }
     }

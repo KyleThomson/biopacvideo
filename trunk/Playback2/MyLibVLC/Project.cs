@@ -374,10 +374,10 @@ namespace SeizurePlayback
             }
             F.WriteLine(st);
             foreach (AnimalType A in Animals)
-            {                
-                st = A.ID;
+            {                                
                 if (E.Sz)
                 {
+                    st = A.ID;
                     for (DateTime i = Earliest; i <= Latest; i=i.AddDays(1))
                     {
                         c = 0;                                        
@@ -391,6 +391,7 @@ namespace SeizurePlayback
                 }
                 if (E.Pellet)
                 {
+                    st = A.ID;
                     for (DateTime i = Earliest; i <= Latest; i=i.AddDays(1))
                     {
                         c = 0;                                        
@@ -413,6 +414,7 @@ namespace SeizurePlayback
                     F.WriteLine(st);    
                 }
             }
+            F.Close();
         }
         void ParseLine(string L)
         {

@@ -6,7 +6,7 @@ using System.Drawing;
 using System.IO;
 namespace SeizurePlayback
 {
-    class ACQReader
+    public class ACQReader
     {
         public string FullName;
         public Int32[][] data;
@@ -61,7 +61,7 @@ namespace SeizurePlayback
         { //open File for reading
             byte CharN; 
             FullName = FName;
-            FILE = new FileStream(FullName, FileMode.Open);            
+            FILE = new FileStream(FullName, FileMode.Open, FileAccess.ReadWrite);            
             FID = new BinaryReader(FILE);
             FILE.Seek(0, SeekOrigin.End);            
             EOF = FILE.Position;
@@ -94,6 +94,22 @@ namespace SeizurePlayback
             Position = 0;
             Loaded = true;
             VoltageSpacing = (int)(Ymax / (Chans+.5));
+        }
+        public void UpdateIDs()
+        {
+            BinaryWriter FID2 = new BinaryWriter(FILE);            
+            for (int i = 0; i < Chans; i++)
+            {                
+                FILE.Seek(ExtLenHeader + ChanLenHeader * i + 6, SeekOrigin.Begin);
+                for (int j = 0; j < ID[i].Length; j++)
+                {
+                    FID2.Write((char)ID[i][j]);
+                }
+                for (int j = ID[i].Length; j < 40; j++)
+                {
+                    FID2.Write((byte)0);
+                }
+            }
         }
         public bool ReadData(int TimeStart, int Length) // In seconds
         {

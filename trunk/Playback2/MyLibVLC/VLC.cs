@@ -102,7 +102,7 @@ namespace SeizurePlayback
         public override string Message { get { return _err; } }
     }
 
-    class VlcInstance : IDisposable
+    public class VlcInstance : IDisposable
     {
         internal IntPtr Handle;
 
@@ -118,7 +118,7 @@ namespace SeizurePlayback
         }
     }
 
-    class VlcMedia : IDisposable
+    public class VlcMedia : IDisposable
     {
         internal IntPtr Handle;
         

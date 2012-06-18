@@ -54,7 +54,7 @@
             this.MinimizeBox = false;
             this.Name = "SzRvwFrm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "Form2";
+            this.Text = "Seizure Review";
             this.TopMost = true;
             this.ResumeLayout(false);
 

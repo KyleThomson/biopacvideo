@@ -67,6 +67,7 @@ namespace SeizurePlayback
             this.PMButton = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.OffsetBox = new System.Windows.Forms.TextBox();
+            this.Renamer = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.SuspendLayout();
@@ -513,12 +514,24 @@ namespace SeizurePlayback
             this.OffsetBox.TabIndex = 48;
             this.OffsetBox.LostFocus += new System.EventHandler(this.OffsetBox_TextChanged);
             // 
+            // Renamer
+            // 
+            this.Renamer.ForeColor = System.Drawing.SystemColors.Control;
+            this.Renamer.Location = new System.Drawing.Point(832, 595);
+            this.Renamer.Name = "Renamer";
+            this.Renamer.Size = new System.Drawing.Size(156, 23);
+            this.Renamer.TabIndex = 49;
+            this.Renamer.Text = "Rename Channels";
+            this.Renamer.UseVisualStyleBackColor = true;
+            this.Renamer.Click += new System.EventHandler(this.Renamer_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1424, 845);
+            this.Controls.Add(this.Renamer);
             this.Controls.Add(this.OffsetBox);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.PMButton);
@@ -615,6 +628,7 @@ namespace SeizurePlayback
         private System.Windows.Forms.Button PMButton;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox OffsetBox;
+        private System.Windows.Forms.Button Renamer;
     }
 }
 
