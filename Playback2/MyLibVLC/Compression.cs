@@ -52,8 +52,8 @@ namespace SeizurePlayback
                         LastCount++;
                         CurFileProg.Invoke((MethodInvoker)delegate { CurFileProg.Increment(1); });
 
-                    }
-                }
+                    }                
+                }                
                 st.Reset();
                 st.Start();                
             }
@@ -61,7 +61,7 @@ namespace SeizurePlayback
         private void CompThread()
         {   
              Process Recomp;
-          
+            bool ResetFailCount = false;
             string Command;
             Test = new StreamWriter("E:\\TEST.TXT");
             Test.AutoFlush = true;
@@ -89,11 +89,35 @@ namespace SeizurePlayback
                     Recomp.Start();
                     Recomp.BeginOutputReadLine();
                     Recomp.BeginErrorReadLine();                    
-                    st.Start();
+                    st.Start();                    
                     while (!Recomp.WaitForExit(1000))
+<<<<<<< .mine
+                    {                                                
+                        if (st.ElapsedMilliseconds > 30000)
+=======
                     {                        
                         if (st.ElapsedMilliseconds > 300000)
+>>>>>>> .r88
                         {
+<<<<<<< .mine
+
+                            if (!ResetFailCount)
+                            {
+                                Recomp.Kill();
+                                ResetFailCount = true;
+                                i--;
+                                fail = true;
+                            }
+                            else
+                            {
+                                Recomp.Kill();
+                                fail = true;
+                                failcount++;
+                                FailCountLbl.Invoke((MethodInvoker)delegate { FailCountLbl.Text = "Fail Count: " + failcount.ToString(); });
+                                TotProgress.Invoke((MethodInvoker)delegate { TotProgress.Increment(1); });
+                                ResetFailCount = false;
+                            }
+=======
                             Test.WriteLine("***********");
                             Test.WriteLine("FAIL");
                             Test.WriteLine("***********");
@@ -101,14 +125,16 @@ namespace SeizurePlayback
                             fail = true;
                             failcount++;
                             FailCountLbl.Invoke((MethodInvoker)delegate { FailCountLbl.Text = "Fail Count: " + failcount.ToString(); });                    
+>>>>>>> .r88
                         }
                     }       
                     if ((File.Exists(Path + "\\temp.avi")) & !fail)
                     {
                         File.Delete(AVIFiles[i]);
                         File.Move(Path + "\\temp.avi", AVIFiles[i]);
-                    } 
-                    TotProgress.Invoke((MethodInvoker) delegate { TotProgress.Increment(1); } );
+                        TotProgress.Invoke((MethodInvoker)delegate { TotProgress.Increment(1); });
+                        ResetFailCount = false;
+                    }                     
                     fail = false; 
                 }
                 //StartComp.Enabled = true;

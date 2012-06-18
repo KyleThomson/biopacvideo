@@ -90,7 +90,7 @@ namespace SeizurePlayback
             VisChecks[15] = VisChan16;
             
             ACQ.initDisplay(graph.X2-graph.X1, graph.Y2-graph.Y1);    //Create the graphics box to display EEG.         
-            TimeBox.SelectedIndex = 0; //Default Time Scale
+            TimeBox.SelectedIndex = 1; //Default Time Scale
             Step = MaxDispSize; //Setting Step to max display size makes sure the image refreshes. 
 
             //Add Mouse Handlers
@@ -108,6 +108,7 @@ namespace SeizurePlayback
         {
           
            int Delay = 0;
+           bool EOFReached = false;
            // int h,m,s;
            Stopwatch st = new Stopwatch();
             while (true)
@@ -142,7 +143,10 @@ namespace SeizurePlayback
                             if (Step >= MaxDispSize)
                             {
                                 if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
-                                    Paused = true;                                
+                                {
+                                    EOFReached = true;
+                                    Paused = true;
+                                }
                                 Step = 0;
                                 Redraw = true;
                             }
@@ -154,6 +158,8 @@ namespace SeizurePlayback
                                 ACQ.drawbuffer();
                             g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
                             g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
+                            if (EOFReached)
+                                g.DrawString("End of File Reached", new Font("Arial", 20), new SolidBrush(Color.Red), new PointF(10, 10));
                             ACQ.Position += 10;
                             Step += 10;
                         }
@@ -164,7 +170,10 @@ namespace SeizurePlayback
                             {
 
                                 if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
+                                {
+                                    EOFReached = true;
                                     Paused = true;
+                                }
                                 Redraw = true;
                                 Step = 0;
                             }
@@ -172,6 +181,8 @@ namespace SeizurePlayback
                                 ACQ.drawbuffer();
                             g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
                             g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
+                            if (EOFReached)
+                                g.DrawString("End of File Reached", new Font("Arial", 20), new SolidBrush(Color.Red), new PointF(10,10));
                             ACQ.Position += 1;
                             Step += 1;
                             st.Stop();
@@ -205,8 +216,13 @@ namespace SeizurePlayback
 
                                 if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
                                     Paused = true;
-                                ACQ.drawbuffer();
+                                Redraw = true;
                                 Step = 0;
+                            }
+                            if (Redraw)
+                            {
+                                ACQ.drawbuffer();
+                                Redraw = false;
                             }
                             g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
                             Thread.Sleep(100);
@@ -481,32 +497,41 @@ namespace SeizurePlayback
         
 
         private void SzCaptureButton_Click(object sender, EventArgs e)
-        {
-            int StartTime;
-            string Notes; 
+        {            
+            infopass P;            
+            P = new infopass();
             if ((CurrentAVI != "") && (ACQ.SelectedChan != -1))
             {
-                StartTime = (ACQ.Position - Step + HighlightStart);                
-                string outfile = CurrentAVI.Substring(CurrentAVI.Length - 27, 18);
-                string FPath = CurrentAVI.Substring(0, CurrentAVI.LastIndexOf("\\")+1) + "Seizure";                
-                SeizureCount[ACQ.SelectedChan]++;                
-                TimeSpan t = TimeSpan.FromSeconds( StartTime );
-                SzPrompt Frm = new SzPrompt();
-                Frm.ShowDialog();
-                Notes = Frm.Notes;
-                Frm.Dispose();
+                P.StartTime = (ACQ.Position - Step + HighlightStart);
+                P.HighlightEnd = HighlightEnd;
+                P.HighlightStart = HighlightStart;
+                P.outfile = CurrentAVI.Substring(CurrentAVI.Length - 27, 18);
+                P.FPath = CurrentAVI.Substring(0, CurrentAVI.LastIndexOf("\\")+1) + "Seizure";                
+                SeizureCount[ACQ.SelectedChan]++;
+                P.length = (int)((float)(HighlightEnd - HighlightStart + 1) * 1.01F);  
+                TimeSpan t = TimeSpan.FromSeconds( P.StartTime );
                 string answer = string.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours,t.Minutes, t.Seconds);
-                outfile += "_S" + SeizureCount[ACQ.SelectedChan].ToString();
-                string Sz = (ACQ.SelectedChan+1).ToString() + ", " + ACQ.ID[ACQ.SelectedChan] +  ", " + SeizureCount[ACQ.SelectedChan].ToString() + ", "
-                    + answer + ", " + (HighlightEnd - HighlightStart + 1).ToString() + " , " + Notes + " , " + outfile;
-                SzTxt.WriteLine(Sz);                
-                if (SRF != null) { SRF.Add(Sz); }
-                SzInfo[SzInfoIndex] = Sz;
-                SzInfoIndex++;
-                int length = (int)((float)(HighlightEnd - HighlightStart + 1) * 1.01F);                
-                outfile = FPath + "\\" + outfile;
-                ACQ.DumpData(outfile + ".dat", ACQ.SelectedChan, StartTime, HighlightEnd - HighlightStart + 1);
-                player.EncodeSeizure((int)((((float)StartTime * 1000 * (1F + VideoOffset)) - Subtractor)/1000), length, CurrentAVI, outfile + ".avi");
+                P.outfile += "_S" + SeizureCount[ACQ.SelectedChan].ToString();
+                P.Sz = (ACQ.SelectedChan + 1).ToString() + ", " + ACQ.ID[ACQ.SelectedChan] + ", " + SeizureCount[ACQ.SelectedChan].ToString() + ", "
+                    + answer + ", " + (HighlightEnd - HighlightStart + 1).ToString() + " , ";
+                P.CurrentAVI = CurrentAVI;
+                P.Subtractor = Subtractor;
+                P.ACQ = ACQ;
+                P.VideoOffset = VideoOffset;
+                SzPrompt Frm = new SzPrompt();
+                Frm.Pass = P;
+                Frm.ShowDialog(this);                
+                if (Frm.Ok)
+                {
+                    string Result = Frm.Result; 
+                    SzTxt.WriteLine(Result);
+                    if (SRF != null) { SRF.Add(Result); }
+                    SzInfo[SzInfoIndex] = Result;
+                    SzInfoIndex++;                    
+                }
+                Frm.Dispose();
+                Step = MaxDispSize;
+                QuitHighlight();
             }
         }
 
@@ -550,6 +575,7 @@ namespace SeizurePlayback
         private void ZoomScale_Scroll(object sender, EventArgs e)
         {
             ACQ.Zoom = (float)ZoomScale.Value / 10;
+            Redraw = true;
         }
 
         private void VideoPanel_Click(object sender, EventArgs e)
@@ -613,6 +639,18 @@ namespace SeizurePlayback
         private void OffsetBox_TextChanged(object sender, EventArgs e)
         {
             float.TryParse(OffsetBox.Text, out VideoOffset);
+        }
+
+        private void Renamer_Click(object sender, EventArgs e)
+        {
+            RenameChans frm = new RenameChans(ACQ.Chans, ACQ.ID);
+            frm.ShowDialog();
+            if (frm.OK)
+            {
+                ACQ.ID = frm.Names; //Grab the names
+                ACQ.UpdateIDs(); //Write the IDs to the ACQ file
+            }
+
         }
 
         
