@@ -168,7 +168,7 @@ namespace SeizurePlayback
             "2m",
             "5m",
             "10m"});
-            this.TimeBox.Location = new System.Drawing.Point(498, 539);
+            this.TimeBox.Location = new System.Drawing.Point(498, 652);
             this.TimeBox.Name = "TimeBox";
             this.TimeBox.Size = new System.Drawing.Size(161, 21);
             this.TimeBox.TabIndex = 18;
@@ -179,7 +179,7 @@ namespace SeizurePlayback
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label1.Location = new System.Drawing.Point(499, 507);
+            this.label1.Location = new System.Drawing.Point(500, 625);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(105, 24);
             this.label1.TabIndex = 19;
@@ -232,7 +232,7 @@ namespace SeizurePlayback
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label2.Location = new System.Drawing.Point(500, 631);
+            this.label2.Location = new System.Drawing.Point(672, 625);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(105, 24);
             this.label2.TabIndex = 24;
@@ -240,7 +240,7 @@ namespace SeizurePlayback
             // 
             // TimeJump
             // 
-            this.TimeJump.Location = new System.Drawing.Point(497, 658);
+            this.TimeJump.Location = new System.Drawing.Point(669, 652);
             this.TimeJump.Name = "TimeJump";
             this.TimeJump.Size = new System.Drawing.Size(161, 20);
             this.TimeJump.TabIndex = 25;
@@ -443,7 +443,7 @@ namespace SeizurePlayback
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label3.Location = new System.Drawing.Point(500, 566);
+            this.label3.Location = new System.Drawing.Point(501, 562);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(104, 24);
             this.label3.TabIndex = 42;
@@ -451,7 +451,7 @@ namespace SeizurePlayback
             // 
             // ZoomScale
             // 
-            this.ZoomScale.Location = new System.Drawing.Point(498, 599);
+            this.ZoomScale.Location = new System.Drawing.Point(499, 595);
             this.ZoomScale.Maximum = 20;
             this.ZoomScale.Minimum = 1;
             this.ZoomScale.Name = "ZoomScale";
@@ -500,7 +500,7 @@ namespace SeizurePlayback
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label4.Location = new System.Drawing.Point(675, 631);
+            this.label4.Location = new System.Drawing.Point(847, 625);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(57, 24);
             this.label4.TabIndex = 47;
@@ -508,7 +508,7 @@ namespace SeizurePlayback
             // 
             // OffsetBox
             // 
-            this.OffsetBox.Location = new System.Drawing.Point(669, 658);
+            this.OffsetBox.Location = new System.Drawing.Point(841, 652);
             this.OffsetBox.Name = "OffsetBox";
             this.OffsetBox.Size = new System.Drawing.Size(161, 20);
             this.OffsetBox.TabIndex = 48;
@@ -573,13 +573,12 @@ namespace SeizurePlayback
             this.Controls.Add(this.ZoomScale);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "MainForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Seizure Video Playback";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).EndInit();
             this.ResumeLayout(false);

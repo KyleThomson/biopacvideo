@@ -21,11 +21,15 @@ namespace SeizurePlayback
         TimeSpan Length;
         int LastCount;
         bool Discard;
+        int CRF, start;
+        bool LargeSize;
         public Compression(string P)
         {
             InitializeComponent();
             Path = P;
-            AVIFiles = Directory.GetFiles(Path, "*.avi");  
+            AVIFiles = Directory.GetFiles(Path, "*.avi");
+            CRF = 33;
+            start = 1;
             
         }
 
@@ -61,6 +65,7 @@ namespace SeizurePlayback
         private void CompThread()
         {   
              Process Recomp;
+             FileInfo FI;
             bool ResetFailCount = false;
             string Command;
             Test = new StreamWriter("E:\\TEST.TXT");
@@ -68,10 +73,12 @@ namespace SeizurePlayback
             bool fail = false;
             int failcount = 0;
             st = new Stopwatch();
-                for (int i = 0; i < AVIFiles.Length; i++)
+                for (int i = start-1; i < AVIFiles.Length; i++)
                 {
+                    FI = new FileInfo(AVIFiles[i]);
+                    if ((!LargeSize) || FI.Length > 1.7e9)
                     LastCount = 0;
-                    Command = "-i " + AVIFiles[i] + " -y -vcodec libx264 -crf 33 -coder 0 -an ";
+                    Command = "-i " + AVIFiles[i] + " -y -vcodec libx264 -crf " + CRF + " -coder 0 -an ";
                     Command += Path + "\\temp.avi";
                     Test.WriteLine(Command);
                     CurFileProg.Invoke((MethodInvoker)delegate { CurFileProg.Value = 0; });
@@ -91,19 +98,14 @@ namespace SeizurePlayback
                     Recomp.BeginErrorReadLine();                    
                     st.Start();                    
                     while (!Recomp.WaitForExit(1000))
-<<<<<<< .mine
-                    {                                                
-                        if (st.ElapsedMilliseconds > 30000)
-=======
                     {                        
                         if (st.ElapsedMilliseconds > 300000)
->>>>>>> .r88
                         {
-<<<<<<< .mine
 
                             if (!ResetFailCount)
                             {
                                 Recomp.Kill();
+                                Recomp.WaitForExit();
                                 ResetFailCount = true;
                                 i--;
                                 fail = true;
@@ -111,21 +113,16 @@ namespace SeizurePlayback
                             else
                             {
                                 Recomp.Kill();
+                                Recomp.WaitForExit();
                                 fail = true;
                                 failcount++;
                                 FailCountLbl.Invoke((MethodInvoker)delegate { FailCountLbl.Text = "Fail Count: " + failcount.ToString(); });
                                 TotProgress.Invoke((MethodInvoker)delegate { TotProgress.Increment(1); });
+                                Test.WriteLine("***********");
+                                Test.WriteLine("FAIL");
+                                Test.WriteLine("***********");
                                 ResetFailCount = false;
-                            }
-=======
-                            Test.WriteLine("***********");
-                            Test.WriteLine("FAIL");
-                            Test.WriteLine("***********");
-                            Recomp.Kill();
-                            fail = true;
-                            failcount++;
-                            FailCountLbl.Invoke((MethodInvoker)delegate { FailCountLbl.Text = "Fail Count: " + failcount.ToString(); });                    
->>>>>>> .r88
+                            }                           
                         }
                     }       
                     if ((File.Exists(Path + "\\temp.avi")) & !fail)
@@ -136,8 +133,7 @@ namespace SeizurePlayback
                         ResetFailCount = false;
                     }                     
                     fail = false; 
-                }
-                //StartComp.Enabled = true;
+                }                
                 Test.Close();
         }
         private void button1_Click(object sender, EventArgs e)
@@ -152,7 +148,7 @@ namespace SeizurePlayback
                 TotProgress.Maximum = AVIFiles.Length;
                 StartComp.Enabled = false;
                 CT = new Thread(new ThreadStart(CompThread));
-                CT.Start();
+                CT.Start();                
 
             }
         }
@@ -160,6 +156,13 @@ namespace SeizurePlayback
         private void Compression_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void AdvancedSettingsButton(object sender, EventArgs e)
+        {
+            /*AdvanceSettings frm = new AdvanceSettings();
+            frm.Show(this);
+            frm.GetInfo(*/
         }
     }
 }

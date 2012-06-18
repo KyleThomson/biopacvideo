@@ -34,6 +34,7 @@
             this.CurrentLabel = new System.Windows.Forms.Label();
             this.FailCountLbl = new System.Windows.Forms.Label();
             this.StartComp = new System.Windows.Forms.Button();
+            this.AdvanceSettingsButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // TotProgress
@@ -88,11 +89,22 @@
             this.StartComp.UseVisualStyleBackColor = true;
             this.StartComp.Click += new System.EventHandler(this.button1_Click);
             // 
+            // AdvanceSettingsButton
+            // 
+            this.AdvanceSettingsButton.Location = new System.Drawing.Point(437, 41);
+            this.AdvanceSettingsButton.Name = "AdvanceSettingsButton";
+            this.AdvanceSettingsButton.Size = new System.Drawing.Size(103, 34);
+            this.AdvanceSettingsButton.TabIndex = 6;
+            this.AdvanceSettingsButton.Text = "Advanced Settings";
+            this.AdvanceSettingsButton.UseVisualStyleBackColor = true;
+            this.AdvanceSettingsButton.Click += new System.EventHandler(this.AdvancedSettingsButton);
+            // 
             // Compression
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(548, 134);
+            this.Controls.Add(this.AdvanceSettingsButton);
             this.Controls.Add(this.StartComp);
             this.Controls.Add(this.FailCountLbl);
             this.Controls.Add(this.CurrentLabel);
@@ -115,6 +127,7 @@
         private System.Windows.Forms.Label CurrentLabel;
         private System.Windows.Forms.Label FailCountLbl;
         private System.Windows.Forms.Button StartComp;
+        private System.Windows.Forms.Button AdvanceSettingsButton;
 
     }
 }
