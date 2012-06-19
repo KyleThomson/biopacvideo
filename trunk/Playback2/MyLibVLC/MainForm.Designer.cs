@@ -68,12 +68,14 @@ namespace SeizurePlayback
             this.label4 = new System.Windows.Forms.Label();
             this.OffsetBox = new System.Windows.Forms.TextBox();
             this.Renamer = new System.Windows.Forms.Button();
+            this.HighlightLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.SuspendLayout();
             // 
             // Play
             // 
+            this.Play.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Play.ForeColor = System.Drawing.SystemColors.Control;
             this.Play.Location = new System.Drawing.Point(832, 505);
             this.Play.Name = "Play";
@@ -94,6 +96,7 @@ namespace SeizurePlayback
             // 
             // Open
             // 
+            this.Open.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Open.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.Open.Location = new System.Drawing.Point(669, 479);
             this.Open.Name = "Open";
@@ -105,6 +108,7 @@ namespace SeizurePlayback
             // 
             // Pause
             // 
+            this.Pause.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pause.ForeColor = System.Drawing.SystemColors.Control;
             this.Pause.Location = new System.Drawing.Point(832, 479);
             this.Pause.Name = "Pause";
@@ -116,6 +120,7 @@ namespace SeizurePlayback
             // 
             // TimeBar
             // 
+            this.TimeBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.TimeBar.LargeChange = 1;
             this.TimeBar.Location = new System.Drawing.Point(498, 695);
             this.TimeBar.Maximum = 9;
@@ -126,6 +131,7 @@ namespace SeizurePlayback
             // 
             // Rewind
             // 
+            this.Rewind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Rewind.ForeColor = System.Drawing.SystemColors.Control;
             this.Rewind.Location = new System.Drawing.Point(913, 479);
             this.Rewind.Name = "Rewind";
@@ -137,6 +143,7 @@ namespace SeizurePlayback
             // 
             // button1
             // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button1.ForeColor = System.Drawing.SystemColors.Control;
             this.button1.Location = new System.Drawing.Point(912, 504);
             this.button1.Name = "button1";
@@ -148,6 +155,7 @@ namespace SeizurePlayback
             // 
             // TimeLabel
             // 
+            this.TimeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.TimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TimeLabel.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.TimeLabel.Location = new System.Drawing.Point(530, 476);
@@ -160,6 +168,7 @@ namespace SeizurePlayback
             // 
             // TimeBox
             // 
+            this.TimeBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.TimeBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.TimeBox.FormattingEnabled = true;
             this.TimeBox.Items.AddRange(new object[] {
@@ -176,6 +185,7 @@ namespace SeizurePlayback
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
@@ -187,6 +197,7 @@ namespace SeizurePlayback
             // 
             // SzCaptureButton
             // 
+            this.SzCaptureButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.SzCaptureButton.ForeColor = System.Drawing.SystemColors.Control;
             this.SzCaptureButton.Location = new System.Drawing.Point(669, 508);
             this.SzCaptureButton.Name = "SzCaptureButton";
@@ -198,6 +209,7 @@ namespace SeizurePlayback
             // 
             // DetectionLoadButton
             // 
+            this.DetectionLoadButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.DetectionLoadButton.ForeColor = System.Drawing.SystemColors.Control;
             this.DetectionLoadButton.Location = new System.Drawing.Point(831, 536);
             this.DetectionLoadButton.Name = "DetectionLoadButton";
@@ -209,6 +221,7 @@ namespace SeizurePlayback
             // 
             // button2
             // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button2.ForeColor = System.Drawing.SystemColors.Control;
             this.button2.Location = new System.Drawing.Point(831, 566);
             this.button2.Name = "button2";
@@ -219,6 +232,7 @@ namespace SeizurePlayback
             // 
             // button3
             // 
+            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button3.ForeColor = System.Drawing.SystemColors.Control;
             this.button3.Location = new System.Drawing.Point(912, 566);
             this.button3.Name = "button3";
@@ -229,6 +243,7 @@ namespace SeizurePlayback
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
@@ -240,6 +255,7 @@ namespace SeizurePlayback
             // 
             // TimeJump
             // 
+            this.TimeJump.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.TimeJump.Location = new System.Drawing.Point(669, 652);
             this.TimeJump.Name = "TimeJump";
             this.TimeJump.Size = new System.Drawing.Size(161, 20);
@@ -248,6 +264,7 @@ namespace SeizurePlayback
             // 
             // VisChan1
             // 
+            this.VisChan1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan1.AutoSize = true;
             this.VisChan1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.VisChan1.Location = new System.Drawing.Point(502, 743);
@@ -260,6 +277,7 @@ namespace SeizurePlayback
             // 
             // VisChan2
             // 
+            this.VisChan2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan2.AutoSize = true;
             this.VisChan2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.VisChan2.Location = new System.Drawing.Point(503, 766);
@@ -272,6 +290,7 @@ namespace SeizurePlayback
             // 
             // VisChan3
             // 
+            this.VisChan3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan3.AutoSize = true;
             this.VisChan3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.VisChan3.Location = new System.Drawing.Point(503, 789);
@@ -284,6 +303,7 @@ namespace SeizurePlayback
             // 
             // VisChan4
             // 
+            this.VisChan4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan4.AutoSize = true;
             this.VisChan4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.VisChan4.Location = new System.Drawing.Point(503, 812);
@@ -296,6 +316,7 @@ namespace SeizurePlayback
             // 
             // VisChan5
             // 
+            this.VisChan5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan5.AutoSize = true;
             this.VisChan5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.VisChan5.Location = new System.Drawing.Point(584, 743);
@@ -308,6 +329,7 @@ namespace SeizurePlayback
             // 
             // VisChan6
             // 
+            this.VisChan6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan6.AutoSize = true;
             this.VisChan6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.VisChan6.Location = new System.Drawing.Point(583, 766);
@@ -320,6 +342,7 @@ namespace SeizurePlayback
             // 
             // VisChan7
             // 
+            this.VisChan7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan7.AutoSize = true;
             this.VisChan7.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.VisChan7.Location = new System.Drawing.Point(583, 789);
@@ -332,6 +355,7 @@ namespace SeizurePlayback
             // 
             // VisChan8
             // 
+            this.VisChan8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan8.AutoSize = true;
             this.VisChan8.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.VisChan8.Location = new System.Drawing.Point(583, 812);
@@ -344,6 +368,7 @@ namespace SeizurePlayback
             // 
             // VisChan16
             // 
+            this.VisChan16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan16.AutoSize = true;
             this.VisChan16.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.VisChan16.Location = new System.Drawing.Point(745, 812);
@@ -356,6 +381,7 @@ namespace SeizurePlayback
             // 
             // VisChan15
             // 
+            this.VisChan15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan15.AutoSize = true;
             this.VisChan15.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.VisChan15.Location = new System.Drawing.Point(745, 789);
@@ -368,6 +394,7 @@ namespace SeizurePlayback
             // 
             // VisChan14
             // 
+            this.VisChan14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan14.AutoSize = true;
             this.VisChan14.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.VisChan14.Location = new System.Drawing.Point(745, 766);
@@ -380,6 +407,7 @@ namespace SeizurePlayback
             // 
             // VisChan13
             // 
+            this.VisChan13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan13.AutoSize = true;
             this.VisChan13.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.VisChan13.Location = new System.Drawing.Point(746, 743);
@@ -392,6 +420,7 @@ namespace SeizurePlayback
             // 
             // VisChan12
             // 
+            this.VisChan12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan12.AutoSize = true;
             this.VisChan12.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.VisChan12.Location = new System.Drawing.Point(665, 812);
@@ -404,6 +433,7 @@ namespace SeizurePlayback
             // 
             // VisChan11
             // 
+            this.VisChan11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan11.AutoSize = true;
             this.VisChan11.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.VisChan11.Location = new System.Drawing.Point(665, 789);
@@ -416,6 +446,7 @@ namespace SeizurePlayback
             // 
             // VisChan10
             // 
+            this.VisChan10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan10.AutoSize = true;
             this.VisChan10.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.VisChan10.Location = new System.Drawing.Point(665, 766);
@@ -428,6 +459,7 @@ namespace SeizurePlayback
             // 
             // VisChan9
             // 
+            this.VisChan9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan9.AutoSize = true;
             this.VisChan9.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.VisChan9.Location = new System.Drawing.Point(664, 743);
@@ -440,6 +472,7 @@ namespace SeizurePlayback
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
@@ -451,6 +484,7 @@ namespace SeizurePlayback
             // 
             // ZoomScale
             // 
+            this.ZoomScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomScale.Location = new System.Drawing.Point(499, 595);
             this.ZoomScale.Maximum = 20;
             this.ZoomScale.Minimum = 1;
@@ -464,6 +498,7 @@ namespace SeizurePlayback
             // 
             // CompressFinish
             // 
+            this.CompressFinish.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.CompressFinish.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.CompressFinish.Location = new System.Drawing.Point(669, 537);
             this.CompressFinish.Name = "CompressFinish";
@@ -475,6 +510,7 @@ namespace SeizurePlayback
             // 
             // RvwSz
             // 
+            this.RvwSz.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.RvwSz.ForeColor = System.Drawing.SystemColors.Control;
             this.RvwSz.Location = new System.Drawing.Point(669, 566);
             this.RvwSz.Name = "RvwSz";
@@ -486,6 +522,7 @@ namespace SeizurePlayback
             // 
             // PMButton
             // 
+            this.PMButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.PMButton.ForeColor = System.Drawing.SystemColors.Control;
             this.PMButton.Location = new System.Drawing.Point(669, 595);
             this.PMButton.Name = "PMButton";
@@ -497,6 +534,7 @@ namespace SeizurePlayback
             // 
             // label4
             // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
@@ -508,6 +546,7 @@ namespace SeizurePlayback
             // 
             // OffsetBox
             // 
+            this.OffsetBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.OffsetBox.Location = new System.Drawing.Point(841, 652);
             this.OffsetBox.Name = "OffsetBox";
             this.OffsetBox.Size = new System.Drawing.Size(161, 20);
@@ -516,6 +555,7 @@ namespace SeizurePlayback
             // 
             // Renamer
             // 
+            this.Renamer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Renamer.ForeColor = System.Drawing.SystemColors.Control;
             this.Renamer.Location = new System.Drawing.Point(832, 595);
             this.Renamer.Name = "Renamer";
@@ -525,12 +565,26 @@ namespace SeizurePlayback
             this.Renamer.UseVisualStyleBackColor = true;
             this.Renamer.Click += new System.EventHandler(this.Renamer_Click);
             // 
+            // HighlightLabel
+            // 
+            this.HighlightLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.HighlightLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.HighlightLabel.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.HighlightLabel.Location = new System.Drawing.Point(530, 508);
+            this.HighlightLabel.Name = "HighlightLabel";
+            this.HighlightLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.HighlightLabel.Size = new System.Drawing.Size(127, 24);
+            this.HighlightLabel.TabIndex = 50;
+            this.HighlightLabel.Text = "        HL";
+            this.HighlightLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1424, 845);
+            this.Controls.Add(this.HighlightLabel);
             this.Controls.Add(this.Renamer);
             this.Controls.Add(this.OffsetBox);
             this.Controls.Add(this.label4);
@@ -572,7 +626,6 @@ namespace SeizurePlayback
             this.Controls.Add(this.Play);
             this.Controls.Add(this.ZoomScale);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -628,6 +681,7 @@ namespace SeizurePlayback
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox OffsetBox;
         private System.Windows.Forms.Button Renamer;
+        private System.Windows.Forms.Label HighlightLabel;
     }
 }
 

@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SeizurePlayback</RootNamespace>
-    <AssemblyName>MyLibVLC</AssemblyName>
+    <AssemblyName>SeizurePlayback</AssemblyName>
     <StartupObject>
     </StartupObject>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>

@@ -39,6 +39,7 @@ namespace SeizurePlayback
         private int Voltage;
         private int DataType;
         public Bitmap offscreen;
+        public Bitmap ScreenCopy;
         
         Graphics g;
         public ACQReader()
@@ -94,6 +95,11 @@ namespace SeizurePlayback
             Position = 0;
             Loaded = true;
             VoltageSpacing = (int)(Ymax / (Chans+.5));
+        }
+        public void RefreshDisplay()
+        {
+            VoltageSpacing = (int)(Ymax / (Chans + .5));
+            PointSpacing = (float)Xmax / MaxDrawSize;
         }
         public void UpdateIDs()
         {
@@ -158,7 +164,7 @@ namespace SeizurePlayback
         }
         public void initDisplay(int X, int Y)
         {
-            offscreen = new Bitmap(X,Y);
+            offscreen = new Bitmap(Math.Max(X,1),Math.Max(1,Y));
             Xmax = X;
             Ymax = Y;            
             g = Graphics.FromImage(offscreen);
@@ -236,41 +242,49 @@ namespace SeizurePlayback
             int NotDisp;
             PointF[][] WaveC;
             Font F = new Font("Arial", 10);
-            SolidBrush B = new SolidBrush(Color.Red);           
+            SolidBrush B = new SolidBrush(Color.Red);
+            try
+            {
              g.Clear(Color.White);
-             if (HL)
-             {                                  
-                 SolidBrush myBrush = new SolidBrush(System.Drawing.Color.LightGreen);                    
-                 g.FillRectangle(myBrush, new Rectangle((int)(HLS * PointSpacing * SampleRate), (int)(VoltageSpacing * (SelectedChan + 0.25F)), (int)((HLE - HLS) * PointSpacing * SampleRate), (Ymax / VisibleChans)));                 
-                 
-             }
-                WaveC = new PointF[Chans][];
-                for (int i = 0; i < Chans; i++)
-                {
-                    WaveC[i] = new PointF[SampleSize];
-                }
-                NotDisp = 0; 
-                for (int j = 0; j < Chans; j++)
-                {
-                    if (!HideChan[j])
-                    {                        
-                          g.DrawString(ID[j], F, B, new PointF(1, .25F + (j-NotDisp) * (Ymax / Chans)));
-                        for (int i = 0; i < SampleSize; i++)
-                        {
+             NotDisp = 0;
+             
+                 WaveC = new PointF[Chans][];
+                 for (int i = 0; i < Chans; i++)
+                 {
+                     WaveC[i] = new PointF[SampleSize];
+                 }
+                 for (int j = 0; j < Chans; j++)
+                 {
 
-                            PointF TempPoint = new PointF((float)i * PointSpacing, VoltageSpacing * ((j - NotDisp) + (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(data[j][i]), Ymax / VisibleChans));
-                            WaveC[j][i] = TempPoint;
-                        }
-                        if (j == SelectedChan)
-                            g.DrawLines(SelectedPen, WaveC[j]);
-                        else
-                            g.DrawLines(WavePen, WaveC[j]);
-                    }
-                    else
-                    {
-                        NotDisp++;
-                    }
-                }                
+                     if (!HideChan[j])
+                     {
+                         if (HL && (SelectedChan == j))
+                         {
+                             SolidBrush myBrush = new SolidBrush(System.Drawing.Color.LightGreen);
+                             g.FillRectangle(myBrush, new Rectangle((int)(HLS * PointSpacing * SampleRate), (int)(VoltageSpacing * (SelectedChan - NotDisp + 0.25F)), (int)((HLE - HLS) * PointSpacing * SampleRate), (Ymax / VisibleChans)));
+
+                         }
+                         g.DrawString(ID[j], F, B, new PointF(1, .25F + (j - NotDisp) * (Ymax / VisibleChans)));
+                         for (int i = 0; i < SampleSize; i++)
+                         {
+
+                             PointF TempPoint = new PointF((float)i * PointSpacing, VoltageSpacing * ((j - NotDisp) + (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(data[j][i]), Ymax / VisibleChans));
+                             WaveC[j][i] = TempPoint;
+                         }
+                         if (j == SelectedChan)
+                             g.DrawLines(SelectedPen, WaveC[j]);
+                         else
+                             g.DrawLines(WavePen, WaveC[j]);
+                     }
+                     else
+                     {
+                         NotDisp++;
+                     }
+                 }
+             }
+             catch
+             {
+             }
             }        
 
     }

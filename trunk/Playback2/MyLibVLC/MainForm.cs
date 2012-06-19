@@ -35,9 +35,10 @@ namespace SeizurePlayback
         Thread ThreadDisplay;
         VlcMedia media;
         string Path;
-        string BaseName;
+        string BaseName;        
         bool Paused;
         Graphics g;
+        bool ResizeBool = false;
         bool doublesize;
         SzRvwFrm SRF; 
         int Step;
@@ -96,7 +97,7 @@ namespace SeizurePlayback
             //Add Mouse Handlers
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MyMouseUp);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownHandler);
-
+            ResizeBool = true;
             //Start up the display thread. 
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
             ThreadDisplay.Start();            
@@ -205,12 +206,14 @@ namespace SeizurePlayback
                             int X = System.Windows.Forms.Cursor.Position.X;
                             HighlightEnd = (int)((float)MaxDispSize * (float)(X - graph.X1) / (graph.X2 - graph.X1));
                             ACQ.sethighlight(HighlightStart, HighlightEnd);
+                            string s = ((int)((HighlightEnd - HighlightStart) / 60)).ToString() + ":" + string.Format("{0:00}", ((HighlightEnd - HighlightStart) % 60));
+                            HighlightLabel.Invoke(new MethodInvoker(delegate { HighlightLabel.Text = s; }));
                             ACQ.drawbuffer();
                             g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
                             Thread.Sleep(30);
                         }
                         else
-                        {
+                        {                             
                             if (Step >= MaxDispSize)
                             {
 
@@ -286,6 +289,7 @@ namespace SeizurePlayback
             Path = FBD.SelectedPath;
             if (FBD.SelectedPath != "")
             {
+                HighlightLabel.Text = "";
                 for (int i = 0; i < 16; i++) SeizureCount[i] = 0; //Initialize to Zero. 
                 string[] FName = Directory.GetFiles(Path, "*.acq");
                 SzInfo = new string[500];
@@ -373,6 +377,7 @@ namespace SeizurePlayback
         {
             Highlighting = false;
             HighlightEnd = HighlightStart = 0;
+            HighlightLabel.Text = "";
             ACQ.EndHighlight();
         }
         private void MyMouseUp(Object sender, MouseEventArgs e)
@@ -382,7 +387,7 @@ namespace SeizurePlayback
                 {
                     if ((HighlightEnd - HighlightStart) < 3)
                     {
-                                                
+                        HighlightLabel.Text = "";                        
                         int TempChan = (int)((float)ACQ.VisibleChans * (float)(((float)e.Y - (float)graph.Y1) / (float)(graph.Y2 - graph.Y1)));
                         int XStart = (int)((float)MaxDispSize * (float)(e.X - graph.X1) / (graph.X2 - graph.X1));
                         ACQ.SelectedChan = ChanPos[TempChan];
@@ -655,12 +660,19 @@ namespace SeizurePlayback
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            Step = MaxDispSize;
-            graph.X2 = MainForm.ActiveForm.Size.Width;
-            graph.Y2 = MainForm.ActiveForm.Size.Height - 420;
-            ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);    //Create the graphics box to display EEG.       
-            VideoPanel.Location = new Point(VideoPanel.Location.X, MainForm.ActiveForm.Height - 400);
-            TimeBar.Size = new Size(MainForm.ActiveForm.Size.Width - TimeBar.Location.X - 5, TimeBar.Size.Height);
+
+            if (!(MainForm.ActiveForm.WindowState == FormWindowState.Minimized) && ResizeBool)
+            {
+                Step = MaxDispSize;
+                Redraw = true;
+                graph.X2 = MainForm.ActiveForm.Size.Width-5; //Eat at joes
+                graph.Y2 = MainForm.ActiveForm.Size.Height - 400; //this does whatever it does 
+                ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);    //Create the graphics box to display EEG.       
+                VideoPanel.Location = new Point(VideoPanel.Location.X, MainForm.ActiveForm.Height - 395);
+                TimeBar.Size = new Size(MainForm.ActiveForm.Size.Width - TimeBar.Location.X - 5, TimeBar.Size.Height);
+                if (ACQ.Loaded) { ACQ.RefreshDisplay(); }
+                MainForm.ActiveForm.Refresh();
+            }
        }
 
 

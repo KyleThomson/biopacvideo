@@ -78,7 +78,7 @@ namespace SeizurePlayback
         private void Cancel_Click(object sender, EventArgs e)
         {
             Ok = false;            
-            //this.Close();
+            this.Close();
         }
         private void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
