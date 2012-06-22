@@ -631,7 +631,7 @@ namespace SeizurePlayback
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Seizure Video Playback";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
-            this.Resize += new System.EventHandler(this.MainForm_Resize);
+            
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).EndInit();
             this.ResumeLayout(false);

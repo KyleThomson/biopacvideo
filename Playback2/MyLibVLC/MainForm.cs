@@ -103,6 +103,7 @@ namespace SeizurePlayback
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownHandler);
             ResizeBool = true;
             //Start up the display thread. 
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
             ThreadDisplay.Start();            
         }
