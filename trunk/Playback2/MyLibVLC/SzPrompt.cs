@@ -40,13 +40,13 @@ namespace SeizurePlayback
         {
             Ok = true;
             Result = Pass.Sz + Notes + "," + Pass.outfile;
-            Pass.outfile = Pass.FPath + "\\" + Pass.outfile;
-            Pass.ACQ.DumpData(Pass.outfile + ".dat", Pass.ACQ.SelectedChan, Pass.StartTime, Pass.HighlightEnd - Pass.HighlightStart + 1);
+            string outfile = Pass.FPath + "\\" + Pass.outfile;
+            Pass.ACQ.DumpData(outfile + ".dat", Pass.ACQ.SelectedChan, Pass.StartTime, Pass.HighlightEnd - Pass.HighlightStart + 1);
             int StartTime = (int)((float)Pass.StartTime * 1000F * (1F + Pass.VideoOffset) / 1000);                            
             Process p = new Process();
             string CmdString = " -y -ss " + StartTime.ToString() + " -t " + Pass.length.ToString();
             CmdString += " -i " + Pass.CurrentAVI;
-            CmdString += " -sameq " + Pass.outfile + ".avi";
+            CmdString += " -sameq " + outfile + ".avi";
             p.StartInfo.Arguments = CmdString;
             p.StartInfo.FileName = "C:\\x264\\ffmpeg.exe";
             p.StartInfo.CreateNoWindow = true;
