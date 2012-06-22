@@ -313,15 +313,17 @@ namespace SeizurePlayback
                 if (File.Exists(FPath + "\\" + BaseName + ".txt"))
                 {
                     
-                    int j;
+                    int Animal;
+                    int SzC;
                     string[] TmpStr;
                     StreamReader TmpTxt = new StreamReader(FPath + "\\" + BaseName + ".txt");                         
                     while (!TmpTxt.EndOfStream)
                     {
                         SzInfo[SzInfoIndex] = TmpTxt.ReadLine();
                         TmpStr = SzInfo[SzInfoIndex].Split(',');
-                        int.TryParse(TmpStr[0], out j);
-                        SeizureCount[j-1]++;
+                        int.TryParse(TmpStr[0], out Animal);
+                        int.TryParse(TmpStr[2], out SzC);
+                        SeizureCount[Animal - 1] = Math.Max(SzC, SeizureCount[Animal - 1]);
                         SzInfoIndex++;
                     }
                     TmpTxt.Dispose();
@@ -503,6 +505,7 @@ namespace SeizurePlayback
 
         private void SzCaptureButton_Click(object sender, EventArgs e)
         {            
+
             infopass P;            
             P = new infopass();
             if ((CurrentAVI != "") && (ACQ.SelectedChan != -1))
@@ -628,6 +631,27 @@ namespace SeizurePlayback
             ACQ.Position = (int)Time.TotalSeconds;
             Step = MaxDispSize;
             SeekToCurrentPos();                        
+        }
+        public void DeleteSz(int Index)
+        {
+            //Remove File/Count
+            string FPath = AVIFiles[0].Substring(0, AVIFiles[0].LastIndexOf("\\") + 1) + "Seizure";
+            string[] TmpStr = SzInfo[Index].Split(',');
+            File.Delete(TmpStr[6] + ".dat");
+            File.Delete(TmpStr[6] + ".avi");                        
+            for (int i = Index; i < SzInfo.Length - 1; i++)
+            {
+                SzInfo[i] = SzInfo[i + 1];
+            }
+            SzInfoIndex--;
+            SzTxt.Close();            
+            SzTxt = new System.IO.StreamWriter(FPath + "\\" + BaseName + ".txt");
+            SzTxt.AutoFlush = true;
+            for (int k = 0; k < SzInfoIndex; k++)
+            {
+                SzTxt.WriteLine(SzInfo[k]);
+            }
+
         }
 
         private void DetectionLoadButton_Click(object sender, EventArgs e)
