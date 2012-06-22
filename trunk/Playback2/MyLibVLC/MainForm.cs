@@ -51,26 +51,30 @@ namespace SeizurePlayback
         float[] Rates = { 0.25F, 0.5F, 1, 2, 5, 10, 20, 30, 50, 100 };
         public MainForm()
         {
-            InitializeComponent();
-            VideoOffset = 0.009F;
-            OffsetBox.Text = VideoOffset.ToString();
-            //Create Instances
-            graph = new Mygraph(); //Small Class for containing EEG area. 
             ACQ = new ACQReader(); //Class to read from ACQ file
-            g = this.CreateGraphics(); //Graphics object for main form
-            string[] args = new string[] {""
-                //,"--vout-filter=deinterlace", "--deinterlace-mode=blend"
-            };
+            graph = new Mygraph(); //Small Class for containing EEG area. 
+         
+            string[] args = new string[] { "" };
             instance = new VlcInstance(args);
-            CurrentAVI = ""; //No default AVI loaded            
-            SeizureCount = new int[16]; //Create Array for Seizure Counts;             
-
-            //Graphics area of the form to display the EEG. It would be better if these were dynamically resized. 
-            //I don't have time for that shit.
             graph.X1 = 5;
             graph.X2 = 1420;
             graph.Y1 = 6;
             graph.Y2 = 460;
+            ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);    //Create the graphics box to display EEG.     
+            InitializeComponent();
+            g = this.CreateGraphics(); //Graphics object for main form
+          
+            VideoOffset = 0.009F;
+            OffsetBox.Text = VideoOffset.ToString();
+            //Create Instances
+            
+           
+            CurrentAVI = ""; //No default AVI loaded            
+            SeizureCount = new int[16]; //Create Array for Seizure Counts;             
+               
+            //Graphics area of the form to display the EEG. It would be better if these were dynamically resized. 
+            //I don't have time for that shit.
+            
             ChanPos = new int[16];
             VisChecks = new CheckBox[16];
             VisChecks[0] = VisChan1;
@@ -90,7 +94,7 @@ namespace SeizurePlayback
             VisChecks[14] = VisChan15;
             VisChecks[15] = VisChan16;
             
-            ACQ.initDisplay(graph.X2-graph.X1, graph.Y2-graph.Y1);    //Create the graphics box to display EEG.         
+            
             TimeBox.SelectedIndex = 1; //Default Time Scale
             Step = MaxDispSize; //Setting Step to max display size makes sure the image refreshes. 
 
