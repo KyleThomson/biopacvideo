@@ -182,8 +182,9 @@ namespace BioPacVideo
             DI = new DriveInfo(MP.RecordingDirectory.Substring(0, 3));
             while (RunDisplayThread)
             {
+
                 MP._DisplayHandle.WaitOne();
-                IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];                
+                this.Invoke(new MethodInvoker (delegate{IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];}));               
                 //if (Still != null)                    
                     g.DrawImage(MP.offscreen, 30, 280);
                 Cm = 0;
@@ -211,10 +212,10 @@ namespace BioPacVideo
                     MessageBox.Show((IWin32Window)null, "You are out of space. Recording Stopped.");
                     StopRecording();
                 }*/
-            IDT_VIDEOSTATUS.Text = Video.GetResText();
-            IDT_ENCSTAT.Text = Video.EncoderStatus();
-            IDT_FEEDST.Text = Feeder.StateText;
-            IDT_ENCODERSTATUS.Text = VideoWrapper.GetEncRes().ToString();            
+            this.Invoke(new MethodInvoker (delegate{ IDT_VIDEOSTATUS.Text = Video.GetResText();}));
+            this.Invoke(new MethodInvoker (delegate{IDT_ENCSTAT.Text = Video.EncoderStatus();}));
+            this.Invoke(new MethodInvoker (delegate{IDT_FEEDST.Text = Feeder.StateText;}));
+            this.Invoke(new MethodInvoker (delegate { IDT_ENCODERSTATUS.Text = VideoWrapper.GetEncRes().ToString(); }));            
            }
         }
 
