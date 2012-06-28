@@ -290,10 +290,10 @@ namespace SeizurePlayback
         {   
             FBD = new FolderBrowserDialog();
             Paused = true;
-            FBD.ShowDialog();            
-            Path = FBD.SelectedPath;
+            FBD.ShowDialog();                        
             if (FBD.SelectedPath != "")
             {
+                Path = FBD.SelectedPath;
                 HighlightLabel.Text = "";
                 for (int i = 0; i < 16; i++) SeizureCount[i] = 0; //Initialize to Zero. 
                 string[] FName = Directory.GetFiles(Path, "*.acq");
@@ -305,7 +305,8 @@ namespace SeizurePlayback
                 ACQ.SetDispLength(MaxDispSize);  
                 AVILengths = new long[AVIFiles.Length];
                 BaseName = AVIFiles[0].Substring(Path.Length+1,15);
-                MainForm.ActiveForm.Text += " - " + BaseName.Substring(4, 2) + "/"  + BaseName.Substring(6,2) + "/" + BaseName.Substring(0,4);
+                MainForm.ActiveForm.Text = "Seizure Playback - " + BaseName.Substring(4, 2) + "/" + BaseName.Substring(6, 2)
+                    + "/" + BaseName.Substring(0, 4) + " - " + BaseName.Substring(9, 2) + ":" + BaseName.Substring(11, 2) + ":" + BaseName.Substring(13, 2);
                 TimeBar.Minimum = 0;
                 TimeBar.Maximum = ACQ.FileTime;
                 SzInfoIndex = 0;
