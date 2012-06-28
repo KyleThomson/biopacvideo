@@ -185,5 +185,19 @@ namespace SeizurePlayback
         {
 
         }
+
+        private void weightToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WeightAdd Frm = new WeightAdd();
+            Frm.ShowDialog();
+            if (Frm.OK)
+            {
+                for (int i = 0; i < Frm.Count; i++)
+                {
+                    pjt.AddWeight(Frm.ID[i], Frm.Weights[i], Frm.Pellets[i], Frm.Date);                
+                }
+            }
+            Frm.Dispose();
+        }
     }
 }

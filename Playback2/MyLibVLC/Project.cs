@@ -31,10 +31,12 @@ namespace SeizurePlayback
     {
         public double wt;
         public DateTime dt;
-        public WeightType(string a, string b)
+        public int pt;
+        public WeightType(string a, string b, string c)
         {
             double.TryParse(a, out wt);
             DateTime.TryParse(b, out dt);
+            int.TryParse(c, out pt);
         }
     }
     class MealType
@@ -154,7 +156,7 @@ namespace SeizurePlayback
                 }
                 foreach (WeightType W in A.WeightInfo)
                 {
-                    s = "An," + A.ID + ", wt, " + W.wt.ToString() + ", " + W.dt.ToString();
+                    s = "An," + A.ID + ", wt, " + W.wt.ToString() + ", " + W.dt.ToString() + ", " + W.pt.ToString();
                     F.WriteLine(s);
                 }
                 foreach (MealType M in A.Meals)
@@ -185,6 +187,7 @@ namespace SeizurePlayback
             }
             return CurrentAnimal;
         }
+
         public string[] Get_Seizures(string A) //Get the seizure info for display
         {
             string[] Szs;
@@ -253,7 +256,12 @@ namespace SeizurePlayback
             }
             return X;
         }
-
+        public void AddWeight(string AID, int Wt, int Pt, DateTime dt)
+        {
+            int An = FindAnimal(AID);
+            WeightType W = new WeightType(dt.ToShortDateString(), Wt.ToString(), Pt.ToString());
+            Animals[An].WeightInfo.Add(W);
+        }
         public void ImportDirectory(string Dir)
         {
             ACQReader TempACQ = new ACQReader();
@@ -355,6 +363,7 @@ namespace SeizurePlayback
                 Animals[CurrentAnimal].Sz.Add(S);
             }
         }
+
         public void ExportData(string Fname, ExportType E)
         {
             //Open File
@@ -454,7 +463,7 @@ namespace SeizurePlayback
                 switch (data[2])
                 {
                     case " wt":
-                        WeightType W = new WeightType(data[3], data[4]);
+                        WeightType W = new WeightType(data[3], data[4], data[5]);
                         Animals[CurrentAnimal].WeightInfo.Add(W);
                         break;
                     case " sz":

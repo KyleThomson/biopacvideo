@@ -125,6 +125,7 @@
             this.weightToolStripMenuItem.Name = "weightToolStripMenuItem";
             this.weightToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.weightToolStripMenuItem.Text = "&Weight";
+            this.weightToolStripMenuItem.Click += new System.EventHandler(this.weightToolStripMenuItem_Click);
             // 
             // tempHumidityToolStripMenuItem
             // 
