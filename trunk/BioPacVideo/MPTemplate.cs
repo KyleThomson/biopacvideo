@@ -21,7 +21,7 @@ namespace BioPacVideo
     {
 
          static readonly MPTemplate instance=new MPTemplate();
-
+         const long MBYTE = 1024 * 1024; 
         public static string[] MPRET = new string[] {"NULL", "SUCCESS", "DRIVERERROR", "DLLBUSY","INVALIDPARAM", "MP_NOT_CONNECTED","MPREADY","PRETRIGGER",
     "TRIGGER","BUSY","NOACTIVECHANNELS","COMERROR", "INVTYPE", "NO_NETWORK_CONNECT", "OVERWROTESAMPLES","MEMERROR",
     "SOCKETERROR","UNDERFLOW","PRESETERROR","XMLERROR" };
@@ -70,7 +70,7 @@ namespace BioPacVideo
         public int SampleRate;
         public int DisplayLength;
         private Single PointSpacing;         
-        private int samplecount;
+        public int samplecount;
         private long[] ChannelDataSizeLocation;
         private int AcqChan;
         private int VoltageSpacing;
@@ -473,8 +473,7 @@ namespace BioPacVideo
         }
 
         public bool StartWriting()
-        {
-            while (FileStop) { }; //Don't Open file if we are still waiting to write! 
+        {            
             open_ACQ_file();
             samplecount = 0;
             writeheader();
@@ -522,16 +521,10 @@ namespace BioPacVideo
                     MPReturn = MPCLASS.stopAcquisition(); //Have to restart the aquisition. 
                     return;
                 }
-                if (FileStop) //Stop before we write the next buffer         
-                {
-                    updateheader(); //Write sample total
-                    BinaryFile.Close(); //Close 
-                    IsFileWriting = false;
-                    FileStop = false;
-                }
                 last_received = received; //For the draw buffer
                 samplesize = (int)last_received / AcqChan;
                 samplecount += samplesize;
+                VideoWrapper.SetSampleCount(samplecount);
                 if (IsFileWriting) //If we are writing to the file, we want to handle it immediately. 
                 {
 
@@ -544,15 +537,25 @@ namespace BioPacVideo
                         BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
                         //better safe than sorry. 
                     }                    
-                    CurrentWriteLoc = BinaryFile.Position;  //Update the current location.                    
+                    CurrentWriteLoc = BinaryFile.Position;  //Update the current location.     
                     
                     if (FileStop) //Need to have thread safe file closing! Oops!                        
                     {
                         updateheader(); //Write sample total
                         BinaryFile.Close(); //Close 
+                        FileCount = 0; 
                         IsFileWriting = false;
                         FileStop = false;                        
                     }
+                    else if (BinaryFile.Position > (1900 * MBYTE)) //Need to stop file, and restart it
+                    {
+                        updateheader(); //Write the final Stuff
+                        BinaryFile.Close(); //Close the file                         
+                        FileCount++; //Apparently, I don't need this, because the code won't overwrite a file. But, whatever
+                        StartWriting(); //Start a new file!
+
+                    }
+                    
                 }
                 /*bool a,b;
                 MPCLASS.getDigitalIO(5, out a, MPCLASS.DIGITALOPT.READ_LOW_BITS);

@@ -71,6 +71,15 @@ namespace BioPacVideo
         public static extern int SetHue(int Chan, int Contrast);
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetSampleCount(int SC);
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int GetFrameCount(int Chan);
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int GetCurrentFileNum(int Chan);
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SetSaturation(int Chan, int Contrast);
  
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
@@ -129,6 +138,14 @@ namespace BioPacVideo
 
         [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetChanAssoc(int Chan, int Camera, bool Recording);
-      
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int GetSampleCount();
+        
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int GetFileNum();
+
+        [DllImport(@".\VideoWrapper.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int GetCamNum();      
     }
 }

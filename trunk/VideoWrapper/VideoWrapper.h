@@ -51,7 +51,13 @@ extern "C" _declspec(dllexport) void SetSwitching(int Switch);
 extern "C" _declspec(dllexport) void SelectChannel(int Chan);
 extern "C" _declspec(dllexport) void ResetFileNumber();
 extern "C" _declspec(dllexport) void SetChanAssoc(int Chan, int Camera, bool Recording);
-
+extern "C" _declspec(dllexport) void SetChanAssoc(int Chan, int Camera, bool Recording);
+extern "C" _declspec(dllexport) void SetSampleCount(int SC);
+extern "C" _declspec(dllexport) int GetSampleCount();
+extern "C" _declspec(dllexport) int GetFileNum();
+extern "C" _declspec(dllexport) int GetCamNum();
+extern "C" _declspec(dllexport) int GetFrameCount(int Cam);
+extern "C" _declspec(dllexport) int GetCurrentFileNum(int Cam);
 
 
 

@@ -66,6 +66,23 @@ namespace BioPacVideo
             }
                                      
         }
+        public int GetSampleCount()
+        {         
+            return VideoWrapper.GetSampleCount();
+        }
+        public string GetSyncInfo()
+        {
+            int Chan = Array.IndexOf(CameraAssociation, VideoWrapper.GetCamNum());
+            return VideoWrapper.GetFileNum().ToString() + " " + Chan.ToString();
+        }
+        public int GetFrameCount(int Chan)
+        {
+            return VideoWrapper.GetFrameCount(CameraAssociation[Chan]);
+        }
+        public int GetFileNum(int Chan)
+        {
+            return VideoWrapper.GetCurrentFileNum(CameraAssociation[Chan]);
+        }
         public bool initVideo()
         {          
             Res =  (AdvantechCodes.tagRes) VideoWrapper.initCaptureSDK();
@@ -89,8 +106,9 @@ namespace BioPacVideo
         }
         public void initEncoder()
         {
-            VideoWrapper.initEncoderSDK();
+            VideoWrapper.initEncoderSDK();            
             VideoWrapper.StartEncoderSDK();
+            LoadSettings();
             EncoderStarted = true;
         }      
              

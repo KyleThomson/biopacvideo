@@ -25,6 +25,8 @@ namespace BioPacVideo
         MPTemplate MP; 
         VideoTemplate Video;
         FeederTemplate Feeder;
+        string SyncName;
+        StreamWriter SyncFile;
         Pen BoxPen;
         FolderBrowserDialog FBD;        
         Bitmap Still;                
@@ -32,8 +34,7 @@ namespace BioPacVideo
         private Thread TimerThread;
         Graphics g;
         DriveInfo DI;
-        bool RunDisplayThread;
-        private DateTime Timing;
+        bool RunDisplayThread; 
 
         public static int[] VoltageSettings = new int[] { 1, 10, 50, 100, 250, 500, 1000, 2000, 3000, 4000, 5000};
         public static int[] DisplayLengthSize = new int[] { 1, 5, 10, 30, 60 };
@@ -95,8 +96,7 @@ namespace BioPacVideo
             bioPacEnabledToolStripMenuItem.Checked = MP.Enabled;
             //Still = new Bitmap("NoSignal.Bmp");
             MP.FileCount = 0;            
-            RecordingButton.BackColor = Color.Green;            
-   
+            RecordingButton.BackColor = Color.Green;                        
             Video.initVideo();
             Video.FileStart = 0;
             IDT_DEVICECOUNT.Text = string.Format("Device Count ({0})", Video.Device_Count);
@@ -118,7 +118,7 @@ namespace BioPacVideo
             VoltScale.SelectedIndex = Array.IndexOf(VoltageSettings, MP.Voltage);
             TimeScale.SelectedIndex = Array.IndexOf(DisplayLengthSize, MP.DisplayLength); 
             ThreadDisplay.Start();
-            TimerThread.Start();
+            TimerThread.Start();            
            
         }
         private void TimerCheckThread()
@@ -179,12 +179,17 @@ namespace BioPacVideo
         private void DisplayThread()
         {
             int Cm; //To hold current camera. 
+            int InnerSync = 0;
+            int ChanSync = 0; 
             DI = new DriveInfo(MP.RecordingDirectory.Substring(0, 3));
             while (RunDisplayThread)
             {
-
+                this.Invoke(new MethodInvoker(delegate { IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn]; }));
+                this.Invoke(new MethodInvoker(delegate { IDT_VIDEOSTATUS.Text = Video.GetResText(); }));
+                this.Invoke(new MethodInvoker(delegate { IDT_ENCSTAT.Text = Video.EncoderStatus(); }));
+                this.Invoke(new MethodInvoker(delegate { IDT_FEEDST.Text = Feeder.StateText; }));
+                this.Invoke(new MethodInvoker(delegate { IDT_ENCODERSTATUS.Text = VideoWrapper.GetEncRes().ToString(); }));                       
                 MP._DisplayHandle.WaitOne();
-                this.Invoke(new MethodInvoker (delegate{IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];}));               
                 //if (Still != null)                    
                     g.DrawImage(MP.offscreen, 30, 280);
                 Cm = 0;
@@ -207,15 +212,21 @@ namespace BioPacVideo
                     g.DrawImage(Still, 132+(i%Video.LengthWise)*162, 32+(float)Math.Floor((decimal)(i/Video.LengthWise))*122, 160, 120);
                     Still.Dispose();
                 }
+                if (MP.IsFileWriting)
+                {
+                    int VS = Video.GetSampleCount();
+                    if (VS != -1)
+                    {
+                        string Output = VS.ToString() + " " + Video.GetSyncInfo();
+                        SyncFile.WriteLine(Output);                        
+                    }
+                }
                 /*if ((long)(DI.AvailableFreeSpace / DI.TotalSize) < .01 && MP.IsFileWriting)
                 {
                     MessageBox.Show((IWin32Window)null, "You are out of space. Recording Stopped.");
                     StopRecording();
                 }*/
-            this.Invoke(new MethodInvoker (delegate{ IDT_VIDEOSTATUS.Text = Video.GetResText();}));
-            this.Invoke(new MethodInvoker (delegate{IDT_ENCSTAT.Text = Video.EncoderStatus();}));
-            this.Invoke(new MethodInvoker (delegate{IDT_FEEDST.Text = Feeder.StateText;}));
-            this.Invoke(new MethodInvoker (delegate { IDT_ENCODERSTATUS.Text = VideoWrapper.GetEncRes().ToString(); }));            
+           
            }
         }
 
@@ -330,6 +341,9 @@ namespace BioPacVideo
 
             MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
             Feeder.SetLogName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString + "_Feeder.log");
+            SyncName = (MP.RecordingDirectory + "\\" + DateString + "\\" + DateString + "_Sync.log"); 
+            SyncFile = new StreamWriter(SyncName);
+            SyncFile.AutoFlush = true;
             //Write INI file once, so we save all the settings                    
             WriteOnce = new IniFile(RecordingDir + "\\" + DateString + "_Settings.txt");
             UpdateINI(WriteOnce);
@@ -345,8 +359,10 @@ namespace BioPacVideo
         {
             MP.StopWriting();
             Video.StopEncoding();
+            while (MP.IsFileWriting) { };
             MP.StopRecording();
             MP.Disconnect();
+            SyncFile.Close();
             Thread.Sleep(1000);
             MP.Connect();
             MP.StartRecording();
@@ -469,7 +485,7 @@ namespace BioPacVideo
             if (disposing)
             {                
                 TimerThread.Abort();
-                RunDisplayThread = false;                
+                ThreadDisplay.Abort();      
                 if (MP.isstreaming)
                 {
                     MP.StopRecording();
@@ -488,7 +504,8 @@ namespace BioPacVideo
         }    
         
         ~MainForm()
-        {                
+        {
+            ThreadDisplay.Abort();
             this.Dispose(true);
         }
 
