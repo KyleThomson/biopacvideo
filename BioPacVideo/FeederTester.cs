@@ -59,8 +59,7 @@ namespace BioPacVideo
         private void IDC_RUNTEST_Click(object sender, EventArgs e)
         {
             int F, P;
-            DateTime Start;
-            TimeSpan Elapsed;
+            DateTime Start;            
             Start = DateTime.Now;
             if (int.TryParse(FeederNum.Text, out F) & int.TryParse(PelletsNum.Text, out P))
             {

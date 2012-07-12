@@ -39,6 +39,7 @@ time_t start_time[MAXDEVS*MAXMUXS];
 time_t end_time[MAXDEVS*MAXMUXS];
 int nWidth[MAXDEVS];
 int nHeight[MAXDEVS];
+long SampleCount = 0;
 int nVideoInput[MAXDEVS];
 int nEncFrameRate[MAXDEVS*MAXMUXS];
 int nEncQuant[MAXDEVS*MAXMUXS];
@@ -52,7 +53,6 @@ bool CamIsRecording[MAXDEVS*MAXMUXS];
 int CamAssoc[MAXDEVS*MAXMUXS];	
 int CamDeref[16];
 INT64 nAccumulatedSize[MAXDEVS*MAXMUXS];
-
 
 typedef int (WINAPI* ptr_func1)(void **pp);
 ptr_func1 AdvDVP_CreateSDKInstence  = NULL;
@@ -76,7 +76,9 @@ int SelDevice = 0;
 int Switching = 4; 
 int FileStart = 0;
 int EncPos = 0;
-
+int StoreSampleCount = -1;
+int CamStore = -1; 
+int FileStore = -1; 
 void StreamReadBegin(int nChNum);	//Begin Video Stream Read Callback function
 void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFlags);	//Video Stream Read Callback function
 void StreamReadEnd(int nChNum);		//End Video Stream Read Callback function
@@ -339,6 +341,15 @@ int StartEncoding()
 	return 1;
 }
 
+int GetFrameCount(int Cam)
+{
+	return nFrameCount[Cam];
+}
+
+int GetCurrentFileNum(int Cam)
+{
+	return nFileIndex[Cam];
+}
 
 
 void StreamReadBegin(int nChNum)
@@ -353,14 +364,19 @@ void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFl
 	nAccumulatedSize[nChNum] += lBufSize;
 	if (nAccumulatedSize[nChNum] >= 1900*MBYTE && dwCompFlags == AVIIF_KEYFRAME)	//The size limit of the AVI file is 2GB
 	{
-		nAccumulatedSize[nChNum] = 0;
-		nFileIndex[nChNum]++;		
+		nAccumulatedSize[nChNum] = 0;		
 		if (hAVIFile[nChNum])
 		{
 			pDVPEncSDK->AdvDVP_CloseAVIFile(hAVIFile[nChNum]);
+			CamStore = nChNum;
+			FileStore = nFileIndex[nChNum];
+			StoreSampleCount = SampleCount;						
+			nFrameCount[nChNum] = 0;
 			hAVIFile[nChNum] = NULL;
+			nFileIndex[nChNum]++;
 		}
-	}		
+			
+	}			
 	//Create AVI file (if closed or unopened)	
 	if (hAVIFile[nChNum] == NULL)
 	{		
@@ -402,6 +418,7 @@ void StreamReadEnd(int nChNum)
 
 void ResetFileNumber()
 {
+	StoreSampleCount = -1; 
 	for (int i = 0;  i < 32; i++)
 	{
 		nFileIndex[i] = 1;
@@ -416,7 +433,7 @@ int __cdecl NewFrameCallback(int empty, int nID, int nDevNum, int nMuxChan, int 
 	Pres[nDevNum][nMuxChan] = true;					
 	int nChNum;	
 	nChNum = (nDevNum*MAXMUXS)+nMuxChan;
-	if (*(pBuf+1) & 0x02) 		
+	if (*(pBuf+1) & 0x02)  //This never actually seems to be true. 
 	{
 		NoSig = true;		
 	}
@@ -520,7 +537,26 @@ void FreeCaptureDevice()
 }
 
 
+//The following three commands are used for video sync. 
+void SetSampleCount(int SC)
+{
+	SampleCount = SC;
+}
 
+int GetSampleCount()
+{
+	return StoreSampleCount;
+}
+int GetFileNum()
+{
+	StoreSampleCount = -1;
+	return FileStore;
+}
+
+int GetCamNum()
+{
+	return CamStore;
+}
 /*******************************************************
 *
 *
