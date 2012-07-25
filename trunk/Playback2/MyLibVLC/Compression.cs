@@ -16,6 +16,7 @@ namespace SeizurePlayback
         string [] AVIFiles;
         string Path;
         StreamWriter Test;
+        int DirCount = 1;
         Thread CT;
         Stopwatch st;
         TimeSpan Length;
@@ -61,44 +62,44 @@ namespace SeizurePlayback
                 st.Reset();
                 st.Start();                
             }
-        }        
+        }
         private void CompThread()
-        {   
-             Process Recomp;
-             FileInfo FI;
+        {
+            Process Recomp;
+            FileInfo FI;
             bool ResetFailCount = false;
             string Command;
             Test = new StreamWriter("E:\\TEST.TXT");
             Test.AutoFlush = true;
             bool fail = false;
             int failcount = 0;
-            st = new Stopwatch();
-                for (int i = start-1; i < AVIFiles.Length; i++)
+            st = new Stopwatch();            
+                for (int i = start - 1; i < AVIFiles.Length; i++)
                 {
                     FI = new FileInfo(AVIFiles[i]);
                     if ((!LargeSize) || FI.Length > 1.7e9)
-                    LastCount = 0;
+                        LastCount = 0;
                     Command = "-i " + AVIFiles[i] + " -y -vcodec libx264 -crf " + CRF + " -coder 0 -an ";
                     Command += Path + "\\temp.avi";
                     Test.WriteLine(Command);
                     CurFileProg.Invoke((MethodInvoker)delegate { CurFileProg.Value = 0; });
-                    CurrentLabel.Invoke( (MethodInvoker) delegate{ CurrentLabel.Text = "Current File: " + AVIFiles[i];});
-                    TotalLabel.Invoke((MethodInvoker)delegate { TotalLabel.Text = "Total Progress: " + (i + 1).ToString() + " of " + AVIFiles.Length.ToString(); });                    
+                    CurrentLabel.Invoke((MethodInvoker)delegate { CurrentLabel.Text = "Current File: " + AVIFiles[i]; });
+                    TotalLabel.Invoke((MethodInvoker)delegate { TotalLabel.Text = "Total Progress: " + (i + 1).ToString() + " of " + AVIFiles.Length.ToString(); });
                     Recomp = new Process();
-                    Recomp.StartInfo = new ProcessStartInfo("C:\\x264\\ffmpeg.exe", Command);                    
+                    Recomp.StartInfo = new ProcessStartInfo("C:\\x264\\ffmpeg.exe", Command);
                     Recomp.StartInfo.CreateNoWindow = true;
                     Recomp.StartInfo.UseShellExecute = false;
                     Recomp.StartInfo.RedirectStandardOutput = true;
                     Recomp.StartInfo.RedirectStandardError = true;
                     Discard = false;
                     Recomp.ErrorDataReceived += new DataReceivedEventHandler(process_OutputDataReceived);
-                    Recomp.OutputDataReceived += new DataReceivedEventHandler(process_OutputDataReceived); 
+                    Recomp.OutputDataReceived += new DataReceivedEventHandler(process_OutputDataReceived);
                     Recomp.Start();
                     Recomp.BeginOutputReadLine();
-                    Recomp.BeginErrorReadLine();                    
-                    st.Start();                    
+                    Recomp.BeginErrorReadLine();
+                    st.Start();
                     while (!Recomp.WaitForExit(1000))
-                    {                        
+                    {
                         if (st.ElapsedMilliseconds > 300000)
                         {
 
@@ -122,20 +123,20 @@ namespace SeizurePlayback
                                 Test.WriteLine("FAIL");
                                 Test.WriteLine("***********");
                                 ResetFailCount = false;
-                            }                           
+                            }
                         }
-                    }       
+                    }
                     if ((File.Exists(Path + "\\temp.avi")) & !fail)
                     {
                         File.Delete(AVIFiles[i]);
                         File.Move(Path + "\\temp.avi", AVIFiles[i]);
                         TotProgress.Invoke((MethodInvoker)delegate { TotProgress.Increment(1); });
                         ResetFailCount = false;
-                    }                     
-                    fail = false; 
-                }                
+                    }
+                    fail = false;
+                }
                 Test.Close();
-        }
+            }        
         private void button1_Click(object sender, EventArgs e)
         {
             DialogResult result;

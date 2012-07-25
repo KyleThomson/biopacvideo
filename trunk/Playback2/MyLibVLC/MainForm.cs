@@ -14,6 +14,7 @@ namespace SeizurePlayback
 {
     public partial class MainForm : Form
     {
+        IniFile INI;
         VlcInstance instance;
         VlcMediaPlayer player;
         FolderBrowserDialog FBD;
@@ -21,8 +22,7 @@ namespace SeizurePlayback
         string[] AVIFiles;
         bool SuppressChange;
         int[] ChanPos;
-        CheckBox[] VisChecks; 
-        int[] AVINums;
+        CheckBox[] VisChecks;         
         int[] SeizureCount;
         int HighlightStart, HighlightEnd;
         bool Highlighting;
@@ -45,15 +45,16 @@ namespace SeizurePlayback
         bool ignore_change;
         string CurrentAVI;
         int MaxDispSize;
+        string DefaultFolder; 
         float Subtractor;
         Mygraph graph;
-        float VideoOffset;
+        float[] VideoOffset;
         float[] Rates = { 0.25F, 0.5F, 1, 2, 5, 10, 20, 30, 50, 100 };
         public MainForm()
         {
             ACQ = new ACQReader(); //Class to read from ACQ file
             graph = new Mygraph(); //Small Class for containing EEG area. 
-         
+            VideoOffset = new float[16];
             string[] args = new string[] { "" };
             instance = new VlcInstance(args);
             graph.X1 = 5;
@@ -62,10 +63,10 @@ namespace SeizurePlayback
             graph.Y2 = 460;
             ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);    //Create the graphics box to display EEG.     
             InitializeComponent();
-            g = this.CreateGraphics(); //Graphics object for main form
-          
-            VideoOffset = 0.009F;
-            OffsetBox.Text = VideoOffset.ToString();
+            INI = new IniFile(Directory.GetCurrentDirectory() + "\\SeizurePlayback.ini"); 
+
+            g = this.CreateGraphics(); //Graphics object for main form                      
+            OffsetBox.Text = VideoOffset[0].ToString();
             //Create Instances
             
            
@@ -93,8 +94,8 @@ namespace SeizurePlayback
             VisChecks[13] = VisChan14;
             VisChecks[14] = VisChan15;
             VisChecks[15] = VisChan16;
-            
-            
+
+            INIload();
             TimeBox.SelectedIndex = 1; //Default Time Scale
             Step = MaxDispSize; //Setting Step to max display size makes sure the image refreshes. 
 
@@ -105,7 +106,24 @@ namespace SeizurePlayback
             //Start up the display thread. 
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
-            ThreadDisplay.Start();            
+            ThreadDisplay.Start();
+            OffsetBox.Enabled = false;
+        }
+        private void INIload()
+        {
+            DefaultFolder = INI.IniReadValue("General", "DefaultFolder", "C:\\");
+            for (int i = 0; i < 16; i++)
+            {
+                VideoOffset[i] = INI.IniReadValue("General", "VideoOffset" + i, 0.009F);
+            }
+        }
+        private void INISave()
+        {
+            INI.IniWriteValue("General", "DefaultFolder", DefaultFolder);
+            for (int i = 0; i < 16; i++)
+            {
+                INI.IniWriteValue("General", "VideoOffset" + i, VideoOffset[i]);
+            }
         }
 
         
@@ -289,16 +307,22 @@ namespace SeizurePlayback
         private void Open_Click(object sender, EventArgs e)
         {   
             FBD = new FolderBrowserDialog();
+            FBD.SelectedPath = DefaultFolder;   
             Paused = true;
+            string[] IniFiles; 
             FBD.ShowDialog();                        
             if (FBD.SelectedPath != "")
             {
                 Path = FBD.SelectedPath;
+                string[] FName = Directory.GetFiles(Path, "*.acq");
+                if (FName.Length == 0) return;
+                DefaultFolder = Path.Substring(0,Path.LastIndexOf("\\"));
+                Console.WriteLine(DefaultFolder);                    
                 HighlightLabel.Text = "";
                 for (int i = 0; i < 16; i++) SeizureCount[i] = 0; //Initialize to Zero. 
-                string[] FName = Directory.GetFiles(Path, "*.acq");
                 SzInfo = new string[500];
                 SzInfoIndex = 0;
+                IniFiles = Directory.GetFiles(Path, "*.ini");                    
                 AVIFiles = Directory.GetFiles(Path, "*.avi");            
                 ACQ.openACQ(FName[0]);
                 ACQ.VisibleChans = ACQ.Chans;
@@ -355,6 +379,7 @@ namespace SeizurePlayback
                     VisChecks[i].Visible = false;
                 }
                 SuppressChange = false;
+                INISave();
             }
         }
 
@@ -370,6 +395,7 @@ namespace SeizurePlayback
             if ((e.X > graph.X1) && (e.X < graph.X2) && (e.Y > graph.Y1) && (e.Y < graph.Y2))
             {                   
                 Paused = true;
+                OffsetBox.Enabled = true;
                 int TempChan = (int)((float)ACQ.VisibleChans * (float)(((float)e.Y - (float)graph.Y1) / (float)(graph.Y2 - graph.Y1)));
                 ACQ.SelectedChan = ChanPos[TempChan];                
                 HighlightStart = (int)((float)MaxDispSize * (float)(e.X-graph.X1)/(graph.X2 - graph.X1));
@@ -392,7 +418,7 @@ namespace SeizurePlayback
         {            
             if (ACQ.Loaded)
                 if ((e.X > graph.X1) && (e.X < graph.X2) && (e.Y > graph.Y1) && (e.Y < graph.Y2))
-                {
+                {                    
                     if ((HighlightEnd - HighlightStart) < 3)
                     {
                         HighlightLabel.Text = "";                        
@@ -418,7 +444,7 @@ namespace SeizurePlayback
             Redraw = true;
             //Frame rate is actually 30.3, but listed as 30 in the avi. To seek to the proper time, need to adjust for that factor.
             //Switch to float to do decimal math, switch back to integer for actual ms. 
-            long TimeSeek = (int)((float)ACQ.Position * 1000F * (1F+VideoOffset));
+            long TimeSeek = (int)((float)ACQ.Position * 1000F * (1F+VideoOffset[ACQ.SelectedChan]));
             bool AVILoaded = false;
             bool pass = false;
             Subtractor = 0;
@@ -470,6 +496,7 @@ namespace SeizurePlayback
         private void button1_Click(object sender, EventArgs e)
         {
             ACQ.SelectedChan = -1;
+            OffsetBox.Enabled = false;
             RealTime = false;
             if (player != null) 
                 player.Stop();                
@@ -531,7 +558,7 @@ namespace SeizurePlayback
                 P.CurrentAVI = CurrentAVI;
                 P.Subtractor = Subtractor;
                 P.ACQ = ACQ;
-                P.VideoOffset = VideoOffset;
+                P.VideoOffset = VideoOffset[ACQ.SelectedChan];                
                 SzPrompt Frm = new SzPrompt();
                 Frm.Pass = P;
                 Frm.ShowDialog(this);                
@@ -673,7 +700,10 @@ namespace SeizurePlayback
 
         private void OffsetBox_TextChanged(object sender, EventArgs e)
         {
-            float.TryParse(OffsetBox.Text, out VideoOffset);
+            if (ACQ.SelectedChan != -1)
+            {
+                float.TryParse(OffsetBox.Text, out VideoOffset[ACQ.SelectedChan]);
+            }
         }
 
         private void Renamer_Click(object sender, EventArgs e)
