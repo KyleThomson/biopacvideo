@@ -107,7 +107,10 @@ namespace SeizurePlayback
         {
             IniWriteValue(Section, Key, Value.ToString());
         }
-        
+        public void IniWriteValue(string Section, string Key, double Value)
+        {
+            IniWriteValue(Section, Key, Value.ToString());
+        }
 
         public void IniWriteValue(string Section, string Key, bool Value)
         {
