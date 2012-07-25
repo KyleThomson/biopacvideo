@@ -69,6 +69,7 @@ namespace SeizurePlayback
             this.OffsetBox = new System.Windows.Forms.TextBox();
             this.Renamer = new System.Windows.Forms.Button();
             this.HighlightLabel = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.SuspendLayout();
@@ -578,12 +579,25 @@ namespace SeizurePlayback
             this.HighlightLabel.Text = "        HL";
             this.HighlightLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // button4
+            // 
+            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button4.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.button4.Location = new System.Drawing.Point(994, 479);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(156, 23);
+            this.button4.TabIndex = 51;
+            this.button4.Text = "Enter Notes";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.NotesButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1424, 845);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.HighlightLabel);
             this.Controls.Add(this.Renamer);
             this.Controls.Add(this.OffsetBox);
@@ -682,6 +696,7 @@ namespace SeizurePlayback
         private System.Windows.Forms.TextBox OffsetBox;
         private System.Windows.Forms.Button Renamer;
         private System.Windows.Forms.Label HighlightLabel;
+        private System.Windows.Forms.Button button4;
     }
 }
 

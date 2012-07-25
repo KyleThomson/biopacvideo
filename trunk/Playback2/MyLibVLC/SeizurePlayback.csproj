@@ -94,6 +94,12 @@
     <Compile Include="AdvanceSettings.Designer.cs">
       <DependentUpon>AdvanceSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="NotesBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NotesBox.Designer.cs">
+      <DependentUpon>NotesBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="INI.cs" />
     <Compile Include="OpenFrm.cs">
       <SubType>Form</SubType>
@@ -147,6 +153,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Exporter.resx">
       <DependentUpon>Exporter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NotesBox.resx">
+      <DependentUpon>NotesBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <SubType>Designer</SubType>

@@ -177,29 +177,30 @@ namespace SeizurePlayback
                         PercentCompletion = Math.Max(PercentCompletion, ((double)ACQ.Position / (double)ACQ.FileTime)*100);
                         UpdateReviewINI(BioINI);
                     }
+                    if (TimeLabel.InvokeRequired) //Need to invoke timer label to change it
+                    {
+                        TimeLabel.Invoke(new MethodInvoker(delegate
+                        {
+                            int h, m, s;
+                            h = ACQ.Position / 3600;
+                            m = (ACQ.Position - (h * 3600)) / 60;
+                            s = ACQ.Position - h * 3600 - m * 60;
+                            //C# sucks at handling string formating.
+                            TimeLabel.Text = string.Format("{0:00}:", h) + string.Format("{0:00}:", m) + string.Format("{0:00}", s);
+                        }));
+                    }
+
+                    if (TimeBar.InvokeRequired) //Once again, need to do an invoke to handle from a separate thread
+                    {
+                        TimeBar.Invoke(new MethodInvoker(delegate
+                        {
+                            ignore_change = true;
+                            TimeBar.Value = Math.Min(ACQ.Position, TimeBar.Maximum);
+                        }));
+                    }
                     if (!Paused)
                     {                        
-                        if (TimeLabel.InvokeRequired) //Need to invoke timer label to change it
-                        {
-                            TimeLabel.Invoke(new MethodInvoker(delegate
-                            {
-                                int h, m, s;
-                                h = ACQ.Position / 3600;
-                                m = (ACQ.Position - (h * 3600)) / 60;
-                                s = ACQ.Position - h * 3600 - m * 60;
-                                //C# sucks at handling string formating.
-                                TimeLabel.Text = string.Format("{0:00}:", h) + string.Format("{0:00}:", m) + string.Format("{0:00}", s);
-                            }));
-                        }
-
-                        if (TimeBar.InvokeRequired) //Once again, need to do an invoke to handle from a separate thread
-                        {
-                            TimeBar.Invoke(new MethodInvoker(delegate
-                            {
-                                ignore_change = true;
-                                TimeBar.Value = Math.Min(ACQ.Position, TimeBar.Maximum);
-                            }));
-                        }
+                        
                         if (!RealTime)
                         {
                             if (Step >= MaxDispSize)
@@ -425,8 +426,13 @@ namespace SeizurePlayback
                 {
                     VisChecks[i].Visible = false;
                 }
-                SuppressChange = false;
+                SuppressChange = false;                                
                 INISave();
+                if (Reviewing)
+                {
+                    ACQ.Position = (int)Math.Floor((PercentCompletion * (double)ACQ.FileTime) / (double)100);
+                    Step = MaxDispSize;
+                }
             }
         }
 
@@ -786,6 +792,20 @@ namespace SeizurePlayback
         private void MainForm_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void NotesButton_Click(object sender, EventArgs e)
+        {
+            if (ACQ.Loaded)
+            {
+                NotesBox N = new NotesBox(ReviewNotes);
+                N.ShowDialog();
+                if (N.OK)
+                {
+                    ReviewNotes = N.Notes;
+                    UpdateReviewINI(BioINI);
+                }
+            }
         }
 
 

@@ -73,7 +73,7 @@
             // 
             this.Reviewing.AutoSize = true;
             this.Reviewing.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Reviewing.Location = new System.Drawing.Point(12, 243);
+            this.Reviewing.Location = new System.Drawing.Point(12, 237);
             this.Reviewing.Name = "Reviewing";
             this.Reviewing.Size = new System.Drawing.Size(100, 24);
             this.Reviewing.TabIndex = 3;
@@ -132,7 +132,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(420, 273);
+            this.ClientSize = new System.Drawing.Size(420, 280);
             this.Controls.Add(this.NotesLabel);
             this.Controls.Add(this.PercentLabel);
             this.Controls.Add(this.label1);
