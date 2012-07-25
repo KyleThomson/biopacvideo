@@ -95,6 +95,12 @@
       <DependentUpon>AdvanceSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="INI.cs" />
+    <Compile Include="OpenFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OpenFrm.Designer.cs">
+      <DependentUpon>OpenFrm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Project.cs" />
     <Compile Include="ProjectManager.cs">
       <SubType>Form</SubType>
@@ -148,6 +154,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Compression.resx">
       <DependentUpon>Compression.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OpenFrm.resx">
+      <DependentUpon>OpenFrm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProjectManager.resx">
       <DependentUpon>ProjectManager.cs</DependentUpon>

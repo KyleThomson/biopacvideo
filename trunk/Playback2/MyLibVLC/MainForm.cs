@@ -18,6 +18,10 @@ namespace SeizurePlayback
         VlcInstance instance;
         VlcMediaPlayer player;
         FolderBrowserDialog FBD;
+        string ReviewNotes;
+        DateTime LastReview;
+        String Reviewer;
+        DateTime LastOpen;
         ACQReader ACQ;        
         string[] AVIFiles;
         bool SuppressChange;
@@ -30,11 +34,13 @@ namespace SeizurePlayback
         bool Redraw;
         string[] SzInfo;
         int SzInfoIndex;
+        IniFile BioINI;
         System.IO.StreamWriter SzTxt; 
         long[] AVILengths;
         Thread ThreadDisplay;
         VlcMedia media;
         string Path;
+        double PercentCompletion;
         string BaseName;        
         bool Paused;
         Graphics g;
@@ -43,6 +49,7 @@ namespace SeizurePlayback
         SzRvwFrm SRF; 
         int Step;
         bool ignore_change;
+        bool Reviewing;        
         string CurrentAVI;
         int MaxDispSize;
         string DefaultFolder; 
@@ -56,7 +63,7 @@ namespace SeizurePlayback
             graph = new Mygraph(); //Small Class for containing EEG area. 
             VideoOffset = new float[16];
             string[] args = new string[] { "" };
-            instance = new VlcInstance(args);
+            instance = new VlcInstance(args);            
             graph.X1 = 5;
             graph.X2 = 1420;
             graph.Y1 = 6;
@@ -114,7 +121,7 @@ namespace SeizurePlayback
             DefaultFolder = INI.IniReadValue("General", "DefaultFolder", "C:\\");
             for (int i = 0; i < 16; i++)
             {
-                VideoOffset[i] = INI.IniReadValue("General", "VideoOffset" + i, 0.009F);
+                VideoOffset[i] = INI.IniReadValue("General", "VideoOffset" + i, (float)0.009F);
             }
         }
         private void INISave()
@@ -125,7 +132,32 @@ namespace SeizurePlayback
                 INI.IniWriteValue("General", "VideoOffset" + i, VideoOffset[i]);
             }
         }
-
+        private void ReadReviewINI(IniFile F)
+        {
+            PercentCompletion = F.IniReadValue("Review", "Complete", (double)0);
+            if (PercentCompletion > 0)
+            {
+                Reviewer = F.IniReadValue("Review", "Reviewer", Reviewer);
+                DateTime.TryParse(F.IniReadValue("Review", "LastReviewed", ""), out LastReview);
+                DateTime.TryParse(F.IniReadValue("Review", "LastOpen", ""), out LastOpen);
+                ReviewNotes = F.IniReadValue("Review", "Notes", "");
+            }
+        }
+        private void UpdateReviewINI(IniFile F)
+        {
+            F.IniWriteValue("Review", "Complete", PercentCompletion);
+            if (!Reviewing)
+            {
+                F.IniWriteValue("Review", "LastReviewed", LastReview.ToLongDateString());
+            }
+            else
+            {
+                F.IniWriteValue("Review", "LastReviewed", DateTime.Now.ToLongDateString());
+            }
+            F.IniWriteValue("Review", "LastOpen", DateTime.Now.ToLongDateString());
+            F.IniWriteValue("Review", "Reviewer", Reviewer);
+            F.IniWriteValue("Review", "Notes", ReviewNotes);
+        }
         
         //Handles drawing the EEG to the screen. VLC handles the video independently. 
         private void DisplayThread()
@@ -139,6 +171,12 @@ namespace SeizurePlayback
             {
                 if (ACQ.Loaded)
                 {
+                    if ((Step >= MaxDispSize) & Reviewing) //Update Review Info - avoiding redundancy.
+                    {
+                        LastReview = DateTime.Now;
+                        PercentCompletion = Math.Max(PercentCompletion, ((double)ACQ.Position / (double)ACQ.FileTime)*100);
+                        UpdateReviewINI(BioINI);
+                    }
                     if (!Paused)
                     {                        
                         if (TimeLabel.InvokeRequired) //Need to invoke timer label to change it
@@ -170,6 +208,7 @@ namespace SeizurePlayback
                                 {
                                     EOFReached = true;
                                     Paused = true;
+                                    PercentCompletion = 100;
                                 }
                                 Step = 0;
                                 Redraw = true;
@@ -197,6 +236,7 @@ namespace SeizurePlayback
                                 {
                                     EOFReached = true;
                                     Paused = true;
+                                    PercentCompletion = 100;
                                 }
                                 Redraw = true;
                                 Step = 0;
@@ -288,8 +328,7 @@ namespace SeizurePlayback
             if (player != null)
                 player.Pause();
             
-        }
-
+        }        
       
       
         private VlcMediaPlayer LoadFile(VlcMediaPlayer player, string FileName)
@@ -307,7 +346,8 @@ namespace SeizurePlayback
         private void Open_Click(object sender, EventArgs e)
         {   
             FBD = new FolderBrowserDialog();
-            FBD.SelectedPath = DefaultFolder;   
+            FBD.SelectedPath = DefaultFolder;
+            OpenFrm frm;
             Paused = true;
             string[] IniFiles; 
             FBD.ShowDialog();                        
@@ -322,13 +362,20 @@ namespace SeizurePlayback
                 for (int i = 0; i < 16; i++) SeizureCount[i] = 0; //Initialize to Zero. 
                 SzInfo = new string[500];
                 SzInfoIndex = 0;
-                IniFiles = Directory.GetFiles(Path, "*.ini");                    
+                IniFiles = Directory.GetFiles(Path, "*_Settings.txt");
+                BioINI = new IniFile(IniFiles[0]);
+                ReadReviewINI(BioINI);
                 AVIFiles = Directory.GetFiles(Path, "*.avi");            
                 ACQ.openACQ(FName[0]);
                 ACQ.VisibleChans = ACQ.Chans;
                 ACQ.SetDispLength(MaxDispSize);  
                 AVILengths = new long[AVIFiles.Length];
                 BaseName = AVIFiles[0].Substring(Path.Length+1,15);
+                frm = new OpenFrm(BaseName, Reviewer, ReviewNotes, PercentCompletion, ACQ.FileTime, LastReview, LastOpen);
+                frm.ShowDialog();
+                Reviewer = frm.GetReviewer();
+                Reviewing = frm.GetReviewing();
+                frm.Dispose();
                 MainForm.ActiveForm.Text = "Seizure Playback - " + BaseName.Substring(4, 2) + "/" + BaseName.Substring(6, 2)
                     + "/" + BaseName.Substring(0, 4) + " - " + BaseName.Substring(9, 2) + ":" + BaseName.Substring(11, 2) + ":" + BaseName.Substring(13, 2);
                 TimeBar.Minimum = 0;
@@ -425,6 +472,7 @@ namespace SeizurePlayback
                         int TempChan = (int)((float)ACQ.VisibleChans * (float)(((float)e.Y - (float)graph.Y1) / (float)(graph.Y2 - graph.Y1)));
                         int XStart = (int)((float)MaxDispSize * (float)(e.X - graph.X1) / (graph.X2 - graph.X1));
                         ACQ.SelectedChan = ChanPos[TempChan];
+                        OffsetBox.Text = VideoOffset[ACQ.SelectedChan].ToString();
                         ACQ.Position = ACQ.Position - Step + XStart;
                         Step = XStart;
                         SeekToCurrentPos();
@@ -734,6 +782,11 @@ namespace SeizurePlayback
                 MainForm.ActiveForm.Refresh();
             }
        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+        }
 
 
 
