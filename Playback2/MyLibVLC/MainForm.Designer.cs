@@ -552,6 +552,7 @@ namespace SeizurePlayback
             this.OffsetBox.Name = "OffsetBox";
             this.OffsetBox.Size = new System.Drawing.Size(161, 20);
             this.OffsetBox.TabIndex = 48;
+            this.OffsetBox.TextChanged += new System.EventHandler(this.OffsetBox_TextChanged_1);
             this.OffsetBox.LostFocus += new System.EventHandler(this.OffsetBox_TextChanged);
             // 
             // Renamer
