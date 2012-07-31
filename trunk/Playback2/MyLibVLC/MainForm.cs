@@ -41,13 +41,15 @@ namespace SeizurePlayback
         VlcMedia media;
         string Path;
         double PercentCompletion;
-        string BaseName;        
+        string BaseName;
+        bool Compressed;
         bool Paused;
         Graphics g;
         bool ResizeBool = false;
         bool doublesize;
         SzRvwFrm SRF; 
         int Step;
+        bool CrashWarning;
         bool ignore_change;
         bool Reviewing;        
         string CurrentAVI;
@@ -74,9 +76,7 @@ namespace SeizurePlayback
 
             g = this.CreateGraphics(); //Graphics object for main form                      
             OffsetBox.Text = VideoOffset[0].ToString();
-            //Create Instances
-            
-           
+            //Create Instances                       
             CurrentAVI = ""; //No default AVI loaded            
             SeizureCount = new int[16]; //Create Array for Seizure Counts;             
                
@@ -134,6 +134,8 @@ namespace SeizurePlayback
         }
         private void ReadReviewINI(IniFile F)
         {
+            CrashWarning = F.IniReadValue("General", "Crash",false);
+            Compressed = F.IniReadValue("Review", "Compressed", false);
             PercentCompletion = F.IniReadValue("Review", "Complete", (double)0);
             if (PercentCompletion > 0)
             {
@@ -372,7 +374,7 @@ namespace SeizurePlayback
                 ACQ.SetDispLength(MaxDispSize);  
                 AVILengths = new long[AVIFiles.Length];
                 BaseName = AVIFiles[0].Substring(Path.Length+1,15);
-                frm = new OpenFrm(BaseName, Reviewer, ReviewNotes, PercentCompletion, ACQ.FileTime, LastReview, LastOpen);
+                frm = new OpenFrm(BaseName, Reviewer, ReviewNotes, PercentCompletion, ACQ.FileTime, LastReview, LastOpen, CrashWarning, Compressed);
                 frm.ShowDialog();
                 Reviewer = frm.GetReviewer();
                 Reviewing = frm.GetReviewing();
@@ -692,13 +694,20 @@ namespace SeizurePlayback
 
         private void CompressFinish_Click(object sender, EventArgs e)
         {
-            if (player != null)
+            if (ACQ.Loaded)
             {
-                player.Stop();
-                player.Dispose();
+                if (player != null)
+                {
+                    player.Stop();
+                    player.Dispose();
+                }
+                Compression Frm = new Compression(Path);
+                Frm.ShowDialog();
+                if (Frm.HitStart)
+                {
+                    BioINI.IniWriteValue("Review", "Compressed", true);
+                }
             }
-            Compression Frm = new Compression(Path);
-            Frm.Show();            
         }
 
         private void RvwSz_Click(object sender, EventArgs e)
@@ -805,6 +814,15 @@ namespace SeizurePlayback
                     ReviewNotes = N.Notes;
                     UpdateReviewINI(BioINI);
                 }
+            }
+        }
+
+        private void OffsetBox_TextChanged_1(object sender, EventArgs e)
+        {
+            if (ACQ.SelectedChan != -1)
+            {
+                float.TryParse(OffsetBox.Text, out VideoOffset[ACQ.SelectedChan]);
+                INISave();
             }
         }
 

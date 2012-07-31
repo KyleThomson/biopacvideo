@@ -286,7 +286,7 @@ namespace SeizurePlayback
                 Files.Add(F);
                 //Open the Feeder file
                 string[] FLogName = Directory.GetFiles(Dir, "*.log");
-                if (FLogName[0] != null)
+                if (FLogName.Length != 0)
                 {
                     DateTime d;
                     string Type;

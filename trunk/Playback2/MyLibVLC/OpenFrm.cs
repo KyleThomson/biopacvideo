@@ -10,12 +10,28 @@ namespace SeizurePlayback
 {
     public partial class OpenFrm : Form
     {         
-        public OpenFrm(string FN, string Rvwr, string N, double PC, int FileLength, DateTime LR, DateTime LO)
+        public OpenFrm(string FN, string Rvwr, string N, double PC, int FileLength, DateTime LR, DateTime LO, bool warning, bool Compressed)
         {
             InitializeComponent();
             FileLabel.Text = "File Name: " + FN;
             Reviewing.Checked = true;
             Reviewer.Text = Rvwr;
+            if (Compressed)
+            {
+                CompLabel.Text = "File has been compressed.";
+            }
+            else
+            {
+                CompLabel.Text = "File has not been compressed.";
+            }
+            if (warning)
+            {
+                WarningLabel.Text = "Warning: Video playback may break";
+            }
+            else
+            {
+                WarningLabel.Text = "";
+            }
             NotesLabel.Text = "Notes: " + N;
             if (PC == 0)
             {                
@@ -52,11 +68,7 @@ namespace SeizurePlayback
         {
             return Reviewing.Checked;   
         }
-        private void OpenFrm_Load(object sender, EventArgs e)
-        {
-
-        }
-
+       
         private void OKbutton_Click(object sender, EventArgs e)
         {
             this.Close();

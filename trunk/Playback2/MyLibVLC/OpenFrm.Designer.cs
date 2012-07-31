@@ -37,6 +37,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.PercentLabel = new System.Windows.Forms.Label();
             this.NotesLabel = new System.Windows.Forms.Label();
+            this.WarningLabel = new System.Windows.Forms.Label();
+            this.CompLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // FileLabel
@@ -128,11 +130,34 @@
             this.NotesLabel.TabIndex = 8;
             this.NotesLabel.Text = "Notes";
             // 
+            // WarningLabel
+            // 
+            this.WarningLabel.AutoSize = true;
+            this.WarningLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WarningLabel.ForeColor = System.Drawing.Color.Red;
+            this.WarningLabel.Location = new System.Drawing.Point(12, 168);
+            this.WarningLabel.Name = "WarningLabel";
+            this.WarningLabel.Size = new System.Drawing.Size(68, 20);
+            this.WarningLabel.TabIndex = 9;
+            this.WarningLabel.Text = "Warning";
+            // 
+            // CompLabel
+            // 
+            this.CompLabel.AutoSize = true;
+            this.CompLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CompLabel.Location = new System.Drawing.Point(12, 148);
+            this.CompLabel.Name = "CompLabel";
+            this.CompLabel.Size = new System.Drawing.Size(99, 20);
+            this.CompLabel.TabIndex = 10;
+            this.CompLabel.Text = "Compressed";
+            // 
             // OpenFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(420, 280);
+            this.Controls.Add(this.CompLabel);
+            this.Controls.Add(this.WarningLabel);
             this.Controls.Add(this.NotesLabel);
             this.Controls.Add(this.PercentLabel);
             this.Controls.Add(this.label1);
@@ -148,7 +173,6 @@
             this.Name = "OpenFrm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Opening information";
-            this.Load += new System.EventHandler(this.OpenFrm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -165,5 +189,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label PercentLabel;
         private System.Windows.Forms.Label NotesLabel;
+        private System.Windows.Forms.Label WarningLabel;
+        private System.Windows.Forms.Label CompLabel;
     }
 }

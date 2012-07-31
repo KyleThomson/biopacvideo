@@ -24,6 +24,7 @@ namespace SeizurePlayback
         bool Discard;
         int CRF, start;
         bool LargeSize;
+        public bool HitStart = false;
         public Compression(string P)
         {
             InitializeComponent();
@@ -145,7 +146,7 @@ namespace SeizurePlayback
                 "Compression Start", MessageBoxButtons.YesNo);            
             if (result == DialogResult.Yes)
             {
-
+                HitStart = true;
                 TotProgress.Maximum = AVIFiles.Length;
                 StartComp.Enabled = false;
                 CT = new Thread(new ThreadStart(CompThread));
