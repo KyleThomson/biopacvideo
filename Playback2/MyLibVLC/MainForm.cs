@@ -784,7 +784,7 @@ namespace SeizurePlayback
         private void MainForm_Resize(object sender, EventArgs e)
         {
 
-            if (!(MainForm.ActiveForm.WindowState == FormWindowState.Minimized) && ResizeBool)
+            if (MainForm.ActiveForm != null) //if (!(MainForm.ActiveForm.WindowState == FormWindowState.Minimized) && ResizeBool
             {
                 Step = MaxDispSize;
                 Redraw = true;

@@ -73,7 +73,7 @@ namespace SeizurePlayback
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void OK_Click(object sender, EventArgs e)
         {
             if (!DateTime.TryParse(DateBox.Text, out Date))
             {
