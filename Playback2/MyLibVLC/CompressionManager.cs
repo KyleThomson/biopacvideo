@@ -44,7 +44,7 @@ namespace SeizurePlayback
             CurrentDir = CMINI.IniReadValue("General", "CurrentDir", 0);
             CurrentFile = CMINI.IniReadValue("General", "CurrentFile", 0);
             if (FileList.Items.Count > 0)
-                FileList.SelectedIndex = CurrentDir;
+                FileList.SelectedIndex = Math.Min(CurrentDir, FileList.Items.Count - 1);
 
             
         }
@@ -164,7 +164,8 @@ namespace SeizurePlayback
                 }
                 IniFiles = Directory.GetFiles(CurPath, "*_Settings.txt");
                 BioINI = new IniFile(IniFiles[0]);
-                BioINI.IniWriteValue("Review", "Compressed", true);                
+                BioINI.IniWriteValue("Review", "Compressed", true);
+                StatusBox.Invoke((MethodInvoker)delegate { StatusBox.Items[j] = "Compressed"; });
                 CurrentFile = 0;
                 CurrentDir++;
                 UpdateINI();
@@ -176,6 +177,7 @@ namespace SeizurePlayback
             while (i < FileList.Items.Count) 
             {
                 CMINI.IniWriteValue("General", "File" + i.ToString(), FileList.Items[i].ToString());
+                CMINI.IniWriteValue("General", "Status" + i.ToString(), StatusBox.Items[i].ToString());
                 i++;
             }
             CMINI.IniWriteValue("General", "File" + i.ToString(), "");
@@ -221,7 +223,7 @@ namespace SeizurePlayback
                 {
                     StatusBox.Items.Add("Error no ini");
                 }
-            }-
+            }
             UpdateINI();
         }
 
@@ -242,6 +244,7 @@ namespace SeizurePlayback
         private void ClrList_Click(object sender, EventArgs e)
         {
             FileList.Items.Clear();
+            StatusBox.Items.Clear();
             CurrentDir = 0;
             CurrentFile = 0;
         }           
