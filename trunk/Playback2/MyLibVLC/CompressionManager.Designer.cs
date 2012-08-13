@@ -40,6 +40,8 @@
             this.ClrList = new System.Windows.Forms.Button();
             this.Remove = new System.Windows.Forms.Button();
             this.FileList = new System.Windows.Forms.ListBox();
+            this.StatusBox = new System.Windows.Forms.ListBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -145,16 +147,35 @@
             // FileList
             // 
             this.FileList.FormattingEnabled = true;
-            this.FileList.Location = new System.Drawing.Point(15, 27);
+            this.FileList.Location = new System.Drawing.Point(15, 25);
             this.FileList.Name = "FileList";
-            this.FileList.Size = new System.Drawing.Size(313, 277);
+            this.FileList.Size = new System.Drawing.Size(197, 277);
             this.FileList.TabIndex = 12;
+            // 
+            // StatusBox
+            // 
+            this.StatusBox.FormattingEnabled = true;
+            this.StatusBox.Location = new System.Drawing.Point(218, 27);
+            this.StatusBox.Name = "StatusBox";
+            this.StatusBox.Size = new System.Drawing.Size(110, 277);
+            this.StatusBox.TabIndex = 13;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(215, 11);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(37, 13);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "Status";
             // 
             // CompressionManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(455, 412);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.StatusBox);
             this.Controls.Add(this.FileList);
             this.Controls.Add(this.Remove);
             this.Controls.Add(this.ClrList);
@@ -188,5 +209,7 @@
         private System.Windows.Forms.Button ClrList;
         private System.Windows.Forms.Button Remove;
         private System.Windows.Forms.ListBox FileList;
+        private System.Windows.Forms.ListBox StatusBox;
+        private System.Windows.Forms.Label label2;
     }
 }

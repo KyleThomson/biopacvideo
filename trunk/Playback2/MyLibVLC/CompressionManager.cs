@@ -24,25 +24,31 @@ namespace SeizurePlayback
         bool Run;
         public CompressionManager()
         {
-            InitializeComponent();            
+            InitializeComponent();
+            string status; 
             CMINI = new IniFile(Directory.GetCurrentDirectory() + "\\CompressionManager.ini");
             string Dir = "!";
             int i = 0;
             while (Dir != "")
             {
                 Dir = CMINI.IniReadValue("General", "File" + i.ToString(), "");
+               
                 if (Dir != "")
                 {
+                    status = CMINI.IniReadValue("General", "Status" + i.ToString(), "");
                     FileList.Items.Add(Dir);
+                    StatusBox.Items.Add(status);
                     i++;
                 }
             }
             CurrentDir = CMINI.IniReadValue("General", "CurrentDir", 0);
             CurrentFile = CMINI.IniReadValue("General", "CurrentFile", 0);
-            FileList.SelectedIndex = CurrentDir;
+            if (FileList.Items.Count > 0)
+                FileList.SelectedIndex = CurrentDir;
+
             
         }
-        public void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        public void process_OutputDataReceived(object sender, DataReceivedEventArgs e) //Need to make sure the compression hasn't frozen. 
         {
             TimeSpan tempspan;
             int maths;
@@ -72,7 +78,7 @@ namespace SeizurePlayback
         }
 
         private void CompThread()
-        {
+        {            
             Process Recomp;
             FileInfo FI;
             bool ResetFailCount = false;
@@ -94,7 +100,8 @@ namespace SeizurePlayback
                 BaseName = AVIFiles[0].Substring(CurPath.Length + 1, 15);
                 for (int i = CurrentFile; i < AVIFiles.Length; i++)
                 {
-                    FI = new FileInfo(AVIFiles[i]);
+                    FI = new FileInfo(AVIFiles[i]);                    
+                    CurrentFile = i;
                     UpdateINI();
                     Command = "-i " + AVIFiles[i] + " -y -vcodec libx264 -crf 28 -coder 0 -an ";
                     Command += CurPath + "\\temp.avi";
@@ -119,9 +126,9 @@ namespace SeizurePlayback
                         {
                             //Need to stop compression
                             Recomp.Kill();
-                            Recomp.WaitForExit();
-                            fail = true;
-                            return;
+                            Recomp.WaitForExit(); 
+                            fail = true; //This shouldn't be needed... but...   
+                            return; //This should hopefully kill the thread. 
                         }
                         if (st.ElapsedMilliseconds > 300000)
                         {
@@ -157,7 +164,7 @@ namespace SeizurePlayback
                 }
                 IniFiles = Directory.GetFiles(CurPath, "*_Settings.txt");
                 BioINI = new IniFile(IniFiles[0]);
-                BioINI.IniWriteValue("Review", "Compressed", true);
+                BioINI.IniWriteValue("Review", "Compressed", true);                
                 CurrentFile = 0;
                 CurrentDir++;
                 UpdateINI();
@@ -181,23 +188,55 @@ namespace SeizurePlayback
         {
             FolderBrowserDialog FBD = new FolderBrowserDialog();
             FBD.ShowDialog();
+            string[] IniFiles;
+            double PercentCompletion; 
+            bool Compressed; 
             if (FBD.SelectedPath != "")
             {
                 FileList.Items.Add(FBD.SelectedPath);
-            }
+                IniFiles = Directory.GetFiles(FBD.SelectedPath, "*_Settings.txt");
+                if (IniFiles.Length == 1)
+                {
+                    BioINI = new IniFile(IniFiles[0]);
+                    PercentCompletion = BioINI.IniReadValue("Review", "Complete", (double)0);
+                    Compressed = BioINI.IniReadValue("Review", "Compressed", false);
+                    if (PercentCompletion > 99)
+                    {
+                        if (Compressed)
+                        {
+                            StatusBox.Items.Add("Compressed");
+                        }
+                        else
+                        {
+                            StatusBox.Items.Add("Uncompressed");
+                        }
+
+                    }
+                    else
+                    {
+                        StatusBox.Items.Add("Not Reviewed");
+                    }
+                }
+                else
+                {
+                    StatusBox.Items.Add("Error no ini");
+                }
+            }-
             UpdateINI();
         }
 
         private void StartButton_Click(object sender, EventArgs e)
         {
-            Run = true;
-            CT = new Thread(new ThreadStart(CompThread));
-            CT.Start();       
+            if (FileList.Items.Count == 0) //If there is nothing to do, do nothing. Very Zen
+                return;
+            Run = true; //Can't directly communicate with thread, so we use a flag
+            CT = new Thread(new ThreadStart(CompThread)); 
+            CT.Start();  //Start the Comp thread.       
         }
 
         private void StopButton_Click(object sender, EventArgs e)
         {
-            Run = false;
+            Run = false; //Set the flag to stop - let the thread handle the specifics. 
         }
 
         private void ClrList_Click(object sender, EventArgs e)
