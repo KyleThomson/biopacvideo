@@ -35,6 +35,7 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.SzTimes = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // SzCount
@@ -60,7 +61,7 @@
             // PelletCount
             // 
             this.PelletCount.AutoSize = true;
-            this.PelletCount.Location = new System.Drawing.Point(12, 35);
+            this.PelletCount.Location = new System.Drawing.Point(12, 55);
             this.PelletCount.Name = "PelletCount";
             this.PelletCount.Size = new System.Drawing.Size(83, 17);
             this.PelletCount.TabIndex = 2;
@@ -70,7 +71,7 @@
             // MedCount
             // 
             this.MedCount.AutoSize = true;
-            this.MedCount.Location = new System.Drawing.Point(12, 58);
+            this.MedCount.Location = new System.Drawing.Point(12, 78);
             this.MedCount.Name = "MedCount";
             this.MedCount.Size = new System.Drawing.Size(73, 17);
             this.MedCount.TabIndex = 3;
@@ -90,7 +91,7 @@
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(12, 81);
+            this.checkBox2.Location = new System.Drawing.Point(12, 101);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(60, 17);
             this.checkBox2.TabIndex = 5;
@@ -107,11 +108,22 @@
             this.checkBox3.Text = "Temperature";
             this.checkBox3.UseVisualStyleBackColor = true;
             // 
+            // SzTimes
+            // 
+            this.SzTimes.AutoSize = true;
+            this.SzTimes.Location = new System.Drawing.Point(12, 32);
+            this.SzTimes.Name = "SzTimes";
+            this.SzTimes.Size = new System.Drawing.Size(92, 17);
+            this.SzTimes.TabIndex = 7;
+            this.SzTimes.Text = "Seizure Times";
+            this.SzTimes.UseVisualStyleBackColor = true;
+            // 
             // Exporter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(224, 233);
+            this.Controls.Add(this.SzTimes);
             this.Controls.Add(this.checkBox3);
             this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.checkBox1);
@@ -135,5 +147,6 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox SzTimes;
     }
 }

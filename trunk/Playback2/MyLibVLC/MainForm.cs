@@ -474,7 +474,7 @@ namespace SeizurePlayback
             if (ACQ.Loaded)
                 if ((e.X > graph.X1) && (e.X < graph.X2) && (e.Y > graph.Y1) && (e.Y < graph.Y2))
                 {                    
-                    if ((HighlightEnd - HighlightStart) < 3)
+                    if ((HighlightEnd - HighlightStart) < MaxDispSize/40)
                     {
                         HighlightLabel.Text = "";                        
                         int TempChan = (int)((float)ACQ.VisibleChans * (float)(((float)e.Y - (float)graph.Y1) / (float)(graph.Y2 - graph.Y1)));
@@ -784,7 +784,7 @@ namespace SeizurePlayback
         private void MainForm_Resize(object sender, EventArgs e)
         {
 
-            if (MainForm.ActiveForm != null) //if (!(MainForm.ActiveForm.WindowState == FormWindowState.Minimized) && ResizeBool
+            if (MainForm.ActiveForm != null)  //if (!(MainForm.ActiveForm.WindowState == FormWindowState.Minimized) && ResizeBool
             {
                 Step = MaxDispSize;
                 Redraw = true;
@@ -824,6 +824,12 @@ namespace SeizurePlayback
                 float.TryParse(OffsetBox.Text, out VideoOffset[ACQ.SelectedChan]);
                 INISave();
             }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            CompressionManager frm = new CompressionManager();
+            frm.Show();
         }
 
 
