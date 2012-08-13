@@ -18,12 +18,14 @@ namespace SeizurePlayback
         public bool Pellet;
         public bool Med;
         public bool wt;
+        public bool SzTime;
         public ExportType()
         {
             Sz = false;
             Pellet = false;
             Med = false;
             wt = false;
+            SzTime = false;
         }
 
     }
@@ -384,7 +386,7 @@ namespace SeizurePlayback
             F.WriteLine(st);
             foreach (AnimalType A in Animals)
             {                                
-                if (E.Sz)
+                if (E.Sz) //Add up daily seizure count. 
                 {
                     st = A.ID;
                     for (DateTime i = Earliest; i <= Latest; i=i.AddDays(1))
@@ -398,7 +400,16 @@ namespace SeizurePlayback
                     }
                     F.WriteLine(st);    
                 }
-                if (E.Pellet)
+                if (E.SzTime)
+                {
+                    st = A.ID;
+                    foreach (SeizureType S in A.Sz)
+                    {
+                        st += ", " + S.d.Subtract(Earliest).TotalHours.ToString();
+                    }
+                    F.WriteLine(st); 
+                }
+                if (E.Pellet) 
                 {
                     st = A.ID;
                     for (DateTime i = Earliest; i <= Latest; i=i.AddDays(1))
