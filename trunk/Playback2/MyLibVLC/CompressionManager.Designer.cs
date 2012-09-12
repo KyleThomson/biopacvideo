@@ -143,6 +143,7 @@
             this.Remove.TabIndex = 11;
             this.Remove.Text = "Remove";
             this.Remove.UseVisualStyleBackColor = true;
+            this.Remove.Click += new System.EventHandler(this.Remove_Click);
             // 
             // FileList
             // 

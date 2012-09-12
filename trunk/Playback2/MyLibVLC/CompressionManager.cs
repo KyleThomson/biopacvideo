@@ -90,6 +90,7 @@ namespace SeizurePlayback
             string[] AVIFiles;
             string BaseName;
             string CurPath;
+            this.Invoke((MethodInvoker)delegate { this.Text = "Compression Manager - Running"; });
             for (int j = CurrentDir; j < FileList.Items.Count; j++)
             {
                 CurPath = FileList.Items[j].ToString();               
@@ -127,7 +128,8 @@ namespace SeizurePlayback
                             //Need to stop compression
                             Recomp.Kill();
                             Recomp.WaitForExit(); 
-                            fail = true; //This shouldn't be needed... but...   
+                            fail = true; //This shouldn't be needed... but...  
+                            this.Invoke((MethodInvoker)delegate { this.Text = "Compression Manager - Stopped"; });
                             return; //This should hopefully kill the thread. 
                         }
                         if (st.ElapsedMilliseconds > 300000)
@@ -170,6 +172,7 @@ namespace SeizurePlayback
                 CurrentDir++;
                 UpdateINI();
             }
+            this.Invoke((MethodInvoker)delegate { this.Text = "Compression Manager - Finished"; });
         }
         private void UpdateINI()
         {
@@ -216,7 +219,15 @@ namespace SeizurePlayback
                     }
                     else
                     {
-                        StatusBox.Items.Add("Not Reviewed");
+                        if (Compressed)
+                        {
+                            StatusBox.Items.Add("NR - Compressed");
+                        }
+                        else
+                        {
+                            StatusBox.Items.Add("NR - Uncompressed");
+                        }
+
                     }
                 }
                 else
@@ -238,6 +249,7 @@ namespace SeizurePlayback
 
         private void StopButton_Click(object sender, EventArgs e)
         {
+            this.Text = "Compression Manager - Stopping";
             Run = false; //Set the flag to stop - let the thread handle the specifics. 
         }
 
@@ -247,6 +259,16 @@ namespace SeizurePlayback
             StatusBox.Items.Clear();
             CurrentDir = 0;
             CurrentFile = 0;
+        }
+
+        private void Remove_Click(object sender, EventArgs e)
+        {
+            int i = FileList.SelectedIndex;
+            if (!Run && i > -1)
+            {                          
+                    FileList.Items.RemoveAt(i);
+                    StatusBox.Items.RemoveAt(i);             
+            }
         }           
     }
 }
