@@ -444,6 +444,7 @@
             this.IDX_RAT1.ShortcutsEnabled = false;
             this.IDX_RAT1.Size = new System.Drawing.Size(76, 20);
             this.IDX_RAT1.TabIndex = 69;
+            this.IDX_RAT1.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // IDX_RAT2
             // 
@@ -451,6 +452,7 @@
             this.IDX_RAT2.Name = "IDX_RAT2";
             this.IDX_RAT2.Size = new System.Drawing.Size(76, 20);
             this.IDX_RAT2.TabIndex = 70;
+            this.IDX_RAT2.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // IDX_RAT3
             // 
@@ -458,6 +460,7 @@
             this.IDX_RAT3.Name = "IDX_RAT3";
             this.IDX_RAT3.Size = new System.Drawing.Size(76, 20);
             this.IDX_RAT3.TabIndex = 71;
+            this.IDX_RAT3.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // IDX_RAT4
             // 
@@ -465,6 +468,7 @@
             this.IDX_RAT4.Name = "IDX_RAT4";
             this.IDX_RAT4.Size = new System.Drawing.Size(76, 20);
             this.IDX_RAT4.TabIndex = 72;
+            this.IDX_RAT4.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // IDX_RAT8
             // 
@@ -472,6 +476,7 @@
             this.IDX_RAT8.Name = "IDX_RAT8";
             this.IDX_RAT8.Size = new System.Drawing.Size(76, 20);
             this.IDX_RAT8.TabIndex = 76;
+            this.IDX_RAT8.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // IDX_RAT7
             // 
@@ -479,6 +484,7 @@
             this.IDX_RAT7.Name = "IDX_RAT7";
             this.IDX_RAT7.Size = new System.Drawing.Size(76, 20);
             this.IDX_RAT7.TabIndex = 75;
+            this.IDX_RAT7.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // IDX_RAT6
             // 
@@ -486,6 +492,7 @@
             this.IDX_RAT6.Name = "IDX_RAT6";
             this.IDX_RAT6.Size = new System.Drawing.Size(76, 20);
             this.IDX_RAT6.TabIndex = 74;
+            this.IDX_RAT6.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // IDX_RAT5
             // 
@@ -493,6 +500,7 @@
             this.IDX_RAT5.Name = "IDX_RAT5";
             this.IDX_RAT5.Size = new System.Drawing.Size(76, 20);
             this.IDX_RAT5.TabIndex = 73;
+            this.IDX_RAT5.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // IDX_RAT12
             // 
@@ -500,6 +508,7 @@
             this.IDX_RAT12.Name = "IDX_RAT12";
             this.IDX_RAT12.Size = new System.Drawing.Size(76, 20);
             this.IDX_RAT12.TabIndex = 80;
+            this.IDX_RAT12.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // IDX_RAT11
             // 
@@ -507,6 +516,7 @@
             this.IDX_RAT11.Name = "IDX_RAT11";
             this.IDX_RAT11.Size = new System.Drawing.Size(76, 20);
             this.IDX_RAT11.TabIndex = 79;
+            this.IDX_RAT11.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // IDX_RAT10
             // 
@@ -514,6 +524,7 @@
             this.IDX_RAT10.Name = "IDX_RAT10";
             this.IDX_RAT10.Size = new System.Drawing.Size(76, 20);
             this.IDX_RAT10.TabIndex = 78;
+            this.IDX_RAT10.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // IDX_RAT9
             // 
@@ -521,6 +532,7 @@
             this.IDX_RAT9.Name = "IDX_RAT9";
             this.IDX_RAT9.Size = new System.Drawing.Size(76, 20);
             this.IDX_RAT9.TabIndex = 77;
+            this.IDX_RAT9.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // IDX_RAT16
             // 
@@ -528,6 +540,7 @@
             this.IDX_RAT16.Name = "IDX_RAT16";
             this.IDX_RAT16.Size = new System.Drawing.Size(76, 20);
             this.IDX_RAT16.TabIndex = 84;
+            this.IDX_RAT16.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // IDX_RAT15
             // 
@@ -535,6 +548,7 @@
             this.IDX_RAT15.Name = "IDX_RAT15";
             this.IDX_RAT15.Size = new System.Drawing.Size(76, 20);
             this.IDX_RAT15.TabIndex = 83;
+            this.IDX_RAT15.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // IDX_RAT14
             // 
@@ -542,6 +556,7 @@
             this.IDX_RAT14.Name = "IDX_RAT14";
             this.IDX_RAT14.Size = new System.Drawing.Size(76, 20);
             this.IDX_RAT14.TabIndex = 82;
+            this.IDX_RAT14.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // IDX_RAT13
             // 
@@ -549,6 +564,7 @@
             this.IDX_RAT13.Name = "IDX_RAT13";
             this.IDX_RAT13.Size = new System.Drawing.Size(76, 20);
             this.IDX_RAT13.TabIndex = 81;
+            this.IDX_RAT13.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // label28
             // 
@@ -784,6 +800,7 @@
             this.RATID5.Name = "RATID5";
             this.RATID5.Size = new System.Drawing.Size(76, 20);
             this.RATID5.TabIndex = 110;
+            this.RATID5.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // RATID6
             // 
@@ -791,6 +808,7 @@
             this.RATID6.Name = "RATID6";
             this.RATID6.Size = new System.Drawing.Size(76, 20);
             this.RATID6.TabIndex = 111;
+            this.RATID6.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // RATID7
             // 
@@ -798,6 +816,7 @@
             this.RATID7.Name = "RATID7";
             this.RATID7.Size = new System.Drawing.Size(76, 20);
             this.RATID7.TabIndex = 112;
+            this.RATID7.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // RATID8
             // 
@@ -805,6 +824,7 @@
             this.RATID8.Name = "RATID8";
             this.RATID8.Size = new System.Drawing.Size(76, 20);
             this.RATID8.TabIndex = 113;
+            this.RATID8.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // RATID9
             // 
@@ -812,6 +832,7 @@
             this.RATID9.Name = "RATID9";
             this.RATID9.Size = new System.Drawing.Size(76, 20);
             this.RATID9.TabIndex = 114;
+            this.RATID9.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // RATID10
             // 
@@ -819,6 +840,7 @@
             this.RATID10.Name = "RATID10";
             this.RATID10.Size = new System.Drawing.Size(76, 20);
             this.RATID10.TabIndex = 115;
+            this.RATID10.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // RATID11
             // 
@@ -826,6 +848,7 @@
             this.RATID11.Name = "RATID11";
             this.RATID11.Size = new System.Drawing.Size(76, 20);
             this.RATID11.TabIndex = 116;
+            this.RATID11.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // RATID12
             // 
@@ -833,6 +856,7 @@
             this.RATID12.Name = "RATID12";
             this.RATID12.Size = new System.Drawing.Size(76, 20);
             this.RATID12.TabIndex = 117;
+            this.RATID12.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // RATID13
             // 
@@ -840,6 +864,7 @@
             this.RATID13.Name = "RATID13";
             this.RATID13.Size = new System.Drawing.Size(76, 20);
             this.RATID13.TabIndex = 118;
+            this.RATID13.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // RATID14
             // 
@@ -847,6 +872,7 @@
             this.RATID14.Name = "RATID14";
             this.RATID14.Size = new System.Drawing.Size(76, 20);
             this.RATID14.TabIndex = 119;
+            this.RATID14.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // RATID15
             // 
@@ -854,6 +880,7 @@
             this.RATID15.Name = "RATID15";
             this.RATID15.Size = new System.Drawing.Size(76, 20);
             this.RATID15.TabIndex = 120;
+            this.RATID15.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             // 
             // RATID16
             // 
@@ -861,20 +888,7 @@
             this.RATID16.Name = "RATID16";
             this.RATID16.Size = new System.Drawing.Size(76, 20);
             this.RATID16.TabIndex = 121;
-            this.RATID5.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
-            this.RATID6.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
-            this.RATID7.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
-            this.RATID8.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
-            this.RATID9.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
-            this.RATID10.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
-            this.RATID11.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
-            this.RATID12.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
-            this.RATID13.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
-            this.RATID14.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
-            this.RATID15.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
             this.RATID16.LostFocus += new System.EventHandler(this.IDX_RAT_FocusLeave);
-
-
             // 
             // FeederForm
             // 

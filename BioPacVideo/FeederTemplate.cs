@@ -88,25 +88,36 @@ namespace BioPacVideo
         {
             int MealSize;
             int Feeder;
-            string Medi; 
+            string Medi;
+            bool MedMeal; 
             //int a, b, tmp;
             Random random = new Random();
-            DateTime Start = DateTime.Now;            
-            /*int[] RatVec = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
-            for (int j = 0; j < 1000; j++)
-            {
-                a = random.Next(0, 15);
-                b = random.Next(0, 15);
-                tmp = RatVec[a];
-                RatVec[a] = RatVec[b];
-                RatVec[b] = tmp;
-            }*/
+            DateTime Start = DateTime.Now;                        
             for (int RC = 0; RC < 16; RC++)
             {
                 if (Rats[RC].Weight > 0)
                 {
+                    //Determine if Meal is empty. 
+                    if (Rats[RC].MedMeals.Count < 1)
+                    {
+                        int MealsLeft;  
+                        int MedMealCount; 
+                        //Determine how many meals are left in the week
+                        //Create a ton of falses
+                        for (int i = 0; i < MealsLeft; i++)
+                        {
+                            Rats[RC].MedMeals.Add(false);
+                        }
+                        //Set a number of them true        
+                        for (int i = 0; i < Math.Ceiling((double)(MealsLeft * Rats[RC].Medication / 100)); i++)
+                        {
+                            Rats[RC].MedMeals[i] = true;
+                        }                                            
+                        
+                    }                                                        
                     MealSize = (int)Math.Ceiling(Rats[RC].Weight*PelletsPerGram);
                     Feeder = RC * 2;
+
                     if (random.Next(1, 100) > Rats[RC].Medication)
                     {                     
                         Medi = "Unmedicated";
