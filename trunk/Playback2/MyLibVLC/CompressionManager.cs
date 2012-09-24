@@ -96,7 +96,7 @@ namespace SeizurePlayback
                 CurPath = FileList.Items[j].ToString();               
                 AVIFiles = Directory.GetFiles(CurPath, "2*.avi");
                 FileList.Invoke((MethodInvoker)delegate { FileList.SelectedIndex = j; });
-                TotProgress.Invoke((MethodInvoker)delegate { TotProgress.Maximum = AVIFiles.Length; });
+                TotProgress.Invoke((MethodInvoker)delegate { TotProgress.Maximum = 100; });
                 TotProgress.Invoke((MethodInvoker)delegate { TotProgress.Value = CurrentFile; });
                 BaseName = AVIFiles[0].Substring(CurPath.Length + 1, 15);
                 for (int i = CurrentFile; i < AVIFiles.Length; i++)

@@ -31,7 +31,7 @@ namespace BioPacVideo
             WeightBoxes = new ArrayList();
             MedicatedBoxes = new ArrayList();
             IDBoxes = new ArrayList();
-            MakeArrays();    
+            MakeArrays();
             TextBox TempBox;
             TextBox TempCheck;
             TextBox TempID;
@@ -50,7 +50,7 @@ namespace BioPacVideo
             IDX_FEEDERENABLE.Checked = Feeder.Enabled;
             IDC_PPG.Text = string.Format("{0:0.000}", Feeder.PelletsPerGram);
             for (int i = 0; i < 16; i++)
-            {      
+            {
                 TempBox = WeightBoxes[i] as TextBox;
                 TempCheck = MedicatedBoxes[i] as TextBox;
                 TempID = IDBoxes[i] as TextBox;
@@ -60,17 +60,17 @@ namespace BioPacVideo
                 {
                     TempBox.Text = string.Format("{0:0.0}", AllRats[i].Weight);
                     TempCheck.Text = AllRats[i].Medication.ToString();
-                                                               
+
                 }
                 else
                 {
                     TempBox.Text = "";
                     //TempCheck.Enabled = false;
-                }                
+                }
             }
             Startup = false;
             updateBoxes();
-            IDC_RATLIST.SelectedIndex = 0;                     
+            IDC_RATLIST.SelectedIndex = 0;
         }
 
 
@@ -98,15 +98,20 @@ namespace BioPacVideo
                         TempCheck.Enabled = true;
                         if (int.TryParse(TempCheck.Text, out Percent))
                         {
-                            AllRats[i].Medication = Percent;
+                            if (Percent != AllRats[i].Medication)
+                            {
+                                AllRats[i].MedMeals.Clear(); //If we change the percentage, need to clear the meals
+                                AllRats[i].Medication = Percent; //Save the percentage
+                            }
                         }
                         TempBox.Text = string.Format("{0:0.0}", AllRats[i].Weight);
-                        
+
                     }
                     else
                     {
                         TempBox.Text = "";
                         TempCheck.Enabled = false;
+                        AllRats[i].MedMeals.Clear(); //No rat, clear the meals. 
                     }
                 }
             }
@@ -225,8 +230,8 @@ namespace BioPacVideo
                 IDC_PPG.Text = string.Format("{0:0.00}", Feeder.PelletsPerGram);
             }
         }
-        
-      
+
+
 
         //START CRAPPY CODE
         private void MakeArrays()
@@ -297,20 +302,20 @@ namespace BioPacVideo
 
         private void IDC_Meal4_TextChanged(object sender, EventArgs e)
         {
-                TimeSpan TestTime;
-                if (TimeSpan.TryParse(IDC_Meal4.Text, out TestTime))
-                {
-                    IDC_Meal4.Text = TestTime.ToString();
-                    Feeder.Meal4 = TestTime;
-                }
-                else
-                    IDC_Meal4.Text = Feeder.Meal4.ToString();
-            
+            TimeSpan TestTime;
+            if (TimeSpan.TryParse(IDC_Meal4.Text, out TestTime))
+            {
+                IDC_Meal4.Text = TestTime.ToString();
+                Feeder.Meal4 = TestTime;
+            }
+            else
+                IDC_Meal4.Text = Feeder.Meal4.ToString();
+
         }
 
         private void IDC_Meal5_TextChanged(object sender, EventArgs e)
         {
-            
+
             TimeSpan TestTime;
             if (TimeSpan.TryParse(IDC_Meal5.Text, out TestTime))
             {
@@ -319,7 +324,7 @@ namespace BioPacVideo
             }
             else
                 IDC_Meal5.Text = Feeder.Meal5.ToString();
-            
+
         }
 
         private void IDC_Meal6_TextChanged(object sender, EventArgs e)
@@ -333,6 +338,5 @@ namespace BioPacVideo
             else
                 IDC_Meal6.Text = Feeder.Meal6.ToString();
         }
-
-         }
+    }         
 }
