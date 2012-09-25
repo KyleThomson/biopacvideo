@@ -415,7 +415,7 @@
             this.IDC_PPG.Location = new System.Drawing.Point(527, 47);
             this.IDC_PPG.Name = "IDC_PPG";
             this.IDC_PPG.Size = new System.Drawing.Size(100, 20);
-            this.IDC_PPG.TabIndex = 66;
+            this.IDC_PPG.TabIndex = 66;            
             this.IDC_PPG.LostFocus += new System.EventHandler(this.IDC_PPG_TextChanged);
             // 
             // label26

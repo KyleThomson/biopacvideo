@@ -121,51 +121,55 @@ namespace BioPacVideo
             TimerThread.Start();            
            
         }
+     
         private void TimerCheckThread()
         {
                        
             while (true)
             {
                 //If 12AM, restart recording. 
-                if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0) & MP.IsFileWriting)
+                if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0))
                 {
-
-                    StopRecording();
-                    StartRecording();
-                    Thread.Sleep(120000);
+                    if (MP.IsFileWriting)
+                    {
+                        StopRecording();
+                        StartRecording();
+                    }
+                    Thread.Sleep(120000); //Always Skip the Meal;
                 }
                 if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal1.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal1.Minutes))
                 {
-                    Feeder.GoMeal();
+                    
+                    Feeder.GoMeal(Feeder.GetDay()*Feeder.DailyMealCount);
                     Thread.Sleep(120000);
                 }
                 if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal2.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal2.Minutes))
                 {
-                    Feeder.GoMeal();
+                    Feeder.GoMeal(Feeder.GetDay()*4+1);
                     Thread.Sleep(120000);
                     //Lunch
                 }
                 if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal3.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal3.Minutes))
                 {
-                    Feeder.GoMeal();
+                    Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount + 2);
                     Thread.Sleep(120000);
                     //Dinner
                 }
                 if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal4.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal4.Minutes))
                 {
-                    Feeder.GoMeal();
+                    Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount + 3);
                     Thread.Sleep(120000);
                     //Brunch
                 } 
                 if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal5.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal5.Minutes))
                 {
-                    Feeder.GoMeal();
+                    Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount + 4);
                     Thread.Sleep(120000);
                     //Midnight Snack 
                 }
                 if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal6.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal6.Minutes))
                 {
-                    Feeder.GoMeal();
+                    Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount + 5);
                     Thread.Sleep(120000);
                     //Hobbits 2nd Lunch
                     //PO - TA - TOES
@@ -248,6 +252,7 @@ namespace BioPacVideo
             BioIni.IniReadValue("Feeder", "Meal6", out Feeder.Meal6);
             Feeder.PelletsPerGram = BioIni.IniReadValue("Feeder", "PelletsPerGram", 0.02);
             Feeder.Enabled = BioIni.IniReadValue("Feeder", "Enabled", true);
+            Feeder.DailyMealCount = BioIni.IniReadValue("Feeder", "DailyMealCount", 4);
             for (int i = 0; i < 16; i++)
             {
                 MP.RecordAC[i] = BioIni.IniReadValue("BioPac", string.Format("Channel{0}", i), true);
@@ -260,6 +265,10 @@ namespace BioPacVideo
                 Feeder.Rats[i].Surgery = BioIni.IniReadValue("Rats", string.Format("Rat{0} Surgery", i));
                 Feeder.Rats[i].Injection = BioIni.IniReadValue("Rats", string.Format("Rat{0} Injection", i));
                 Feeder.Rats[i].FirstSeizure = BioIni.IniReadValue("Rats", string.Format("Rat{0} FirstSeizure", i));
+                for (int j = 0; j < (7 * 6); j++)
+                {
+                    Feeder.Rats[i].Meals[j] = BioIni.IniReadValue("Rats", "Rat" + i + "Meal" + j, false);
+                }
             }
             Video.Enabled = BioIni.IniReadValue("Video", "Enabled", true);
             Video.XRes = BioIni.IniReadValue("Video", "XRes", 320);
@@ -297,6 +306,7 @@ namespace BioPacVideo
             BioIni.IniWriteValue("Feeder", "Meal6", Feeder.Meal6.ToString());
             BioIni.IniWriteValue("Feeder", "PelletsPerGram", Feeder.PelletsPerGram.ToString());
             BioIni.IniWriteValue("Feeder", "Enabled", Feeder.Enabled);
+            BioIni.IniWriteValue("Feeder", "DailyMealCount", Feeder.DailyMealCount);
             for (int i = 0; i < 16; i++)
             {
                 BioIni.IniWriteValue("BioPac", string.Format("Channel{0}", i), MP.RecordAC[i]);
@@ -309,6 +319,10 @@ namespace BioPacVideo
                 BioIni.IniWriteValue("Rats", string.Format("Rat{0} Surgery", i), Feeder.Rats[i].Surgery.ToShortDateString());
                 BioIni.IniWriteValue("Rats", string.Format("Rat{0} Injection", i), Feeder.Rats[i].Injection.ToShortDateString());
                 BioIni.IniWriteValue("Rats", string.Format("Rat{0} FirstSeizure", i), Feeder.Rats[i].FirstSeizure.ToShortDateString());
+                for (int j = 0; j < (7 * 6); j++)
+                {
+                    BioIni.IniWriteValue("Rats", "Rat" + i + "Meal" + j, Feeder.Rats[i].Meals[j]);
+                }
             }
             BioIni.IniWriteValue("Video", "Enabled", Video.Enabled);
             BioIni.IniWriteValue("Video", "LengthWise", Video.LengthWise);
@@ -528,6 +542,20 @@ namespace BioPacVideo
             frm.ShowDialog(this);
             Feeder.Rats = frm.ReturnRats();
             Feeder = frm.ReturnFeeder();
+            int M = 0;
+            if (!((Feeder.Meal1.Hours == 0) && (Feeder.Meal1.Minutes == 0))) 
+                M++;
+            if (!((Feeder.Meal2.Hours == 0) && (Feeder.Meal2.Minutes == 0)))
+                M++;
+            if (!((Feeder.Meal3.Hours == 0) && (Feeder.Meal3.Minutes == 0)))
+                M++;
+            if (!((Feeder.Meal4.Hours == 0) && (Feeder.Meal4.Minutes == 0)))
+                M++;
+            if (!((Feeder.Meal5.Hours == 0) && (Feeder.Meal5.Minutes == 0)))
+                M++;
+            if (!((Feeder.Meal6.Hours == 0) && (Feeder.Meal6.Minutes == 0)))
+                M++;
+            Feeder.DailyMealCount = M;
             frm.Dispose();
             UpdateINI(BioIni);           
         }
