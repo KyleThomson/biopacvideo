@@ -91,6 +91,10 @@ namespace BioPacVideo
                     AllRats[i].ID = TempID.Text;
                     if (Double.TryParse(TempBox.Text, out Weight))
                     {
+                        if ((AllRats[i].Weight <= 0) && (Weight > 0))
+                        {
+                            Feeder.GenMeals(i, true);
+                        }
                         AllRats[i].Weight = Weight;
                     }
                     if (AllRats[i].Weight > 0)
@@ -99,9 +103,9 @@ namespace BioPacVideo
                         if (int.TryParse(TempCheck.Text, out Percent))
                         {
                             if (Percent != AllRats[i].Medication)
-                            {
-                                AllRats[i].MedMeals.Clear(); //If we change the percentage, need to clear the meals
+                            {                                
                                 AllRats[i].Medication = Percent; //Save the percentage
+                                Feeder.GenMeals(i, true); 
                             }
                         }
                         TempBox.Text = string.Format("{0:0.0}", AllRats[i].Weight);
@@ -110,8 +114,7 @@ namespace BioPacVideo
                     else
                     {
                         TempBox.Text = "";
-                        TempCheck.Enabled = false;
-                        AllRats[i].MedMeals.Clear(); //No rat, clear the meals. 
+                        TempCheck.Enabled = false;                        
                     }
                 }
             }
@@ -222,7 +225,7 @@ namespace BioPacVideo
             Double TestDouble;
             if (Double.TryParse(IDC_PPG.Text, out TestDouble))
             {
-                IDC_PPG.Text = string.Format("{0:0.00}", TestDouble);
+                IDC_PPG.Text = string.Format("{0:0.0000}", TestDouble);
                 Feeder.PelletsPerGram = TestDouble;
             }
             else
@@ -291,7 +294,7 @@ namespace BioPacVideo
             updateBoxes();
         }
         private void button1_Click(object sender, EventArgs e)
-        {
+        {            
             this.Close();
         }
 
@@ -338,5 +341,7 @@ namespace BioPacVideo
             else
                 IDC_Meal6.Text = Feeder.Meal6.ToString();
         }
+
+
     }         
 }

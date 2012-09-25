@@ -13,11 +13,11 @@ namespace BioPacVideo
         public DateTime Injection;
         public DateTime Surgery;
         public int Medication;
-        public List<bool> MedMeals;
+        public bool[] Meals;
         public RatTemplate()
         {
             Weight = new double();
-            MedMeals = new List<bool>();
+            Meals = new bool[7 * 6];
             FirstSeizure = new DateTime();
             Injection = new DateTime();
             Surgery = new DateTime();
