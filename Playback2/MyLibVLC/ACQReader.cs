@@ -18,12 +18,17 @@ namespace SeizurePlayback
         public int SampleRate;
         private BinaryReader FID;
         private FileStream FILE;
+        private BinaryReader FID2;
+        private FileStream FILE2;        
+        private bool MultiFile; 
         private int ExtLenHeader;
         private int ChanLenHeader;
         long EOF;
         public float Zoom; 
         private int ForeignHeader;
         public int FileTime;
+        public int TotFileTime;
+        public int ExtFileTime;
         public int Position;
         private int DataStart;
         private int MaxDrawSize; 
@@ -60,9 +65,9 @@ namespace SeizurePlayback
         }
         public void openACQ(string FName)
         { //open File for reading
-            byte CharN; 
+            byte CharN;
             FullName = FName;
-            FILE = new FileStream(FullName, FileMode.Open, FileAccess.ReadWrite);            
+            FILE = new FileStream(FName, FileMode.Open, FileAccess.ReadWrite);            
             FID = new BinaryReader(FILE);
             FILE.Seek(0, SeekOrigin.End);            
             EOF = FILE.Position;
@@ -92,9 +97,19 @@ namespace SeizurePlayback
             DataType = 4; // FID.ReadInt16();
             DataStart = ForeignHeader + 4 * Chans + (ChanLenHeader *Chans) + ExtLenHeader;
             FileTime = (int)((FILE.Length - (long)DataStart) / (DataType * Chans * SampleRate));
+            TotFileTime = FileTime;
             Position = 0;
             Loaded = true;
             VoltageSpacing = (int)(Ymax / (Chans+.5));
+        }
+        public void AppendACQ(string FName)
+        {
+            //We can make a bunch of assumptions, since this file is just an extension of the first
+            FILE2 = new FileStream(FullName, FileMode.Open, FileAccess.ReadWrite);
+            FID2 = new BinaryReader(FILE2); 
+            ExtFileTime = (int)((FILE2.Length - (long)DataStart) / (DataType * Chans * SampleRate));
+            TotFileTime += ExtFileTime;
+            MultiFile = true;
         }
         public void RefreshDisplay()
         {
@@ -125,13 +140,15 @@ namespace SeizurePlayback
             for (int i = 0; i < Chans; i++)
             {
                 data[i] = new Int32[SampleSize];
-            }
-            //Seek to data point, 2 because they are 2 bytes each, dumbass.
+            }            
+
             SeekPoint = DataType*TimeStart * Chans * SampleRate + DataStart; 
-            FILE.Seek(SeekPoint, SeekOrigin.Begin);
-            //Pull Data from file
-            if (DataType == 4)
+            //Three cases - 
+            //Data is all in first file                          
+            if (((SeekPoint < FILE.Length) && (SeekPoint+(DataType*Length * Chans * SampleRate) <= FILE.Length)) || !MultiFile)
             {
+                FILE.Seek(SeekPoint, SeekOrigin.Begin);                
+                //Pull Data from file                
                 for (int i = 0; i < Length * Chans * SampleRate; i++)
                 {
                     if (FILE.Position >= EOF)
@@ -139,22 +156,81 @@ namespace SeizurePlayback
                         SampleSize = (i - 1) / Chans;
                         return false;
                     }
-                    data[i % Chans][i / Chans] = FID.ReadInt32();
-                }
+                    if (DataType == 4)
+                    {   
+                        data[i % Chans][i / Chans] = FID.ReadInt32();
+                    }
+                    else
+                    {
+                        data[i % Chans][i / Chans] = (Int32)FID.ReadInt16();
+                    }
+                }                               
             }
-            else
+            else if ((SeekPoint < FILE.Length) && (SeekPoint + (DataType * Length * Chans * SampleRate) > FILE.Length))
+            //Data is partially in first, partially in second. 
             {
+                int SP = 0;
+
                 for (int i = 0; i < Length * Chans * SampleRate; i++)
                 {
                     if (FILE.Position >= EOF)
                     {
                         SampleSize = (i - 1) / Chans;
+                        SP = i;
+                    }
+                    if (DataType == 4)
+                    {
+                        data[i % Chans][i / Chans] = FID.ReadInt32();
+                    }
+                    else
+                    {
+                        data[i % Chans][i / Chans] = (Int32)FID.ReadInt16();
+                    }
+                }
+                FILE2.Seek(DataStart, SeekOrigin.Begin);
+                for (int i = SP; i < Length * Chans * SampleRate; i++)
+                {
+                    if (FILE2.Position >= EOF)
+                    {
+                        SampleSize = (i - 1) / Chans;
                         return false;
                     }
-                    data[i % Chans][i / Chans] = (Int32)FID.ReadInt16();
+                    if (DataType == 4)
+                    {
+                        data[i % Chans][i / Chans] = FID2.ReadInt32();
+                    }
+                    else
+                    {
+                        data[i % Chans][i / Chans] = (Int32)FID2.ReadInt16();
+                    }
+                }                
+            }
+            else            
+            //Data is all in second file    
+            {
+                //Calculate amount of data in first file
+                //This is really difficult
+                SeekPoint = (SeekPoint - FILE.Length) + DataStart * 2; //I think this math works out
+                FILE2.Seek(SeekPoint, SeekOrigin.Begin);
+
+                for (int i = 0; i < Length * Chans * SampleRate; i++)
+                {
+                    if (FILE2.Position >= EOF)
+                    {
+                        SampleSize = (i - 1) / Chans;                        
+                    }
+                    if (DataType == 4)
+                    {
+                        data[i % Chans][i / Chans] = FID2.ReadInt32();
+                    }
+                    else
+                    {
+                        data[i % Chans][i / Chans] = (Int32)FID2.ReadInt16();
+                    }
                 }
             }
             return true;
+
         }
         public void SetDispLength(int DS)
         {
@@ -196,8 +272,8 @@ namespace SeizurePlayback
             for (int i = 0; i < Chans; i++)
             {
                 data[i] = new Int32[SampleSize];
-            }
-            //Seek to data point, 2 because they are 2 bytes each, dumbass.
+            }            
+            //This is where it gets hard
             SeekPoint = DataType * St * Chans * SampleRate + DataStart;
             FILE.Seek(SeekPoint, SeekOrigin.Begin);
             //Pull Data from file
