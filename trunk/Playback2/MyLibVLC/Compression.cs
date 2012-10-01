@@ -16,7 +16,7 @@ namespace SeizurePlayback
         string [] AVIFiles;
         string Path;
         StreamWriter Test;
-        int DirCount = 1;
+        int n = 1;
         Thread CT;
         Stopwatch st;
         TimeSpan Length;
