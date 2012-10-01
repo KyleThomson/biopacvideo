@@ -176,7 +176,7 @@ namespace SeizurePlayback
                     if ((Step >= MaxDispSize) & Reviewing) //Update Review Info - avoiding redundancy.
                     {
                         LastReview = DateTime.Now;
-                        PercentCompletion = Math.Max(PercentCompletion, ((double)ACQ.Position / (double)ACQ.FileTime)*100);
+                        PercentCompletion = Math.Max(PercentCompletion, ((double)ACQ.Position / (double)ACQ.TotFileTime)*100);
                         UpdateReviewINI(BioINI);
                     }
                     if (TimeLabel.InvokeRequired) //Need to invoke timer label to change it
@@ -370,11 +370,15 @@ namespace SeizurePlayback
                 ReadReviewINI(BioINI);
                 AVIFiles = Directory.GetFiles(Path, "*.avi");            
                 ACQ.openACQ(FName[0]);
+                if (FName.Length > 1)
+                {
+                    ACQ.AppendACQ(FName[1]);
+                }
                 ACQ.VisibleChans = ACQ.Chans;
                 ACQ.SetDispLength(MaxDispSize);  
                 AVILengths = new long[AVIFiles.Length];
                 BaseName = AVIFiles[0].Substring(Path.Length+1,15);
-                frm = new OpenFrm(BaseName, Reviewer, ReviewNotes, PercentCompletion, ACQ.FileTime, LastReview, LastOpen, CrashWarning, Compressed);
+                frm = new OpenFrm(BaseName, Reviewer, ReviewNotes, PercentCompletion, ACQ.TotFileTime, LastReview, LastOpen, CrashWarning, Compressed);
                 frm.ShowDialog();
                 Reviewer = frm.GetReviewer();
                 Reviewing = frm.GetReviewing();
@@ -382,7 +386,7 @@ namespace SeizurePlayback
                 MainForm.ActiveForm.Text = "Seizure Playback - " + BaseName.Substring(4, 2) + "/" + BaseName.Substring(6, 2)
                     + "/" + BaseName.Substring(0, 4) + " - " + BaseName.Substring(9, 2) + ":" + BaseName.Substring(11, 2) + ":" + BaseName.Substring(13, 2);
                 TimeBar.Minimum = 0;
-                TimeBar.Maximum = ACQ.FileTime;
+                TimeBar.Maximum = ACQ.TotFileTime;
                 SzInfoIndex = 0;
                 string FPath = AVIFiles[0].Substring(0, AVIFiles[0].LastIndexOf("\\") + 1) + "Seizure";                
 
@@ -432,7 +436,7 @@ namespace SeizurePlayback
                 INISave();
                 if (Reviewing)
                 {
-                    ACQ.Position = (int)Math.Floor((PercentCompletion * (double)ACQ.FileTime) / (double)100);
+                    ACQ.Position = (int)Math.Floor((PercentCompletion * (double)ACQ.TotFileTime) / (double)100);
                     Step = MaxDispSize;
                 }
             }
