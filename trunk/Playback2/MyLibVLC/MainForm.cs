@@ -478,7 +478,7 @@ namespace SeizurePlayback
             if (ACQ.Loaded)
                 if ((e.X > graph.X1) && (e.X < graph.X2) && (e.Y > graph.Y1) && (e.Y < graph.Y2))
                 {                    
-                    if ((HighlightEnd - HighlightStart) < MaxDispSize/40)
+                    if ((HighlightEnd - HighlightStart) < MaxDispSize/30)
                     {
                         HighlightLabel.Text = "";                        
                         int TempChan = (int)((float)ACQ.VisibleChans * (float)(((float)e.Y - (float)graph.Y1) / (float)(graph.Y2 - graph.Y1)));
