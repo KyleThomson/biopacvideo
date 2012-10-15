@@ -587,7 +587,7 @@ namespace SeizurePlayback
 
         private void TimeBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int[] TimeScales = {30, 60, 120, 300, 600};
+            int[] TimeScales = {30, 60, 120, 300, 600, 1800, 3600};
             MaxDispSize = TimeScales[TimeBox.SelectedIndex];
             Rewind.Text = "Rewind " + MaxDispSize.ToString() + "s";
             Step = MaxDispSize;

@@ -178,7 +178,9 @@ namespace SeizurePlayback
             "60s",
             "2m",
             "5m",
-            "10m"});
+            "10m",
+            "30m ",
+            "60m"});
             this.TimeBox.Location = new System.Drawing.Point(498, 652);
             this.TimeBox.Name = "TimeBox";
             this.TimeBox.Size = new System.Drawing.Size(161, 21);
@@ -610,7 +612,7 @@ namespace SeizurePlayback
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(1424, 845);
+            this.ClientSize = new System.Drawing.Size(1284, 845);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.HighlightLabel);
