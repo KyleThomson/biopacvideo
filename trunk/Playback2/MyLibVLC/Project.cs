@@ -284,7 +284,7 @@ namespace SeizurePlayback
                 {
                     MessageBox.Show("File already imported", "ERROR");
                     return;
-                }
+                }                
                 Files.Add(F);
                 //Open the Feeder file
                 string[] FLogName = Directory.GetFiles(Dir, "*.log");

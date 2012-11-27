@@ -43,6 +43,7 @@
             this.MainList = new System.Windows.Forms.ListBox();
             this.MainSelect = new System.Windows.Forms.ComboBox();
             this.SecondSelect = new System.Windows.Forms.ComboBox();
+            this.addMultipleDirectoriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,6 +65,7 @@
             this.newProjectToolStripMenuItem,
             this.selectProjectToolStripMenuItem,
             this.importFileToolStripMenuItem,
+            this.addMultipleDirectoriesToolStripMenuItem,
             this.exportDataToolStripMenuItem,
             this.importSeizureToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -73,21 +75,21 @@
             // newProjectToolStripMenuItem
             // 
             this.newProjectToolStripMenuItem.Name = "newProjectToolStripMenuItem";
-            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.newProjectToolStripMenuItem.Text = "&New Project";
             this.newProjectToolStripMenuItem.Click += new System.EventHandler(this.newProjectToolStripMenuItem_Click);
             // 
             // selectProjectToolStripMenuItem
             // 
             this.selectProjectToolStripMenuItem.Name = "selectProjectToolStripMenuItem";
-            this.selectProjectToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.selectProjectToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.selectProjectToolStripMenuItem.Text = "&Open Project";
             this.selectProjectToolStripMenuItem.Click += new System.EventHandler(this.selectProjectToolStripMenuItem_Click);
             // 
             // importFileToolStripMenuItem
             // 
             this.importFileToolStripMenuItem.Name = "importFileToolStripMenuItem";
-            this.importFileToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.importFileToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.importFileToolStripMenuItem.Text = "Add Directory";
             this.importFileToolStripMenuItem.Click += new System.EventHandler(this.importFileToolStripMenuItem_Click);
             // 
@@ -95,14 +97,14 @@
             // 
             this.exportDataToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.exportDataToolStripMenuItem.Name = "exportDataToolStripMenuItem";
-            this.exportDataToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.exportDataToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.exportDataToolStripMenuItem.Text = "&Export Data";
             this.exportDataToolStripMenuItem.Click += new System.EventHandler(this.exportDataToolStripMenuItem_Click);
             // 
             // importSeizureToolStripMenuItem
             // 
             this.importSeizureToolStripMenuItem.Name = "importSeizureToolStripMenuItem";
-            this.importSeizureToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.importSeizureToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.importSeizureToolStripMenuItem.Text = "&Import Seizure File";
             // 
             // plottingToolStripMenuItem
@@ -175,6 +177,13 @@
             this.SecondSelect.TabIndex = 9;
             this.SecondSelect.SelectedIndexChanged += new System.EventHandler(this.SecondSelect_SelectedIndexChanged);
             // 
+            // addMultipleDirectoriesToolStripMenuItem
+            // 
+            this.addMultipleDirectoriesToolStripMenuItem.Name = "addMultipleDirectoriesToolStripMenuItem";
+            this.addMultipleDirectoriesToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.addMultipleDirectoriesToolStripMenuItem.Text = "Add &Multiple Directories";
+            this.addMultipleDirectoriesToolStripMenuItem.Click += new System.EventHandler(this.addMultipleDirectoriesToolStripMenuItem_Click);
+            // 
             // ProjectManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -212,5 +221,6 @@
         private System.Windows.Forms.ComboBox MainSelect;
         private System.Windows.Forms.ComboBox SecondSelect;
         private System.Windows.Forms.ToolStripMenuItem exportDataToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addMultipleDirectoriesToolStripMenuItem;
     }
 }

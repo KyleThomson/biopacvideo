@@ -105,7 +105,7 @@ namespace SeizurePlayback
         public void AppendACQ(string FName)
         {
             //We can make a bunch of assumptions, since this file is just an extension of the first
-            FILE2 = new FileStream(FullName, FileMode.Open, FileAccess.ReadWrite);
+            FILE2 = new FileStream(FName, FileMode.Open, FileAccess.ReadWrite);
             FID2 = new BinaryReader(FILE2); 
             ExtFileTime = (int)((FILE2.Length - (long)DataStart) / (DataType * Chans * SampleRate));
             TotFileTime += ExtFileTime;
@@ -173,18 +173,22 @@ namespace SeizurePlayback
 
                 for (int i = 0; i < Length * Chans * SampleRate; i++)
                 {
-                    if (FILE.Position >= EOF)
+                    if (FILE.Position + DataType - 1 >= EOF)
                     {
                         SampleSize = (i - 1) / Chans;
                         SP = i;
-                    }
-                    if (DataType == 4)
-                    {
-                        data[i % Chans][i / Chans] = FID.ReadInt32();
+                        break;
                     }
                     else
                     {
-                        data[i % Chans][i / Chans] = (Int32)FID.ReadInt16();
+                        if (DataType == 4)
+                        {
+                            data[i % Chans][i / Chans] = FID.ReadInt32();
+                        }
+                        else
+                        {
+                            data[i % Chans][i / Chans] = (Int32)FID.ReadInt16();
+                        }
                     }
                 }
                 FILE2.Seek(DataStart, SeekOrigin.Begin);
