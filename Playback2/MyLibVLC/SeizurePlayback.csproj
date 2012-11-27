@@ -100,6 +100,12 @@
     <Compile Include="AdvanceSettings.Designer.cs">
       <DependentUpon>AdvanceSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="MultiDirectoryAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MultiDirectoryAdd.Designer.cs">
+      <DependentUpon>MultiDirectoryAdd.cs</DependentUpon>
+    </Compile>
     <Compile Include="NotesBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,6 +168,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Exporter.resx">
       <DependentUpon>Exporter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MultiDirectoryAdd.resx">
+      <DependentUpon>MultiDirectoryAdd.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NotesBox.resx">
       <DependentUpon>NotesBox.cs</DependentUpon>

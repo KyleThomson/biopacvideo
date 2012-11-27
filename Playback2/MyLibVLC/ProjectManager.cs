@@ -199,5 +199,21 @@ namespace SeizurePlayback
             }
             Frm.Dispose();
         }
+
+        private void addMultipleDirectoriesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MultiDirectoryAdd Frm = new MultiDirectoryAdd();
+            Frm.ShowDialog();
+            if (Frm.Pass)
+            {
+                for (int i = 0; i < Frm.DirReturn.Length; i++)
+                {
+                    //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
+                    pjt.ImportDirectory(Frm.DirReturn[i]);
+                }
+            }
+            UpdateMainList();
+            pjt.Save();
+        }
     }
 }
