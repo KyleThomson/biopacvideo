@@ -504,7 +504,7 @@ namespace SeizurePlayback
             Redraw = true;
             //Frame rate is actually 30.3, but listed as 30 in the avi. To seek to the proper time, need to adjust for that factor.
             //Switch to float to do decimal math, switch back to integer for actual ms. 
-            long TimeSeek = (int)((float)ACQ.Position * 1000F * (1F+VideoOffset[ACQ.SelectedChan]));
+            long TimeSeek = (long)((float)ACQ.Position * 1000F * (1F+VideoOffset[ACQ.SelectedChan]));
             bool AVILoaded = false;
             bool pass = false;
             Subtractor = 0;
@@ -540,6 +540,7 @@ namespace SeizurePlayback
                 {
                     TimeSeek = TimeSeek - player.GetLengthMs();
                     Subtractor += player.GetLengthMs();
+                    Console.WriteLine(Subtractor);
                     player.Stop();
                     FNum++;
                     media.Dispose();
@@ -833,6 +834,17 @@ namespace SeizurePlayback
         private void button5_Click(object sender, EventArgs e)
         {
             CompressionManager frm = new CompressionManager();
+            frm.Show();
+        }
+
+        private void VideoCreate_Click(object sender, EventArgs e)
+        {
+            if (CurrentAVI == "")
+                return;
+            int Start = (ACQ.Position - Step + HighlightStart);
+            long Seek;
+            Seek = (long)((float)Start * 1000F * (1F + VideoOffset[ACQ.SelectedChan]) - Subtractor); 
+            VideoCreator frm = new VideoCreator(ACQ.GetData(ACQ.SelectedChan, Start, HighlightEnd - HighlightStart + 1), HighlightEnd - HighlightStart + 1, CurrentAVI, Seek);
             frm.Show();
         }
 
