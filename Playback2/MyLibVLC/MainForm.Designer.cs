@@ -71,6 +71,7 @@ namespace SeizurePlayback
             this.HighlightLabel = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
+            this.VideoCreate = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.SuspendLayout();
@@ -599,7 +600,7 @@ namespace SeizurePlayback
             // 
             this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button5.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.button5.Location = new System.Drawing.Point(994, 505);
+            this.button5.Location = new System.Drawing.Point(994, 511);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(156, 23);
             this.button5.TabIndex = 52;
@@ -607,12 +608,25 @@ namespace SeizurePlayback
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
+            // VideoCreate
+            // 
+            this.VideoCreate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.VideoCreate.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.VideoCreate.Location = new System.Drawing.Point(993, 543);
+            this.VideoCreate.Name = "VideoCreate";
+            this.VideoCreate.Size = new System.Drawing.Size(156, 23);
+            this.VideoCreate.TabIndex = 53;
+            this.VideoCreate.Text = "Video Creator";
+            this.VideoCreate.UseVisualStyleBackColor = true;
+            this.VideoCreate.Click += new System.EventHandler(this.VideoCreate_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(1284, 845);
+            this.ClientSize = new System.Drawing.Size(1429, 845);
+            this.Controls.Add(this.VideoCreate);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.HighlightLabel);
@@ -715,6 +729,7 @@ namespace SeizurePlayback
         private System.Windows.Forms.Label HighlightLabel;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button VideoCreate;
     }
 }
 
