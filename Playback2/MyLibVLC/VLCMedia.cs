@@ -92,7 +92,10 @@ namespace SeizurePlayback
             playing = false;
             paused = false;
         }
-
+        public void NextFrame()
+        {
+            LibVlc.libvlc_media_player_next_frame(Handle);
+        }
         public void Speed(float Rate)
         {
             int ret = LibVlc.libvlc_media_player_set_rate(Handle, Rate);

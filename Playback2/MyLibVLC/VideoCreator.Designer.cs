@@ -37,6 +37,7 @@
             this.ZoomScale = new System.Windows.Forms.TrackBar();
             this.CurProg = new System.Windows.Forms.ProgressBar();
             this.ProgText = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
             this.CapPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.SuspendLayout();
@@ -137,6 +138,17 @@
             this.ProgText.Text = "                                               ";
             this.ProgText.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // button2
+            // 
+            this.button2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.button2.Location = new System.Drawing.Point(451, 738);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(125, 25);
+            this.button2.TabIndex = 47;
+            this.button2.Text = "Test Frames";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // VideoCreator
             // 
             this.AccessibleRole = System.Windows.Forms.AccessibleRole.TitleBar;
@@ -144,6 +156,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlText;
             this.ClientSize = new System.Drawing.Size(988, 840);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.ProgText);
             this.Controls.Add(this.CurProg);
             this.Controls.Add(this.ZoomScale);
@@ -172,5 +185,6 @@
         private System.Windows.Forms.Panel EEGPanel;
         private System.Windows.Forms.ProgressBar CurProg;
         private System.Windows.Forms.Label ProgText;
+        private System.Windows.Forms.Button button2;
     }
 }

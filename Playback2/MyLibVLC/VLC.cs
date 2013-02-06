@@ -2,10 +2,10 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Drawing;
 namespace SeizurePlayback
 {
-    // http://www.videolan.org/developers/vlc/doc/doxygen/html/group__libvlc.html
-
+    
     static class LibVlc
     {        
         #region core
@@ -76,7 +76,33 @@ namespace SeizurePlayback
 
         [DllImport("libvlc")]
         public static extern void libvlc_media_player_stop(IntPtr player);
+
+        [DllImport("libvlc")]
+        public static extern void libvlc_media_player_next_frame(IntPtr player);
+
+        [DllImport("libvlc")]
+        public static extern void libvlc_video_set_format(IntPtr player, string Chroma, int Width, int Height, int Pitch);
+
+        [DllImport("libvlc")]
+        public static extern void libvlc_video_set_format(IntPtr player, [MarshalAs(UnmanagedType.LPArray)] byte[] Chroma, int Width, int Height, int Pitch);
+
+        [DllImport("libvlc")]
+        public static extern void libvlc_video_set_callbacks(IntPtr player, IntPtr @lock, IntPtr unlock, IntPtr display, IntPtr opaque);
+		
+	
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void* LockEventHandler(void* opaque, void** plane);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void UnlockEventHandler(void* opaque, void* picture, void** plane);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public unsafe delegate void DisplayEventHandler(void* opaque, void* picture);
+
+
         #endregion
+
+
 
         #region exception
         [DllImport("libvlc")]
@@ -108,7 +134,8 @@ namespace SeizurePlayback
 
         public VlcInstance(string[] args)
         {
-            Handle = LibVlc.libvlc_new(0, null);
+           Handle = LibVlc.libvlc_new(0, null);           
+            //Handle = LibVlc.libvlc_new(1, args);
             if (Handle == IntPtr.Zero) throw new VlcException();
         }
 

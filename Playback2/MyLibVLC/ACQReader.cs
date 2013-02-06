@@ -266,6 +266,30 @@ namespace SeizurePlayback
             //result = (result < minPixel) ? minPixel: result;
             return (result);
         }
+        public Int32[] GetData(int Chan, int St, int Length)
+        {
+            Int32[][] InternalData;
+            int SS = SampleRate* Length;            
+            InternalData = new Int32[Chans][];     
+            for (int i = 0; i < Chans; i++)
+            {
+                InternalData[i] = new Int32[SS];
+            }            
+            //This is where it gets hard
+            int SeekPoint = DataType * St * Chans * SampleRate + DataStart;
+            FILE.Seek(SeekPoint, SeekOrigin.Begin);
+            //Pull Data from file
+            if (DataType == 4)
+            {
+                for (int i = 0; i < Length * Chans * SampleRate; i++)
+                {
+                    InternalData[i % Chans][i / Chans] = FID.ReadInt32();
+                }                
+                
+            }
+               return InternalData[Chan];
+            }
+
         public void DumpData(string Fname, int Chan, int St, int Length)
         {
             int SeekPoint;
@@ -317,6 +341,7 @@ namespace SeizurePlayback
         {
             HL = false;
         }
+       
         public void drawbuffer()
         {
             int NotDisp;

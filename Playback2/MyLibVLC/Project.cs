@@ -19,6 +19,7 @@ namespace SeizurePlayback
         public bool Med;
         public bool wt;
         public bool SzTime;
+        public bool Meal;
         public ExportType()
         {
             Sz = false;
@@ -26,6 +27,7 @@ namespace SeizurePlayback
             Med = false;
             wt = false;
             SzTime = false;
+            Meal = false;
         }
 
     }
@@ -83,7 +85,7 @@ namespace SeizurePlayback
         {
             DateTime.TryParse(a, out d);            
             TimeSpan.TryParse(b, out t);
-            t = t + TimeSpan.FromSeconds(d.TimeOfDay.TotalSeconds);
+            //t = t + TimeSpan.FromSeconds(d.TimeOfDay.TotalSeconds);
             int.TryParse(e, out length);
             file = f;            
             Notes = c;
@@ -118,6 +120,18 @@ namespace SeizurePlayback
             if (!Directory.Exists(P + "\\Data"))
             {
                 Directory.CreateDirectory(P + "\\Data");
+            }
+        }
+        public void MergeProject(string Inpt)
+        {
+            if (File.Exists(Inpt))
+            {
+                StreamReader F = new StreamReader(Inpt);
+                while (!F.EndOfStream)
+                {
+                    ParseLine(F.ReadLine());
+                }
+                F.Dispose();
             }
         }
         public void Open()
@@ -270,7 +284,7 @@ namespace SeizurePlayback
             FileType F = new FileType();
             //Open the ACQ file
             string[] FName = Directory.GetFiles(Dir, "*.acq");
-            if (FName[0] != null) //Prevent wrong directory from being opened
+            if (FName.Length > 0) 
             {
                 TempACQ.openACQ(FName[0]);
                 string Fn = FName[0].Substring(FName[0].LastIndexOf('\\') + 1);
@@ -287,7 +301,7 @@ namespace SeizurePlayback
                 }                
                 Files.Add(F);
                 //Open the Feeder file
-                string[] FLogName = Directory.GetFiles(Dir, "*.log");
+                string[] FLogName = Directory.GetFiles(Dir, "*Feeder.log");
                 if (FLogName.Length != 0)
                 {
                     DateTime d;
@@ -353,6 +367,7 @@ namespace SeizurePlayback
             string[] TmpStr;            
             int CurrentAnimal;
             string str;
+            TimeSpan t;
             string F = File.Substring(File.LastIndexOf('\\')+1);            
             dt = ConvertFileToDT(F);
             StreamReader TmpTxt = new StreamReader(File);
@@ -360,8 +375,10 @@ namespace SeizurePlayback
             {
                 str = TmpTxt.ReadLine();
                 TmpStr = str.Split(',');
-                CurrentAnimal = FindAnimal(TmpStr[1]);                
-                SeizureType S = new SeizureType(dt.ToString(), TmpStr[3], TmpStr[5], TmpStr[4], TmpStr[6]);
+                CurrentAnimal = FindAnimal(TmpStr[1]);           
+                TimeSpan.TryParse(TmpStr[3], out t);
+                t = t.Add(dt.TimeOfDay);                
+                SeizureType S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6]);
                 Animals[CurrentAnimal].Sz.Add(S);
             }
         }
@@ -374,10 +391,10 @@ namespace SeizurePlayback
             //
             Sort();
             int c;
-            string st;
+            string st, st2;
             DateTime Earliest = Files[0].Start.Date;
             DateTime Latest = Files[Files.Count - 1].Start.Date;
-            st = "Animal";
+            st = "Animal";            
             for (DateTime i = Earliest; i <= Latest; i=i.AddDays(1))
             {
                 st += "," + i.ToShortDateString();
@@ -405,9 +422,28 @@ namespace SeizurePlayback
                     st = A.ID;
                     foreach (SeizureType S in A.Sz)
                     {
-                        st += ", " + S.d.Subtract(Earliest).TotalHours.ToString();
+                        st += ", " + Math.Floor(S.d.Subtract(Earliest).TotalHours + S.t.TotalHours).ToString();
                     }
                     F.WriteLine(st); 
+                }
+                if (E.Meal)
+                {
+                     st = A.ID;
+                     st2 = A.ID;
+                     foreach (MealType M in A.Meals)
+                     {
+                         st += ", " + Math.Floor(M.d.Subtract(Earliest).TotalHours).ToString();
+                         if (M.type == "M")
+                         {
+                             st2 += ", 1"; 
+                         }
+                         else
+                         {
+                             st2 += ", 0"; 
+                         }
+                     }
+                     F.WriteLine(st);
+                     F.WriteLine(st2); 
                 }
                 if (E.Pellet) 
                 {
