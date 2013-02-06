@@ -21,7 +21,7 @@ namespace SeizurePlayback
         {
             SaveFileDialog F = new SaveFileDialog();
             F.DefaultExt = ".pjt";
-            F.InitialDirectory = "D:\\";
+            F.InitialDirectory = "C:\\";
             if (F.ShowDialog() == DialogResult.OK)
             {
                 pjt = new Project(F.FileName);
@@ -32,7 +32,7 @@ namespace SeizurePlayback
         {
             OpenFileDialog F = new OpenFileDialog();
             F.DefaultExt = ".pjt";
-            F.InitialDirectory = "D:\\";
+            F.InitialDirectory = "C:\\";
             if (F.ShowDialog() == DialogResult.OK)
             {
                 pjt = new Project(F.FileName);
@@ -40,6 +40,7 @@ namespace SeizurePlayback
             }
             UpdateMainList();
         }
+        
 
         private void UpdateMainList()
         {
@@ -110,7 +111,7 @@ namespace SeizurePlayback
             {
                 OpenFileDialog F = new OpenFileDialog();
                 //F.Filter = "*.txt";            
-                F.InitialDirectory = "D:\\";
+                F.InitialDirectory = "C:\\";
                 if (F.ShowDialog() == DialogResult.OK)
                 {
                     //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
@@ -214,6 +215,18 @@ namespace SeizurePlayback
             }
             UpdateMainList();
             pjt.Save();
+        }
+
+        private void mergeProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog F = new OpenFileDialog();
+            F.DefaultExt = ".pjt";
+            F.InitialDirectory = "C:\\";
+            if (F.ShowDialog() == DialogResult.OK)
+            {
+                pjt.MergeProject(F.FileName);                
+            }
+            UpdateMainList();
         }
     }
 }

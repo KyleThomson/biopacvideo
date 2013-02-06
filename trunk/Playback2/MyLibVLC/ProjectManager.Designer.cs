@@ -33,6 +33,7 @@
             this.newProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addMultipleDirectoriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importSeizureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.plottingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,7 +44,7 @@
             this.MainList = new System.Windows.Forms.ListBox();
             this.MainSelect = new System.Windows.Forms.ComboBox();
             this.SecondSelect = new System.Windows.Forms.ComboBox();
-            this.addMultipleDirectoriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mergeProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,6 +65,7 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newProjectToolStripMenuItem,
             this.selectProjectToolStripMenuItem,
+            this.mergeProjectToolStripMenuItem,
             this.importFileToolStripMenuItem,
             this.addMultipleDirectoriesToolStripMenuItem,
             this.exportDataToolStripMenuItem,
@@ -92,6 +94,13 @@
             this.importFileToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.importFileToolStripMenuItem.Text = "Add Directory";
             this.importFileToolStripMenuItem.Click += new System.EventHandler(this.importFileToolStripMenuItem_Click);
+            // 
+            // addMultipleDirectoriesToolStripMenuItem
+            // 
+            this.addMultipleDirectoriesToolStripMenuItem.Name = "addMultipleDirectoriesToolStripMenuItem";
+            this.addMultipleDirectoriesToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.addMultipleDirectoriesToolStripMenuItem.Text = "Add &Multiple Directories";
+            this.addMultipleDirectoriesToolStripMenuItem.Click += new System.EventHandler(this.addMultipleDirectoriesToolStripMenuItem_Click);
             // 
             // exportDataToolStripMenuItem
             // 
@@ -177,12 +186,12 @@
             this.SecondSelect.TabIndex = 9;
             this.SecondSelect.SelectedIndexChanged += new System.EventHandler(this.SecondSelect_SelectedIndexChanged);
             // 
-            // addMultipleDirectoriesToolStripMenuItem
+            // mergeProjectToolStripMenuItem
             // 
-            this.addMultipleDirectoriesToolStripMenuItem.Name = "addMultipleDirectoriesToolStripMenuItem";
-            this.addMultipleDirectoriesToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.addMultipleDirectoriesToolStripMenuItem.Text = "Add &Multiple Directories";
-            this.addMultipleDirectoriesToolStripMenuItem.Click += new System.EventHandler(this.addMultipleDirectoriesToolStripMenuItem_Click);
+            this.mergeProjectToolStripMenuItem.Name = "mergeProjectToolStripMenuItem";
+            this.mergeProjectToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.mergeProjectToolStripMenuItem.Text = "Merge Project";
+            this.mergeProjectToolStripMenuItem.Click += new System.EventHandler(this.mergeProjectToolStripMenuItem_Click);
             // 
             // ProjectManager
             // 
@@ -222,5 +231,6 @@
         private System.Windows.Forms.ComboBox SecondSelect;
         private System.Windows.Forms.ToolStripMenuItem exportDataToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addMultipleDirectoriesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mergeProjectToolStripMenuItem;
     }
 }

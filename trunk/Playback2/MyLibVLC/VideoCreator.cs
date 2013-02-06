@@ -18,6 +18,7 @@ namespace SeizurePlayback
         VlcMedia media;
         VlcMediaPlayer player;
         VlcInstance instance;
+        Rectangle rect;
         Bitmap TempEEG;
         Bitmap VideoBMP;
         Graphics f;
@@ -52,6 +53,7 @@ namespace SeizurePlayback
             TempEEG = new Bitmap(EEG);
             EEGPanel.BackgroundImage = TempEEG;
             media = new VlcMedia(instance, CurrentAVI);
+            rect = new Rectangle(0, 0, CapPanel.Width, CapPanel.Height);
             /*Rectangle rect = new Rectangle(0, 0, VideoBMP.Width, VideoBMP.Height);
             System.Drawing.Imaging.BitmapData bmpData = VideoBMP.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
                 VideoBMP.PixelFormat);
@@ -98,8 +100,7 @@ namespace SeizurePlayback
         }
         private void CreateVideo()
         {
-            float Step = 950F/((float)LiS*30);
-            Rectangle rect = new Rectangle(0, 0, CapPanel.Width, CapPanel.Height);
+            float Step = 950F/((float)LiS*30);            
             Pen LinePen = new Pen(Color.Red,3);
             for (int i = 1; i < LiS*30; i++)
             {
@@ -108,30 +109,34 @@ namespace SeizurePlayback
                 f = Graphics.FromImage(TempEEG);
                 f.DrawLine(LinePen, new Point((int)((float)i * Step), 0), new Point((int)((float)i * Step), 221));
                 EEGPanel.BackgroundImage = TempEEG;
-                VideoPanel.BackgroundImage = new Bitmap(string.Format("C:\\test\\a{0:D5}.png", i)); 
+                VideoPanel.BackgroundImage = new Bitmap(string.Format("C:\\test\\a{0:D5}.png", i));
+                //CapPanel.DrawToBitmap(CaptureBMP, rect);
+                //CaptureBMP.Save(string.Format("C:\\TEST\\Img{0:D5}.png", i), System.Drawing.Imaging.ImageFormat.Png);
+                CapPanel.Invoke((MethodInvoker)delegate {CapPanel.DrawToBitmap(CaptureBMP, rect);});
+                CapPanel.Invoke((MethodInvoker)delegate { CaptureBMP.Save(string.Format("C:\\TEST\\Img{0:D5}.png", i), System.Drawing.Imaging.ImageFormat.Png); });
+                Thread.Sleep(50);
                 try {            
-                    CapPanel.DrawToBitmap(CaptureBMP, rect);
-                    CaptureBMP.Save(string.Format("C:\\TEST\\Img{0:D5}.png", i), System.Drawing.Imaging.ImageFormat.Png);
+                    
                 }
                 catch 
                 {
                     Thread.Sleep(300); 
                     try
                     {            
-                        CapPanel.DrawToBitmap(CaptureBMP, rect);
-                        CaptureBMP.Save(string.Format("C:\\TEST\\Img{0:D5}.png", i), System.Drawing.Imaging.ImageFormat.Png);
+                       // CapPanel.DrawToBitmap(CaptureBMP, rect);
+                       // CaptureBMP.Save(string.Format("C:\\TEST\\Img{0:D5}.png", i), System.Drawing.Imaging.ImageFormat.Png);
                     } 
                     catch
                      {}
                 }
                 
-                ProgText.Invoke((MethodInvoker)delegate { ProgText.Text = "Step " + i + " of " + LiS * 30; });
-                if ((i % 10) == 0)
+                ProgText.Invoke((MethodInvoker)delegate { ProgText.Text = "Step " + (i+1) + " of " + LiS * 30; });
+                if (((i+1) % 10) == 0)
                    CurProg.Invoke((MethodInvoker)delegate { CurProg.Increment(1); });
                 TempEEG.Dispose();
                 VideoPanel.BackgroundImage.Dispose();
                 EEGPanel.BackgroundImage.Dispose();
-                CaptureBMP.Dispose();
+                ////    CaptureBMP.Dispose();
                 if ((i % 30) == 0)
                 {
                     GC.Collect();                                     
@@ -152,8 +157,9 @@ namespace SeizurePlayback
         }
         private void StartCap_Click(object sender, EventArgs e)
         {
+            //CreateVideo();
 
-            if (!Stop)
+           if (!Stop)
             {
                 StartCap.Text = "Stop Capture";
                 CurProg.Value = 0;
@@ -167,7 +173,7 @@ namespace SeizurePlayback
                 StartCap.Text = "Stop Capture";
                 CT.Abort();
                 Stop = !Stop;
-            }
+            } /**/
         }
 
         
@@ -180,32 +186,24 @@ namespace SeizurePlayback
         }
         private void DumpFrames()
         {
-            Mem.SetCallback(delegate(Bitmap frame)
-            {
-                if (NewFrame)
-                {
-                    frame.Save(string.Format("C:\\TEST\\a{0:D5}.png", cnt++), System.Drawing.Imaging.ImageFormat.Png);
-                    NewFrame = false;                   
-                }
+           
 
-            });
-
-            for (int i = 1; i < LiS * 30; i++)
+            for (int i = 0; i < LiS * 30; i++)
             {
                 Mem.NextFrame();
                 NewFrame = true;
                 while (NewFrame) { };
-                ProgText.Invoke((MethodInvoker)delegate { ProgText.Text = "Frame " + i + " of " + LiS * 30; });
-                if ((i % 10) == 0)
+                VideoBMP.Save(string.Format("C:\\TEST\\a{0:D5}.png", cnt++), System.Drawing.Imaging.ImageFormat.Png);
+                VideoPanel.BackgroundImage = VideoBMP;
+                Thread.Sleep(200);
+                ProgText.Invoke((MethodInvoker)delegate { ProgText.Text = "Frame " + (i+1) + " of " + LiS * 30; });
+                if (((i+1) % 10) == 0)
                 {
                     CurProg.Invoke((MethodInvoker)delegate { CurProg.Increment(1); });
                     GC.Collect();
-                    Thread.Sleep(100);
-                }
-
                     
-
-                //Thread.Sleep(100);
+                }
+                                //Thread.Sleep(100);
                 //VideoPanel.BackgroundImage = new Bitmap(string.Format("C:\\TEST\\a{0:D5}.png", cnt - 1));
 
             }
@@ -213,6 +211,15 @@ namespace SeizurePlayback
         }
         private void DumpFrames_Click(object sender, EventArgs e)
         {
+            Mem.SetCallback(delegate(Bitmap frame)
+            {
+                if (NewFrame)
+                {
+                    VideoBMP = (Bitmap)frame.Clone();
+                    NewFrame = false;
+                }
+
+            });
             CurProg.Value = 0;
             CurProg.Maximum = LiS*3;
             CT = new Thread(new ThreadStart(DumpFrames));
@@ -227,6 +234,22 @@ namespace SeizurePlayback
         private void VideoCreator_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Mem.SetCallback(delegate(Bitmap frame)
+            {
+                if (NewFrame)
+                {
+                    VideoBMP = (Bitmap)frame.Clone();
+                    NewFrame = false;                   
+                }                
+            });
+            Mem.NextFrame();
+            NewFrame = true;
+            Thread.Sleep(100);
+            VideoPanel.BackgroundImage = VideoBMP;
         }        
 
     }

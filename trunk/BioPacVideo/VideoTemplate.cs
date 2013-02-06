@@ -107,8 +107,7 @@ namespace BioPacVideo
         public void initEncoder()
         {
             VideoWrapper.initEncoderSDK();            
-            VideoWrapper.StartEncoderSDK();
-            LoadSettings();
+            VideoWrapper.StartEncoderSDK();            
             EncoderStarted = true;
         }      
              
@@ -149,7 +148,8 @@ namespace BioPacVideo
             VideoWrapper.SetFName(FName, FStart);
         }
         public void StartRecording()
-        {                        
+        {
+            LoadSettings();
             VideoWrapper.StartEncoding();            
         } 
         public void SelectChannel(int Chan)

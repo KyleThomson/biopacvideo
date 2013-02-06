@@ -547,7 +547,7 @@ namespace BioPacVideo
                         IsFileWriting = false;
                         FileStop = false;                        
                     }
-                    else if (BinaryFile.Position > (1900 * MBYTE)) //Need to stop file, and restart it
+                    else if (BinaryFile.Position > (1980 * MBYTE)) //Need to stop file, and restart it
                     {
                         updateheader(); //Write the final Stuff
                         BinaryFile.Close(); //Close the file                         

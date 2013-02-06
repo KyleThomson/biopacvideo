@@ -23,7 +23,8 @@ namespace SeizurePlayback
             if (SzCount.Checked) E.Sz = true;
             if (PelletCount.Checked) E.Pellet = true;
             if (MedCount.Checked) E.Med = true;
-            
+            if (MealCheck.Checked) E.Meal = true;
+            if (SzTimes.Checked) E.SzTime = true;
             SaveFileDialog F = new SaveFileDialog();
             F.DefaultExt = ".pjt";
             F.InitialDirectory = "D:\\";

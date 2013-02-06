@@ -65,6 +65,7 @@
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -79,7 +80,7 @@
     <Compile Include="Compression.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Compression.Designer.cs">
+    <Compile Include="Compression.designer.cs">
       <DependentUpon>Compression.cs</DependentUpon>
     </Compile>
     <Compile Include="CompressionManager.cs">
@@ -99,6 +100,13 @@
     </Compile>
     <Compile Include="AdvanceSettings.Designer.cs">
       <DependentUpon>AdvanceSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Render.cs" />
+    <Compile Include="VideoCreator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VideoCreator.Designer.cs">
+      <DependentUpon>VideoCreator.cs</DependentUpon>
     </Compile>
     <Compile Include="MultiDirectoryAdd.cs">
       <SubType>Form</SubType>
@@ -163,11 +171,17 @@
     <EmbeddedResource Include="AdvanceSettings.resx">
       <DependentUpon>AdvanceSettings.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Compression.resx">
+      <DependentUpon>Compression.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CompressionManager.resx">
       <DependentUpon>CompressionManager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Exporter.resx">
       <DependentUpon>Exporter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VideoCreator.resx">
+      <DependentUpon>VideoCreator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MultiDirectoryAdd.resx">
       <DependentUpon>MultiDirectoryAdd.cs</DependentUpon>
@@ -178,9 +192,6 @@
     <EmbeddedResource Include="MainForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Compression.resx">
-      <DependentUpon>Compression.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OpenFrm.resx">
       <DependentUpon>OpenFrm.cs</DependentUpon>
@@ -239,6 +250,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

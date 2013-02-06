@@ -36,6 +36,7 @@
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.SzTimes = new System.Windows.Forms.CheckBox();
+            this.MealCheck = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // SzCount
@@ -118,11 +119,22 @@
             this.SzTimes.Text = "Seizure Times";
             this.SzTimes.UseVisualStyleBackColor = true;
             // 
+            // MealCheck
+            // 
+            this.MealCheck.AutoSize = true;
+            this.MealCheck.Location = new System.Drawing.Point(12, 124);
+            this.MealCheck.Name = "MealCheck";
+            this.MealCheck.Size = new System.Drawing.Size(49, 17);
+            this.MealCheck.TabIndex = 8;
+            this.MealCheck.Text = "Meal";
+            this.MealCheck.UseVisualStyleBackColor = true;
+            // 
             // Exporter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(224, 233);
+            this.Controls.Add(this.MealCheck);
             this.Controls.Add(this.SzTimes);
             this.Controls.Add(this.checkBox3);
             this.Controls.Add(this.checkBox2);
@@ -148,5 +160,6 @@
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.CheckBox SzTimes;
+        private System.Windows.Forms.CheckBox MealCheck;
     }
 }

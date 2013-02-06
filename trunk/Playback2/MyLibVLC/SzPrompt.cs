@@ -42,7 +42,7 @@ namespace SeizurePlayback
             Result = Pass.Sz + Notes + "," + Pass.outfile;
             string outfile = Pass.FPath + "\\" + Pass.outfile;
             Pass.ACQ.DumpData(outfile + ".dat", Pass.ACQ.SelectedChan, Pass.StartTime, Pass.HighlightEnd - Pass.HighlightStart + 1);
-            int StartTime = (int)((float)Pass.StartTime * 1000F * (1F + Pass.VideoOffset) / 1000);                            
+            int StartTime = (int)((((float)Pass.StartTime * 1000F * (1F + Pass.VideoOffset)) - Pass.Subtractor)/1000F);                            
             Process p = new Process();
             string CmdString = " -y -ss " + StartTime.ToString() + " -t " + Pass.length.ToString();
             CmdString += " -i " + Pass.CurrentAVI;
