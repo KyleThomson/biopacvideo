@@ -25,6 +25,7 @@ namespace SeizurePlayback
             if (MedCount.Checked) E.Med = true;
             if (MealCheck.Checked) E.Meal = true;
             if (SzTimes.Checked) E.SzTime = true;
+            if (DetailList.Checked) E.DetailList = true;
             SaveFileDialog F = new SaveFileDialog();
             F.DefaultExt = ".pjt";
             F.InitialDirectory = "D:\\";
