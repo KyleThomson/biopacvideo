@@ -20,6 +20,7 @@ namespace SeizurePlayback
         public bool wt;
         public bool SzTime;
         public bool Meal;
+        public bool DetailList;
         public ExportType()
         {
             Sz = false;
@@ -28,6 +29,7 @@ namespace SeizurePlayback
             wt = false;
             SzTime = false;
             Meal = false;
+            DetailList = false;
         }
 
     }
@@ -394,7 +396,22 @@ namespace SeizurePlayback
             string st, st2;
             DateTime Earliest = Files[0].Start.Date;
             DateTime Latest = Files[Files.Count - 1].Start.Date;
-            st = "Animal";            
+            
+            if (E.DetailList)
+            {
+                
+                foreach (AnimalType A in Animals)
+                {
+                    F.WriteLine(A.ID);
+                    foreach (SeizureType S in A.Sz)
+                    {
+                        F.WriteLine(S.d.ToShortDateString() + ", " + S.t.ToString() + ", " + S.Notes);
+                    }
+                }
+                F.Close();                    
+                return;
+            }
+            st = "Animal";
             for (DateTime i = Earliest; i <= Latest; i=i.AddDays(1))
             {
                 st += "," + i.ToShortDateString();

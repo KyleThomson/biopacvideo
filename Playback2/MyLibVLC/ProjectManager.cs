@@ -228,5 +228,11 @@ namespace SeizurePlayback
             }
             UpdateMainList();
         }
+
+        private void calendarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Calendar F = new Calendar();
+            F.Show();
+        }
     }
 }

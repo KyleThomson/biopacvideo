@@ -32,6 +32,7 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mergeProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addMultipleDirectoriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,7 +45,7 @@
             this.MainList = new System.Windows.Forms.ListBox();
             this.MainSelect = new System.Windows.Forms.ComboBox();
             this.SecondSelect = new System.Windows.Forms.ComboBox();
-            this.mergeProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.calendarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -88,6 +89,13 @@
             this.selectProjectToolStripMenuItem.Text = "&Open Project";
             this.selectProjectToolStripMenuItem.Click += new System.EventHandler(this.selectProjectToolStripMenuItem_Click);
             // 
+            // mergeProjectToolStripMenuItem
+            // 
+            this.mergeProjectToolStripMenuItem.Name = "mergeProjectToolStripMenuItem";
+            this.mergeProjectToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.mergeProjectToolStripMenuItem.Text = "Merge Project";
+            this.mergeProjectToolStripMenuItem.Click += new System.EventHandler(this.mergeProjectToolStripMenuItem_Click);
+            // 
             // importFileToolStripMenuItem
             // 
             this.importFileToolStripMenuItem.Name = "importFileToolStripMenuItem";
@@ -118,6 +126,8 @@
             // 
             // plottingToolStripMenuItem
             // 
+            this.plottingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.calendarToolStripMenuItem});
             this.plottingToolStripMenuItem.Name = "plottingToolStripMenuItem";
             this.plottingToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.plottingToolStripMenuItem.Text = "Plot";
@@ -186,12 +196,12 @@
             this.SecondSelect.TabIndex = 9;
             this.SecondSelect.SelectedIndexChanged += new System.EventHandler(this.SecondSelect_SelectedIndexChanged);
             // 
-            // mergeProjectToolStripMenuItem
+            // calendarToolStripMenuItem
             // 
-            this.mergeProjectToolStripMenuItem.Name = "mergeProjectToolStripMenuItem";
-            this.mergeProjectToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.mergeProjectToolStripMenuItem.Text = "Merge Project";
-            this.mergeProjectToolStripMenuItem.Click += new System.EventHandler(this.mergeProjectToolStripMenuItem_Click);
+            this.calendarToolStripMenuItem.Name = "calendarToolStripMenuItem";
+            this.calendarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.calendarToolStripMenuItem.Text = "Calendar";
+            this.calendarToolStripMenuItem.Click += new System.EventHandler(this.calendarToolStripMenuItem_Click);
             // 
             // ProjectManager
             // 
@@ -232,5 +242,6 @@
         private System.Windows.Forms.ToolStripMenuItem exportDataToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addMultipleDirectoriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mergeProjectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem calendarToolStripMenuItem;
     }
 }
