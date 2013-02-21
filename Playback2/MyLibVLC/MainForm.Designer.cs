@@ -1,6 +1,6 @@
 namespace SeizurePlayback
 {
-    partial class MainForm
+    partial class CManage
     {
         /// <summary>
         /// Required designer variable.
@@ -34,7 +34,7 @@ namespace SeizurePlayback
             this.Pause = new System.Windows.Forms.Button();
             this.TimeBar = new System.Windows.Forms.TrackBar();
             this.Rewind = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.SpeedUp = new System.Windows.Forms.Button();
             this.TimeLabel = new System.Windows.Forms.Label();
             this.TimeBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -69,9 +69,10 @@ namespace SeizurePlayback
             this.OffsetBox = new System.Windows.Forms.TextBox();
             this.Renamer = new System.Windows.Forms.Button();
             this.HighlightLabel = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
+            this.NotesButton = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.VideoCreate = new System.Windows.Forms.Button();
+            this.AddtoProject = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.SuspendLayout();
@@ -144,17 +145,17 @@ namespace SeizurePlayback
             this.Rewind.UseVisualStyleBackColor = true;
             this.Rewind.Click += new System.EventHandler(this.Rewind_Click);
             // 
-            // button1
+            // SpeedUp
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.ForeColor = System.Drawing.SystemColors.Control;
-            this.button1.Location = new System.Drawing.Point(912, 504);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 16;
-            this.button1.Text = "Speed Up";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.SpeedUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.SpeedUp.ForeColor = System.Drawing.SystemColors.Control;
+            this.SpeedUp.Location = new System.Drawing.Point(912, 504);
+            this.SpeedUp.Name = "SpeedUp";
+            this.SpeedUp.Size = new System.Drawing.Size(75, 23);
+            this.SpeedUp.TabIndex = 16;
+            this.SpeedUp.Text = "Speed Up";
+            this.SpeedUp.UseVisualStyleBackColor = true;
+            this.SpeedUp.Click += new System.EventHandler(this.SpeedUp_Click);
             // 
             // TimeLabel
             // 
@@ -584,23 +585,23 @@ namespace SeizurePlayback
             this.HighlightLabel.Text = "        HL";
             this.HighlightLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // button4
+            // NotesButton
             // 
-            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button4.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.button4.Location = new System.Drawing.Point(994, 479);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(156, 23);
-            this.button4.TabIndex = 51;
-            this.button4.Text = "Enter Notes";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.NotesButton_Click);
+            this.NotesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.NotesButton.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.NotesButton.Location = new System.Drawing.Point(993, 479);
+            this.NotesButton.Name = "NotesButton";
+            this.NotesButton.Size = new System.Drawing.Size(156, 23);
+            this.NotesButton.TabIndex = 51;
+            this.NotesButton.Text = "Enter Notes";
+            this.NotesButton.UseVisualStyleBackColor = true;
+            this.NotesButton.Click += new System.EventHandler(this.NotesButton_Click);
             // 
             // button5
             // 
             this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button5.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.button5.Location = new System.Drawing.Point(994, 511);
+            this.button5.Location = new System.Drawing.Point(993, 505);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(156, 23);
             this.button5.TabIndex = 52;
@@ -612,7 +613,7 @@ namespace SeizurePlayback
             // 
             this.VideoCreate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VideoCreate.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.VideoCreate.Location = new System.Drawing.Point(993, 543);
+            this.VideoCreate.Location = new System.Drawing.Point(993, 534);
             this.VideoCreate.Name = "VideoCreate";
             this.VideoCreate.Size = new System.Drawing.Size(156, 23);
             this.VideoCreate.TabIndex = 53;
@@ -620,15 +621,28 @@ namespace SeizurePlayback
             this.VideoCreate.UseVisualStyleBackColor = true;
             this.VideoCreate.Click += new System.EventHandler(this.VideoCreate_Click);
             // 
-            // MainForm
+            // AddtoProject
+            // 
+            this.AddtoProject.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.AddtoProject.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.AddtoProject.Location = new System.Drawing.Point(993, 566);
+            this.AddtoProject.Name = "AddtoProject";
+            this.AddtoProject.Size = new System.Drawing.Size(156, 23);
+            this.AddtoProject.TabIndex = 54;
+            this.AddtoProject.Text = "Finalize Review";
+            this.AddtoProject.UseVisualStyleBackColor = true;
+            this.AddtoProject.Click += new System.EventHandler(this.AddtoProj_Click);
+            // 
+            // CManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1429, 845);
+            this.Controls.Add(this.AddtoProject);
             this.Controls.Add(this.VideoCreate);
             this.Controls.Add(this.button5);
-            this.Controls.Add(this.button4);
+            this.Controls.Add(this.NotesButton);
             this.Controls.Add(this.HighlightLabel);
             this.Controls.Add(this.Renamer);
             this.Controls.Add(this.OffsetBox);
@@ -663,7 +677,7 @@ namespace SeizurePlayback
             this.Controls.Add(this.label1);
             this.Controls.Add(this.TimeBox);
             this.Controls.Add(this.TimeLabel);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.SpeedUp);
             this.Controls.Add(this.Rewind);
             this.Controls.Add(this.TimeBar);
             this.Controls.Add(this.Pause);
@@ -671,7 +685,7 @@ namespace SeizurePlayback
             this.Controls.Add(this.Play);
             this.Controls.Add(this.ZoomScale);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Name = "MainForm";
+            this.Name = "CManage";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Seizure Video Playback";
@@ -692,7 +706,7 @@ namespace SeizurePlayback
         private System.Windows.Forms.Button Pause;
         private System.Windows.Forms.TrackBar TimeBar;
         private System.Windows.Forms.Button Rewind;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button SpeedUp;
         private System.Windows.Forms.Label TimeLabel;
         private System.Windows.Forms.ComboBox TimeBox;
         private System.Windows.Forms.Label label1;
@@ -727,9 +741,10 @@ namespace SeizurePlayback
         private System.Windows.Forms.TextBox OffsetBox;
         private System.Windows.Forms.Button Renamer;
         private System.Windows.Forms.Label HighlightLabel;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button NotesButton;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button VideoCreate;
+        private System.Windows.Forms.Button AddtoProject;
     }
 }
 

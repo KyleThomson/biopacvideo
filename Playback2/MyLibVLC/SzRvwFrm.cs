@@ -10,9 +10,9 @@ namespace SeizurePlayback
 {
     public partial class SzRvwFrm : Form
     {
-        MainForm Prnt;
+        CManage Prnt;
         bool SuppressChange;
-        public SzRvwFrm(MainForm sent)
+        public SzRvwFrm(CManage sent)
         {
             InitializeComponent();
             Prnt = sent;
