@@ -12,7 +12,7 @@ using System.Diagnostics;
 
 namespace SeizurePlayback
 {
-    public partial class MainForm : Form
+    public partial class CManage : Form
     {
         IniFile INI;
         VlcInstance instance;
@@ -56,10 +56,11 @@ namespace SeizurePlayback
         int MaxDispSize;
         string DefaultFolder; 
         float Subtractor;
+        string CurrentProject;
         Mygraph graph;
         float[] VideoOffset;
         float[] Rates = { 0.25F, 0.5F, 1, 2, 5, 10, 20, 30, 50, 100 };
-        public MainForm()
+        public CManage()
         {
             ACQ = new ACQReader(); //Class to read from ACQ file
             graph = new Mygraph(); //Small Class for containing EEG area. 
@@ -123,6 +124,8 @@ namespace SeizurePlayback
             {
                 VideoOffset[i] = INI.IniReadValue("General", "VideoOffset" + i, (float)0.009F);
             }
+            CurrentProject = INI.IniReadValue("General", "CurrentProject", "");
+
         }
         private void INISave()
         {
@@ -131,6 +134,7 @@ namespace SeizurePlayback
             {
                 INI.IniWriteValue("General", "VideoOffset" + i, VideoOffset[i]);
             }
+            INI.IniWriteValue("General", "CurrentProject", CurrentProject);
         }
         private void ReadReviewINI(IniFile F)
         {
@@ -383,7 +387,7 @@ namespace SeizurePlayback
                 Reviewer = frm.GetReviewer();
                 Reviewing = frm.GetReviewing();
                 frm.Dispose();
-                MainForm.ActiveForm.Text = "Seizure Playback - " + BaseName.Substring(4, 2) + "/" + BaseName.Substring(6, 2)
+                CManage.ActiveForm.Text = "Seizure Playback - " + BaseName.Substring(4, 2) + "/" + BaseName.Substring(6, 2)
                     + "/" + BaseName.Substring(0, 4) + " - " + BaseName.Substring(9, 2) + ":" + BaseName.Substring(11, 2) + ":" + BaseName.Substring(13, 2);
                 TimeBar.Minimum = 0;
                 TimeBar.Maximum = ACQ.TotFileTime;
@@ -554,7 +558,7 @@ namespace SeizurePlayback
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void SpeedUp_Click(object sender, EventArgs e)
         {
             ACQ.SelectedChan = -1;
             OffsetBox.Enabled = false;
@@ -789,17 +793,17 @@ namespace SeizurePlayback
         private void MainForm_Resize(object sender, EventArgs e)
         {
 
-            if (MainForm.ActiveForm != null)  //if (!(MainForm.ActiveForm.WindowState == FormWindowState.Minimized) && ResizeBool
+            if (CManage.ActiveForm != null)  //if (!(MainForm.ActiveForm.WindowState == FormWindowState.Minimized) && ResizeBool
             {
                 Step = MaxDispSize;
                 Redraw = true;
-                graph.X2 = MainForm.ActiveForm.Size.Width-5; //Eat at joes
-                graph.Y2 = MainForm.ActiveForm.Size.Height - 400; //this does whatever it does 
+                graph.X2 = CManage.ActiveForm.Size.Width-5; //Eat at joes
+                graph.Y2 = CManage.ActiveForm.Size.Height - 400; //this does whatever it does 
                 ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);    //Create the graphics box to display EEG.       
-                VideoPanel.Location = new Point(VideoPanel.Location.X, MainForm.ActiveForm.Height - 395);
-                TimeBar.Size = new Size(MainForm.ActiveForm.Size.Width - TimeBar.Location.X - 5, TimeBar.Size.Height);
+                VideoPanel.Location = new Point(VideoPanel.Location.X, CManage.ActiveForm.Height - 395);
+                TimeBar.Size = new Size(CManage.ActiveForm.Size.Width - TimeBar.Location.X - 5, TimeBar.Size.Height);
                 if (ACQ.Loaded) { ACQ.RefreshDisplay(); }
-                MainForm.ActiveForm.Refresh();
+                CManage.ActiveForm.Refresh();
             }
        }
 
@@ -846,6 +850,33 @@ namespace SeizurePlayback
             Seek = (long)((float)Start * 1000F * (1F + VideoOffset[ACQ.SelectedChan]) - Subtractor); 
             VideoCreator frm = new VideoCreator(ACQ.GetData(ACQ.SelectedChan, Start, HighlightEnd - HighlightStart + 1), HighlightEnd - HighlightStart + 1, CurrentAVI, Seek);
             frm.Show();
+        }
+
+        private void AddtoProj_Click(object sender, EventArgs e)
+        {
+            Project pjt;
+            Paused = true;
+            ACQ.Loaded = false;
+            if (player != null)
+                player.Stop();
+            ACQ.closeACQ();
+            SzTxt.Close();
+            ACQ.cleargraph();
+            this.Text = "Closing File...";
+            Thread.Sleep(500);
+            this.Text = "Seizure Video Playback";            
+            AddtoProject F = new AddtoProject(CurrentProject);
+            F.ShowDialog();
+            if (F.passed)
+            {
+                CurrentProject = F.returnstring;
+                pjt = new Project(CurrentProject);
+                pjt.Open();
+                pjt.ImportDirectory(Path);
+                pjt.Save();
+                INISave();
+
+            }
         }
 
 

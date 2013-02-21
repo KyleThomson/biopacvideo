@@ -67,7 +67,7 @@ namespace SeizurePlayback
         { //open File for reading
             byte CharN;
             FullName = FName;
-            FILE = new FileStream(FName, FileMode.Open, FileAccess.ReadWrite);            
+            FILE = new FileStream(FName, FileMode.Open, FileAccess.Read);            
             FID = new BinaryReader(FILE);
             FILE.Seek(0, SeekOrigin.End);            
             EOF = FILE.Position;
@@ -249,6 +249,10 @@ namespace SeizurePlayback
             Ymax = Y;            
             g = Graphics.FromImage(offscreen);
             g.Clear(Color.White);            
+        }
+        public void cleargraph()
+        {
+            g.Clear(Color.White);
         }
         public void ResetScale()
         {

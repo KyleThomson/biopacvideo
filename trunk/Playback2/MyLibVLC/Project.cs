@@ -333,6 +333,7 @@ namespace SeizurePlayback
                         MealType M = new MealType(d.ToString(), Type, PC.ToString());
                         Animals[CurrentAnimal].Meals.Add(M);
                     }
+                    FLog.Close();
                 }
                 if (Directory.Exists(Dir + "\\Seizure"))
                 {
@@ -383,6 +384,7 @@ namespace SeizurePlayback
                 SeizureType S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6]);
                 Animals[CurrentAnimal].Sz.Add(S);
             }
+            TmpTxt.Close();
         }
 
         public void ExportData(string Fname, ExportType E)
