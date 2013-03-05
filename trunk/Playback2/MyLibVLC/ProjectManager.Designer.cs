@@ -38,6 +38,7 @@
             this.exportDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importSeizureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.plottingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.calendarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.measurementsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.weightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tempHumidityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,8 +46,10 @@
             this.MainList = new System.Windows.Forms.ListBox();
             this.MainSelect = new System.Windows.Forms.ComboBox();
             this.SecondSelect = new System.Windows.Forms.ComboBox();
-            this.calendarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.Info = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -57,7 +60,7 @@
             this.measurementsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(409, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(555, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -132,6 +135,13 @@
             this.plottingToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.plottingToolStripMenuItem.Text = "Plot";
             // 
+            // calendarToolStripMenuItem
+            // 
+            this.calendarToolStripMenuItem.Name = "calendarToolStripMenuItem";
+            this.calendarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.calendarToolStripMenuItem.Text = "Calendar";
+            this.calendarToolStripMenuItem.Click += new System.EventHandler(this.calendarToolStripMenuItem_Click);
+            // 
             // measurementsToolStripMenuItem
             // 
             this.measurementsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -160,7 +170,7 @@
             this.SecondList.FormattingEnabled = true;
             this.SecondList.Location = new System.Drawing.Point(178, 66);
             this.SecondList.Name = "SecondList";
-            this.SecondList.Size = new System.Drawing.Size(185, 264);
+            this.SecondList.Size = new System.Drawing.Size(284, 264);
             this.SecondList.TabIndex = 1;
             this.SecondList.SelectedIndexChanged += new System.EventHandler(this.SecondList_SelectedIndexChanged);
             // 
@@ -196,18 +206,28 @@
             this.SecondSelect.TabIndex = 9;
             this.SecondSelect.SelectedIndexChanged += new System.EventHandler(this.SecondSelect_SelectedIndexChanged);
             // 
-            // calendarToolStripMenuItem
+            // statusStrip1
             // 
-            this.calendarToolStripMenuItem.Name = "calendarToolStripMenuItem";
-            this.calendarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.calendarToolStripMenuItem.Text = "Calendar";
-            this.calendarToolStripMenuItem.Click += new System.EventHandler(this.calendarToolStripMenuItem_Click);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Info});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 371);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(555, 22);
+            this.statusStrip1.TabIndex = 10;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // Info
+            // 
+            this.Info.Name = "Info";
+            this.Info.Size = new System.Drawing.Size(163, 17);
+            this.Info.Text = "                                                    ";
             // 
             // ProjectManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(409, 393);
+            this.ClientSize = new System.Drawing.Size(555, 393);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.SecondSelect);
             this.Controls.Add(this.MainSelect);
             this.Controls.Add(this.MainList);
@@ -218,6 +238,8 @@
             this.Text = "Project Manager";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -243,5 +265,7 @@
         private System.Windows.Forms.ToolStripMenuItem addMultipleDirectoriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mergeProjectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem calendarToolStripMenuItem;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel Info;
     }
 }

@@ -107,6 +107,7 @@ namespace SeizurePlayback
         
         private void importSeizureToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //This function probably should not be used. 
             if (pjt != null)
             {
                 OpenFileDialog F = new OpenFileDialog();
@@ -134,8 +135,11 @@ namespace SeizurePlayback
 
                 FolderBrowserDialog F = new FolderBrowserDialog();                
                 if (F.ShowDialog(this) == DialogResult.OK)
-                {                    
-                    pjt.ImportDirectory(F.SelectedPath);
+                {
+                    if (!pjt.ImportDirectory(F.SelectedPath))
+                    {
+                        MessageBox.Show("File already imported", "ERROR");
+                    }
                 }                
                 UpdateMainList();
                 pjt.Save();
@@ -203,6 +207,7 @@ namespace SeizurePlayback
 
         private void addMultipleDirectoriesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            int DuplicateDirectoryCount = 0; 
             MultiDirectoryAdd Frm = new MultiDirectoryAdd();
             Frm.ShowDialog();
             if (Frm.Pass)
@@ -210,11 +215,16 @@ namespace SeizurePlayback
                 for (int i = 0; i < Frm.DirReturn.Length; i++)
                 {
                     //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
-                    pjt.ImportDirectory(Frm.DirReturn[i]);
+                    if (!pjt.ImportDirectory(Frm.DirReturn[i]))
+                    {
+                        DuplicateDirectoryCount++;
+                    }
                 }
             }
             UpdateMainList();
             pjt.Save();
+            if (DuplicateDirectoryCount > 0)
+                Info.Text = DuplicateDirectoryCount.ToString() + " duplicate directories skipped.";
         }
 
         private void mergeProjectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -231,8 +241,10 @@ namespace SeizurePlayback
 
         private void calendarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Calendar F = new Calendar();
-            F.Show();
+            if (pjt == null)
+                return;
+            Calendar F = new Calendar(pjt);
+            F.ShowDialog();
         }
     }
 }

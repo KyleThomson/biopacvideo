@@ -93,18 +93,31 @@ namespace SeizurePlayback
             Notes = c;
         }   
     }
+    class ImportantDateType
+    {
+        public string Label;
+        public DateTime Date;
+        public ImportantDateType(string a, string b)
+        {
+            Label = a;
+            DateTime.TryParse(b, out Date);
+        }
+        
+    }
     class AnimalType
     {
         public string ID;
         public List<WeightType> WeightInfo;
         public List<SeizureType> Sz;
-        public List<MealType> Meals;                
+        public List<MealType> Meals;
+        public List<ImportantDateType> ImportantDates;    
         public int Group;
         public AnimalType()
-        {
+        {            
             Sz = new List<SeizureType>();
             WeightInfo = new List<WeightType>();
             Meals = new List<MealType>();
+            ImportantDates = new List<ImportantDateType>();
         }
     }
     public class Project
@@ -181,6 +194,10 @@ namespace SeizurePlayback
                 {
                     s = "An," + A.ID + ", ml, " + M.d.ToString() + "," + M.type + "," + M.pelletcount.ToString();
                     F.WriteLine(s);
+                }
+                foreach (ImportantDateType I in A.ImportantDates)
+                {
+                    s = "An," + A.ID + ", id, " + I.Date.ToString() + ", lbl, " + I.Label; 
                 }
             }
             F.Close();
@@ -280,7 +297,28 @@ namespace SeizurePlayback
             WeightType W = new WeightType(dt.ToShortDateString(), Wt.ToString(), Pt.ToString());
             Animals[An].WeightInfo.Add(W);
         }
-        public void ImportDirectory(string Dir)
+        public int GetAnimalDateInfo(string AID, DateTime D)
+        {            
+            int Percent = 0;
+            foreach (FileType Fe in Files)
+            {
+                foreach (string Animal in Fe.AnimalIDs)
+                {
+                    if (String.Compare(Animal, AID) == 0)
+                    {
+                        
+                        if ((Fe.Start.Day == D.Day) && (Fe.Start.Month == D.Month) && (Fe.Start.Year == D.Year))
+                        {                            
+                            Percent = Percent + (int)Math.Round((decimal)Fe.Duration.TotalSeconds / 864);                            
+                        }
+                    }
+                }
+            }
+            Percent = Math.Min(100, Percent);
+            return Percent; 
+
+        }
+        public bool ImportDirectory(string Dir)
         {
             ACQReader TempACQ = new ACQReader();
             FileType F = new FileType();
@@ -290,16 +328,17 @@ namespace SeizurePlayback
             {
                 TempACQ.openACQ(FName[0]);
                 string Fn = FName[0].Substring(FName[0].LastIndexOf('\\') + 1);
-                F.Start = ConvertFileToDT(Fn);
+                F.Start = ConvertFileToDT(Fn);                
                 F.Chans = TempACQ.Chans;
                 F.AnimalIDs = TempACQ.ID;
                 F.Duration = TimeSpan.FromSeconds(TempACQ.FileTime);
                 TempACQ.closeACQ();
-                FileType Fs = Files.Find(delegate(FileType Ft) { return (DateTime.Compare(Ft.Start, F.Start) == 0); });
+                FileType Fs = Files.Find(delegate(FileType Ft) { return ((DateTime.Compare(Ft.Start, F.Start) == 0) && (string.Compare(F.AnimalIDs[0], Ft.AnimalIDs[0])== 0)); }); 
+                //Determine if duplicate file - compare animal name and file start
                 if (Fs != null)
                 {
-                    MessageBox.Show("File already imported", "ERROR");
-                    return;
+                    //Boot us out of the function                   
+                    return false;
                 }                
                 Files.Add(F);
                 //Open the Feeder file
@@ -344,6 +383,7 @@ namespace SeizurePlayback
                     }
                 }
             }
+            return true;
         }
         public DateTime ConvertFileToDT(string F)
         {            
@@ -539,6 +579,10 @@ namespace SeizurePlayback
                     case " ml":
                         MealType M = new MealType(data[3], data[4], data[5]);
                         Animals[CurrentAnimal].Meals.Add(M);
+                        break;
+                    case " id":
+                        ImportantDateType I = new ImportantDateType(data[4], data[3]);
+                        Animals[CurrentAnimal].ImportantDates.Add(I);
                         break;
                     case " gp":                        
                         break;
