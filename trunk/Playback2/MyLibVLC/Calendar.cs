@@ -46,8 +46,12 @@ namespace SeizurePlayback
             Pen Filled = new Pen(Color.Blue);
             SolidBrush BlueFill = new SolidBrush(Color.LightBlue);
             SolidBrush BT = new SolidBrush(Color.Black);
-            Pen DayHilight = new Pen(Color.Blue);
+            Font Fs = new Font("Arial", 11);
+            SolidBrush Bs = new SolidBrush(Color.Red);
+            Pen DayHilight = new Pen(Color.Blue);           
             DayHilight.Width = 3;
+            Pen ImpDay = new Pen(Color.Red);
+            ImpDay.Width = 3;
             int Percent; 
             String St;            
             g.Clear(Color.White);
@@ -59,8 +63,14 @@ namespace SeizurePlayback
                     //Draw inital box
                     //g.FillRectangle(WhiteFill, new Rectangle(new Point(DW * d, DW * w), S));
                     g.DrawRectangle(Day, new Rectangle(new Point(DW * d, DW * w), S));
-                    //Draw Data box                                  
-                    Percent = pjt.GetAnimalDateInfo(AnimalSel.Items[AnimalSel.SelectedIndex].ToString(), N.AddDays(d + w * 7));                    
+                    //Draw Data box    
+                }
+            }
+            for (int w = 0; w < DaysShown; w++)
+            {
+                for (int d = 0; d < 7; d++)
+                {
+                    Percent = pjt.GetAnimalRecordingInfo(AnimalSel.Items[AnimalSel.SelectedIndex].ToString(), N.AddDays(d + w * 7));                    
                     if (Percent > 0)
                     {
                         g.FillRectangle(BlueFill,new Rectangle(new Point(DW * d, DW * w), new Size(DW, (int)((float)DW * ((float)Percent / 100F)))));
@@ -69,8 +79,18 @@ namespace SeizurePlayback
                     //Write text
                     St = N.AddDays(d+w*7).Day.ToString(); 
                     g.DrawString(St, F, BT, new PointF(DW * d + DW - (St.Length*12) - 6, DW * w + 4));
-
-                    
+                }
+            }
+            for (int w = 0; w < DaysShown; w++)
+            {
+                for (int d = 0; d < 7; d++)
+                {
+                    ImportantDateType I = pjt.CheckImportantDate(AnimalSel.Items[AnimalSel.SelectedIndex].ToString(), N.AddDays(d + w * 7));
+                    if (I != null)
+                    {
+                        g.DrawRectangle(ImpDay, new Rectangle(new Point(DW * d, DW * w), S));
+                        g.DrawString(I.Label, Fs, Bs, new PointF(DW * d + 2, DW * w + DW - 17));
+                    }
                 }
             }            
             panel1.Refresh();

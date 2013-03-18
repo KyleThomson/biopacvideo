@@ -44,7 +44,7 @@
             this.shapeContainer1.Name = "shapeContainer1";
             this.shapeContainer1.Shapes.AddRange(new Microsoft.VisualBasic.PowerPacks.Shape[] {
             this.lineShape1});
-            this.shapeContainer1.Size = new System.Drawing.Size(604, 520);
+            this.shapeContainer1.Size = new System.Drawing.Size(604, 595);
             this.shapeContainer1.TabIndex = 1;
             this.shapeContainer1.TabStop = false;
             // 
@@ -69,7 +69,7 @@
             // 
             this.panel1.Location = new System.Drawing.Point(60, 50);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(534, 458);
+            this.panel1.Size = new System.Drawing.Size(534, 534);
             this.panel1.TabIndex = 3;
             // 
             // MMY
@@ -90,18 +90,18 @@
             this.Up.Name = "Up";
             this.Up.Size = new System.Drawing.Size(52, 228);
             this.Up.TabIndex = 0;
-            this.Up.Text = "Ý";
+            this.Up.Text = "⇧";
             this.Up.UseVisualStyleBackColor = true;
             this.Up.Click += new System.EventHandler(this.Up_Click);
             // 
             // down
             // 
             this.down.Font = new System.Drawing.Font("Wingdings", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.down.Location = new System.Drawing.Point(2, 284);
+            this.down.Location = new System.Drawing.Point(2, 360);
             this.down.Name = "down";
             this.down.Size = new System.Drawing.Size(52, 224);
             this.down.TabIndex = 5;
-            this.down.Text = "Ú";
+            this.down.Text = "⇩";
             this.down.UseVisualStyleBackColor = true;
             this.down.Click += new System.EventHandler(this.down_Click);
             // 
@@ -109,7 +109,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(604, 520);
+            this.ClientSize = new System.Drawing.Size(604, 595);
             this.Controls.Add(this.down);
             this.Controls.Add(this.Up);
             this.Controls.Add(this.MMY);
@@ -118,7 +118,7 @@
             this.Controls.Add(this.shapeContainer1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Calendar";
-            this.Text = "Form1";
+            this.Text = "Calendar";
             this.Load += new System.EventHandler(this.Calendar_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

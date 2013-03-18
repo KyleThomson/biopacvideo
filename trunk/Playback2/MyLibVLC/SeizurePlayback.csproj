@@ -79,6 +79,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ACQReader.cs" />
+    <Compile Include="AddDate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddDate.Designer.cs">
+      <DependentUpon>AddDate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Compression.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -182,6 +188,9 @@
     <Compile Include="WeightAdd.Designer.cs">
       <DependentUpon>WeightAdd.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AddDate.resx">
+      <DependentUpon>AddDate.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AdvanceSettings.resx">
       <DependentUpon>AdvanceSettings.cs</DependentUpon>
     </EmbeddedResource>

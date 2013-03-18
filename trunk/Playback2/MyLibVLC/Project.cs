@@ -56,9 +56,9 @@ namespace SeizurePlayback
             type = b;
             int.TryParse(c, out pelletcount);
         }
-       
+        
     }
-    class FileType
+    public class FileType
     {
         public string[] AnimalIDs;
         public int Chans;
@@ -93,7 +93,7 @@ namespace SeizurePlayback
             Notes = c;
         }   
     }
-    class ImportantDateType
+    public class ImportantDateType
     {
         public string Label;
         public DateTime Date;
@@ -124,7 +124,7 @@ namespace SeizurePlayback
     {
         public string P;
         public string Filename;
-        List<FileType> Files;
+        public List<FileType> Files;
         List<AnimalType> Animals;                 
         public Project(string Inpt)
         {
@@ -197,7 +197,8 @@ namespace SeizurePlayback
                 }
                 foreach (ImportantDateType I in A.ImportantDates)
                 {
-                    s = "An," + A.ID + ", id, " + I.Date.ToString() + ", lbl, " + I.Label; 
+                    s = "An," + A.ID + ", id, " + I.Date.ToString() + "," + I.Label;
+                    F.WriteLine(s);
                 }
             }
             F.Close();
@@ -297,7 +298,7 @@ namespace SeizurePlayback
             WeightType W = new WeightType(dt.ToShortDateString(), Wt.ToString(), Pt.ToString());
             Animals[An].WeightInfo.Add(W);
         }
-        public int GetAnimalDateInfo(string AID, DateTime D)
+        public int GetAnimalRecordingInfo(string AID, DateTime D)
         {            
             int Percent = 0;
             foreach (FileType Fe in Files)
@@ -426,6 +427,43 @@ namespace SeizurePlayback
             }
             TmpTxt.Close();
         }
+        public void AddImportantDate(string AnimalName, string d, string Text)
+        {
+            int CurrentAnimal = FindAnimal(AnimalName);
+            ImportantDateType N = new ImportantDateType(Text, d);
+            Animals[CurrentAnimal].ImportantDates.Add(N);
+        }
+        public void RemoveImportantDate(string AnimalName, int loc)
+        {
+            int CurrentAnimal = FindAnimal(AnimalName);
+            Animals[CurrentAnimal].ImportantDates.RemoveAt(loc);            
+        }
+        public string[] GetImportantDates(string AnimalName)
+        {
+            
+            int CurrentAnimal = FindAnimal(AnimalName);
+            int c = 0;
+            string[] output = new string[Animals[CurrentAnimal].ImportantDates.Count];
+            foreach (ImportantDateType I in Animals[CurrentAnimal].ImportantDates)
+            {
+                output[c] = I.Date.ToString() + " - " + I.Label;
+                c++;
+            }
+            return output;
+            
+        }
+        public ImportantDateType CheckImportantDate(string AnimalName, DateTime N)
+        {
+            int CurrentAnimal = FindAnimal(AnimalName);
+            foreach (ImportantDateType I in Animals[CurrentAnimal].ImportantDates)
+            {
+                if (DateTime.Compare(N.Date, I.Date.Date) == 0) //Compare only the day, not the time 
+                {
+                    return I; 
+                }
+            }
+            return null;
+        }
 
         public void ExportData(string Fname, ExportType E)
         {
@@ -441,16 +479,33 @@ namespace SeizurePlayback
             
             if (E.DetailList)
             {
-                
+
                 foreach (AnimalType A in Animals)
                 {
                     F.WriteLine(A.ID);
+                    DateTime LastDate = Earliest;
                     foreach (SeizureType S in A.Sz)
                     {
+                        foreach (ImportantDateType I in A.ImportantDates)
+                        {
+                            if ((DateTime.Compare(I.Date, LastDate) > 0) && (DateTime.Compare(I.Date, S.d) <= 0))
+                            {
+                                F.WriteLine(I.Date.ToShortDateString() + ", " + I.Label);
+                            }
+                        }
                         F.WriteLine(S.d.ToShortDateString() + ", " + S.t.ToString() + ", " + S.Notes);
+                        LastDate = S.d;
+                    }
+
+                    foreach (ImportantDateType I in A.ImportantDates)
+                    {
+                        if ((DateTime.Compare(I.Date, LastDate) > 0))
+                        {
+                            F.WriteLine(I.Date.ToShortDateString() + ", " + I.Label);
+                        }
                     }
                 }
-                F.Close();                    
+            F.Close();                    
                 return;
             }
             st = "Animal";
