@@ -73,7 +73,14 @@ namespace SeizurePlayback
             SecondList.Items.Clear();
             if (MainSelect.SelectedIndex == 0) //Files
             {
-                
+                if (SecondSelect.SelectedIndex == 0)
+                {
+                    SecondList.Items.Clear();
+                    foreach (string A in pjt.Files[MainList.SelectedIndex].AnimalIDs) 
+                    {
+                        SecondList.Items.Add(A);
+                    }
+                }
             }
             else if (MainSelect.SelectedIndex == 1) //Animals
             {            
@@ -236,7 +243,7 @@ namespace SeizurePlayback
             {
                 pjt.MergeProject(F.FileName);                
             }
-            UpdateMainList();
+            UpdateMainList();            
         }
 
         private void calendarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -245,6 +252,13 @@ namespace SeizurePlayback
                 return;
             Calendar F = new Calendar(pjt);
             F.ShowDialog();
+        }
+
+        private void importantDateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddDate F = new AddDate(pjt);
+            F.ShowDialog();
+            pjt = F.pjt;            
         }
     }
 }

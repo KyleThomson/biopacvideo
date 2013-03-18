@@ -48,6 +48,7 @@
             this.SecondSelect = new System.Windows.Forms.ComboBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.Info = new System.Windows.Forms.ToolStripStatusLabel();
+            this.importantDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -146,7 +147,8 @@
             // 
             this.measurementsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.weightToolStripMenuItem,
-            this.tempHumidityToolStripMenuItem});
+            this.tempHumidityToolStripMenuItem,
+            this.importantDateToolStripMenuItem});
             this.measurementsToolStripMenuItem.Name = "measurementsToolStripMenuItem";
             this.measurementsToolStripMenuItem.Size = new System.Drawing.Size(89, 20);
             this.measurementsToolStripMenuItem.Text = "&Measurements";
@@ -222,6 +224,13 @@
             this.Info.Size = new System.Drawing.Size(163, 17);
             this.Info.Text = "                                                    ";
             // 
+            // importantDateToolStripMenuItem
+            // 
+            this.importantDateToolStripMenuItem.Name = "importantDateToolStripMenuItem";
+            this.importantDateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.importantDateToolStripMenuItem.Text = "&Important Date";
+            this.importantDateToolStripMenuItem.Click += new System.EventHandler(this.importantDateToolStripMenuItem_Click);
+            // 
             // ProjectManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -267,5 +276,6 @@
         private System.Windows.Forms.ToolStripMenuItem calendarToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel Info;
+        private System.Windows.Forms.ToolStripMenuItem importantDateToolStripMenuItem;
     }
 }
