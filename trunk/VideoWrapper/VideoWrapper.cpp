@@ -362,7 +362,7 @@ void StreamReadBegin(int nChNum)
 void StreamReadProc(int nChNum, LPVOID pStreamBuf, long lBufSize, DWORD dwCompFlags)
 {		
 	nAccumulatedSize[nChNum] += lBufSize;
-	if (nAccumulatedSize[nChNum] >= 1900*MBYTE && dwCompFlags == AVIIF_KEYFRAME)	//The size limit of the AVI file is 2GB
+	if (nAccumulatedSize[nChNum] >= 512*MBYTE && dwCompFlags == AVIIF_KEYFRAME)	//The size limit of the AVI file is 2GB
 	{
 		nAccumulatedSize[nChNum] = 0;		
 		if (hAVIFile[nChNum])

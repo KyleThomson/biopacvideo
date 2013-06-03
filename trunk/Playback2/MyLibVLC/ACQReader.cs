@@ -45,7 +45,8 @@ namespace SeizurePlayback
         private int DataType;
         public Bitmap offscreen;
         public Bitmap ScreenCopy;
-        
+        private List<TimeSpan> SzTime;
+        private List<int> SzChannel; 
         Graphics g;
         public ACQReader()
         {
@@ -345,7 +346,11 @@ namespace SeizurePlayback
         {
             HL = false;
         }
-       
+        public void AddSeizure(TimeSpan S, int T) 
+        {
+            //SzTimeStart.Add(S);
+ 
+        }
         public void drawbuffer()
         {
             int NotDisp;
@@ -372,7 +377,7 @@ namespace SeizurePlayback
                              SolidBrush myBrush = new SolidBrush(System.Drawing.Color.LightGreen);
                              g.FillRectangle(myBrush, new Rectangle((int)(HLS * PointSpacing * SampleRate), (int)(VoltageSpacing * (SelectedChan - NotDisp + 0.25F)), (int)((HLE - HLS) * PointSpacing * SampleRate), (Ymax / VisibleChans)));
 
-                         }
+                         }                         
                          g.DrawString(ID[j], F, B, new PointF(1, .25F + (j - NotDisp) * (Ymax / VisibleChans)));
                          for (int i = 0; i < SampleSize; i++)
                          {

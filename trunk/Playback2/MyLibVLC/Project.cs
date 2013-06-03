@@ -56,7 +56,13 @@ namespace SeizurePlayback
             type = b;
             int.TryParse(c, out pelletcount);
         }
-        
+        public bool Compare(MealType C)
+        {
+            if ((DateTime.Compare(d, C.d) == 0) && (string.Compare(type, C.type) == 0) &&  (pelletcount == C.pelletcount))
+                return true;
+            else
+                return false;
+        }
     }
     public class FileType
     {
@@ -73,6 +79,13 @@ namespace SeizurePlayback
          }
         public FileType()
         {
+        }
+        public bool Compare(FileType C)
+        {
+            if ((DateTime.Compare(Start, C.Start) == 0) && (string.Compare(AnimalIDs[0], C.AnimalIDs[0]) == 0))
+                return true;
+            else
+                return false;
         }
     }
         
@@ -91,7 +104,14 @@ namespace SeizurePlayback
             int.TryParse(e, out length);
             file = f;            
             Notes = c;
-        }   
+        }
+        public bool Compare(SeizureType C)
+        {
+            if ((DateTime.Compare(d, C.d) == 0) && (TimeSpan.Compare(t, C.t) == 0) && (length == C.length))
+                return true;
+            else
+                return false;
+        }        
     }
     public class ImportantDateType
     {
@@ -144,7 +164,7 @@ namespace SeizurePlayback
                 StreamReader F = new StreamReader(Inpt);
                 while (!F.EndOfStream)
                 {
-                    ParseLine(F.ReadLine());
+                    ParseLineDuplicate(F.ReadLine());
                 }
                 F.Dispose();
             }
@@ -640,6 +660,85 @@ namespace SeizurePlayback
                         Animals[CurrentAnimal].ImportantDates.Add(I);
                         break;
                     case " gp":                        
+                        break;
+                    default:
+                        Console.WriteLine(data[2] + ": ERROR IN COMPARE");
+                        break;
+                }
+            }
+
+        }
+        void ParseLineDuplicate(string L)
+        {
+            string[] data;
+            string[] IDs;
+            bool Pass; //Check if Data Is duplicated;
+            int Chans;
+            data = L.Split(',');
+            //Data format - Record Type - Record Start
+            //Record types - An = Animal, Fl = File, 
+            if (data[0].IndexOf("Fl") != -1)
+            {
+
+                DateTime TempDate;
+                try
+                {
+                    TempDate = ConvertFileToDT(data[1]);
+                    //Get the ACQ info. 
+                    int.TryParse(data[3], out Chans);
+                    IDs = new string[Chans];
+                    for (int i = 0; i < Chans; i++)
+                    {
+                        IDs[i] = data[4 + i];
+                    }
+                    FileType F = new FileType(IDs, Chans, TempDate, data[2]);
+                    Pass=true;
+                    foreach (FileType C in Files)
+                    {
+                        if (C.Compare(F)) Pass = false;
+                    }
+                    if (Pass) Files.Add(F);
+                }
+                catch
+                {
+                    Console.WriteLine("FAILURE IN DATE PARSE");
+                }
+
+            }
+            else if (data[0].IndexOf("An") != -1)
+            {
+                int CurrentAnimal = FindAnimal(data[1]);
+                //data[2].Replace(" ", string.Empty);            
+                switch (data[2])
+                {
+                    case " wt":
+                        WeightType W = new WeightType(data[3], data[4], data[5]);
+                        Pass=true;
+                        Animals[CurrentAnimal].WeightInfo.Add(W);
+                        break;
+                    case " sz":
+                        SeizureType S = new SeizureType(data[3], data[4], data[5], data[6], data[7]);
+                        Pass=true;
+                        foreach (SeizureType C in Animals[CurrentAnimal].Sz)
+                        {
+                            if (C.Compare(S)) Pass = false;
+                        }
+                        if (Pass) Animals[CurrentAnimal].Sz.Add(S);
+                        break;
+                    case " ml":
+                        MealType M = new MealType(data[3], data[4], data[5]);
+                        Pass = true;
+                        foreach (MealType C in Animals[CurrentAnimal].Meals)
+                        {
+                            if (C.Compare(M)) Pass = false;
+                        }
+                        if (Pass) Animals[CurrentAnimal].Meals.Add(M);
+                        break;
+                    case " id":
+                        ImportantDateType I = new ImportantDateType(data[4], data[3]);
+                        Animals[CurrentAnimal].ImportantDates.Add(I);
+                        break;
+                    case " gp":
                         break;
                     default:
                         Console.WriteLine(data[2] + ": ERROR IN COMPARE");
