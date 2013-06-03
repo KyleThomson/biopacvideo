@@ -121,6 +121,12 @@
     <Compile Include="AddtoProject.Designer.cs">
       <DependentUpon>AddtoProject.cs</DependentUpon>
     </Compile>
+    <Compile Include="GetACQ.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GetACQ.Designer.cs">
+      <DependentUpon>GetACQ.cs</DependentUpon>
+    </Compile>
     <Compile Include="Render.cs" />
     <Compile Include="VideoCreator.cs">
       <SubType>Form</SubType>
@@ -208,6 +214,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AddtoProject.resx">
       <DependentUpon>AddtoProject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GetACQ.resx">
+      <DependentUpon>GetACQ.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VideoCreator.resx">
       <DependentUpon>VideoCreator.cs</DependentUpon>

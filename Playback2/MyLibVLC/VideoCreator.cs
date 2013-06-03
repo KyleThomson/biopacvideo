@@ -37,7 +37,7 @@ namespace SeizurePlayback
         {
             InitializeComponent();
             Data = PassData;            
-            Zoom = 1;
+            Zoom = 0.15f;
             WavePen = new Pen(Color.Black);
             CaptureBMP = new Bitmap(CapPanel.Width, CapPanel.Height);
             VideoBMP = new Bitmap(640, 480);

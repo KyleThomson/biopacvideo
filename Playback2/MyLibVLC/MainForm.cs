@@ -110,6 +110,8 @@ namespace SeizurePlayback
             //Add Mouse Handlers
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MyMouseUp);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownHandler);
+            this.KeyPreview = true;
+            this.KeyPress += new KeyPressEventHandler(Form1_KeyPress);
             ResizeBool = true;
             //Start up the display thread. 
             this.Resize += new System.EventHandler(this.MainForm_Resize);
@@ -169,8 +171,7 @@ namespace SeizurePlayback
         private void DisplayThread()
         {
           
-           int Delay = 0;
-           bool EOFReached = false;
+           int Delay = 0;        
            // int h,m,s;
            Stopwatch st = new Stopwatch();
             while (true)
@@ -212,8 +213,7 @@ namespace SeizurePlayback
                             if (Step >= MaxDispSize)
                             {
                                 if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
-                                {
-                                    EOFReached = true;
+                                {                                    
                                     Paused = true;
                                     PercentCompletion = 100;
                                 }
@@ -227,9 +227,7 @@ namespace SeizurePlayback
                             if (Redraw)
                                 ACQ.drawbuffer();
                             g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
-                            g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
-                            if (EOFReached)
-                                g.DrawString("End of File Reached", new Font("Arial", 20), new SolidBrush(Color.Red), new PointF(10, 10));
+                            g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));                         
                             ACQ.Position += 10;
                             Step += 10;
                         }
@@ -240,8 +238,7 @@ namespace SeizurePlayback
                             {
 
                                 if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
-                                {
-                                    EOFReached = true;
+                                {                                    
                                     Paused = true;
                                     PercentCompletion = 100;
                                 }
@@ -252,8 +249,8 @@ namespace SeizurePlayback
                                 ACQ.drawbuffer();
                             g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
                             g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
-                            if (EOFReached)
-                                g.DrawString("End of File Reached", new Font("Arial", 20), new SolidBrush(Color.Red), new PointF(10,10));
+                           /*if (EOFReached)
+                                g.DrawString("End of File Reached", new Font("Arial", 20), new SolidBrush(Color.Red), new PointF(10,10));*/
                             ACQ.Position += 1;
                             Step += 1;
                             st.Stop();
@@ -310,7 +307,27 @@ namespace SeizurePlayback
                 
             } 
         }
-        
+        void Form1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            string s = e.KeyChar.ToString();
+            if (string.Compare(s,"r",true)==0)
+            {
+                Rewind_Click(null, null);
+            }
+            if (string.Compare(s, "p",true) == 0)
+            {
+                Play_Click(null, null);
+            }
+            if (string.Compare(s, "s",true) == 0)
+            {
+                SpeedUp_Click(null, null);
+            }
+            if (string.Compare(s, "u", true) == 0)
+            {
+                Pause_Click(null, null);
+            }
+
+        }
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             ThreadDisplay.Abort();
@@ -633,7 +650,8 @@ namespace SeizurePlayback
                     SzTxt.WriteLine(Result);
                     if (SRF != null) { SRF.Add(Result); }
                     SzInfo[SzInfoIndex] = Result;
-                    SzInfoIndex++;                    
+                    SzInfoIndex++;
+                    //ACQ.AddSz(HighlightStart, HilightEnd); 
                 }
                 Frm.Dispose();
                 Step = MaxDispSize;
@@ -877,6 +895,12 @@ namespace SeizurePlayback
                 INISave();
 
             }
+        }
+
+        private void Download_ACQ_Click(object sender, EventArgs e)
+        {
+            GetACQ F = new GetACQ();
+            F.ShowDialog();
         }
 
 

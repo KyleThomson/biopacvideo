@@ -73,6 +73,7 @@ namespace SeizurePlayback
             this.button5 = new System.Windows.Forms.Button();
             this.VideoCreate = new System.Windows.Forms.Button();
             this.AddtoProject = new System.Windows.Forms.Button();
+            this.Download_ACQ = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.SuspendLayout();
@@ -633,12 +634,25 @@ namespace SeizurePlayback
             this.AddtoProject.UseVisualStyleBackColor = true;
             this.AddtoProject.Click += new System.EventHandler(this.AddtoProj_Click);
             // 
+            // Download_ACQ
+            // 
+            this.Download_ACQ.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Download_ACQ.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.Download_ACQ.Location = new System.Drawing.Point(993, 595);
+            this.Download_ACQ.Name = "Download_ACQ";
+            this.Download_ACQ.Size = new System.Drawing.Size(156, 23);
+            this.Download_ACQ.TabIndex = 55;
+            this.Download_ACQ.Text = "Download ACQ";
+            this.Download_ACQ.UseVisualStyleBackColor = true;
+            this.Download_ACQ.Click += new System.EventHandler(this.Download_ACQ_Click);
+            // 
             // CManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1429, 845);
+            this.Controls.Add(this.Download_ACQ);
             this.Controls.Add(this.AddtoProject);
             this.Controls.Add(this.VideoCreate);
             this.Controls.Add(this.button5);
@@ -745,6 +759,7 @@ namespace SeizurePlayback
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button VideoCreate;
         private System.Windows.Forms.Button AddtoProject;
+        private System.Windows.Forms.Button Download_ACQ;
     }
 }
 
