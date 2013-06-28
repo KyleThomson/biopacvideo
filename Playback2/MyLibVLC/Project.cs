@@ -556,7 +556,7 @@ namespace SeizurePlayback
                     st = A.ID;
                     foreach (SeizureType S in A.Sz)
                     {
-                        st += ", " + Math.Floor(S.d.Subtract(Earliest).TotalHours + S.t.TotalHours).ToString();
+                        st += ", " + Math.Round(S.d.Subtract(Earliest).TotalHours + S.t.TotalHours,2).ToString();
                     }
                     F.WriteLine(st); 
                 }
