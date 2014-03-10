@@ -128,7 +128,7 @@ namespace BioPacVideo
         {
             LogFileName = FName;
         }
-        private void Log(string Command)
+        public void Log(string Command)
         {
             if (LogFileName == "") { return; }
             if (!File.Exists(LogFileName))
@@ -155,7 +155,7 @@ namespace BioPacVideo
             Commands.Enqueue((byte)255);
             CommandSize = Commands.Count;
             CommandReady = true;
-        }
+        }        
         public void GoMeal(int MealNum)
         {
             int MealSize;
