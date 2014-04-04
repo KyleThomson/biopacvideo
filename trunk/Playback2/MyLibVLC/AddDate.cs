@@ -42,8 +42,7 @@ namespace SeizurePlayback
         private void Add_Click(object sender, EventArgs e)
         {
             //Add the date to the animal's list
-            pjt.AddImportantDate(AnimalBox.Items[AnimalBox.SelectedIndex].ToString(), DateBox1.Text, LabelBox1.Text);
-            pjt.Save();
+            pjt.AddImportantDate(AnimalBox.Items[AnimalBox.SelectedIndex].ToString(), DateBox1.Text, LabelBox1.Text);            
             RefreshBox();
         }
 

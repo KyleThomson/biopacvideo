@@ -38,6 +38,8 @@
             this.SzTimes = new System.Windows.Forms.CheckBox();
             this.MealCheck = new System.Windows.Forms.CheckBox();
             this.DetailList = new System.Windows.Forms.CheckBox();
+            this.Notes = new System.Windows.Forms.CheckBox();
+            this.SzSvBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // SzCount
@@ -63,7 +65,7 @@
             // PelletCount
             // 
             this.PelletCount.AutoSize = true;
-            this.PelletCount.Location = new System.Drawing.Point(12, 55);
+            this.PelletCount.Location = new System.Drawing.Point(125, 81);
             this.PelletCount.Name = "PelletCount";
             this.PelletCount.Size = new System.Drawing.Size(83, 17);
             this.PelletCount.TabIndex = 2;
@@ -73,7 +75,7 @@
             // MedCount
             // 
             this.MedCount.AutoSize = true;
-            this.MedCount.Location = new System.Drawing.Point(12, 78);
+            this.MedCount.Location = new System.Drawing.Point(12, 127);
             this.MedCount.Name = "MedCount";
             this.MedCount.Size = new System.Drawing.Size(73, 17);
             this.MedCount.TabIndex = 3;
@@ -93,7 +95,7 @@
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(12, 101);
+            this.checkBox2.Location = new System.Drawing.Point(125, 104);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(60, 17);
             this.checkBox2.TabIndex = 5;
@@ -113,7 +115,7 @@
             // SzTimes
             // 
             this.SzTimes.AutoSize = true;
-            this.SzTimes.Location = new System.Drawing.Point(12, 32);
+            this.SzTimes.Location = new System.Drawing.Point(12, 35);
             this.SzTimes.Name = "SzTimes";
             this.SzTimes.Size = new System.Drawing.Size(92, 17);
             this.SzTimes.TabIndex = 7;
@@ -123,7 +125,7 @@
             // MealCheck
             // 
             this.MealCheck.AutoSize = true;
-            this.MealCheck.Location = new System.Drawing.Point(12, 124);
+            this.MealCheck.Location = new System.Drawing.Point(12, 104);
             this.MealCheck.Name = "MealCheck";
             this.MealCheck.Size = new System.Drawing.Size(49, 17);
             this.MealCheck.TabIndex = 8;
@@ -140,11 +142,33 @@
             this.DetailList.Text = "Detailed List";
             this.DetailList.UseVisualStyleBackColor = true;
             // 
+            // Notes
+            // 
+            this.Notes.AutoSize = true;
+            this.Notes.Location = new System.Drawing.Point(12, 81);
+            this.Notes.Name = "Notes";
+            this.Notes.Size = new System.Drawing.Size(69, 17);
+            this.Notes.TabIndex = 10;
+            this.Notes.Text = "Sz Notes";
+            this.Notes.UseVisualStyleBackColor = true;
+            // 
+            // SzSvBox
+            // 
+            this.SzSvBox.AutoSize = true;
+            this.SzSvBox.Location = new System.Drawing.Point(12, 58);
+            this.SzSvBox.Name = "SzSvBox";
+            this.SzSvBox.Size = new System.Drawing.Size(105, 17);
+            this.SzSvBox.TabIndex = 11;
+            this.SzSvBox.Text = "Seizure Severity ";
+            this.SzSvBox.UseVisualStyleBackColor = true;
+            // 
             // Exporter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(224, 233);
+            this.Controls.Add(this.SzSvBox);
+            this.Controls.Add(this.Notes);
             this.Controls.Add(this.DetailList);
             this.Controls.Add(this.MealCheck);
             this.Controls.Add(this.SzTimes);
@@ -174,5 +198,7 @@
         private System.Windows.Forms.CheckBox SzTimes;
         private System.Windows.Forms.CheckBox MealCheck;
         private System.Windows.Forms.CheckBox DetailList;
+        private System.Windows.Forms.CheckBox Notes;
+        private System.Windows.Forms.CheckBox SzSvBox;
     }
 }

@@ -21,6 +21,9 @@ namespace SeizurePlayback
         public bool SzTime;
         public bool Meal;
         public bool DetailList;
+        public bool Notes;
+        public bool SeverityIndx;
+        
         public ExportType()
         {
             Sz = false;
@@ -30,10 +33,40 @@ namespace SeizurePlayback
             SzTime = false;
             Meal = false;
             DetailList = false;
+            Notes = false;
+            SeverityIndx = false; 
         }
 
     }
-    class WeightType
+    public class LabelType
+    {
+        public string Name;
+        public int IDNum;
+        public LabelType(string a, string b)
+        {
+            int.TryParse(a, out IDNum);
+            Name = b;
+        }
+    }
+    public class GroupType
+    {
+        public string Name;
+        public int count;
+        public int IDNum; 
+        public GroupType()
+        {
+            Name = "";
+            count = 0;
+            IDNum = 0;
+        }
+        public GroupType(string a, string b, string c)
+        {
+            Name = b;
+            int.TryParse(a, out IDNum);
+            int.TryParse(c, out count);            
+        }
+    }
+    public class WeightType
     {
         public double wt;
         public DateTime dt;
@@ -45,7 +78,7 @@ namespace SeizurePlayback
             int.TryParse(c, out pt);
         }
     }
-    class MealType
+    public class MealType
     {
         public DateTime d;
         public string type;
@@ -89,13 +122,14 @@ namespace SeizurePlayback
         }
     }
         
-    class SeizureType
+    public class SeizureType
     {
         public TimeSpan t;        
         public DateTime d;
         public int length;
         public string Notes;       
-        public string file;        
+        public string file;
+        public int Severity; 
         public SeizureType(string a, string b, string c, string e, string f)
         {
             DateTime.TryParse(a, out d);            
@@ -104,6 +138,17 @@ namespace SeizurePlayback
             int.TryParse(e, out length);
             file = f;            
             Notes = c;
+            Severity = -1; 
+        }
+        public SeizureType(string a, string b, string c, string e, string f, string g)
+        {
+            DateTime.TryParse(a, out d);
+            TimeSpan.TryParse(b, out t);
+            //t = t + TimeSpan.FromSeconds(d.TimeOfDay.TotalSeconds);
+            int.TryParse(e, out length);
+            file = f;
+            Notes = c;
+            int.TryParse(g, out Severity);
         }
         public bool Compare(SeizureType C)
         {
@@ -115,43 +160,58 @@ namespace SeizurePlayback
     }
     public class ImportantDateType
     {
-        public string Label;
+        public int LabelID;
         public DateTime Date;
         public ImportantDateType(string a, string b)
         {
-            Label = a;
+            int.TryParse(a, out LabelID);
             DateTime.TryParse(b, out Date);
         }
         
     }
-    class AnimalType
+    public class AnimalType
     {
         public string ID;
         public List<WeightType> WeightInfo;
         public List<SeizureType> Sz;
         public List<MealType> Meals;
-        public List<ImportantDateType> ImportantDates;    
-        public int Group;
+        public List<ImportantDateType> ImportantDates;
+        public GroupType Group;
         public AnimalType()
         {            
             Sz = new List<SeizureType>();
             WeightInfo = new List<WeightType>();
             Meals = new List<MealType>();
             ImportantDates = new List<ImportantDateType>();
+            Group = new GroupType();
         }
     }
+    /****************************************************************************************************************8
+     *
+     * 
+     * Start project definition
+     * 
+     * 
+     * 
+     * ******************************************************************************************************************/
+    
+
+
     public class Project
     {
         public string P;
         public string Filename;
         public List<FileType> Files;
-        List<AnimalType> Animals;                 
+        public List<GroupType> Groups; 
+        public List<AnimalType> Animals;
+        public List<LabelType> Labels; 
         public Project(string Inpt)
         {
             Filename = Inpt;
             P = Path.GetDirectoryName(Inpt);
             Animals = new List<AnimalType>();
             Files = new List<FileType>();
+            Groups = new List<GroupType>();
             if (!Directory.Exists(P + "\\Data"))
             {
                 Directory.CreateDirectory(P + "\\Data");
@@ -197,12 +257,22 @@ namespace SeizurePlayback
                 s = "Fl," + DTS(Fe.Start) + "," + Fe.Duration.ToString() + "," + Fe.Chans.ToString() + answer;
                 F.WriteLine(s);
             }
+            foreach (GroupType G in Groups)
+            {
+                s = "Gp," + G.IDNum + ", " + G.Name + ", " + G.count;
+                F.WriteLine(s);
+            }
             foreach (AnimalType A in Animals)
             {
+                if (A.Group.IDNum != 0) //Save Group Name
+                {
+                    s = "An," + A.ID + ", gp," + A.Group.IDNum + ", " + A.Group.Name;
+                    F.WriteLine(s);
+                }
                 foreach (SeizureType S in A.Sz)
                 {
                     answer = string.Format("{0:D2}:{1:D2}:{2:D2}", S.t.Hours, S.t.Minutes, S.t.Seconds);
-                    s ="An," + A.ID + ", sz, " + S.d.ToString() + ", " + answer + ", " + S.Notes + "," + S.length + "," + S.file;
+                    s ="An," + A.ID + ", sz, " + S.d.ToString() + ", " + answer + ", " + S.Notes + "," + S.length + "," + S.file + "," + S.Severity;
                     F.WriteLine(s);
                 }
                 foreach (WeightType W in A.WeightInfo)
@@ -217,7 +287,7 @@ namespace SeizurePlayback
                 }
                 foreach (ImportantDateType I in A.ImportantDates)
                 {
-                    s = "An," + A.ID + ", id, " + I.Date.ToString() + "," + I.Label;
+                    s = "An," + A.ID + ", dt, " + I.LabelID.ToString() + "," + I.Date.ToString();
                     F.WriteLine(s);
                 }
             }
@@ -432,17 +502,25 @@ namespace SeizurePlayback
             int CurrentAnimal;
             string str;
             TimeSpan t;
+            SeizureType S;
             string F = File.Substring(File.LastIndexOf('\\')+1);            
             dt = ConvertFileToDT(F);
             StreamReader TmpTxt = new StreamReader(File);
             while (!TmpTxt.EndOfStream)
             {
                 str = TmpTxt.ReadLine();
-                TmpStr = str.Split(',');
+                TmpStr = str.Split(',');                
                 CurrentAnimal = FindAnimal(TmpStr[1]);           
                 TimeSpan.TryParse(TmpStr[3], out t);
-                t = t.Add(dt.TimeOfDay);                
-                SeizureType S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6]);
+                t = t.Add(dt.TimeOfDay);
+                if (TmpStr.Length == 7)
+                {
+                    S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6]);
+                }
+                else
+                {
+                    S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6], TmpStr[7]);
+                }
                 Animals[CurrentAnimal].Sz.Add(S);
             }
             TmpTxt.Close();
@@ -466,7 +544,7 @@ namespace SeizurePlayback
             string[] output = new string[Animals[CurrentAnimal].ImportantDates.Count];
             foreach (ImportantDateType I in Animals[CurrentAnimal].ImportantDates)
             {
-                output[c] = I.Date.ToString() + " - " + I.Label;
+                output[c] = I.Date.ToString() + " - " + I.LabelID.ToString();
                 c++;
             }
             return output;
@@ -493,7 +571,7 @@ namespace SeizurePlayback
             //
             Sort();
             int c;
-            string st, st2;
+            string st, st2, st3;
             DateTime Earliest = Files[0].Start.Date;
             DateTime Latest = Files[Files.Count - 1].Start.Date;
             
@@ -560,10 +638,27 @@ namespace SeizurePlayback
                     }
                     F.WriteLine(st); 
                 }
+                if (E.SeverityIndx)
+                    st = A.ID;
+                    foreach (SeizureType S in A.Sz)
+                    {
+                        st += ", " + S.Severity.ToString();
+                    }
+                    F.WriteLine(st); 
+                    if (E.Notes)
+                {
+                    st = A.ID;
+                    foreach (SeizureType S in A.Sz)
+                    {
+                        st += "," + S.Notes;
+                    }
+                    F.WriteLine(st);
+                }                
                 if (E.Meal)
                 {
                      st = A.ID;
                      st2 = A.ID;
+                     st3 = A.ID; 
                      foreach (MealType M in A.Meals)
                      {
                          st += ", " + Math.Floor(M.d.Subtract(Earliest).TotalHours).ToString();
@@ -575,13 +670,18 @@ namespace SeizurePlayback
                          {
                              st2 += ", 0"; 
                          }
+                         if (E.Pellet)
+                         {
+                             st3 += ", " + M.pelletcount.ToString();
+                         }
                      }
                      F.WriteLine(st);
-                     F.WriteLine(st2); 
+                     F.WriteLine(st2);
+                     F.WriteLine(st3); 
                 }
-                if (E.Pellet) 
+               /*if (E.Pellet) 
                 {
-                    st = A.ID;
+                    st = A.ID;                    
                     for (DateTime i = Earliest; i <= Latest; i=i.AddDays(1))
                     {
                         c = 0;                                        
@@ -602,7 +702,7 @@ namespace SeizurePlayback
                         st += "," + c;
                     }
                     F.WriteLine(st);    
-                }
+                }  */
             }
             F.Close();
         }
@@ -637,30 +737,47 @@ namespace SeizurePlayback
                 }
 
             }
+            else if (data[0].IndexOf("Gp") != -1)
+            {
+                GroupType G = new GroupType(data[1], data[2], data[3]);
+                Groups.Add(G);
+            }
             else if (data[0].IndexOf("An") != -1)
             {
                 int CurrentAnimal = FindAnimal(data[1]);
                 //data[2].Replace(" ", string.Empty);            
                 switch (data[2])
                 {
+                    case " gp":
+                        int.TryParse(data[3], out Animals[CurrentAnimal].Group.IDNum);
+                        Animals[CurrentAnimal].Group.Name = data[4];
+                        break;
                     case " wt":
                         WeightType W = new WeightType(data[3], data[4], data[5]);
                         Animals[CurrentAnimal].WeightInfo.Add(W);
                         break;
                     case " sz":
-                        SeizureType S = new SeizureType(data[3], data[4], data[5], data[6], data[7]);
+                        SeizureType S;
+                        if (data.Length == 8)
+                        {
+                            //Old way - no severity score
+                            S = new SeizureType(data[3], data[4], data[5], data[6], data[7]);
+                        }
+                        else
+                        {
+                            //New way, has severity info
+                            S = new SeizureType(data[3], data[4], data[5], data[6], data[7], data[8]);
+                        }
                         Animals[CurrentAnimal].Sz.Add(S);
                         break;
                     case " ml":
                         MealType M = new MealType(data[3], data[4], data[5]);
                         Animals[CurrentAnimal].Meals.Add(M);
                         break;
-                    case " id":
-                        ImportantDateType I = new ImportantDateType(data[4], data[3]);
+                    case " dt":
+                        ImportantDateType I = new ImportantDateType(data[3], data[4]);
                         Animals[CurrentAnimal].ImportantDates.Add(I);
-                        break;
-                    case " gp":                        
-                        break;
+                        break;                    
                     default:
                         Console.WriteLine(data[2] + ": ERROR IN COMPARE");
                         break;
@@ -705,6 +822,40 @@ namespace SeizurePlayback
                 }
 
             }
+            else if (data[0].IndexOf("Gp") != -1)
+            {
+                //Need to make sure group is not duplicated
+                int tempG;
+                int.TryParse(data[3], out tempG);
+                bool pass = true;
+                foreach (GroupType G in Groups)
+                {
+                    if (G.IDNum == tempG)
+                        pass = false;
+                }
+                if (pass)
+                {
+                    GroupType G = new GroupType(data[3], data[4], data[5]);
+                    Groups.Add(G);
+                }
+            }
+            else if (data[0].IndexOf("Lb") != -1)
+            {
+                int tempL;
+                int.TryParse(data[3], out tempG);
+                bool pass = true;
+                foreach (GroupType G in Groups)
+                {
+                    if (G.IDNum == tempG)
+                        pass = false;
+                }
+                if (pass)
+                {
+                    GroupType G = new GroupType(data[3], data[4], data[5]);
+                    Groups.Add(G);
+                }
+
+            }
             else if (data[0].IndexOf("An") != -1)
             {
                 int CurrentAnimal = FindAnimal(data[1]);
@@ -713,12 +864,12 @@ namespace SeizurePlayback
                 {
                     case " wt":
                         WeightType W = new WeightType(data[3], data[4], data[5]);
-                        Pass=true;
+                        Pass = true;
                         Animals[CurrentAnimal].WeightInfo.Add(W);
                         break;
                     case " sz":
                         SeizureType S = new SeizureType(data[3], data[4], data[5], data[6], data[7]);
-                        Pass=true;
+                        Pass = true;
                         foreach (SeizureType C in Animals[CurrentAnimal].Sz)
                         {
                             if (C.Compare(S)) Pass = false;
@@ -739,6 +890,12 @@ namespace SeizurePlayback
                         Animals[CurrentAnimal].ImportantDates.Add(I);
                         break;
                     case " gp":
+                        //If the animal doesn't have a group, assign one, otherwise, ignore.
+                        if (Animals[CurrentAnimal].Group.IDNum == 0)
+                        {
+                            int.TryParse(data[3], out Animals[CurrentAnimal].Group.IDNum);
+                            Animals[CurrentAnimal].Group.Name = data[4];
+                        }
                         break;
                     default:
                         Console.WriteLine(data[2] + ": ERROR IN COMPARE");

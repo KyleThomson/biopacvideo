@@ -50,6 +50,7 @@ namespace SeizurePlayback
         SzRvwFrm SRF; 
         int Step;
         bool CrashWarning;
+        ReviewLogger RL; //Log of reviewer actions
         bool ignore_change;
         bool Reviewing;        
         string CurrentAVI;
@@ -403,6 +404,11 @@ namespace SeizurePlayback
                 frm.ShowDialog();
                 Reviewer = frm.GetReviewer();
                 Reviewing = frm.GetReviewing();
+                if (Reviewing)
+                {
+                    //ReviewLogging = true;
+
+                }
                 frm.Dispose();
                 CManage.ActiveForm.Text = "Seizure Playback - " + BaseName.Substring(4, 2) + "/" + BaseName.Substring(6, 2)
                     + "/" + BaseName.Substring(0, 4) + " - " + BaseName.Substring(9, 2) + ":" + BaseName.Substring(11, 2) + ":" + BaseName.Substring(13, 2);

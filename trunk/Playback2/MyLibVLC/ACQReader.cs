@@ -351,6 +351,14 @@ namespace SeizurePlayback
             //SzTimeStart.Add(S);
  
         }
+        public Bitmap drawchan(int start, int end)
+        {
+            //Graphics f;
+            //graphics temp; 
+            //Bitmap B = new Bitmap(f);
+            return null;
+
+        }
         public void drawbuffer()
         {
             int NotDisp;
