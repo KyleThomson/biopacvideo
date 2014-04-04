@@ -85,6 +85,13 @@
     <Compile Include="AddDate.Designer.cs">
       <DependentUpon>AddDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="AddGroup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddGroup.Designer.cs">
+      <DependentUpon>AddGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReviewLogger.cs" />
     <Compile Include="Compression.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -196,6 +203,9 @@
     </Compile>
     <EmbeddedResource Include="AddDate.resx">
       <DependentUpon>AddDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddGroup.resx">
+      <DependentUpon>AddGroup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AdvanceSettings.resx">
       <DependentUpon>AdvanceSettings.cs</DependentUpon>

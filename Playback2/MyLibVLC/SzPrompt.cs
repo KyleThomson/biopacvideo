@@ -20,9 +20,10 @@ namespace SeizurePlayback
         public infopass Pass;
         Thread CT;        
         public SzPrompt()
-        {
+        {            
             InitializeComponent();
             Notes = "";
+            Unknown.Checked = true;
             Ok = false;
         }
 
@@ -33,6 +34,20 @@ namespace SeizurePlayback
             OKBtn.Enabled = false;
             CancelBtn.Enabled = false;
             CurFileProg.Maximum = Pass.length * 30;
+            if (S1.Checked)
+                Pass.Stage = 1;
+            else if (S2.Checked)
+                Pass.Stage = 2;
+            else if (S3.Checked)
+                Pass.Stage = 3;
+            else if (S4.Checked)
+                Pass.Stage = 4;
+            else if (S5.Checked)
+                Pass.Stage = 5;
+            else if (NonConv.Checked)
+                Pass.Stage = 0;
+            else if (Unknown.Checked)
+                Pass.Stage = -1;
             CT = new Thread(new ThreadStart(ExtractThread));
             CT.Start();
         }
@@ -59,7 +74,9 @@ namespace SeizurePlayback
             while (!p.WaitForExit(1000))
             { };
             Notes = Notes.Replace(",", string.Empty);
-            Result = Pass.Sz + Notes + ", " + Pass.outfile;
+            
+          
+            Result = Pass.Sz + Notes + ", " + Pass.outfile + ", " + Pass.Stage.ToString();
             PleaseWait.Invoke((MethodInvoker)delegate { PleaseWait.Text = "Finished!"; });
             Thread.Sleep(1000);
             this.Invoke((MethodInvoker)delegate { this.Close(); });
@@ -69,7 +86,12 @@ namespace SeizurePlayback
         {
             Notes = NotesBx.Text;
         }
+        private void RadioButtonChanged(object sender, EventArgs e)
+        {         
+           
 
+            
+        }
         private void SzPrompt_Load(object sender, EventArgs e)
         {
 
@@ -97,6 +119,8 @@ namespace SeizurePlayback
                 }         
             }
         }
+       
+
     }
     public class infopass
     {
@@ -111,6 +135,8 @@ namespace SeizurePlayback
         public float VideoOffset;
         public int length;
         public int StartTime;
+        public int Stage;
+        public double duration;
         public infopass()
         { }
     }

@@ -42,13 +42,16 @@
             this.measurementsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.weightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tempHumidityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importantDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SecondList = new System.Windows.Forms.ListBox();
             this.MainList = new System.Windows.Forms.ListBox();
             this.MainSelect = new System.Windows.Forms.ComboBox();
             this.SecondSelect = new System.Windows.Forms.ComboBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.Info = new System.Windows.Forms.ToolStripStatusLabel();
-            this.importantDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rawSeizuresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.groupAssignmentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -57,8 +60,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.plottingToolStripMenuItem,
-            this.measurementsToolStripMenuItem});
+            this.measurementsToolStripMenuItem,
+            this.plottingToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(555, 24);
@@ -131,7 +134,8 @@
             // plottingToolStripMenuItem
             // 
             this.plottingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.calendarToolStripMenuItem});
+            this.calendarToolStripMenuItem,
+            this.resultsToolStripMenuItem});
             this.plottingToolStripMenuItem.Name = "plottingToolStripMenuItem";
             this.plottingToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.plottingToolStripMenuItem.Text = "Plot";
@@ -148,7 +152,8 @@
             this.measurementsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.weightToolStripMenuItem,
             this.tempHumidityToolStripMenuItem,
-            this.importantDateToolStripMenuItem});
+            this.importantDateToolStripMenuItem,
+            this.groupAssignmentToolStripMenuItem});
             this.measurementsToolStripMenuItem.Name = "measurementsToolStripMenuItem";
             this.measurementsToolStripMenuItem.Size = new System.Drawing.Size(89, 20);
             this.measurementsToolStripMenuItem.Text = "&Measurements";
@@ -156,16 +161,23 @@
             // weightToolStripMenuItem
             // 
             this.weightToolStripMenuItem.Name = "weightToolStripMenuItem";
-            this.weightToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.weightToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.weightToolStripMenuItem.Text = "&Weight";
             this.weightToolStripMenuItem.Click += new System.EventHandler(this.weightToolStripMenuItem_Click);
             // 
             // tempHumidityToolStripMenuItem
             // 
             this.tempHumidityToolStripMenuItem.Name = "tempHumidityToolStripMenuItem";
-            this.tempHumidityToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.tempHumidityToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.tempHumidityToolStripMenuItem.Text = "Temp/Humidity";
             this.tempHumidityToolStripMenuItem.Click += new System.EventHandler(this.tempHumidityToolStripMenuItem_Click);
+            // 
+            // importantDateToolStripMenuItem
+            // 
+            this.importantDateToolStripMenuItem.Name = "importantDateToolStripMenuItem";
+            this.importantDateToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.importantDateToolStripMenuItem.Text = "&Important Date";
+            this.importantDateToolStripMenuItem.Click += new System.EventHandler(this.importantDateToolStripMenuItem_Click);
             // 
             // SecondList
             // 
@@ -224,12 +236,26 @@
             this.Info.Size = new System.Drawing.Size(163, 17);
             this.Info.Text = "                                                    ";
             // 
-            // importantDateToolStripMenuItem
+            // resultsToolStripMenuItem
             // 
-            this.importantDateToolStripMenuItem.Name = "importantDateToolStripMenuItem";
-            this.importantDateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.importantDateToolStripMenuItem.Text = "&Important Date";
-            this.importantDateToolStripMenuItem.Click += new System.EventHandler(this.importantDateToolStripMenuItem_Click);
+            this.resultsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.rawSeizuresToolStripMenuItem});
+            this.resultsToolStripMenuItem.Name = "resultsToolStripMenuItem";
+            this.resultsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.resultsToolStripMenuItem.Text = "Results";
+            // 
+            // rawSeizuresToolStripMenuItem
+            // 
+            this.rawSeizuresToolStripMenuItem.Name = "rawSeizuresToolStripMenuItem";
+            this.rawSeizuresToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.rawSeizuresToolStripMenuItem.Text = "Raw Seizures";
+            // 
+            // groupAssignmentToolStripMenuItem
+            // 
+            this.groupAssignmentToolStripMenuItem.Name = "groupAssignmentToolStripMenuItem";
+            this.groupAssignmentToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.groupAssignmentToolStripMenuItem.Text = "&Group Assignment";
+            this.groupAssignmentToolStripMenuItem.Click += new System.EventHandler(this.groupAssignmentToolStripMenuItem_Click);
             // 
             // ProjectManager
             // 
@@ -277,5 +303,8 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel Info;
         private System.Windows.Forms.ToolStripMenuItem importantDateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resultsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem groupAssignmentToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rawSeizuresToolStripMenuItem;
     }
 }

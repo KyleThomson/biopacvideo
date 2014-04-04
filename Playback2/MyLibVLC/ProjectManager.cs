@@ -155,11 +155,15 @@ namespace SeizurePlayback
 
         private void MainList_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (pjt == null)
+                return;
             UpdateSecondList();
         }
 
         private void MainSelect_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (pjt == null)
+                return;
             if (MainSelect.SelectedIndex == 0)
             {
                 SecondSelect.Items.Clear();
@@ -179,6 +183,8 @@ namespace SeizurePlayback
 
         private void SecondSelect_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (pjt == null)
+                return;
             UpdateSecondList();
         }
 
@@ -200,6 +206,8 @@ namespace SeizurePlayback
 
         private void weightToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (pjt == null)
+                return;
             WeightAdd Frm = new WeightAdd();
             Frm.ShowDialog();
             if (Frm.OK)
@@ -214,6 +222,8 @@ namespace SeizurePlayback
 
         private void addMultipleDirectoriesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (pjt == null)
+                return;
             int DuplicateDirectoryCount = 0; 
             MultiDirectoryAdd Frm = new MultiDirectoryAdd();
             Frm.ShowDialog();
@@ -236,6 +246,8 @@ namespace SeizurePlayback
 
         private void mergeProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (pjt == null)
+                return;
             OpenFileDialog F = new OpenFileDialog();
             F.DefaultExt = ".pjt";
             F.InitialDirectory = "C:\\";
@@ -256,9 +268,26 @@ namespace SeizurePlayback
 
         private void importantDateToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (pjt == null)
+                return;
             AddDate F = new AddDate(pjt);
             F.ShowDialog();
-            pjt = F.pjt;            
+            pjt = F.pjt;
+            pjt.Save();
+            F.Dispose();
         }
+
+        private void groupAssignmentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (pjt == null)
+                return;
+            AddGroup F = new AddGroup(pjt);
+            F.ShowDialog();
+            pjt = F.pjt;
+            pjt.Save();
+            F.Dispose();
+
+        }
+        
     }
 }
