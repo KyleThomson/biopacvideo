@@ -93,6 +93,7 @@ namespace BioPacVideo
                 }
                 IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
             }
+            Update_FreeSpace();
             bioPacEnabledToolStripMenuItem.Checked = MP.Enabled;
             //Still = new Bitmap("NoSignal.Bmp");
             MP.FileCount = 0;            
@@ -135,6 +136,8 @@ namespace BioPacVideo
                         StopRecording();
                         StartRecording();
                     }
+                    //Update Hard Drive
+                    Update_FreeSpace();
                     Thread.Sleep(120000); //Always Skip the Meal;
                 }
                 if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal1.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal1.Minutes))
@@ -179,7 +182,7 @@ namespace BioPacVideo
                 
             }
       }
-       
+        
         private void DisplayThread()
         {
             int Cm; //To hold current camera. 
@@ -243,7 +246,9 @@ namespace BioPacVideo
             MP.DisplayLength = BioIni.IniReadValue("BioPac", "DisplayLength", 10);
             MP.Voltage = BioIni.IniReadValue("BioPac", "Voltage(mV)", 500);
             MP.Gain = BioIni.IniReadValue("BioPac", "Gain", 20000);
-            MP.Enabled = BioIni.IniReadValue("BioPac", "Enabled", true); 
+            MP.Enabled = BioIni.IniReadValue("BioPac", "Enabled", true);
+            MP.Offset = BioIni.IniReadValue("BioPac", "Offset",0.0);
+            MP.RecordingDevice = BioIni.IniReadValue("BioPac", "RecordingDevice", "BioPacAmp");
             BioIni.IniReadValue("Feeder", "Meal1", out Feeder.Meal1);
             BioIni.IniReadValue("Feeder", "Meal2", out Feeder.Meal2);
             BioIni.IniReadValue("Feeder", "Meal3", out Feeder.Meal3);
@@ -298,12 +303,14 @@ namespace BioPacVideo
             BioIni.IniWriteValue("BioPac", "Voltage(mV)", MP.Voltage.ToString());
             BioIni.IniWriteValue("BioPac", "Gain", MP.Gain.ToString());
             BioIni.IniWriteValue("BioPac", "Enabled", MP.Enabled);
+            BioIni.IniWriteValue("BioPac", "Offset", MP.Offset.ToString());
+            BioIni.IniWriteValue("BioPac", "RecordingDevice", MP.RecordingDevice);
             BioIni.IniWriteValue("Feeder", "Meal1", Feeder.Meal1.ToString());
             BioIni.IniWriteValue("Feeder", "Meal2", Feeder.Meal2.ToString());
             BioIni.IniWriteValue("Feeder", "Meal3", Feeder.Meal3.ToString());
             BioIni.IniWriteValue("Feeder", "Meal4", Feeder.Meal4.ToString());
             BioIni.IniWriteValue("Feeder", "Meal5", Feeder.Meal5.ToString());
-            BioIni.IniWriteValue("Feeder", "Meal6", Feeder.Meal6.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal6", Feeder.Meal6.ToString());            
             BioIni.IniWriteValue("Feeder", "PelletsPerGram", Feeder.PelletsPerGram.ToString());
             BioIni.IniWriteValue("Feeder", "Enabled", Feeder.Enabled);
             BioIni.IniWriteValue("Feeder", "DailyMealCount", Feeder.DailyMealCount);
@@ -391,8 +398,7 @@ namespace BioPacVideo
                 {            
                     IDT_VIDEOSTATUS.Text = Video.GetResText();                      
                     //Visual Stuff, so we know we are recording. 
-                    RecordingButton.Text = "Stop Recording";
-                    IDT_BIOPACRECORDINGSTAT.Text = "Recording";
+                    RecordingButton.Text = "Stop Recording";                   
                     IDM_SELECTCHANNELS.Enabled = false;
                     IDM_SETTINGS.Enabled = false;
                     IDM_DISCONNECTBIOPAC.Enabled = false;
@@ -404,9 +410,6 @@ namespace BioPacVideo
                 {                                        
                     //End Recording
                     StopRecording();
-
-
-                    IDT_BIOPACRECORDINGSTAT.Text = "Not Recording";                                           
                     IDM_SELECTCHANNELS.Enabled = true;
                     IDM_SETTINGS.Enabled = true;
                     IDM_DISCONNECTBIOPAC.Enabled = true;
@@ -663,6 +666,20 @@ namespace BioPacVideo
         {
             //ZoomWindow X = new ZoomWindow();
             //X.ShowDialog(this);
+        }
+        private void Update_FreeSpace()
+        {
+            DriveInfo Drive = new DriveInfo(Path.GetPathRoot(MP.RecordingDirectory));
+            long DriveSpace = Drive.TotalSize;
+            long FreeSpace = Drive.TotalFreeSpace;
+            double GBFree = (double)(FreeSpace / 1073741824);
+            this.Invoke(new MethodInvoker(delegate { SpaceLeft.Text = GBFree.ToString() + "GB Free"; }));
+            if (GBFree < 40)
+                this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.Red; }));
+            else if (GBFree < 100)
+                this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.Yellow; }));
+            else this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.LightGreen; }));
+
         }
     }
 }
