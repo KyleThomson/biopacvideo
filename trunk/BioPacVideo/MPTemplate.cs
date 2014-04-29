@@ -28,7 +28,9 @@ namespace BioPacVideo
         static EventWaitHandle _DrawHandle = new AutoResetEvent(false);
         public EventWaitHandle _DisplayHandle = new AutoResetEvent(false);
         public bool isstreaming = false;
-        public bool isconnected = false;        
+        public bool isconnected = false;
+        public string RecordingDevice; 
+        public double Offset;
         public bool[] FeederTest;
         private bool[] DigitalChannel;
         private int MaxDrawSize;
@@ -87,7 +89,7 @@ namespace BioPacVideo
             CurPointPos = 0;
             FeederTest = new bool[8];
             DigitalChannel = new bool[16];
-            wavePen = new Pen(Color.Black);
+            wavePen = new Pen(Color.Black);            
             for (int i = 0; i < 16; i++)
             {
                 DigitalChannel[i] = false;
@@ -370,7 +372,7 @@ namespace BioPacVideo
                         {
                             if (i / AcqChan >= samplesize - SamplesLeft)
                             {
-                                PointF TempPoint = new PointF(CurPointPos * PointSpacing, VoltageSpacing * ((i % AcqChan) + (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax/(AcqChan)));
+                                PointF TempPoint = new PointF(CurPointPos * PointSpacing, VoltageSpacing * ((i % AcqChan) - (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]-Offset), Ymax/(AcqChan+1)));
                                 WaveC[i % AcqChan][SamplePos] = TempPoint;
                                 if (i % AcqChan == AcqChan - 1)
                                 {
@@ -381,7 +383,7 @@ namespace BioPacVideo
                         }
                         else
                         {
-                            PointF TempPoint = new PointF(CurPointPos * PointSpacing, VoltageSpacing * ((i % AcqChan) + (float)0.5) +  ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]), Ymax/(AcqChan)));
+                            PointF TempPoint = new PointF(CurPointPos * PointSpacing, VoltageSpacing * ((i % AcqChan) + (float)0.5) +  ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]-Offset), Ymax/(AcqChan+1)));
                             WaveC[i % AcqChan][SamplePos] = TempPoint;
                             if (i % AcqChan == AcqChan-1) 
                             {
@@ -498,7 +500,7 @@ namespace BioPacVideo
         {
             uint received;                     
             AcqChan = TotChan();  //How many channels are we going to acquire   
-            VoltageSpacing =(int)(Ymax / (AcqChan+1));
+            VoltageSpacing =(int)(Ymax / (AcqChan));
             Thread BuffDraw = new Thread(new ThreadStart(drawbuffer)); //Set up thread for buffering 
             BuffDraw.Start(); //and then start it 
             BuffSize = ((uint)(SampleRate/UpdateSpeed))*(uint)AcqChan; //Need to determine the right buffer size.
@@ -524,19 +526,35 @@ namespace BioPacVideo
                 last_received = received; //For the draw buffer
                 samplesize = (int)last_received / AcqChan;
                 samplecount += samplesize;
-                VideoWrapper.SetSampleCount(samplecount);
+                VideoWrapper.SetSampleCount(samplecount);                
                 if (IsFileWriting) //If we are writing to the file, we want to handle it immediately. 
                 {
 
-                    BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin); //Make sure the File writting is in the right place                    
-                    for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
+                    BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin); //Make sure the File writting is in the right place 
+                    if (string.Compare(RecordingDevice, "Telemetry") == 0)
                     {
-                        rec_buffer[j] = Math.Min(rec_buffer[j], (double)Int32.MaxValue/Gain); //Make sure we don't exceed the maxes
-                        rec_buffer[j] = Math.Max(rec_buffer[j], (double)Int32.MinValue/Gain);//Make sure we don't exceed the minmum
-                        transbuffer = Convert.ToInt32(rec_buffer[j] * Gain); //Convert the value
-                        BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
-                        //better safe than sorry. 
-                    }                    
+                        for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
+                        {
+                            rec_buffer[j] = rec_buffer[j];
+                            rec_buffer[j] = Math.Min(rec_buffer[j], 4); //Make sure we don't exceed the maxes
+                            rec_buffer[j] = Math.Max(rec_buffer[j], 0);//Make sure we don't exceed the minmum
+                            transbuffer = Convert.ToInt32((rec_buffer[j] - Offset) * (double)Int32.MaxValue / 2); //Convert the value
+                            BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
+                            //better safe than sorry. 
+                        }
+                    }
+                    else
+                    {                        
+                        for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
+                        {
+                            rec_buffer[j] = rec_buffer[j];
+                            rec_buffer[j] = Math.Min(rec_buffer[j], Int32.MaxValue / Gain); //Make sure we don't exceed the maxes
+                            rec_buffer[j] = Math.Max(rec_buffer[j], Int32.MinValue / Gain);//Make sure we don't exceed the minmum
+                            transbuffer = Convert.ToInt32((rec_buffer[j]) * Gain); //Convert the value
+                            BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
+                            //better safe than sorry. 
+                        }
+                    }
                     CurrentWriteLoc = BinaryFile.Position;  //Update the current location.     
                     
                     if (FileStop) //Need to have thread safe file closing! Oops!                        

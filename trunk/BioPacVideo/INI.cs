@@ -82,6 +82,10 @@ namespace Ini
             else
               IniWriteValue(Section, Key, "false");
         }
+        public void IniWriteValue(string Section, string Key, double Value)
+        {
+            IniWriteValue(Section, Key, Value.ToString());
+        }
         public bool IniReadValue(string Section, string Key, bool Def2)
         {   
             string Def;
