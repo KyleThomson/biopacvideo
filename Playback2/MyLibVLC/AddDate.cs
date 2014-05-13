@@ -65,6 +65,11 @@ namespace SeizurePlayback
         {
             this.Close(); 
         }
+
+        private void CreateLbl_Click(object sender, EventArgs e)
+        {
+            
+        }
         
     }
 }

@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Threading;
-using System.Text;
 using System.Windows.Forms;
 
 namespace SeizurePlayback
@@ -46,6 +45,13 @@ namespace SeizurePlayback
         {
             int.TryParse(a, out IDNum);
             Name = b;
+        }
+        public string LabelMatch(int IDtest, string returnstr)
+        {
+            if (IDtest == IDNum)
+                return Name;
+            else
+                return returnstr;
         }
     }
     public class GroupType
@@ -588,7 +594,7 @@ namespace SeizurePlayback
                         {
                             if ((DateTime.Compare(I.Date, LastDate) > 0) && (DateTime.Compare(I.Date, S.d) <= 0))
                             {
-                                F.WriteLine(I.Date.ToShortDateString() + ", " + I.Label);
+                                F.WriteLine(I.Date.ToShortDateString() + ", " + I.LabelID);
                             }
                         }
                         F.WriteLine(S.d.ToShortDateString() + ", " + S.t.ToString() + ", " + S.Notes);
@@ -599,7 +605,7 @@ namespace SeizurePlayback
                     {
                         if ((DateTime.Compare(I.Date, LastDate) > 0))
                         {
-                            F.WriteLine(I.Date.ToShortDateString() + ", " + I.Label);
+                            F.WriteLine(I.Date.ToShortDateString() + ", " + I.LabelID.ToString());
                         }
                     }
                 }
@@ -706,6 +712,8 @@ namespace SeizurePlayback
             }
             F.Close();
         }
+
+        //This function takes the data from the project file and loads it into memory. 
         void ParseLine(string L)
         {
             string[] data;
@@ -713,7 +721,7 @@ namespace SeizurePlayback
             int Chans;
             data = L.Split(',');
             //Data format - Record Type - Record Start
-            //Record types - An = Animal, Fl = File, 
+            //Record types - An = Animal, Fl = File, Gp = Group, Lb = Label.
             if (data[0].IndexOf("Fl") != -1)
             {
 
@@ -742,10 +750,14 @@ namespace SeizurePlayback
                 GroupType G = new GroupType(data[1], data[2], data[3]);
                 Groups.Add(G);
             }
+            else if (data[0].IndexOf("Lb") != -1)
+            {
+                LabelType Lb = new LabelType(data[1], data[2]);
+                Labels.Add(Lb);
+            }
             else if (data[0].IndexOf("An") != -1)
             {
-                int CurrentAnimal = FindAnimal(data[1]);
-                //data[2].Replace(" ", string.Empty);            
+                int CurrentAnimal = FindAnimal(data[1]);                
                 switch (data[2])
                 {
                     case " gp":
@@ -777,7 +789,7 @@ namespace SeizurePlayback
                     case " dt":
                         ImportantDateType I = new ImportantDateType(data[3], data[4]);
                         Animals[CurrentAnimal].ImportantDates.Add(I);
-                        break;                    
+                        break;
                     default:
                         Console.WriteLine(data[2] + ": ERROR IN COMPARE");
                         break;
@@ -842,17 +854,17 @@ namespace SeizurePlayback
             else if (data[0].IndexOf("Lb") != -1)
             {
                 int tempL;
-                int.TryParse(data[3], out tempG);
+                int.TryParse(data[3], out tempL);
                 bool pass = true;
-                foreach (GroupType G in Groups)
+                foreach (LabelType Lb in Labels)
                 {
-                    if (G.IDNum == tempG)
+                    if (Lb.IDNum == tempL)
                         pass = false;
                 }
                 if (pass)
                 {
-                    GroupType G = new GroupType(data[3], data[4], data[5]);
-                    Groups.Add(G);
+                    LabelType Lb = new LabelType(data[3], data[4]);
+                    Labels.Add(Lb);
                 }
 
             }

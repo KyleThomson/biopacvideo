@@ -17,12 +17,13 @@ namespace SeizurePlayback
         IniFile INI;
         VlcInstance instance;
         VlcMediaPlayer player;
-        FolderBrowserDialog FBD;
+        FolderBrowserDialog FBD;        
         string ReviewNotes;
         DateTime LastReview;
         String Reviewer;
         DateTime LastOpen;
-        ACQReader ACQ;        
+        ACQReader ACQ;
+        DetectedSeizureFileType DSF; 
         string[] AVIFiles;
         bool SuppressChange;
         int[] ChanPos;
@@ -65,6 +66,7 @@ namespace SeizurePlayback
         {
             ACQ = new ACQReader(); //Class to read from ACQ file
             graph = new Mygraph(); //Small Class for containing EEG area. 
+            DSF = new DetectedSeizureFileType();
             VideoOffset = new float[16];
             string[] args = new string[] { "" };
             instance = new VlcInstance(args);            
@@ -785,7 +787,14 @@ namespace SeizurePlayback
 
         private void DetectionLoadButton_Click(object sender, EventArgs e)
         {
-
+            OpenFileDialog FD = new OpenFileDialog();
+            FD.DefaultExt = ".det";
+            DialogResult Res = FD.ShowDialog();
+            if (Res == DialogResult.OK)
+            {
+                DSF.OpenFile(FD.FileName);   
+            }
+            DetSezLabel.Text = ".det Loaded";
         }
 
         private void PMButton_Click(object sender, EventArgs e)
@@ -907,6 +916,37 @@ namespace SeizurePlayback
         {
             GetACQ F = new GetACQ();
             F.ShowDialog();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {            
+            if (!DSF.isLoaded) return;
+            DSF.Inc(); 
+            DetectedSeizureType Sz = DSF.GetCurrentSeizure();
+            DetSezLabel.Text = (DSF.SeizureNumber+1).ToString() + " of " + DSF.Count.ToString();
+            ACQ.SelectedChan = Sz.Channel;
+            ACQ.Position = Math.Max(0, Sz.TimeInSec - 30);
+            Step = MaxDispSize;
+            SeekToCurrentPos();
+            QuitHighlight();
+            Paused = false;
+            RealTime = true;            
+         
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (!DSF.isLoaded) return;
+            DSF.Dec();
+            DetectedSeizureType Sz = DSF.GetCurrentSeizure();
+            DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
+            ACQ.SelectedChan = Sz.Channel;
+            ACQ.Position = Math.Max(0, Sz.TimeInSec - 30);
+            Step = MaxDispSize;
+            SeekToCurrentPos();
+            QuitHighlight();
+            Paused = false;
+            RealTime = true;         
         }
 
 
