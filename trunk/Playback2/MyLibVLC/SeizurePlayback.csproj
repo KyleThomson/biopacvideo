@@ -91,6 +91,7 @@
     <Compile Include="AddGroup.Designer.cs">
       <DependentUpon>AddGroup.cs</DependentUpon>
     </Compile>
+    <Compile Include="DetectedSeizureList.cs" />
     <Compile Include="ReviewLogger.cs" />
     <Compile Include="Compression.cs">
       <SubType>Form</SubType>

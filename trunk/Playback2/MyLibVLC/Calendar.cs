@@ -88,8 +88,13 @@ namespace SeizurePlayback
                     ImportantDateType I = pjt.CheckImportantDate(AnimalSel.Items[AnimalSel.SelectedIndex].ToString(), N.AddDays(d + w * 7));
                     if (I != null)
                     {
+                        string s = "";
+                        foreach (LabelType Lb in pjt.Labels)
+                        {
+                            s = Lb.LabelMatch(I.LabelID, s); 
+                        }
                         g.DrawRectangle(ImpDay, new Rectangle(new Point(DW * d, DW * w), S));
-                        g.DrawString(I.Label, Fs, Bs, new PointF(DW * d + 2, DW * w + DW - 17));
+                        g.DrawString(s, Fs, Bs, new PointF(DW * d + 2, DW * w + DW - 17));
                     }
                 }
             }            

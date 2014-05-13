@@ -175,6 +175,7 @@
             this.CreateLbl.TabIndex = 14;
             this.CreateLbl.Text = "Create Label";
             this.CreateLbl.UseVisualStyleBackColor = true;
+            this.CreateLbl.Click += new System.EventHandler(this.CreateLbl_Click);
             // 
             // AddDate
             // 

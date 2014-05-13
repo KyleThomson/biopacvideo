@@ -74,6 +74,7 @@ namespace SeizurePlayback
             this.VideoCreate = new System.Windows.Forms.Button();
             this.AddtoProject = new System.Windows.Forms.Button();
             this.Download_ACQ = new System.Windows.Forms.Button();
+            this.DetSezLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.SuspendLayout();
@@ -230,23 +231,25 @@ namespace SeizurePlayback
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button2.ForeColor = System.Drawing.SystemColors.Control;
-            this.button2.Location = new System.Drawing.Point(831, 566);
+            this.button2.Location = new System.Drawing.Point(912, 566);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 22;
             this.button2.Text = "Next";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button3.ForeColor = System.Drawing.SystemColors.Control;
-            this.button3.Location = new System.Drawing.Point(912, 566);
+            this.button3.Location = new System.Drawing.Point(832, 566);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 23;
             this.button3.Text = "Previous";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // label2
             // 
@@ -646,12 +649,25 @@ namespace SeizurePlayback
             this.Download_ACQ.UseVisualStyleBackColor = true;
             this.Download_ACQ.Click += new System.EventHandler(this.Download_ACQ_Click);
             // 
+            // DetSezLabel
+            // 
+            this.DetSezLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.DetSezLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DetSezLabel.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.DetSezLabel.Location = new System.Drawing.Point(531, 536);
+            this.DetSezLabel.Name = "DetSezLabel";
+            this.DetSezLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.DetSezLabel.Size = new System.Drawing.Size(127, 24);
+            this.DetSezLabel.TabIndex = 56;
+            this.DetSezLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // CManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1429, 845);
+            this.Controls.Add(this.DetSezLabel);
             this.Controls.Add(this.Download_ACQ);
             this.Controls.Add(this.AddtoProject);
             this.Controls.Add(this.VideoCreate);
@@ -760,6 +776,7 @@ namespace SeizurePlayback
         private System.Windows.Forms.Button VideoCreate;
         private System.Windows.Forms.Button AddtoProject;
         private System.Windows.Forms.Button Download_ACQ;
+        private System.Windows.Forms.Label DetSezLabel;
     }
 }
 
