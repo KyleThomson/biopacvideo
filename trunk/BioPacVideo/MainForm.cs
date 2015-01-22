@@ -22,7 +22,7 @@ namespace BioPacVideo
     public partial class MainForm : Form
     {
         IniFile BioIni; //Main Ini File
-        MPTemplate MP; 
+        MPTemplate MP;
         VideoTemplate Video;
         FeederTemplate Feeder;
         string SyncName;
@@ -216,7 +216,11 @@ namespace BioPacVideo
                     {
                        Still = new Bitmap("NoSignal.Bmp");
                     }
-                    g.DrawImage(Still, 132+(i%Video.LengthWise)*162, 32+(float)Math.Floor((decimal)(i/Video.LengthWise))*122, 160, 120);
+                    try
+                    {
+                        g.DrawImage(Still, 132 + (i % Video.LengthWise) * 162, 32 + (float)Math.Floor((decimal)(i / Video.LengthWise)) * 122, 160, 120);
+                    }
+                    catch { };
                     Still.Dispose();
                 }
                 if (MP.IsFileWriting)
@@ -568,7 +572,6 @@ namespace BioPacVideo
         {
             FeederTester frm = new FeederTester();
             frm.ShowDialog(this);
-            frm.Kill();
             frm.Dispose();
         }
     
@@ -667,6 +670,13 @@ namespace BioPacVideo
             //ZoomWindow X = new ZoomWindow();
             //X.ShowDialog(this);
         }
+
+        private void AddPelletCountMenuItem_Click(object sender, EventArgs e)
+        {
+            PelletCounts Frm = new PelletCounts();
+            Frm.ShowDialog(this);
+            Frm.Dispose();
+        }
         private void Update_FreeSpace()
         {
             DriveInfo Drive = new DriveInfo(Path.GetPathRoot(MP.RecordingDirectory));
@@ -680,6 +690,11 @@ namespace BioPacVideo
                 this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.Yellow; }));
             else this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.LightGreen; }));
 
+        }
+
+        private void showFeederStatusToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MP.ShowFeederStatus();
         }
     }
 }

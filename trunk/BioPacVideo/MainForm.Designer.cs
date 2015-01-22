@@ -52,7 +52,9 @@ namespace BioPacVideo
             this.automaticFeederToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setFeedingProtocolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testFeedersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AddPelletCountMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusBar = new System.Windows.Forms.StatusStrip();
+            this.SpaceLeft = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_BIOPACSTAT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_MPLASTMESSAGE = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_VIDEOSTATUS = new System.Windows.Forms.ToolStripStatusLabel();
@@ -65,7 +67,7 @@ namespace BioPacVideo
             this.TimeScale = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.SpaceLeft = new System.Windows.Forms.ToolStripStatusLabel();
+            this.showFeederStatusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -241,7 +243,9 @@ namespace BioPacVideo
             // 
             this.automaticFeederToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setFeedingProtocolToolStripMenuItem,
-            this.testFeedersToolStripMenuItem});
+            this.testFeedersToolStripMenuItem,
+            this.AddPelletCountMenuItem,
+            this.showFeederStatusToolStripMenuItem});
             this.automaticFeederToolStripMenuItem.Name = "automaticFeederToolStripMenuItem";
             this.automaticFeederToolStripMenuItem.Size = new System.Drawing.Size(92, 20);
             this.automaticFeederToolStripMenuItem.Text = "Animal Settings";
@@ -249,16 +253,23 @@ namespace BioPacVideo
             // setFeedingProtocolToolStripMenuItem
             // 
             this.setFeedingProtocolToolStripMenuItem.Name = "setFeedingProtocolToolStripMenuItem";
-            this.setFeedingProtocolToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.setFeedingProtocolToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.setFeedingProtocolToolStripMenuItem.Text = "Animal Settings";
             this.setFeedingProtocolToolStripMenuItem.Click += new System.EventHandler(this.setFeedingProtocolToolStripMenuItem_Click);
             // 
             // testFeedersToolStripMenuItem
             // 
             this.testFeedersToolStripMenuItem.Name = "testFeedersToolStripMenuItem";
-            this.testFeedersToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.testFeedersToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.testFeedersToolStripMenuItem.Text = "Feeder Test";
             this.testFeedersToolStripMenuItem.Click += new System.EventHandler(this.testFeedersToolStripMenuItem_Click);
+            // 
+            // AddPelletCountMenuItem
+            // 
+            this.AddPelletCountMenuItem.Name = "AddPelletCountMenuItem";
+            this.AddPelletCountMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.AddPelletCountMenuItem.Text = "Add Pellet Count";
+            this.AddPelletCountMenuItem.Click += new System.EventHandler(this.AddPelletCountMenuItem_Click);
             // 
             // StatusBar
             // 
@@ -279,6 +290,19 @@ namespace BioPacVideo
             this.StatusBar.Text = "statusStrip1";
             this.StatusBar.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.StatusBar_ItemClicked);
             // 
+            // SpaceLeft
+            // 
+            this.SpaceLeft.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.SpaceLeft.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.SpaceLeft.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.SpaceLeft.Name = "SpaceLeft";
+            this.SpaceLeft.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
+            this.SpaceLeft.RightToLeftAutoMirrorImage = true;
+            this.SpaceLeft.Size = new System.Drawing.Size(108, 23);
+            this.SpaceLeft.Text = "HD Size";
+            // 
             // IDT_BIOPACSTAT
             // 
             this.IDT_BIOPACSTAT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
@@ -288,7 +312,7 @@ namespace BioPacVideo
             this.IDT_BIOPACSTAT.Font = new System.Drawing.Font("Tahoma", 10F);
             this.IDT_BIOPACSTAT.Name = "IDT_BIOPACSTAT";
             this.IDT_BIOPACSTAT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_BIOPACSTAT.Size = new System.Drawing.Size(179, 21);
+            this.IDT_BIOPACSTAT.Size = new System.Drawing.Size(179, 23);
             this.IDT_BIOPACSTAT.Text = "BioPac Disconnected";
             // 
             // IDT_MPLASTMESSAGE
@@ -299,7 +323,7 @@ namespace BioPacVideo
             this.IDT_MPLASTMESSAGE.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_MPLASTMESSAGE.Name = "IDT_MPLASTMESSAGE";
             this.IDT_MPLASTMESSAGE.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_MPLASTMESSAGE.Size = new System.Drawing.Size(107, 21);
+            this.IDT_MPLASTMESSAGE.Size = new System.Drawing.Size(107, 23);
             this.IDT_MPLASTMESSAGE.Text = "NO STATUS";
             // 
             // IDT_VIDEOSTATUS
@@ -310,7 +334,7 @@ namespace BioPacVideo
             this.IDT_VIDEOSTATUS.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_VIDEOSTATUS.Name = "IDT_VIDEOSTATUS";
             this.IDT_VIDEOSTATUS.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_VIDEOSTATUS.Size = new System.Drawing.Size(123, 21);
+            this.IDT_VIDEOSTATUS.Size = new System.Drawing.Size(123, 23);
             this.IDT_VIDEOSTATUS.Text = "VIDEO STATUS";
             // 
             // IDT_VIDEORESULT
@@ -321,7 +345,7 @@ namespace BioPacVideo
             this.IDT_VIDEORESULT.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_VIDEORESULT.Name = "IDT_VIDEORESULT";
             this.IDT_VIDEORESULT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_VIDEORESULT.Size = new System.Drawing.Size(122, 21);
+            this.IDT_VIDEORESULT.Size = new System.Drawing.Size(122, 23);
             this.IDT_VIDEORESULT.Text = "VIDEO RESULT";
             // 
             // IDT_DEVICECOUNT
@@ -332,7 +356,7 @@ namespace BioPacVideo
             this.IDT_DEVICECOUNT.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_DEVICECOUNT.Name = "IDT_DEVICECOUNT";
             this.IDT_DEVICECOUNT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_DEVICECOUNT.Size = new System.Drawing.Size(105, 21);
+            this.IDT_DEVICECOUNT.Size = new System.Drawing.Size(105, 23);
             this.IDT_DEVICECOUNT.Text = "Devices (0)";
             // 
             // IDT_ENCODERSTATUS
@@ -343,7 +367,7 @@ namespace BioPacVideo
             this.IDT_ENCODERSTATUS.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_ENCODERSTATUS.Name = "IDT_ENCODERSTATUS";
             this.IDT_ENCODERSTATUS.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_ENCODERSTATUS.Size = new System.Drawing.Size(106, 21);
+            this.IDT_ENCODERSTATUS.Size = new System.Drawing.Size(106, 23);
             this.IDT_ENCODERSTATUS.Text = "ENCR STAT";
             // 
             // IDT_ENCSTAT
@@ -354,7 +378,7 @@ namespace BioPacVideo
             this.IDT_ENCSTAT.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_ENCSTAT.Name = "IDT_ENCSTAT";
             this.IDT_ENCSTAT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_ENCSTAT.Size = new System.Drawing.Size(101, 21);
+            this.IDT_ENCSTAT.Size = new System.Drawing.Size(101, 23);
             this.IDT_ENCSTAT.Text = "ENCDR RS";
             // 
             // IDT_FEEDST
@@ -365,7 +389,7 @@ namespace BioPacVideo
             this.IDT_FEEDST.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_FEEDST.Name = "IDT_FEEDST";
             this.IDT_FEEDST.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_FEEDST.Size = new System.Drawing.Size(89, 21);
+            this.IDT_FEEDST.Size = new System.Drawing.Size(89, 23);
             this.IDT_FEEDST.Text = "FEEDER";
             // 
             // VoltScale
@@ -404,18 +428,12 @@ namespace BioPacVideo
             this.label3.TabIndex = 8;
             this.label3.Text = "Volt Scale";
             // 
-            // SpaceLeft
+            // showFeederStatusToolStripMenuItem
             // 
-            this.SpaceLeft.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.SpaceLeft.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-            this.SpaceLeft.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.SpaceLeft.Name = "SpaceLeft";
-            this.SpaceLeft.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.SpaceLeft.RightToLeftAutoMirrorImage = true;
-            this.SpaceLeft.Size = new System.Drawing.Size(108, 23);
-            this.SpaceLeft.Text = "HD Size";
+            this.showFeederStatusToolStripMenuItem.Name = "showFeederStatusToolStripMenuItem";
+            this.showFeederStatusToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.showFeederStatusToolStripMenuItem.Text = "Show Feeder Status";
+            this.showFeederStatusToolStripMenuItem.Click += new System.EventHandler(this.showFeederStatusToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -485,7 +503,9 @@ namespace BioPacVideo
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         internal System.Windows.Forms.ToolStripStatusLabel IDT_ENCSTAT;
+        private System.Windows.Forms.ToolStripMenuItem AddPelletCountMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel SpaceLeft;
+        private System.Windows.Forms.ToolStripMenuItem showFeederStatusToolStripMenuItem;
     }
 }
 

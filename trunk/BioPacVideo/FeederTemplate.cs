@@ -17,11 +17,13 @@ namespace BioPacVideo
         public TimeSpan Meal5;
         public TimeSpan Meal6;
         public int DailyMealCount;
-        public double PelletsPerGram;        
+        public double PelletsPerGram;
+        public bool ErrorState;
         public bool Enabled;
         public int State;
         public string StateText;
         private Queue<byte> Commands;
+        private Stack<string> CommandText;
         public int CommandSize = 0;  //Number of commands left to run. 
         public bool CommandReady; //Set once all commands queued.
         public int gap = 0;
@@ -111,11 +113,20 @@ namespace BioPacVideo
         public FeederTemplate()
         {
             Commands = new Queue<byte>();
-            CommandReady = false; 
+            CommandText = new Stack<string>(); 
+            CommandReady = false;
+            ErrorState = false;
             State = 3;
             StateText = "READY";
             Rats = RatTemplate.NewInitArray(16);
             LogFileName = "";
+        }
+        public string GetLastCommandText()
+        {
+            if (CommandText.Count > 0)
+                return CommandText.Pop();
+            else
+                return "No Text in Stack";
         }
         public byte GetTopCommand()
         {
@@ -148,9 +159,11 @@ namespace BioPacVideo
         {
             Commands.Enqueue((byte)Feeder);
             Commands.Enqueue((byte)Pellets);
+            string Txt = "Feeder-" + Feeder.ToString() + "  Pellets-" + Pellets.ToString();
+            CommandText.Push(Txt); 
             CommandSize = Commands.Count;
         }
-        public void Execute()
+        public void ExecuteAck()
         {
             Commands.Enqueue((byte)255);
             CommandSize = Commands.Count;
@@ -195,7 +208,7 @@ namespace BioPacVideo
                 }
 
             }
-            Execute();            
+            ExecuteAck();            
         }
 
     }
