@@ -64,20 +64,16 @@ namespace SeizurePlayback
         float[] Rates = { 0.25F, 0.5F, 1, 2, 5, 10, 20, 30, 50, 100 };
         public CManage()
         {
+            InitializeComponent();
+            this.WindowState = FormWindowState.Maximized;            
             ACQ = new ACQReader(); //Class to read from ACQ file
             graph = new Mygraph(); //Small Class for containing EEG area. 
             DSF = new DetectedSeizureFileType();
             VideoOffset = new float[16];
             string[] args = new string[] { "" };
-            instance = new VlcInstance(args);            
-            graph.X1 = 5;
-            graph.X2 = 1420;
-            graph.Y1 = 6;
-            graph.Y2 = 460;
-            ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);    //Create the graphics box to display EEG.     
-            InitializeComponent();
-            INI = new IniFile(Directory.GetCurrentDirectory() + "\\SeizurePlayback.ini"); 
-
+            instance = new VlcInstance(args);                        
+            INI = new IniFile(Directory.GetCurrentDirectory() + "\\SeizurePlayback.ini");
+            ACQ.initDisplay(10, 10);    
             g = this.CreateGraphics(); //Graphics object for main form                      
             OffsetBox.Text = VideoOffset[0].ToString();
             //Create Instances                       
@@ -121,6 +117,13 @@ namespace SeizurePlayback
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
             ThreadDisplay.Start();
             OffsetBox.Enabled = false;
+            graph.X1 = 5;
+            graph.X2 = this.Size.Width - 10;
+            graph.Y1 = 6;
+            graph.Y2 = VideoPanel.Location.Y - 11; //this.Size.Height - VideoPanel.Location.Y;    
+            Console.WriteLine(this.Size.Height);
+            Console.WriteLine(VideoPanel.Location.Y - 11);        
+            ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);    //Create the graphics box to display EEG. 
         }
         private void INIload()
         {
@@ -394,6 +397,7 @@ namespace SeizurePlayback
                 ReadReviewINI(BioINI);
                 AVIFiles = Directory.GetFiles(Path, "*.avi");            
                 ACQ.openACQ(FName[0]);
+                Console.WriteLine(FName[0]);
                 if (FName.Length > 1)
                 {
                     ACQ.AppendACQ(FName[1]);
@@ -830,8 +834,8 @@ namespace SeizurePlayback
             {
                 Step = MaxDispSize;
                 Redraw = true;
-                graph.X2 = CManage.ActiveForm.Size.Width-5; //Eat at joes
-                graph.Y2 = CManage.ActiveForm.Size.Height - 400; //this does whatever it does 
+                graph.X2 = CManage.ActiveForm.Size.Width-10; //Eat at joes
+                graph.Y2 = VideoPanel.Location.Y-11; //this does whatever it does 
                 ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);    //Create the graphics box to display EEG.       
                 VideoPanel.Location = new Point(VideoPanel.Location.X, CManage.ActiveForm.Height - 395);
                 TimeBar.Size = new Size(CManage.ActiveForm.Size.Width - TimeBar.Location.X - 5, TimeBar.Size.Height);
@@ -947,6 +951,18 @@ namespace SeizurePlayback
             QuitHighlight();
             Paused = false;
             RealTime = true;         
+        }
+
+        private void FixChan_Click(object sender, EventArgs e)
+        {
+            FixChan F = new FixChan();
+            F.ShowDialog();
+            if (F.pass)
+            {
+                ACQ.FixChans(F.FixNum); 
+            }
+            F.Dispose();
+            
         }
 
 

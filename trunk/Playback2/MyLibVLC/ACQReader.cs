@@ -336,6 +336,55 @@ namespace SeizurePlayback
             FOUT_ID.Close();
             FOUT.Close();
         }
+
+        public void FixChans(int BreakNum)
+        {
+            
+            string Fname = FullName.Substring(0,FullName.Length-4) + "_F.acq";
+            FileStream FOUT = new FileStream(Fname, FileMode.Create);
+            BinaryWriter FOUT_ID = new BinaryWriter(FOUT);
+            long EndPoint = DataStart + SampleRate * Chans * Position * 4;
+            FILE.Seek(0, SeekOrigin.Begin);
+            //Copy data up to the broken part            
+            if (BreakNum > 0)
+            {
+                for (long i = 0; i < EndPoint; i++)
+                {
+                    FOUT_ID.Write(FID.ReadByte()); //Read a byte and write it
+                }
+                for (int i=0; i < BreakNum; i++)
+                {
+                    FOUT_ID.Write((Int32)0); //Write the two missing samples
+                }
+
+            }
+            else
+            {
+                for (long i = 0; i < EndPoint+4*BreakNum; i++)
+                {
+                    FOUT_ID.Write(FID.ReadByte()); //Read a byte and write it
+                }
+                FILE.Seek(-4 * BreakNum, SeekOrigin.Current);
+            }
+            long EndPoint2 = FID.BaseStream.Length-FID.BaseStream.Position;
+            for (long i = 0; i < EndPoint2; i++)
+            {
+               FOUT_ID.Write(FID.ReadByte());
+            }
+            FOUT_ID.Close();
+            FOUT.Close();
+            FILE.Close();
+            FID.Close(); 
+            if (File.Exists(FullName.Substring(0, FullName.Length - 4) + ".bak"))
+            {
+                File.Delete(FullName.Substring(0, FullName.Length - 4) + ".bak");
+            }
+            File.Move(FullName, FullName.Substring(0, FullName.Length - 4) + ".bak");
+            File.Move(FullName.Substring(0, FullName.Length - 4) + "_F.acq", FullName);
+            FILE = new FileStream(FullName, FileMode.Open, FileAccess.Read);
+            FID = new BinaryReader(FILE);
+
+        }
         public void sethighlight(int Start, int End)
         {
             HLS = Start;

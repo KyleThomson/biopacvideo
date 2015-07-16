@@ -75,6 +75,7 @@ namespace SeizurePlayback
             this.AddtoProject = new System.Windows.Forms.Button();
             this.Download_ACQ = new System.Windows.Forms.Button();
             this.DetSezLabel = new System.Windows.Forms.Label();
+            this.FixChan = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.SuspendLayout();
@@ -93,6 +94,7 @@ namespace SeizurePlayback
             // 
             // VideoPanel
             // 
+            this.VideoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VideoPanel.BackColor = System.Drawing.Color.DarkGray;
             this.VideoPanel.Location = new System.Drawing.Point(12, 473);
             this.VideoPanel.Name = "VideoPanel";
@@ -661,12 +663,25 @@ namespace SeizurePlayback
             this.DetSezLabel.TabIndex = 56;
             this.DetSezLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // FixChan
+            // 
+            this.FixChan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.FixChan.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.FixChan.Location = new System.Drawing.Point(1155, 479);
+            this.FixChan.Name = "FixChan";
+            this.FixChan.Size = new System.Drawing.Size(123, 53);
+            this.FixChan.TabIndex = 57;
+            this.FixChan.Text = "Fix Channel at Timepoint";
+            this.FixChan.UseVisualStyleBackColor = true;
+            this.FixChan.Click += new System.EventHandler(this.FixChan_Click);
+            // 
             // CManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(1429, 845);
+            this.ClientSize = new System.Drawing.Size(1672, 845);
+            this.Controls.Add(this.FixChan);
             this.Controls.Add(this.DetSezLabel);
             this.Controls.Add(this.Download_ACQ);
             this.Controls.Add(this.AddtoProject);
@@ -777,6 +792,7 @@ namespace SeizurePlayback
         private System.Windows.Forms.Button AddtoProject;
         private System.Windows.Forms.Button Download_ACQ;
         private System.Windows.Forms.Label DetSezLabel;
+        private System.Windows.Forms.Button FixChan;
     }
 }
 

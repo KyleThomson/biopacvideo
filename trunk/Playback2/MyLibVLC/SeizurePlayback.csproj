@@ -92,6 +92,12 @@
       <DependentUpon>AddGroup.cs</DependentUpon>
     </Compile>
     <Compile Include="DetectedSeizureList.cs" />
+    <Compile Include="FixChan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FixChan.Designer.cs">
+      <DependentUpon>FixChan.cs</DependentUpon>
+    </Compile>
     <Compile Include="ReviewLogger.cs" />
     <Compile Include="Compression.cs">
       <SubType>Form</SubType>
@@ -225,6 +231,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AddtoProject.resx">
       <DependentUpon>AddtoProject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FixChan.resx">
+      <DependentUpon>FixChan.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GetACQ.resx">
       <DependentUpon>GetACQ.cs</DependentUpon>

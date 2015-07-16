@@ -129,7 +129,7 @@ namespace BioPacVideo
             while (true)
             {
                 //If 12AM, restart recording. 
-                if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0))
+                if (((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0)) | ((DateTime.Now.TimeOfDay.Hours == 12) & (DateTime.Now.TimeOfDay.Minutes == 0)))
                 {
                     if (MP.IsFileWriting)
                     {
@@ -251,7 +251,8 @@ namespace BioPacVideo
             MP.Voltage = BioIni.IniReadValue("BioPac", "Voltage(mV)", 500);
             MP.Gain = BioIni.IniReadValue("BioPac", "Gain", 20000);
             MP.Enabled = BioIni.IniReadValue("BioPac", "Enabled", true);
-            MP.Offset = BioIni.IniReadValue("BioPac", "Offset",0.0);            
+            MP.Offset = BioIni.IniReadValue("BioPac", "Offset",0.0);
+            MP.RecordingDevice = BioIni.IniReadValue("BioPac", "RecordingDevice", "BioPacAmp");
             BioIni.IniReadValue("Feeder", "Meal1", out Feeder.Meal1);
             BioIni.IniReadValue("Feeder", "Meal2", out Feeder.Meal2);
             BioIni.IniReadValue("Feeder", "Meal3", out Feeder.Meal3);
@@ -267,10 +268,6 @@ namespace BioPacVideo
             }
             for (int i = 0; i < 16; i++)
             {
-                MP.RecordingDevice[i] = BioIni.IniReadValue("BioPac", string.Format("RecordingDevice_Channel{0}",i), false);
-            }
-            for (int i = 0; i < 16; i++)
-            {
                 Feeder.Rats[i].ID = BioIni.IniReadValue("Rats", string.Format("Rat{0} ID", i), string.Format("Rat{0}", i));
                 Feeder.Rats[i].Weight = BioIni.IniReadValue("Rats", string.Format("Rat{0} (g)", i), (double)0);
                 Feeder.Rats[i].Medication = BioIni.IniReadValue("Rats", string.Format("Rat{0}Medicate", i), 100);
@@ -282,7 +279,6 @@ namespace BioPacVideo
                     Feeder.Rats[i].Meals[j] = BioIni.IniReadValue("Rats", "Rat" + i + "Meal" + j, false);
                 }
             }
-            
             Video.Enabled = BioIni.IniReadValue("Video", "Enabled", true);
             Video.XRes = BioIni.IniReadValue("Video", "XRes", 320);
             Video.LengthWise = BioIni.IniReadValue("Video", "LengthWise", 8);
@@ -311,7 +307,8 @@ namespace BioPacVideo
             BioIni.IniWriteValue("BioPac", "Voltage(mV)", MP.Voltage.ToString());
             BioIni.IniWriteValue("BioPac", "Gain", MP.Gain.ToString());
             BioIni.IniWriteValue("BioPac", "Enabled", MP.Enabled);
-            BioIni.IniWriteValue("BioPac", "Offset", MP.Offset.ToString());            
+            BioIni.IniWriteValue("BioPac", "Offset", MP.Offset.ToString());
+            BioIni.IniWriteValue("BioPac", "RecordingDevice", MP.RecordingDevice);
             BioIni.IniWriteValue("Feeder", "Meal1", Feeder.Meal1.ToString());
             BioIni.IniWriteValue("Feeder", "Meal2", Feeder.Meal2.ToString());
             BioIni.IniWriteValue("Feeder", "Meal3", Feeder.Meal3.ToString());
@@ -321,10 +318,6 @@ namespace BioPacVideo
             BioIni.IniWriteValue("Feeder", "PelletsPerGram", Feeder.PelletsPerGram.ToString());
             BioIni.IniWriteValue("Feeder", "Enabled", Feeder.Enabled);
             BioIni.IniWriteValue("Feeder", "DailyMealCount", Feeder.DailyMealCount);
-            for (int i = 0; i < 16; i++)
-            {
-               BioIni.IniWriteValue("BioPac", string.Format("RecordingDevice_Channel{0}", i),  MP.RecordingDevice[i]);
-            }
             for (int i = 0; i < 16; i++)
             {
                 BioIni.IniWriteValue("BioPac", string.Format("Channel{0}", i), MP.RecordAC[i]);
@@ -480,10 +473,9 @@ namespace BioPacVideo
         private void selectChannelsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             
-            RecordSelect frm = new RecordSelect(MP.RecordAC, MP.RecordingDevice);
+            RecordSelect frm = new RecordSelect(MP.RecordAC);
             frm.ShowDialog(this);                
             MP.RecordAC = frm.AC();
-            MP.RecordingDevice = frm.RC();
             frm.Dispose();
             UpdateINI(BioIni);
             IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
