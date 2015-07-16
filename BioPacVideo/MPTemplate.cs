@@ -1,15 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Drawing;
-using System.Collections;
-using System.Drawing.Drawing2D;
-using System.Windows.Forms;
 using System.Threading;
-using System.IO;
+using System.Windows.Forms;
 using System.Xml;
-
 using MPCLASS = Biopac.API.MPDevice.MPDevImports;
 using MPCODE = Biopac.API.MPDevice.MPDevImports.MPRETURNCODE;
 
@@ -27,12 +26,11 @@ namespace BioPacVideo
     "SOCKETERROR","UNDERFLOW","PRESETERROR","XMLERROR" };
         static EventWaitHandle _DrawHandle = new AutoResetEvent(false);
         public EventWaitHandle _DisplayHandle = new AutoResetEvent(false);
-        public bool[] RecordingDevice; 
+        public string RecordingDevice; 
         public double Offset;
         public bool[] FeederTest;
         private bool[] DigitalChannel;
         private int MaxDrawSize;
-        private double[] DisplayOffsets; 
         Thread AcqThread = null;
         FeederTemplate Feeder;     
         public String Filename;
@@ -93,8 +91,6 @@ namespace BioPacVideo
             CurPointPos = 0;
             FeederTest = new bool[8];
             DigitalChannel = new bool[16];
-            RecordingDevice = new bool[16];
-            DisplayOffsets = new double[16];
             wavePen = new Pen(Color.Black);            
             for (int i = 0; i < 16; i++)
             {
@@ -121,7 +117,7 @@ namespace BioPacVideo
         public void InitializeDisplay(int X, int Y)
         {
             offscreen = new Bitmap((int)(X - 60), Y-350);
-            MaxDrawSize = SampleRate * DisplayLength; 
+            MaxDrawSize = SampleRate * DisplayLength;
             WaveCords = new PointF[MaxDrawSize];
         }
 
@@ -161,10 +157,7 @@ namespace BioPacVideo
             }
 
         }
-        public void UpdateOffsets() //This function is used to separate telemeter recordings from non-telemeter recordings via the offset
-        {
-            
-        }
+
 
         private void open_ACQ_file()
         {
@@ -328,7 +321,7 @@ namespace BioPacVideo
 
         private float ScaleVoltsToPixel(float volt, float pixelHeight)
         {
-            float maxPixel = (pixelHeight * .15F); 
+            float maxPixel = (pixelHeight * .15F);
             float minPixel = (pixelHeight * .95F);
 
             float m = 1000* (maxPixel - minPixel) / (2 * (Voltage));
@@ -459,20 +452,21 @@ namespace BioPacVideo
                 return false;
         }
       
-        public bool StartRecording() //Start Data Acquisition
+        public bool StartRecording()
         {
             AcqThread = new Thread(new ThreadStart(RecordingThread)); //Initialize recording thread
-            AcqThread.Priority = ThreadPriority.Highest; //Need to make sure that the computer makes this most important    
-            isstreaming = true; //most important flag - lets rest of program know we are streaming data. 
-            g = Graphics.FromImage(offscreen);  //Create an image to draw EEG on 
+            AcqThread.Priority = ThreadPriority.Highest;
+            isstreaming = true;
+            g = Graphics.FromImage(offscreen);
             ClearDisplay = true;
-            Ymax = Convert.ToSingle(g.VisibleClipBounds.Height); //Get the max Y
-            Xmax = Convert.ToSingle(g.VisibleClipBounds.Width);  //Get the max X 
-            PointSpacing = Convert.ToSingle(Xmax / MaxDrawSize); //Determine the X-spacing based on Sampling Rate                    
-            MPReturn = MPCLASS.setDigitalAcqChannels(DigitalChannel);  //Set the digital channels so we can communicate with the feeders 
+            Ymax = Convert.ToSingle(g.VisibleClipBounds.Height);
+            Xmax = Convert.ToSingle(g.VisibleClipBounds.Width);         
+            PointSpacing = Convert.ToSingle(Xmax / MaxDrawSize);    
+                 
+            MPReturn = MPCLASS.setDigitalAcqChannels(DigitalChannel);
             if (this.MPReturn != MPCODE.MPSUCCESS)
                 return false;
-            MPReturn = MPCLASS.setSampleRate(1000 / SampleRate); //Send the current sampling rate
+            MPReturn = MPCLASS.setSampleRate(1000 / SampleRate);
             if (this.MPReturn != MPCODE.MPSUCCESS)
                 return false;
 
@@ -490,13 +484,13 @@ namespace BioPacVideo
             return true;
         }
 
-        public bool StartWriting() //Not much is needed to start a file - open it and write. 
+        public bool StartWriting()
         {            
-            open_ACQ_file(); //Open a new file
-            samplecount = 0; //Start at sample 0
-            writeheader(); //Put in header info
-            IsFileWriting = true; //set File to be writing - will begin next buffer
-            return true; 
+            open_ACQ_file();
+            samplecount = 0;
+            writeheader();
+            IsFileWriting = true;
+            return true;
         }
         public void StopWriting()
         {
@@ -542,39 +536,40 @@ namespace BioPacVideo
                     MPReturn = MPCLASS.stopAcquisition(); //Have to restart the aquisition. 
                     return;
                 }
-                last_received = received; //For the draw buffer
-                if (last_received % AcqChan > 0) 
+                if (received % AcqChan > 0)
                 {
-                    Console.WriteLine("Buffer Mismatch: " + (last_received % AcqChan).ToString()); 
-                }
-                samplesize = (int)last_received / AcqChan; //How many samples did we acquire? 
+                    Console.WriteLine("Buffersize Mismatch @ " + DateTime.Now.TimeOfDay.ToString());                        
+                } 
+                last_received = received; //For the draw buffer
+                samplesize = (int)last_received / AcqChan;
                 samplecount += samplesize;
                 VideoWrapper.SetSampleCount(samplecount);                
                 if (IsFileWriting) //If we are writing to the file, we want to handle it immediately. 
                 {
 
-                    BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin); //Make sure the File writting is in the right place                     
-                    
+                    BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin); //Make sure the File writting is in the right place 
+                    if (string.Compare(RecordingDevice, "Telemetry") == 0)
+                    {
+                        for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
+                        {                            
+                            rec_buffer[j] = Math.Min(rec_buffer[j], 4); //Make sure we don't exceed the maxes
+                            rec_buffer[j] = Math.Max(rec_buffer[j], 0);//Make sure we don't exceed the minmum
+                            transbuffer = Convert.ToInt32((rec_buffer[j] - Offset) * (double)Int32.MaxValue / 2); //Convert the value
+                            BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
+                            //better safe than sorry. 
+                        }
+                    }
+                    else
+                    {                        
                         for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
                         {
-                            if (RecordingDevice[j%AcqChan]) //Telemetry - This may be temporary. 
-                            {                            
-                                rec_buffer[j] = Math.Min(rec_buffer[j], 4); //Make sure we don't exceed the maxes
-                                rec_buffer[j] = Math.Max(rec_buffer[j], 0);//Make sure we don't exceed the minmum
-                                transbuffer = Convert.ToInt32((rec_buffer[j] - Offset) * (double)Int32.MaxValue / 2); //Convert the value
-                                BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
-                                //better safe than sorry. 
-                            }
-                    
-                            else
-                            {                        
-                                rec_buffer[j] = Math.Min(rec_buffer[j], Int32.MaxValue / Gain); //Make sure we don't exceed the maxes
-                                rec_buffer[j] = Math.Max(rec_buffer[j], Int32.MinValue / Gain);//Make sure we don't exceed the minmum
-                                transbuffer = Convert.ToInt32((rec_buffer[j]) * Gain); //Convert the value
-                                BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
-                                //better safe than sorry. 
-                            }
-                         }
+                            rec_buffer[j] = Math.Min(rec_buffer[j], Int32.MaxValue / Gain); //Make sure we don't exceed the maxes
+                            rec_buffer[j] = Math.Max(rec_buffer[j], Int32.MinValue / Gain);//Make sure we don't exceed the minmum
+                            transbuffer = Convert.ToInt32((rec_buffer[j]) * Gain); //Convert the value
+                            BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
+                            //better safe than sorry. 
+                        }
+                    }
                     CurrentWriteLoc = BinaryFile.Position;  //Update the current location.     
                     
                     if (FileStop) //Need to have thread safe file closing! Oops!                        
@@ -599,66 +594,66 @@ namespace BioPacVideo
                 lastb = b; //Without debounce, you get multiple states in a single transistion
                 if (Feeder.gap == 0)
                 {
-                    MPCLASS.getDigitalIO(9, out a, MPCLASS.DIGITALOPT.READ_HIGH_BITS); //read the high bit for state
-                    MPCLASS.getDigitalIO(8, out b, MPCLASS.DIGITALOPT.READ_HIGH_BITS); //read the low bit for state
-                    if ((lastb == b) && (lasta == a))
+                MPCLASS.getDigitalIO(9, out a, MPCLASS.DIGITALOPT.READ_HIGH_BITS); //read the high bit for state
+                MPCLASS.getDigitalIO(8, out b, MPCLASS.DIGITALOPT.READ_HIGH_BITS); //read the low bit for state
+                if ((lastb == b) && (lasta == a))
+                {
+                    if (a && b) //11, feeder ready 
                     {
-                        if (a && b) //11, feeder ready 
-                        {
-                            Feeder.State = 3;
-                            Feeder.StateText = "READY";
-                        }
-                        if (!a && b)
-                        {
-                            Feeder.State = 1;
-                            Feeder.StateText = "EXECUTING";
-                        }
-                        if (a && !b)
-                        {
-                            if (Feeder.State != 2)
-                            {
-                                string Result = "SUCCESS - " + Feeder.GetLastCommandText() + " - ";
-                                FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Status(Result); }));
-                                Feeder.ExecuteAck();
-                            }
-                            Feeder.State = 2;
-                            Feeder.StateText = "SUCCESS";
-                        }
-                        if (!a && !b)
-                        {
-                            if (Feeder.State == 3) //If the feeder goes from ready to Error, something happened with the infrared sensors
-                            {
-                                FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error("Infrared Sensors offline - "); }));
-                            }
-                            else if (Feeder.State == 1) //if something went wrong during execution, then the feeder failed to deliver pellets. 
-                            {
-                                string Result = "FAIL - " + Feeder.GetLastCommandText() + " - ";
-                                FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error(Result); }));
-                                Feeder.ExecuteAck();
-                            }
-                            Feeder.State = 0;
-                            Feeder.StateText = "ERROR";
-                        }
+                        Feeder.State = 3;
+                        Feeder.StateText = "READY";
                     }
-                    if ((Feeder.CommandSize > 0) && Feeder.CommandReady)
+                    if (!a && b)
                     {
-                        byte v;
-                        v = Feeder.GetTopCommand();
-                        Feeder.gap++;
-                        for (byte k = 0; k < 5; k++)   //Step through the bits of the command                    
+                        Feeder.State = 1;
+                        Feeder.StateText = "EXECUTING";
+                    }
+                    if (a && !b)
+                    {
+                        if (Feeder.State != 2)
                         {
-                            bool x = !((v & (1 << k)) > 0); //mathematical way to make x the kth bit                              
-                            MPCLASS.setDigitalIO((uint)k, x, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //set it on the MP150
+                            string Result = "SUCCESS - " + Feeder.GetLastCommandText() + " - ";
+                            FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Status(Result); }));
+                            Feeder.ExecuteAck();
                         }
-                        MPCLASS.setDigitalIO(7, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //pulse the data ready bit
-                        Thread.Sleep(1);
-                        MPCLASS.setDigitalIO(7, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //finish pulse                    
+                        Feeder.State = 2;
+                        Feeder.StateText = "SUCCESS";
+                    }
+                    if (!a && !b)
+                    {
+                        if (Feeder.State == 3) //If the feeder goes from ready to Error, something happened with the infrared sensors
+                        {
+                            FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error("Infrared Sensors offline - "); }));
+                        }
+                        else if (Feeder.State == 1) //if something went wrong during execution, then the feeder failed to deliver pellets. 
+                        {
+                            string Result = "FAIL - " + Feeder.GetLastCommandText() + " - ";
+                            FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error(Result); }));
+                            Feeder.ExecuteAck();
+                        }
+                        Feeder.State = 0;
+                        Feeder.StateText = "ERROR";
                     }
                 }
+                if ((Feeder.CommandSize > 0) && Feeder.CommandReady)
+                { 
+                    byte v;                    
+                    v = Feeder.GetTopCommand();
+                    Feeder.gap++;
+                    for (byte k = 0; k < 5; k++)   //Step through the bits of the command                    
+                    {
+                        bool x =!((v&(1 << k)) > 0); //mathematical way to make x the kth bit                              
+                        MPCLASS.setDigitalIO((uint)k, x, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //set it on the MP150
+                    }
+                    MPCLASS.setDigitalIO(7, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //pulse the data ready bit
+                    Thread.Sleep(1);
+                    MPCLASS.setDigitalIO(7, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //finish pulse                    
+                }
+            }
                 else if (Feeder.gap > 0) //only want to send the feeding commands once every 4 cycles 
                 {
                     Feeder.gap++;
-                    if (Feeder.gap == 4) { Feeder.gap = 0; }
+                    if (Feeder.gap == 6) { Feeder.gap = 0; }
                 }
                                 
                 Buffer.BlockCopy(rec_buffer, 0, draw_buffer, 0, (int)received * 8);  //copy the Buffer to the drawing area                      

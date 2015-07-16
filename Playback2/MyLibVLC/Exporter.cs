@@ -37,6 +37,11 @@ namespace SeizurePlayback
             }
         }
 
+        private void Exporter_Load(object sender, EventArgs e)
+        {
+
+        }
+
     }
 
 }

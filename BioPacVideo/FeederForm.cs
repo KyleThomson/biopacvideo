@@ -91,22 +91,34 @@ namespace BioPacVideo
                     AllRats[i].ID = TempID.Text;
                     if (Double.TryParse(TempBox.Text, out Weight))
                     {
+                        if (Weight > 1000) { Weight = 1000; } //I can't believe I actually had to add this check in. Thanks Carlos
                         if ((AllRats[i].Weight <= 0) && (Weight > 0))
                         {
                             Feeder.GenMeals(i, true);
                         }
                         AllRats[i].Weight = Weight;
                     }
+                    else
+                    {
+                        TempBox.Text = "";
+                    }
                     if (AllRats[i].Weight > 0)
                     {
                         TempCheck.Enabled = true;
                         if (int.TryParse(TempCheck.Text, out Percent))
                         {
+                            //Checks for errant data
+                            if (Percent > 100) { Percent = 100; } //Checks for errant data
+                            if (Percent < 0) { Percent = 0; }
                             if (Percent != AllRats[i].Medication)
-                            {                                
+                            {
                                 AllRats[i].Medication = Percent; //Save the percentage
-                                Feeder.GenMeals(i, true); 
+                                Feeder.GenMeals(i, true);
                             }
+                        }
+                        else
+                        {
+                            TempCheck.Text = "";
                         }
                         TempBox.Text = string.Format("{0:0.0}", AllRats[i].Weight);
 

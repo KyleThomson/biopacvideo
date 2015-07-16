@@ -181,6 +181,7 @@
             this.Controls.Add(this.SzCount);
             this.Name = "Exporter";
             this.Text = "Export Data";
+            this.Load += new System.EventHandler(this.Exporter_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

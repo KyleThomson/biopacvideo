@@ -190,6 +190,7 @@ namespace SeizurePlayback
 
             for (int i = 0; i < LiS * 30; i++)
             {
+                ProgText.Invoke((MethodInvoker)delegate { ProgText.Text = "Starting Dump..."; }); 
                 Mem.NextFrame();
                 NewFrame = true;
                 while (NewFrame) { };
@@ -210,7 +211,7 @@ namespace SeizurePlayback
             Mem.SetCallback(null);
         }
         private void DumpFrames_Click(object sender, EventArgs e)
-        {
+        {            
             Mem.SetCallback(delegate(Bitmap frame)
             {
                 if (NewFrame)

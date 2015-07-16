@@ -183,7 +183,7 @@
             this.RadioBox.Size = new System.Drawing.Size(197, 113);
             this.RadioBox.TabIndex = 12;
             this.RadioBox.TabStop = false;
-            this.RadioBox.Text = "This Does Nothing";
+            this.RadioBox.Text = "Please Mark Seizure Stage";
             // 
             // Unknown
             // 

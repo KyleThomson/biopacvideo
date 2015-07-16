@@ -329,7 +329,7 @@ namespace SeizurePlayback
             Szs = new string[Animals[idx].Sz.Count];
             foreach (SeizureType S in Animals[idx].Sz)
             {
-                answer =  string.Format("{0:D2}:{1:D2}:{2:D2}", S.t.Hours, S.t.Minutes, S.t.Seconds);
+                answer = S.Notes + string.Format("- {0:D2}:{1:D2}:{2:D2} - {3:D1}", S.t.Hours, S.t.Minutes, S.t.Seconds, S.Severity);
                 Szs[i] = S.d.ToShortDateString() + " " + answer;
                 i++;
             }
@@ -640,7 +640,8 @@ namespace SeizurePlayback
                     st = A.ID;
                     foreach (SeizureType S in A.Sz)
                     {
-                        st += ", " + Math.Round(S.d.Subtract(Earliest).TotalHours + S.t.TotalHours,2).ToString();
+                        //Create a timestamp based on the earliest hour in the file. 
+                        st += ", " + Math.Round(S.d.Subtract(Earliest).TotalHours + S.t.Subtract(S.d.TimeOfDay).TotalHours,2).ToString();                       
                     }
                     F.WriteLine(st); 
                 }
