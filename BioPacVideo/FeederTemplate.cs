@@ -182,7 +182,7 @@ namespace BioPacVideo
                 if (Rats[RC].Weight > 0)
                 {
                     Feeder = RC * 2;
-                    MealSize = (int)Math.Ceiling(Rats[RC].Weight * PelletsPerGram);
+                    MealSize = (int)Math.Round(Rats[RC].Weight * PelletsPerGram);
                     if (Rats[RC].Meals[MealNum])
                     {
                         Feeder = Feeder + 1;
