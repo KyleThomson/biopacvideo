@@ -1,0 +1,1 @@
+Open source software for streaming EEG data from a BioPac MP150 and synchronized video recording and playback. Also contains code for automatic feeder control.
