@@ -665,12 +665,13 @@ namespace ProjectManager
             string st, st2, st3;
             DateTime Earliest = Files[0].Start.Date;
             DateTime Latest = Files[Files.Count - 1].Start.Date;
-            
+            st = Earliest.ToShortDateString() + "," + Earliest.ToShortTimeString();
+            F.WriteLine(st); 
             if (E.DetailList)
             {
 
                 foreach (AnimalType A in Animals)
-                {
+                {                    
                     F.WriteLine(A.ID);
                     DateTime LastDate = Earliest;
                     foreach (SeizureType S in A.Sz)
@@ -711,12 +712,12 @@ namespace ProjectManager
                 return; 
             }
             st = "Animal";
-            for (DateTime i = Earliest; i <= Latest; i=i.AddDays(1))
+            /* for (DateTime i = Earliest; i <= Latest; i=i.AddDays(1))
             {
                 st += "," + i.ToShortDateString();
                 Console.WriteLine(st);
             }
-            F.WriteLine(st);
+            F.WriteLine(st);*/
             foreach (AnimalType A in Animals)
             {
                 if (E.Sz) //Add up daily seizure count. 
