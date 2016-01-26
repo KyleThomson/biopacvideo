@@ -45,7 +45,8 @@ namespace ProjectManager
     {
         public string Name;
         public int IDNum;
-        public LabelType(string a, string b)
+ 
+        public LabelType(string a, string b) 
         {
             int.TryParse(a, out IDNum);
             Name = b;
@@ -132,6 +133,18 @@ namespace ProjectManager
                 return false;
         }
     }
+    public class InjectionType
+    {
+        public string Route;
+        public string Dose;
+        public string ADDID;
+        public string solvent; 
+        public DateTime d;
+        public InjectionType(string a, string b, string c, string d)
+        {
+            
+        }
+    }
     public class FileType
     {
         public string[] AnimalIDs;
@@ -214,6 +227,7 @@ namespace ProjectManager
         public List<BloodDrawType> BloodDraws;
         public List<RemovalType> Removals; 
         public GroupType Group;
+        public List<InjectionType> Injections; 
         public AnimalType()
         {            
             Sz = new List<SeizureType>();
@@ -223,6 +237,7 @@ namespace ProjectManager
             Group = new GroupType();
             BloodDraws = new List<BloodDrawType>();
             Removals = new List<RemovalType>();
+            Injections = new List<InjectionType>(); 
         }
     }
     /****************************************************************************************************************8
@@ -851,7 +866,8 @@ namespace ProjectManager
             }
             else if (data[0].IndexOf("Lb") != -1)
             {
-                LabelType Lb = new LabelType(data[1], data[2]);
+                LabelType Lb;
+                Lb = new LabelType(data[1], data[2]);
                 Labels.Add(Lb);
             }
             else if (data[0].IndexOf("An") != -1)
