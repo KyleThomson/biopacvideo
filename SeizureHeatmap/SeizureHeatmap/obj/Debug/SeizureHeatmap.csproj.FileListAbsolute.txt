@@ -1,0 +1,14 @@
+C:\Users\John\Documents\C#_Learning\SeizureHeatmap\SeizureHeatmap\bin\Debug\SeizureHeatmap.exe.config
+C:\Users\John\Documents\C#_Learning\SeizureHeatmap\SeizureHeatmap\bin\Debug\SeizureHeatmap.exe
+C:\Users\John\Documents\C#_Learning\SeizureHeatmap\SeizureHeatmap\bin\Debug\SeizureHeatmap.pdb
+C:\Users\John\Documents\C#_Learning\SeizureHeatmap\SeizureHeatmap\obj\Debug\SeizureHeatmap.csprojAssemblyReference.cache
+C:\Users\John\Documents\C#_Learning\SeizureHeatmap\SeizureHeatmap\obj\Debug\SeizureHeatmap.mainUI.resources
+C:\Users\John\Documents\C#_Learning\SeizureHeatmap\SeizureHeatmap\obj\Debug\SeizureHeatmap.Properties.Resources.resources
+C:\Users\John\Documents\C#_Learning\SeizureHeatmap\SeizureHeatmap\obj\Debug\SeizureHeatmap.csproj.GenerateResource.cache
+C:\Users\John\Documents\C#_Learning\SeizureHeatmap\SeizureHeatmap\obj\Debug\SeizureHeatmap.csproj.CoreCompileInputs.cache
+C:\Users\John\Documents\C#_Learning\SeizureHeatmap\SeizureHeatmap\obj\Debug\SeizureHeatmap.exe
+C:\Users\John\Documents\C#_Learning\SeizureHeatmap\SeizureHeatmap\obj\Debug\SeizureHeatmap.pdb
+C:\Users\John\Documents\C#_Learning\SeizureHeatmap\SeizureHeatmap\bin\Debug\FileHelpers.dll
+C:\Users\John\Documents\C#_Learning\SeizureHeatmap\SeizureHeatmap\bin\Debug\FileHelpers.xml
+C:\Users\John\Documents\C#_Learning\SeizureHeatmap\SeizureHeatmap\obj\Debug\SeizureHeatmap.csproj.CopyComplete
+C:\Users\John\Documents\C#_Learning\SeizureHeatmap\SeizureHeatmap\obj\Debug\SeizureHeatmap.csproj.ResolveComReference.cache
