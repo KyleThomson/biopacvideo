@@ -249,7 +249,7 @@ namespace SeizurePlayback
             Xmax = X;
             Ymax = Y;            
             g = Graphics.FromImage(offscreen);
-            g.Clear(Color.White);            
+            g.Clear(Color.White);
         }
         public void cleargraph()
         {

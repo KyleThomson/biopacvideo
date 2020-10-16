@@ -36,6 +36,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.showAnimal = new System.Windows.Forms.Button();
             this.GenerateExcel = new System.Windows.Forms.Button();
+            this.DrawPoint = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -109,11 +110,22 @@
             this.GenerateExcel.UseVisualStyleBackColor = true;
             this.GenerateExcel.Click += new System.EventHandler(this.button2_Click);
             // 
+            // DrawPoint
+            // 
+            this.DrawPoint.Location = new System.Drawing.Point(36, 493);
+            this.DrawPoint.Name = "DrawPoint";
+            this.DrawPoint.Size = new System.Drawing.Size(142, 43);
+            this.DrawPoint.TabIndex = 9;
+            this.DrawPoint.Text = "Draw some points";
+            this.DrawPoint.UseVisualStyleBackColor = true;
+            this.DrawPoint.Click += new System.EventHandler(this.DrawPoint_Click);
+            // 
             // mainUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1071, 591);
+            this.Controls.Add(this.DrawPoint);
             this.Controls.Add(this.GenerateExcel);
             this.Controls.Add(this.showAnimal);
             this.Controls.Add(this.button1);
@@ -137,6 +149,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button showAnimal;
         private System.Windows.Forms.Button GenerateExcel;
+        private System.Windows.Forms.Button DrawPoint;
     }
 }
 
