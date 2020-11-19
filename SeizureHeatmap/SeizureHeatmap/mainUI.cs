@@ -122,8 +122,11 @@ namespace SeizureHeatmap
 
         private void DrawPoint_Click(object sender, EventArgs e)
         {
+            int X = 1024;
+            int Y = 1024;
             List<string> xTickString = new List<string>();
             List<string> yTickString = new List<string>();
+            //Obtain basis for y and x axis labelling
             for (int i = 0; i < data.Animals[0].allDaySrs.Length; i++)
             {
                 xTickString.Add((i+1).ToString());
@@ -133,115 +136,54 @@ namespace SeizureHeatmap
             {
                 yTickString.Add(data.Animals[i].animalID);
             }
-            Drawing newGraph = new Drawing(1024, 1024);
-            int X = 1024;
-            int Y = 1024;
-            newGraph.DrawAxes(4, X, Y);
-            newGraph.DisplayGraph();
-            newGraph.DrawTicks(data.Animals[0].allDaySrs.Length, data.Animals.Count, X, Y, 1.5F, xTickString, yTickString);
-            Font aFont = new Font("Arial",12);
-            newGraph.WriteXLabel("Time (days)", aFont);
-            newGraph.WriteYLabel("Animals", aFont);
-            newGraph.DrawVector(data.Animals[0].allDaySrs.Length,data.Animals.Count);
-            //Pen B = new Pen(Color.Black, width: (float)2.5);
-            //PictureBox P = new PictureBox();
-            //P.ClientSize = new Size(512, 512);
-            //var bitmap = new Bitmap(512, 512);
+            //instantiate new instance of a graph
+            GraphProperties srsGraph = new GraphProperties();
+            srsGraph.InitGraph(X, Y);
+            srsGraph.DrawAxes(4, X, Y);
+            srsGraph.DrawTicks(data.Animals[0].allDaySrs.Length, data.Animals.Count, X, Y, 1.5F, xTickString, yTickString);
+            Font aFont = new Font("Arial", 12);
+            srsGraph.WriteXLabel("Time (days)", aFont, X, Y);
+            srsGraph.WriteYLabel("Animals", aFont, X, Y);
+            int markerSize = 4;
+           
+            for (int i = 0; i < data.Animals.Count; i++)
+            {
+                float yCoord = srsGraph.yTickPoints[i];
+                int[] tempSRS = (int[])data.Animals[i].allDaySrs;
+                for (int j = 0; j < data.Animals[i].allDaySrs.Length; j++)
+                {
+                    int oddCount = 0;
+                    int evenCount = 0;
+                    for (int k = 0; k < tempSRS[j]; k++)
+                    {
+                        if (k%2 == 0)
+                        {
+                            evenCount++;
+                            float xCoord = srsGraph.xTickPoints[j] + (evenCount * markerSize / 3);
+                            srsGraph.PlotPoints(xCoord, yCoord, markerSize);
+                        }
+                        else
+                        {
+                            oddCount++;
+                            float xCoord = srsGraph.xTickPoints[j] - (evenCount * markerSize / 3);
+                            srsGraph.PlotPoints(xCoord, yCoord, markerSize);
+                        }
+                        
+                    }
+                }
+            }
+            srsGraph.DisplayGraph();
 
-            //try
-            //{
-            //// Calculate positioning of axes
-            //int X = bitmap.Width;
-            //int Y = bitmap.Height;
-            //int yTickCount = data.Animals.Count;
-            //int xTickCount = data.Animals[0].allDaySrs.Length;
-            //float yTickSpacing = ((float)(Y / (yTickCount*1.25)));
-            //float xTickSpacing = X / xTickCount;
-            //// Axis labeling
-            //string xLabel = "Time (days)";
-            //string yLabel = "Animal IDs";
-            //// Axis label bounding boxes
-            //float width = 200.0F;
-            //float height = 50.0F;
-            //float yWidth = 100.0F;
-            //float yHeight = 350.0F;
-            //RectangleF xLabelRect = new RectangleF((X - X / 6) / 2, (float)(Y / 1.125), width, height);
-            //RectangleF yLabelRect = new RectangleF(X/256, Y/4, yWidth, yHeight);
-            //// Axis label formatting
-            //Font drawFont = new Font("Arial", 12);
-            //Font animalFont = new Font("Arial", 8);
-            //SolidBrush drawBrush = new SolidBrush(Color.Black);
-            //StringFormat drawFormat = new StringFormat();
-            //drawFormat.Alignment = StringAlignment.Center;
-            //StringFormat yLabelFormat = new StringFormat();
-            //yLabelFormat.FormatFlags = StringFormatFlags.DirectionVertical;
-
-            //using (var graphics = Graphics.FromImage(bitmap))
-            //{
-            //    // Y-axis
-            //    graphics.DrawLine(B, X / 6, 0, X / 6, (int)(Y / 1.2));
-            //    graphics.DrawString(yLabel, drawFont, drawBrush, yLabelRect, yLabelFormat);
-            //    for(int i = 0; i < data.Animals.Count; i++)
-            //    {
-            //        graphics.DrawLine(B, (float)(X / 6.5), yTickSpacing * (i+1), (float)(X / 5.5), yTickSpacing * (i+1));
-            //        RectangleF yTickLabelRect = new RectangleF((float)(X / (X*16)), (float)(yTickSpacing * (i + 1/1.2)), width / 2, height / 2);
-            //        graphics.DrawString(data.Animals[i].animalID, animalFont, drawBrush, yTickLabelRect, drawFormat);
-            //        //Draw data points //ith animals seizure frequencies per day
-            //        List<int> tempSrsList = new List<int>((IEnumerable<int>)data.Animals[i].allDaySrs);
-            //        for (int k = 0; k < data.Animals[i].allDaySrs.Length; k++)
-            //        {
-            //            for (int j = 0; j < tempSrsList[k]; j++)
-            //            {
-            //                // generate point for each seizure
-            //                PointF point1 = new PointF(X / 6 + xTickSpacing * (k + 1) + (j + 2), yTickSpacing * (i + 1) + (i / 2));
-            //                PointF point2 = new PointF(X / 6 + xTickSpacing * (k + 1) + (k / 1) + (j + 2), yTickSpacing * (i + 1));
-            //                PointF point3 = new PointF(X / 6 + xTickSpacing * (k + 1) + (j + 2), yTickSpacing * (i + 1) - (i / 2));
-            //                PointF point4 = new PointF(X / 6 + xTickSpacing * (k + 1) - (k / 1) + (j + 2), yTickSpacing * (i + 1));
-            //                PointF[] diamondMarker =
-            //                {
-            //                    point1,
-            //                    point2,
-            //                    point3,
-            //                    point4
-            //                };
-
-            //                graphics.DrawPolygon(B, diamondMarker);
-            //            }
-            //        }
-            //    }
-            //    // X-axis
-            //    graphics.DrawLine(B, X / 6, (int)(Y / 1.2), X, (int)(Y / 1.2));
-            //    graphics.DrawString(xLabel, drawFont, drawBrush, xLabelRect, drawFormat);
-            //    for(int i = 0; i < xTickCount; i++)
-            //    {
-            //        graphics.DrawLine(B, X / 6 + xTickSpacing * (i + 1), (float)(Y / 1.175), X / 6 + xTickSpacing * (i + 1), (float)(Y / 1.225));
-            //        RectangleF xTickLabelRect = new RectangleF((float)(X/8 + xTickSpacing * (i)), (float)(Y / 1.150), width / 2, height / 2);
-            //        graphics.DrawString((i+1).ToString(), animalFont, drawBrush, xTickLabelRect, drawFormat);
-            //    }
-            //}
-            //var myForm = new Form1();
-            //myForm.Size = new Size(512, 512);
-            //P.Image = bitmap;
-            //myForm.Controls.Add(P);
-            //myForm.Show();
-            //}
-            //catch (NullReferenceException ex)
-            //{
-            //    MessageBox.Show(ex.ToString());
         }
 
+        private void mainUI_Load(object sender, EventArgs e)
+        {
 
-
-}
-                       
-        //var myForm = new Form1();
+        }
+    }
         
 
     }
-            //Drawing Circles = new Drawing();
-            //Circles.InitDrawing(512, 512);
-            //Circles.CreateDrawing(24, 24, 50, 50, "hello!");
-            //Graphics newDrawing = Circles.gfx;
 
 
 

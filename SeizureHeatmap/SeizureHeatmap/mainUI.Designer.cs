@@ -135,6 +135,7 @@
             this.Controls.Add(this.fileLoad);
             this.Name = "mainUI";
             this.Text = "Main_Interface";
+            this.Load += new System.EventHandler(this.mainUI_Load);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
 
