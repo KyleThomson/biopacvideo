@@ -103,17 +103,6 @@ namespace SeizureHeatmap
 
         }
 
-        private void showAnimal_Click(object sender, EventArgs e)
-        {
-            // get selected animal
-            string selectedAnimal = listBox1.SelectedItem.ToString();
-            int animalIdx = listBox1.SelectedIndex;
-            if (chart1.Series[animalIdx].Enabled == false)
-            {
-                chart1.Series[animalIdx].Enabled = true;
-            }
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
             //newHM = new CreateHeatmap
@@ -124,61 +113,31 @@ namespace SeizureHeatmap
         {
             int X = 1024;
             int Y = 1024;
-            List<string> xTickString = new List<string>();
-            List<string> yTickString = new List<string>();
-            //Obtain basis for y and x axis labelling
-            for (int i = 0; i < data.Animals[0].allDaySrs.Length; i++)
-            {
-                xTickString.Add((i+1).ToString());
-            }
-
-            for (int i = 0; i < data.Animals.Count; i++)
-            {
-                yTickString.Add(data.Animals[i].animalID);
-            }
-            //instantiate new instance of a graph
-            GraphProperties srsGraph = new GraphProperties();
-            srsGraph.InitGraph(X, Y);
-            srsGraph.DrawAxes(4, X, Y);
-            srsGraph.DrawTicks(data.Animals[0].allDaySrs.Length, data.Animals.Count, X, Y, 1.5F, xTickString, yTickString);
-            Font aFont = new Font("Arial", 12);
-            srsGraph.WriteXLabel("Time (days)", aFont, X, Y);
-            srsGraph.WriteYLabel("Animals", aFont, X, Y);
-            int markerSize = 4;
-           
-            for (int i = 0; i < data.Animals.Count; i++)
-            {
-                float yCoord = srsGraph.yTickPoints[i];
-                int[] tempSRS = (int[])data.Animals[i].allDaySrs;
-                for (int j = 0; j < data.Animals[i].allDaySrs.Length; j++)
-                {
-                    int oddCount = 0;
-                    int evenCount = 0;
-                    for (int k = 0; k < tempSRS[j]; k++)
-                    {
-                        if (k%2 == 0)
-                        {
-                            evenCount++;
-                            float xCoord = srsGraph.xTickPoints[j] + (evenCount * markerSize / 3);
-                            srsGraph.PlotPoints(xCoord, yCoord, markerSize);
-                        }
-                        else
-                        {
-                            oddCount++;
-                            float xCoord = srsGraph.xTickPoints[j] - (evenCount * markerSize / 3);
-                            srsGraph.PlotPoints(xCoord, yCoord, markerSize);
-                        }
-                        
-                    }
-                }
-            }
-            srsGraph.DisplayGraph();
-
+            SeizureGraphing srsGraph = new SeizureGraphing(X, Y, data);
+            srsGraph.PlotSeizures(data);
         }
 
         private void mainUI_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void HideAnimal_Click(object sender, EventArgs e)
+        {
+            // get selected animal
+            string selectedAnimal = listBox1.SelectedItem.ToString();
+            int animalIdx = listBox1.SelectedIndex;
+            MainData tempData = data;
+            tempData.Animals.RemoveAt(animalIdx);
+            if (selectedAnimal != null)
+            {
+                // hide animal seizure data
+                int X = 1024;
+                int Y = 1024;
+                SeizureGraphing newGraph = new SeizureGraphing(X, Y, tempData);
+                newGraph.PlotSeizures(tempData);
+
+            }
         }
     }
         

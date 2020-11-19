@@ -31,12 +31,10 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             this.fileLoad = new System.Windows.Forms.Button();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.PlotSeizure = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.showAnimal = new System.Windows.Forms.Button();
             this.GenerateExcel = new System.Windows.Forms.Button();
             this.DrawPoint = new System.Windows.Forms.Button();
+            this.HideAnimal = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -61,16 +59,6 @@
             this.chart1.Text = "chart1";
             this.chart1.Click += new System.EventHandler(this.chart1_Click);
             // 
-            // PlotSeizure
-            // 
-            this.PlotSeizure.Location = new System.Drawing.Point(36, 326);
-            this.PlotSeizure.Name = "PlotSeizure";
-            this.PlotSeizure.Size = new System.Drawing.Size(142, 29);
-            this.PlotSeizure.TabIndex = 4;
-            this.PlotSeizure.Text = "Plot seizures";
-            this.PlotSeizure.UseVisualStyleBackColor = true;
-            this.PlotSeizure.Click += new System.EventHandler(this.button1_Click);
-            // 
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
@@ -80,29 +68,9 @@
             this.listBox1.TabIndex = 5;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(36, 260);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(142, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Hide animal";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
-            // 
-            // showAnimal
-            // 
-            this.showAnimal.Location = new System.Drawing.Point(36, 289);
-            this.showAnimal.Name = "showAnimal";
-            this.showAnimal.Size = new System.Drawing.Size(142, 23);
-            this.showAnimal.TabIndex = 7;
-            this.showAnimal.Text = "show animal";
-            this.showAnimal.UseVisualStyleBackColor = true;
-            this.showAnimal.Click += new System.EventHandler(this.showAnimal_Click);
-            // 
             // GenerateExcel
             // 
-            this.GenerateExcel.Location = new System.Drawing.Point(36, 426);
+            this.GenerateExcel.Location = new System.Drawing.Point(36, 371);
             this.GenerateExcel.Name = "GenerateExcel";
             this.GenerateExcel.Size = new System.Drawing.Size(142, 43);
             this.GenerateExcel.TabIndex = 8;
@@ -112,25 +80,33 @@
             // 
             // DrawPoint
             // 
-            this.DrawPoint.Location = new System.Drawing.Point(36, 493);
+            this.DrawPoint.Location = new System.Drawing.Point(36, 433);
             this.DrawPoint.Name = "DrawPoint";
             this.DrawPoint.Size = new System.Drawing.Size(142, 43);
             this.DrawPoint.TabIndex = 9;
-            this.DrawPoint.Text = "Draw some points";
+            this.DrawPoint.Text = "Plot seizure data";
             this.DrawPoint.UseVisualStyleBackColor = true;
             this.DrawPoint.Click += new System.EventHandler(this.DrawPoint_Click);
+            // 
+            // HideAnimal
+            // 
+            this.HideAnimal.Location = new System.Drawing.Point(36, 271);
+            this.HideAnimal.Name = "HideAnimal";
+            this.HideAnimal.Size = new System.Drawing.Size(142, 35);
+            this.HideAnimal.TabIndex = 10;
+            this.HideAnimal.Text = "Hide animal";
+            this.HideAnimal.UseVisualStyleBackColor = true;
+            this.HideAnimal.Click += new System.EventHandler(this.HideAnimal_Click);
             // 
             // mainUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1071, 591);
+            this.Controls.Add(this.HideAnimal);
             this.Controls.Add(this.DrawPoint);
             this.Controls.Add(this.GenerateExcel);
-            this.Controls.Add(this.showAnimal);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.listBox1);
-            this.Controls.Add(this.PlotSeizure);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.fileLoad);
             this.Name = "mainUI";
@@ -145,12 +121,10 @@
 
         private System.Windows.Forms.Button fileLoad;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
-        private System.Windows.Forms.Button PlotSeizure;
         private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button showAnimal;
         private System.Windows.Forms.Button GenerateExcel;
         private System.Windows.Forms.Button DrawPoint;
+        private System.Windows.Forms.Button HideAnimal;
     }
 }
 
