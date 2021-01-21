@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
-namespace SeizureHeatmap
+namespace ProjectManager
 {
     class GraphProperties
     {
@@ -14,10 +14,12 @@ namespace SeizureHeatmap
         public Pen axisPen;
         public int xAxisLength;
         public int yAxisLength;
+        public float xAxisStart;
+        public float yAxisStart;
         public List<float> xTickPoints;
         public List<float> yTickPoints;
         public PictureBox picture = new PictureBox();
-        public Form1 graphForm = new Form1();
+        public Form graphForm = new Form();
         public void InitGraph(int X, int Y)
         {
             mainPlot = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
@@ -65,7 +67,6 @@ namespace SeizureHeatmap
                 PointF xTickStart = new PointF(xAxisStart + xTickSpacing * (i + 1), yAxisLength - yAxisStart);
                 xTickPoints.Add(xAxisStart + xTickSpacing * (i + 1));
                 PointF xTickEnd = new PointF(xAxisStart + xTickSpacing * (i + 1), (float)((yAxisLength - yAxisStart) * 0.99));
-                PointF xTickLabelLoc = new PointF(xAxisStart + xTickSpacing * (i), (float)(yAxisLength - yAxisStart * 0.8));
                 graphics.DrawLine(tickPen, xTickStart, xTickEnd);
                 // x tick label
                 SizeF xTickSize = new SizeF();
@@ -107,6 +108,7 @@ namespace SeizureHeatmap
         }
         public void PlotPoints(float xCoord, float yCoord, int markerSize)
         {
+            
             Pen dataPen = new Pen(Brushes.Black);
             graphics.DrawEllipse(dataPen, xCoord, yCoord, markerSize, markerSize);
         }

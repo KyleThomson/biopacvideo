@@ -79,6 +79,7 @@
     <Compile Include="Exporter.designer.cs">
       <DependentUpon>Exporter.cs</DependentUpon>
     </Compile>
+    <Compile Include="GraphProperties.cs" />
     <Compile Include="MultiDirectoryAdd.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -240,6 +240,50 @@ namespace ProjectManager
             Injections = new List<InjectionType>(); 
         }
     }
+    public class SzGraph
+    {
+        public GraphProperties graph;
+        public SzGraph(int X, int Y, Project pjt)
+        {
+            graph = new GraphProperties();
+            graph.InitGraph(X, Y);
+            graph.DrawAxes(4, X, Y);
+            int numXTicks = 3;
+            int xTickInterval = 5;
+            List<string> xTickString = GetXTickLabels(pjt, xTickInterval);
+            List<string> yTickString = GetYTickLabels(pjt);
+            graph.DrawTicks(numXTicks, pjt.Animals.Count, X, Y, 1.5F, xTickString, yTickString);
+            Font aFont = new Font("Arial", 12);
+            graph.WriteXLabel("Time (days)", aFont, X, Y);
+            graph.WriteYLabel("Animals", aFont, X, Y);
+        }
+        public List<string> GetXTickLabels(Project pjt, int xTickInterval)
+        {
+            List<string> xTickString = new List<string>();
+            //Obtain basis for y and x axis labelling
+            for (int i = 0; i < pjt.Files.Count; i+=xTickInterval)
+            {
+                if (i % xTickInterval == 0 && i != 0)
+                {
+                    xTickString.Add((i).ToString());
+                }
+                
+            }
+            return xTickString;
+        }
+        public List<string> GetYTickLabels(Project pjt)
+        {
+            List<string> yTickString = new List<string>();
+            //Obtain basis for y and x axis labelling
+            for (int i = 0; i < pjt.Animals.Count; i++)
+            {
+                yTickString.Add(pjt.Animals[i].ID);
+            }
+            return yTickString;
+        }
+
+
+    }
     /****************************************************************************************************************8
      *
      * 
