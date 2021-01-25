@@ -248,6 +248,8 @@ namespace ProjectManager
             graph = new GraphProperties();
             graph.InitGraph(X, Y);
             graph.DrawAxes(4, X, Y);
+            graph.maxXData = pjt.Files.Count;
+            graph.maxYData = pjt.Animals.Count;
             int numXTicks = 3;
             int xTickInterval = 5;
             List<string> xTickString = GetXTickLabels(pjt, xTickInterval);
@@ -280,6 +282,18 @@ namespace ProjectManager
                 yTickString.Add(pjt.Animals[i].ID);
             }
             return yTickString;
+        }
+        public void PlotSz(Project pjt)
+        {
+            int markerSize = 4;
+            for (int i = 0; i < pjt.Animals.Count; i++)
+            {
+                float yCoord = graph.yTickPoints[i];
+                for (int j = 0; j < pjt.Animals[i].Sz.Count; j++)
+                {
+                    float xCoord = pjt.Animals[i].Sz[j].t.Days;
+                }
+            }
         }
 
 

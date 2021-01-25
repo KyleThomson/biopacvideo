@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Windows.Forms;
 namespace ProjectManager
 {
-    class GraphProperties
+    public class GraphProperties
     {
         public Bitmap mainPlot;
         public Graphics graphics;
@@ -18,6 +18,8 @@ namespace ProjectManager
         public float yAxisStart;
         public List<float> xTickPoints;
         public List<float> yTickPoints;
+        public float maxXData;
+        public float maxYData;
         public PictureBox picture = new PictureBox();
         public Form graphForm = new Form();
         public void InitGraph(int X, int Y)
@@ -32,15 +34,15 @@ namespace ProjectManager
             xTickPoints = new List<float>();
             yTickPoints = new List<float>();
         }
-        public void DrawAxes(float penWidth, int Xmax, int Ymax)
+        public void DrawAxes(float penWidth, int X, int Y)
         {
-            float xAxisLength = (float)(Xmax * 0.75);
-            float yAxisLength = (float)(Ymax * 0.75);
-            float xAxisStart = (float)(Xmax * 0.25);
-            float yAxisStart = (float)(Ymax * 0.25);
+            float xAxisLength = (float)(X * 0.75);
+            float yAxisLength = (float)(Y * 0.75);
+            float xAxisStart = (float)(X * 0.25);
+            float yAxisStart = (float)(Y * 0.25);
 
-            PointF xAxisStartPoint = new PointF(xAxisStart, Ymax - yAxisStart);
-            PointF xAxisEndPoint = new PointF(xAxisLength, Ymax - yAxisStart);
+            PointF xAxisStartPoint = new PointF(xAxisStart, Y - yAxisStart);
+            PointF xAxisEndPoint = new PointF(xAxisLength, Y - yAxisStart);
             PointF yAxisStartPoint = new PointF(xAxisStart, yAxisStart);
             PointF yAxisEndPoint = new PointF(xAxisStart, yAxisLength);
 
@@ -106,11 +108,30 @@ namespace ProjectManager
             RectangleF yLabelRect = new RectangleF((float)(Xmax * 0.15), (float)(Ymax / 2.25), 50, 200);
             graphics.DrawString(yLabel, font, drawBrush, yLabelRect, yLabelFormat);
         }
-        public void PlotPoints(float xCoord, float yCoord, int markerSize)
-        {
-            
+        public void PlotPoints(float xCoord, float yCoord, int markerSize, string markerType)
+        {          
             Pen dataPen = new Pen(Brushes.Black);
-            graphics.DrawEllipse(dataPen, xCoord, yCoord, markerSize, markerSize);
+            SolidBrush dataBrush = new SolidBrush(Color.Black);
+            //float xLastPos = xTickPoints[xTickPoints.Count - 1];
+            //float yLastPos = yTickPoints[yTickPoints.Count - 1];
+            float realXCoord = (xCoord / maxXData) * xAxisLength;
+            float realYCoord = (yCoord / maxYData) * yAxisLength;
+            if(markerType == "o")
+            {
+                graphics.DrawEllipse(dataPen, realXCoord, realYCoord, markerSize, markerSize);
+            }
+            else if(markerType == ".")
+            {
+                graphics.FillEllipse(dataBrush, realXCoord, realYCoord, markerSize, markerSize);
+            }
+            else if(markerType == "d")
+            {
+                //gotta do some math to draw a rhombus/diamond marker
+            }
+            else
+            {
+                //no marker shape selected?
+            }
         }
         public void DisplayGraph()
         {
