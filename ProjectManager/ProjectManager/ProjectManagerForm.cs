@@ -262,8 +262,8 @@ namespace ProjectManager
         {
             if (pjt == null)
                 return;
-            Calendar F = new Calendar(pjt);
-            F.ShowDialog();
+            //Calendar F = new Calendar(pjt);
+            //F.ShowDialog();
         }
 
         private void importantDateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -288,6 +288,14 @@ namespace ProjectManager
             F.Dispose();
 
         }
-        
+
+        private void testPlotToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SzGraph Test = new SzGraph(1024, 1024, pjt);
+            Test.GetXTickLabels(pjt,5);
+            Test.GetYTickLabels(pjt);
+            Test.PlotSz(pjt);
+            Test.graph.DisplayGraph();
+        }
     }
 }

@@ -247,7 +247,8 @@ namespace ProjectManager
         {
             graph = new GraphProperties();
             graph.InitGraph(X, Y);
-            graph.DrawAxes(4, X, Y);
+            List<PointF> axes = graph.DrawAxes(4, X, Y);
+            graph.axes = axes;
             graph.maxXData = pjt.Files.Count;
             graph.maxYData = pjt.Animals.Count;
             int numXTicks = 3;
@@ -285,14 +286,24 @@ namespace ProjectManager
         }
         public void PlotSz(Project pjt)
         {
-            int markerSize = 4;
+            int markerSize = 8;
             for (int i = 0; i < pjt.Animals.Count; i++)
             {
-                float yCoord = graph.yTickPoints[i];
+                //float yCoord = graph.yTickPoints[i];
+                float yCoord = i+1;
                 for (int j = 0; j < pjt.Animals[i].Sz.Count; j++)
                 {
-                    float xCoord = pjt.Animals[i].Sz[j].t.Days;
+                    float xCoord = (float)pjt.Animals[i].Sz[j].t.Hours / 24;
+                    graph.PlotPoints(xCoord, yCoord, markerSize, "o");
                 }
+            }
+        }
+        public void PlotTrt(Project pjt)
+        {
+            for (int i = 0; i < pjt.Animals.Count; i++)
+            {
+                float yCoord = i;
+                //pjt.Animals[i].Injections.
             }
         }
 
@@ -316,7 +327,8 @@ namespace ProjectManager
         public List<FileType> Files;
         public List<GroupType> Groups; 
         public List<AnimalType> Animals;
-        public List<LabelType> Labels; 
+        public List<LabelType> Labels;
+        public SzGraph Graph;
         public Project(string Inpt)
         {
             Filename = Inpt;

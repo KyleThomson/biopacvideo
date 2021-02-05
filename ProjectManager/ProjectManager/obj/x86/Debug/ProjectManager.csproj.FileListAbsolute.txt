@@ -2,7 +2,6 @@ C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.AddDate.resources
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.AddGroup.resources
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.AddtoProject.resources
-C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.Calendar.resources
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.Exporter.resources
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.MultiDirectoryAdd.resources
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.ProjectManager.resources
@@ -10,3 +9,7 @@ C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.WeightAdd.resources
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.csproj.GenerateResource.cache
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.csproj.CoreCompileInputs.cache
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\ProjectManager.exe
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\ProjectManager.pdb
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.exe
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.pdb

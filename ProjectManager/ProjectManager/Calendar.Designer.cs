@@ -127,8 +127,7 @@
 
         #endregion
 
-        private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer1;
-        private Microsoft.VisualBasic.PowerPacks.LineShape lineShape1;
+
         private System.Windows.Forms.ComboBox AnimalSel;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label MMY;

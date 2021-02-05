@@ -67,12 +67,6 @@
     <Compile Include="AddtoProject.designer.cs">
       <DependentUpon>AddtoProject.cs</DependentUpon>
     </Compile>
-    <Compile Include="Calendar.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Calendar.designer.cs">
-      <DependentUpon>Calendar.cs</DependentUpon>
-    </Compile>
     <Compile Include="Exporter.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,9 +101,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AddtoProject.resx">
       <DependentUpon>AddtoProject.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Calendar.resx">
-      <DependentUpon>Calendar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Exporter.resx">
       <DependentUpon>Exporter.cs</DependentUpon>

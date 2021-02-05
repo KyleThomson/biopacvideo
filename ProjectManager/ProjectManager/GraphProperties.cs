@@ -12,8 +12,8 @@ namespace ProjectManager
         public Bitmap mainPlot;
         public Graphics graphics;
         public Pen axisPen;
-        public int xAxisLength;
-        public int yAxisLength;
+        public float xAxisLength;
+        public float yAxisLength;
         public float xAxisStart;
         public float yAxisStart;
         public List<float> xTickPoints;
@@ -22,6 +22,7 @@ namespace ProjectManager
         public float maxYData;
         public PictureBox picture = new PictureBox();
         public Form graphForm = new Form();
+        public List<PointF> axes;
         public void InitGraph(int X, int Y)
         {
             mainPlot = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
@@ -34,13 +35,14 @@ namespace ProjectManager
             xTickPoints = new List<float>();
             yTickPoints = new List<float>();
         }
-        public void DrawAxes(float penWidth, int X, int Y)
+        public List<PointF> DrawAxes(float penWidth, int X, int Y)
         {
             float xAxisLength = (float)(X * 0.75);
             float yAxisLength = (float)(Y * 0.75);
             float xAxisStart = (float)(X * 0.25);
             float yAxisStart = (float)(Y * 0.25);
 
+            
             PointF xAxisStartPoint = new PointF(xAxisStart, Y - yAxisStart);
             PointF xAxisEndPoint = new PointF(xAxisLength, Y - yAxisStart);
             PointF yAxisStartPoint = new PointF(xAxisStart, yAxisStart);
@@ -52,6 +54,12 @@ namespace ProjectManager
             graphics.DrawLine(axisPen, xAxisStartPoint, xAxisEndPoint);
             // Y Axis
             graphics.DrawLine(axisPen, yAxisStartPoint, yAxisEndPoint);
+            List<PointF> axes = new List<PointF>();
+            axes.Add(xAxisStartPoint);
+            axes.Add(xAxisEndPoint);
+            axes.Add(yAxisStartPoint);
+            axes.Add(yAxisEndPoint);
+            return axes;
         }
         public void DrawTicks(int xTicks, int yTicks, int xAxisLength, int yAxisLength, float tickWidth, List<string> xTickLabels, List<string> yTickLabels)
         {
@@ -132,6 +140,21 @@ namespace ProjectManager
             {
                 //no marker shape selected?
             }
+        }
+        public void Line(float x1Coord, float y1Coord, float x2Coord, float y2Coord, float lineWidth, Color color)
+        {
+            Pen dataPen = new Pen(Brushes.Black);
+            dataPen.Color = color;
+            dataPen.Width = lineWidth;
+
+            float realX1Coord = (x1Coord / maxXData) * xAxisLength;
+            float realY1Coord = (y1Coord / maxYData) * yAxisLength;
+            float realX2Coord = (x2Coord / maxXData) * xAxisLength;
+            float realY2Coord = (y2Coord / maxYData) * yAxisLength;
+
+            PointF startPoint = new PointF(realX1Coord, realY1Coord);
+            PointF endPoint = new PointF(realX2Coord, realY2Coord);
+            graphics.DrawLine(dataPen, startPoint, endPoint);
         }
         public void DisplayGraph()
         {
