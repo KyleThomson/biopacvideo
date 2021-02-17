@@ -61,7 +61,7 @@ namespace ProjectManager
             axes.Add(yAxisEndPoint);
             return axes;
         }
-        public void DrawTicks(int xTicks, int yTicks, int xAxisLength, int yAxisLength, float tickWidth, List<string> xTickLabels, List<string> yTickLabels)
+        public List<float> DrawTicks(int xTicks, int yTicks, int xAxisLength, int yAxisLength, float tickWidth, List<string> xTickLabels, List<string> yTickLabels)
         {
             Pen tickPen = new Pen(Brushes.Black);
             tickPen.Width = tickWidth;
@@ -74,14 +74,19 @@ namespace ProjectManager
 
             for (int i = 0; i < xTicks; i++)
             {
-                PointF xTickStart = new PointF(xAxisStart + xTickSpacing * (i + 1), yAxisLength - yAxisStart);
-                xTickPoints.Add(xAxisStart + xTickSpacing * (i + 1));
-                PointF xTickEnd = new PointF(xAxisStart + xTickSpacing * (i + 1), (float)((yAxisLength - yAxisStart) * 0.99));
+                float currentXPoint = (float)(Convert.ToDouble(xTickLabels[i])/maxXData)*(axes[1].X - axes[0].X);
+                //PointF xTickStart = new PointF(xAxisStart + xTickSpacing * (i + 1), yAxisLength - yAxisStart);
+                PointF xTickStart = new PointF(xAxisStart + currentXPoint, yAxisLength - yAxisStart);
+                //xTickPoints.Add(xAxisStart + xTickSpacing * (i + 1));
+                xTickPoints.Add(xAxisStart + currentXPoint);
+                //PointF xTickEnd = new PointF(xAxisStart + xTickSpacing * (i + 1), (float)((yAxisLength - yAxisStart) * 0.99));
+                PointF xTickEnd = new PointF(xAxisStart + currentXPoint, (float)((yAxisLength - yAxisStart) * 0.99));
                 graphics.DrawLine(tickPen, xTickStart, xTickEnd);
                 // x tick label
                 SizeF xTickSize = new SizeF();
                 xTickSize = graphics.MeasureString(xTickLabels[i], xFont);
-                RectangleF xTickRect = new RectangleF(xAxisStart - (xTickSize.Width) / 2 + xTickSpacing * (i + 1), (float)(yAxisLength - yAxisStart * .975), xTickSize.Width, xTickSize.Height);
+                //RectangleF xTickRect = new RectangleF(xAxisStart - (xTickSize.Width) / 2 + xTickSpacing * (i + 1), (float)(yAxisLength - yAxisStart * .975), xTickSize.Width, xTickSize.Height);
+                RectangleF xTickRect = new RectangleF(xAxisStart - (xTickSize.Width) / 2 + currentXPoint, (float)(yAxisLength - yAxisStart * .975), xTickSize.Width, xTickSize.Height);
                 graphics.DrawString(xTickLabels[i], xFont, drawBrush, xTickRect);
 
 
@@ -99,6 +104,10 @@ namespace ProjectManager
                 RectangleF yTickRect = new RectangleF((float)(xAxisStart * 0.975) - yTickSize.Width, yAxisLength - yAxisStart - yTickSpacing * (i + 1) - yTickSize.Height / 2, yTickSize.Width, yTickSize.Height);
                 graphics.DrawString(yTickLabels[i], xFont, drawBrush, yTickRect);
             }
+            List<float> axesStarts = new List<float>();
+            axesStarts.Add(xAxisLength);
+            axesStarts.Add(yAxisLength);
+            return axesStarts;
         }
         public void WriteXLabel(string xLabel, Font font, int Xmax, int Ymax)
         {
@@ -122,11 +131,19 @@ namespace ProjectManager
             SolidBrush dataBrush = new SolidBrush(Color.Black);
             //float xLastPos = xTickPoints[xTickPoints.Count - 1];
             //float yLastPos = yTickPoints[yTickPoints.Count - 1];
-            float realXCoord = (xCoord / maxXData) * xAxisLength;
-            float realYCoord = (yCoord / maxYData) * yAxisLength;
-            if(markerType == "o")
+
+            // Scale input coordinates to pixels using where the axes were drawn and the maximum X and Y data
+            float xAxisStart = (float)(xAxisLength * 0.25);
+            float yAxisStart = (float)(yAxisLength * 0.25);
+            float xStart = axes[0].X;
+            float xEnd = axes[1].X;
+            float yEnd = axes[3].Y;
+            float realXCoord = (xCoord / maxXData) * (xEnd - xStart);
+            //float realYCoord = (yCoord / maxYData) * (yEnd);
+            float realYCoord = yCoord;
+            if (markerType == "o")
             {
-                graphics.DrawEllipse(dataPen, realXCoord, realYCoord, markerSize, markerSize);
+                graphics.DrawEllipse(dataPen, realXCoord + xAxisStart, realYCoord, markerSize, markerSize);
             }
             else if(markerType == ".")
             {

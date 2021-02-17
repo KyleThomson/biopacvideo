@@ -245,20 +245,26 @@ namespace ProjectManager
         public GraphProperties graph;
         public SzGraph(int X, int Y, Project pjt)
         {
+            // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
             graph = new GraphProperties();
             graph.InitGraph(X, Y);
             List<PointF> axes = graph.DrawAxes(4, X, Y);
+            // Add some important graph properties to new graph class. Is this a bad use of memory?
             graph.axes = axes;
-            graph.maxXData = pjt.Files.Count;
+            graph.maxXData = pjt.Files.Count; // add maxima
             graph.maxYData = pjt.Animals.Count;
-            int numXTicks = 3;
+            int numXTicks = (int)Math.Floor((decimal)pjt.Files.Count/5); // x and y axis handling
             int xTickInterval = 5;
             List<string> xTickString = GetXTickLabels(pjt, xTickInterval);
             List<string> yTickString = GetYTickLabels(pjt);
-            graph.DrawTicks(numXTicks, pjt.Animals.Count, X, Y, 1.5F, xTickString, yTickString);
+            List<float> axesStarts = graph.DrawTicks(numXTicks, pjt.Animals.Count, X, Y, 1.5F, xTickString, yTickString);
+            graph.xAxisLength = axesStarts[0];
+            graph.yAxisLength = axesStarts[1];
             Font aFont = new Font("Arial", 12);
             graph.WriteXLabel("Time (days)", aFont, X, Y);
             graph.WriteYLabel("Animals", aFont, X, Y);
+            DateTime Earliest = pjt.Files[0].Start.Date;
+            DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
         }
         public List<string> GetXTickLabels(Project pjt, int xTickInterval)
         {
@@ -287,13 +293,18 @@ namespace ProjectManager
         public void PlotSz(Project pjt)
         {
             int markerSize = 8;
+            float startDay = pjt.Files[0].Start.DayOfYear;
+            DateTime Earliest = pjt.Files[0].Start.Date;
+            DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
             for (int i = 0; i < pjt.Animals.Count; i++)
-            {
+            {            
                 //float yCoord = graph.yTickPoints[i];
-                float yCoord = i+1;
+                //float yCoord = pjt.Animals.Count - i + 1;
+                float yCoord = graph.yTickPoints[i];
                 for (int j = 0; j < pjt.Animals[i].Sz.Count; j++)
                 {
-                    float xCoord = (float)pjt.Animals[i].Sz[j].t.Hours / 24;
+                    float xCoord = (float)Math.Round((pjt.Animals[i].Sz[j].d.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours)/24,2);
+                    //float xCoord = (float)(pjt.Animals[i].Sz[j].d.DayOfYear - startDay);
                     graph.PlotPoints(xCoord, yCoord, markerSize, "o");
                 }
             }
@@ -302,7 +313,7 @@ namespace ProjectManager
         {
             for (int i = 0; i < pjt.Animals.Count; i++)
             {
-                float yCoord = i;
+                float yCoord = pjt.Animals.Count - i + 1;
                 //pjt.Animals[i].Injections.
             }
         }
