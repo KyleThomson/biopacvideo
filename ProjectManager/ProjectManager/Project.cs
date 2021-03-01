@@ -247,13 +247,20 @@ namespace ProjectManager
         {
             // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
             graph = new GraphProperties();
-            graph.InitGraph(X, Y);
-            List<PointF> axes = graph.DrawAxes(4, X, Y);
+            graph.X = X;
+            graph.Y = Y;
+            graph.InitGraph();
+            List<PointF> axes = graph.DrawAxes(4);
+
             // Add some important graph properties to new graph class. Is this a bad use of memory?
             graph.axes = axes;
-            graph.maxXData = pjt.Files.Count; // add maxima
+            graph.BoundingBox(4);
+            // add the x and y maxima based on opened project
+            graph.maxXData = pjt.Files.Count; 
             graph.maxYData = pjt.Animals.Count;
-            int numXTicks = (int)Math.Floor((decimal)pjt.Files.Count/5); // x and y axis handling
+
+            // block of code for x and y axis handling
+            int numXTicks = (int)Math.Floor((decimal)pjt.Files.Count/5); 
             int xTickInterval = 5;
             List<string> xTickString = GetXTickLabels(pjt, xTickInterval);
             List<string> yTickString = GetYTickLabels(pjt);
@@ -263,8 +270,14 @@ namespace ProjectManager
             Font aFont = new Font("Arial", 12);
             graph.WriteXLabel("Time (days)", aFont, X, Y);
             graph.WriteYLabel("Animals", aFont, X, Y);
+
+            // beginning of the project file and end of the project file
             DateTime Earliest = pjt.Files[0].Start.Date;
             DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
+
+            // Add text boxes as test
+            Color color = Color.FromName("LightSlateGray");
+            graph.TextBox(color);
         }
         public List<string> GetXTickLabels(Project pjt, int xTickInterval)
         {
@@ -304,8 +317,15 @@ namespace ProjectManager
                 for (int j = 0; j < pjt.Animals[i].Sz.Count; j++)
                 {
                     float xCoord = (float)Math.Round((pjt.Animals[i].Sz[j].d.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours)/24,2);
-                    //float xCoord = (float)(pjt.Animals[i].Sz[j].d.DayOfYear - startDay);
-                    graph.PlotPoints(xCoord, yCoord, markerSize, "o");
+                    if (pjt.Animals[i].Sz[j].Severity > 0)
+                    {
+                        graph.PlotPoints(xCoord, yCoord - markerSize, markerSize, "o");
+                    }
+                    else if (pjt.Animals[i].Sz[j].Severity == 0)
+                    {
+                        graph.PlotPoints(xCoord, yCoord - markerSize, markerSize, ".");
+                    }
+                    
                 }
             }
         }
