@@ -23,7 +23,9 @@ namespace ProjectManager
         public bool Notes;
         public bool SeverityIndx;
         public bool BloodDraw;
-        public bool BloodDrawList; 
+        public bool BloodDrawList;
+        public bool Injections;
+        public bool InjectionsList; 
         
         public ExportType()
         {
@@ -37,7 +39,9 @@ namespace ProjectManager
             Notes = false;
             SeverityIndx = false;
             BloodDraw = false;
-            BloodDrawList = false; 
+            BloodDrawList = false;
+            Injections = false;
+            InjectionsList = false; 
         }
 
     }
@@ -136,13 +140,23 @@ namespace ProjectManager
     public class InjectionType
     {
         public string Route;
-        public string Dose;
+        public int Dose;
+        public double DoseAmount;
+        public int DoseNum;
         public string ADDID;
         public string solvent; 
-        public DateTime d;
-        public InjectionType(string a, string b, string c, string d)
+        public DateTime TimePoint;
+
+        //Date DoseNum ADDID Dose DoseAmount Route Solvent
+        public InjectionType(string a, string b, string c, string d, string e, string f, string g)
         {
-            
+            DateTime.TryParse(a, out TimePoint);
+            int.TryParse(b, out DoseNum); 
+            ADDID = c;            
+            int.TryParse(d, out Dose);
+            double.TryParse(e, out DoseAmount); 
+            Route = f;
+            solvent = g;
         }
     }
     public class FileType
@@ -239,106 +253,106 @@ namespace ProjectManager
             Removals = new List<RemovalType>();
             Injections = new List<InjectionType>(); 
         }
-    }
-    public class SzGraph
-    {
-        public GraphProperties graph;
-        public SzGraph(int X, int Y, Project pjt)
+        public class SzGraph
         {
-            // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
-            graph = new GraphProperties();
-            graph.X = X;
-            graph.Y = Y;
-            graph.InitGraph();
-            List<PointF> axes = graph.DrawAxes(4);
-
-            // Add some important graph properties to new graph class. Is this a bad use of memory?
-            graph.axes = axes;
-            graph.BoundingBox(4);
-            // add the x and y maxima based on opened project
-            graph.maxXData = pjt.Files.Count; 
-            graph.maxYData = pjt.Animals.Count;
-
-            // block of code for x and y axis handling
-            int numXTicks = (int)Math.Floor((decimal)pjt.Files.Count/5); 
-            int xTickInterval = 5;
-            List<string> xTickString = GetXTickLabels(pjt, xTickInterval);
-            List<string> yTickString = GetYTickLabels(pjt);
-            List<float> axesStarts = graph.DrawTicks(numXTicks, pjt.Animals.Count, X, Y, 1.5F, xTickString, yTickString);
-            graph.xAxisLength = axesStarts[0];
-            graph.yAxisLength = axesStarts[1];
-            Font aFont = new Font("Arial", 12);
-            graph.WriteXLabel("Time (days)", aFont, X, Y);
-            graph.WriteYLabel("Animals", aFont, X, Y);
-
-            // beginning of the project file and end of the project file
-            DateTime Earliest = pjt.Files[0].Start.Date;
-            DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
-
-            // Add text boxes as test
-            Color color = Color.FromName("LightSlateGray");
-            graph.TextBox(color);
-        }
-        public List<string> GetXTickLabels(Project pjt, int xTickInterval)
-        {
-            List<string> xTickString = new List<string>();
-            //Obtain basis for y and x axis labelling
-            for (int i = 0; i < pjt.Files.Count; i+=xTickInterval)
+            public GraphProperties graph;
+            public SzGraph(int X, int Y, Project pjt)
             {
-                if (i % xTickInterval == 0 && i != 0)
+                // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
+                graph = new GraphProperties();
+                graph.X = X;
+                graph.Y = Y;
+                graph.InitGraph();
+                List<PointF> axes = graph.DrawAxes(4);
+
+                // Add some important graph properties to new graph class. Is this a bad use of memory?
+                graph.axes = axes;
+                graph.BoundingBox(4);
+                // add the x and y maxima based on opened project
+                graph.maxXData = pjt.Files.Count;
+                graph.maxYData = pjt.Animals.Count;
+
+                // block of code for x and y axis handling
+                int numXTicks = (int)Math.Floor((decimal)pjt.Files.Count / 5);
+                int xTickInterval = 5;
+                List<string> xTickString = GetXTickLabels(pjt, xTickInterval);
+                List<string> yTickString = GetYTickLabels(pjt);
+                List<float> axesStarts = graph.DrawTicks(numXTicks, pjt.Animals.Count, X, Y, 1.5F, xTickString, yTickString);
+                graph.xAxisLength = axesStarts[0];
+                graph.yAxisLength = axesStarts[1];
+                Font aFont = new Font("Arial", 12);
+                graph.WriteXLabel("Time (days)", aFont, X, Y);
+                graph.WriteYLabel("Animals", aFont, X, Y);
+
+                // beginning of the project file and end of the project file
+                DateTime Earliest = pjt.Files[0].Start.Date;
+                DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
+
+                // Add text boxes as test
+                Color color = Color.FromName("LightSlateGray");
+                //graph.TextBox(color);
+            }
+            public List<string> GetXTickLabels(Project pjt, int xTickInterval)
+            {
+                List<string> xTickString = new List<string>();
+                //Obtain basis for y and x axis labelling
+                for (int i = 0; i < pjt.Files.Count; i += xTickInterval)
                 {
-                    xTickString.Add((i).ToString());
+                    if (i % xTickInterval == 0 && i != 0)
+                    {
+                        xTickString.Add((i).ToString());
+                    }
+
                 }
-                
+                return xTickString;
             }
-            return xTickString;
-        }
-        public List<string> GetYTickLabels(Project pjt)
-        {
-            List<string> yTickString = new List<string>();
-            //Obtain basis for y and x axis labelling
-            for (int i = 0; i < pjt.Animals.Count; i++)
+            public List<string> GetYTickLabels(Project pjt)
             {
-                yTickString.Add(pjt.Animals[i].ID);
-            }
-            return yTickString;
-        }
-        public void PlotSz(Project pjt)
-        {
-            int markerSize = 8;
-            float startDay = pjt.Files[0].Start.DayOfYear;
-            DateTime Earliest = pjt.Files[0].Start.Date;
-            DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
-            for (int i = 0; i < pjt.Animals.Count; i++)
-            {            
-                //float yCoord = graph.yTickPoints[i];
-                //float yCoord = pjt.Animals.Count - i + 1;
-                float yCoord = graph.yTickPoints[i];
-                for (int j = 0; j < pjt.Animals[i].Sz.Count; j++)
+                List<string> yTickString = new List<string>();
+                //Obtain basis for y and x axis labelling
+                for (int i = 0; i < pjt.Animals.Count; i++)
                 {
-                    float xCoord = (float)Math.Round((pjt.Animals[i].Sz[j].d.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours)/24,2);
-                    if (pjt.Animals[i].Sz[j].Severity > 0)
+                    yTickString.Add(pjt.Animals[i].ID);
+                }
+                return yTickString;
+            }
+            public void PlotSz(Project pjt)
+            {
+                int markerSize = 8;
+                float startDay = pjt.Files[0].Start.DayOfYear;
+                DateTime Earliest = pjt.Files[0].Start.Date;
+                DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
+                for (int i = 0; i < pjt.Animals.Count; i++)
+                {
+                    //float yCoord = graph.yTickPoints[i];
+                    //float yCoord = pjt.Animals.Count - i + 1;
+                    float yCoord = graph.yTickPoints[i];
+                    for (int j = 0; j < pjt.Animals[i].Sz.Count; j++)
                     {
-                        graph.PlotPoints(xCoord, yCoord - markerSize, markerSize, "o");
+                        float xCoord = (float)Math.Round((pjt.Animals[i].Sz[j].d.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours) / 24, 2);
+                        if (pjt.Animals[i].Sz[j].Severity > 0)
+                        {
+                            graph.PlotPoints(xCoord, yCoord - markerSize, markerSize, "o");
+                        }
+                        else if (pjt.Animals[i].Sz[j].Severity == 0)
+                        {
+                            graph.PlotPoints(xCoord, yCoord - markerSize, markerSize, ".");
+                        }
+
                     }
-                    else if (pjt.Animals[i].Sz[j].Severity == 0)
-                    {
-                        graph.PlotPoints(xCoord, yCoord - markerSize, markerSize, ".");
-                    }
-                    
                 }
             }
-        }
-        public void PlotTrt(Project pjt)
-        {
-            for (int i = 0; i < pjt.Animals.Count; i++)
+            public void PlotTrt(Project pjt)
             {
-                float yCoord = pjt.Animals.Count - i + 1;
-                //pjt.Animals[i].Injections.
+                for (int i = 0; i < pjt.Animals.Count; i++)
+                {
+                    float yCoord = pjt.Animals.Count - i + 1;
+                    //pjt.Animals[i].Injections.
+                }
             }
+
+
         }
-
-
     }
     /****************************************************************************************************************8
      *
@@ -358,8 +372,7 @@ namespace ProjectManager
         public List<FileType> Files;
         public List<GroupType> Groups; 
         public List<AnimalType> Animals;
-        public List<LabelType> Labels;
-        public SzGraph Graph;
+        public List<LabelType> Labels; 
         public Project(string Inpt)
         {
             Filename = Inpt;
@@ -454,6 +467,11 @@ namespace ProjectManager
                 {
                     s = "An," + A.ID + ", bd, " + B.dt.ToString() + "," + B.EnteredTime.ToString() + "," + B.ID;
                     F.WriteLine(s);
+                }
+                foreach (InjectionType I in A.Injections)
+                {
+                    s = "An," + A.ID + ", ij, " + I.TimePoint.ToString() + "," + I.DoseNum.ToString() + "," + I.ADDID + "," + I.Dose.ToString() + "," + I.DoseAmount.ToString() + "," +  I.Route + "," + I.solvent;
+                    F.WriteLine(s); 
                 }
                 
             }
@@ -664,6 +682,20 @@ namespace ProjectManager
                             BloodDrawType B = new BloodDrawType(d.ToString(), T.ToString(), S);
                             Animals[CurrentAnimal].BloodDraws.Add(B);
                         }
+                        else if (Line.IndexOf("Inj") > -1)
+                        {
+                            int Inj; 
+                            int AID;
+                            string[] data;
+                            data = Line.Split(',');
+                            DateTime.TryParse(Line.Substring(0, Line.IndexOf("Inj") - 1), out d);                            
+                            int.TryParse(Line.Substring(Line.IndexOf("Inj") + 3, 1), out Inj);
+                            int.TryParse(data[1], out AID); 
+                            CurrentAnimal = FindAnimal(F.AnimalIDs[AID-1]);
+                            //Date DoseNum ADDID Dose DoseAmount Route Solvent
+                            InjectionType I = new InjectionType(d.ToString(), Inj.ToString(), data[3], data[4], data[7], data[5], data[6]);
+                            Animals[CurrentAnimal].Injections.Add(I); 
+                        }
                         else
                         {
                             Console.WriteLine("Unparsable Line in feeding file: " + Line);
@@ -855,7 +887,7 @@ namespace ProjectManager
                     st = A.ID;
                     foreach (SeizureType S in A.Sz)
                     {
-                        st += ", " + Math.Round(S.d.Subtract(Earliest).TotalHours + S.t.TotalHours, 2).ToString();
+                        st += ", " + Math.Round(S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours, 2).ToString();
                     }
                     F.WriteLine(st);
                 }
@@ -923,6 +955,22 @@ namespace ProjectManager
                     }
                     F.WriteLine(st);
                     F.WriteLine(st2);
+                }
+                if (E.Injections)
+                {
+                    st = A.ID + ",IJT";
+                    st2 = A.ID +",IJC";
+                    foreach (InjectionType I in A.Injections)
+                    {
+                        st += "," + Math.Round(I.TimePoint.Subtract(Earliest).TotalHours,2).ToString();
+                        st2 += "," + I.ADDID;
+                    }
+                    F.WriteLine(st);
+                    F.WriteLine(st2);
+                }
+                if (E.InjectionsList)
+                {
+
                 }
             }
             F.Close();
@@ -1013,6 +1061,10 @@ namespace ProjectManager
                     case " dt":
                         ImportantDateType I = new ImportantDateType(data[3], data[4]);
                         Animals[CurrentAnimal].ImportantDates.Add(I);
+                        break;
+                    case " ij":
+                        InjectionType Inj = new InjectionType(data[3], data[4], data[5], data[6], data[7], data[8], data[9]);
+                        Animals[CurrentAnimal].Injections.Add(Inj);
                         break;
                     default:
                         Console.WriteLine(data[2] + ": ERROR IN COMPARE");
