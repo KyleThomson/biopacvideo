@@ -158,6 +158,27 @@ namespace ProjectManager
             if (pjt == null)
                 return;
             UpdateSecondList();
+            //ContextMenu rightClickMenu = new ContextMenu(); // generate context menu
+            //rightClickMenu.MenuItems.Add("Delete");
+            //MainList.ContextMenu = rightClickMenu;
+            MainList.MouseUp += new MouseEventHandler(this.MainList_MouseUp);
+
+
+        }
+        private void MainList_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var item = MainList.IndexFromPoint(e.Location);
+                if (item >= 0)
+                {
+                    ContextMenu rightClickMenu = new ContextMenu(); // generate context menu
+                    rightClickMenu.MenuItems.Add("Delete");
+                    MainList.ContextMenu = rightClickMenu;
+                    MainList.SelectedIndex = item;
+                    rightClickMenu.Show(MainList, e.Location);
+                }
+            }
         }
 
         private void MainSelect_SelectedIndexChanged(object sender, EventArgs e)

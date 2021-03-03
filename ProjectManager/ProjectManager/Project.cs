@@ -239,11 +239,11 @@ namespace ProjectManager
         public List<MealType> Meals;
         public List<ImportantDateType> ImportantDates;
         public List<BloodDrawType> BloodDraws;
-        public List<RemovalType> Removals; 
+        public List<RemovalType> Removals;
         public GroupType Group;
-        public List<InjectionType> Injections; 
+        public List<InjectionType> Injections;
         public AnimalType()
-        {            
+        {
             Sz = new List<SeizureType>();
             WeightInfo = new List<WeightType>();
             Meals = new List<MealType>();
@@ -251,109 +251,110 @@ namespace ProjectManager
             Group = new GroupType();
             BloodDraws = new List<BloodDrawType>();
             Removals = new List<RemovalType>();
-            Injections = new List<InjectionType>(); 
-        }
-        public class SzGraph
-        {
-            public GraphProperties graph;
-            public SzGraph(int X, int Y, Project pjt)
-            {
-                // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
-                graph = new GraphProperties();
-                graph.X = X;
-                graph.Y = Y;
-                graph.InitGraph();
-                List<PointF> axes = graph.DrawAxes(4);
-
-                // Add some important graph properties to new graph class. Is this a bad use of memory?
-                graph.axes = axes;
-                graph.BoundingBox(4);
-                // add the x and y maxima based on opened project
-                graph.maxXData = pjt.Files.Count;
-                graph.maxYData = pjt.Animals.Count;
-
-                // block of code for x and y axis handling
-                int numXTicks = (int)Math.Floor((decimal)pjt.Files.Count / 5);
-                int xTickInterval = 5;
-                List<string> xTickString = GetXTickLabels(pjt, xTickInterval);
-                List<string> yTickString = GetYTickLabels(pjt);
-                List<float> axesStarts = graph.DrawTicks(numXTicks, pjt.Animals.Count, X, Y, 1.5F, xTickString, yTickString);
-                graph.xAxisLength = axesStarts[0];
-                graph.yAxisLength = axesStarts[1];
-                Font aFont = new Font("Arial", 12);
-                graph.WriteXLabel("Time (days)", aFont, X, Y);
-                graph.WriteYLabel("Animals", aFont, X, Y);
-
-                // beginning of the project file and end of the project file
-                DateTime Earliest = pjt.Files[0].Start.Date;
-                DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
-
-                // Add text boxes as test
-                Color color = Color.FromName("LightSlateGray");
-                //graph.TextBox(color);
-            }
-            public List<string> GetXTickLabels(Project pjt, int xTickInterval)
-            {
-                List<string> xTickString = new List<string>();
-                //Obtain basis for y and x axis labelling
-                for (int i = 0; i < pjt.Files.Count; i += xTickInterval)
-                {
-                    if (i % xTickInterval == 0 && i != 0)
-                    {
-                        xTickString.Add((i).ToString());
-                    }
-
-                }
-                return xTickString;
-            }
-            public List<string> GetYTickLabels(Project pjt)
-            {
-                List<string> yTickString = new List<string>();
-                //Obtain basis for y and x axis labelling
-                for (int i = 0; i < pjt.Animals.Count; i++)
-                {
-                    yTickString.Add(pjt.Animals[i].ID);
-                }
-                return yTickString;
-            }
-            public void PlotSz(Project pjt)
-            {
-                int markerSize = 8;
-                float startDay = pjt.Files[0].Start.DayOfYear;
-                DateTime Earliest = pjt.Files[0].Start.Date;
-                DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
-                for (int i = 0; i < pjt.Animals.Count; i++)
-                {
-                    //float yCoord = graph.yTickPoints[i];
-                    //float yCoord = pjt.Animals.Count - i + 1;
-                    float yCoord = graph.yTickPoints[i];
-                    for (int j = 0; j < pjt.Animals[i].Sz.Count; j++)
-                    {
-                        float xCoord = (float)Math.Round((pjt.Animals[i].Sz[j].d.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours) / 24, 2);
-                        if (pjt.Animals[i].Sz[j].Severity > 0)
-                        {
-                            graph.PlotPoints(xCoord, yCoord - markerSize, markerSize, "o");
-                        }
-                        else if (pjt.Animals[i].Sz[j].Severity == 0)
-                        {
-                            graph.PlotPoints(xCoord, yCoord - markerSize, markerSize, ".");
-                        }
-
-                    }
-                }
-            }
-            public void PlotTrt(Project pjt)
-            {
-                for (int i = 0; i < pjt.Animals.Count; i++)
-                {
-                    float yCoord = pjt.Animals.Count - i + 1;
-                    //pjt.Animals[i].Injections.
-                }
-            }
-
-
+            Injections = new List<InjectionType>();
         }
     }
+    public class SzGraph
+    {
+        public GraphProperties graph;
+        public SzGraph(int X, int Y, Project pjt)
+        {
+            // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
+            graph = new GraphProperties();
+            graph.X = X;
+            graph.Y = Y;
+            graph.InitGraph();
+            List<PointF> axes = graph.DrawAxes(4);
+
+            // Add some important graph properties to new graph class. Is this a bad use of memory?
+            graph.axes = axes;
+            graph.BoundingBox(4);
+            // add the x and y maxima based on opened project
+            graph.maxXData = pjt.Files.Count;
+            graph.maxYData = pjt.Animals.Count;
+
+            // block of code for x and y axis handling
+            int numXTicks = (int)Math.Floor((decimal)pjt.Files.Count / 5);
+            int xTickInterval = 5;
+            List<string> xTickString = GetXTickLabels(pjt, xTickInterval);
+            List<string> yTickString = GetYTickLabels(pjt);
+            List<float> axesStarts = graph.DrawTicks(numXTicks, pjt.Animals.Count, X, Y, 1.5F, xTickString, yTickString);
+            graph.xAxisLength = axesStarts[0];
+            graph.yAxisLength = axesStarts[1];
+            Font aFont = new Font("Arial", 12);
+            graph.WriteXLabel("Time (days)", aFont, X, Y);
+            graph.WriteYLabel("Animals", aFont, X, Y);
+
+            // beginning of the project file and end of the project file
+            DateTime Earliest = pjt.Files[0].Start.Date;
+            DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
+
+            // Add text boxes as test
+            Color color = Color.FromName("LightSlateGray");
+            //graph.TextBox(color);
+        }
+        public List<string> GetXTickLabels(Project pjt, int xTickInterval)
+        {
+            List<string> xTickString = new List<string>();
+            //Obtain basis for y and x axis labelling
+            for (int i = 0; i < pjt.Files.Count; i += xTickInterval)
+            {
+                if (i % xTickInterval == 0 && i != 0)
+                {
+                    xTickString.Add((i).ToString());
+                }
+
+            }
+            return xTickString;
+        }
+        public List<string> GetYTickLabels(Project pjt)
+        {
+            List<string> yTickString = new List<string>();
+            //Obtain basis for y and x axis labelling
+            for (int i = 0; i < pjt.Animals.Count; i++)
+            {
+                yTickString.Add(pjt.Animals[i].ID);
+            }
+            return yTickString;
+        }
+        public void PlotSz(Project pjt)
+        {
+            int markerSize = 8;
+            float startDay = pjt.Files[0].Start.DayOfYear;
+            DateTime Earliest = pjt.Files[0].Start.Date;
+            DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
+            for (int i = 0; i < pjt.Animals.Count; i++)
+            {
+                //float yCoord = graph.yTickPoints[i];
+                //float yCoord = pjt.Animals.Count - i + 1;
+                float yCoord = graph.yTickPoints[i];
+                for (int j = 0; j < pjt.Animals[i].Sz.Count; j++)
+                {
+                    float xCoord = (float)Math.Round((pjt.Animals[i].Sz[j].d.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours) / 24, 2);
+                    if (pjt.Animals[i].Sz[j].Severity > 0)
+                    {
+                        graph.PlotPoints(xCoord, yCoord - markerSize, markerSize, "o");
+                    }
+                    else if (pjt.Animals[i].Sz[j].Severity == 0)
+                    {
+                        graph.PlotPoints(xCoord, yCoord - markerSize, markerSize, ".");
+                    }
+
+                }
+            }
+        }
+        public void PlotTrt(Project pjt)
+        {
+            for (int i = 0; i < pjt.Animals.Count; i++)
+            {
+                float yCoord = pjt.Animals.Count - i + 1;
+                //pjt.Animals[i].Injections.
+            }
+        }
+
+
+    }
+    
     /****************************************************************************************************************8
      *
      * 
