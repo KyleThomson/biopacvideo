@@ -46,13 +46,13 @@
             this.calendarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rawSeizuresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.testPlotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SecondList = new System.Windows.Forms.ListBox();
             this.MainList = new System.Windows.Forms.ListBox();
             this.MainSelect = new System.Windows.Forms.ComboBox();
             this.SecondSelect = new System.Windows.Forms.ComboBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.Info = new System.Windows.Forms.ToolStripStatusLabel();
-            this.testPlotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -184,7 +184,7 @@
             // calendarToolStripMenuItem
             // 
             this.calendarToolStripMenuItem.Name = "calendarToolStripMenuItem";
-            this.calendarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.calendarToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.calendarToolStripMenuItem.Text = "Calendar";
             this.calendarToolStripMenuItem.Click += new System.EventHandler(this.calendarToolStripMenuItem_Click);
             // 
@@ -193,7 +193,7 @@
             this.resultsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rawSeizuresToolStripMenuItem});
             this.resultsToolStripMenuItem.Name = "resultsToolStripMenuItem";
-            this.resultsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.resultsToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.resultsToolStripMenuItem.Text = "Results";
             // 
             // rawSeizuresToolStripMenuItem
@@ -201,6 +201,13 @@
             this.rawSeizuresToolStripMenuItem.Name = "rawSeizuresToolStripMenuItem";
             this.rawSeizuresToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.rawSeizuresToolStripMenuItem.Text = "Raw Seizures";
+            // 
+            // testPlotToolStripMenuItem
+            // 
+            this.testPlotToolStripMenuItem.Name = "testPlotToolStripMenuItem";
+            this.testPlotToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
+            this.testPlotToolStripMenuItem.Text = "Test Plot";
+            this.testPlotToolStripMenuItem.Click += new System.EventHandler(this.testPlotToolStripMenuItem_Click);
             // 
             // SecondList
             // 
@@ -259,13 +266,6 @@
             this.Info.Size = new System.Drawing.Size(163, 17);
             this.Info.Text = "                                                    ";
             // 
-            // testPlotToolStripMenuItem
-            // 
-            this.testPlotToolStripMenuItem.Name = "testPlotToolStripMenuItem";
-            this.testPlotToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.testPlotToolStripMenuItem.Text = "Test Plot";
-            this.testPlotToolStripMenuItem.Click += new System.EventHandler(this.testPlotToolStripMenuItem_Click);
-            // 
             // ProjectManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -280,6 +280,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "ProjectManager";
             this.Text = "Project Manager";
+            this.Load += new System.EventHandler(this.ProjectManager_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);

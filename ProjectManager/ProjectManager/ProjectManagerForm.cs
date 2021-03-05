@@ -158,9 +158,6 @@ namespace ProjectManager
             if (pjt == null)
                 return;
             UpdateSecondList();
-            //ContextMenu rightClickMenu = new ContextMenu(); // generate context menu
-            //rightClickMenu.MenuItems.Add("Delete");
-            //MainList.ContextMenu = rightClickMenu;
             MainList.MouseUp += new MouseEventHandler(this.MainList_MouseUp);
 
 
@@ -316,7 +313,13 @@ namespace ProjectManager
             Test.GetXTickLabels(pjt,5);
             Test.GetYTickLabels(pjt);
             Test.PlotSz(pjt);
+            Test.PlotTrt(pjt);
             Test.graph.DisplayGraph();
+        }
+
+        private void ProjectManager_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -285,10 +285,6 @@ namespace ProjectManager
             graph.WriteXLabel("Time (days)", aFont, X, Y);
             graph.WriteYLabel("Animals", aFont, X, Y);
 
-            // beginning of the project file and end of the project file
-            DateTime Earliest = pjt.Files[0].Start.Date;
-            DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
-
             // Add text boxes as test
             Color color = Color.FromName("LightSlateGray");
             //graph.TextBox(color);
@@ -325,19 +321,18 @@ namespace ProjectManager
             DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
             for (int i = 0; i < pjt.Animals.Count; i++)
             {
+                float yCoord = i + 1;
                 //float yCoord = graph.yTickPoints[i];
-                //float yCoord = pjt.Animals.Count - i + 1;
-                float yCoord = graph.yTickPoints[i];
                 for (int j = 0; j < pjt.Animals[i].Sz.Count; j++)
                 {
                     float xCoord = (float)Math.Round((pjt.Animals[i].Sz[j].d.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours) / 24, 2);
                     if (pjt.Animals[i].Sz[j].Severity > 0)
                     {
-                        graph.PlotPoints(xCoord, yCoord - markerSize, markerSize, "o");
+                        graph.PlotPoints(xCoord, yCoord, markerSize, "o");
                     }
                     else if (pjt.Animals[i].Sz[j].Severity == 0)
                     {
-                        graph.PlotPoints(xCoord, yCoord - markerSize, markerSize, ".");
+                        graph.PlotPoints(xCoord, yCoord, markerSize, ".");
                     }
 
                 }
@@ -345,10 +340,46 @@ namespace ProjectManager
         }
         public void PlotTrt(Project pjt)
         {
+            DateTime Earliest = pjt.Files[0].Start.Date;
+            float lineWidth = 2;
+            Color vehicleColor = Color.FromName("Teal");
+            Color drugColor = Color.FromName("Red");
             for (int i = 0; i < pjt.Animals.Count; i++)
             {
-                float yCoord = pjt.Animals.Count - i + 1;
-                //pjt.Animals[i].Injections.
+                float yCoord = i + 1;
+
+                // Initialize vehicle and drug treatment times
+                List<float> vehicleTimes = new List<float>();
+                List<float> drugTimes = new List<float>();
+                
+                for (int j = 0; j < pjt.Animals[i].Injections.Count; j++)
+                {
+                    foreach (InjectionType I in pjt.Animals[i].Injections)
+                    {
+                        if (I.ADDID == "Vehicle")
+                        {
+                            vehicleTimes.Add((float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24, 2));
+                        }
+                        else
+                        {
+                            drugTimes.Add((float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24, 2));
+                        }
+                    }
+                    // Draw vehicle line
+                    if (vehicleTimes.Count > 1)
+                    {
+                        graph.Line(vehicleTimes[0], yCoord, vehicleTimes[vehicleTimes.Count - 1], yCoord, lineWidth, vehicleColor);
+                    }
+                    
+
+                    // Draw drug line
+                    if (drugTimes.Count > 1)
+                    {
+                        graph.Line(drugTimes[0], yCoord, drugTimes[drugTimes.Count - 1], yCoord, lineWidth, drugColor);
+                    }
+                    
+
+                }
             }
         }
 
