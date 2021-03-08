@@ -170,15 +170,35 @@ namespace ProjectManager
             {
                 var item = MainList.IndexFromPoint(e.Location);
 
-                if (item != ListBox.NoMatches) //item >= 0
+                if (item >= 0) // check if item selected is in range of MainList
                 {
-                    ContextMenu rightClickMenu = new ContextMenu(); // generate context menu
-                    rightClickMenu.MenuItems.Add("Delete");
-                    MainList.ContextMenu = rightClickMenu;
+                    ContextMenuStrip rightClickMenu = new ContextMenuStrip(); // generate context menu
+                    // Add menu options
+                    var deleteAnimal = rightClickMenu.Items.Add("Delete");
+                    MainList.ContextMenuStrip = rightClickMenu;
                     MainList.SelectedIndex = item;
                     rightClickMenu.Show(MainList, e.Location);
+                    rightClickMenu.AutoClose = true;
+                    // Call event handler if delete was selected
+                    deleteAnimal.Click += new EventHandler(delete_Click);
+                    
                 }
             }
+        }
+        private void delete_Click(object sender, EventArgs e)
+        {
+            var index = MainList.SelectedIndex;
+            MainList.Items.RemoveAt(index);
+            if (MainSelect.SelectedIndex == 1) // operate on animals
+            {
+                
+                pjt.Animals.RemoveAt(index);
+            }
+            else if(MainSelect.SelectedIndex == 0) // operate on files
+            {
+                pjt.Files.RemoveAt(index);
+            }
+                     
         }
 
         private void MainSelect_SelectedIndexChanged(object sender, EventArgs e)
