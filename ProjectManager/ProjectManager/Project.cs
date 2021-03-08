@@ -260,28 +260,21 @@ namespace ProjectManager
         public SzGraph(int X, int Y, Project pjt)
         {
             // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
-            graph = new GraphProperties();
-            graph.X = X;
-            graph.Y = Y;
-            graph.InitGraph();
-            List<PointF> axes = graph.DrawAxes(4);
-
-            // Add some important graph properties to new graph class. Is this a bad use of memory?
-            graph.axes = axes;
+            graph = new GraphProperties(X, Y, pjt.Files.Count, pjt.Animals.Count);
+            graph.DrawAxes(4);
             graph.BoundingBox(4);
-            // add the x and y maxima based on opened project
-            graph.maxXData = pjt.Files.Count;
-            graph.maxYData = pjt.Animals.Count;
 
-            // block of code for x and y axis handling
+            // x tick every 5 days
             int numXTicks = (int)Math.Floor((decimal)pjt.Files.Count / 5);
             int xTickInterval = 5;
+
+            // Get axis tick labels for graph properties
             List<string> xTickString = GetXTickLabels(pjt, xTickInterval);
             List<string> yTickString = GetYTickLabels(pjt);
-            List<float> axesStarts = graph.DrawTicks(numXTicks, pjt.Animals.Count, X, Y, 1.5F, xTickString, yTickString);
-            graph.xAxisLength = axesStarts[0];
-            graph.yAxisLength = axesStarts[1];
-            Font aFont = new Font("Arial", 12);
+
+            // Draw ticks and label axes
+            graph.DrawTicks(numXTicks, pjt.Animals.Count, 1.5F, xTickString, yTickString);
+            Font aFont = new Font("Arial", 12 * graph.objectScale);
             graph.WriteXLabel("Time (days)", aFont, X, Y);
             graph.WriteYLabel("Animals", aFont, X, Y);
 

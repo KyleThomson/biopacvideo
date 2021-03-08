@@ -337,7 +337,7 @@ namespace ProjectManager
             Test.GetYTickLabels(pjt);
             Test.PlotSz(pjt);
             Test.PlotTrt(pjt);
-            Test.graph.DisplayGraph(1024,1024);
+            Test.graph.DisplayGraph();
         }
 
         private void ProjectManager_Load(object sender, EventArgs e)

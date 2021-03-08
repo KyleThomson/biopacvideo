@@ -24,29 +24,44 @@ namespace ProjectManager
         public Form graphForm = new Form();
         public List<PointF> axes;
         public int X; public int Y;
-        public void InitGraph()
+        public float scale;
+        public float objectScale;
+        public int screenWidth { get; set; } public int screenHeight { get; set; }
+
+        public GraphProperties(int width, int height, float maxX, float maxY)
         {
+            // First find resolution that graphics will be scaled to
+            screenWidth = Screen.PrimaryScreen.Bounds.Width;
+            screenHeight = Screen.PrimaryScreen.Bounds.Height;
+            X = width; Y = height;
+
+            // bitmap initialization
             mainPlot = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
             graphics = Graphics.FromImage(mainPlot);
-            //picture.ClientSize = new Size(X, Y);
             graphics.Clear(Color.White);
-            //graphForm.Size = new Size(X, Y);
-            //picture.Image = mainPlot;
-            //graphForm.Controls.Add(picture);
             xTickPoints = new List<float>();
             yTickPoints = new List<float>();
-            
+
+
             // Set smoothing mode for graphics in initialization. This will smooth out edges when drawing round objects.
             graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             // High quality interpolation makes rescaling of image maintain resolution.
             graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+
+            // calculate target scaling factor to maintain graph aspect ratio on any screen
+            scale = (float)(Math.Min(width / mainPlot.Width, height / mainPlot.Height));
+            objectScale = 1 / scale;
+
+            // Set input arguments as max data
+            maxXData = maxX; maxYData = maxY;
+
         }
-        public List<PointF> DrawAxes(float penWidth)
+        public void DrawAxes(float penWidth)
         {
-            float xAxisLength = (float)(X * 0.75);
-            float yAxisLength = (float)(Y * 0.75);
-            float xAxisStart = (float)(X * 0.25);
-            float yAxisStart = (float)(Y * 0.25);
+            xAxisLength = (float)(X * 0.75);
+            yAxisLength = (float)(Y * 0.75);
+            xAxisStart = (float)(X * 0.25);
+            yAxisStart = (float)(Y * 0.25);
 
             
             PointF xAxisStartPoint = new PointF(xAxisStart, Y - yAxisStart);
@@ -55,37 +70,35 @@ namespace ProjectManager
             PointF yAxisEndPoint = new PointF(xAxisStart, yAxisLength);
 
             Pen axisPen = new Pen(Brushes.Black);
-            axisPen.Width = penWidth;
+            axisPen.Width = penWidth * objectScale;
             // X Axis First
             graphics.DrawLine(axisPen, xAxisStartPoint, xAxisEndPoint);
             // Y Axis
             graphics.DrawLine(axisPen, yAxisStartPoint, yAxisEndPoint);
-            List<PointF> axes = new List<PointF>();
-            axes.Add(xAxisStartPoint);
-            axes.Add(xAxisEndPoint);
-            axes.Add(yAxisStartPoint);
-            axes.Add(yAxisEndPoint);
-            return axes;
+            List<PointF> axesList = new List<PointF>();
+            axesList.Add(xAxisStartPoint);
+            axesList.Add(xAxisEndPoint);
+            axesList.Add(yAxisStartPoint);
+            axesList.Add(yAxisEndPoint);
+            axes = axesList;
         }
         public void BoundingBox(float penWidth)
         {
             Pen axisPen = new Pen(Brushes.Black);
-            axisPen.Width = penWidth;
+            axisPen.Width = penWidth * objectScale;
             //Horizontal bounding line
             graphics.DrawLine(axisPen, new PointF(axes[0].X-2, (float)(axes[2].Y - axes[2].Y * 0.01)), new PointF(axes[1].X+2, (float)(axes[2].Y - axes[2].Y * 0.01)));
             //Vertical bounding line
             graphics.DrawLine(axisPen, new PointF(axes[1].X, axes[2].Y), new PointF(axes[1].X, axes[3].Y));
 
         }
-        public List<float> DrawTicks(int xTicks, int yTicks, int xAxisLength, int yAxisLength, float tickWidth, List<string> xTickLabels, List<string> yTickLabels)
+        public void DrawTicks(int xTicks, int yTicks, float tickWidth, List<string> xTickLabels, List<string> yTickLabels)
         {
             Pen tickPen = new Pen(Brushes.Black);
             tickPen.Width = tickWidth;
             float xTickSpacing = (float)(xAxisLength / (xTicks * 2));
             float yTickSpacing = (float)(yAxisLength / (yTicks * 2));
-            float xAxisStart = (float)(xAxisLength * 0.25);
-            float yAxisStart = (float)(yAxisLength * 0.25);
-            Font xFont = new Font("Arial", 8);
+            Font xFont = new Font("Arial", 8 * objectScale);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
 
             for (int i = 0; i < xTicks; i++)
@@ -120,10 +133,6 @@ namespace ProjectManager
                 RectangleF yTickRect = new RectangleF((float)(xAxisStart * 0.975) - yTickSize.Width, (float)(yAxisLength - yAxisStart - yTickSpacing * (i + 0.5) - yTickSize.Height / 2), yTickSize.Width, yTickSize.Height);
                 graphics.DrawString(yTickLabels[i], xFont, drawBrush, yTickRect);
             }
-            List<float> axesStarts = new List<float>();
-            axesStarts.Add(xAxisLength);
-            axesStarts.Add(yAxisLength);
-            return axesStarts;
         }
         public void WriteXLabel(string xLabel, Font font, int Xmax, int Ymax)
         {
@@ -135,7 +144,7 @@ namespace ProjectManager
 
             float xPoint = (xEnd) / 2;
             float yPoint = axes[0].Y;
-
+            
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             RectangleF xLabelRect = new RectangleF((xPoint), (float)(yPoint * 1.05), 200, 50);
             StringFormat drawFormat = new StringFormat();
@@ -177,16 +186,16 @@ namespace ProjectManager
 
             if (markerType == "o")
             {
-                graphics.DrawEllipse(dataPen, realXCoord + xAxisStart, realYCoord + yAxisStart, markerSize, markerSize);
+                graphics.DrawEllipse(dataPen, realXCoord + xAxisStart, realYCoord + yAxisStart, markerSize * objectScale, markerSize * objectScale);
             }
             else if(markerType == ".")
             {
-                graphics.FillEllipse(dataBrush, realXCoord + xAxisStart, realYCoord + yAxisStart, markerSize, markerSize);
+                graphics.FillEllipse(dataBrush, realXCoord + xAxisStart, realYCoord + yAxisStart, markerSize * objectScale, markerSize * objectScale);
             }
             else if(markerType == "d")
             {
                 //gotta do some math to draw a rhombus/diamond marker
-                DrawDiamond(realXCoord + xAxisStart, realYCoord, markerSize);
+                DrawDiamond(realXCoord + xAxisStart, realYCoord, markerSize * objectScale);
                 // If we lived in a perfect world this would draw a diamond.
             }
             else
@@ -199,7 +208,7 @@ namespace ProjectManager
             // Adjust pen to user inputted width and color
             Pen dataPen = new Pen(Brushes.Black);
             dataPen.Color = color;
-            dataPen.Width = lineWidth;
+            dataPen.Width = lineWidth * objectScale;
 
             // Scale input coordinates to pixels using where the axes were drawn and the maximum X and Y data
             float xAxisStart = (float)(xAxisLength * 0.25);
@@ -218,17 +227,19 @@ namespace ProjectManager
             PointF endPoint = new PointF(realX2Coord + xAxisStart, realY2Coord + yAxisStart);
             graphics.DrawLine(dataPen, startPoint, endPoint);
         }
-        public void DisplayGraph(float width, float height)
+        public void DisplayGraph()
         {
             // calculate target scaling factor
-            float scale = Math.Min(width / mainPlot.Width, height / mainPlot.Height);
+
 
             // Create new bitmap and graphics to fit graph to monitor
-            Bitmap bmp = new Bitmap(mainPlot, new Size((int)width, (int)height));
+            Bitmap bmp = new Bitmap(mainPlot, new Size(screenWidth, screenHeight));
             var newGfx = Graphics.FromImage(bmp);
+            newGfx.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
             newGfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
             newGfx.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
             newGfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            newGfx.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 
             // Scaled dimensions of new graph
             var scaleWidth = (int)(mainPlot.Width * scale);
@@ -236,13 +247,14 @@ namespace ProjectManager
 
             // Re-draw the graphics we already created
             var brush = new SolidBrush(Color.Black);
-            newGfx.FillRectangle(brush, new RectangleF(0, 0, width, height));
-            newGfx.DrawImage(mainPlot, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
+            newGfx.FillRectangle(brush, new RectangleF(0, 0, mainPlot.Width, mainPlot.Height));
+            newGfx.DrawImage(mainPlot, (screenWidth - scaleWidth) / 2, (screenHeight - scaleHeight) / 2, scaleWidth, scaleHeight);
 
             PictureBox resizedPicture = new PictureBox();
-            resizedPicture.ClientSize = new Size((int)width, (int)height);
+            resizedPicture.ClientSize = new Size((int)screenWidth, (int)screenHeight);
             resizedPicture.Image = bmp;
-            graphForm.Size = new Size((int)width, (int)height);
+
+            graphForm.Size = new Size((int)screenWidth, (int)screenHeight);
             graphForm.Controls.Add(resizedPicture);
             graphForm.Show();
         }
