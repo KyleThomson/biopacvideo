@@ -28,14 +28,14 @@ namespace ProjectManager
         {
             mainPlot = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
             graphics = Graphics.FromImage(mainPlot);
-            picture.ClientSize = new Size(X, Y);
+            //picture.ClientSize = new Size(X, Y);
             graphics.Clear(Color.White);
-            graphForm.Size = new Size(X, Y);
-            picture.Image = mainPlot;
-            graphForm.Controls.Add(picture);
+            //graphForm.Size = new Size(X, Y);
+            //picture.Image = mainPlot;
+            //graphForm.Controls.Add(picture);
             xTickPoints = new List<float>();
             yTickPoints = new List<float>();
-
+            
             // Set smoothing mode for graphics in initialization. This will smooth out edges when drawing round objects.
             graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             // High quality interpolation makes rescaling of image maintain resolution.
@@ -127,18 +127,36 @@ namespace ProjectManager
         }
         public void WriteXLabel(string xLabel, Font font, int Xmax, int Ymax)
         {
+            // Reference axis coordinates to write axis label relative to them
+            float xStart = axes[0].X;
+            float xEnd = axes[1].X;
+            float yStart = axes[2].Y;
+            float yEnd = axes[3].Y;
+
+            float xPoint = (xEnd) / 2;
+            float yPoint = axes[0].Y;
+
             SolidBrush drawBrush = new SolidBrush(Color.Black);
-            RectangleF xLabelRect = new RectangleF((float)(Xmax / 2.5), (float)(Ymax - Ymax * 0.20), 200, 50);
+            RectangleF xLabelRect = new RectangleF((xPoint), (float)(yPoint * 1.05), 200, 50);
             StringFormat drawFormat = new StringFormat();
             drawFormat.Alignment = StringAlignment.Center;
             graphics.DrawString(xLabel, font, drawBrush, xLabelRect, drawFormat);
         }
         public void WriteYLabel(string yLabel, Font font, int Xmax, int Ymax)
         {
+            // Reference axis coordinates to write axis label relative to them
+            float xStart = axes[0].X;
+            float xEnd = axes[1].X;
+            float yStart = axes[2].Y;
+            float yEnd = axes[3].Y;
+
+            float xPoint = axes[0].X;
+            float yPoint = (yEnd + yStart) / 2;
+            
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             StringFormat yLabelFormat = new StringFormat();
             yLabelFormat.FormatFlags = StringFormatFlags.DirectionVertical;
-            RectangleF yLabelRect = new RectangleF((float)(Xmax * 0.15), (float)(Ymax / 2.25), 50, 200);
+            RectangleF yLabelRect = new RectangleF((float)(xPoint * 0.70), yPoint, 50, 200);
             graphics.DrawString(yLabel, font, drawBrush, yLabelRect, yLabelFormat);
         }
         public void PlotPoints(float xCoord, float yCoord, int markerSize, string markerType)
@@ -200,8 +218,32 @@ namespace ProjectManager
             PointF endPoint = new PointF(realX2Coord + xAxisStart, realY2Coord + yAxisStart);
             graphics.DrawLine(dataPen, startPoint, endPoint);
         }
-        public void DisplayGraph()
+        public void DisplayGraph(float width, float height)
         {
+            // calculate target scaling factor
+            float scale = Math.Min(width / mainPlot.Width, height / mainPlot.Height);
+
+            // Create new bitmap and graphics to fit graph to monitor
+            Bitmap bmp = new Bitmap(mainPlot, new Size((int)width, (int)height));
+            var newGfx = Graphics.FromImage(bmp);
+            newGfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            newGfx.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+            newGfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            // Scaled dimensions of new graph
+            var scaleWidth = (int)(mainPlot.Width * scale);
+            var scaleHeight = (int)(mainPlot.Height * scale);
+
+            // Re-draw the graphics we already created
+            var brush = new SolidBrush(Color.Black);
+            newGfx.FillRectangle(brush, new RectangleF(0, 0, width, height));
+            newGfx.DrawImage(mainPlot, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
+
+            PictureBox resizedPicture = new PictureBox();
+            resizedPicture.ClientSize = new Size((int)width, (int)height);
+            resizedPicture.Image = bmp;
+            graphForm.Size = new Size((int)width, (int)height);
+            graphForm.Controls.Add(resizedPicture);
             graphForm.Show();
         }
         public void DrawDiamond(float centerX, float centerY, float size)
@@ -224,5 +266,21 @@ namespace ProjectManager
             SolidBrush dataBrush = new SolidBrush(Color.Black);
             graphics.DrawString(inputStr, new Font("Arial",12), dataBrush, X / 2, Y / 6);
         }
+        public void ReScaleImage(float width, float height)
+        {
+            var brush = new SolidBrush(Color.Black);
+            // calculate target scaling factor
+            float scale = Math.Min(width / mainPlot.Width, height / mainPlot.Height);
+            var bmp = new Bitmap((int)width, (int)height);
+            var newGfx = Graphics.FromImage(bmp);
+
+            var scaleWidth = (int)(mainPlot.Width * scale);
+            var scaleHeight = (int)(mainPlot.Height * scale);
+
+            newGfx.DrawImage(mainPlot, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
+
+        }
+             
+        
     }
 }

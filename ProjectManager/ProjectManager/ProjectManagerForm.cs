@@ -158,17 +158,19 @@ namespace ProjectManager
             if (pjt == null)
                 return;
             UpdateSecondList();
+
+            // Create an event handler if someone right clicks an item in main list.
             MainList.MouseDown += new MouseEventHandler(this.MainList_MouseDown);
 
 
         }
         private void MainList_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Right) // check if right mouse button was clicked
             {
                 var item = MainList.IndexFromPoint(e.Location);
 
-                if (item >= 0)
+                if (item != ListBox.NoMatches) //item >= 0
                 {
                     ContextMenu rightClickMenu = new ContextMenu(); // generate context menu
                     rightClickMenu.MenuItems.Add("Delete");
@@ -310,12 +312,12 @@ namespace ProjectManager
 
         private void testPlotToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SzGraph Test = new SzGraph(1024, 1024, pjt);
+            SzGraph Test = new SzGraph(4000, 4000, pjt);
             Test.GetXTickLabels(pjt,5);
             Test.GetYTickLabels(pjt);
             Test.PlotSz(pjt);
             Test.PlotTrt(pjt);
-            Test.graph.DisplayGraph();
+            Test.graph.DisplayGraph(1024,1024);
         }
 
         private void ProjectManager_Load(object sender, EventArgs e)
