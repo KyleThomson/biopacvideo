@@ -292,7 +292,7 @@ namespace ProjectManager
         public List<string> GetXTickLabels(Project pjt, int xTickInterval)
         {
             List<string> xTickString = new List<string>();
-            //Obtain basis for y and x axis labelling
+            //Obtain basis for y and x axis labeling
             for (int i = 0; i < pjt.Files.Count; i += xTickInterval)
             {
                 if (i % xTickInterval == 0 && i != 0)
@@ -341,12 +341,12 @@ namespace ProjectManager
         public void PlotTrt(Project pjt)
         {
             DateTime Earliest = pjt.Files[0].Start.Date;
-            float lineWidth = 2;
+            float lineWidth = 4;
             Color vehicleColor = Color.FromName("Teal");
             Color drugColor = Color.FromName("Red");
             for (int i = 0; i < pjt.Animals.Count; i++)
             {
-                float yCoord = i + 1;
+                float yCoord = (float)(i + 0.5);
 
                 // Initialize vehicle and drug treatment times
                 List<float> vehicleTimes = new List<float>();
@@ -381,6 +381,11 @@ namespace ProjectManager
 
                 }
             }
+        }
+        public void Legend()
+        {
+            // Method that draws on legend for injection type and seizure type
+
         }
 
 

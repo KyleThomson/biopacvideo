@@ -35,6 +35,11 @@ namespace ProjectManager
             graphForm.Controls.Add(picture);
             xTickPoints = new List<float>();
             yTickPoints = new List<float>();
+
+            // Set smoothing mode for graphics in initialization. This will smooth out edges when drawing round objects.
+            graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            // High quality interpolation makes rescaling of image maintain resolution.
+            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
         }
         public List<PointF> DrawAxes(float penWidth)
         {
@@ -158,7 +163,7 @@ namespace ProjectManager
             }
             else if(markerType == ".")
             {
-                graphics.FillEllipse(dataBrush, realXCoord + xAxisStart, realYCoord + yAxisStart, markerSize/2, markerSize/2);
+                graphics.FillEllipse(dataBrush, realXCoord + xAxisStart, realYCoord + yAxisStart, markerSize, markerSize);
             }
             else if(markerType == "d")
             {

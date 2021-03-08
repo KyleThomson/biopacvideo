@@ -158,15 +158,16 @@ namespace ProjectManager
             if (pjt == null)
                 return;
             UpdateSecondList();
-            MainList.MouseUp += new MouseEventHandler(this.MainList_MouseUp);
+            MainList.MouseDown += new MouseEventHandler(this.MainList_MouseDown);
 
 
         }
-        private void MainList_MouseUp(object sender, MouseEventArgs e)
+        private void MainList_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
                 var item = MainList.IndexFromPoint(e.Location);
+
                 if (item >= 0)
                 {
                     ContextMenu rightClickMenu = new ContextMenu(); // generate context menu
