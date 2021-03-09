@@ -113,8 +113,7 @@ namespace ProjectManager
                 graphics.DrawLine(tickPen, xTickStart, xTickEnd);
 
                 // x tick label
-                SizeF xTickSize = new SizeF();
-                xTickSize = graphics.MeasureString(xTickLabels[i], xFont);
+                SizeF xTickSize = graphics.MeasureString(xTickLabels[i], xFont);
                 RectangleF xTickRect = new RectangleF(xAxisStart - (xTickSize.Width) / 2 + currentXPoint, (float)(yAxisLength * 1.025), xTickSize.Width, xTickSize.Height);
                 graphics.DrawString(xTickLabels[i], xFont, drawBrush, xTickRect);
 
@@ -130,44 +129,41 @@ namespace ProjectManager
                 graphics.DrawLine(tickPen, yTickStart, yTickEnd);
 
                 // y tick label
-                SizeF yTickSize = new SizeF();
-                yTickSize = graphics.MeasureString(yTickLabels[i], xFont);
+                SizeF yTickSize = graphics.MeasureString(yTickLabels[i], xFont);
                 RectangleF yTickRect = new RectangleF((float)(xAxisStart * 0.975) - yTickSize.Width, (float)(yAxisLength - yTickSpacing * (i + 0.5) - yTickSize.Height / 2), yTickSize.Width, yTickSize.Height);
                 graphics.DrawString(yTickLabels[i], xFont, drawBrush, yTickRect);
             }
         }
         public void WriteXLabel(string xLabel, Font font)
-        {
-            // Reference axis coordinates to write axis label relative to them
-            float xStart = axes[0].X;
-            float xEnd = axes[1].X;
-            float yStart = axes[2].Y;
-            float yEnd = axes[3].Y;
-
-            float xPoint = (xAxisLength - xAxisStart) / 2;
-            float yPoint = axes[0].Y;
-            
+        {   
+            // Format string
             SolidBrush drawBrush = new SolidBrush(Color.Black);
-            RectangleF xLabelRect = new RectangleF((xPoint), (float)(yPoint * 1.15), 200, 50);
             StringFormat drawFormat = new StringFormat();
             drawFormat.Alignment = StringAlignment.Center;
+
+            // Get size of the string
+            SizeF xLabelSize = graphics.MeasureString(xLabel, font);
+
+            // Use size of string and length of axis to center the label
+            float xPoint = (xAxisLength + xAxisStart) / 2 - xLabelSize.Width / 2;
+            float yPoint = axes[0].Y;
+            RectangleF xLabelRect = new RectangleF((xPoint), (float)(yPoint * 1.05), xLabelSize.Width, xLabelSize.Height);
             graphics.DrawString(xLabel, font, drawBrush, xLabelRect, drawFormat);
         }
         public void WriteYLabel(string yLabel, Font font)
         {
-            // Reference axis coordinates to write axis label relative to them
-            float xStart = axes[0].X;
-            float xEnd = axes[1].X;
-            float yStart = axes[2].Y;
-            float yEnd = axes[3].Y;
-
-            float xPoint = axes[0].X;
-            float yPoint = (yEnd + yStart) / 2;
-            
+            // Format string
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             StringFormat yLabelFormat = new StringFormat();
             yLabelFormat.FormatFlags = StringFormatFlags.DirectionVertical;
-            RectangleF yLabelRect = new RectangleF((float)(xPoint * 0.70), yPoint, 50, 200);
+
+            // Get size of the string
+            SizeF yLabelSize = graphics.MeasureString(yLabel, font);
+
+            // Use size of string and length of axis to center the label
+            float xPoint = axes[0].X;
+            float yPoint = (yAxisLength + yAxisStart) / 2 - yLabelSize.Width / 2;
+            RectangleF yLabelRect = new RectangleF((float)(xPoint * 0.70), yPoint, yLabelSize.Height, yLabelSize.Width);
             graphics.DrawString(yLabel, font, drawBrush, yLabelRect, yLabelFormat);
         }
         public void PlotPoints(float xCoord, float yCoord, int markerSize, string markerType)
@@ -183,6 +179,7 @@ namespace ProjectManager
             float realXCoord = xCoord * xScale + xAxisStart;
             float realYCoord = yAxisLength - yCoord * yScale;
 
+            // Marker type selection
             if (markerType == "o")
             {
                 graphics.DrawEllipse(dataPen, realXCoord, realYCoord, markerSize * objectScale, markerSize * objectScale);
@@ -225,17 +222,11 @@ namespace ProjectManager
         }
         public void DisplayGraph()
         {
-            // calculate target scaling factor
-
-
             // Create new bitmap and graphics to fit graph to monitor
             Bitmap bmp = new Bitmap(mainPlot, new Size(screenWidth, screenHeight));
             var newGfx = Graphics.FromImage(bmp);
-            newGfx.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
             newGfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            newGfx.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
             newGfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            newGfx.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 
             // Scaled dimensions of new graph
             var scaleWidth = (int)(mainPlot.Width * scale);
@@ -247,10 +238,10 @@ namespace ProjectManager
             newGfx.DrawImage(mainPlot, (screenWidth - scaleWidth) / 2, (screenHeight - scaleHeight) / 2, scaleWidth, scaleHeight);
 
             PictureBox resizedPicture = new PictureBox();
-            resizedPicture.ClientSize = new Size((int)screenWidth, (int)screenHeight);
+            resizedPicture.ClientSize = new Size(screenWidth, screenHeight);
             resizedPicture.Image = bmp;
 
-            graphForm.Size = new Size((int)screenWidth, (int)screenHeight);
+            graphForm.Size = new Size(screenWidth, screenHeight);
             graphForm.Controls.Add(resizedPicture);
             graphForm.Show();
         }
@@ -268,7 +259,7 @@ namespace ProjectManager
 
             graphics.DrawPolygon(dataPen, dPoints);
         }
-        public void TextBox(string inputStr, Color color)
+        public void TextBox(string inputStr, Color color, Font font)
         {
             Pen dataPen = new Pen(Brushes.Black);
             SolidBrush dataBrush = new SolidBrush(Color.Black);

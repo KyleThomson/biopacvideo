@@ -377,6 +377,13 @@ namespace ProjectManager
         public void Legend()
         {
             // Method that draws on legend for injection type and seizure type
+            Font legendFont = new Font("Arial", 12 * graph.objectScale);
+            SolidBrush legendBrush = new SolidBrush(Color.Black);
+
+            // Placement point for drug treatment legend
+
+
+            //graph.graphics.DrawString("Drug Treatment", legendFont, legendBrush,)
 
         }
 
