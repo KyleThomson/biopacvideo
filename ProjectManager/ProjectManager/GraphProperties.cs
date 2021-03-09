@@ -33,6 +33,8 @@ namespace ProjectManager
             // First find resolution that graphics will be scaled to
             screenWidth = Screen.PrimaryScreen.Bounds.Width;
             screenHeight = Screen.PrimaryScreen.Bounds.Height;
+            //screenWidth = 720;
+            //screenHeight = 1080;
             X = width; Y = height;
 
             // bitmap initialization
@@ -49,7 +51,7 @@ namespace ProjectManager
             graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 
             // calculate target scaling factor to maintain graph aspect ratio on any screen
-            scale = (float)(Math.Min(width / mainPlot.Width, height / mainPlot.Height));
+            scale = Math.Min(screenWidth / (float)width, screenHeight / (float)height);
             objectScale = 1 / scale;
 
             // Set input arguments as max data
@@ -95,9 +97,9 @@ namespace ProjectManager
         public void DrawTicks(int xTicks, int yTicks, float tickWidth, List<string> xTickLabels, List<string> yTickLabels)
         {
             Pen tickPen = new Pen(Brushes.Black);
-            tickPen.Width = tickWidth;
+            tickPen.Width = tickWidth * objectScale;
             float xTickSpacing = (float)(xAxisLength / (xTicks * 2));
-            float yTickSpacing = (float)(yAxisLength / (yTicks * 2));
+            float yTickSpacing = (float)(yAxisLength / (yTicks * 1.5));
             Font xFont = new Font("Arial", 8 * objectScale);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
 
@@ -105,15 +107,15 @@ namespace ProjectManager
             {
                 float currentXPoint = (float)(Convert.ToDouble(xTickLabels[i])/maxXData)*(axes[1].X - axes[0].X);
                 // create length of x tick
-                PointF xTickStart = new PointF(xAxisStart + currentXPoint, yAxisLength - yAxisStart);
+                PointF xTickStart = new PointF(xAxisStart + currentXPoint, yAxisLength);
                 xTickPoints.Add(xAxisStart + currentXPoint);
-                PointF xTickEnd = new PointF(xAxisStart + currentXPoint, (float)((yAxisLength - yAxisStart) * 0.99));
+                PointF xTickEnd = new PointF(xAxisStart + currentXPoint, (float)((yAxisLength) * 0.99));
                 graphics.DrawLine(tickPen, xTickStart, xTickEnd);
 
                 // x tick label
                 SizeF xTickSize = new SizeF();
                 xTickSize = graphics.MeasureString(xTickLabels[i], xFont);
-                RectangleF xTickRect = new RectangleF(xAxisStart - (xTickSize.Width) / 2 + currentXPoint, (float)(yAxisLength - yAxisStart * .975), xTickSize.Width, xTickSize.Height);
+                RectangleF xTickRect = new RectangleF(xAxisStart - (xTickSize.Width) / 2 + currentXPoint, (float)(yAxisLength * 1.025), xTickSize.Width, xTickSize.Height);
                 graphics.DrawString(xTickLabels[i], xFont, drawBrush, xTickRect);
 
 
@@ -122,19 +124,19 @@ namespace ProjectManager
             for (int i = 0; i < yTicks; i++)
             {
                 // create length of ticks
-                PointF yTickStart = new PointF(xAxisStart, (float)(yAxisLength - yAxisStart - yTickSpacing * (i + 0.5)));
-                yTickPoints.Add((float)(yAxisLength - yAxisStart - yTickSpacing * (i + 0.5)));
-                PointF yTickEnd = new PointF((float)(xAxisStart * 1.02), (float)((yAxisLength - yAxisStart - yTickSpacing * (i + 0.5))));
+                PointF yTickStart = new PointF(xAxisStart, (float)(yAxisLength - yTickSpacing * (i + 0.5)));
+                yTickPoints.Add((float)(yAxisLength - yTickSpacing * (i + 0.5)));
+                PointF yTickEnd = new PointF((float)(xAxisStart * 1.02), (float)((yAxisLength - yTickSpacing * (i + 0.5))));
                 graphics.DrawLine(tickPen, yTickStart, yTickEnd);
 
                 // y tick label
                 SizeF yTickSize = new SizeF();
                 yTickSize = graphics.MeasureString(yTickLabels[i], xFont);
-                RectangleF yTickRect = new RectangleF((float)(xAxisStart * 0.975) - yTickSize.Width, (float)(yAxisLength - yAxisStart - yTickSpacing * (i + 0.5) - yTickSize.Height / 2), yTickSize.Width, yTickSize.Height);
+                RectangleF yTickRect = new RectangleF((float)(xAxisStart * 0.975) - yTickSize.Width, (float)(yAxisLength - yTickSpacing * (i + 0.5) - yTickSize.Height / 2), yTickSize.Width, yTickSize.Height);
                 graphics.DrawString(yTickLabels[i], xFont, drawBrush, yTickRect);
             }
         }
-        public void WriteXLabel(string xLabel, Font font, int Xmax, int Ymax)
+        public void WriteXLabel(string xLabel, Font font)
         {
             // Reference axis coordinates to write axis label relative to them
             float xStart = axes[0].X;
@@ -142,16 +144,16 @@ namespace ProjectManager
             float yStart = axes[2].Y;
             float yEnd = axes[3].Y;
 
-            float xPoint = (xEnd) / 2;
+            float xPoint = (xAxisLength - xAxisStart) / 2;
             float yPoint = axes[0].Y;
             
             SolidBrush drawBrush = new SolidBrush(Color.Black);
-            RectangleF xLabelRect = new RectangleF((xPoint), (float)(yPoint * 1.05), 200, 50);
+            RectangleF xLabelRect = new RectangleF((xPoint), (float)(yPoint * 1.15), 200, 50);
             StringFormat drawFormat = new StringFormat();
             drawFormat.Alignment = StringAlignment.Center;
             graphics.DrawString(xLabel, font, drawBrush, xLabelRect, drawFormat);
         }
-        public void WriteYLabel(string yLabel, Font font, int Xmax, int Ymax)
+        public void WriteYLabel(string yLabel, Font font)
         {
             // Reference axis coordinates to write axis label relative to them
             float xStart = axes[0].X;
@@ -173,24 +175,21 @@ namespace ProjectManager
             Pen dataPen = new Pen(Brushes.Black);
             SolidBrush dataBrush = new SolidBrush(Color.Black);
 
-            // Scale input coordinates to pixels using where the axes were drawn and the maximum X and Y data
-            float xAxisStart = (float)(xAxisLength * 0.25);
-            float yAxisStart = (float)(yAxisLength * 0.75);
-            float xStart = axes[0].X;
-            float xEnd = axes[1].X;
-            float yStart = axes[2].Y;
-            float yEnd = axes[3].Y;
-            float realXCoord = (xCoord / maxXData) * (xEnd - xStart);
-            float realYCoord = (float)((yCoord / maxYData) * (yStart - yEnd));
-            //float realYCoord = yCoord;
+            // Calculate a scale factor that is in units of Pixels/unit
+            float xScale = (xAxisLength - xAxisStart) / maxXData;
+            float yScale = (yAxisLength - yAxisStart) / maxYData;
+
+            // Convert input coordinate points
+            float realXCoord = xCoord * xScale + xAxisStart;
+            float realYCoord = yAxisLength - yCoord * yScale;
 
             if (markerType == "o")
             {
-                graphics.DrawEllipse(dataPen, realXCoord + xAxisStart, realYCoord + yAxisStart, markerSize * objectScale, markerSize * objectScale);
+                graphics.DrawEllipse(dataPen, realXCoord, realYCoord, markerSize * objectScale, markerSize * objectScale);
             }
             else if(markerType == ".")
             {
-                graphics.FillEllipse(dataBrush, realXCoord + xAxisStart, realYCoord + yAxisStart, markerSize * objectScale, markerSize * objectScale);
+                graphics.FillEllipse(dataBrush, realXCoord, realYCoord, markerSize * objectScale, markerSize * objectScale);
             }
             else if(markerType == "d")
             {
@@ -210,21 +209,18 @@ namespace ProjectManager
             dataPen.Color = color;
             dataPen.Width = lineWidth * objectScale;
 
-            // Scale input coordinates to pixels using where the axes were drawn and the maximum X and Y data
-            float xAxisStart = (float)(xAxisLength * 0.25);
-            float yAxisStart = (float)(yAxisLength * 0.75);
-            float xStart = axes[0].X;
-            float xEnd = axes[1].X;
-            float yStart = axes[2].Y;
-            float yEnd = axes[3].Y;
+            // Calculate a scale factor that is in units of Pixels/unit
+            float xScale = (xAxisLength - xAxisStart) / maxXData;
+            float yScale = (yAxisLength - yAxisStart) / maxYData;
 
-            float realX1Coord = (x1Coord / maxXData) * (xEnd - xStart);
-            float realY1Coord = (y1Coord / maxYData) * (yStart - yEnd);
-            float realX2Coord = (x2Coord / maxXData) * (xEnd - xStart);
-            float realY2Coord = (y2Coord / maxYData) * (yStart - yEnd);
+            // Convert input coordinate points
+            float realX1Coord = x1Coord * xScale + xAxisStart;
+            float realY1Coord = yAxisLength - y1Coord * yScale;
+            float realX2Coord = x2Coord * xScale + xAxisStart;
+            float realY2Coord = yAxisLength - y2Coord * yScale;
 
-            PointF startPoint = new PointF(realX1Coord + xAxisStart, realY1Coord + yAxisStart);
-            PointF endPoint = new PointF(realX2Coord + xAxisStart, realY2Coord + yAxisStart);
+            PointF startPoint = new PointF(realX1Coord, realY1Coord);
+            PointF endPoint = new PointF(realX2Coord, realY2Coord);
             graphics.DrawLine(dataPen, startPoint, endPoint);
         }
         public void DisplayGraph()
@@ -277,20 +273,6 @@ namespace ProjectManager
             Pen dataPen = new Pen(Brushes.Black);
             SolidBrush dataBrush = new SolidBrush(Color.Black);
             graphics.DrawString(inputStr, new Font("Arial",12), dataBrush, X / 2, Y / 6);
-        }
-        public void ReScaleImage(float width, float height)
-        {
-            var brush = new SolidBrush(Color.Black);
-            // calculate target scaling factor
-            float scale = Math.Min(width / mainPlot.Width, height / mainPlot.Height);
-            var bmp = new Bitmap((int)width, (int)height);
-            var newGfx = Graphics.FromImage(bmp);
-
-            var scaleWidth = (int)(mainPlot.Width * scale);
-            var scaleHeight = (int)(mainPlot.Height * scale);
-
-            newGfx.DrawImage(mainPlot, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
-
         }
              
         

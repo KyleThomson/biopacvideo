@@ -275,8 +275,8 @@ namespace ProjectManager
             // Draw ticks and label axes
             graph.DrawTicks(numXTicks, pjt.Animals.Count, 1.5F, xTickString, yTickString);
             Font aFont = new Font("Arial", 12 * graph.objectScale);
-            graph.WriteXLabel("Time (days)", aFont, X, Y);
-            graph.WriteYLabel("Animals", aFont, X, Y);
+            graph.WriteXLabel("Time (days)", aFont);
+            graph.WriteYLabel("Animals", aFont);
 
             // Add text boxes as test
             Color color = Color.FromName("LightSlateGray");
@@ -315,7 +315,6 @@ namespace ProjectManager
             for (int i = 0; i < pjt.Animals.Count; i++)
             {
                 float yCoord = i + 1;
-                //float yCoord = graph.yTickPoints[i];
                 for (int j = 0; j < pjt.Animals[i].Sz.Count; j++)
                 {
                     float xCoord = (float)Math.Round((pjt.Animals[i].Sz[j].d.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours) / 24, 2);
