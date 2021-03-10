@@ -337,6 +337,7 @@ namespace ProjectManager
             Test.GetYTickLabels(pjt);
             Test.PlotSz(pjt);
             Test.PlotTrt(pjt);
+            Test.Legend();
             Test.graph.DisplayGraph();
         }
 

@@ -377,13 +377,42 @@ namespace ProjectManager
         public void Legend()
         {
             // Method that draws on legend for injection type and seizure type
+            int markerSize = 8;
             Font legendFont = new Font("Arial", 12 * graph.objectScale);
             SolidBrush legendBrush = new SolidBrush(Color.Black);
+            Pen drugPen = new Pen(Brushes.Red);
+            drugPen.Width = 4F * graph.objectScale;
+            Pen vehiclePen = new Pen(Brushes.Teal);
+            vehiclePen.Width = 4F * graph.objectScale;
+            Pen szPen = new Pen(Brushes.Black);
 
             // Placement point for drug treatment legend
+            string drugString = "Drug Treatment";
+            PointF drugStringPoint = new PointF(graph.xAxisStart, (float)(graph.axes[0].Y * 1.1));
+            SizeF drugStringSize = graph.graphics.MeasureString(drugString, legendFont);
+            graph.graphics.DrawString(drugString, legendFont, legendBrush, drugStringPoint.X, drugStringPoint.Y);
+            graph.graphics.DrawLine(drugPen, drugStringPoint.X, drugStringPoint.Y + drugStringSize.Height, drugStringPoint.X + drugStringSize.Width, drugStringPoint.Y + drugStringSize.Height);
 
+            // Placement for vehicle treatment
+            string vehicleString = "Vehicle Treatment";            
+            SizeF vehicleStringSize = graph.graphics.MeasureString(vehicleString, legendFont);
+            PointF vehicleStringPoint = new PointF(graph.xAxisLength - vehicleStringSize.Width, (float)(graph.axes[0].Y * 1.1));
+            graph.graphics.DrawString(vehicleString, legendFont, legendBrush, vehicleStringPoint.X, vehicleStringPoint.Y);
+            graph.graphics.DrawLine(vehiclePen, vehicleStringPoint.X, vehicleStringPoint.Y + vehicleStringSize.Height, vehicleStringPoint.X + vehicleStringSize.Width, vehicleStringPoint.Y + vehicleStringSize.Height);
 
-            //graph.graphics.DrawString("Drug Treatment", legendFont, legendBrush,)
+            // Placement for focal seizure
+            string focalSzString = "Focal Seizure:";
+            SizeF focalSzStringSize = graph.graphics.MeasureString(focalSzString, legendFont);
+            PointF focalSzStringPoint = new PointF(graph.xAxisStart, (float)(graph.axes[0].Y * 1.15));
+            graph.graphics.DrawString(focalSzString, legendFont, legendBrush, focalSzStringPoint.X, focalSzStringPoint.Y);
+            graph.graphics.FillEllipse(legendBrush, focalSzStringPoint.X + focalSzStringSize.Width, focalSzStringPoint.Y + focalSzStringSize.Height / 4, markerSize * graph.objectScale, markerSize * graph.objectScale);
+
+            // Placement for generalized seizure
+            string generalSzString = "Generalized Seizure:";
+            SizeF generalSzStringSize = graph.graphics.MeasureString(generalSzString, legendFont);
+            PointF generalSzStringPoint = new PointF(graph.xAxisLength - generalSzStringSize.Width, (float)(graph.axes[0].Y * 1.15));
+            graph.graphics.DrawString(generalSzString, legendFont, legendBrush, generalSzStringPoint.X, generalSzStringPoint.Y);
+            graph.graphics.DrawEllipse(szPen, generalSzStringPoint.X + generalSzStringSize.Width, generalSzStringPoint.Y + generalSzStringSize.Height / 4, markerSize * graph.objectScale, markerSize * graph.objectScale);
 
         }
 
