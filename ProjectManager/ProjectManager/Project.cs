@@ -415,6 +415,10 @@ namespace ProjectManager
             graph.graphics.DrawEllipse(szPen, generalSzStringPoint.X + generalSzStringSize.Width, generalSzStringPoint.Y + generalSzStringSize.Height / 4, markerSize * graph.objectScale, markerSize * graph.objectScale);
 
         }
+        public void T35_Header()
+        {
+
+        }
 
 
     }
