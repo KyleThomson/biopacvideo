@@ -338,6 +338,7 @@ namespace ProjectManager
             Test.PlotSz(pjt);
             Test.PlotTrt(pjt);
             Test.Legend();
+            Test.T35_Header();
             Test.graph.DisplayGraph();
         }
 

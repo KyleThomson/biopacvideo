@@ -277,10 +277,6 @@ namespace ProjectManager
             Font aFont = new Font("Arial", 12 * graph.objectScale);
             graph.WriteXLabel("Time (days)", aFont);
             graph.WriteYLabel("Animals", aFont);
-
-            // Add text boxes as test
-            Color color = Color.FromName("LightSlateGray");
-            //graph.TextBox(color);
         }
         public List<string> GetXTickLabels(Project pjt, int xTickInterval)
         {
@@ -324,7 +320,7 @@ namespace ProjectManager
                     }
                     else if (pjt.Animals[i].Sz[j].Severity == 0)
                     {
-                        graph.PlotPoints(xCoord, yCoord, markerSize, ".");
+                        graph.PlotPoints(xCoord, yCoord, markerSize / 2, ".");
                     }
 
                 }
@@ -405,7 +401,7 @@ namespace ProjectManager
             SizeF focalSzStringSize = graph.graphics.MeasureString(focalSzString, legendFont);
             PointF focalSzStringPoint = new PointF(graph.xAxisStart, (float)(graph.axes[0].Y * 1.15));
             graph.graphics.DrawString(focalSzString, legendFont, legendBrush, focalSzStringPoint.X, focalSzStringPoint.Y);
-            graph.graphics.FillEllipse(legendBrush, focalSzStringPoint.X + focalSzStringSize.Width, focalSzStringPoint.Y + focalSzStringSize.Height / 4, markerSize * graph.objectScale, markerSize * graph.objectScale);
+            graph.graphics.FillEllipse(legendBrush, focalSzStringPoint.X + focalSzStringSize.Width, focalSzStringPoint.Y + focalSzStringSize.Height / 4, markerSize / 2 * graph.objectScale, markerSize / 2 * graph.objectScale);
 
             // Placement for generalized seizure
             string generalSzString = "Generalized Seizure:";
@@ -417,7 +413,30 @@ namespace ProjectManager
         }
         public void T35_Header()
         {
+            // Initialize header information for drawing text
+            string headerString = "Epilepsy Therapy Screening Program";
+            Font headerFont = new Font("Arial", 14F * graph.objectScale);
+            string subheader = "Test 35 - Chronic Post-SE (KA) Spontaneously Seizing Rats: Stage 1 (IP Administration)";
+            Font subFont = new Font("Arial", 8F * graph.objectScale);
+            SolidBrush headerBrush = new SolidBrush(Color.Black);
 
+            // Get sizes and points for string placement
+            SizeF headerSize = graph.graphics.MeasureString(headerString, headerFont);
+            SizeF subSize = graph.graphics.MeasureString(subheader, subFont);
+
+            PointF headerPoint = new PointF(graph.mainPlot.Width / 2 - headerSize.Width / 2, (float)(graph.mainPlot.Height * 0.05));
+            PointF subPoint = new PointF(graph.mainPlot.Width / 2 - subSize.Width / 2, (float)(graph.mainPlot.Height * 0.05 + headerSize.Height));
+
+            // Draw rectangles first
+            RectangleF headerRect = new RectangleF((int)(graph.mainPlot.Width / 2 - subSize.Width / 2), (int)(graph.mainPlot.Height * 0.05), (int)subSize.Width, (int)(headerSize.Height + subSize.Height));
+            Pen headerPen = new Pen(Brushes.Black);
+            SolidBrush solidBrush = new SolidBrush(Color.LightSlateGray);
+            graph.graphics.FillRectangle(solidBrush, headerRect);
+            graph.graphics.DrawRectangle(headerPen, headerRect.X, headerRect.Y, headerRect.Width, headerRect.Height);
+            
+            // Now draw strings over rectangles
+            graph.graphics.DrawString(headerString, headerFont, headerBrush, headerPoint);
+            graph.graphics.DrawString(subheader, subFont, headerBrush, subPoint);
         }
 
 
