@@ -42,6 +42,7 @@
             this.SzSvBox = new System.Windows.Forms.CheckBox();
             this.BloodDraw = new System.Windows.Forms.CheckBox();
             this.BloodDrawList = new System.Windows.Forms.CheckBox();
+            this.binSeizures = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // SzCount
@@ -184,11 +185,22 @@
             this.BloodDrawList.Text = "Blood Draws (List)";
             this.BloodDrawList.UseVisualStyleBackColor = true;
             // 
+            // binSeizures
+            // 
+            this.binSeizures.AutoSize = true;
+            this.binSeizures.Location = new System.Drawing.Point(125, 127);
+            this.binSeizures.Name = "binSeizures";
+            this.binSeizures.Size = new System.Drawing.Size(84, 17);
+            this.binSeizures.TabIndex = 14;
+            this.binSeizures.Text = "Bin Seizures";
+            this.binSeizures.UseVisualStyleBackColor = true;
+            // 
             // Exporter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(224, 233);
+            this.Controls.Add(this.binSeizures);
             this.Controls.Add(this.BloodDrawList);
             this.Controls.Add(this.BloodDraw);
             this.Controls.Add(this.SzSvBox);
@@ -226,5 +238,6 @@
         private System.Windows.Forms.CheckBox SzSvBox;
         private System.Windows.Forms.CheckBox BloodDraw;
         private System.Windows.Forms.CheckBox BloodDrawList;
+        private System.Windows.Forms.CheckBox binSeizures;
     }
 }

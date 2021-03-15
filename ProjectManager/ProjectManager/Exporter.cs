@@ -30,12 +30,18 @@ namespace ProjectManager
             if (SzSvBox.Checked) E.SeverityIndx = true;
             if (BloodDraw.Checked) E.BloodDraw = true;
             if (BloodDrawList.Checked) E.BloodDrawList = true;
+            if (binSeizures.Checked) E.binSz = true;
             SaveFileDialog F = new SaveFileDialog();
             F.DefaultExt = ".pjt";
             F.InitialDirectory = "D:\\";
-            if (F.ShowDialog() == DialogResult.OK)
+            SaveFileDialog binned = new SaveFileDialog();
+            binned.Title = "Binned Seizures .csv";
+            binned.DefaultExt = ".csv";
+            binned.InitialDirectory = "D:\\";
+            if (F.ShowDialog() == DialogResult.OK && binned.ShowDialog() == DialogResult.OK)
             {
-                pjt.ExportData(F.FileName, E);
+                int numDays = pjt.Files.Count;
+                pjt.ExportData(F.FileName, E, numDays, binned.FileName);
             }
         }
 

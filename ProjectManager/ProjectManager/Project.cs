@@ -8,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace ProjectManager
 {
@@ -25,7 +26,8 @@ namespace ProjectManager
         public bool BloodDraw;
         public bool BloodDrawList;
         public bool Injections;
-        public bool InjectionsList; 
+        public bool InjectionsList;
+        public bool binSz;
         
         public ExportType()
         {
@@ -41,7 +43,8 @@ namespace ProjectManager
             BloodDraw = false;
             BloodDrawList = false;
             Injections = false;
-            InjectionsList = false; 
+            InjectionsList = false;
+            binSz = false;
         }
 
     }
@@ -254,15 +257,32 @@ namespace ProjectManager
             Injections = new List<InjectionType>();
         }
     }
+    public class Test35_Stats
+    {
+
+    }
     public class SzGraph
     {
+        // instance of graph for test 35 or test 36
         public GraphProperties graph;
-        public SzGraph(int X, int Y, Project pjt)
+
+        // string variables for header info for the pdf
+        public string test;
+        public string header;
+        public string subHeader;
+        public string ETSP;
+        public string batch;
+        public string dose;
+        public string frequency;
+        public SzGraph(int X, int Y, Project pjt, string testType)
         {
             // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
             graph = new GraphProperties(X, Y, pjt.Files.Count, pjt.Animals.Count);
             graph.DrawAxes(4);
             graph.BoundingBox(4);
+
+            // Save type of test we are doing (test 35 or test 36 for now)
+            test = testType;
 
             // x tick every 5 days
             int numXTicks = (int)Math.Floor((decimal)pjt.Files.Count / 5);
@@ -282,7 +302,7 @@ namespace ProjectManager
         {
             List<string> xTickString = new List<string>();
             //Obtain basis for y and x axis labeling
-            for (int i = 0; i < pjt.Files.Count; i += xTickInterval)
+            for (int i = 0; i <= pjt.Files.Count; i += xTickInterval)
             {
                 if (i % xTickInterval == 0 && i != 0)
                 {
@@ -304,6 +324,7 @@ namespace ProjectManager
         }
         public void PlotSz(Project pjt)
         {
+            // Plot seizures the same for both test 35 and test 36
             int markerSize = 8;
             float startDay = pjt.Files[0].Start.DayOfYear;
             DateTime Earliest = pjt.Files[0].Start.Date;
@@ -332,42 +353,51 @@ namespace ProjectManager
             float lineWidth = 4;
             Color vehicleColor = Color.FromName("Teal");
             Color drugColor = Color.FromName("Red");
-            for (int i = 0; i < pjt.Animals.Count; i++)
+
+            // If Test 35, use injections to draw lines for treatment
+            if (test == "T35")
             {
-                float yCoord = (float)(i + 0.5);
-
-                // Initialize vehicle and drug treatment times
-                List<float> vehicleTimes = new List<float>();
-                List<float> drugTimes = new List<float>();
-                
-                for (int j = 0; j < pjt.Animals[i].Injections.Count; j++)
+                for (int i = 0; i < pjt.Animals.Count; i++)
                 {
-                    foreach (InjectionType I in pjt.Animals[i].Injections)
-                    {
-                        if (I.ADDID == "Vehicle")
-                        {
-                            vehicleTimes.Add((float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24, 2));
-                        }
-                        else
-                        {
-                            drugTimes.Add((float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24, 2));
-                        }
-                    }
-                    // Draw vehicle line
-                    if (vehicleTimes.Count > 1)
-                    {
-                        graph.Line(vehicleTimes[0], yCoord, vehicleTimes[vehicleTimes.Count - 1], yCoord, lineWidth, vehicleColor);
-                    }
-                    
+                    float yCoord = (float)(i + 0.5);
 
-                    // Draw drug line
-                    if (drugTimes.Count > 1)
-                    {
-                        graph.Line(drugTimes[0], yCoord, drugTimes[drugTimes.Count - 1], yCoord, lineWidth, drugColor);
-                    }
-                    
+                    // Initialize vehicle and drug treatment times
+                    List<float> vehicleTimes = new List<float>();
+                    List<float> drugTimes = new List<float>();
 
+                    for (int j = 0; j < pjt.Animals[i].Injections.Count; j++)
+                    {
+                        foreach (InjectionType I in pjt.Animals[i].Injections)
+                        {
+                            if (I.ADDID == "Vehicle")
+                            {
+                                vehicleTimes.Add((float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24, 2));
+                            }
+                            else
+                            {
+                                drugTimes.Add((float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24, 2));
+                            }
+                        }
+                        // Draw vehicle line
+                        if (vehicleTimes.Count > 1)
+                        {
+                            graph.Line(vehicleTimes[0], yCoord, vehicleTimes[vehicleTimes.Count - 1], yCoord, lineWidth, vehicleColor);
+                        }
+
+
+                        // Draw drug line
+                        if (drugTimes.Count > 1)
+                        {
+                            graph.Line(drugTimes[0], yCoord, drugTimes[drugTimes.Count - 1], yCoord, lineWidth, drugColor);
+                        }
+
+
+                    }
                 }
+            }
+            else if (test == "T36")
+            {
+
             }
         }
         public void Legend()
@@ -420,6 +450,7 @@ namespace ProjectManager
             Font subFont = new Font("Arial", 8F * graph.objectScale);
             SolidBrush headerBrush = new SolidBrush(Color.Black);
 
+
             // Get sizes and points for string placement
             SizeF headerSize = graph.graphics.MeasureString(headerString, headerFont);
             SizeF subSize = graph.graphics.MeasureString(subheader, subFont);
@@ -437,6 +468,17 @@ namespace ProjectManager
             // Now draw strings over rectangles
             graph.graphics.DrawString(headerString, headerFont, headerBrush, headerPoint);
             graph.graphics.DrawString(subheader, subFont, headerBrush, subPoint);
+
+            // Set values for ETSP, Batch, Dose, and Frequency
+                // If user did not input values for these set to ----
+            ETSP = "----";
+            batch = "----";
+            dose = "----";
+            frequency = "----";
+                // else, set to user defined values
+
+            // Draw area and strings for etsp, batch, etc.
+
         }
 
 
@@ -890,7 +932,7 @@ namespace ProjectManager
             return null;
         }
 
-        public void ExportData(string Fname, ExportType E)
+        public void ExportData(string Fname, ExportType E, int numDays, string binnedFile)
         {
             //Open File
             StreamWriter F = new StreamWriter(Fname);
@@ -902,7 +944,12 @@ namespace ProjectManager
             DateTime Earliest = Files[0].Start.Date;
             DateTime Latest = Files[Files.Count - 1].Start.Date;
             st = Earliest.ToShortDateString() + "," + Earliest.ToShortTimeString();
-            F.WriteLine(st); 
+            F.WriteLine(st);
+
+            // Open binned seizure file
+            StreamWriter sw = new StreamWriter(binnedFile);
+            sw.AutoFlush = true;
+            string sz;
             if (E.DetailList)
             {
 
@@ -1060,8 +1107,41 @@ namespace ProjectManager
                 {
 
                 }
+                if (E.binSz)
+                {
+                    
+                    // bin seizures if option was selected
+                    sz = A.ID;
+                   
+                    // Create list for days that seizures happen
+                    List<double> szDay = new List<double>();
+                    List<double> binSeizures = new List<double>(new double[numDays]);
+                    foreach (SeizureType seizureType in A.Sz)
+                    {
+                        szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays));
+                    }
+                    var g = szDay.GroupBy(i => i);
+                    foreach (var bin in g)
+                    {
+                        if (bin.Key > 0)
+                        {
+                            binSeizures[(int)(bin.Key - 1)] = bin.Count();
+                        }
+                        else
+                        {
+                            binSeizures[(int)(bin.Key)] = bin.Count();
+                        }
+                    }
+                    for (int i = 0; i < binSeizures.Count; i++)
+                    {
+                        sz += "," + binSeizures[i].ToString();
+                    }
+                    sw.WriteLine(sz);
+                    
+                }
             }
             F.Close();
+            sw.Close();
         }
 
         //This function takes the data from the project file and loads it into memory. 
