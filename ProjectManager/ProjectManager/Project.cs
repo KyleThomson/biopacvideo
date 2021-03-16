@@ -276,17 +276,36 @@ namespace ProjectManager
         public string frequency;
         public SzGraph(int X, int Y, Project pjt, string testType)
         {
+            // Sort project based on test
+            if (testType == "T35")
+            {
+                // Sort by injections
+                pjt = pjt.T35Sort(pjt);
+            }
+            DateTime Earliest = pjt.Files[0].Start.Date;
+            // Find max day of project
+            int tempMax = 0;
+            foreach (AnimalType A in pjt.Animals)
+            {
+                if (A.Injections.Count > 0)
+                {
+                    if ((float)Math.Round(A.Injections[A.Injections.Count-1].TimePoint.Subtract(Earliest).TotalHours / 24, 2) > tempMax)
+                    {
+                        tempMax = (int)Math.Round(A.Injections[A.Injections.Count - 1].TimePoint.Subtract(Earliest).TotalHours / 24, 2);
+                    }
+                }
+            }
             // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
-            graph = new GraphProperties(X, Y, pjt.Files.Count, pjt.Animals.Count);
+            graph = new GraphProperties(X, Y, tempMax + 2, pjt.Animals.Count);
             graph.DrawAxes(4);
             graph.BoundingBox(4);
 
             // Save type of test we are doing (test 35 or test 36 for now)
             test = testType;
 
-            // x tick every 5 days
-            int numXTicks = (int)Math.Floor((decimal)pjt.Files.Count / 5);
-            int xTickInterval = 5;
+            // x tick every 7 days           
+            int xTickInterval = 7;
+            int numXTicks = ((tempMax + 2) / xTickInterval) + 1;
 
             // Get axis tick labels for graph properties
             List<string> xTickString = GetXTickLabels(pjt, xTickInterval);
@@ -304,7 +323,7 @@ namespace ProjectManager
             //Obtain basis for y and x axis labeling
             for (int i = 0; i <= pjt.Files.Count; i += xTickInterval)
             {
-                if (i % xTickInterval == 0 && i != 0)
+                if (i % xTickInterval == 0)// && i != 0)
                 {
                     xTickString.Add((i).ToString());
                 }
@@ -412,6 +431,7 @@ namespace ProjectManager
             vehiclePen.Width = 4F * graph.objectScale;
             Pen szPen = new Pen(Brushes.Black);
 
+            // If Test 35
             // Placement point for drug treatment legend
             string drugString = "Drug Treatment";
             PointF drugStringPoint = new PointF(graph.xAxisStart, (float)(graph.axes[0].Y * 1.1));
@@ -419,6 +439,7 @@ namespace ProjectManager
             graph.graphics.DrawString(drugString, legendFont, legendBrush, drugStringPoint.X, drugStringPoint.Y);
             graph.graphics.DrawLine(drugPen, drugStringPoint.X, drugStringPoint.Y + drugStringSize.Height, drugStringPoint.X + drugStringSize.Width, drugStringPoint.Y + drugStringSize.Height);
 
+            // If Test 35
             // Placement for vehicle treatment
             string vehicleString = "Vehicle Treatment";            
             SizeF vehicleStringSize = graph.graphics.MeasureString(vehicleString, legendFont);
@@ -479,6 +500,31 @@ namespace ProjectManager
 
             // Draw area and strings for etsp, batch, etc.
 
+        }
+        public Project T35Sort(Project pjt)
+        {
+            // Sort animals according to vehicle first
+            
+            pjt.Animals.OrderBy(a => a.Injections[0].ADDID).ToList();
+            int i = 0;
+            foreach (AnimalType A in pjt.Animals)
+            {
+                if (A.Injections.Count == 0)
+                {
+                    // If injections aren't there delete animal
+                    pjt.Animals.RemoveAt(i);
+                }
+                else if (A.Injections[0].ADDID != A.Injections[A.Injections.Count-1].ADDID)
+                {
+                    // If there is only one treatment method? Suppose this works if you check first and last ADDID
+                    // Assumes that there are only two blocks of treatment MAX
+                    pjt.Animals.RemoveAt(i);
+                }
+                i++; // step counter
+            }
+            List<AnimalType> sortedA = pjt.Animals.OrderBy(a => a.Injections[0].ADDID).ToList();
+            pjt.Animals = sortedA;
+            return pjt;
         }
 
 
@@ -670,7 +716,18 @@ namespace ProjectManager
                 A.Meals.Sort(delegate(MealType M1, MealType M2) { return DateTime.Compare(M1.d, M2.d); });
             }            
             
-        }        
+        }
+        public Project T35Sort(Project pjt)
+        {
+            // Remove animals w/o injections and one type of ADDID
+            pjt.Animals.RemoveAll(a => a.Injections.Count == 0);
+            pjt.Animals.RemoveAll(a => a.Injections[0].ADDID == a.Injections[a.Injections.Count-1].ADDID);
+
+            // Sort animals according to vehicle first
+            List<AnimalType> sortedA = pjt.Animals.OrderBy(a => a.Injections[0].ADDID).ToList();
+            pjt.Animals = sortedA;
+            return pjt;
+        }
 
         public string[] Get_Animals()
         {
