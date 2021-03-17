@@ -89,7 +89,7 @@ namespace ProjectManager
             Pen axisPen = new Pen(Brushes.Black);
             axisPen.Width = penWidth * objectScale;
             //Horizontal bounding line
-            graphics.DrawLine(axisPen, new PointF(axes[0].X-2, (float)(axes[2].Y - axes[2].Y * 0.01)), new PointF(axes[1].X+2, (float)(axes[2].Y - axes[2].Y * 0.01)));
+            graphics.DrawLine(axisPen, new PointF(axes[0].X-3, (float)(axes[2].Y - axes[2].Y * 0.011)), new PointF(axes[1].X+3, (float)(axes[2].Y - axes[2].Y * 0.011)));
             //Vertical bounding line
             graphics.DrawLine(axisPen, new PointF(axes[1].X, axes[2].Y), new PointF(axes[1].X, axes[3].Y));
 

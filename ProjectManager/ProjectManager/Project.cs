@@ -245,6 +245,7 @@ namespace ProjectManager
         public List<RemovalType> Removals;
         public GroupType Group;
         public List<InjectionType> Injections;
+        public float seizureBurden;
         public AnimalType()
         {
             Sz = new List<SeizureType>();
@@ -255,6 +256,60 @@ namespace ProjectManager
             BloodDraws = new List<BloodDrawType>();
             Removals = new List<RemovalType>();
             Injections = new List<InjectionType>();
+        }
+        public void SeizureBurden()
+        {
+            int? bubbleSeverity = null ; // nullable
+            int? noteSeverity = null ; // nullable
+            int? totalBurden = 0;
+
+            // Find drug and vehicle injections so we can determine if the seizure occurred during drug/vehicle treatment
+            List<InjectionType> vehicleI = Injections.Where(I => I.ADDID == "Vehicle").ToList();
+            List<InjectionType> drugI = Injections.Where(I => I.ADDID != "Vehicle").ToList();
+
+            if (Sz.Count > 0)
+            {
+                foreach (SeizureType S in Sz)
+                {
+                    if (S.Severity >= 0 && S.Severity <= 5)
+                    {
+                        bubbleSeverity = S.Severity;
+
+                    }
+                    if (S.Notes.Length > 0)
+                    {
+                        string storeNum = String.Join("", S.Notes.Where(char.IsDigit));
+                        if (storeNum.Length > 0)
+                        {
+                            if (int.Parse(storeNum) <= 5)
+                            {
+                                noteSeverity = int.Parse(storeNum);
+                            }
+                        }
+
+                    }
+                    
+                    // Add seizure severity to running total
+                    totalBurden += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
+
+                    // reset severity
+                    bubbleSeverity = null;
+                    noteSeverity = null;
+                }
+                // Calculate seizure burden
+                seizureBurden = (float)totalBurden / Sz.Count;
+            }
+        }
+        public List<float> FindTreatmentRange(List<InjectionType> injections)
+        {
+            List<float> trtRange = new List<float>();
+            // find max min values
+            float min = injections.Min(I => (float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24, 2));
+            float max = injections.Max(I => (float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24, 2));
+
+
+
+            return trtRange;
         }
     }
     public class Test35_Stats
@@ -282,6 +337,7 @@ namespace ProjectManager
                 // Sort by injections
                 pjt = pjt.T35Sort(pjt);
             }
+
             DateTime Earliest = pjt.Files[0].Start.Date;
             // Find max day of project
             int tempMax = 0;
@@ -295,10 +351,14 @@ namespace ProjectManager
                     }
                 }
             }
+
             // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
             graph = new GraphProperties(X, Y, tempMax + 2, pjt.Animals.Count);
             graph.DrawAxes(4);
             graph.BoundingBox(4);
+
+            // Calculate seizure burdens for animals
+            pjt.CalculateSzBurden();
 
             // Save type of test we are doing (test 35 or test 36 for now)
             test = testType;
@@ -311,9 +371,9 @@ namespace ProjectManager
             List<string> xTickString = GetXTickLabels(pjt, xTickInterval);
             List<string> yTickString = GetYTickLabels(pjt);
 
-            // Draw ticks and label axes
-            graph.DrawTicks(numXTicks, pjt.Animals.Count, 1.5F, xTickString, yTickString);
+            // Draw ticks and label axes           
             Font aFont = new Font("Arial", 12 * graph.objectScale);
+            graph.DrawTicks(numXTicks, pjt.Animals.Count, 1.5F, xTickString, yTickString);
             graph.WriteXLabel("Time (days)", aFont);
             graph.WriteYLabel("Animals", aFont);
         }
@@ -501,31 +561,6 @@ namespace ProjectManager
             // Draw area and strings for etsp, batch, etc.
 
         }
-        public Project T35Sort(Project pjt)
-        {
-            // Sort animals according to vehicle first
-            
-            pjt.Animals.OrderBy(a => a.Injections[0].ADDID).ToList();
-            int i = 0;
-            foreach (AnimalType A in pjt.Animals)
-            {
-                if (A.Injections.Count == 0)
-                {
-                    // If injections aren't there delete animal
-                    pjt.Animals.RemoveAt(i);
-                }
-                else if (A.Injections[0].ADDID != A.Injections[A.Injections.Count-1].ADDID)
-                {
-                    // If there is only one treatment method? Suppose this works if you check first and last ADDID
-                    // Assumes that there are only two blocks of treatment MAX
-                    pjt.Animals.RemoveAt(i);
-                }
-                i++; // step counter
-            }
-            List<AnimalType> sortedA = pjt.Animals.OrderBy(a => a.Injections[0].ADDID).ToList();
-            pjt.Animals = sortedA;
-            return pjt;
-        }
 
 
     }
@@ -548,7 +583,8 @@ namespace ProjectManager
         public List<FileType> Files;
         public List<GroupType> Groups; 
         public List<AnimalType> Animals;
-        public List<LabelType> Labels; 
+        public List<LabelType> Labels;
+        public float seizureBurdenSEM;
         public Project(string Inpt)
         {
             Filename = Inpt;
@@ -727,6 +763,24 @@ namespace ProjectManager
             List<AnimalType> sortedA = pjt.Animals.OrderBy(a => a.Injections[0].ADDID).ToList();
             pjt.Animals = sortedA;
             return pjt;
+        }
+        public void CalculateSzBurden()
+        {
+            // list for seizure burdens to calculate SEM
+            List<float> allBurdens = new List<float>();
+            foreach (AnimalType A in Animals)
+            {
+                A.SeizureBurden();
+                allBurdens.Add(A.seizureBurden);
+            }
+
+            // Calculate Std. Dev.
+            float avg = Enumerable.Average(allBurdens);
+            float sum = (float)allBurdens.Sum(s => Math.Pow(s - avg, 2));
+            float stdev = (float)Math.Sqrt(sum / (allBurdens.Count - 1));
+
+            // Calculate SEM of seizure burdens
+            seizureBurdenSEM = (float)(stdev / Math.Sqrt(allBurdens.Count - 1));
         }
 
         public string[] Get_Animals()
