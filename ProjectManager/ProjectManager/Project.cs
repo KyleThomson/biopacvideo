@@ -544,13 +544,21 @@ namespace ProjectManager
             graph.graphics.DrawEllipse(szPen, generalSzStringPoint.X + generalSzStringSize.Width, generalSzStringPoint.Y + generalSzStringSize.Height / 4, markerSize * graph.objectScale, markerSize * graph.objectScale);
 
         }
-        public void T35_Header()
+        public void DisplayHeader()
         {
             // Initialize header information for drawing text
             string headerString = "Epilepsy Therapy Screening Program";
-            Font headerFont = new Font("Arial", 14F * graph.objectScale);
-            string subheader = "Test 35 - Chronic Post-SE (KA) Spontaneously Seizing Rats: Stage 1 (IP Administration)";
-            Font subFont = new Font("Arial", 8F * graph.objectScale);
+            Font headerFont = new Font("Arial", 16F * graph.objectScale);
+            string subheader = "";
+            if (test == "T35")
+            {
+                subheader = "Test 35 - Chronic Post-SE (KA) Spontaneously Seizing Rats: Stage 1 (IP Administration)";
+            }
+            else if (test == "T36")
+            {
+                subheader = "Test 36 - Chronic Post-SE (KA) Spontaneously Seizing Rats: Stage 2 (Oral Administration - Drug in Food)";
+            }
+            Font subFont = new Font("Arial", 10F * graph.objectScale);
             SolidBrush headerBrush = new SolidBrush(Color.Black);
 
 
@@ -573,14 +581,38 @@ namespace ProjectManager
             graph.graphics.DrawString(subheader, subFont, headerBrush, subPoint);
 
             // Set values for ETSP, Batch, Dose, and Frequency
-                // If user did not input values for these set to ----
-            ETSP = "----";
-            batch = "----";
-            dose = "----";
-            frequency = "----";
-                // else, set to user defined values
+            // If user did not input values for these set to ----
+            ETSP = "ETSP: ----";
+            batch = "Batch: ----";
+            dose = "Dose: ----";
+            frequency = "Frequnecy: ----";
+            // else, set to user defined values
 
             // Draw area and strings for etsp, batch, etc.
+            SizeF etspSize = graph.graphics.MeasureString(ETSP, headerFont);
+            SizeF batchSize = graph.graphics.MeasureString(batch, headerFont);
+            SizeF doseSize = graph.graphics.MeasureString(dose, headerFont);
+            SizeF freqSize = graph.graphics.MeasureString(frequency, headerFont);
+            float etspAndbatchY = (float)((headerRect.Y + headerSize.Height + subSize.Height) * 1.1);
+            
+            RectangleF etspAndbatch = new RectangleF(headerRect.X, etspAndbatchY, headerRect.Width, Math.Max(etspSize.Height, batchSize.Height));
+            float doseAndfreqY = (float)((etspAndbatch.Y + Math.Max(etspSize.Height, batchSize.Height)) * 1.075);
+            RectangleF doseAndfreq = new RectangleF(headerRect.X, doseAndfreqY, headerRect.Width, Math.Max(doseSize.Height, freqSize.Height));
+
+            graph.graphics.FillRectangle(solidBrush, etspAndbatch);
+            graph.graphics.DrawRectangle(headerPen, etspAndbatch.X, etspAndbatch.Y, etspAndbatch.Width, etspAndbatch.Height);
+            graph.graphics.FillRectangle(solidBrush, doseAndfreq);
+            graph.graphics.DrawRectangle(headerPen, doseAndfreq.X, doseAndfreq.Y, doseAndfreq.Width, doseAndfreq.Height);
+
+            // Draw strings for etsp, batch, dose, frequency
+            graph.graphics.DrawString(ETSP, headerFont, headerBrush, headerRect.X, etspAndbatchY);
+            graph.graphics.DrawString(batch, headerFont, headerBrush, (float)(headerRect.Width * 1.5 - batchSize.Width), etspAndbatchY);
+            graph.graphics.DrawString(dose, headerFont, headerBrush, headerRect.X, doseAndfreqY);
+            graph.graphics.DrawString(frequency, headerFont, headerBrush, (float)(headerRect.Width * 1.5 - freqSize.Width), doseAndfreqY);
+
+        }
+        public void DisplayStats(Project pjt)
+        {
 
         }
 
