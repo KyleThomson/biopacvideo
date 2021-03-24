@@ -435,7 +435,7 @@ namespace ProjectManager
                 float yCoord = i + 1;
                 for (int j = 0; j < pjt.Animals[i].Sz.Count; j++)
                 {
-                    float xCoord = (float)(pjt.Animals[i].Sz[j].d.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours);// / 24;
+                    float xCoord = (float)(pjt.Animals[i].Sz[j].d.Date.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours) / 24;
                     if (pjt.Animals[i].Sz[j].Severity > 0)
                     {
                         graph.PlotPoints(xCoord, yCoord, markerSize, "o");
