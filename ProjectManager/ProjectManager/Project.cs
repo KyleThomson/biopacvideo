@@ -245,7 +245,9 @@ namespace ProjectManager
         public List<RemovalType> Removals;
         public GroupType Group;
         public List<InjectionType> Injections;
-        public float seizureBurden;
+        public float seizureVehicleBurden;
+        public float seizureDrugBurden;
+        public float seizureBLBurden;
         public AnimalType()
         {
             Sz = new List<SeizureType>();
@@ -257,15 +259,23 @@ namespace ProjectManager
             Removals = new List<RemovalType>();
             Injections = new List<InjectionType>();
         }
-        public void SeizureBurden()
+        public void SeizureBurden(DateTime Earliest)
         {
             int? bubbleSeverity = null ; // nullable
             int? noteSeverity = null ; // nullable
-            int? totalBurden = 0;
+            int? vehicleBurden = 0;
+            int? drugBurden = 0;
+            int? baselineBurden = 0;
+            List<int> vehicleSz = new List<int>();
+            List<int> drugSz = new List<int>();
+            List<int> baselineSz = new List<int>();
+            
 
             // Find drug and vehicle injections so we can determine if the seizure occurred during drug/vehicle treatment
             List<InjectionType> vehicleI = Injections.Where(I => I.ADDID == "Vehicle").ToList();
             List<InjectionType> drugI = Injections.Where(I => I.ADDID != "Vehicle").ToList();
+            List<double> vehicleTimes = vehicleI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
+            List<double> drugTimes = drugI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
 
             if (Sz.Count > 0)
             {
@@ -288,29 +298,41 @@ namespace ProjectManager
                         }
 
                     }
-                    
-                    // Add seizure severity to running total
-                    totalBurden += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
+                    double szTime = S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours;
+                    // Add seizure severity to running total depending on treatment that seizure occurred during
+
+                    //Seizure happened during vehicle treatment
+                    if (szTime >= vehicleTimes.Min() && szTime <= vehicleTimes.Max())
+                    {
+                        vehicleBurden += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
+                        vehicleSz.Add((int)(Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity));
+                    }
+                    //Seizure happened during drug treatment
+                    else if (szTime >= drugTimes.Min() && szTime <= drugTimes.Max())
+                    {
+                        drugBurden += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
+                        drugSz.Add((int)(Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity));
+                    }
+                    //Seizure happened outside of both treatments
+                    else
+                    {
+                        baselineBurden += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
+                        baselineSz.Add((int)(Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity));
+                    }
+                    //totalBurden += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
 
                     // reset severity
                     bubbleSeverity = null;
                     noteSeverity = null;
                 }
                 // Calculate seizure burden
-                seizureBurden = (float)totalBurden / Sz.Count;
+                seizureVehicleBurden = (float)vehicleBurden / Sz.Count;
+                seizureDrugBurden = (float)drugBurden / Sz.Count;
+                seizureBLBurden = (float)baselineBurden / Sz.Count;
             }
+
         }
-        public List<float> FindTreatmentRange(List<InjectionType> injections)
-        {
-            List<float> trtRange = new List<float>();
-            // find max min values
-            float min = injections.Min(I => (float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24, 2));
-            float max = injections.Max(I => (float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24, 2));
 
-
-
-            return trtRange;
-        }
     }
     public class Test35_Stats
     {
@@ -413,7 +435,7 @@ namespace ProjectManager
                 float yCoord = i + 1;
                 for (int j = 0; j < pjt.Animals[i].Sz.Count; j++)
                 {
-                    float xCoord = (float)Math.Round((pjt.Animals[i].Sz[j].d.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours) / 24, 2);
+                    float xCoord = (float)(pjt.Animals[i].Sz[j].d.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours);// / 24;
                     if (pjt.Animals[i].Sz[j].Severity > 0)
                     {
                         graph.PlotPoints(xCoord, yCoord, markerSize, "o");
@@ -584,7 +606,9 @@ namespace ProjectManager
         public List<GroupType> Groups; 
         public List<AnimalType> Animals;
         public List<LabelType> Labels;
-        public float seizureBurdenSEM;
+        public float vehicleSEM;
+        public float drugSEM;
+        public float baselineSEM;
         public Project(string Inpt)
         {
             Filename = Inpt;
@@ -766,21 +790,35 @@ namespace ProjectManager
         }
         public void CalculateSzBurden()
         {
-            // list for seizure burdens to calculate SEM
-            List<float> allBurdens = new List<float>();
             foreach (AnimalType A in Animals)
             {
-                A.SeizureBurden();
-                allBurdens.Add(A.seizureBurden);
+                // SeizureBurden() calculates seizure burden for all relevant groups and finds their SEM's
+                A.SeizureBurden(Files[0].Start.Date);
             }
 
-            // Calculate Std. Dev.
-            float avg = Enumerable.Average(allBurdens);
-            float sum = (float)allBurdens.Sum(s => Math.Pow(s - avg, 2));
-            float stdev = (float)Math.Sqrt(sum / (allBurdens.Count - 1));
+            // list for seizure burdens to calculate SEM
+            List<float> allVehicleBurdens = Animals.Select(a => a.seizureVehicleBurden).ToList();
+            List<float> allDrugBurdens = Animals.Select(a => a.seizureDrugBurden).ToList();
+            List<float> allBLBurdens = Animals.Select(a => a.seizureBLBurden).ToList();
 
-            // Calculate SEM of seizure burdens
-            seizureBurdenSEM = (float)(stdev / Math.Sqrt(allBurdens.Count - 1));
+            // Find SEM for each group
+            vehicleSEM = SEM(allVehicleBurdens);
+            drugSEM = SEM(allDrugBurdens);
+            baselineSEM = SEM(allBLBurdens);
+        }
+        public float SEM(List<float> sz)
+        {
+            float sem;
+            float sigma;
+            float variance = 0;
+            // find standard deviation of sz burden
+            for (int i = 0; i < sz.Count; i++)
+            {
+                variance += (float)(Math.Pow(sz[i] - sz.Average(), 2));
+            }
+            sigma = (float)Math.Sqrt(variance / (sz.Count - 1));
+            sem = (float)(sigma / Math.Sqrt(sz.Count - 1));
+            return sem;
         }
 
         public string[] Get_Animals()
