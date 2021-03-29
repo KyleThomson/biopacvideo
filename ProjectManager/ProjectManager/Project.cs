@@ -613,7 +613,18 @@ namespace ProjectManager
         }
         public void DisplayStats(Project pjt)
         {
+            // Draw Daily Seizure Burden header
 
+            // Draw Seizure Freedom header
+
+            if (test == "T35")
+            {
+                // if test 35, do baseline, vehicle, and drug
+            }
+            else if (test == "T36")
+            {
+                // test 36 just vehicle and drug
+            }
         }
 
 
