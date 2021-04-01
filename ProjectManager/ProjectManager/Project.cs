@@ -245,9 +245,9 @@ namespace ProjectManager
         public List<RemovalType> Removals;
         public GroupType Group;
         public List<InjectionType> Injections;
-        public float vehicleScore;
-        public float drugScore;
-        public float baselineScore;
+        public float vehicleBurden;
+        public float drugBurden;
+        public float baselineBurden;
         public int vehicleSzCount;
         public int drugSzCount;
         public int baselineSzCount;
@@ -266,16 +266,17 @@ namespace ProjectManager
         {
             int? bubbleSeverity = null ; // nullable
             int? noteSeverity = null ; // nullable
-            int? vehicleBurden = 0;
-            int? drugBurden = 0;
-            int? baselineBurden = 0;
+            int? vehicleScore = 0;
+            int? drugScore= 0;
+            int? baselineScore= 0;
             int vCounts = 0;
             int dCounts = 0;
             int blCounts = 0;
+            
             List<int> vehicleSz = new List<int>();
             List<int> drugSz = new List<int>();
             List<int> baselineSz = new List<int>();
-            
+
 
             // Find drug and vehicle injections so we can determine if the seizure occurred during drug/vehicle treatment
             List<InjectionType> vehicleI = Injections.Where(I => I.ADDID == "Vehicle").ToList();
@@ -283,6 +284,10 @@ namespace ProjectManager
             List<double> vehicleTimes = vehicleI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
             List<double> drugTimes = drugI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
 
+            // Number of days for each group
+            float vehicleDays = (float)((vehicleTimes.Max() - vehicleTimes.Min()) / 24);
+            float drugDays = (float)((drugTimes.Max() - drugTimes.Min()) / 24);
+            float baselineDays = (float)(drugTimes.Min() / 24);
             if (Sz.Count > 0)
             {
                 foreach (SeizureType S in Sz)
@@ -310,22 +315,19 @@ namespace ProjectManager
                     //Seizure happened during vehicle treatment
                     if (szTime >= vehicleTimes.Min() && szTime <= vehicleTimes.Max())
                     {
-                        vehicleBurden += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
-                        vehicleSz.Add((int)(Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity));
+                        vehicleScore += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
                         vCounts++;
                     }
                     //Seizure happened during drug treatment
                     else if (szTime >= drugTimes.Min() && szTime <= drugTimes.Max())
                     {
-                        drugBurden += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
-                        drugSz.Add((int)(Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity));
+                        drugScore += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
                         dCounts++;
                     }
                     //Seizure happened outside of both treatments
                     else
                     {
-                        baselineBurden += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
-                        baselineSz.Add((int)(Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity));
+                        baselineScore += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
                         blCounts++;
                     }
                     //totalBurden += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
@@ -334,10 +336,10 @@ namespace ProjectManager
                     bubbleSeverity = null;
                     noteSeverity = null;
                 }
-                // Set seizure scores for each group
-                vehicleScore = (float)vehicleBurden;
-                drugScore = (float)drugBurden;
-                baselineScore = (float)baselineBurden;
+                // Set seizure burdens for each group
+                vehicleBurden = (float)(vehicleScore / vehicleDays);
+                drugBurden = (float)(drugScore / drugDays);
+                baselineBurden= (float)(baselineScore / baselineDays);
 
                 // Set seizure counts for each group
                 vehicleSzCount = vCounts;
@@ -586,6 +588,7 @@ namespace ProjectManager
             // Draw rectangles first
             RectangleF headerRect = new RectangleF((int)(graph.mainPlot.Width / 2 - subSize.Width / 2), (int)(graph.mainPlot.Height * 0.05), (int)subSize.Width, (int)(headerSize.Height + subSize.Height));
             Pen headerPen = new Pen(Brushes.Black);
+            headerPen.Width = 2.0F * graph.objectScale;
             SolidBrush solidBrush = new SolidBrush(Color.LightSlateGray);
             graph.graphics.FillRectangle(solidBrush, headerRect);
             graph.graphics.DrawRectangle(headerPen, headerRect.X, headerRect.Y, headerRect.Width, headerRect.Height);
@@ -632,16 +635,41 @@ namespace ProjectManager
             // Draw Daily Seizure Burden header
             string burdenString = "Daily Seizure Burden";
             SizeF burdenSize = graph.graphics.MeasureString(burdenString, headerFont);
-            PointF burdenPoint = new PointF((float)(graph.mainPlot.Width / 2 - burdenSize.Width / 0.75), (float)(graph.yAxisStart * 0.65));
+            PointF burdenPoint = new PointF((float)(graph.mainPlot.Width / 2 - burdenSize.Width / 0.65), (float)(graph.yAxisStart * 0.65));
             graph.graphics.DrawString(burdenString, headerFont, headerBrush, burdenPoint);
             // Draw Seizure Freedom header
 
             if (test == "T35")
             {
                 // if test 35, do baseline, vehicle, and drug
+                Font statsFont = new Font("Arial", 10F * graph.objectScale);
+                Pen boundingPen = new Pen(Brushes.Black);
+                boundingPen.Width = 1.25F * graph.objectScale;
+
                 string baselineBurden = pjt.baselineBurden.ToString() + "\u00B1" + pjt.baselineSEM.ToString();
                 string drugBurden = pjt.drugBurden.ToString() + "\u00B1" + pjt.drugSEM.ToString();
                 string vehicleBurden = pjt.vehicleBurden.ToString() + "\u00B1" + pjt.vehicleSEM.ToString();
+
+                SizeF baselineStringSize = graph.graphics.MeasureString(baselineBurden, statsFont);
+                SizeF drugStringSize = graph.graphics.MeasureString(drugBurden, statsFont);
+                SizeF vehicleStringSize = graph.graphics.MeasureString(vehicleBurden, statsFont);
+                float boxLength = new List<float>() { baselineStringSize.Width, drugStringSize.Width, vehicleStringSize.Width }.Max();
+                float boxHeight = new List<float>() { baselineStringSize.Height, drugStringSize.Height, vehicleStringSize.Height }.Max();
+
+                // Baseline Burden
+                graph.graphics.DrawString(baselineBurden, statsFont, headerBrush, graph.mainPlot.Width / 4, (float)(graph.yAxisStart * 0.8));
+                graph.graphics.DrawRectangle(boundingPen, graph.mainPlot.Width / 4, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
+                graph.graphics.DrawString("Baseline", headerFont, headerBrush, graph.mainPlot.Width / 4, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
+
+                // Drug Burden       
+                graph.graphics.DrawString(drugBurden, statsFont, headerBrush, graph.mainPlot.Width / 4 + boxLength + boxLength / 8, (float)(graph.yAxisStart * 0.8));
+                graph.graphics.DrawRectangle(boundingPen, graph.mainPlot.Width / 4 + boxLength + boxLength / 8, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
+                graph.graphics.DrawString("Drug", headerFont, headerBrush, graph.mainPlot.Width / 4 + boxLength + boxLength / 8, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
+
+                // Vehicle Burden       
+                graph.graphics.DrawString(vehicleBurden, statsFont, headerBrush, graph.mainPlot.Width / 4 + boxLength * 2 + boxLength / 4, (float)(graph.yAxisStart * 0.8));
+                graph.graphics.DrawRectangle(boundingPen, graph.mainPlot.Width / 4 + boxLength * 2 + boxLength / 4, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
+                graph.graphics.DrawString("Vehicle", headerFont, headerBrush, graph.mainPlot.Width / 4 + boxLength * 2 + boxLength / 4, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
             }
             else if (test == "T36")
             {
@@ -865,14 +893,14 @@ namespace ProjectManager
             }
 
             // list for seizure burdens to calculate SEM
-            vehicleBurden = Animals.Select(a => a.vehicleScore).ToList().Sum() / Animals.Select(a => a.vehicleSzCount).ToList().Sum();
-            drugBurden = Animals.Select(a => a.drugScore).ToList().Sum() / Animals.Select(a => a.drugSzCount).ToList().Sum();
-            baselineBurden = Animals.Select(a => a.baselineScore).ToList().Sum() / Animals.Select(a => a.baselineSzCount).ToList().Sum();
+            vehicleBurden = (float)Math.Round(Animals.Select(a => a.vehicleBurden).ToList().Average(),2);
+            drugBurden = (float)Math.Round(Animals.Select(a => a.drugBurden).ToList().Average(),2);
+            baselineBurden = (float)Math.Round(Animals.Select(a => a.baselineBurden).ToList().Average(),2);
 
             // Find SEM for each group
-            vehicleSEM = SEM(Animals.Select(a => a.vehicleScore).ToList());
-            drugSEM = SEM(Animals.Select(a => a.drugScore).ToList());
-            baselineSEM = SEM(Animals.Select(a => a.baselineScore).ToList());
+            vehicleSEM = SEM(Animals.Select(a => a.vehicleBurden).ToList());
+            drugSEM = SEM(Animals.Select(a => a.drugBurden).ToList());
+            baselineSEM = SEM(Animals.Select(a => a.baselineBurden).ToList());
         }
         public void CalculateSeizureFreedom()
         {
@@ -889,7 +917,7 @@ namespace ProjectManager
                 variance += (float)(Math.Pow(sz[i] - sz.Average(), 2));
             }
             sigma = (float)Math.Sqrt(variance / (sz.Count - 1));
-            sem = (float)(sigma / Math.Sqrt(sz.Count - 1));
+            sem = (float)Math.Round((float)(sigma / Math.Sqrt(sz.Count - 1)),2);
             return sem;
         }
 
