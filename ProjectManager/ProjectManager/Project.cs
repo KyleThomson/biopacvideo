@@ -245,9 +245,12 @@ namespace ProjectManager
         public List<RemovalType> Removals;
         public GroupType Group;
         public List<InjectionType> Injections;
-        public float seizureVehicleBurden;
-        public float seizureDrugBurden;
-        public float seizureBLBurden;
+        public float vehicleScore;
+        public float drugScore;
+        public float baselineScore;
+        public int vehicleSzCount;
+        public int drugSzCount;
+        public int baselineSzCount;
         public AnimalType()
         {
             Sz = new List<SeizureType>();
@@ -266,6 +269,9 @@ namespace ProjectManager
             int? vehicleBurden = 0;
             int? drugBurden = 0;
             int? baselineBurden = 0;
+            int vCounts = 0;
+            int dCounts = 0;
+            int blCounts = 0;
             List<int> vehicleSz = new List<int>();
             List<int> drugSz = new List<int>();
             List<int> baselineSz = new List<int>();
@@ -306,18 +312,21 @@ namespace ProjectManager
                     {
                         vehicleBurden += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
                         vehicleSz.Add((int)(Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity));
+                        vCounts++;
                     }
                     //Seizure happened during drug treatment
                     else if (szTime >= drugTimes.Min() && szTime <= drugTimes.Max())
                     {
                         drugBurden += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
                         drugSz.Add((int)(Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity));
+                        dCounts++;
                     }
                     //Seizure happened outside of both treatments
                     else
                     {
                         baselineBurden += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
                         baselineSz.Add((int)(Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity));
+                        blCounts++;
                     }
                     //totalBurden += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
 
@@ -325,10 +334,15 @@ namespace ProjectManager
                     bubbleSeverity = null;
                     noteSeverity = null;
                 }
-                // Calculate seizure burden
-                seizureVehicleBurden = (float)vehicleBurden / Sz.Count;
-                seizureDrugBurden = (float)drugBurden / Sz.Count;
-                seizureBLBurden = (float)baselineBurden / Sz.Count;
+                // Set seizure scores for each group
+                vehicleScore = (float)vehicleBurden;
+                drugScore = (float)drugBurden;
+                baselineScore = (float)baselineBurden;
+
+                // Set seizure counts for each group
+                vehicleSzCount = vCounts;
+                drugSzCount = dCounts;
+                baselineSzCount = blCounts;
             }
 
         }
@@ -613,13 +627,21 @@ namespace ProjectManager
         }
         public void DisplayStats(Project pjt)
         {
+            Font headerFont = new Font("Arial", 12F * graph.objectScale);
+            SolidBrush headerBrush = new SolidBrush(Color.Black);
             // Draw Daily Seizure Burden header
-
+            string burdenString = "Daily Seizure Burden";
+            SizeF burdenSize = graph.graphics.MeasureString(burdenString, headerFont);
+            PointF burdenPoint = new PointF((float)(graph.mainPlot.Width / 2 - burdenSize.Width / 0.75), (float)(graph.yAxisStart * 0.65));
+            graph.graphics.DrawString(burdenString, headerFont, headerBrush, burdenPoint);
             // Draw Seizure Freedom header
 
             if (test == "T35")
             {
                 // if test 35, do baseline, vehicle, and drug
+                string baselineBurden = pjt.baselineBurden.ToString() + "\u00B1" + pjt.baselineSEM.ToString();
+                string drugBurden = pjt.drugBurden.ToString() + "\u00B1" + pjt.drugSEM.ToString();
+                string vehicleBurden = pjt.vehicleBurden.ToString() + "\u00B1" + pjt.vehicleSEM.ToString();
             }
             else if (test == "T36")
             {
@@ -652,6 +674,9 @@ namespace ProjectManager
         public float vehicleSEM;
         public float drugSEM;
         public float baselineSEM;
+        public float vehicleBurden;
+        public float drugBurden;
+        public float baselineBurden;
         public Project(string Inpt)
         {
             Filename = Inpt;
@@ -840,14 +865,18 @@ namespace ProjectManager
             }
 
             // list for seizure burdens to calculate SEM
-            List<float> allVehicleBurdens = Animals.Select(a => a.seizureVehicleBurden).ToList();
-            List<float> allDrugBurdens = Animals.Select(a => a.seizureDrugBurden).ToList();
-            List<float> allBLBurdens = Animals.Select(a => a.seizureBLBurden).ToList();
+            vehicleBurden = Animals.Select(a => a.vehicleScore).ToList().Sum() / Animals.Select(a => a.vehicleSzCount).ToList().Sum();
+            drugBurden = Animals.Select(a => a.drugScore).ToList().Sum() / Animals.Select(a => a.drugSzCount).ToList().Sum();
+            baselineBurden = Animals.Select(a => a.baselineScore).ToList().Sum() / Animals.Select(a => a.baselineSzCount).ToList().Sum();
 
             // Find SEM for each group
-            vehicleSEM = SEM(allVehicleBurdens);
-            drugSEM = SEM(allDrugBurdens);
-            baselineSEM = SEM(allBLBurdens);
+            vehicleSEM = SEM(Animals.Select(a => a.vehicleScore).ToList());
+            drugSEM = SEM(Animals.Select(a => a.drugScore).ToList());
+            baselineSEM = SEM(Animals.Select(a => a.baselineScore).ToList());
+        }
+        public void CalculateSeizureFreedom()
+        {
+
         }
         public float SEM(List<float> sz)
         {
