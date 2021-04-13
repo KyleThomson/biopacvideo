@@ -251,6 +251,10 @@ namespace ProjectManager
         public int vehicleSzCount;
         public int drugSzCount;
         public int baselineSzCount;
+
+        public bool baselineFreedom;
+        public bool drugFreedom;
+        public bool vehicleFreedom;
         public AnimalType()
         {
             Sz = new List<SeizureType>();
@@ -287,7 +291,15 @@ namespace ProjectManager
             // Number of days for each group
             float vehicleDays = (float)((vehicleTimes.Max() - vehicleTimes.Min()) / 24);
             float drugDays = (float)((drugTimes.Max() - drugTimes.Min()) / 24);
-            float baselineDays = (float)(drugTimes.Min() / 24);
+            float baselineDays = -1;
+            if (drugTimes.Min() < vehicleTimes.Min())
+            {
+                baselineDays = (float)(drugTimes.Min() / 24);
+            }
+            else if (drugTimes.Min() > vehicleTimes.Min())
+            {
+                baselineDays = (float)(vehicleTimes.Min() / 24);
+            }
             if (Sz.Count > 0)
             {
                 foreach (SeizureType S in Sz)
@@ -347,6 +359,55 @@ namespace ProjectManager
                 baselineSzCount = blCounts;
             }
 
+        }
+        public void SzFreedom(DateTime Earliest)
+        {
+            // This method answers the question: Did animal have seizure during treatment?
+
+            // Find drug and vehicle injections so we can determine if the seizure occurred during drug/vehicle treatment
+            List<InjectionType> vehicleI = Injections.Where(I => I.ADDID == "Vehicle").ToList();
+            List<InjectionType> drugI = Injections.Where(I => I.ADDID != "Vehicle").ToList();
+            List<double> vehicleTimes = vehicleI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
+            List<double> drugTimes = drugI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
+            List<SeizureType> drugSz = (List<SeizureType>)Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= drugTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= drugTimes.Max());
+            List<SeizureType> vehicleSz = (List<SeizureType>)Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= vehicleTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= vehicleTimes.Max());
+            double baselineTime = -1; // initialize baseline
+            if (drugTimes.Min() < vehicleTimes.Min())
+            {
+                baselineTime = drugTimes.Min();
+            }
+            else if (drugTimes.Min() > vehicleTimes.Min())
+            {
+                baselineTime = vehicleTimes.Min();
+            }
+
+            // where there were baseline seizures
+            List<SeizureType> baselineSz = (List<SeizureType>)Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours < baselineTime);
+
+            if (drugSz.Count > 0 || drugSz != null)
+            {
+                drugFreedom = false;
+            }
+            else
+            {
+                drugFreedom = true;
+            }
+            if (vehicleSz.Count > 0 || vehicleSz != null)
+            {
+                vehicleFreedom = false;
+            }
+            else
+            {
+                vehicleFreedom = true;
+            }
+            if (baselineSz.Count > 0 || baselineSz != null)
+            {
+                baselineFreedom = false;
+            }
+            else
+            {
+                baselineFreedom = true;
+            }
         }
 
     }
@@ -632,12 +693,18 @@ namespace ProjectManager
         {
             Font headerFont = new Font("Arial", 12F * graph.objectScale);
             SolidBrush headerBrush = new SolidBrush(Color.Black);
+
             // Draw Daily Seizure Burden header
             string burdenString = "Daily Seizure Burden";
             SizeF burdenSize = graph.graphics.MeasureString(burdenString, headerFont);
             PointF burdenPoint = new PointF((float)(graph.mainPlot.Width / 2 - burdenSize.Width / 0.65), (float)(graph.yAxisStart * 0.65));
             graph.graphics.DrawString(burdenString, headerFont, headerBrush, burdenPoint);
+
             // Draw Seizure Freedom header
+            string freedomString = "Seizure Freedom";
+            SizeF freedomSize = graph.graphics.MeasureString(freedomString, headerFont);
+            PointF freedomPoint = new PointF((float)(graph.mainPlot.Width / 2 + freedomSize.Width / 1.25), (float)(graph.yAxisStart * 0.65));
+            graph.graphics.DrawString(freedomString, headerFont, headerBrush, freedomPoint);
 
             if (test == "T35")
             {
@@ -670,11 +737,38 @@ namespace ProjectManager
                 graph.graphics.DrawString(vehicleBurden, statsFont, headerBrush, graph.mainPlot.Width / 4 + boxLength * 2 + boxLength / 4, (float)(graph.yAxisStart * 0.8));
                 graph.graphics.DrawRectangle(boundingPen, graph.mainPlot.Width / 4 + boxLength * 2 + boxLength / 4, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
                 graph.graphics.DrawString("Vehicle", headerFont, headerBrush, graph.mainPlot.Width / 4 + boxLength * 2 + boxLength / 4, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
+
+                // Vehicle freedom
+                SizeF vehicleSize = graph.graphics.MeasureString("Vehicle", headerFont);
+                float startPt = (float)(graph.mainPlot.Width * 0.75 - vehicleSize.Width);
+                float boxStart = (float)(graph.mainPlot.Width * 0.75 - boxLength);
+                string vehicleFreedom = pjt.vehicleSzFreedom.ToString() + "/" + pjt.Animals.Count.ToString();
+                graph.graphics.DrawString(vehicleFreedom, statsFont, headerBrush, startPt, (float)(graph.yAxisStart * 0.8));
+                graph.graphics.DrawRectangle(boundingPen, boxStart, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
+                graph.graphics.DrawString("Vehicle", headerFont, headerBrush, startPt, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
+
+                // Drug freedom
+                SizeF drugSize = graph.graphics.MeasureString("Vehicle", headerFont);
+                string drugFreedom = pjt.drugSzFreedom.ToString() + "/" + pjt.Animals.Count.ToString();
+                graph.graphics.DrawString(drugFreedom, statsFont, headerBrush, (float)(graph.mainPlot.Width * 0.75) - drugSize.Width - boxLength - boxLength / 8, (float)(graph.yAxisStart * 0.8));
+                graph.graphics.DrawRectangle(boundingPen, (float)(graph.mainPlot.Width * 0.75) - drugSize.Width - boxLength - boxLength / 4, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
+                graph.graphics.DrawString("Drug", headerFont, headerBrush, (float)(graph.mainPlot.Width * 0.75) - drugSize.Width - boxLength - boxLength / 4, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
+
+                // Baseline freedom
+                SizeF baselineSize = graph.graphics.MeasureString("Vehicle", headerFont);
+                string baselineFreedom = pjt.drugSzFreedom.ToString() + "/" + pjt.Animals.Count.ToString();
+                graph.graphics.DrawString(baselineFreedom, statsFont, headerBrush, (float)(graph.mainPlot.Width * 0.75) - baselineSize.Width - boxLength - boxLength / 4, (float)(graph.yAxisStart * 0.8));
+                graph.graphics.DrawRectangle(boundingPen, (float)(graph.mainPlot.Width * 0.75) - baselineSize.Width - boxLength * 2 - boxLength / 4, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
+                graph.graphics.DrawString("Baseline", headerFont, headerBrush, (float)(graph.mainPlot.Width * 0.75) - baselineSize.Width - boxLength * 2 - boxLength / 4, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
             }
             else if (test == "T36")
             {
                 // test 36 just vehicle and drug
             }
+        }
+        public void ExportPDF()
+        {
+
         }
 
 
@@ -705,6 +799,9 @@ namespace ProjectManager
         public float vehicleBurden;
         public float drugBurden;
         public float baselineBurden;
+        public int vehicleSzFreedom;
+        public int baselineSzFreedom;
+        public int drugSzFreedom;
         public Project(string Inpt)
         {
             Filename = Inpt;
@@ -902,8 +999,31 @@ namespace ProjectManager
             drugSEM = SEM(Animals.Select(a => a.drugBurden).ToList());
             baselineSEM = SEM(Animals.Select(a => a.baselineBurden).ToList());
         }
-        public void CalculateSeizureFreedom()
+        public void SeizureFreedom()
         {
+            int baselineCount = 0;
+            int vehicleCount = 0;
+            int drugCount = 0;
+            foreach (AnimalType A in Animals)
+            {
+                A.SzFreedom(Files[0].Start.Date);
+                if (A.baselineFreedom)
+                {
+                    baselineCount++;
+                }
+                if (A.vehicleFreedom)
+                {
+                    vehicleCount++;
+                }
+                if (A.drugFreedom)
+                {
+                    drugCount++;
+                }
+            }
+
+            vehicleSzFreedom = vehicleCount;
+            baselineSzFreedom = baselineCount;
+            drugSzFreedom = drugCount;
 
         }
         public float SEM(List<float> sz)
