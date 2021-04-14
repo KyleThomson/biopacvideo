@@ -89,7 +89,7 @@ namespace ProjectManager
             Pen axisPen = new Pen(Brushes.Black);
             axisPen.Width = penWidth * objectScale;
             //Horizontal bounding line
-            graphics.DrawLine(axisPen, new PointF(axes[0].X-3, (float)(axes[2].Y - axes[2].Y * 0.011)), new PointF(axes[1].X+3, (float)(axes[2].Y - axes[2].Y * 0.011)));
+            graphics.DrawLine(axisPen, new PointF((float)(axes[0].X*0.995), (float)(axes[2].Y - axes[2].Y * 0.011)), new PointF((float)(axes[1].X*1.0025), (float)(axes[2].Y - axes[2].Y * 0.011)));
             //Vertical bounding line
             graphics.DrawLine(axisPen, new PointF(axes[1].X, axes[2].Y), new PointF(axes[1].X, axes[3].Y));
 
@@ -100,12 +100,13 @@ namespace ProjectManager
             tickPen.Width = tickWidth * objectScale;
             float xTickSpacing = (float)(xAxisLength / (xTicks * 2));
             float yTickSpacing = (float)(yAxisLength / (yTicks * 1.5));
-            Font xFont = new Font("Arial", 8 * objectScale);
+            Font xFont = new Font("Arial", 10 * objectScale);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
 
             for (int i = 0; i < xTicks; i++)
             {
-                float currentXPoint = (float)(Convert.ToDouble(xTickLabels[i])/maxXData)*(axes[1].X - axes[0].X);
+                //float currentXPoint = (float)((Convert.ToDouble(xTickLabels[i])/maxXData)*(axes[1].X - axes[0].X)*.98);
+                float currentXPoint = (float)(((Convert.ToDouble(xTickLabels[i]) + 0.5) / maxXData) * (axes[1].X - axes[0].X) * 0.95);
                 // create length of x tick
                 PointF xTickStart = new PointF(xAxisStart + currentXPoint, yAxisLength);
                 xTickPoints.Add(xAxisStart + currentXPoint);
@@ -169,10 +170,11 @@ namespace ProjectManager
         public void PlotPoints(float xCoord, float yCoord, int markerSize, string markerType)
         {          
             Pen dataPen = new Pen(Brushes.Black);
+            dataPen.Width = dataPen.Width * objectScale;
             SolidBrush dataBrush = new SolidBrush(Color.Black);
 
             // Calculate a scale factor that is in units of Pixels/unit
-            float xScale = (xAxisLength - xAxisStart) / maxXData;
+            float xScale = (xTickPoints[xTickPoints.Count-1] - xTickPoints[0]) / maxXData;
             float yScale = (yAxisLength - yAxisStart) / maxYData;
 
             // Convert input coordinate points
@@ -207,7 +209,7 @@ namespace ProjectManager
             dataPen.Width = lineWidth * objectScale;
 
             // Calculate a scale factor that is in units of Pixels/unit
-            float xScale = (xAxisLength - xAxisStart) / maxXData;
+            float xScale = (xTickPoints[xTickPoints.Count - 1] - xTickPoints[0]) / maxXData;
             float yScale = (yAxisLength - yAxisStart) / maxYData;
 
             // Convert input coordinate points
