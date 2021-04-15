@@ -13,3 +13,13 @@ C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Deb
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\ProjectManager.pdb
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.exe
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.pdb
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\Accord.dll.config
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\Accord.dll
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\Accord.Math.Core.dll
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\Accord.Math.dll
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\Accord.Statistics.dll
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\Accord.xml
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\Accord.Math.xml
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\Accord.Math.Core.xml
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\Accord.Statistics.xml
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.csproj.CopyComplete

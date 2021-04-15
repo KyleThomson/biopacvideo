@@ -510,6 +510,7 @@ namespace ProjectManager
         {
             // Plot seizures the same for both test 35 and test 36
             int markerSize = 8;
+            Color szColor = Color.FromName("Black");
             DateTime Earliest = pjt.Files[0].Start.Date;
             DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
             for (int i = 0; i < pjt.Animals.Count; i++)
@@ -521,11 +522,11 @@ namespace ProjectManager
 
                     if (pjt.Animals[i].Sz[j].Severity > 0)
                     {
-                        graph.PlotPoints(xCoord, yCoord, markerSize, "o");
+                        graph.PlotPoints(xCoord, yCoord, markerSize, "o", szColor);
                     }
                     else if (pjt.Animals[i].Sz[j].Severity == 0)
                     {
-                        graph.PlotPoints(xCoord, yCoord, markerSize / 2, ".");
+                        graph.PlotPoints(xCoord, yCoord, markerSize / 2, ".", szColor);
                     }
 
                 }
@@ -581,6 +582,32 @@ namespace ProjectManager
             }
             else if (test == "T36")
             {
+                Color unmedicatedColor = Color.FromName("Blue");
+                float animalCounter = 0.5F;
+                foreach (AnimalType A in pjt.Animals)
+                {
+                    // Get y coordinate
+                    float yCoord = animalCounter;
+                    animalCounter++;
+
+                    // Initialize vehicle and drug treatment times
+                    List<float> vehicleTimes = new List<float>();
+                    List<float> drugTimes = new List<float>();
+
+                    foreach (MealType M in A.Meals)
+                    {
+                        float xCoord = (float)M.d.Subtract(Earliest).TotalHours / 24;
+                        if (M.type == "M")
+                        {         
+                            graph.PlotPoints(xCoord, yCoord, 8, ".", drugColor);
+                        }
+                        else
+                        {
+                            graph.PlotPoints(xCoord, yCoord, 8, ".", unmedicatedColor);
+                        }
+                    }
+
+                }
 
             }
         }

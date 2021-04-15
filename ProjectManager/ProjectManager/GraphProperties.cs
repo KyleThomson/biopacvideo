@@ -167,9 +167,10 @@ namespace ProjectManager
             RectangleF yLabelRect = new RectangleF((float)(xPoint * 0.70), yPoint, yLabelSize.Height, yLabelSize.Width);
             graphics.DrawString(yLabel, font, drawBrush, yLabelRect, yLabelFormat);
         }
-        public void PlotPoints(float xCoord, float yCoord, int markerSize, string markerType)
+        public void PlotPoints(float xCoord, float yCoord, int markerSize, string markerType, Color color)
         {          
             Pen dataPen = new Pen(Brushes.Black);
+            dataPen.Color = color;
             dataPen.Width = dataPen.Width * objectScale;
             SolidBrush dataBrush = new SolidBrush(Color.Black);
 
