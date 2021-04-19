@@ -33,8 +33,10 @@ namespace ProjectManager
             if (binSeizures.Checked) E.binSz = true;
             SaveFileDialog F = new SaveFileDialog();
             F.DefaultExt = ".pjt";
+            F.Title = "Save project excel file";
             F.InitialDirectory = "D:\\";
             SaveFileDialog binned = new SaveFileDialog();
+            binned.DefaultExt = "csv";
             binned.Title = "Binned Seizures .csv";
             binned.DefaultExt = ".csv";
             binned.InitialDirectory = "D:\\";
