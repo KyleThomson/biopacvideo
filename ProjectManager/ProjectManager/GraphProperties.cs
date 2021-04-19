@@ -173,6 +173,7 @@ namespace ProjectManager
             dataPen.Color = color;
             dataPen.Width = dataPen.Width * objectScale;
             SolidBrush dataBrush = new SolidBrush(Color.Black);
+            dataBrush.Color = color;
 
             // Calculate a scale factor that is in units of Pixels/unit
             float xScale = (xTickPoints[xTickPoints.Count-1] - xTickPoints[0]) / maxXData;

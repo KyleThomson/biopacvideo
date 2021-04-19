@@ -266,7 +266,7 @@ namespace ProjectManager
             Removals = new List<RemovalType>();
             Injections = new List<InjectionType>();
         }
-        public void SeizureBurden(DateTime Earliest)
+        public void SeizureBurden(string test, DateTime Earliest)
         {
             int bubbleSeverity = default ; // default
             int noteSeverity = default; // default
@@ -281,137 +281,240 @@ namespace ProjectManager
             List<int> drugSz = new List<int>();
             List<int> baselineSz = new List<int>();
 
+            if (test == "T35")
+            {
 
-            // Find drug and vehicle injections so we can determine if the seizure occurred during drug/vehicle treatment
-            List<InjectionType> vehicleI = Injections.Where(I => I.ADDID == "Vehicle").ToList();
-            List<InjectionType> drugI = Injections.Where(I => I.ADDID != "Vehicle").ToList();
-            List<double> vehicleTimes = vehicleI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
-            List<double> drugTimes = drugI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
+                // Find drug and vehicle injections so we can determine if the seizure occurred during drug/vehicle treatment
+                List<InjectionType> vehicleI = Injections.Where(I => I.ADDID == "Vehicle").ToList();
+                List<InjectionType> drugI = Injections.Where(I => I.ADDID != "Vehicle").ToList();
+                List<double> vehicleTimes = vehicleI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
+                List<double> drugTimes = drugI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
 
-            // Number of days for each group
-            float vehicleDays = (float)((vehicleTimes.Max() - vehicleTimes.Min()) / 24);
-            float drugDays = (float)((drugTimes.Max() - drugTimes.Min()) / 24);
-            // Initialize days in baseline. Not sure how else to do this since compiler doesn't like variables being designed in a conditional statement
-            float baselineDays = -1;
-            if (drugTimes.Min() < vehicleTimes.Min())
-            {
-                baselineDays = (float)(drugTimes.Min() / 24);
-            }
-            else if (drugTimes.Min() > vehicleTimes.Min())
-            {
-                baselineDays = (float)(vehicleTimes.Min() / 24);
-            }
-            if (Sz.Count > 0)
-            {
-                foreach (SeizureType S in Sz)
+                // Number of days for each group
+                float vehicleDays = (float)((vehicleTimes.Max() - vehicleTimes.Min()) / 24);
+                float drugDays = (float)((drugTimes.Max() - drugTimes.Min()) / 24);
+                // Initialize days in baseline. Not sure how else to do this since compiler doesn't like variables being designed in a conditional statement
+                float baselineDays = -1;
+                if (drugTimes.Min() < vehicleTimes.Min())
                 {
-                    if (S.Severity >= 0 && S.Severity <= 5)
-                    {
-                        bubbleSeverity = S.Severity;
+                    baselineDays = (float)(drugTimes.Min() / 24);
+                }
+                else if (drugTimes.Min() > vehicleTimes.Min())
+                {
+                    baselineDays = (float)(vehicleTimes.Min() / 24);
+                }
 
-                    }
-                    if (S.Notes.Length > 0)
+
+                if (Sz.Count > 0)
+                {
+                    foreach (SeizureType S in Sz)
                     {
-                        string storeNum = String.Join("", S.Notes.Where(char.IsDigit));
-                        if (storeNum.Length > 0)
+                        if (S.Severity >= 0 && S.Severity <= 5)
                         {
-                            if (int.Parse(storeNum) <= 5 && int.Parse(storeNum) >= 0)
+                            bubbleSeverity = S.Severity;
+
+                        }
+                        if (S.Notes.Length > 0)
+                        {
+                            string storeNum = String.Join("", S.Notes.Where(char.IsDigit));
+                            if (storeNum.Length > 0)
                             {
-                                noteSeverity = int.Parse(storeNum);
+                                if (int.Parse(storeNum) <= 5 && int.Parse(storeNum) >= 0)
+                                {
+                                    noteSeverity = int.Parse(storeNum);
+                                }
+                                else
+                                {
+                                    noteSeverity = -1;
+                                }
                             }
-                            else
-                            {
-                                noteSeverity = -1;
-                            }
+
+                        }
+                        double szTime = S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours;
+                        // Add seizure severity to running total depending on treatment that seizure occurred during
+
+                        //Seizure happened during vehicle treatment
+                        if (szTime >= vehicleTimes.Min() && szTime <= vehicleTimes.Max())
+                        {
+                            vehicleScore += Math.Max(bubbleSeverity, noteSeverity);
+                            vCounts++;
+                        }
+                        //Seizure happened during drug treatment
+                        else if (szTime >= drugTimes.Min() && szTime <= drugTimes.Max())
+                        {
+                            drugScore += Math.Max(bubbleSeverity, noteSeverity);
+                            dCounts++;
+                        }
+                        //Seizure happened outside of both treatments
+                        else
+                        {
+                            baselineScore += Math.Max(bubbleSeverity, noteSeverity);
+                            blCounts++;
                         }
 
+                        // reset severity
+                        bubbleSeverity = default;
+                        noteSeverity = default;
                     }
-                    double szTime = S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours;
-                    // Add seizure severity to running total depending on treatment that seizure occurred during
+                    // Set seizure burdens for each group
+                    vehicleBurden = vehicleScore / vehicleDays;
+                    drugBurden = drugScore / drugDays;
+                    baselineBurden = baselineScore / baselineDays;
 
-                    //Seizure happened during vehicle treatment
-                    if (szTime >= vehicleTimes.Min() && szTime <= vehicleTimes.Max())
-                    {
-                        vehicleScore += Math.Max(bubbleSeverity, noteSeverity);
-                        vCounts++;
-                    }
-                    //Seizure happened during drug treatment
-                    else if (szTime >= drugTimes.Min() && szTime <= drugTimes.Max())
-                    {
-                        drugScore += Math.Max(bubbleSeverity, noteSeverity);
-                        dCounts++;
-                    }
-                    //Seizure happened outside of both treatments
-                    else
-                    {
-                        baselineScore += Math.Max(bubbleSeverity, noteSeverity);
-                        blCounts++;
-                    }
-                    //totalBurden += Nullable.Compare(bubbleSeverity, noteSeverity) > 0 ? bubbleSeverity : noteSeverity;
-
-                    // reset severity
-                    bubbleSeverity = default;
-                    noteSeverity = default;
+                    // Set seizure counts for each group
+                    vehicleSzCount = vCounts;
+                    drugSzCount = dCounts;
+                    baselineSzCount = blCounts;
                 }
-                // Set seizure burdens for each group
-                vehicleBurden = (float)(vehicleScore / vehicleDays);
-                drugBurden = (float)(drugScore / drugDays);
-                baselineBurden= (float)(baselineScore / baselineDays);
+            }
+            else if (test == "T36")// Test 36
+            {
+                // Break up meals into both groups
+                List<MealType> baselineMeals = Meals.Where(m => m.type == "U").ToList();
+                List<MealType> medicatedMeals = Meals.Where(m => m.type == "M").ToList();
 
-                // Set seizure counts for each group
-                vehicleSzCount = vCounts;
-                drugSzCount = dCounts;
-                baselineSzCount = blCounts;
+                // Get meal times
+                List<double> baselineTimes = baselineMeals.Select(m => (double)m.d.Subtract(Earliest).TotalHours).ToList();
+                List<double> medicatedTimes = medicatedMeals.Select(m => (double)m.d.Subtract(Earliest).TotalHours).ToList();
+
+                // Number of days for each group
+                float baselineDays = (float)((baselineTimes.Max() - baselineTimes.Min()) / 24);
+                float medicatedDays = (float)((medicatedTimes.Max() - medicatedTimes.Min()) / 24);
+
+                if (Sz.Count > 0)
+                {
+                    foreach (SeizureType S in Sz)
+                    {
+                        if (S.Severity >= 0 && S.Severity <= 5)
+                        {
+                            bubbleSeverity = S.Severity;
+                        }
+                        if (S.Notes.Length > 0)
+                        {
+                            string storeNum = String.Join("", S.Notes.Where(char.IsDigit));
+                            if (storeNum.Length > 0)
+                            {
+                                if (int.Parse(storeNum) <= 5 && int.Parse(storeNum) >= 0)
+                                {
+                                    noteSeverity = int.Parse(storeNum);
+                                }
+                                else
+                                {
+                                    noteSeverity = -1;
+                                }
+                            }
+                        }
+                        double szTime = S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours;
+                        // Add seizure severity to running total depending on treatment that seizure occurred during
+                        //Seizure happened during drug treatment
+                        if (szTime >= medicatedTimes.Min() && szTime <= medicatedTimes.Max())
+                        {
+                            drugScore += Math.Max(bubbleSeverity, noteSeverity);
+                            dCounts++;
+                        }
+                        //Seizure happened outside of both treatments
+                        else
+                        {
+                            baselineScore += Math.Max(bubbleSeverity, noteSeverity);
+                            blCounts++;
+                        }
+                        // reset severity
+                        bubbleSeverity = default;
+                        noteSeverity = default;
+                    }
+                    // Set seizure burdens for each group
+                    drugBurden = drugScore / medicatedDays;
+                    baselineBurden = baselineScore / baselineDays;
+
+                    // Set seizure counts for each group
+                    drugSzCount = dCounts;
+                    baselineSzCount = blCounts;
+                }
             }
 
         }
-        public void SzFreedom(DateTime Earliest)
+        public void SzFreedom(string test, DateTime Earliest)
         {
             // This method answers the question: Did animal have seizure during treatment?
 
-            // Find drug and vehicle injections so we can determine if the seizure occurred during drug/vehicle treatment
-            List<InjectionType> vehicleI = Injections.Where(I => I.ADDID == "Vehicle").ToList();
-            List<InjectionType> drugI = Injections.Where(I => I.ADDID != "Vehicle").ToList();
-            List<double> vehicleTimes = vehicleI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
-            List<double> drugTimes = drugI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
-            List<SeizureType> drugSz = Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= drugTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= drugTimes.Max()).ToList();
-            List<SeizureType> vehicleSz = Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= vehicleTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= vehicleTimes.Max()).ToList();
-            double baselineTime = -1; // initialize baseline
-            if (drugTimes.Min() < vehicleTimes.Min())
+            if (test == "T35")
             {
-                baselineTime = drugTimes.Min();
-            }
-            else if (drugTimes.Min() > vehicleTimes.Min())
-            {
-                baselineTime = vehicleTimes.Min();
-            }
+                // Find drug and vehicle injections so we can determine if the seizure occurred during drug/vehicle treatment
+                List<InjectionType> vehicleI = Injections.Where(I => I.ADDID == "Vehicle").ToList();
+                List<InjectionType> drugI = Injections.Where(I => I.ADDID != "Vehicle").ToList();
+                List<double> vehicleTimes = vehicleI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
+                List<double> drugTimes = drugI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
+                List<SeizureType> drugSz = Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= drugTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= drugTimes.Max()).ToList();
+                List<SeizureType> vehicleSz = Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= vehicleTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= vehicleTimes.Max()).ToList();
+                double baselineTime = -1; // initialize baseline
+                if (drugTimes.Min() < vehicleTimes.Min())
+                {
+                    baselineTime = drugTimes.Min();
+                }
+                else if (drugTimes.Min() > vehicleTimes.Min())
+                {
+                    baselineTime = vehicleTimes.Min();
+                }
 
-            // where there were baseline seizures
-            List<SeizureType> baselineSz = Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours < baselineTime).ToList();
+                // where there were baseline seizures
+                List<SeizureType> baselineSz = Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours < baselineTime).ToList();
 
-            if (drugSz.Count > 0)
-            {
-                drugFreedom = 0;
+                if (drugSz.Count > 0)
+                {
+                    drugFreedom = 0;
+                }
+                else
+                {
+                    drugFreedom = 1;
+                }
+                if (vehicleSz.Count > 0)
+                {
+                    vehicleFreedom = 0;
+                }
+                else
+                {
+                    vehicleFreedom = 1;
+                }
+                if (baselineSz.Count > 0)
+                {
+                    baselineFreedom = 0;
+                }
+                else
+                {
+                    baselineFreedom = 1;
+                }
             }
-            else
+            else // Test 36
             {
-                drugFreedom = 1;
-            }
-            if (vehicleSz.Count > 0)
-            {
-                vehicleFreedom = 0;
-            }
-            else
-            {
-                vehicleFreedom = 1;
-            }
-            if (baselineSz.Count > 0)
-            {
-                baselineFreedom = 0;
-            }
-            else
-            {
-                baselineFreedom = 1;
+                // Break up meals into both groups
+                List<MealType> baselineMeals = Meals.Where(m => m.type == "U").ToList();
+                List<MealType> medicatedMeals = Meals.Where(m => m.type == "M").ToList();
+
+                // Get meal times
+                List<double> baselineTimes = baselineMeals.Select(m => (double)m.d.Subtract(Earliest).TotalHours).ToList();
+                List<double> medicatedTimes = medicatedMeals.Select(m => (double)m.d.Subtract(Earliest).TotalHours).ToList();
+
+                // seizures during unmedicated and medicated meals
+                List<SeizureType> drugSz = Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= medicatedTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= medicatedTimes.Max()).ToList();
+                List<SeizureType> baselineSz = Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours < medicatedTimes.Min() || S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours > medicatedTimes.Max()).ToList();
+
+                // Answer seizure freedom
+                if (drugSz.Count > 0)
+                {
+                    drugFreedom = 0;
+                }
+                else
+                {
+                    drugFreedom = 1;
+                }
+                if (baselineSz.Count > 0)
+                {
+                    baselineFreedom = 0;
+                }
+                else
+                {
+                    baselineFreedom = 1;
+                }
             }
         }
 
@@ -439,34 +542,30 @@ namespace ProjectManager
             if (testType == "T35")
             {
                 // Sort by injections
-                pjt = pjt.T35Sort(pjt);
+                pjt.T35Sort();
             }
-
-            DateTime Earliest = pjt.Files[0].Start.Date;
-            // Find max day of project
-            int tempMax = 0;
-            foreach (AnimalType A in pjt.Animals)
+            else
             {
-                if (A.Injections.Count > 0)
-                {
-                    if ((float)Math.Round(A.Injections[A.Injections.Count-1].TimePoint.Subtract(Earliest).TotalHours / 24, 2) > tempMax)
-                    {
-                        tempMax = (int)Math.Round(A.Injections[A.Injections.Count - 1].TimePoint.Subtract(Earliest).TotalHours / 24, 2);
-                    }
-                }
+                pjt.T36Sort();
             }
+            
+            // Find max day of project
+            DateTime Earliest = pjt.Files[0].Start.Date;
+            DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
+            double totalHours = Latest.Subtract(Earliest).TotalHours;
+            int tempMax = (int)Math.Round(totalHours / 24, 2);
 
             // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
             graph = new GraphProperties(X, Y, tempMax + 2, pjt.Animals.Count);
             graph.DrawAxes(4);
             graph.BoundingBox(4);
 
-            // Calculate seizure burdens for animals
-            pjt.CalculateSzBurden();
-            pjt.SeizureFreedom();
-
             // Save type of test we are doing (test 35 or test 36 for now)
             test = testType;
+
+            // Calculate seizure burdens for animals
+            pjt.CalculateSzBurden();
+            pjt.SeizureFreedom(); 
 
             // x tick every 7 days           
             int xTickInterval = 7;
@@ -625,19 +724,40 @@ namespace ProjectManager
 
             // If Test 35
             // Placement point for drug treatment legend
-            string drugString = "Drug Treatment";
-            PointF drugStringPoint = new PointF(graph.xAxisStart, (float)(graph.axes[0].Y * 1.1));
-            SizeF drugStringSize = graph.graphics.MeasureString(drugString, legendFont);
-            graph.graphics.DrawString(drugString, legendFont, legendBrush, drugStringPoint.X, drugStringPoint.Y);
-            graph.graphics.DrawLine(drugPen, drugStringPoint.X, drugStringPoint.Y + drugStringSize.Height, drugStringPoint.X + drugStringSize.Width, drugStringPoint.Y + drugStringSize.Height);
+            if (test == "T35")
+            {
+                string drugString = "Drug Treatment";
+                PointF drugStringPoint = new PointF(graph.xAxisStart, (float)(graph.axes[0].Y * 1.1));
+                SizeF drugStringSize = graph.graphics.MeasureString(drugString, legendFont);
+                graph.graphics.DrawString(drugString, legendFont, legendBrush, drugStringPoint.X, drugStringPoint.Y);
+                graph.graphics.DrawLine(drugPen, drugStringPoint.X, drugStringPoint.Y + drugStringSize.Height, drugStringPoint.X + drugStringSize.Width, drugStringPoint.Y + drugStringSize.Height);
 
-            // If Test 35
-            // Placement for vehicle treatment
-            string vehicleString = "Vehicle Treatment";            
-            SizeF vehicleStringSize = graph.graphics.MeasureString(vehicleString, legendFont);
-            PointF vehicleStringPoint = new PointF(graph.xAxisLength - vehicleStringSize.Width, (float)(graph.axes[0].Y * 1.1));
-            graph.graphics.DrawString(vehicleString, legendFont, legendBrush, vehicleStringPoint.X, vehicleStringPoint.Y);
-            graph.graphics.DrawLine(vehiclePen, vehicleStringPoint.X, vehicleStringPoint.Y + vehicleStringSize.Height, vehicleStringPoint.X + vehicleStringSize.Width, vehicleStringPoint.Y + vehicleStringSize.Height);
+                // If Test 35
+                // Placement for vehicle treatment
+                string vehicleString = "Vehicle Treatment";
+                SizeF vehicleStringSize = graph.graphics.MeasureString(vehicleString, legendFont);
+                PointF vehicleStringPoint = new PointF(graph.xAxisLength - vehicleStringSize.Width, (float)(graph.axes[0].Y * 1.1));
+                graph.graphics.DrawString(vehicleString, legendFont, legendBrush, vehicleStringPoint.X, vehicleStringPoint.Y);
+                graph.graphics.DrawLine(vehiclePen, vehicleStringPoint.X, vehicleStringPoint.Y + vehicleStringSize.Height, vehicleStringPoint.X + vehicleStringSize.Width, vehicleStringPoint.Y + vehicleStringSize.Height);
+            }
+            else if (test == "T36")
+            {
+                string drugString = "Medicated Meal:";
+                SolidBrush drugBrush = new SolidBrush(Color.Red);
+                PointF drugStringPoint = new PointF(graph.xAxisStart, (float)(graph.axes[0].Y * 1.1));
+                SizeF drugStringSize = graph.graphics.MeasureString(drugString, legendFont);
+                graph.graphics.DrawString(drugString, legendFont, legendBrush, drugStringPoint.X, drugStringPoint.Y);
+                graph.graphics.FillEllipse(drugBrush, drugStringPoint.X + drugStringSize.Width, drugStringPoint.Y + drugStringSize.Height / 4, markerSize * graph.objectScale, markerSize * graph.objectScale);
+
+                // If Test 35
+                // Placement for vehicle treatment
+                string vehicleString = "Unmedicated Meal:";
+                SolidBrush unmedicatedBrush = new SolidBrush(Color.Blue);
+                SizeF vehicleStringSize = graph.graphics.MeasureString(vehicleString, legendFont);
+                PointF vehicleStringPoint = new PointF(graph.xAxisLength - vehicleStringSize.Width, (float)(graph.axes[0].Y * 1.1));
+                graph.graphics.DrawString(vehicleString, legendFont, legendBrush, vehicleStringPoint.X, vehicleStringPoint.Y);
+                graph.graphics.FillEllipse(unmedicatedBrush, vehicleStringPoint.X + vehicleStringSize.Width, vehicleStringPoint.Y + vehicleStringSize.Height / 4, markerSize * graph.objectScale, markerSize * graph.objectScale);
+            }
 
             // Placement for focal seizure
             string focalSzString = "Focal Seizure:";
@@ -836,6 +956,7 @@ namespace ProjectManager
         public int vehicleSzFreedom;
         public int baselineSzFreedom;
         public int drugSzFreedom;
+        public string test;
         public Project(string Inpt)
         {
             Filename = Inpt;
@@ -1004,23 +1125,37 @@ namespace ProjectManager
             }            
             
         }
-        public Project T35Sort(Project pjt)
+        public void T35Sort()
         {
             // Remove animals w/o injections and one type of ADDID
-            pjt.Animals.RemoveAll(a => a.Injections.Count == 0);
-            pjt.Animals.RemoveAll(a => a.Injections[0].ADDID == a.Injections[a.Injections.Count-1].ADDID);
+            Animals.RemoveAll(a => a.Injections.Count == 0);
+            Animals.RemoveAll(a => a.Injections[0].ADDID == a.Injections[a.Injections.Count-1].ADDID);
 
             // Sort animals according to vehicle first
-            List<AnimalType> sortedA = pjt.Animals.OrderBy(a => a.Injections[0].ADDID).ToList();
-            pjt.Animals = sortedA;
-            return pjt;
+            List<AnimalType> sortedA = Animals.OrderBy(a => a.Injections[0].ADDID).ToList();
+            Animals = sortedA;
+        }
+        public void T36Sort()
+        {
+            // Iterate through animals backwards so we don't get unhandled exception when removing list elements
+            for (int i = Animals.Count - 1; i >= 0; i--)
+            {
+                // Break up meals into both groups
+                List<MealType> baselineMeals = Animals[i].Meals.Where(m => m.type == "U").ToList();
+                List<MealType> medicatedMeals = Animals[i].Meals.Where(m => m.type == "M").ToList(); 
+        
+                if (baselineMeals.Count <= 1 || medicatedMeals.Count <= 1)
+                {
+                    Animals.RemoveAt(i);
+                }
+            }
         }
         public void CalculateSzBurden()
         {
             foreach (AnimalType A in Animals)
             {
                 // SeizureBurden() calculates seizure burden for all relevant groups and finds their SEM's
-                A.SeizureBurden(Files[0].Start.Date);
+                A.SeizureBurden(test, Files[0].Start.Date);
             }
 
             // list for seizure burdens to calculate SEM
@@ -1038,7 +1173,7 @@ namespace ProjectManager
             // Answer seizure freedom question for each animal
             foreach (AnimalType A in Animals)
             {
-                A.SzFreedom(Files[0].Start.Date);
+                A.SzFreedom(test, Files[0].Start.Date);
             }
 
             // Add up animal seizure freedoms
