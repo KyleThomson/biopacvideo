@@ -37,6 +37,16 @@ namespace ProjectManager
             {
                 pjt = new Project(F.FileName);
                 pjt.Open();
+                SeizureAnalysis testAnalysis = new SeizureAnalysis();
+                foreach (AnimalType A in pjt.Animals)
+                {
+                    foreach (SeizureType S in A.Sz)
+                    {
+                        S.Severity = 5;
+                        S.Notes = "sz3";
+                        testAnalysis.CompareSeizures(S);
+                    }
+                }
             }
             UpdateMainList();
         }

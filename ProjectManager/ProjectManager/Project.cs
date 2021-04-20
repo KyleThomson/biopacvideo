@@ -194,7 +194,8 @@ namespace ProjectManager
         public int length;
         public string Notes;       
         public string file;
-        public int Severity; 
+        public int Severity;
+        public bool stageAgreement; // Do bubble and note severity agree?
         public SeizureType(string a, string b, string c, string e, string f)
         {
             DateTime.TryParse(a, out d);            
@@ -330,6 +331,10 @@ namespace ProjectManager
                             }
 
                         }
+                        
+                        // Check if bubble and note match and flag if it doesn't
+                        if (bubbleSeverity != noteSeverity) { S.stageAgreement = false; }// Do something
+
                         double szTime = S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours;
                         // Add seizure severity to running total depending on treatment that seizure occurred during
 
@@ -521,410 +526,6 @@ namespace ProjectManager
     }
     public class Test35_Stats
     {
-
-    }
-    public class SzGraph
-    {
-        // instance of graph for test 35 or test 36
-        public GraphProperties graph;
-
-        // string variables for header info for the pdf
-        public string test;
-        public string header;
-        public string subHeader;
-        public string ETSP;
-        public string batch;
-        public string dose;
-        public string frequency;
-        public SzGraph(int X, int Y, Project pjt, string testType)
-        {
-            // Sort project based on test
-            if (testType == "T35")
-            {
-                // Sort by injections
-                pjt.T35Sort();
-            }
-            else
-            {
-                pjt.T36Sort();
-            }
-            
-            // Find max day of project
-            DateTime Earliest = pjt.Files[0].Start.Date;
-            DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
-            double totalHours = Latest.Subtract(Earliest).TotalHours;
-            int tempMax = (int)Math.Round(totalHours / 24, 2);
-
-            // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
-            graph = new GraphProperties(X, Y, tempMax + 2, pjt.Animals.Count);
-            graph.DrawAxes(4);
-            graph.BoundingBox(4);
-
-            // Save type of test we are doing (test 35 or test 36 for now)
-            test = testType;
-
-            // Calculate seizure burdens for animals
-            pjt.CalculateSzBurden();
-            pjt.SeizureFreedom(); 
-
-            // x tick every 7 days           
-            int xTickInterval = 7;
-            int numXTicks = ((tempMax + 2) / xTickInterval) + 1;
-
-            // Get axis tick labels for graph properties
-            List<string> xTickString = GetXTickLabels(pjt, xTickInterval);
-            List<string> yTickString = GetYTickLabels(pjt);
-
-            // Draw ticks and label axes           
-            Font aFont = new Font("Arial", 12 * graph.objectScale);
-            graph.DrawTicks(numXTicks, pjt.Animals.Count, 3.0F, xTickString, yTickString);
-            graph.WriteXLabel("Time (days)", aFont);
-            graph.WriteYLabel("Animals", aFont);
-        }
-        public List<string> GetXTickLabels(Project pjt, int xTickInterval)
-        {
-            List<string> xTickString = new List<string>();
-            //Obtain basis for y and x axis labeling
-            for (int i = 0; i <= pjt.Files.Count; i += xTickInterval)
-            {
-                if (i % xTickInterval == 0)// && i != 0)
-                {
-                    xTickString.Add((i).ToString());
-                }
-
-            }
-            return xTickString;
-        }
-        public List<string> GetYTickLabels(Project pjt)
-        {
-            List<string> yTickString = new List<string>();
-            //Obtain basis for y and x axis labelling
-            for (int i = 0; i < pjt.Animals.Count; i++)
-            {
-                yTickString.Add(pjt.Animals[i].ID);
-            }
-            return yTickString;
-        }
-        public void PlotSz(Project pjt)
-        {
-            // Plot seizures the same for both test 35 and test 36
-            int markerSize = 8;
-            Color szColor = Color.FromName("Black");
-            DateTime Earliest = pjt.Files[0].Start.Date;
-            DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
-            for (int i = 0; i < pjt.Animals.Count; i++)
-            {
-                float yCoord = i + 1;
-                for (int j = 0; j < pjt.Animals[i].Sz.Count; j++)
-                {
-                    float xCoord = (float)(pjt.Animals[i].Sz[j].d.Date.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours) / 24;
-
-                    if (pjt.Animals[i].Sz[j].Severity > 0)
-                    {
-                        graph.PlotPoints(xCoord, yCoord, markerSize, "o", szColor);
-                    }
-                    else if (pjt.Animals[i].Sz[j].Severity == 0)
-                    {
-                        graph.PlotPoints(xCoord, yCoord, markerSize / 2, ".", szColor);
-                    }
-
-                }
-            }
-        }
-        public void PlotTrt(Project pjt)
-        {
-            DateTime Earliest = pjt.Files[0].Start.Date;
-            float lineWidth = 4;
-            Color vehicleColor = Color.FromName("Teal");
-            Color drugColor = Color.FromName("Red");
-
-            // If Test 35, use injections to draw lines for treatment
-            if (test == "T35")
-            {
-                for (int i = 0; i < pjt.Animals.Count; i++)
-                {
-                    float yCoord = (float)(i + 0.5);
-
-                    // Initialize vehicle and drug treatment times
-                    List<float> vehicleTimes = new List<float>();
-                    List<float> drugTimes = new List<float>();
-
-                    for (int j = 0; j < pjt.Animals[i].Injections.Count; j++)
-                    {
-                        foreach (InjectionType I in pjt.Animals[i].Injections)
-                        {
-                            if (I.ADDID == "Vehicle")
-                            {
-                                vehicleTimes.Add((float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24, 2));
-                            }
-                            else
-                            {
-                                drugTimes.Add((float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24, 2));
-                            }
-                        }
-                        // Draw vehicle line
-                        if (vehicleTimes.Count > 1)
-                        {
-                            graph.Line(vehicleTimes[0], yCoord, vehicleTimes[vehicleTimes.Count - 1], yCoord, lineWidth, vehicleColor);
-                        }
-
-
-                        // Draw drug line
-                        if (drugTimes.Count > 1)
-                        {
-                            graph.Line(drugTimes[0], yCoord, drugTimes[drugTimes.Count - 1], yCoord, lineWidth, drugColor);
-                        }
-
-
-                    }
-                }
-            }
-            else if (test == "T36")
-            {
-                Color unmedicatedColor = Color.FromName("Blue");
-                float animalCounter = 0.5F;
-                foreach (AnimalType A in pjt.Animals)
-                {
-                    // Get y coordinate
-                    float yCoord = animalCounter;
-                    animalCounter++;
-
-                    // Initialize vehicle and drug treatment times
-                    List<float> vehicleTimes = new List<float>();
-                    List<float> drugTimes = new List<float>();
-
-                    foreach (MealType M in A.Meals)
-                    {
-                        float xCoord = (float)M.d.Subtract(Earliest).TotalHours / 24;
-                        if (M.type == "M")
-                        {         
-                            graph.PlotPoints(xCoord, yCoord, 8, ".", drugColor);
-                        }
-                        else
-                        {
-                            graph.PlotPoints(xCoord, yCoord, 8, ".", unmedicatedColor);
-                        }
-                    }
-
-                }
-
-            }
-        }
-        public void Legend()
-        {
-            // Method that draws on legend for injection type and seizure type
-            int markerSize = 8;
-            Font legendFont = new Font("Arial", 12 * graph.objectScale);
-            SolidBrush legendBrush = new SolidBrush(Color.Black);
-            Pen drugPen = new Pen(Brushes.Red);
-            drugPen.Width = 4F * graph.objectScale;
-            Pen vehiclePen = new Pen(Brushes.Teal);
-            vehiclePen.Width = 4F * graph.objectScale;
-            Pen szPen = new Pen(Brushes.Black);
-
-            // If Test 35
-            // Placement point for drug treatment legend
-            if (test == "T35")
-            {
-                string drugString = "Drug Treatment";
-                PointF drugStringPoint = new PointF(graph.xAxisStart, (float)(graph.axes[0].Y * 1.1));
-                SizeF drugStringSize = graph.graphics.MeasureString(drugString, legendFont);
-                graph.graphics.DrawString(drugString, legendFont, legendBrush, drugStringPoint.X, drugStringPoint.Y);
-                graph.graphics.DrawLine(drugPen, drugStringPoint.X, drugStringPoint.Y + drugStringSize.Height, drugStringPoint.X + drugStringSize.Width, drugStringPoint.Y + drugStringSize.Height);
-
-                // If Test 35
-                // Placement for vehicle treatment
-                string vehicleString = "Vehicle Treatment";
-                SizeF vehicleStringSize = graph.graphics.MeasureString(vehicleString, legendFont);
-                PointF vehicleStringPoint = new PointF(graph.xAxisLength - vehicleStringSize.Width, (float)(graph.axes[0].Y * 1.1));
-                graph.graphics.DrawString(vehicleString, legendFont, legendBrush, vehicleStringPoint.X, vehicleStringPoint.Y);
-                graph.graphics.DrawLine(vehiclePen, vehicleStringPoint.X, vehicleStringPoint.Y + vehicleStringSize.Height, vehicleStringPoint.X + vehicleStringSize.Width, vehicleStringPoint.Y + vehicleStringSize.Height);
-            }
-            else if (test == "T36")
-            {
-                string drugString = "Medicated Meal:";
-                SolidBrush drugBrush = new SolidBrush(Color.Red);
-                PointF drugStringPoint = new PointF(graph.xAxisStart, (float)(graph.axes[0].Y * 1.1));
-                SizeF drugStringSize = graph.graphics.MeasureString(drugString, legendFont);
-                graph.graphics.DrawString(drugString, legendFont, legendBrush, drugStringPoint.X, drugStringPoint.Y);
-                graph.graphics.FillEllipse(drugBrush, drugStringPoint.X + drugStringSize.Width, drugStringPoint.Y + drugStringSize.Height / 4, markerSize * graph.objectScale, markerSize * graph.objectScale);
-
-                // If Test 35
-                // Placement for vehicle treatment
-                string vehicleString = "Unmedicated Meal:";
-                SolidBrush unmedicatedBrush = new SolidBrush(Color.Blue);
-                SizeF vehicleStringSize = graph.graphics.MeasureString(vehicleString, legendFont);
-                PointF vehicleStringPoint = new PointF(graph.xAxisLength - vehicleStringSize.Width, (float)(graph.axes[0].Y * 1.1));
-                graph.graphics.DrawString(vehicleString, legendFont, legendBrush, vehicleStringPoint.X, vehicleStringPoint.Y);
-                graph.graphics.FillEllipse(unmedicatedBrush, vehicleStringPoint.X + vehicleStringSize.Width, vehicleStringPoint.Y + vehicleStringSize.Height / 4, markerSize * graph.objectScale, markerSize * graph.objectScale);
-            }
-
-            // Placement for focal seizure
-            string focalSzString = "Focal Seizure:";
-            SizeF focalSzStringSize = graph.graphics.MeasureString(focalSzString, legendFont);
-            PointF focalSzStringPoint = new PointF(graph.xAxisStart, (float)(graph.axes[0].Y * 1.15));
-            graph.graphics.DrawString(focalSzString, legendFont, legendBrush, focalSzStringPoint.X, focalSzStringPoint.Y);
-            graph.graphics.FillEllipse(legendBrush, focalSzStringPoint.X + focalSzStringSize.Width, focalSzStringPoint.Y + focalSzStringSize.Height / 4, markerSize / 2 * graph.objectScale, markerSize / 2 * graph.objectScale);
-
-            // Placement for generalized seizure
-            string generalSzString = "Generalized Seizure:";
-            SizeF generalSzStringSize = graph.graphics.MeasureString(generalSzString, legendFont);
-            PointF generalSzStringPoint = new PointF(graph.xAxisLength - generalSzStringSize.Width, (float)(graph.axes[0].Y * 1.15));
-            graph.graphics.DrawString(generalSzString, legendFont, legendBrush, generalSzStringPoint.X, generalSzStringPoint.Y);
-            graph.graphics.DrawEllipse(szPen, generalSzStringPoint.X + generalSzStringSize.Width, generalSzStringPoint.Y + generalSzStringSize.Height / 4, markerSize * graph.objectScale, markerSize * graph.objectScale);
-
-        }
-        public void DisplayHeader()
-        {
-            // Initialize header information for drawing text
-            string headerString = "Epilepsy Therapy Screening Program";
-            Font headerFont = new Font("Arial", 16F * graph.objectScale);
-            string subheader = "";
-            if (test == "T35")
-            {
-                subheader = "Test 35 - Chronic Post-SE (KA) Spontaneously Seizing Rats: Stage 1 (IP Administration)";
-            }
-            else if (test == "T36")
-            {
-                subheader = "Test 36 - Chronic Post-SE (KA) Spontaneously Seizing Rats: Stage 2 (Oral Administration - Drug in Food)";
-            }
-            Font subFont = new Font("Arial", 10F * graph.objectScale);
-            SolidBrush headerBrush = new SolidBrush(Color.Black);
-
-
-            // Get sizes and points for string placement
-            SizeF headerSize = graph.graphics.MeasureString(headerString, headerFont);
-            SizeF subSize = graph.graphics.MeasureString(subheader, subFont);
-
-            PointF headerPoint = new PointF(graph.mainPlot.Width / 2 - headerSize.Width / 2, (float)(graph.mainPlot.Height * 0.05));
-            PointF subPoint = new PointF(graph.mainPlot.Width / 2 - subSize.Width / 2, (float)(graph.mainPlot.Height * 0.05 + headerSize.Height));
-
-            // Draw rectangles first
-            RectangleF headerRect = new RectangleF((int)(graph.mainPlot.Width / 2 - subSize.Width / 2), (int)(graph.mainPlot.Height * 0.05), (int)subSize.Width, (int)(headerSize.Height + subSize.Height));
-            Pen headerPen = new Pen(Brushes.Black);
-            headerPen.Width = 2.0F * graph.objectScale;
-            SolidBrush solidBrush = new SolidBrush(Color.LightSlateGray);
-            graph.graphics.FillRectangle(solidBrush, headerRect);
-            graph.graphics.DrawRectangle(headerPen, headerRect.X, headerRect.Y, headerRect.Width, headerRect.Height);
-            
-            // Now draw strings over rectangles
-            graph.graphics.DrawString(headerString, headerFont, headerBrush, headerPoint);
-            graph.graphics.DrawString(subheader, subFont, headerBrush, subPoint);
-
-            // Set values for ETSP, Batch, Dose, and Frequency
-            // If user did not input values for these set to ----
-            ETSP = "ETSP: ----";
-            batch = "Batch: ----";
-            dose = "Dose: ----";
-            frequency = "Frequnecy: ----";
-            // else, set to user defined values
-
-            // Draw area and strings for etsp, batch, etc.
-            SizeF etspSize = graph.graphics.MeasureString(ETSP, headerFont);
-            SizeF batchSize = graph.graphics.MeasureString(batch, headerFont);
-            SizeF doseSize = graph.graphics.MeasureString(dose, headerFont);
-            SizeF freqSize = graph.graphics.MeasureString(frequency, headerFont);
-            float etspAndbatchY = (float)((headerRect.Y + headerSize.Height + subSize.Height) * 1.1);
-            
-            RectangleF etspAndbatch = new RectangleF(headerRect.X, etspAndbatchY, headerRect.Width, Math.Max(etspSize.Height, batchSize.Height));
-            float doseAndfreqY = (float)((etspAndbatch.Y + Math.Max(etspSize.Height, batchSize.Height)) * 1.075);
-            RectangleF doseAndfreq = new RectangleF(headerRect.X, doseAndfreqY, headerRect.Width, Math.Max(doseSize.Height, freqSize.Height));
-
-            graph.graphics.FillRectangle(solidBrush, etspAndbatch);
-            graph.graphics.DrawRectangle(headerPen, etspAndbatch.X, etspAndbatch.Y, etspAndbatch.Width, etspAndbatch.Height);
-            graph.graphics.FillRectangle(solidBrush, doseAndfreq);
-            graph.graphics.DrawRectangle(headerPen, doseAndfreq.X, doseAndfreq.Y, doseAndfreq.Width, doseAndfreq.Height);
-
-            // Draw strings for etsp, batch, dose, frequency
-            graph.graphics.DrawString(ETSP, headerFont, headerBrush, headerRect.X, etspAndbatchY);
-            graph.graphics.DrawString(batch, headerFont, headerBrush, (float)(headerRect.Width * 1.5 - batchSize.Width), etspAndbatchY);
-            graph.graphics.DrawString(dose, headerFont, headerBrush, headerRect.X, doseAndfreqY);
-            graph.graphics.DrawString(frequency, headerFont, headerBrush, (float)(headerRect.Width * 1.5 - freqSize.Width), doseAndfreqY);
-
-        }
-        public void DisplayStats(Project pjt)
-        {
-            Font headerFont = new Font("Arial", 12F * graph.objectScale);
-            SolidBrush headerBrush = new SolidBrush(Color.Black);
-
-            // Draw Daily Seizure Burden header
-            string burdenString = "Daily Seizure Burden";
-            SizeF burdenSize = graph.graphics.MeasureString(burdenString, headerFont);
-            PointF burdenPoint = new PointF((float)(graph.mainPlot.Width / 2 - burdenSize.Width / 0.65), (float)(graph.yAxisStart * 0.65));
-            graph.graphics.DrawString(burdenString, headerFont, headerBrush, burdenPoint);
-
-            // Draw Seizure Freedom header
-            string freedomString = "Seizure Freedom";
-            SizeF freedomSize = graph.graphics.MeasureString(freedomString, headerFont);
-            PointF freedomPoint = new PointF((float)(graph.mainPlot.Width / 2 + freedomSize.Width / 1.25), (float)(graph.yAxisStart * 0.65));
-            graph.graphics.DrawString(freedomString, headerFont, headerBrush, freedomPoint);
-
-            if (test == "T35")
-            {
-                // if test 35, do baseline, vehicle, and drug
-                Font statsFont = new Font("Arial", 8F * graph.objectScale);
-                Pen boundingPen = new Pen(Brushes.Black);
-                boundingPen.Width = 1.25F * graph.objectScale;
-
-                string baselineBurden = pjt.baselineBurden.ToString() + "\u00B1" + pjt.baselineSEM.ToString();
-                string drugBurden = pjt.drugBurden.ToString() + "\u00B1" + pjt.drugSEM.ToString();
-                string vehicleBurden = pjt.vehicleBurden.ToString() + "\u00B1" + pjt.vehicleSEM.ToString();
-
-                SizeF baselineStringSize = graph.graphics.MeasureString(baselineBurden, statsFont);
-                SizeF drugStringSize = graph.graphics.MeasureString(drugBurden, statsFont);
-                SizeF vehicleStringSize = graph.graphics.MeasureString(vehicleBurden, statsFont);
-                float boxLength = new List<float>() { baselineStringSize.Width, drugStringSize.Width, vehicleStringSize.Width }.Max();
-                float boxHeight = new List<float>() { baselineStringSize.Height, drugStringSize.Height, vehicleStringSize.Height }.Max();
-
-                // Baseline Burden
-                graph.graphics.DrawString(baselineBurden, statsFont, headerBrush, graph.mainPlot.Width / 4, (float)(graph.yAxisStart * 0.8));
-                graph.graphics.DrawRectangle(boundingPen, graph.mainPlot.Width / 4, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
-                graph.graphics.DrawString("Baseline", headerFont, headerBrush, graph.mainPlot.Width / 4, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
-
-                // Drug Burden       
-                graph.graphics.DrawString(drugBurden, statsFont, headerBrush, graph.mainPlot.Width / 4 + boxLength + boxLength / 4, (float)(graph.yAxisStart * 0.8));
-                graph.graphics.DrawRectangle(boundingPen, graph.mainPlot.Width / 4 + boxLength + boxLength / 4, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
-                graph.graphics.DrawString("Drug", headerFont, headerBrush, graph.mainPlot.Width / 4 + boxLength + boxLength / 4, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
-
-                // Vehicle Burden       
-                graph.graphics.DrawString(vehicleBurden, statsFont, headerBrush, graph.mainPlot.Width / 4 + boxLength * 2 + boxLength / 2, (float)(graph.yAxisStart * 0.8));
-                graph.graphics.DrawRectangle(boundingPen, graph.mainPlot.Width / 4 + boxLength * 2 + boxLength / 2, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
-                graph.graphics.DrawString("Vehicle", headerFont, headerBrush, graph.mainPlot.Width / 4 + boxLength * 2 + boxLength / 2, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
-
-                // Vehicle freedom
-                SizeF vehicleSize = graph.graphics.MeasureString("Vehicle", headerFont);
-                float startPt = (float)(graph.mainPlot.Width * 0.75 - vehicleSize.Width);
-                float boxStart = (float)(graph.mainPlot.Width * 0.75 - boxLength);
-                string vehicleFreedom = pjt.vehicleSzFreedom.ToString() + "/" + pjt.Animals.Count.ToString();
-                graph.graphics.DrawString(vehicleFreedom, statsFont, headerBrush, boxStart, (float)(graph.yAxisStart * 0.8));
-                graph.graphics.DrawRectangle(boundingPen, boxStart, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
-                graph.graphics.DrawString("Vehicle", headerFont, headerBrush, boxStart, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
-
-                // Drug freedom
-                SizeF drugSize = graph.graphics.MeasureString("Vehicle", headerFont);
-                string drugFreedom = pjt.drugSzFreedom.ToString() + "/" + pjt.Animals.Count.ToString();
-                graph.graphics.DrawString(drugFreedom, statsFont, headerBrush, boxStart - boxLength - boxLength / 4, (float)(graph.yAxisStart * 0.8));
-                graph.graphics.DrawRectangle(boundingPen, boxStart - boxLength - boxLength / 4, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
-                graph.graphics.DrawString("Drug", headerFont, headerBrush, boxStart - boxLength - boxLength / 4, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
-
-                // Baseline freedom
-                SizeF baselineSize = graph.graphics.MeasureString("Vehicle", headerFont);
-                string baselineFreedom = pjt.drugSzFreedom.ToString() + "/" + pjt.Animals.Count.ToString();
-                SizeF blFreedomS = graph.graphics.MeasureString(baselineFreedom, statsFont);
-                graph.graphics.DrawString(baselineFreedom, statsFont, headerBrush, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.yAxisStart * 0.8));
-                graph.graphics.DrawRectangle(boundingPen, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
-                graph.graphics.DrawString("Baseline", headerFont, headerBrush, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
-            }
-            else if (test == "T36")
-            {
-                // test 36 just vehicle and drug
-            }
-        }
-        public void ExportPDF()
-        {
-
-        }
-
 
     }
     
@@ -1457,7 +1058,7 @@ namespace ProjectManager
             return null;
         }
 
-        public void ExportData(string Fname, ExportType E, int numDays, string binnedFile)
+        public void ExportData(string Fname, ExportType E)
         {
             //Open File
             StreamWriter F = new StreamWriter(Fname);
@@ -1469,11 +1070,7 @@ namespace ProjectManager
             DateTime Earliest = Files[0].Start.Date;
             DateTime Latest = Files[Files.Count - 1].Start.Date;
             st = Earliest.ToShortDateString() + "," + Earliest.ToShortTimeString();
-            F.WriteLine(st);
-
-            // Open binned seizure file
-            StreamWriter sw = new StreamWriter(binnedFile);
-            sw.AutoFlush = true;
+            F.WriteLine(st); 
             string sz;
             if (E.DetailList)
             {
@@ -1632,41 +1229,58 @@ namespace ProjectManager
                 {
 
                 }
-                if (E.binSz)
+
+                
+            }
+            if (E.binSz)
+            {
+                // Create new file dialog box for saving exported binned seizures .csv
+                SaveFileDialog binned = new SaveFileDialog();
+                binned.DefaultExt = "csv";
+                binned.Title = "Binned Seizures .csv";
+                binned.DefaultExt = ".csv";
+                binned.InitialDirectory = "D:\\";
+
+                if (binned.ShowDialog() == DialogResult.OK)
                 {
-                    
-                    // bin seizures if option was selected
-                    sz = A.ID;
-                   
-                    // Create list for days that seizures happen
-                    List<double> szDay = new List<double>();
-                    List<double> binSeizures = new List<double>(new double[numDays]);
-                    foreach (SeizureType seizureType in A.Sz)
+
+                    // Open binned seizure file
+                    StreamWriter sw = new StreamWriter(binned.FileName);
+                    sw.AutoFlush = true;
+                    foreach (AnimalType A in Animals)
                     {
-                        szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays));
-                    }
-                    var g = szDay.GroupBy(i => i);
-                    foreach (var bin in g)
-                    {
-                        if (bin.Key > 0)
+                        // bin seizures if option was selected
+                        sz = A.ID;
+                        int numDays = Files.Count;
+                        // Create list for days that seizures happen
+                        List<double> szDay = new List<double>();
+                        List<double> binSeizures = new List<double>(new double[numDays]);
+                        foreach (SeizureType seizureType in A.Sz)
                         {
-                            binSeizures[(int)(bin.Key - 1)] = bin.Count();
+                            szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays));
                         }
-                        else
+                        var g = szDay.GroupBy(i => i);
+                        foreach (var bin in g)
                         {
-                            binSeizures[(int)(bin.Key)] = bin.Count();
+                            if (bin.Key > 0)
+                            {
+                                binSeizures[(int)(bin.Key - 1)] = bin.Count();
+                            }
+                            else
+                            {
+                                binSeizures[(int)(bin.Key)] = bin.Count();
+                            }
                         }
+                        for (int i = 0; i < binSeizures.Count; i++)
+                        {
+                            sz += "," + binSeizures[i].ToString();
+                        }
+                        sw.WriteLine(sz); // write seizures
                     }
-                    for (int i = 0; i < binSeizures.Count; i++)
-                    {
-                        sz += "," + binSeizures[i].ToString();
-                    }
-                    sw.WriteLine(sz);
-                    
+                    sw.Close(); // close writer
                 }
             }
-            F.Close();
-            sw.Close();
+            F.Close();     
         }
 
         //This function takes the data from the project file and loads it into memory. 

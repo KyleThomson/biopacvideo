@@ -103,6 +103,9 @@
       <DependentUpon>ProjectManagerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SeizureAnalysis.cs" />
+    <Compile Include="SeizureStageDialog.cs" />
+    <Compile Include="SzGraph.cs" />
     <Compile Include="WeightAdd.cs">
       <SubType>Form</SubType>
     </Compile>

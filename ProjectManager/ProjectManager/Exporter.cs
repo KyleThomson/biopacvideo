@@ -31,19 +31,16 @@ namespace ProjectManager
             if (BloodDraw.Checked) E.BloodDraw = true;
             if (BloodDrawList.Checked) E.BloodDrawList = true;
             if (binSeizures.Checked) E.binSz = true;
+            
+            // Create file dialog box for saving exported project file.
             SaveFileDialog F = new SaveFileDialog();
             F.DefaultExt = ".pjt";
-            F.Title = "Save project excel file";
+            F.Title = "Save project (.pjt) file";
             F.InitialDirectory = "D:\\";
-            SaveFileDialog binned = new SaveFileDialog();
-            binned.DefaultExt = "csv";
-            binned.Title = "Binned Seizures .csv";
-            binned.DefaultExt = ".csv";
-            binned.InitialDirectory = "D:\\";
-            if (F.ShowDialog() == DialogResult.OK && binned.ShowDialog() == DialogResult.OK)
+
+            if (F.ShowDialog() == DialogResult.OK)
             {
-                int numDays = pjt.Files.Count;
-                pjt.ExportData(F.FileName, E, numDays, binned.FileName);
+                pjt.ExportData(F.FileName, E);
             }
         }
 
