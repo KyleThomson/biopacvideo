@@ -19,235 +19,7 @@ namespace ProjectManager
         IAK,    // 2
         T39     // 3 etc.
     }
-    public class ExportType
-    {
-        public bool Sz;
-        public bool Pellet;
-        public bool Med;
-        public bool wt;
-        public bool SzTime;
-        public bool Meal;
-        public bool DetailList;
-        public bool Notes;
-        public bool SeverityIndx;
-        public bool BloodDraw;
-        public bool BloodDrawList;
-        public bool Injections;
-        public bool InjectionsList;
-        public bool binSz;
-        
-        public ExportType()
-        {
-            Sz = false;
-            Pellet = false;
-            Med = false;
-            wt = false;
-            SzTime = false;
-            Meal = false;
-            DetailList = false;
-            Notes = false;
-            SeverityIndx = false;
-            BloodDraw = false;
-            BloodDrawList = false;
-            Injections = false;
-            InjectionsList = false;
-            binSz = false;
-        }
 
-    }
-    public class LabelType
-    {
-        public string Name;
-        public int IDNum;
- 
-        public LabelType(string a, string b) 
-        {
-            int.TryParse(a, out IDNum);
-            Name = b;
-        }
-        public string LabelMatch(int IDtest, string returnstr)
-        {
-            if (IDtest == IDNum)
-                return Name;
-            else
-                return returnstr;
-        }
-    }
-    public class GroupType
-    {
-        public string Name;
-        public int count;
-        public int IDNum; 
-        public GroupType()
-        {
-            Name = "";
-            count = 0;
-            IDNum = 0;
-        }
-        public GroupType(string a, string b, string c)
-        {
-            Name = b;
-            int.TryParse(a, out IDNum);
-            int.TryParse(c, out count);            
-        }
-    }
-    public class RemovalType
-    {
-        public DateTime dt;        
-        public int count;        
-        public string pt;
-        public RemovalType(string a, string b, string c)
-        {
-            DateTime.TryParse(a, out dt);            
-            int.TryParse(b, out count);
-            pt = c;
-        }
-    }
-    public class BloodDrawType
-    {
-        public DateTime dt;
-        public TimeSpan EnteredTime;
-        public string ID;
-        public BloodDrawType(string a, string b, string c)
-        {
-            DateTime.TryParse(a, out dt);
-            TimeSpan.TryParse(b, out EnteredTime);
-            ID = c; 
-        }
-
-    }
-    public class WeightType
-    {
-        public double wt;
-        public DateTime dt;
-        public int pt;
-        public WeightType(string a, string b, string c)
-        {
-            double.TryParse(a, out wt);
-            DateTime.TryParse(b, out dt);
-            int.TryParse(c, out pt);
-        }
-    }
-    public class MealType
-    {
-        public DateTime d;
-        public string type;
-        public int pelletcount;
-        public MealType(string a, string b, string c)
-        {
-            DateTime.TryParse(a, out d);
-            type = b;
-            int.TryParse(c, out pelletcount);
-        }
-        public bool Compare(MealType C)
-        {
-            if ((DateTime.Compare(d, C.d) == 0) && (string.Compare(type, C.type) == 0) &&  (pelletcount == C.pelletcount))
-                return true;
-            else
-                return false;
-        }
-    }
-    public class InjectionType
-    {
-        public string Route;
-        public int Dose;
-        public double DoseAmount;
-        public int DoseNum;
-        public string ADDID;
-        public string solvent; 
-        public DateTime TimePoint;
-
-        //Date DoseNum ADDID Dose DoseAmount Route Solvent
-        public InjectionType(string a, string b, string c, string d, string e, string f, string g)
-        {
-            DateTime.TryParse(a, out TimePoint);
-            int.TryParse(b, out DoseNum); 
-            ADDID = c;            
-            int.TryParse(d, out Dose);
-            double.TryParse(e, out DoseAmount); 
-            Route = f;
-            solvent = g;
-        }
-    }
-    public class FileType
-    {
-        public string[] AnimalIDs;
-        public int Chans;
-        public DateTime Start;
-        public TimeSpan Duration;
-        public FileType(string[] A, int B, DateTime C, string D)
-        {
-            AnimalIDs = A;
-            Chans = B;
-            Start = C;
-            TimeSpan.TryParse(D, out Duration);            
-         }
-        public FileType()
-        {
-        }
-        public bool Compare(FileType C)
-        {
-            if ((DateTime.Compare(Start, C.Start) == 0) && (string.Compare(AnimalIDs[0], C.AnimalIDs[0]) == 0))
-                return true;
-            else
-                return false;
-        }
-    }
-        
-    public class SeizureType
-    {
-        public TimeSpan t;        
-        public DateTime d;
-        public int length;
-        public string Notes;       
-        public string file;
-        public int Severity;
-        public bool stageAgreement; // Do bubble and note severity agree?
-        public SeizureType(string a, string b, string c, string e, string f)
-        {
-            DateTime.TryParse(a, out d);            
-            TimeSpan.TryParse(b, out t);
-            //t = t + TimeSpan.FromSeconds(d.TimeOfDay.TotalSeconds);
-            int.TryParse(e, out length);
-            file = f;            
-            Notes = c;
-            Severity = -1; 
-        }
-        public SeizureType(string a, string b, string c, string e, string f, string g)
-        {
-            DateTime.TryParse(a, out d);
-            TimeSpan.TryParse(b, out t);
-            //t = t + TimeSpan.FromSeconds(d.TimeOfDay.TotalSeconds);
-            int.TryParse(e, out length);
-            file = f;
-            Notes = c;
-            int.TryParse(g, out Severity);
-        }
-        public bool Compare(SeizureType C)
-        {
-            if ((DateTime.Compare(d, C.d) == 0) && (TimeSpan.Compare(t, C.t) == 0) && (length == C.length))
-                return true;
-            else
-                return false;
-        }        
-    }
-    public class ImportantDateType
-    {
-        public int LabelID;
-        public DateTime Date;
-        public ImportantDateType(string a, string b)
-        {
-            int.TryParse(a, out LabelID);
-            DateTime.TryParse(b, out Date);
-        }
-        
-    }
-   
-    public class Test35_Stats
-    {
-
-    }
-    
     /****************************************************************************************************************8
      *
      * 
@@ -256,7 +28,7 @@ namespace ProjectManager
      * 
      * 
      * ******************************************************************************************************************/
-    
+
 
 
     public class Project
@@ -264,7 +36,7 @@ namespace ProjectManager
         public string P;
         public string Filename;
         public List<FileType> Files;
-        public List<GroupType> Groups; 
+        public List<GroupType> Groups;
         public List<AnimalType> Animals;
         public List<LabelType> Labels;
         public float vehicleSEM;
@@ -300,15 +72,15 @@ namespace ProjectManager
         {
             if (File.Exists(Filename))
             {
-            StreamReader F = new StreamReader(Filename);
-            while (!F.EndOfStream)
-            {
-                ParseLine(F.ReadLine());
-            }
-            F.Dispose();
+                StreamReader F = new StreamReader(Filename);
+                while (!F.EndOfStream)
+                {
+                    ParseLine(F.ReadLine());
+                }
+                F.Dispose();
             }
         }
-        
+
         public void Save()
         {
             StreamWriter F = new StreamWriter(Filename);
@@ -339,7 +111,7 @@ namespace ProjectManager
                 foreach (SeizureType S in A.Sz)
                 {
                     answer = string.Format("{0:D2}:{1:D2}:{2:D2}", S.t.Hours, S.t.Minutes, S.t.Seconds);
-                    s ="An," + A.ID + ", sz, " + S.d.ToString() + ", " + answer + ", " + S.Notes + "," + S.length + "," + S.file + "," + S.Severity;
+                    s = "An," + A.ID + ", sz, " + S.d.ToString() + ", " + answer + ", " + S.Notes + "," + S.length + "," + S.file + "," + S.Severity;
                     F.WriteLine(s);
                 }
                 foreach (WeightType W in A.WeightInfo)
@@ -356,7 +128,7 @@ namespace ProjectManager
                 {
                     s = "An," + A.ID + ", rm, " + R.dt.ToString() + "," + R.count.ToString() + "," + R.pt;
                     F.WriteLine(s);
-                } 
+                }
                 foreach (ImportantDateType I in A.ImportantDates)
                 {
                     s = "An," + A.ID + ", dt, " + I.LabelID.ToString() + "," + I.Date.ToString();
@@ -369,10 +141,10 @@ namespace ProjectManager
                 }
                 foreach (InjectionType I in A.Injections)
                 {
-                    s = "An," + A.ID + ", ij, " + I.TimePoint.ToString() + "," + I.DoseNum.ToString() + "," + I.ADDID + "," + I.Dose.ToString() + "," + I.DoseAmount.ToString() + "," +  I.Route + "," + I.solvent;
-                    F.WriteLine(s); 
+                    s = "An," + A.ID + ", ij, " + I.TimePoint.ToString() + "," + I.DoseNum.ToString() + "," + I.ADDID + "," + I.Dose.ToString() + "," + I.DoseAmount.ToString() + "," + I.Route + "," + I.solvent;
+                    F.WriteLine(s);
                 }
-                
+
             }
             F.Close();
             F.Dispose();
@@ -383,7 +155,7 @@ namespace ProjectManager
             AnimalType A;
             An = An.Replace(" ", string.Empty);
             CurrentAnimal = Animals.FindIndex(
-               delegate(AnimalType X)
+               delegate (AnimalType X)
                {
                    return X.ID == An;
                });
@@ -406,7 +178,7 @@ namespace ProjectManager
             Szs = new string[Animals[idx].Sz.Count];
             foreach (SeizureType S in Animals[idx].Sz)
             {
-                answer =  string.Format("{0:D2}:{1:D2}:{2:D2}", S.t.Hours, S.t.Minutes, S.t.Seconds);
+                answer = string.Format("{0:D2}:{1:D2}:{2:D2}", S.t.Hours, S.t.Minutes, S.t.Seconds);
                 Szs[i] = S.d.ToShortDateString() + " " + answer;
                 i++;
             }
@@ -418,7 +190,7 @@ namespace ProjectManager
         {
             string[] Ms;
             int i = 0;
-            int idx = FindAnimal(A);            
+            int idx = FindAnimal(A);
             Ms = new string[Animals[idx].Meals.Count];
             foreach (MealType M in Animals[idx].Meals)
             {
@@ -431,14 +203,14 @@ namespace ProjectManager
 
         public void Sort() //Sort the entire database
         {
-            Files.Sort(delegate(FileType F1, FileType F2) { return DateTime.Compare(F1.Start, F2.Start); }); 
-            Animals.Sort(delegate(AnimalType A1, AnimalType A2) { return string.Compare(A1.ID, A2.ID); });
+            Files.Sort(delegate (FileType F1, FileType F2) { return DateTime.Compare(F1.Start, F2.Start); });
+            Animals.Sort(delegate (AnimalType A1, AnimalType A2) { return string.Compare(A1.ID, A2.ID); });
             foreach (AnimalType A in Animals)
             {
-                A.Sz.Sort(delegate(SeizureType S1, SeizureType S2) { return DateTime.Compare(S1.d, S2.d); });
-                A.Meals.Sort(delegate(MealType M1, MealType M2) { return DateTime.Compare(M1.d, M2.d); });
-            }            
-            
+                A.Sz.Sort(delegate (SeizureType S1, SeizureType S2) { return DateTime.Compare(S1.d, S2.d); });
+                A.Meals.Sort(delegate (MealType M1, MealType M2) { return DateTime.Compare(M1.d, M2.d); });
+            }
+
         }
         public void Analysis()
         {
@@ -550,7 +322,7 @@ namespace ProjectManager
             Animals[An].WeightInfo.Add(W);
         }
         public int GetAnimalRecordingInfo(string AID, DateTime D)
-        {            
+        {
             int Percent = 0;
             foreach (FileType Fe in Files)
             {
@@ -558,16 +330,16 @@ namespace ProjectManager
                 {
                     if (String.Compare(Animal, AID) == 0)
                     {
-                        
+
                         if ((Fe.Start.Day == D.Day) && (Fe.Start.Month == D.Month) && (Fe.Start.Year == D.Year))
-                        {                            
-                            Percent = Percent + (int)Math.Round((decimal)Fe.Duration.TotalSeconds / 864);                            
+                        {
+                            Percent = Percent + (int)Math.Round((decimal)Fe.Duration.TotalSeconds / 864);
                         }
                     }
                 }
             }
             Percent = Math.Min(100, Percent);
-            return Percent; 
+            return Percent;
 
         }
         public bool ImportDirectory(string Dir)
@@ -576,22 +348,22 @@ namespace ProjectManager
             FileType F = new FileType();
             //Open the ACQ file
             string[] FName = Directory.GetFiles(Dir, "*.acq");
-            if (FName.Length > 0) 
+            if (FName.Length > 0)
             {
                 TempACQ.openACQ(FName[0]);
                 string Fn = FName[0].Substring(FName[0].LastIndexOf('\\') + 1);
-                F.Start = ConvertFileToDT(Fn);                
+                F.Start = ConvertFileToDT(Fn);
                 F.Chans = TempACQ.Chans;
                 F.AnimalIDs = TempACQ.ID;
                 F.Duration = TimeSpan.FromSeconds(TempACQ.FileTime);
                 TempACQ.closeACQ();
-                FileType Fs = Files.Find(delegate(FileType Ft) { return ((DateTime.Compare(Ft.Start, F.Start) == 0) && (string.Compare(F.AnimalIDs[0], Ft.AnimalIDs[0])== 0)); }); 
+                FileType Fs = Files.Find(delegate (FileType Ft) { return ((DateTime.Compare(Ft.Start, F.Start) == 0) && (string.Compare(F.AnimalIDs[0], Ft.AnimalIDs[0]) == 0)); });
                 //Determine if duplicate file - compare animal name and file start
                 if (Fs != null)
                 {
                     //Boot us out of the function                   
                     return false;
-                }                
+                }
                 Files.Add(F);
                 //Open the Feeder file
                 string[] FLogName = Directory.GetFiles(Dir, "*Feeder.log");
@@ -616,8 +388,8 @@ namespace ProjectManager
                             int.TryParse(Line.Substring(Line.IndexOf("Feeder: ") + 8, 2), out Feeder);
                             CurrentAnimal = FindAnimal(F.AnimalIDs[Feeder / 2]);
                             if (Feeder % 2 == 1) //Figure out which feeder went off using modulus. 
-                                //Odd = Back, i.e. "_M_edicated" 
-                                //Even = Front, i.e. "_U_nmedicated"
+                                                 //Odd = Back, i.e. "_M_edicated" 
+                                                 //Even = Front, i.e. "_U_nmedicated"
                             {
                                 Type = "M"; //M for medicated
                             }
@@ -629,13 +401,13 @@ namespace ProjectManager
                             Animals[CurrentAnimal].Meals.Add(M); //Add it to the correct animal
                         }
                         else if (Line.IndexOf("Removal") > -1)
-                        { 
-                            int AID; 
-                            string type; 
+                        {
+                            int AID;
+                            string type;
                             DateTime.TryParse(Line.Substring(0, Line.IndexOf("Removal") - 1), out d);
                             int.TryParse(Line.Substring(Line.IndexOf("P: ") + 3), out PC);
                             int.TryParse(Line.Substring(Line.IndexOf("Removal: ") + 9, 2), out AID);
-                            CurrentAnimal = FindAnimal(F.AnimalIDs[AID-1]);
+                            CurrentAnimal = FindAnimal(F.AnimalIDs[AID - 1]);
                             if (Line.IndexOf("Tot") > -1)
                             {
                                 type = "T";
@@ -645,33 +417,33 @@ namespace ProjectManager
                                 type = "M";
                             }
                             RemovalType R = new RemovalType(d.ToString(), PC.ToString(), type);
-                            Animals[CurrentAnimal].Removals.Add(R); 
-                        }   
+                            Animals[CurrentAnimal].Removals.Add(R);
+                        }
                         else if (Line.IndexOf("BloodDraw") > -1)
                         {
                             int AID;
-                            TimeSpan T; 
+                            TimeSpan T;
                             DateTime.TryParse(Line.Substring(0, Line.IndexOf("Blood") - 1), out d);
                             int.TryParse(Line.Substring(Line.IndexOf("BloodDraw: ") + 11, 2), out AID);
                             TimeSpan.TryParse(Line.Substring(Line.IndexOf("Time: ") + 5, 8), out T);
                             string S = Line.Substring(Line.IndexOf("ID: ") + 4, 3);
-                            CurrentAnimal = FindAnimal(F.AnimalIDs[AID-1]);
+                            CurrentAnimal = FindAnimal(F.AnimalIDs[AID - 1]);
                             BloodDrawType B = new BloodDrawType(d.ToString(), T.ToString(), S);
                             Animals[CurrentAnimal].BloodDraws.Add(B);
                         }
                         else if (Line.IndexOf("Inj") > -1)
                         {
-                            int Inj; 
+                            int Inj;
                             int AID;
                             string[] data;
                             data = Line.Split(',');
-                            DateTime.TryParse(Line.Substring(0, Line.IndexOf("Inj") - 1), out d);                            
+                            DateTime.TryParse(Line.Substring(0, Line.IndexOf("Inj") - 1), out d);
                             int.TryParse(Line.Substring(Line.IndexOf("Inj") + 3, 1), out Inj);
-                            int.TryParse(data[1], out AID); 
-                            CurrentAnimal = FindAnimal(F.AnimalIDs[AID-1]);
+                            int.TryParse(data[1], out AID);
+                            CurrentAnimal = FindAnimal(F.AnimalIDs[AID - 1]);
                             //Date DoseNum ADDID Dose DoseAmount Route Solvent
                             InjectionType I = new InjectionType(d.ToString(), Inj.ToString(), data[3], data[4], data[7], data[5], data[6]);
-                            Animals[CurrentAnimal].Injections.Add(I); 
+                            Animals[CurrentAnimal].Injections.Add(I);
                         }
                         else
                         {
@@ -693,7 +465,7 @@ namespace ProjectManager
             return true;
         }
         public DateTime ConvertFileToDT(string F)
-        {            
+        {
             int y, M, d;
             int h, m, s;
             int.TryParse(F.Substring(0, 4), out y);
@@ -703,30 +475,30 @@ namespace ProjectManager
             int.TryParse(F.Substring(11, 2), out m);
             int.TryParse(F.Substring(13, 2), out s);
             return new DateTime(y, M, d, h, m, s);
-            
+
 
         }
         public string DTS(DateTime dt)
         {
 
-            return string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", dt);      
-        }            
+            return string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", dt);
+        }
         public void ImportSzFile(string File)
-        {            
+        {
             DateTime dt;
-            string[] TmpStr;            
+            string[] TmpStr;
             int CurrentAnimal;
             string str;
             TimeSpan t;
             SeizureType S;
-            string F = File.Substring(File.LastIndexOf('\\')+1);            
+            string F = File.Substring(File.LastIndexOf('\\') + 1);
             dt = ConvertFileToDT(F);
             StreamReader TmpTxt = new StreamReader(File);
             while (!TmpTxt.EndOfStream)
             {
                 str = TmpTxt.ReadLine();
-                TmpStr = str.Split(',');                
-                CurrentAnimal = FindAnimal(TmpStr[1]);           
+                TmpStr = str.Split(',');
+                CurrentAnimal = FindAnimal(TmpStr[1]);
                 TimeSpan.TryParse(TmpStr[3], out t);
                 t = t.Add(dt.TimeOfDay);
                 if (TmpStr.Length == 7)
@@ -750,11 +522,11 @@ namespace ProjectManager
         public void RemoveImportantDate(string AnimalName, int loc)
         {
             int CurrentAnimal = FindAnimal(AnimalName);
-            Animals[CurrentAnimal].ImportantDates.RemoveAt(loc);            
+            Animals[CurrentAnimal].ImportantDates.RemoveAt(loc);
         }
         public string[] GetImportantDates(string AnimalName)
         {
-            
+
             int CurrentAnimal = FindAnimal(AnimalName);
             int c = 0;
             string[] output = new string[Animals[CurrentAnimal].ImportantDates.Count];
@@ -764,7 +536,7 @@ namespace ProjectManager
                 c++;
             }
             return output;
-            
+
         }
         public ImportantDateType CheckImportantDate(string AnimalName, DateTime N)
         {
@@ -773,7 +545,7 @@ namespace ProjectManager
             {
                 if (DateTime.Compare(N.Date, I.Date.Date) == 0) //Compare only the day, not the time 
                 {
-                    return I; 
+                    return I;
                 }
             }
             return null;
@@ -791,13 +563,13 @@ namespace ProjectManager
             DateTime Earliest = Files[0].Start.Date;
             DateTime Latest = Files[Files.Count - 1].Start.Date;
             st = Earliest.ToShortDateString() + "," + Earliest.ToShortTimeString();
-            F.WriteLine(st); 
+            F.WriteLine(st);
             string sz;
             if (E.DetailList)
             {
 
                 foreach (AnimalType A in Animals)
-                {                    
+                {
                     F.WriteLine(A.ID);
                     DateTime LastDate = Earliest;
                     foreach (SeizureType S in A.Sz)
@@ -821,7 +593,7 @@ namespace ProjectManager
                         }
                     }
                 }
-            F.Close();                    
+                F.Close();
                 return;
             }
             if (E.BloodDrawList)
@@ -830,12 +602,12 @@ namespace ProjectManager
                 {
                     foreach (BloodDrawType B in A.BloodDraws)
                     {
-                        st = A.ID + ',' + B.dt.Date.ToString("MM/dd/yyyy") + " " + B.EnteredTime.ToString() + "," + B.ID; 
+                        st = A.ID + ',' + B.dt.Date.ToString("MM/dd/yyyy") + " " + B.EnteredTime.ToString() + "," + B.ID;
                         F.WriteLine(st);
-                    }                    
+                    }
                 }
                 F.Close();
-                return; 
+                return;
             }
             st = "Animal";
             /* for (DateTime i = Earliest; i <= Latest; i=i.AddDays(1))
@@ -928,7 +700,7 @@ namespace ProjectManager
                     st2 = "PLRC," + A.ID;  //Pellet Removal Count 
                     foreach (RemovalType R in A.Removals)
                     {
-                        st += "," + Math.Round(R.dt.Subtract(Earliest).TotalHours,2).ToString();
+                        st += "," + Math.Round(R.dt.Subtract(Earliest).TotalHours, 2).ToString();
                         st2 += "," + R.count.ToString();
                     }
                     F.WriteLine(st);
@@ -937,10 +709,10 @@ namespace ProjectManager
                 if (E.Injections)
                 {
                     st = A.ID + ",IJT";
-                    st2 = A.ID +",IJC";
+                    st2 = A.ID + ",IJC";
                     foreach (InjectionType I in A.Injections)
                     {
-                        st += "," + Math.Round(I.TimePoint.Subtract(Earliest).TotalHours,2).ToString();
+                        st += "," + Math.Round(I.TimePoint.Subtract(Earliest).TotalHours, 2).ToString();
                         st2 += "," + I.ADDID;
                     }
                     F.WriteLine(st);
@@ -951,7 +723,7 @@ namespace ProjectManager
 
                 }
 
-                
+
             }
             if (E.binSz)
             {
@@ -1001,7 +773,7 @@ namespace ProjectManager
                     sw.Close(); // close writer
                 }
             }
-            F.Close();     
+            F.Close();
         }
 
         //This function takes the data from the project file and loads it into memory. 
@@ -1021,14 +793,14 @@ namespace ProjectManager
                 {
                     TempDate = ConvertFileToDT(data[1]);
                     //Get the ACQ info. 
-                    int.TryParse(data[3],out Chans);
+                    int.TryParse(data[3], out Chans);
                     IDs = new string[Chans];
                     for (int i = 0; i < Chans; i++)
                     {
-                        IDs[i] = data[4+i];
+                        IDs[i] = data[4 + i];
                     }
                     FileType F = new FileType(IDs, Chans, TempDate, data[2]);
-                    Files.Add(F);                                     
+                    Files.Add(F);
                 }
                 catch
                 {
@@ -1049,7 +821,7 @@ namespace ProjectManager
             }
             else if (data[0].IndexOf("An") != -1)
             {
-                int CurrentAnimal = FindAnimal(data[1]);                
+                int CurrentAnimal = FindAnimal(data[1]);
                 switch (data[2])
                 {
                     case " gp":
@@ -1125,7 +897,7 @@ namespace ProjectManager
                         IDs[i] = data[4 + i];
                     }
                     FileType F = new FileType(IDs, Chans, TempDate, data[2]);
-                    Pass=true;
+                    Pass = true;
                     foreach (FileType C in Files)
                     {
                         if (C.Compare(F)) Pass = false;
@@ -1220,6 +992,7 @@ namespace ProjectManager
             }
 
         }
-        
+
     }
 }
+
