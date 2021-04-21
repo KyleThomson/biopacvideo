@@ -44,7 +44,7 @@ namespace ProjectManager
                     {
                         S.Severity = 5;
                         S.Notes = "sz3";
-                        testAnalysis.CompareSeizures(S);
+                       testAnalysis.CompareSeizures(S);
                     }
                 }
             }

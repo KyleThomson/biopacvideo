@@ -24,11 +24,11 @@ namespace ProjectManager
             // Check if bubble and note match and flag if it doesn't -- want to prompt user with messagebox
             if (bubbleSeverity != noteSeverity)
             {
-                SeizureStageDialog seizureStageDialog = new SeizureStageDialog();
-                SeizureStageDialog.ShowDialog(bubbleSeverity, noteSeverity);
+                SeizureStageDialog stageDialog = new SeizureStageDialog();
+                stageDialog.ShowDialog(bubbleSeverity, noteSeverity);
+                finalStage = stageDialog.returnSeverity;
             }// Do something
-
-            finalStage = bubbleSeverity;
+            else { finalStage = bubbleSeverity; }
 
             return finalStage;
         }
