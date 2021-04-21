@@ -270,13 +270,8 @@ namespace ProjectManager
         public float vehicleSEM;
         public float drugSEM;
         public float baselineSEM;
-        public float vehicleBurden;
-        public float drugBurden;
-        public float baselineBurden;
-        public int vehicleSzFreedom;
-        public int baselineSzFreedom;
-        public int drugSzFreedom;
-        public string test;
+        public TESTTYPES test;
+        public SeizureAnalysis analysis;
         public Project(string Inpt)
         {
             Filename = Inpt;
@@ -445,28 +440,61 @@ namespace ProjectManager
             }            
             
         }
-        public void T35Sort()
+        public void Analysis()
         {
-            // Remove animals w/o injections and one type of ADDID
-            Animals.RemoveAll(a => a.Injections.Count == 0);
-            Animals.RemoveAll(a => a.Injections[0].ADDID == a.Injections[a.Injections.Count-1].ADDID);
+            // First determine type of test to do then sort
+            DetermineTest();
+            TestSort();
 
-            // Sort animals according to vehicle first
-            List<AnimalType> sortedA = Animals.OrderBy(a => a.Injections[0].ADDID).ToList();
-            Animals = sortedA;
+            // Computer burden and freedoms
+            CalculateSzBurden();
+            SeizureFreedom();
+
+            // SEM
+            analysis.baselineSEM = analysis.SEM(analysis.baselineBurdens);
+            analysis.drugSEM = analysis.SEM(analysis.drugBurdens);
+            analysis.vehicleSEM = analysis.SEM(analysis.vehicleBurdens);
         }
-        public void T36Sort()
+        public void CompareStageConflicts()
         {
-            // Iterate through animals backwards so we don't get unhandled exception when removing list elements
-            for (int i = Animals.Count - 1; i >= 0; i--)
+            foreach (AnimalType A in Animals)
             {
-                // Break up meals into both groups
-                List<MealType> baselineMeals = Animals[i].Meals.Where(m => m.type == "U").ToList();
-                List<MealType> medicatedMeals = Animals[i].Meals.Where(m => m.type == "M").ToList(); 
-        
-                if (baselineMeals.Count <= 1 || medicatedMeals.Count <= 1)
+                foreach (SeizureType S in A.Sz)
                 {
-                    Animals.RemoveAt(i);
+                    analysis.CompareSeizures(S);
+                }
+            }
+        }
+        public void DetermineTest()
+        {
+            // check for project class traits that indicate the test that should performed, then set class variable to that test
+        }
+        public void TestSort()
+        {
+            if (test == TESTTYPES.T35)
+            {
+                // Remove animals w/o injections and one type of ADDID
+                Animals.RemoveAll(a => a.Injections.Count == 0);
+                Animals.RemoveAll(a => a.Injections[0].ADDID == a.Injections[a.Injections.Count - 1].ADDID);
+
+                // Sort animals according to vehicle first
+                List<AnimalType> sortedA = Animals.OrderBy(a => a.Injections[0].ADDID).ToList();
+                Animals = sortedA;
+            }
+            else if (test == TESTTYPES.T36)
+            {
+                // Iterate through animals backwards so we don't get unhandled exception when removing list elements
+                for (int i = Animals.Count - 1; i >= 0; i--)
+                {
+                    // Break up meals into both groups
+                    List<MealType> baselineMeals = Animals[i].Meals.Where(m => m.type == "U").ToList();
+                    List<MealType> medicatedMeals = Animals[i].Meals.Where(m => m.type == "M").ToList();
+
+                    if (baselineMeals.Count <= 1 || medicatedMeals.Count <= 1)
+                    {
+                        Animals.RemoveAt(i);
+
+                    }
                 }
             }
         }
@@ -475,46 +503,20 @@ namespace ProjectManager
             foreach (AnimalType A in Animals)
             {
                 // SeizureBurden() calculates seizure burden for all relevant groups and finds their SEM's
-                A.SeizureBurden(test, Files[0].Start.Date);
+                analysis.SeizureBurden(A, Files[0].Start.Date);
             }
-
-            // list for seizure burdens to calculate SEM
-            vehicleBurden = (float)Math.Round(Animals.Select(a => a.vehicleBurden).ToList().Average(),2);
-            drugBurden = (float)Math.Round(Animals.Select(a => a.drugBurden).ToList().Average(),2);
-            baselineBurden = (float)Math.Round(Animals.Select(a => a.baselineBurden).ToList().Average(),2);
-
-            // Find SEM for each group
-            vehicleSEM = SEM(Animals.Select(a => a.vehicleBurden).ToList());
-            drugSEM = SEM(Animals.Select(a => a.drugBurden).ToList());
-            baselineSEM = SEM(Animals.Select(a => a.baselineBurden).ToList());
+            analysis.AverageBurdens();
         }
         public void SeizureFreedom()
         {
             // Answer seizure freedom question for each animal
             foreach (AnimalType A in Animals)
             {
-                A.SzFreedom(test, Files[0].Start.Date);
+                analysis.SeizureFreedom(A, Files[0].Start.Date);
             }
 
             // Add up animal seizure freedoms
-            vehicleSzFreedom = Animals.Select(a => a.vehicleFreedom).ToList().Sum();
-            baselineSzFreedom = Animals.Select(a => a.baselineFreedom).ToList().Sum();
-            drugSzFreedom = Animals.Select(a => a.drugFreedom).ToList().Sum();
-
-        }
-        public float SEM(List<float> sz)
-        {
-            float sem;
-            float sigma;
-            float variance = 0;
-            // find standard deviation of sz burden
-            for (int i = 0; i < sz.Count; i++)
-            {
-                variance += (float)(Math.Pow(sz[i] - sz.Average(), 2));
-            }
-            sigma = (float)Math.Sqrt(variance / (sz.Count - 1));
-            sem = (float)Math.Round((float)(sigma / Math.Sqrt(sz.Count - 1)),2);
-            return sem;
+            analysis.SumFreedoms();
         }
 
         public string[] Get_Animals()

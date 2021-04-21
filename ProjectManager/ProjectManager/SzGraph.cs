@@ -18,25 +18,17 @@ namespace ProjectManager
         public GraphProperties graph;
 
         // string variables for header info for the pdf
-        public string test;
+        public TESTTYPES test;
         public string header;
         public string subHeader;
         public string ETSP;
         public string batch;
         public string dose;
         public string frequency;
-        public SzGraph(int X, int Y, Project pjt, string testType)
+        public SzGraph(int X, int Y, Project pjt)
         {
-            // Sort project based on test
-            if (testType == "T35")
-            {
-                // Sort by injections
-                pjt.T35Sort();
-            }
-            else
-            {
-                pjt.T36Sort();
-            }
+            // Type of test
+            test = pjt.test;
 
             // Find max day of project
             DateTime Earliest = pjt.Files[0].Start.Date;
@@ -48,13 +40,6 @@ namespace ProjectManager
             graph = new GraphProperties(X, Y, tempMax + 2, pjt.Animals.Count);
             graph.DrawAxes(4);
             graph.BoundingBox(4);
-
-            // Save type of test we are doing (test 35 or test 36 for now)
-            test = testType;
-
-            // Calculate seizure burdens for animals
-            pjt.CalculateSzBurden();
-            pjt.SeizureFreedom();
 
             // x tick every 7 days           
             int xTickInterval = 7;
@@ -128,7 +113,7 @@ namespace ProjectManager
             Color drugColor = Color.FromName("Red");
 
             // If Test 35, use injections to draw lines for treatment
-            if (test == "T35")
+            if (test == TESTTYPES.T35)
             {
                 for (int i = 0; i < pjt.Animals.Count; i++)
                 {
@@ -168,7 +153,7 @@ namespace ProjectManager
                     }
                 }
             }
-            else if (test == "T36")
+            else if (test == TESTTYPES.T36)
             {
                 Color unmedicatedColor = Color.FromName("Blue");
                 float animalCounter = 0.5F;
@@ -213,7 +198,7 @@ namespace ProjectManager
 
             // If Test 35
             // Placement point for drug treatment legend
-            if (test == "T35")
+            if (test == TESTTYPES.T35)
             {
                 string drugString = "Drug Treatment";
                 PointF drugStringPoint = new PointF(graph.xAxisStart, (float)(graph.axes[0].Y * 1.1));
@@ -229,7 +214,7 @@ namespace ProjectManager
                 graph.graphics.DrawString(vehicleString, legendFont, legendBrush, vehicleStringPoint.X, vehicleStringPoint.Y);
                 graph.graphics.DrawLine(vehiclePen, vehicleStringPoint.X, vehicleStringPoint.Y + vehicleStringSize.Height, vehicleStringPoint.X + vehicleStringSize.Width, vehicleStringPoint.Y + vehicleStringSize.Height);
             }
-            else if (test == "T36")
+            else if (test == TESTTYPES.T36)
             {
                 string drugString = "Medicated Meal:";
                 SolidBrush drugBrush = new SolidBrush(Color.Red);
@@ -269,11 +254,11 @@ namespace ProjectManager
             string headerString = "Epilepsy Therapy Screening Program";
             Font headerFont = new Font("Arial", 16F * graph.objectScale);
             string subheader = "";
-            if (test == "T35")
+            if (test == TESTTYPES.T35)
             {
                 subheader = "Test 35 - Chronic Post-SE (KA) Spontaneously Seizing Rats: Stage 1 (IP Administration)";
             }
-            else if (test == "T36")
+            else if (test == TESTTYPES.T36)
             {
                 subheader = "Test 36 - Chronic Post-SE (KA) Spontaneously Seizing Rats: Stage 2 (Oral Administration - Drug in Food)";
             }
@@ -348,16 +333,16 @@ namespace ProjectManager
             PointF freedomPoint = new PointF((float)(graph.mainPlot.Width / 2 + freedomSize.Width / 1.25), (float)(graph.yAxisStart * 0.65));
             graph.graphics.DrawString(freedomString, headerFont, headerBrush, freedomPoint);
 
-            if (test == "T35")
+            if (test == TESTTYPES.T35)
             {
                 // if test 35, do baseline, vehicle, and drug
                 Font statsFont = new Font("Arial", 8F * graph.objectScale);
                 Pen boundingPen = new Pen(Brushes.Black);
                 boundingPen.Width = 1.25F * graph.objectScale;
 
-                string baselineBurden = pjt.baselineBurden.ToString() + "\u00B1" + pjt.baselineSEM.ToString();
-                string drugBurden = pjt.drugBurden.ToString() + "\u00B1" + pjt.drugSEM.ToString();
-                string vehicleBurden = pjt.vehicleBurden.ToString() + "\u00B1" + pjt.vehicleSEM.ToString();
+                string baselineBurden = pjt.analysis.avgBaseBurden.ToString() + "\u00B1" + pjt.baselineSEM.ToString();
+                string drugBurden = pjt.analysis.avgDrugBurden.ToString() + "\u00B1" + pjt.drugSEM.ToString();
+                string vehicleBurden = pjt.analysis.avgVehBurden.ToString() + "\u00B1" + pjt.vehicleSEM.ToString();
 
                 SizeF baselineStringSize = graph.graphics.MeasureString(baselineBurden, statsFont);
                 SizeF drugStringSize = graph.graphics.MeasureString(drugBurden, statsFont);
@@ -384,29 +369,29 @@ namespace ProjectManager
                 SizeF vehicleSize = graph.graphics.MeasureString("Vehicle", headerFont);
                 float startPt = (float)(graph.mainPlot.Width * 0.75 - vehicleSize.Width);
                 float boxStart = (float)(graph.mainPlot.Width * 0.75 - boxLength);
-                string vehicleFreedom = pjt.vehicleSzFreedom.ToString() + "/" + pjt.Animals.Count.ToString();
+                string vehicleFreedom = pjt.analysis.vehFreedomSum.ToString() + "/" + pjt.Animals.Count.ToString();
                 graph.graphics.DrawString(vehicleFreedom, statsFont, headerBrush, boxStart, (float)(graph.yAxisStart * 0.8));
                 graph.graphics.DrawRectangle(boundingPen, boxStart, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
                 graph.graphics.DrawString("Vehicle", headerFont, headerBrush, boxStart, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
 
                 // Drug freedom
                 SizeF drugSize = graph.graphics.MeasureString("Vehicle", headerFont);
-                string drugFreedom = pjt.drugSzFreedom.ToString() + "/" + pjt.Animals.Count.ToString();
+                string drugFreedom = pjt.analysis.drugFreedomSum.ToString() + "/" + pjt.Animals.Count.ToString();
                 graph.graphics.DrawString(drugFreedom, statsFont, headerBrush, boxStart - boxLength - boxLength / 4, (float)(graph.yAxisStart * 0.8));
                 graph.graphics.DrawRectangle(boundingPen, boxStart - boxLength - boxLength / 4, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
                 graph.graphics.DrawString("Drug", headerFont, headerBrush, boxStart - boxLength - boxLength / 4, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
 
                 // Baseline freedom
                 SizeF baselineSize = graph.graphics.MeasureString("Vehicle", headerFont);
-                string baselineFreedom = pjt.drugSzFreedom.ToString() + "/" + pjt.Animals.Count.ToString();
+                string baselineFreedom = pjt.analysis.baseFreedomSum.ToString() + "/" + pjt.Animals.Count.ToString();
                 SizeF blFreedomS = graph.graphics.MeasureString(baselineFreedom, statsFont);
                 graph.graphics.DrawString(baselineFreedom, statsFont, headerBrush, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.yAxisStart * 0.8));
                 graph.graphics.DrawRectangle(boundingPen, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
                 graph.graphics.DrawString("Baseline", headerFont, headerBrush, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
             }
-            else if (test == "T36")
+            else if (test == TESTTYPES.T36)
             {
-                // test 36 just vehicle and drug
+                // test 36 just baseline and drug
             }
         }
         public void ExportPDF()

@@ -37,16 +37,8 @@ namespace ProjectManager
             {
                 pjt = new Project(F.FileName);
                 pjt.Open();
-                SeizureAnalysis testAnalysis = new SeizureAnalysis();
-                foreach (AnimalType A in pjt.Animals)
-                {
-                    foreach (SeizureType S in A.Sz)
-                    {
-                        S.Severity = 5;
-                        S.Notes = "sz3";
-                       testAnalysis.CompareSeizures(S);
-                    }
-                }
+                pjt.CompareStageConflicts(); // Find conflicts between bubble and notes
+                pjt.Analysis();              // Now perform analysis once/if any conflicts are resolved
             }
             UpdateMainList();
         }
@@ -342,8 +334,7 @@ namespace ProjectManager
 
         private void testPlotToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            pjt.test = "T35";
-            SzGraph Test = new SzGraph(4000, 4000, pjt, pjt.test);
+            SzGraph Test = new SzGraph(4000, 4000, pjt);
             Test.GetXTickLabels(pjt,5); // pjt, tick label every 5 units
             Test.GetYTickLabels(pjt);
             Test.PlotSz(pjt);
