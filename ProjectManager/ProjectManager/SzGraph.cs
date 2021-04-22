@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace ProjectManager
 {
-    public class SzGraph
+    class SzGraph
     {
         // instance of graph for test 35 or test 36
         public GraphProperties graph;

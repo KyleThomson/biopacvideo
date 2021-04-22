@@ -24,13 +24,14 @@ namespace ProjectManager
             F.InitialDirectory = "C:\\";
             if (F.ShowDialog() == DialogResult.OK)
             {
-                int test = DamerauLevenshtein.DamerauLevenshteinDistanceTo("vechilce", "vehicle");
+                
                 pjt = new Project(F.FileName);
                 pjt.Open();
             }                    
         }
         private void selectProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            int test = DamerauLevenshtein.DamerauLevenshteinDistanceTo("vhciecle", "vehicle");
             OpenFileDialog F = new OpenFileDialog();
             F.DefaultExt = ".pjt";
             F.InitialDirectory = "C:\\";
