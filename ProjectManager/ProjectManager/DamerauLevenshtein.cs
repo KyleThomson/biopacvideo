@@ -5,6 +5,8 @@ using System.Text;
 
 namespace ProjectManager
 {
+    // Implementation of Damerau-Levenshtein algorithm. Well documented method for measuring distance between an input and target string by measuring transpositions,
+    // insertions, substitutions, and deletions. So two strings that are sufficiently different (i.e. apple and banana) will have a higher score/distance. 
     public static class DamerauLevenshtein
     {
         public static int DamerauLevenshteinDistanceTo(this string @string, string targetString)
@@ -15,20 +17,21 @@ namespace ProjectManager
         {
             if (String.IsNullOrEmpty(string1))
             {
-                if (!String.IsNullOrEmpty(string2)) { return string2.Length; }
+                if (!String.IsNullOrEmpty(string2)) { return string2.Length; } // certain 100% mismatch
 
                 return 0;
             }
 
             if (String.IsNullOrEmpty(string2))
             {
-                if (!String.IsNullOrEmpty(string1)) { return string1.Length; }
+                if (!String.IsNullOrEmpty(string1)) { return string1.Length; } // certain 100% mismatch
 
                 return 0;
             }
             int length1 = string1.Length;
             int length2 = string2.Length;
 
+            // create 2D integer array to store differences from target string
             int[,] d = new int[length1 + 1, length2 + 1];
 
             int cost, del, ins, sub;
@@ -40,6 +43,7 @@ namespace ProjectManager
             {
                 for (int j = 1; j <= d.GetUpperBound(1); j++)
                 {
+                    // Iterate through both strings and find matching characters. If character matches, cost = 1
                     if (string1[i - 1] == string2[j - 1]) { cost = 0; } else { cost = 1; }
 
                     del = d[i - 1, j] + 1;

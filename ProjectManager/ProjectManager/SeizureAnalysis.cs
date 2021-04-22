@@ -16,10 +16,21 @@ namespace ProjectManager
         public List<float> baselineBurdens;
         public List<float> vehicleBurdens;
         public List<float> drugBurdens;
+        public List<string> groups;
 
         public float avgDrugBurden; public float avgVehBurden; public float avgBaseBurden;
         public int vehFreedomSum; public int drugFreedomSum; public int baseFreedomSum;
 
+        public SeizureAnalysis()
+        {
+            baselineBurdens = new List<float>();
+            vehicleBurdens = new List<float>();
+            drugBurdens = new List<float>();
+
+            baselineSzFreedom = new List<int>();
+            vehicleSzFreedom = new List<int>();
+            drugSzFreedom = new List<int>();
+        }
         public TESTTYPES test;
         public void SeizureBurden(AnimalType animal, DateTime Earliest)
         {
@@ -42,8 +53,8 @@ namespace ProjectManager
             if (test == TESTTYPES.T35)
             {
                 // Find drug and vehicle injections so we can determine if the seizure occurred during drug/vehicle treatment
-                List<InjectionType> vehicleI = animal.Injections.Where(I => I.ADDID == "Vehicle").ToList();
-                List<InjectionType> drugI = animal.Injections.Where(I => I.ADDID != "Vehicle").ToList();
+                List<InjectionType> vehicleI = animal.Injections.Where(I => I.ADDID == "vehicle").ToList();
+                List<InjectionType> drugI = animal.Injections.Where(I => I.ADDID != "vehicle").ToList();
                 List<double> vehicleTimes = vehicleI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
                 List<double> drugTimes = drugI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
 
@@ -285,7 +296,7 @@ namespace ProjectManager
             sem = (float)Math.Round((float)(sigma / Math.Sqrt(sz.Count - 1)), 2);
             return sem;
         }
-        public int CompareSeizures(SeizureType seizure)
+        public int CompareSeizures(SeizureType seizure, string animalID)
         {
             int bubbleSeverity = default; // default
             int noteSeverity = default; // default
@@ -302,8 +313,9 @@ namespace ProjectManager
             // Check if bubble and note match and flag if it doesn't -- want to prompt user with messagebox
             if (bubbleSeverity != noteSeverity)
             {
+                string ID = animalID + "had seizure at" + seizure.d.ToString();
                 SeizureStageDialog stageDialog = new SeizureStageDialog();
-                stageDialog.ShowDialog(bubbleSeverity, noteSeverity);
+                stageDialog.ShowDialog(bubbleSeverity, noteSeverity, ID);
                 finalStage = stageDialog.returnSeverity;
             }// Do something
             else { finalStage = bubbleSeverity; }

@@ -9,13 +9,18 @@ namespace ProjectManager
     public class SeizureStageDialog
     {
         public int returnSeverity { get; set; }
-        public void ShowDialog(int bubbleStage, int notesStage)
+        public void ShowDialog(int bubbleStage, int notesStage, string ID)
         {
             // Create form and form size
             Form prompt = new Form();
             prompt.Width = 250;
             prompt.Height = 100;
             prompt.Text = "Select correct severity.";
+
+            // Create label to inform user of animal that has the conflict.
+            Label animalLabel = new Label();
+            animalLabel.Location = new System.Drawing.Point(0, 0);
+            animalLabel.Text = ID;
 
             // Create buttons with stages
             FlowLayoutPanel panel = new FlowLayoutPanel();
@@ -31,6 +36,7 @@ namespace ProjectManager
             // Display selection form & add controls to form
             panel.Controls.Add(bubbled);
             panel.Controls.Add(noted);
+            panel.Controls.Add(animalLabel);
             prompt.Controls.Add(panel);
             prompt.StartPosition = FormStartPosition.CenterScreen;
             prompt.ShowDialog();

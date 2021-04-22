@@ -51,6 +51,7 @@ namespace ProjectManager
             Animals = new List<AnimalType>();
             Files = new List<FileType>();
             Groups = new List<GroupType>();
+            analysis = new SeizureAnalysis();
             if (!Directory.Exists(P + "\\Data"))
             {
                 Directory.CreateDirectory(P + "\\Data");
@@ -214,10 +215,6 @@ namespace ProjectManager
         }
         public void Analysis()
         {
-            // First determine type of test to do then sort
-            DetermineTest();
-            TestSort();
-
             // Computer burden and freedoms
             CalculateSzBurden();
             SeizureFreedom();
@@ -233,13 +230,18 @@ namespace ProjectManager
             {
                 foreach (SeizureType S in A.Sz)
                 {
-                    analysis.CompareSeizures(S);
+                    analysis.CompareSeizures(S, A.ID);
                 }
             }
         }
         public void DetermineTest()
         {
             // check for project class traits that indicate the test that should performed, then set class variable to that test
+            analysis.test = TESTTYPES.T35;
+
+            // Sort AFTER determining test!
+            TestSort();
+            ParseGroups();
         }
         public void TestSort()
         {
@@ -269,6 +271,42 @@ namespace ProjectManager
                     }
                 }
             }
+        }
+        public void ParseGroups()
+        {
+            // Use Damerau-Levenshtein algorithm to find groups
+            List<string> groups = new List<string>();
+            string notVehicle = "";
+            int notVehTest = new int();
+            foreach (AnimalType A in Animals)
+            {
+                if (A.Injections.Count > 0)
+                {
+                    foreach (InjectionType I in A.Injections)
+                    {
+                        if (!String.IsNullOrEmpty(notVehicle)) 
+                        // Test if string that is found as not vehicle group is similar to current ADDID.
+                        { notVehTest = DamerauLevenshtein.DamerauLevenshteinDistanceTo(I.ADDID.ToLower(), notVehicle); }
+
+                        // Test if ADDID is sufficiently similar to "vehicle".
+                        int vehTest = DamerauLevenshtein.DamerauLevenshteinDistanceTo(I.ADDID.ToLower(), "vehicle");
+                        if (vehTest <= 3 && !groups.Contains("vehicle") && groups.Count < 3) { groups.Add("vehicle"); I.ADDID = "vehicle"; } // if this is satisfied then vehicle is an injection
+
+                        else if (vehTest > 3 && notVehTest <= 3 && groups.Count < 3 && !groups.Contains(notVehicle))
+                        // Identified ADDID as unique and not vehicle.
+                        { groups.Add(I.ADDID); notVehicle = I.ADDID; }
+
+                        // Throw error if we get a third group.
+                        else if (groups.Count >= 3) { throw (new Exception("More than two groups found.")); }
+                    }
+                }
+                else if (A.Meals.Count > 0)
+                {
+                    // run block of code for medicated and unmedicated meals
+                }
+            }
+            // Pass groups found to analysis.
+            analysis.groups = groups;
         }
         public void CalculateSzBurden()
         {

@@ -31,7 +31,6 @@ namespace ProjectManager
         }
         private void selectProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int test = DamerauLevenshtein.DamerauLevenshteinDistanceTo("vhciecle", "vehicle");
             OpenFileDialog F = new OpenFileDialog();
             F.DefaultExt = ".pjt";
             F.InitialDirectory = "C:\\";
@@ -39,6 +38,7 @@ namespace ProjectManager
             {
                 pjt = new Project(F.FileName);
                 pjt.Open();
+                pjt.DetermineTest();         // Determine test to use
                 pjt.CompareStageConflicts(); // Find conflicts between bubble and notes
                 pjt.Analysis();              // Now perform analysis once/if any conflicts are resolved
             }
