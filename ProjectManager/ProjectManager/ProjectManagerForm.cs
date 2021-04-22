@@ -24,6 +24,7 @@ namespace ProjectManager
             F.InitialDirectory = "C:\\";
             if (F.ShowDialog() == DialogResult.OK)
             {
+                int test = DamerauLevenshtein.DamerauLevenshteinDistanceTo("vechilce", "vehicle");
                 pjt = new Project(F.FileName);
                 pjt.Open();
             }                    

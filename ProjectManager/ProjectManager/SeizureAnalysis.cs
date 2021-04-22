@@ -41,7 +41,6 @@ namespace ProjectManager
 
             if (test == TESTTYPES.T35)
             {
-
                 // Find drug and vehicle injections so we can determine if the seizure occurred during drug/vehicle treatment
                 List<InjectionType> vehicleI = animal.Injections.Where(I => I.ADDID == "Vehicle").ToList();
                 List<InjectionType> drugI = animal.Injections.Where(I => I.ADDID != "Vehicle").ToList();
@@ -356,6 +355,7 @@ namespace ProjectManager
                 baseFreedomSum = baselineSzFreedom.Sum();
             }
         }
+        
     }
 }
 
