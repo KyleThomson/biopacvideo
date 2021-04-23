@@ -195,6 +195,7 @@
             this.binSeizures.TabIndex = 14;
             this.binSeizures.Text = "Bin Seizures";
             this.binSeizures.UseVisualStyleBackColor = true;
+            this.binSeizures.CheckedChanged += new System.EventHandler(this.binSeizures_CheckedChanged);
             // 
             // offsetEntry
             // 

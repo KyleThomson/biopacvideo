@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace ProjectManager
 {
@@ -45,6 +46,12 @@ namespace ProjectManager
         }
 
         private void offsetEntry_TextChanged(object sender, EventArgs e)
+        {
+
+            if (offsetEntry.Text.Length > 0) { double offset = double.Parse(offsetEntry.Text); }
+        }
+
+        private void binSeizures_CheckedChanged(object sender, EventArgs e)
         {
             if (binSeizures.Checked) { offsetEntry.ReadOnly = false; }
         }
