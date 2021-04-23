@@ -21,6 +21,7 @@ namespace ProjectManager
             Label animalLabel = new Label();
             animalLabel.Location = new System.Drawing.Point(0, 0);
             animalLabel.Text = ID;
+            animalLabel.AutoSize = true;
 
             // Create buttons with stages
             FlowLayoutPanel panel = new FlowLayoutPanel();

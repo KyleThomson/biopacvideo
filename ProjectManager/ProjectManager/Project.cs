@@ -240,8 +240,9 @@ namespace ProjectManager
             analysis.test = TESTTYPES.T35;
 
             // Sort AFTER determining test!
-            TestSort();
             ParseGroups();
+            TestSort();
+            
         }
         public void TestSort()
         {
@@ -290,11 +291,21 @@ namespace ProjectManager
 
                         // Test if ADDID is sufficiently similar to "vehicle".
                         int vehTest = DamerauLevenshtein.DamerauLevenshteinDistanceTo(I.ADDID.ToLower(), "vehicle");
-                        if (vehTest <= 3 && !groups.Contains("vehicle") && groups.Count < 3) { groups.Add("vehicle"); I.ADDID = "vehicle"; } // if this is satisfied then vehicle is an injection
 
-                        else if (vehTest > 3 && notVehTest <= 3 && groups.Count < 3 && !groups.Contains(notVehicle))
+                        // check if vehicle is a group yet
+                        if (!groups.Contains("vehicle") && groups.Count < 2) { groups.Add("vehicle"); }
+
+                        // if this is satisfied then injection is vehicle
+                        if (vehTest <= 3 && groups.Contains("vehicle") && groups.Count < 3) 
+                        { I.ADDID = "vehicle"; }
+
                         // Identified ADDID as unique and not vehicle.
-                        { groups.Add(I.ADDID); notVehicle = I.ADDID; }
+                        else if (vehTest > 3 && notVehTest <= 3 && groups.Count < 3)
+                        { notVehicle = I.ADDID; }
+
+                        // check if not vehicle is a group yet
+                        if (!groups.Contains(notVehicle) && notVehTest <= 3 && vehTest > 3 && groups.Count < 2) 
+                        { groups.Add(I.ADDID); }
 
                         // Throw error if we get a third group.
                         else if (groups.Count >= 3) { throw (new Exception("More than two groups found.")); }

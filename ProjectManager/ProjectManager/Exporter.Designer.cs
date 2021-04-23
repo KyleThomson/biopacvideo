@@ -43,6 +43,7 @@
             this.BloodDraw = new System.Windows.Forms.CheckBox();
             this.BloodDrawList = new System.Windows.Forms.CheckBox();
             this.binSeizures = new System.Windows.Forms.CheckBox();
+            this.offsetEntry = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // SzCount
@@ -195,11 +196,22 @@
             this.binSeizures.Text = "Bin Seizures";
             this.binSeizures.UseVisualStyleBackColor = true;
             // 
+            // offsetEntry
+            // 
+            this.offsetEntry.Location = new System.Drawing.Point(125, 151);
+            this.offsetEntry.Name = "offsetEntry";
+            this.offsetEntry.ReadOnly = true;
+            this.offsetEntry.Size = new System.Drawing.Size(83, 20);
+            this.offsetEntry.TabIndex = 15;
+            this.offsetEntry.Text = "Enter bin offset";
+            this.offsetEntry.TextChanged += new System.EventHandler(this.offsetEntry_TextChanged);
+            // 
             // Exporter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(224, 233);
+            this.Controls.Add(this.offsetEntry);
             this.Controls.Add(this.binSeizures);
             this.Controls.Add(this.BloodDrawList);
             this.Controls.Add(this.BloodDraw);
@@ -239,5 +251,6 @@
         private System.Windows.Forms.CheckBox BloodDraw;
         private System.Windows.Forms.CheckBox BloodDrawList;
         private System.Windows.Forms.CheckBox binSeizures;
+        private System.Windows.Forms.TextBox offsetEntry;
     }
 }

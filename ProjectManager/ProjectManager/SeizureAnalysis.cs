@@ -205,8 +205,8 @@ namespace ProjectManager
             if (test == TESTTYPES.T35)
             {
                 // Find drug and vehicle injections so we can determine if the seizure occurred during drug/vehicle treatment
-                List<InjectionType> vehicleI = animal.Injections.Where(I => I.ADDID == "Vehicle").ToList();
-                List<InjectionType> drugI = animal.Injections.Where(I => I.ADDID != "Vehicle").ToList();
+                List<InjectionType> vehicleI = animal.Injections.Where(I => I.ADDID == "vehicle").ToList();
+                List<InjectionType> drugI = animal.Injections.Where(I => I.ADDID != "vehicle").ToList();
                 List<double> vehicleTimes = vehicleI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
                 List<double> drugTimes = drugI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
                 List<SeizureType> drugSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= drugTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= drugTimes.Max()).ToList();
@@ -313,7 +313,7 @@ namespace ProjectManager
             // Check if bubble and note match and flag if it doesn't -- want to prompt user with messagebox
             if (bubbleSeverity != noteSeverity)
             {
-                string ID = animalID + "had seizure at" + seizure.d.ToString();
+                string ID = animalID + " had seizure at " + seizure.d.ToString();
                 SeizureStageDialog stageDialog = new SeizureStageDialog();
                 stageDialog.ShowDialog(bubbleSeverity, noteSeverity, ID);
                 finalStage = stageDialog.returnSeverity;

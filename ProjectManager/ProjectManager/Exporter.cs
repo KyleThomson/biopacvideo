@@ -30,7 +30,7 @@ namespace ProjectManager
             if (SzSvBox.Checked) E.SeverityIndx = true;
             if (BloodDraw.Checked) E.BloodDraw = true;
             if (BloodDrawList.Checked) E.BloodDrawList = true;
-            if (binSeizures.Checked) E.binSz = true;
+            if (binSeizures.Checked) E.binSz = true; 
             
             // Create file dialog box for saving exported project file.
             SaveFileDialog F = new SaveFileDialog();
@@ -44,6 +44,10 @@ namespace ProjectManager
             }
         }
 
+        private void offsetEntry_TextChanged(object sender, EventArgs e)
+        {
+            if (binSeizures.Checked) { offsetEntry.ReadOnly = false; }
+        }
     }
 
 }
