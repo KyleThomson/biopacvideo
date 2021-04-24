@@ -181,7 +181,7 @@ namespace ProjectManager
 
             // Convert input coordinate points
             float realXCoord = xCoord * xScale + xAxisStart;
-            float realYCoord = yAxisLength - yCoord * yScale;
+            float realYCoord = (float)(yAxisLength - yCoord * yScale);
 
             // Marker type selection
             if (markerType == "o")

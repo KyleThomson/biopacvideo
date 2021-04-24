@@ -294,7 +294,7 @@ namespace ProjectManager
             }
             sigma = (float)Math.Sqrt(variance / (sz.Count - 1));
             sem = (float)Math.Round((float)(sigma / Math.Sqrt(sz.Count - 1)), 2);
-            return sem;
+            return (float)Math.Round(sem,2);
         }
         public int CompareSeizures(SeizureType seizure, string animalID)
         {
@@ -343,14 +343,14 @@ namespace ProjectManager
         {
             if (test == TESTTYPES.T35)
             {
-                avgDrugBurden = drugBurdens.Average();
-                avgBaseBurden = baselineBurdens.Average();
-                avgVehBurden = vehicleBurdens.Average();
+                avgDrugBurden = (float)Math.Round(drugBurdens.Average(),2);
+                avgBaseBurden = (float)Math.Round(baselineBurdens.Average(),2);
+                avgVehBurden = (float)Math.Round(vehicleBurdens.Average(),2);
             }
             else if (test == TESTTYPES.T36)
             {
-                avgDrugBurden = drugBurdens.Average();
-                avgBaseBurden = baselineBurdens.Average();
+                avgDrugBurden = (float)Math.Round(drugBurdens.Average(),2);
+                avgBaseBurden = (float)Math.Round(baselineBurdens.Average(),2);
             }
         }
         public void SumFreedoms()

@@ -35,15 +35,17 @@ namespace ProjectManager
             DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
             double totalHours = Latest.Subtract(Earliest).TotalHours;
             int tempMax = (int)Math.Round(totalHours / 24, 2);
-
-            // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
-            graph = new GraphProperties(X, Y, tempMax + 2, pjt.Animals.Count);
-            graph.DrawAxes(4);
-            graph.BoundingBox(4);
-
             // x tick every 7 days           
             int xTickInterval = 7;
-            int numXTicks = ((tempMax + 2) / xTickInterval) + 1;
+            
+            // Get nearest multiple of 7 days
+            int nearestMultiple = (int)Math.Round(tempMax / (double)xTickInterval, MidpointRounding.AwayFromZero) * xTickInterval;
+            int numXTicks = (nearestMultiple / xTickInterval) + 1;
+
+            // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
+            graph = new GraphProperties(X, Y, nearestMultiple, pjt.Animals.Count);
+            graph.DrawAxes(4);
+            graph.BoundingBox(4);
 
             // Get axis tick labels for graph properties
             List<string> xTickString = GetXTickLabels(pjt, xTickInterval);
@@ -91,8 +93,8 @@ namespace ProjectManager
                 float yCoord = i + 1;
                 for (int j = 0; j < pjt.Animals[i].Sz.Count; j++)
                 {
-                    float xCoord = (float)(pjt.Animals[i].Sz[j].d.Date.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours) / 24;
-
+                    //float xCoord = (float)(pjt.Animals[i].Sz[j].d.Date.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours) / 24;
+                    float xCoord = (float)(7 + 0.5);
                     if (pjt.Animals[i].Sz[j].Severity > 0)
                     {
                         graph.PlotPoints(xCoord, yCoord, markerSize, "o", szColor);
@@ -127,7 +129,7 @@ namespace ProjectManager
                     {
                         foreach (InjectionType I in pjt.Animals[i].Injections)
                         {
-                            if (I.ADDID == "Vehicle")
+                            if (I.ADDID == "vehicle")
                             {
                                 vehicleTimes.Add((float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24, 2));
                             }
