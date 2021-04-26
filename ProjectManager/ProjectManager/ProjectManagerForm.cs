@@ -336,6 +336,7 @@ namespace ProjectManager
 
         private void testPlotToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            pjt.TestSort();
             SzGraph Test = new SzGraph(4000, 4000, pjt);
             Test.GetXTickLabels(pjt,5); // pjt, tick label every 5 units
             Test.GetYTickLabels(pjt);

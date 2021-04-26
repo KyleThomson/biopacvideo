@@ -180,7 +180,7 @@ namespace ProjectManager
             float yScale = (yAxisLength - yAxisStart) / maxYData;
 
             // Convert input coordinate points
-            float realXCoord = xCoord * xScale + xAxisStart;
+            float realXCoord = xCoord * xScale + xTickPoints[0];
             float realYCoord = (float)(yAxisLength - yCoord * yScale);
 
             // Marker type selection
@@ -190,7 +190,7 @@ namespace ProjectManager
             }
             else if(markerType == ".")
             {
-                graphics.FillEllipse(dataBrush, realXCoord, realYCoord, markerSize * objectScale, markerSize * objectScale);
+                graphics.FillEllipse(dataBrush, realXCoord + markerSize * objectScale, realYCoord, markerSize * objectScale, markerSize * objectScale);
             }
             else if(markerType == "d")
             {
@@ -215,9 +215,9 @@ namespace ProjectManager
             float yScale = (yAxisLength - yAxisStart) / maxYData;
 
             // Convert input coordinate points
-            float realX1Coord = x1Coord * xScale + xAxisStart;
+            float realX1Coord = x1Coord * xScale + xTickPoints[0];
             float realY1Coord = yAxisLength - y1Coord * yScale;
-            float realX2Coord = x2Coord * xScale + xAxisStart;
+            float realX2Coord = x2Coord * xScale + xTickPoints[0];
             float realY2Coord = yAxisLength - y2Coord * yScale;
 
             PointF startPoint = new PointF(realX1Coord, realY1Coord);

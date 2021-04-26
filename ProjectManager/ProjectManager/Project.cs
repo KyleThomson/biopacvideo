@@ -39,9 +39,6 @@ namespace ProjectManager
         public List<GroupType> Groups;
         public List<AnimalType> Animals;
         public List<LabelType> Labels;
-        public float vehicleSEM;
-        public float drugSEM;
-        public float baselineSEM;
         public TESTTYPES test;
         public SeizureAnalysis analysis;
         public Project(string Inpt)
@@ -791,6 +788,9 @@ namespace ProjectManager
                     sw.AutoFlush = true;
                     foreach (AnimalType A in Animals)
                     {
+                        // first injection
+                        double alignBy = Math.Round(A.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);
+
                         // bin seizures if option was selected
                         sz = A.ID;
                         int numDays = Files.Count;
@@ -799,7 +799,10 @@ namespace ProjectManager
                         List<double> binSeizures = new List<double>(new double[numDays]);
                         foreach (SeizureType seizureType in A.Sz)
                         {
-                            szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays));
+                            if (seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays >= alignBy)
+                            {
+                                szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays));
+                            }
                         }
                         var g = szDay.GroupBy(i => i);
                         foreach (var bin in g)

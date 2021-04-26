@@ -93,15 +93,14 @@ namespace ProjectManager
                 float yCoord = i + 1;
                 for (int j = 0; j < pjt.Animals[i].Sz.Count; j++)
                 {
-                    //float xCoord = (float)(pjt.Animals[i].Sz[j].d.Date.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours) / 24;
-                    float xCoord = (float)(7 + 0.5);
+                    float xCoord = (float)(Math.Round((pjt.Animals[i].Sz[j].d.Date.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours) / 24, 2));
                     if (pjt.Animals[i].Sz[j].Severity > 0)
                     {
-                        graph.PlotPoints(xCoord, yCoord, markerSize, "o", szColor);
+                        graph.PlotPoints((float)(xCoord), yCoord, markerSize, "o", szColor);
                     }
                     else if (pjt.Animals[i].Sz[j].Severity == 0)
                     {
-                        graph.PlotPoints(xCoord, yCoord, markerSize / 2, ".", szColor);
+                        graph.PlotPoints((float)(xCoord), (float)(yCoord - 0.05), markerSize / 2, ".", szColor);
                     }
 
                 }
@@ -292,7 +291,7 @@ namespace ProjectManager
             ETSP = "ETSP: ----";
             batch = "Batch: ----";
             dose = "Dose: ----";
-            frequency = "Frequnecy: ----";
+            frequency = "Frequency: ----";
             // else, set to user defined values
 
             // Draw area and strings for etsp, batch, etc.
@@ -342,14 +341,15 @@ namespace ProjectManager
                 Pen boundingPen = new Pen(Brushes.Black);
                 boundingPen.Width = 1.25F * graph.objectScale;
 
-                string baselineBurden = pjt.analysis.avgBaseBurden.ToString() + "\u00B1" + pjt.baselineSEM.ToString();
-                string drugBurden = pjt.analysis.avgDrugBurden.ToString() + "\u00B1" + pjt.drugSEM.ToString();
-                string vehicleBurden = pjt.analysis.avgVehBurden.ToString() + "\u00B1" + pjt.vehicleSEM.ToString();
+                string baselineBurden = pjt.analysis.avgBaseBurden.ToString() + "\u00B1" + pjt.analysis.baselineSEM.ToString();
+                string drugBurden = pjt.analysis.avgDrugBurden.ToString() + "\u00B1" + pjt.analysis.drugSEM.ToString();
+                string vehicleBurden = pjt.analysis.avgVehBurden.ToString() + "\u00B1" + pjt.analysis.vehicleSEM.ToString();
+                SizeF baselineS = graph.graphics.MeasureString("Baseline", headerFont);
 
                 SizeF baselineStringSize = graph.graphics.MeasureString(baselineBurden, statsFont);
                 SizeF drugStringSize = graph.graphics.MeasureString(drugBurden, statsFont);
                 SizeF vehicleStringSize = graph.graphics.MeasureString(vehicleBurden, statsFont);
-                float boxLength = new List<float>() { baselineStringSize.Width, drugStringSize.Width, vehicleStringSize.Width }.Max();
+                float boxLength = new List<float>() { baselineS.Width, drugStringSize.Width, vehicleStringSize.Width }.Max();
                 float boxHeight = new List<float>() { baselineStringSize.Height, drugStringSize.Height, vehicleStringSize.Height }.Max();
 
                 // Baseline Burden
