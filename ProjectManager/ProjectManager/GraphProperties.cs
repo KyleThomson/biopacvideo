@@ -33,8 +33,7 @@ namespace ProjectManager
             // First find resolution that graphics will be scaled to
             screenWidth = Screen.PrimaryScreen.Bounds.Width;
             screenHeight = Screen.PrimaryScreen.Bounds.Height;
-            //screenWidth = 720;
-            //screenHeight = 1080;
+
             X = width; Y = height;
 
             // bitmap initialization
@@ -238,7 +237,7 @@ namespace ProjectManager
 
             // Re-draw the graphics we already created
             var brush = new SolidBrush(Color.Black);
-            newGfx.FillRectangle(brush, new RectangleF(0, 0, mainPlot.Width, mainPlot.Height));
+            //newGfx.FillRectangle(brush, new RectangleF(0, 0, mainPlot.Width, mainPlot.Height));
             newGfx.DrawImage(mainPlot, (screenWidth - scaleWidth) / 2, (screenHeight - scaleHeight) / 2, scaleWidth, scaleHeight);
 
             PictureBox resizedPicture = new PictureBox();

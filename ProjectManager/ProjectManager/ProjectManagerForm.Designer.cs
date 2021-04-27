@@ -47,13 +47,13 @@
             this.resultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rawSeizuresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testPlotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SecondList = new System.Windows.Forms.ListBox();
             this.MainList = new System.Windows.Forms.ListBox();
             this.MainSelect = new System.Windows.Forms.ComboBox();
             this.SecondSelect = new System.Windows.Forms.ComboBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.Info = new System.Windows.Forms.ToolStripStatusLabel();
-            this.exportTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -211,6 +211,13 @@
             this.testPlotToolStripMenuItem.Text = "Test Plot";
             this.testPlotToolStripMenuItem.Click += new System.EventHandler(this.testPlotToolStripMenuItem_Click);
             // 
+            // exportTestToolStripMenuItem
+            // 
+            this.exportTestToolStripMenuItem.Name = "exportTestToolStripMenuItem";
+            this.exportTestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportTestToolStripMenuItem.Text = "Export test";
+            this.exportTestToolStripMenuItem.Click += new System.EventHandler(this.exportTestToolStripMenuItem_Click);
+            // 
             // SecondList
             // 
             this.SecondList.FormattingEnabled = true;
@@ -267,13 +274,6 @@
             this.Info.Name = "Info";
             this.Info.Size = new System.Drawing.Size(163, 17);
             this.Info.Text = "                                                    ";
-            // 
-            // exportTestToolStripMenuItem
-            // 
-            this.exportTestToolStripMenuItem.Name = "exportTestToolStripMenuItem";
-            this.exportTestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.exportTestToolStripMenuItem.Text = "Export test";
-            this.exportTestToolStripMenuItem.Click += new System.EventHandler(this.exportTestToolStripMenuItem_Click);
             // 
             // ProjectManager
             // 

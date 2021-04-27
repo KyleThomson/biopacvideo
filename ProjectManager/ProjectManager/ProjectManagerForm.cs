@@ -113,6 +113,17 @@ namespace ProjectManager
                             SecondList.Items.Add(S[i]);
                         }
                     }
+                    else if (SecondSelect.SelectedIndex == 3)
+                    {
+                        SecondList.Items.Clear();
+                        if (pjt.test == TESTTYPES.T35)
+                        {
+                            SecondList.Items.Add("Baseline");
+                            SecondList.Items.Add("Vehicle");
+                            SecondList.Items.Add("Drug");
+                        }
+                        
+                    }
                 }
             }
         }
@@ -136,7 +147,8 @@ namespace ProjectManager
         }
 
         private void SecondList_SelectedIndexChanged(object sender, EventArgs e)
-        {              
+        {
+            SecondList.MouseDown += new MouseEventHandler(this.SecondList_MouseDown);
         }
 
         
@@ -190,6 +202,38 @@ namespace ProjectManager
                 }
             }
         }
+        private void SecondList_MouseDown(object sender, MouseEventArgs e)
+        { 
+            if (e.Button == MouseButtons.Right) // check if right mouse button was clicked
+            {
+                var item = SecondList.IndexFromPoint(e.Location);
+                if (item >= 0) // check if item is in range
+                {
+                    ContextMenuStrip rightClickMenu = new ContextMenuStrip();
+                    // add menu options
+                    var deleteTrt = rightClickMenu.Items.Add("Delete");
+                    SecondList.ContextMenuStrip = rightClickMenu;
+                    SecondList.SelectedIndex = item;
+                    rightClickMenu.Show(SecondList, e.Location);
+                    rightClickMenu.AutoClose = true;
+
+                    // call event handler to delete treatment
+                    deleteTrt.Click += new EventHandler(delete_secondlist);
+                }
+            }
+        }
+        private void delete_secondlist(object sender, EventArgs e)
+        {
+            if (SecondSelect.SelectedIndex == 3)
+            {
+                // block of code to remove treatment from analysis
+                if (MainList.SelectedIndex >= 0 )
+                {
+                    SecondList.Items.RemoveAt(SecondList.SelectedIndex);
+                    string animal = pjt.Animals[MainList.SelectedIndex].ID;
+                }
+            }
+        }
         private void delete_Click(object sender, EventArgs e)
         {
             var index = MainList.SelectedIndex;
@@ -202,8 +246,7 @@ namespace ProjectManager
             else if(MainSelect.SelectedIndex == 0) // operate on files
             {
                 pjt.Files.RemoveAt(index);
-            }
-                     
+            }        
         }
 
         private void MainSelect_SelectedIndexChanged(object sender, EventArgs e)
@@ -222,6 +265,7 @@ namespace ProjectManager
                 SecondSelect.Items.Add("Seizures");
                 SecondSelect.Items.Add("Weights");
                 SecondSelect.Items.Add("Meals");
+                SecondSelect.Items.Add("Treatments");
                 SecondSelect.SelectedIndex = 0;
             }
             UpdateMainList();

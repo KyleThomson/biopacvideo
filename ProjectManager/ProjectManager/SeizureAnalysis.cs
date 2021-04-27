@@ -124,6 +124,9 @@ namespace ProjectManager
                     vehicleBurdens.Add(animal.ID, vehicleBurden);
                     drugBurdens.Add(animal.ID, drugBurden);
                     baselineBurdens.Add(animal.ID, baselineBurden);
+
+                    // szmetrics
+                    
                 }
             }
             else if (test == TESTTYPES.T36)// Test 36
@@ -338,9 +341,9 @@ namespace ProjectManager
         {
             if (test == TESTTYPES.T35)
             {
-                avgDrugBurden = (float)Math.Round(drugBurdens.Values.Average(),2);
-                avgBaseBurden = (float)Math.Round(baselineBurdens.Values.Average(),2);
-                avgVehBurden = (float)Math.Round(vehicleBurdens.Values.Average(),2);
+                if (drugBurdens != null) { avgDrugBurden = (float)Math.Round(drugBurdens.Values.Average(), 2); }
+                if (baselineBurdens != null) { avgBaseBurden = (float)Math.Round(baselineBurdens.Values.Average(), 2); }
+                if (vehicleBurdens != null) { avgVehBurden = (float)Math.Round(vehicleBurdens.Values.Average(), 2); }
             }
             else if (test == TESTTYPES.T36)
             {

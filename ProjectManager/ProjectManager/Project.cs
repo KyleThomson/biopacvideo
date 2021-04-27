@@ -19,6 +19,12 @@ namespace ProjectManager
         IAK,    // 2
         T39     // 3 etc.
     }
+    public enum TRTTYPE
+    {
+        Baseline,
+        Vehicle,
+        Drug
+    }
 
     /****************************************************************************************************************8
      *
@@ -197,8 +203,6 @@ namespace ProjectManager
             }
             return Ms;
         }
-
-
         public void Sort() //Sort the entire database
         {
             Files.Sort(delegate (FileType F1, FileType F2) { return DateTime.Compare(F1.Start, F2.Start); });
@@ -220,6 +224,10 @@ namespace ProjectManager
             analysis.baselineSEM = analysis.SEM(analysis.baselineBurdens.Values.ToList());
             analysis.drugSEM = analysis.SEM(analysis.drugBurdens.Values.ToList());
             analysis.vehicleSEM = analysis.SEM(analysis.vehicleBurdens.Values.ToList());
+        }
+        public void RemoveTreatment(string A)
+        {
+
         }
         public void CompareStageConflicts()
         {
