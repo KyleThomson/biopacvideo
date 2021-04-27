@@ -217,9 +217,9 @@ namespace ProjectManager
             SeizureFreedom();
 
             // SEM
-            analysis.baselineSEM = analysis.SEM(analysis.baselineBurdens);
-            analysis.drugSEM = analysis.SEM(analysis.drugBurdens);
-            analysis.vehicleSEM = analysis.SEM(analysis.vehicleBurdens);
+            analysis.baselineSEM = analysis.SEM(analysis.baselineBurdens.Values.ToList());
+            analysis.drugSEM = analysis.SEM(analysis.drugBurdens.Values.ToList());
+            analysis.vehicleSEM = analysis.SEM(analysis.vehicleBurdens.Values.ToList());
         }
         public void CompareStageConflicts()
         {

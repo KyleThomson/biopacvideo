@@ -10,12 +10,15 @@ namespace ProjectManager
         public float vehicleSEM;
         public float drugSEM;
         public float baselineSEM;
-        public List<int> vehicleSzFreedom;
-        public List<int> baselineSzFreedom;
-        public List<int> drugSzFreedom;
-        public List<float> baselineBurdens;
-        public List<float> vehicleBurdens;
-        public List<float> drugBurdens;
+
+        public Dictionary<string, int> vehicleFreedom = new Dictionary<string, int>();
+        public Dictionary<string, int> baselineFreedom = new Dictionary<string, int>();
+        public Dictionary<string, int> drugFreedom = new Dictionary<string, int>();
+
+        public Dictionary<string, float> vehicleBurdens = new Dictionary<string, float>();
+        public Dictionary<string, float> baselineBurdens = new Dictionary<string, float>();
+        public Dictionary<string, float> drugBurdens = new Dictionary<string, float>();
+
         public List<string> groups;
 
         public float avgDrugBurden; public float avgVehBurden; public float avgBaseBurden;
@@ -23,13 +26,6 @@ namespace ProjectManager
 
         public SeizureAnalysis()
         {
-            baselineBurdens = new List<float>();
-            vehicleBurdens = new List<float>();
-            drugBurdens = new List<float>();
-
-            baselineSzFreedom = new List<int>();
-            vehicleSzFreedom = new List<int>();
-            drugSzFreedom = new List<int>();
         }
         public TESTTYPES test;
         public void SeizureBurden(AnimalType animal, DateTime Earliest)
@@ -76,21 +72,18 @@ namespace ProjectManager
                 {
                     foreach (SeizureType S in animal.Sz)
                     {
-                        if (S.Severity >= 0 && S.Severity <= 5)
-                        {
-                            bubbleSeverity = S.Severity;
-                        }
+                        if (S.Severity >= 0 && S.Severity <= 5) { bubbleSeverity = S.Severity; }
+
+                        else if (S.Severity == 0) { bubbleSeverity = 1; }
+
                         if (S.Notes.Length > 0)
                         {
                             noteSeverity = ParseSeizure(S.Notes);
-                            if (noteSeverity <= 5 && noteSeverity >= 0)
-                            {
-                                // Nothing
-                            }
-                            else
-                            {
-                                noteSeverity = -1;
-                            }
+                            if (noteSeverity <= 5 && noteSeverity >= 0) { }
+
+                            else if (noteSeverity == 0) { noteSeverity = 1; }
+
+                            else { noteSeverity = -1; }
                         }
 
                         // Check if bubble and note match and flag if it doesn't
@@ -128,9 +121,9 @@ namespace ProjectManager
                     baselineBurden = baselineScore / baselineDays;
 
                     // add burden to list
-                    vehicleBurdens.Add(vehicleBurden);
-                    drugBurdens.Add(drugBurden);
-                    baselineBurdens.Add(baselineBurden);
+                    vehicleBurdens.Add(animal.ID, vehicleBurden);
+                    drugBurdens.Add(animal.ID, drugBurden);
+                    baselineBurdens.Add(animal.ID, baselineBurden);
                 }
             }
             else if (test == TESTTYPES.T36)// Test 36
@@ -151,19 +144,21 @@ namespace ProjectManager
                 {
                     foreach (SeizureType S in animal.Sz)
                     {
-                        if (S.Severity >= 0 && S.Severity <= 5)
+                        if (S.Severity > 0 && S.Severity <= 5)
                         {
                             bubbleSeverity = S.Severity;
                         }
+                        else if ( S.Severity == 0) { bubbleSeverity = 1; }
                         if (S.Notes.Length > 0)
                         {
                             string storeNum = String.Join("", S.Notes.Where(char.IsDigit));
                             if (storeNum.Length > 0)
                             {
-                                if (int.Parse(storeNum) <= 5 && int.Parse(storeNum) >= 0)
+                                if (int.Parse(storeNum) <= 5 && int.Parse(storeNum) > 0)
                                 {
                                     noteSeverity = int.Parse(storeNum);
                                 }
+                                else if ( int.Parse(storeNum) == 0) { noteSeverity = 1; }
                                 else
                                 {
                                     noteSeverity = -1;
@@ -193,8 +188,8 @@ namespace ProjectManager
                     baselineBurden = baselineScore / baselineDays;
 
                     // add burden to list
-                    drugBurdens.Add(drugBurden);
-                    baselineBurdens.Add(baselineBurden);
+                    drugBurdens.Add(animal.ID, drugBurden);
+                    baselineBurdens.Add(animal.ID, baselineBurden);
                 }
             }
         }
@@ -226,27 +221,27 @@ namespace ProjectManager
 
                 if (drugSz.Count > 0)
                 {
-                     drugSzFreedom.Add(0);
+                    drugFreedom.Add(animal.ID, 0);
                 }
                 else
                 {
-                    drugSzFreedom.Add(1);
+                    drugFreedom.Add(animal.ID, 1);
                 }
                 if (vehicleSz.Count > 0)
                 {
-                    vehicleSzFreedom.Add(0);
+                    vehicleFreedom.Add(animal.ID, 0);
                 }
                 else
                 {
-                    vehicleSzFreedom.Add(1);
+                    vehicleFreedom.Add(animal.ID, 1);
                 }
                 if (baselineSz.Count > 0)
                 {
-                    baselineSzFreedom.Add(0);
+                    baselineFreedom.Add(animal.ID, 0);
                 }
                 else
                 {
-                    baselineSzFreedom.Add(1);
+                    baselineFreedom.Add(animal.ID, 1);
                 }
             }
             else if (test == TESTTYPES.T36) // Test 36
@@ -266,19 +261,19 @@ namespace ProjectManager
                 // Answer seizure freedom
                 if (drugSz.Count > 0)
                 {
-                    drugSzFreedom.Add(0);
+                    drugFreedom.Add(animal.ID, 0);
                 }
                 else
                 {
-                    drugSzFreedom.Add(1);
+                    drugFreedom.Add(animal.ID, 1);
                 }
                 if (baselineSz.Count > 0)
                 {
-                    baselineSzFreedom.Add(0);
+                    baselineFreedom.Add(animal.ID, 0);
                 }
                 else
                 {
-                    baselineSzFreedom.Add(1);
+                    baselineFreedom.Add(animal.ID, 1);
                 }
             }
         }
@@ -343,31 +338,30 @@ namespace ProjectManager
         {
             if (test == TESTTYPES.T35)
             {
-                avgDrugBurden = (float)Math.Round(drugBurdens.Average(),2);
-                avgBaseBurden = (float)Math.Round(baselineBurdens.Average(),2);
-                avgVehBurden = (float)Math.Round(vehicleBurdens.Average(),2);
+                avgDrugBurden = (float)Math.Round(drugBurdens.Values.Average(),2);
+                avgBaseBurden = (float)Math.Round(baselineBurdens.Values.Average(),2);
+                avgVehBurden = (float)Math.Round(vehicleBurdens.Values.Average(),2);
             }
             else if (test == TESTTYPES.T36)
             {
-                avgDrugBurden = (float)Math.Round(drugBurdens.Average(),2);
-                avgBaseBurden = (float)Math.Round(baselineBurdens.Average(),2);
+                avgDrugBurden = (float)Math.Round(drugBurdens.Values.Average(), 2);
+                avgBaseBurden = (float)Math.Round(baselineBurdens.Values.Average(), 2);
             }
         }
         public void SumFreedoms()
         {
             if (test == TESTTYPES.T35)
             {
-                drugFreedomSum = drugSzFreedom.Sum();
-                baseFreedomSum = baselineSzFreedom.Sum();
-                vehFreedomSum = vehicleSzFreedom.Sum();
+                drugFreedomSum = drugFreedom.Values.Sum();
+                baseFreedomSum = baselineFreedom.Values.Sum();
+                vehFreedomSum = vehicleFreedom.Values.Sum();
             }
             else if (test == TESTTYPES.T36)
             {
-                drugFreedomSum = drugSzFreedom.Sum();
-                baseFreedomSum = baselineSzFreedom.Sum();
+                drugFreedomSum = drugFreedom.Values.Sum();
+                baseFreedomSum = baselineFreedom.Values.Sum();
             }
         }
-        
     }
 }
 
