@@ -186,11 +186,11 @@ namespace ProjectManager
             // Marker type selection
             if (markerType == "o")
             {
-                graphics.DrawEllipse(dataPen, realXCoord, realYCoord, markerSize * objectScale, markerSize * objectScale);
+                graphics.DrawEllipse(dataPen, realXCoord - (markerSize * objectScale) / 2, realYCoord, markerSize * objectScale, markerSize * objectScale);
             }
             else if(markerType == ".")
             {
-                graphics.FillEllipse(dataBrush, realXCoord + markerSize * objectScale, realYCoord, markerSize * objectScale, markerSize * objectScale);
+                graphics.FillEllipse(dataBrush, realXCoord - (markerSize * objectScale) / 2, realYCoord, markerSize * objectScale, markerSize * objectScale);
             }
             else if(markerType == "d")
             {

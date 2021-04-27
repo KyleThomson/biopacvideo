@@ -252,8 +252,8 @@ namespace ProjectManager
             else if (test == TESTTYPES.T36) // Test 36
             {
                 // Break up meals into both groups
-                List<MealType> baselineMeals = animal.Meals.Where(m => m.type == "U").ToList();
-                List<MealType> medicatedMeals = animal.Meals.Where(m => m.type == "M").ToList();
+                List<MealType> baselineMeals = animal.Meals.Where(m => m.type.ToUpper() == "U").ToList();
+                List<MealType> medicatedMeals = animal.Meals.Where(m => m.type.ToUpper() == "M").ToList();
 
                 // Get meal times
                 List<double> baselineTimes = baselineMeals.Select(m => (double)m.d.Subtract(Earliest).TotalHours).ToList();

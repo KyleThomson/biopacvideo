@@ -801,7 +801,7 @@ namespace ProjectManager
                         {
                             if (seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays >= alignBy)
                             {
-                                szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays));
+                                szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays - alignBy));
                             }
                         }
                         var g = szDay.GroupBy(i => i);

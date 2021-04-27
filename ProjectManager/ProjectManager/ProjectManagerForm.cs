@@ -11,7 +11,8 @@ namespace ProjectManager
 {
     public partial class ProjectManager : Form
     {
-        Project pjt; 
+        Project pjt;
+        SzGraph pjtGraph;
         public ProjectManager()
         {
             InitializeComponent();
@@ -338,7 +339,7 @@ namespace ProjectManager
         {
             pjt.TestSort();
             SzGraph Test = new SzGraph(4000, 4000, pjt);
-            Test.GetXTickLabels(pjt,5); // pjt, tick label every 5 units
+            Test.GetXTickLabels(pjt,5); // pjt, tick label every 7 units
             Test.GetYTickLabels(pjt);
             Test.PlotSz(pjt);
             Test.PlotTrt(pjt);
@@ -346,9 +347,15 @@ namespace ProjectManager
             Test.DisplayHeader();
             Test.DisplayStats(pjt);
             Test.graph.DisplayGraph();
+            pjtGraph = Test;
         }
 
         private void ProjectManager_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void exportTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
