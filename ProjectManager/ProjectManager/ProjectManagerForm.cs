@@ -357,7 +357,8 @@ namespace ProjectManager
 
         private void exportTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            PdfSharp.Pdf.PdfDocument pdf = new PdfSharp.Pdf.PdfDocument();
+            pdf.AddPage();
         }
     }
 }

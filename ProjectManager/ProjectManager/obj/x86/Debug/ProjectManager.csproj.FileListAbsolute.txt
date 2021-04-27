@@ -24,3 +24,9 @@ C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Deb
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\Accord.Statistics.xml
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.csproj.CopyComplete
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.TestInput.resources
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\PdfSharp.Charting.dll
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\PdfSharp.dll
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\PdfSharp.xml
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\PdfSharp.Charting.xml
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\de\PdfSharp.resources.dll
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\de\PdfSharp.Charting.resources.dll
