@@ -113,6 +113,17 @@ namespace ProjectManager
                             SecondList.Items.Add(S[i]);
                         }
                     }
+                    else if (SecondSelect.SelectedIndex == 3)
+                    {
+                        SecondList.Items.Clear();
+                        if (pjt.test == TESTTYPES.T35)
+                        {
+                            SecondList.Items.Add("Baseline");
+                            SecondList.Items.Add("Vehicle");
+                            SecondList.Items.Add("Drug");
+                        }
+                        
+                    }
                 }
             }
         }
@@ -136,7 +147,8 @@ namespace ProjectManager
         }
 
         private void SecondList_SelectedIndexChanged(object sender, EventArgs e)
-        {              
+        {
+            SecondList.MouseDown += new MouseEventHandler(this.SecondList_MouseDown);
         }
 
         
@@ -190,20 +202,85 @@ namespace ProjectManager
                 }
             }
         }
+        private void SecondList_MouseDown(object sender, MouseEventArgs e)
+        { 
+            if (e.Button == MouseButtons.Right) // check if right mouse button was clicked
+            {
+                var item = SecondList.IndexFromPoint(e.Location);
+                if (item >= 0) // check if item is in range
+                {
+                    ContextMenuStrip rightClickMenu = new ContextMenuStrip();
+                    // add menu options
+                    var deleteTrt = rightClickMenu.Items.Add("Delete");
+                    SecondList.ContextMenuStrip = rightClickMenu;
+                    SecondList.SelectedIndex = item;
+                    rightClickMenu.Show(SecondList, e.Location);
+                    rightClickMenu.AutoClose = true;
+
+                    // call event handler to delete treatment
+                    deleteTrt.Click += new EventHandler(delete_secondlist);
+                }
+            }
+        }
+        private void delete_secondlist(object sender, EventArgs e)
+        {
+            if (SecondSelect.SelectedIndex == 0) // Seizure box selected
+            {
+                if (MainList.SelectedIndex >= 0)
+                {
+                    // Remove selected seizure
+                    pjt.Animals[MainList.SelectedIndex].Sz.RemoveAt(SecondList.SelectedIndex);
+                    SecondList.Items.RemoveAt(SecondList.SelectedIndex);
+                }
+            }
+            else if (SecondSelect.SelectedIndex == 2) // Meal box selected
+            {
+                if (MainList.SelectedIndex >= 0)
+                {
+                    // Remove selected meal
+                    pjt.Animals[MainList.SelectedIndex].Meals.RemoveAt(SecondList.SelectedIndex);
+                    SecondList.Items.RemoveAt(SecondList.SelectedIndex);
+                }
+            }
+            else if (SecondSelect.SelectedIndex == 3) // Treatment box selected
+            {
+                // block of code to remove treatment from analysis
+                if (MainList.SelectedIndex >= 0 )
+                {
+                    if (SecondList.Items[SecondList.SelectedIndex].ToString().ToUpper() == "BASELINE") // BASELINE CHOSEN FOR REMOVAL
+                    {
+                        pjt.Animals[MainList.SelectedIndex].metrics.RemoveAll(M => M.treatment == TRTTYPE.Baseline);
+                        SecondList.Items.RemoveAt(SecondList.SelectedIndex);
+                    }
+                    else if (SecondList.Items[SecondList.SelectedIndex].ToString().ToUpper() == "VEHICLE") // VEHICLE CHOSEN FOR REMOVAL
+                    {
+                        pjt.Animals[MainList.SelectedIndex].metrics.RemoveAll(M => M.treatment == TRTTYPE.Vehicle);
+                        SecondList.Items.RemoveAt(SecondList.SelectedIndex);
+                    }
+                    else if (SecondList.Items[SecondList.SelectedIndex].ToString().ToUpper() == "DRUG") // DRUG CHOSEN FOR REMOVAL
+                    {
+                        pjt.Animals[MainList.SelectedIndex].metrics.RemoveAll(M => M.treatment == TRTTYPE.Drug);
+                        SecondList.Items.RemoveAt(SecondList.SelectedIndex);
+                    }
+                }
+            }
+            //Re-do analysis once some data has been removed
+            pjt.Analysis();
+        }
         private void delete_Click(object sender, EventArgs e)
         {
             var index = MainList.SelectedIndex;
             MainList.Items.RemoveAt(index);
             if (MainSelect.SelectedIndex == 1) // operate on animals
             {
-                
                 pjt.Animals.RemoveAt(index);
+                //Re-do analysis once some data has been removed
+                pjt.Analysis();
             }
             else if(MainSelect.SelectedIndex == 0) // operate on files
             {
                 pjt.Files.RemoveAt(index);
-            }
-                     
+            }        
         }
 
         private void MainSelect_SelectedIndexChanged(object sender, EventArgs e)
@@ -222,6 +299,7 @@ namespace ProjectManager
                 SecondSelect.Items.Add("Seizures");
                 SecondSelect.Items.Add("Weights");
                 SecondSelect.Items.Add("Meals");
+                SecondSelect.Items.Add("Treatments");
                 SecondSelect.SelectedIndex = 0;
             }
             UpdateMainList();
@@ -337,7 +415,6 @@ namespace ProjectManager
 
         private void testPlotToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            pjt.TestSort();
             SzGraph Test = new SzGraph(4000, 4000, pjt);
             Test.GetXTickLabels(pjt,5); // pjt, tick label every 7 units
             Test.GetYTickLabels(pjt);

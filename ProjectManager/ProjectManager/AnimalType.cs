@@ -16,6 +16,7 @@ namespace ProjectManager
         public List<RemovalType> Removals;
         public GroupType Group;
         public List<InjectionType> Injections;
+        public List<SzMetrics> metrics;
         public AnimalType()
         {
             Sz = new List<SeizureType>();
@@ -26,6 +27,7 @@ namespace ProjectManager
             BloodDraws = new List<BloodDrawType>();
             Removals = new List<RemovalType>();
             Injections = new List<InjectionType>();
+            metrics = new List<SzMetrics>();
         }
     }
 }

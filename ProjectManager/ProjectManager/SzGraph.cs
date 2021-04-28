@@ -371,21 +371,21 @@ namespace ProjectManager
                 SizeF vehicleSize = graph.graphics.MeasureString("Vehicle", headerFont);
                 float startPt = (float)(graph.mainPlot.Width * 0.75 - vehicleSize.Width);
                 float boxStart = (float)(graph.mainPlot.Width * 0.75 - boxLength);
-                string vehicleFreedom = pjt.analysis.vehFreedomSum.ToString() + "/" + pjt.Animals.Count.ToString();
+                string vehicleFreedom = pjt.analysis.vehFreedomSum.ToString() + "/" + pjt.vehicleAnimals.ToString();
                 graph.graphics.DrawString(vehicleFreedom, statsFont, headerBrush, boxStart, (float)(graph.yAxisStart * 0.8));
                 graph.graphics.DrawRectangle(boundingPen, boxStart, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
                 graph.graphics.DrawString("Vehicle", headerFont, headerBrush, boxStart, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
 
                 // Drug freedom
                 SizeF drugSize = graph.graphics.MeasureString("Vehicle", headerFont);
-                string drugFreedom = pjt.analysis.drugFreedomSum.ToString() + "/" + pjt.Animals.Count.ToString();
+                string drugFreedom = pjt.analysis.drugFreedomSum.ToString() + "/" + pjt.drugAnimals.ToString();
                 graph.graphics.DrawString(drugFreedom, statsFont, headerBrush, boxStart - boxLength - boxLength / 4, (float)(graph.yAxisStart * 0.8));
                 graph.graphics.DrawRectangle(boundingPen, boxStart - boxLength - boxLength / 4, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
                 graph.graphics.DrawString("Drug", headerFont, headerBrush, boxStart - boxLength - boxLength / 4, (float)(graph.yAxisStart * 0.8 - boxHeight * 1.25));
 
                 // Baseline freedom
                 SizeF baselineSize = graph.graphics.MeasureString("Vehicle", headerFont);
-                string baselineFreedom = pjt.analysis.baseFreedomSum.ToString() + "/" + pjt.Animals.Count.ToString();
+                string baselineFreedom = pjt.analysis.baseFreedomSum.ToString() + "/" + pjt.baselineAnimals.ToString();
                 SizeF blFreedomS = graph.graphics.MeasureString(baselineFreedom, statsFont);
                 graph.graphics.DrawString(baselineFreedom, statsFont, headerBrush, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.yAxisStart * 0.8));
                 graph.graphics.DrawRectangle(boundingPen, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.yAxisStart * 0.8), boxLength, boxHeight);
