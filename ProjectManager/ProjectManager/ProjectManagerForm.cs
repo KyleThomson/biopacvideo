@@ -224,15 +224,48 @@ namespace ProjectManager
         }
         private void delete_secondlist(object sender, EventArgs e)
         {
-            if (SecondSelect.SelectedIndex == 3)
+            if (SecondSelect.SelectedIndex == 0) // Seizure box selected
+            {
+                if (MainList.SelectedIndex >= 0)
+                {
+                    // Remove selected seizure
+                    pjt.Animals[MainList.SelectedIndex].Sz.RemoveAt(SecondList.SelectedIndex);
+                    SecondList.Items.RemoveAt(SecondList.SelectedIndex);
+                }
+            }
+            else if (SecondSelect.SelectedIndex == 2) // Meal box selected
+            {
+                if (MainList.SelectedIndex >= 0)
+                {
+                    // Remove selected meal
+                    pjt.Animals[MainList.SelectedIndex].Meals.RemoveAt(SecondList.SelectedIndex);
+                    SecondList.Items.RemoveAt(SecondList.SelectedIndex);
+                }
+            }
+            else if (SecondSelect.SelectedIndex == 3) // Treatment box selected
             {
                 // block of code to remove treatment from analysis
                 if (MainList.SelectedIndex >= 0 )
                 {
-                    SecondList.Items.RemoveAt(SecondList.SelectedIndex);
-                    string animal = pjt.Animals[MainList.SelectedIndex].ID;
+                    if (SecondList.Items[SecondList.SelectedIndex].ToString().ToUpper() == "BASELINE") // BASELINE CHOSEN FOR REMOVAL
+                    {
+                        pjt.Animals[MainList.SelectedIndex].metrics.RemoveAll(M => M.treatment == TRTTYPE.Baseline);
+                        SecondList.Items.RemoveAt(SecondList.SelectedIndex);
+                    }
+                    else if (SecondList.Items[SecondList.SelectedIndex].ToString().ToUpper() == "VEHICLE") // VEHICLE CHOSEN FOR REMOVAL
+                    {
+                        pjt.Animals[MainList.SelectedIndex].metrics.RemoveAll(M => M.treatment == TRTTYPE.Vehicle);
+                        SecondList.Items.RemoveAt(SecondList.SelectedIndex);
+                    }
+                    else if (SecondList.Items[SecondList.SelectedIndex].ToString().ToUpper() == "DRUG") // DRUG CHOSEN FOR REMOVAL
+                    {
+                        pjt.Animals[MainList.SelectedIndex].metrics.RemoveAll(M => M.treatment == TRTTYPE.Drug);
+                        SecondList.Items.RemoveAt(SecondList.SelectedIndex);
+                    }
                 }
             }
+            //Re-do analysis once some data has been removed
+            pjt.Analysis();
         }
         private void delete_Click(object sender, EventArgs e)
         {
@@ -240,8 +273,9 @@ namespace ProjectManager
             MainList.Items.RemoveAt(index);
             if (MainSelect.SelectedIndex == 1) // operate on animals
             {
-                
                 pjt.Animals.RemoveAt(index);
+                //Re-do analysis once some data has been removed
+                pjt.Analysis();
             }
             else if(MainSelect.SelectedIndex == 0) // operate on files
             {
@@ -381,7 +415,6 @@ namespace ProjectManager
 
         private void testPlotToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            pjt.TestSort();
             SzGraph Test = new SzGraph(4000, 4000, pjt);
             Test.GetXTickLabels(pjt,5); // pjt, tick label every 7 units
             Test.GetYTickLabels(pjt);

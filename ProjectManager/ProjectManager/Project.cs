@@ -47,6 +47,7 @@ namespace ProjectManager
         public List<LabelType> Labels;
         public TESTTYPES test;
         public SeizureAnalysis analysis;
+        public int vehicleAnimals; public int baselineAnimals; public int drugAnimals;
         public Project(string Inpt)
         {
             Filename = Inpt;
@@ -219,15 +220,32 @@ namespace ProjectManager
             // Computer burden and freedoms
             CalculateSzBurden();
             SeizureFreedom();
-
-            // SEM
-            analysis.baselineSEM = analysis.SEM(analysis.baselineBurdens.Values.ToList());
-            analysis.drugSEM = analysis.SEM(analysis.drugBurdens.Values.ToList());
-            analysis.vehicleSEM = analysis.SEM(analysis.vehicleBurdens.Values.ToList());
+            // count animals in each treatment group
+            CountTreatments();
         }
-        public void RemoveTreatment(string A)
+        public void CountTreatments()
         {
+            int tempBaselineAnimals = 0;
+            int tempVehicleAnimals = 0;
+            int tempDrugAnimals = 0;
+            // This method counts the number of animals treated with a specific treatment
+            foreach (AnimalType A in Animals)
+            {
+                foreach (SzMetrics szMetrics in A.metrics)
+                {
+                    if (szMetrics.treatment == TRTTYPE.Baseline)
+                    { tempBaselineAnimals++; }
 
+                    else if (szMetrics.treatment == TRTTYPE.Vehicle)
+                    { tempVehicleAnimals++; }
+
+                    else if (szMetrics.treatment == TRTTYPE.Drug)
+                    { tempDrugAnimals++; }
+                }
+            }
+            baselineAnimals = tempBaselineAnimals;
+            vehicleAnimals = tempVehicleAnimals;
+            drugAnimals = tempDrugAnimals;
         }
         public void CompareStageConflicts()
         {
@@ -251,6 +269,7 @@ namespace ProjectManager
         }
         public void TestSort()
         {
+            // TestSort sorts Animals based on the test being performed then initializes SzMetrics for each animal accordingly.
             if (test == TESTTYPES.T35)
             {
                 // Remove animals w/o injections and one type of ADDID
@@ -260,6 +279,19 @@ namespace ProjectManager
                 // Sort animals according to vehicle first
                 List<AnimalType> sortedA = Animals.OrderBy(a => a.Injections[0].ADDID).ToList();
                 Animals = sortedA;
+
+                // Initialize metrics to store analysis for each animal
+                foreach (AnimalType A in Animals)
+                {
+                    SzMetrics vehicle = new SzMetrics() { treatment = TRTTYPE.Vehicle };
+                    SzMetrics baseline = new SzMetrics() { treatment = TRTTYPE.Baseline };
+                    SzMetrics drug = new SzMetrics() { treatment = TRTTYPE.Drug };
+                    if (A.metrics.Count == 0)
+                    {
+                        A.metrics.Add(vehicle); A.metrics.Add(baseline); A.metrics.Add(drug);
+                    }
+                    
+                }
             }
             else if (test == TESTTYPES.T36)
             {
@@ -331,7 +363,7 @@ namespace ProjectManager
                 // SeizureBurden() calculates seizure burden for all relevant groups and finds their SEM's
                 analysis.SeizureBurden(A, Files[0].Start.Date);
             }
-            analysis.AverageBurdens();
+            analysis.AverageBurdens(Animals);
         }
         public void SeizureFreedom()
         {
@@ -342,7 +374,7 @@ namespace ProjectManager
             }
 
             // Add up animal seizure freedoms
-            analysis.SumFreedoms();
+            analysis.SumFreedoms(Animals);
         }
 
         public string[] Get_Animals()

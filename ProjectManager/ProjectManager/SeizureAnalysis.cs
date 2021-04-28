@@ -11,14 +11,6 @@ namespace ProjectManager
         public float drugSEM;
         public float baselineSEM;
 
-        public Dictionary<string, int> vehicleFreedom = new Dictionary<string, int>();
-        public Dictionary<string, int> baselineFreedom = new Dictionary<string, int>();
-        public Dictionary<string, int> drugFreedom = new Dictionary<string, int>();
-
-        public Dictionary<string, float> vehicleBurdens = new Dictionary<string, float>();
-        public Dictionary<string, float> baselineBurdens = new Dictionary<string, float>();
-        public Dictionary<string, float> drugBurdens = new Dictionary<string, float>();
-
         public List<string> groups;
 
         public float avgDrugBurden; public float avgVehBurden; public float avgBaseBurden;
@@ -35,9 +27,13 @@ namespace ProjectManager
             float baselineBurden;
             int bubbleSeverity = default; // default
             int noteSeverity = default; // default
+
+            // running seizure stage totals
             int vehicleScore = 0;
             int drugScore = 0;
             int baselineScore = 0;
+
+            // counts for seizures
             int vCounts = 0;
             int dCounts = 0;
             int blCounts = 0;
@@ -120,13 +116,18 @@ namespace ProjectManager
                     drugBurden = drugScore / drugDays;
                     baselineBurden = baselineScore / baselineDays;
 
-                    // add burden to list
-                    vehicleBurdens.Add(animal.ID, vehicleBurden);
-                    drugBurdens.Add(animal.ID, drugBurden);
-                    baselineBurdens.Add(animal.ID, baselineBurden);
+                    // szmetrics to add burdens
+                    foreach (SzMetrics M in animal.metrics)
+                    {
+                        if (M.treatment == TRTTYPE.Baseline) 
+                        { M.szBurden = baselineBurden; }
 
-                    // szmetrics
-                    
+                        else if (M.treatment == TRTTYPE.Vehicle)
+                        { M.szBurden = vehicleBurden; }
+
+                        else if (M.treatment == TRTTYPE.Drug)
+                        { M.szBurden = drugBurden; }
+                    }
                 }
             }
             else if (test == TESTTYPES.T36)// Test 36
@@ -190,16 +191,24 @@ namespace ProjectManager
                     drugBurden = drugScore / medicatedDays;
                     baselineBurden = baselineScore / baselineDays;
 
-                    // add burden to list
-                    drugBurdens.Add(animal.ID, drugBurden);
-                    baselineBurdens.Add(animal.ID, baselineBurden);
+                    // szmetrics
+                    foreach (SzMetrics M in animal.metrics)
+                    {
+                        if (M.treatment == TRTTYPE.Baseline)
+                        { M.szBurden = baselineBurden; }
+
+                        else if (M.treatment == TRTTYPE.Drug)
+                        { M.szBurden = drugBurden; }
+                    }
                 }
             }
         }
         public void SeizureFreedom(AnimalType animal, DateTime Earliest)
         {
             // This method answers the question: Did animal have seizure during treatment?
-
+            int baselineSzFreedom;
+            int vehicleSzFreedom;
+            int drugSzFreedom;
             if (test == TESTTYPES.T35)
             {
                 // Find drug and vehicle injections so we can determine if the seizure occurred during drug/vehicle treatment
@@ -224,27 +233,40 @@ namespace ProjectManager
 
                 if (drugSz.Count > 0)
                 {
-                    drugFreedom.Add(animal.ID, 0);
+                    drugSzFreedom = 0;
                 }
                 else
                 {
-                    drugFreedom.Add(animal.ID, 1);
+                    drugSzFreedom = 1;
                 }
                 if (vehicleSz.Count > 0)
                 {
-                    vehicleFreedom.Add(animal.ID, 0);
+                    vehicleSzFreedom = 0;
                 }
                 else
                 {
-                    vehicleFreedom.Add(animal.ID, 1);
+                    vehicleSzFreedom = 1;
                 }
                 if (baselineSz.Count > 0)
                 {
-                    baselineFreedom.Add(animal.ID, 0);
+                    baselineSzFreedom = 0;
                 }
                 else
                 {
-                    baselineFreedom.Add(animal.ID, 1);
+                    baselineSzFreedom = 1;
+                }
+
+                // szmetrics
+                foreach (SzMetrics M in animal.metrics)
+                {
+                    if (M.treatment == TRTTYPE.Baseline)
+                    { M.szFreedom = baselineSzFreedom; }
+
+                    else if (M.treatment == TRTTYPE.Vehicle)
+                    { M.szFreedom = vehicleSzFreedom; }
+
+                    else if (M.treatment == TRTTYPE.Drug)
+                    { M.szFreedom = drugSzFreedom; }
                 }
             }
             else if (test == TESTTYPES.T36) // Test 36
@@ -264,19 +286,29 @@ namespace ProjectManager
                 // Answer seizure freedom
                 if (drugSz.Count > 0)
                 {
-                    drugFreedom.Add(animal.ID, 0);
+                    drugSzFreedom = 0;
                 }
                 else
                 {
-                    drugFreedom.Add(animal.ID, 1);
+                    drugSzFreedom = 1;
                 }
                 if (baselineSz.Count > 0)
                 {
-                    baselineFreedom.Add(animal.ID, 0);
+                    baselineSzFreedom = 0;
                 }
                 else
                 {
-                    baselineFreedom.Add(animal.ID, 1);
+                    baselineSzFreedom = 1;
+                }
+
+                // szmetrics
+                foreach (SzMetrics M in animal.metrics)
+                {
+                    if (M.treatment == TRTTYPE.Baseline)
+                    { M.szFreedom = baselineSzFreedom; }
+
+                    else if (M.treatment == TRTTYPE.Drug)
+                    { M.szFreedom = drugSzFreedom; }
                 }
             }
         }
@@ -337,32 +369,77 @@ namespace ProjectManager
             }
             return severity;
         }
-        public void AverageBurdens()
+        public void AverageBurdens(List<AnimalType> animals)
         {
+            // Iterate thru each animal and each list of SzMetrics to acquire list of burdens to compute average burden
+            // Also pass list of burdens to SEM()
+            List<float> allVehicleSzBurdens = new List<float>();
+            List<float> allBaselineSzBurdens = new List<float>();
+            List<float> allDrugSzBurdens = new List<float>();
+            foreach (AnimalType A in animals)
+            {
+                foreach (SzMetrics M in A.metrics)
+                {
+                    if (M.treatment == TRTTYPE.Baseline)
+                    { allBaselineSzBurdens.Add(M.szBurden); }
+
+                    else if (M.treatment == TRTTYPE.Vehicle)
+                    { allVehicleSzBurdens.Add(M.szBurden); }
+
+                    else if (M.treatment == TRTTYPE.Drug)
+                    { allDrugSzBurdens.Add(M.szBurden); }
+                }
+            }
             if (test == TESTTYPES.T35)
             {
-                if (drugBurdens != null) { avgDrugBurden = (float)Math.Round(drugBurdens.Values.Average(), 2); }
-                if (baselineBurdens != null) { avgBaseBurden = (float)Math.Round(baselineBurdens.Values.Average(), 2); }
-                if (vehicleBurdens != null) { avgVehBurden = (float)Math.Round(vehicleBurdens.Values.Average(), 2); }
+                if (allDrugSzBurdens != null) { avgDrugBurden = (float)Math.Round(allDrugSzBurdens.Average(), 2); }
+                if (allBaselineSzBurdens != null) { avgBaseBurden = (float)Math.Round(allBaselineSzBurdens.Average(), 2); }
+                if (allVehicleSzBurdens != null) { avgVehBurden = (float)Math.Round(allVehicleSzBurdens.Average(), 2); }
+
+                // SEM
+                baselineSEM = SEM(allBaselineSzBurdens);
+                drugSEM = SEM(allDrugSzBurdens);
+                vehicleSEM = SEM(allVehicleSzBurdens);
             }
             else if (test == TESTTYPES.T36)
             {
-                avgDrugBurden = (float)Math.Round(drugBurdens.Values.Average(), 2);
-                avgBaseBurden = (float)Math.Round(baselineBurdens.Values.Average(), 2);
+                if (allDrugSzBurdens != null) { avgDrugBurden = (float)Math.Round(allDrugSzBurdens.Average(), 2); }
+                if (allBaselineSzBurdens != null) { avgBaseBurden = (float)Math.Round(allBaselineSzBurdens.Average(), 2); }
+
+                // SEM
+                baselineSEM = SEM(allBaselineSzBurdens);
+                drugSEM = SEM(allDrugSzBurdens);
             }
         }
-        public void SumFreedoms()
+        public void SumFreedoms(List<AnimalType> animals)
         {
+            List<int> allBaselineSzFreedoms = new List<int>();
+            List<int> allVehicleSzFreedoms = new List<int>();
+            List<int> allDrugSzFreedoms = new List<int>();
+            foreach (AnimalType A in animals)
+            {
+                foreach (SzMetrics M in A.metrics)
+                {
+                    if (M.treatment == TRTTYPE.Baseline)
+                    { allBaselineSzFreedoms.Add(M.szFreedom); }
+
+                    else if (M.treatment == TRTTYPE.Vehicle)
+                    { allVehicleSzFreedoms.Add(M.szFreedom); }
+
+                    else if (M.treatment == TRTTYPE.Drug)
+                    { allDrugSzFreedoms.Add(M.szFreedom); }
+                }
+            }
             if (test == TESTTYPES.T35)
             {
-                drugFreedomSum = drugFreedom.Values.Sum();
-                baseFreedomSum = baselineFreedom.Values.Sum();
-                vehFreedomSum = vehicleFreedom.Values.Sum();
+                drugFreedomSum = allDrugSzFreedoms.Sum();
+                baseFreedomSum = allBaselineSzFreedoms.Sum();
+                vehFreedomSum = allVehicleSzFreedoms.Sum();
             }
             else if (test == TESTTYPES.T36)
             {
-                drugFreedomSum = drugFreedom.Values.Sum();
-                baseFreedomSum = baselineFreedom.Values.Sum();
+                drugFreedomSum = allDrugSzFreedoms.Sum();
+                baseFreedomSum = allBaselineSzFreedoms.Sum();
             }
         }
     }
