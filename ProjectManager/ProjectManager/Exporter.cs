@@ -31,11 +31,12 @@ namespace ProjectManager
             if (SzSvBox.Checked) E.SeverityIndx = true;
             if (BloodDraw.Checked) E.BloodDraw = true;
             if (BloodDrawList.Checked) E.BloodDrawList = true;
-            if (binSeizures.Checked) E.binSz = true; 
+            if (binSeizures.Checked) E.binSz = true;
             
             // Create file dialog box for saving exported project file.
             SaveFileDialog F = new SaveFileDialog();
             F.DefaultExt = ".pjt";
+            F.Filter = "PJT files (*.pjt) |*.pjt";
             F.Title = "Save project (.pjt) file";
             F.InitialDirectory = "D:\\";
 

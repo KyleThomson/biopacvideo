@@ -54,6 +54,8 @@
             this.SecondSelect = new System.Windows.Forms.ComboBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.Info = new System.Windows.Forms.ToolStripStatusLabel();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -79,7 +81,9 @@
             this.importFileToolStripMenuItem,
             this.addMultipleDirectoriesToolStripMenuItem,
             this.exportDataToolStripMenuItem,
-            this.importSeizureToolStripMenuItem});
+            this.importSeizureToolStripMenuItem,
+            this.saveToolStripMenuItem,
+            this.saveAsToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
@@ -186,7 +190,7 @@
             // calendarToolStripMenuItem
             // 
             this.calendarToolStripMenuItem.Name = "calendarToolStripMenuItem";
-            this.calendarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.calendarToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.calendarToolStripMenuItem.Text = "Calendar";
             this.calendarToolStripMenuItem.Click += new System.EventHandler(this.calendarToolStripMenuItem_Click);
             // 
@@ -195,7 +199,7 @@
             this.resultsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rawSeizuresToolStripMenuItem});
             this.resultsToolStripMenuItem.Name = "resultsToolStripMenuItem";
-            this.resultsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.resultsToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.resultsToolStripMenuItem.Text = "Results";
             // 
             // rawSeizuresToolStripMenuItem
@@ -207,14 +211,14 @@
             // testPlotToolStripMenuItem
             // 
             this.testPlotToolStripMenuItem.Name = "testPlotToolStripMenuItem";
-            this.testPlotToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.testPlotToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.testPlotToolStripMenuItem.Text = "Test Plot";
             this.testPlotToolStripMenuItem.Click += new System.EventHandler(this.testPlotToolStripMenuItem_Click);
             // 
             // exportTestToolStripMenuItem
             // 
             this.exportTestToolStripMenuItem.Name = "exportTestToolStripMenuItem";
-            this.exportTestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportTestToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.exportTestToolStripMenuItem.Text = "Export test";
             this.exportTestToolStripMenuItem.Click += new System.EventHandler(this.exportTestToolStripMenuItem_Click);
             // 
@@ -275,6 +279,19 @@
             this.Info.Size = new System.Drawing.Size(163, 17);
             this.Info.Text = "                                                    ";
             // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.saveToolStripMenuItem.Text = "Save";
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.saveAsToolStripMenuItem.Text = "Save As";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
+            // 
             // ProjectManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -327,5 +344,7 @@
         private System.Windows.Forms.ToolStripMenuItem rawSeizuresToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem testPlotToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportTestToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
     }
 }

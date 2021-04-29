@@ -104,7 +104,6 @@ namespace ProjectManager
 
             for (int i = 0; i < xTicks; i++)
             {
-                //float currentXPoint = (float)((Convert.ToDouble(xTickLabels[i])/maxXData)*(axes[1].X - axes[0].X)*.98);
                 float currentXPoint = (float)(((Convert.ToDouble(xTickLabels[i]) + 0.5) / maxXData) * (axes[1].X - axes[0].X) * 0.95);
                 // create length of x tick
                 PointF xTickStart = new PointF(xAxisStart + currentXPoint, yAxisLength);
@@ -225,28 +224,32 @@ namespace ProjectManager
         }
         public void DisplayGraph()
         {
-            // Create new bitmap and graphics to fit graph to monitor
-            Bitmap bmp = new Bitmap(mainPlot, new Size(screenWidth, screenHeight));
-            var newGfx = Graphics.FromImage(bmp);
-            newGfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            newGfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
             // Scaled dimensions of new graph
             var scaleWidth = (int)(mainPlot.Width * scale);
             var scaleHeight = (int)(mainPlot.Height * scale);
 
+            // Create new bitmap and graphics to fit graph to monitor
+            //Bitmap bmp = new Bitmap(mainPlot, new Size(screenWidth, screenHeight));
+            Bitmap bmp = new Bitmap(mainPlot, new Size(scaleWidth, scaleHeight));
+            var newGfx = Graphics.FromImage(bmp);
+            newGfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            newGfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
             // Re-draw the graphics we already created
             var brush = new SolidBrush(Color.Black);
             //newGfx.FillRectangle(brush, new RectangleF(0, 0, mainPlot.Width, mainPlot.Height));
-            newGfx.DrawImage(mainPlot, (screenWidth - scaleWidth) / 2, (screenHeight - scaleHeight) / 2, scaleWidth, scaleHeight);
+            //newGfx.DrawImage(mainPlot, (screenWidth - scaleWidth) / 2, (screenHeight - scaleHeight) / 2, scaleWidth, scaleHeight);
+            newGfx.DrawImage(mainPlot, 0, 0, scaleWidth, scaleHeight);
 
             PictureBox resizedPicture = new PictureBox();
-            resizedPicture.ClientSize = new Size(screenWidth, screenHeight);
+            resizedPicture.ClientSize = new Size(scaleWidth, scaleHeight);
             resizedPicture.Image = bmp;
 
-            graphForm.Size = new Size(screenWidth, screenHeight);
+            graphForm.Size = new Size(scaleWidth, scaleHeight);
+            //graphForm.Size = new Size(scaleWidth, scaleHeight);
             graphForm.Controls.Add(resizedPicture);
             graphForm.Show();
+            bmp.Save(@"E:\Box Sync\LABWORK\ADD_lab\testest.pdf");
         }
         public void DrawDiamond(float centerX, float centerY, float size)
         {

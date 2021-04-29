@@ -13,6 +13,7 @@ namespace ProjectManager
     {
         Project pjt;
         SzGraph pjtGraph;
+        string openedFilename;
         public ProjectManager()
         {
             InitializeComponent();
@@ -38,6 +39,7 @@ namespace ProjectManager
             if (F.ShowDialog() == DialogResult.OK)
             {
                 pjt = new Project(F.FileName);
+                openedFilename = F.FileName;
                 pjt.Open();
                 pjt.DetermineTest();         // Determine test to use
                 pjt.CompareStageConflicts(); // Find conflicts between bubble and notes
@@ -436,6 +438,20 @@ namespace ProjectManager
         {
             PdfSharp.Pdf.PdfDocument pdf = new PdfSharp.Pdf.PdfDocument();
             pdf.AddPage();
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Save .pjt file as -
+            SaveFileDialog saveAsDialog = new SaveFileDialog();
+            saveAsDialog.Filter = "PJT files (*.pjt) |*.pjt";
+            saveAsDialog.DefaultExt = ".pjt";
+            saveAsDialog.Title = "Save as project (.pjt) file";
+            saveAsDialog.InitialDirectory = "D:\\";
+
+            if (saveAsDialog.ShowDialog() == DialogResult.OK)
+            {
+            }
         }
     }
 }

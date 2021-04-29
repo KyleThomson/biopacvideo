@@ -815,6 +815,7 @@ namespace ProjectManager
             {
                 // Create new file dialog box for saving exported binned seizures .csv
                 SaveFileDialog binned = new SaveFileDialog();
+                binned.Filter = "CSV files (*.csv) |*.csv";
                 binned.DefaultExt = "csv";
                 binned.Title = "Binned Seizures .csv";
                 binned.DefaultExt = ".csv";
@@ -833,7 +834,7 @@ namespace ProjectManager
 
                         // bin seizures if option was selected
                         sz = A.ID;
-                        int numDays = Files.Count;
+                        int numDays = (int)Math.Floor(Latest.Subtract(Earliest).TotalDays);
                         // Create list for days that seizures happen
                         List<double> szDay = new List<double>();
                         List<double> binSeizures = new List<double>(new double[numDays]);

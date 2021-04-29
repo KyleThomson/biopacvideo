@@ -278,7 +278,7 @@ namespace ProjectManager
             RectangleF headerRect = new RectangleF((int)(graph.mainPlot.Width / 2 - subSize.Width / 2), (int)(graph.mainPlot.Height * 0.05), (int)subSize.Width, (int)(headerSize.Height + subSize.Height));
             Pen headerPen = new Pen(Brushes.Black);
             headerPen.Width = 2.0F * graph.objectScale;
-            SolidBrush solidBrush = new SolidBrush(Color.LightSlateGray);
+            SolidBrush solidBrush = new SolidBrush(Color.Gray);
             graph.graphics.FillRectangle(solidBrush, headerRect);
             graph.graphics.DrawRectangle(headerPen, headerRect.X, headerRect.Y, headerRect.Width, headerRect.Height);
 
