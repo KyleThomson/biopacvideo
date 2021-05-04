@@ -144,7 +144,6 @@ namespace ProjectManager
                     pjt.ImportSzFile(F.FileName);
                 }
                 UpdateMainList();
-                pjt.Save();
             }
         }
 
@@ -168,7 +167,6 @@ namespace ProjectManager
                     }
                 }                
                 UpdateMainList();
-                pjt.Save();
             }
         }
 
@@ -365,7 +363,6 @@ namespace ProjectManager
                 }
             }
             UpdateMainList();
-            pjt.Save();
             if (DuplicateDirectoryCount > 0)
                 Info.Text = DuplicateDirectoryCount.ToString() + " duplicate directories skipped.";
         }
@@ -399,7 +396,6 @@ namespace ProjectManager
             AddDate F = new AddDate(pjt);
             F.ShowDialog();
             pjt = F.pjt;
-            pjt.Save();
             F.Dispose();
         }
 
@@ -410,7 +406,6 @@ namespace ProjectManager
             AddGroup F = new AddGroup(pjt);
             F.ShowDialog();
             pjt = F.pjt;
-            pjt.Save();
             F.Dispose();
 
         }
@@ -451,7 +446,27 @@ namespace ProjectManager
 
             if (saveAsDialog.ShowDialog() == DialogResult.OK)
             {
+                if (saveAsDialog.FileName != "")
+                {
+                    pjt.Save(saveAsDialog.FileName);
+                }
             }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Ask user for confirmation in case of misclick or a change of heart about overwriting data
+            //ConfirmSaveDialog confirmSaveDialog = new ConfirmSaveDialog();
+            //confirmSaveDialog.ShowDialog();
+            string confirmationMessage = "Are you sure you want to overwrite existing file?";
+            DialogResult confirmSaveResult = MessageBox.Show(confirmationMessage, "Overwrite file", MessageBoxButtons.YesNo);
+
+            if (confirmSaveResult == DialogResult.Yes)
+            // Save over current file
+            { pjt.Save(pjt.Filename); }
+            else 
+            { }
+            
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Accord.Statistics;
 
 namespace ProjectManager
 {
@@ -16,10 +17,23 @@ namespace ProjectManager
         public float avgDrugBurden; public float avgVehBurden; public float avgBaseBurden;
         public int vehFreedomSum; public int drugFreedomSum; public int baseFreedomSum;
 
+        public Accord.Statistics.Testing.FisherExactTest szFreedomVehicleFisherTest;
+        public Accord.Statistics.Testing.FisherExactTest szBurdenVehicleFisherTest;
+
+        public Accord.Statistics.Testing.FisherExactTest szFreedomBaselineFisherTest;
+        public Accord.Statistics.Testing.FisherExactTest szBurdenBaselineFisherTest;
+
+        public Accord.Statistics.Testing.FisherExactTest szFreedomDrugFisherTest;
+        public Accord.Statistics.Testing.FisherExactTest szBurdenDrugFisherTest;
         public SeizureAnalysis()
         {
+            
         }
         public TESTTYPES test;
+        public void FisherExact(List<float> group1, List<float> group2)
+        {
+            
+        }
         public void SeizureBurden(AnimalType animal, DateTime Earliest)
         {
             float vehicleBurden;

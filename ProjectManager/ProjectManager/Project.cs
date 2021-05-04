@@ -86,9 +86,9 @@ namespace ProjectManager
             }
         }
 
-        public void Save()
+        public void Save(string fileToSave)
         {
-            StreamWriter F = new StreamWriter(Filename);
+            StreamWriter F = new StreamWriter(fileToSave);
             string s;
             string answer;
             foreach (FileType Fe in Files)
@@ -222,6 +222,35 @@ namespace ProjectManager
             SeizureFreedom();
             // count animals in each treatment group
             CountTreatments();
+        }
+        public void FisherExact()
+        {
+            // Extract data into lists
+            if (test == TESTTYPES.T35)
+            {
+                List<float> vehicleBurdens = new List<float>();
+                List<float> baselineBurdens = new List<float>();
+                List<float> drugBurdens = new List<float>();
+
+                List<int> vehicleFreedom = new List<int>();
+                List<int> baselineFreedom = new List<int>();
+                List<int> drugFreedom = new List<int>();
+
+                foreach (AnimalType animal in Animals)
+                {
+                    foreach (SzMetrics szM in animal.metrics)
+                    {
+                        if (szM.treatment == TRTTYPE.Vehicle) 
+                        { vehicleBurdens.Add(szM.szBurden); vehicleFreedom.Add(szM.szFreedom); }
+
+                        else if (szM.treatment == TRTTYPE.Drug)
+                        { drugBurdens.Add(szM.szBurden); drugFreedom.Add(szM.szFreedom); }
+
+                        else if (szM.treatment == TRTTYPE.Baseline)
+                        { baselineBurdens.Add(szM.szBurden); baselineFreedom.Add(szM.szFreedom); }
+                    }
+                }
+            }
         }
         public void CountTreatments()
         {

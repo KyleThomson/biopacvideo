@@ -35,9 +35,9 @@ namespace ProjectManager
             
             // Create file dialog box for saving exported project file.
             SaveFileDialog F = new SaveFileDialog();
-            F.DefaultExt = ".pjt";
-            F.Filter = "PJT files (*.pjt) |*.pjt";
-            F.Title = "Save project (.pjt) file";
+            F.DefaultExt = ".csv";
+            F.Filter = "CSV files (*.csv) |*.csv";
+            F.Title = "Save project (.csv) file";
             F.InitialDirectory = "D:\\";
 
             if (F.ShowDialog() == DialogResult.OK)

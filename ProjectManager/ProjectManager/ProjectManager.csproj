@@ -104,6 +104,7 @@
     </Compile>
     <Compile Include="AnimalType.cs" />
     <Compile Include="BloodDrawType.cs" />
+    <Compile Include="ConfirmSaveDialog.cs" />
     <Compile Include="DamerauLevenshtein.cs" />
     <Compile Include="Exporter.cs">
       <SubType>Form</SubType>
@@ -113,6 +114,7 @@
     </Compile>
     <Compile Include="ExportType.cs" />
     <Compile Include="FileType.cs" />
+    <Compile Include="FisherExact.cs" />
     <Compile Include="GraphProperties.cs" />
     <Compile Include="GroupType.cs" />
     <Compile Include="ImportantDateType.cs" />
