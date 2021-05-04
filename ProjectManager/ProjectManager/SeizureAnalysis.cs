@@ -17,14 +17,6 @@ namespace ProjectManager
         public float avgDrugBurden; public float avgVehBurden; public float avgBaseBurden;
         public int vehFreedomSum; public int drugFreedomSum; public int baseFreedomSum;
 
-        public Accord.Statistics.Testing.FisherExactTest szFreedomVehicleFisherTest;
-        public Accord.Statistics.Testing.FisherExactTest szBurdenVehicleFisherTest;
-
-        public Accord.Statistics.Testing.FisherExactTest szFreedomBaselineFisherTest;
-        public Accord.Statistics.Testing.FisherExactTest szBurdenBaselineFisherTest;
-
-        public Accord.Statistics.Testing.FisherExactTest szFreedomDrugFisherTest;
-        public Accord.Statistics.Testing.FisherExactTest szBurdenDrugFisherTest;
         public SeizureAnalysis()
         {
             
@@ -55,7 +47,7 @@ namespace ProjectManager
             List<int> vehicleSz = new List<int>();
             List<int> drugSz = new List<int>();
             List<int> baselineSz = new List<int>();
-
+            
             if (test == TESTTYPES.T35)
             {
                 // Find drug and vehicle injections so we can determine if the seizure occurred during drug/vehicle treatment
