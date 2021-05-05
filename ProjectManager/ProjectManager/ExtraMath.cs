@@ -19,5 +19,12 @@ namespace ProjectManager
             }
             return result;
         }
+        public static double FisherExact(int a, int b, int c, int d, int N)
+        {
+            double pvalue;
+            pvalue = Factorial(a + b) * Factorial(c + d) * Factorial(a + c) * Factorial(b + d) / (Factorial(a) * Factorial(b) * Factorial(c) * Factorial(d) * Factorial(N));
+
+            return pvalue;
+        }
     }
 }

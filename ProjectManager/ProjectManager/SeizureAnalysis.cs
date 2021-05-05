@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Accord.Statistics;
+using Accord.Statistics.Testing;
 
 namespace ProjectManager
 {
@@ -17,14 +17,49 @@ namespace ProjectManager
         public float avgDrugBurden; public float avgVehBurden; public float avgBaseBurden;
         public int vehFreedomSum; public int drugFreedomSum; public int baseFreedomSum;
 
+        public List<float> drugBurdenList; public List<float> vehicleBurdenList; public List<float> baselineBurdenList;
+
         public SeizureAnalysis()
         {
             
         }
         public TESTTYPES test;
-        public void FisherExact(List<float> group1, List<float> group2)
+        public void SzFreedomSignificance(Project pjt)
         {
-            
+            // Get integers for fisher exact test
+            if (test == TESTTYPES.T35)
+            {
+                // Do Drug vs. Baseline comparison first
+                int drugAndBaselineAnimals = pjt.drugAnimals + pjt.baselineAnimals; // total number of animals for drug and baseline
+                int seizedDrugAnimals = pjt.drugAnimals - drugFreedomSum; int seizedBaselineAnimals = pjt.baselineAnimals - baseFreedomSum;
+                int notSeizedDrugAnimals = drugFreedomSum; int notSeizedBaselineAnimals = baseFreedomSum;
+                double drugVsBaselinePvalue = ExtraMath.FisherExact(seizedDrugAnimals, seizedBaselineAnimals, notSeizedDrugAnimals, notSeizedBaselineAnimals, drugAndBaselineAnimals);
+
+                // Do Vehicle vs. Baseline comparison next
+                int vehicleAndBaselineAnimals = pjt.vehicleAnimals + pjt.baselineAnimals; // total number of animals for vehicle and baseline
+                int seizedVehicleAnimals = pjt.vehicleAnimals - vehFreedomSum;
+                int notSeizedVehicleAnimals = vehFreedomSum;
+                double vehicleVsBaselinePvalue = ExtraMath.FisherExact(seizedVehicleAnimals, seizedBaselineAnimals, notSeizedVehicleAnimals, notSeizedBaselineAnimals, vehicleAndBaselineAnimals);
+
+            }
+            else if (test == TESTTYPES.T36)
+            {
+                // Do Drug vs. Baseline comparison ONLY
+                int drugAndBaselineAnimals = pjt.drugAnimals + pjt.baselineAnimals; // total number of animals for drug and baseline
+                int seizedDrugAnimals = pjt.drugAnimals - drugFreedomSum; int seizedBaselineAnimals = pjt.baselineAnimals - baseFreedomSum;
+                int notSeizedDrugAnimals = drugFreedomSum; int notSeizedBaselineAnimals = baseFreedomSum;
+                double drugVsBaselinePvalue = ExtraMath.FisherExact(seizedDrugAnimals, seizedBaselineAnimals, notSeizedDrugAnimals, notSeizedBaselineAnimals, drugAndBaselineAnimals);
+            }
+
+        }
+        public double SzBurdenSignificance(double[] sample1, double[] sample2)
+        {
+            // generate new mww test
+            var mwwTest = new MannWhitneyWilcoxonTest(sample1, sample2, TwoSampleHypothesis.FirstValueIsGreaterThanSecond , exact: false);
+
+            // extract pvalue and return
+            double pvalue = mwwTest.PValue;
+            return pvalue;
         }
         public void SeizureBurden(AnimalType animal, DateTime Earliest)
         {
@@ -416,6 +451,7 @@ namespace ProjectManager
                 baselineSEM = SEM(allBaselineSzBurdens);
                 drugSEM = SEM(allDrugSzBurdens);
             }
+            drugBurdenList = allDrugSzBurdens; vehicleBurdenList = allVehicleSzBurdens; baselineBurdenList = allBaselineSzBurdens;
         }
         public void SumFreedoms(List<AnimalType> animals)
         {

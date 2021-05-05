@@ -455,9 +455,6 @@ namespace ProjectManager
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // Ask user for confirmation in case of misclick or a change of heart about overwriting data
-            //ConfirmSaveDialog confirmSaveDialog = new ConfirmSaveDialog();
-            //confirmSaveDialog.ShowDialog();
             string confirmationMessage = "Are you sure you want to overwrite existing file?";
             DialogResult confirmSaveResult = MessageBox.Show(confirmationMessage, "Overwrite file", MessageBoxButtons.YesNo);
 

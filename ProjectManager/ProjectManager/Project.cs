@@ -223,34 +223,42 @@ namespace ProjectManager
             // count animals in each treatment group
             CountTreatments();
         }
-        public void FisherExact()
+        public void EvaluateSignificance()
         {
-            // Extract data into lists
-            if (test == TESTTYPES.T35)
-            {
-                List<float> vehicleBurdens = new List<float>();
-                List<float> baselineBurdens = new List<float>();
-                List<float> drugBurdens = new List<float>();
+           // Evaluate significance of seizure burden and seizure freedom
 
-                List<int> vehicleFreedom = new List<int>();
-                List<int> baselineFreedom = new List<int>();
-                List<int> drugFreedom = new List<int>();
+           // Seizure freedom first with Fisher Exact Test
 
-                foreach (AnimalType animal in Animals)
-                {
-                    foreach (SzMetrics szM in animal.metrics)
-                    {
-                        if (szM.treatment == TRTTYPE.Vehicle) 
-                        { vehicleBurdens.Add(szM.szBurden); vehicleFreedom.Add(szM.szFreedom); }
+           // Seizure burden next
+           if (test == TESTTYPES.T35)
+           {
+                // Initialize arrays!
+                double[] drugBurden = new double[analysis.drugBurdenList.Count];
+                double[] vehicleBurden = new double[analysis.vehicleBurdenList.Count];
+                double[] baselineBurden = new double[analysis.baselineBurdenList.Count];
 
-                        else if (szM.treatment == TRTTYPE.Drug)
-                        { drugBurdens.Add(szM.szBurden); drugFreedom.Add(szM.szFreedom); }
+                for (int i = 0; i < analysis.drugBurdenList.Count; i++)
+                { drugBurden[i] = (double)analysis.drugBurdenList[i]; }
 
-                        else if (szM.treatment == TRTTYPE.Baseline)
-                        { baselineBurdens.Add(szM.szBurden); baselineFreedom.Add(szM.szFreedom); }
-                    }
-                }
+                for (int i = 0; i < analysis.vehicleBurdenList.Count; i++)
+                { vehicleBurden[i] = (double)analysis.vehicleBurdenList[i]; }
+
+                for (int i = 0; i < analysis.baselineBurdenList.Count; i++)
+                { baselineBurden[i] = (double)analysis.baselineBurdenList[i]; }
             }
+            else if (test == TESTTYPES.T36)
+            {
+                // Initialize arrays!
+                double[] drugBurden = new double[analysis.drugBurdenList.Count];
+                double[] baselineBurden = new double[analysis.baselineBurdenList.Count];
+
+                for (int i = 0; i < analysis.drugBurdenList.Count; i++)
+                { drugBurden[i] = (double)analysis.drugBurdenList[i]; }
+
+                for (int i = 0; i < analysis.baselineBurdenList.Count; i++)
+                { baselineBurden[i] = (double)analysis.baselineBurdenList[i]; }
+            }
+
         }
         public void CountTreatments()
         {
