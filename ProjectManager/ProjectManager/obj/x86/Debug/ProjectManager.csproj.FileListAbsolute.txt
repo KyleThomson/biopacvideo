@@ -30,3 +30,4 @@ C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Deb
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\PdfSharp.Charting.xml
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\de\PdfSharp.resources.dll
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Debug\de\PdfSharp.Charting.resources.dll
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Debug\ProjectManager.SaveReminderDialog.resources

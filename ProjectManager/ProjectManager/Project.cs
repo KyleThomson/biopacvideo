@@ -48,8 +48,10 @@ namespace ProjectManager
         public TESTTYPES test;
         public SeizureAnalysis analysis;
         public int vehicleAnimals; public int baselineAnimals; public int drugAnimals;
+        public bool _fileChanged; // flag to indicate if changes have been made to file
         public Project(string Inpt)
         {
+            _fileChanged = false; // initialize file as not changed
             Filename = Inpt;
             P = Path.GetDirectoryName(Inpt);
             Animals = new List<AnimalType>();
@@ -153,6 +155,11 @@ namespace ProjectManager
             }
             F.Close();
             F.Dispose();
+            _fileChanged = false; // after file has saved, we can reset flag
+        }
+        public void FileChanged()
+        {
+            _fileChanged = true;
         }
         private int FindAnimal(string An) //Finds an Animal Index, or creates a new one if not found
         {

@@ -18,8 +18,9 @@ namespace ProjectManager
         {
             InitializeComponent();
             MainSelect.SelectedIndex = 0;
+            FormClosed += new FormClosedEventHandler(ProjectManagerClosed);
         }
-      private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)        
+        private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)        
         {
             SaveFileDialog F = new SaveFileDialog();
             F.DefaultExt = ".pjt";
@@ -30,6 +31,15 @@ namespace ProjectManager
                 pjt = new Project(F.FileName);
                 pjt.Open();
             }                    
+        }
+        private void ProjectManagerClosed(object sender, FormClosedEventArgs e)
+        {
+            // Check file changed flag in project data
+            if (pjt._fileChanged)
+            {
+                SaveReminderDialog saveReminderDialog = new SaveReminderDialog();
+                saveReminderDialog.Show();
+            }
         }
         private void selectProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -266,6 +276,8 @@ namespace ProjectManager
             }
             //Re-do analysis once some data has been removed
             pjt.Analysis();
+            // indicate file modified
+            pjt.FileChanged();
         }
         private void delete_Click(object sender, EventArgs e)
         {
@@ -274,13 +286,15 @@ namespace ProjectManager
             if (MainSelect.SelectedIndex == 1) // operate on animals
             {
                 pjt.Animals.RemoveAt(index);
-                //Re-do analysis once some data has been removed
-                pjt.Analysis();
             }
             else if(MainSelect.SelectedIndex == 0) // operate on files
             {
                 pjt.Files.RemoveAt(index);
-            }        
+            }
+            //Re-do analysis once some data has been removed
+            pjt.Analysis();
+            // indicate file modified
+            pjt.FileChanged();
         }
 
         private void MainSelect_SelectedIndexChanged(object sender, EventArgs e)
