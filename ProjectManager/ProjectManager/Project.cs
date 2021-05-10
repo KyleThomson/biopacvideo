@@ -233,30 +233,16 @@ namespace ProjectManager
            if (test == TESTTYPES.T35)
            {
                 // Initialize arrays!
-                double[] drugBurden = new double[analysis.drugBurdenList.Count];
-                double[] vehicleBurden = new double[analysis.vehicleBurdenList.Count];
-                double[] baselineBurden = new double[analysis.baselineBurdenList.Count];
+                double[] drugBurden = Array.ConvertAll(analysis.drugBurdenList.ToArray(), x => (double)x);
+                double[] vehicleBurden = Array.ConvertAll(analysis.vehicleBurdenList.ToArray(), x => (double)x);
+                double[] baselineBurden = Array.ConvertAll(analysis.baselineBurdenList.ToArray(), x => (double)x);
 
-                for (int i = 0; i < analysis.drugBurdenList.Count; i++)
-                { drugBurden[i] = (double)analysis.drugBurdenList[i]; }
-
-                for (int i = 0; i < analysis.vehicleBurdenList.Count; i++)
-                { vehicleBurden[i] = (double)analysis.vehicleBurdenList[i]; }
-
-                for (int i = 0; i < analysis.baselineBurdenList.Count; i++)
-                { baselineBurden[i] = (double)analysis.baselineBurdenList[i]; }
             }
             else if (test == TESTTYPES.T36)
             {
                 // Initialize arrays!
-                double[] drugBurden = new double[analysis.drugBurdenList.Count];
-                double[] baselineBurden = new double[analysis.baselineBurdenList.Count];
-
-                for (int i = 0; i < analysis.drugBurdenList.Count; i++)
-                { drugBurden[i] = (double)analysis.drugBurdenList[i]; }
-
-                for (int i = 0; i < analysis.baselineBurdenList.Count; i++)
-                { baselineBurden[i] = (double)analysis.baselineBurdenList[i]; }
+                double[] drugBurden = Array.ConvertAll(analysis.drugBurdenList.ToArray(), x => (double)x);
+                double[] baselineBurden = Array.ConvertAll(analysis.baselineBurdenList.ToArray(), x => (double)x);
             }
 
         }
