@@ -17,7 +17,8 @@ namespace ProjectManager
         T35,    // 0
         T36,    // 1
         IAK,    // 2
-        T39     // 3 etc.
+        T39,
+        UNDEFINED
     }
     public enum TRTTYPE
     {
@@ -224,11 +225,17 @@ namespace ProjectManager
         }
         public void Analysis()
         {
-            // Computer burden and freedoms
-            CalculateSzBurden();
-            SeizureFreedom();
-            // count animals in each treatment group
-            CountTreatments();
+            // check if there was a test performed
+            if (analysis.test == TESTTYPES.UNDEFINED)
+            { return; }
+            else
+            {
+                // Computer burden and freedoms
+                CalculateSzBurden();
+                SeizureFreedom();
+                // count animals in each treatment group
+                CountTreatments();
+            }
         }
         public void EvaluateSignificance()
         {
@@ -253,7 +260,7 @@ namespace ProjectManager
             }
 
         }
-        public void CountTreatments()
+        private void CountTreatments()
         {
             int tempBaselineAnimals = 0;
             int tempVehicleAnimals = 0;
@@ -290,17 +297,38 @@ namespace ProjectManager
         public void DetermineTest()
         {
             // check for project class traits that indicate the test that should performed, then set class variable to that test
-            analysis.test = TESTTYPES.T35;
+            string treatment = MealOrInjection();
 
-            // Sort AFTER determining test!
+            // Find number of treatment groups
             ParseGroups();
-            TestSort();
+            if (analysis.groups.Count == 2  && analysis.groups.Contains("vehicle") && treatment == "vehicle")
+            { analysis.test = TESTTYPES.T35; }
+            else if (analysis.groups.Count == 2 && treatment == "meal")
+            { analysis.test = TESTTYPES.T36; }
+            else if (treatment == "")
+            { analysis.test = TESTTYPES.UNDEFINED; }
+
             
+            
+        }
+        private string MealOrInjection()
+        {
+            // MealOrInjection() returns a string that tries to identify one of two treatment delivery methods.
+            // If the delivery method can't be determined then the string is returned empty.
+            string treatment = "";
+            foreach (AnimalType animal in Animals)
+            {
+                if (animal.Injections.Count > 0)
+                { treatment = "inject"; }
+                else if (animal.Meals.Count > 0)
+                { treatment = "meal"; }
+            }
+            return treatment;
         }
         public void TestSort()
         {
             // TestSort sorts Animals based on the test being performed then initializes SzMetrics for each animal accordingly.
-            if (test == TESTTYPES.T35)
+            if (analysis.test == TESTTYPES.T35)
             {
                 // Remove animals w/o injections and one type of ADDID
                 Animals.RemoveAll(a => a.Injections.Count == 0);
@@ -323,7 +351,7 @@ namespace ProjectManager
                     
                 }
             }
-            else if (test == TESTTYPES.T36)
+            else if (analysis.test == TESTTYPES.T36)
             {
                 // Iterate through animals backwards so we don't get unhandled exception when removing list elements
                 for (int i = Animals.Count - 1; i >= 0; i--)
@@ -339,8 +367,10 @@ namespace ProjectManager
                     }
                 }
             }
+            else if (analysis.test == TESTTYPES.UNDEFINED)
+            { return; }
         }
-        public void ParseGroups()
+        private void ParseGroups()
         {
             // Use Damerau-Levenshtein algorithm to find groups
             List<string> groups = new List<string>();
@@ -386,7 +416,7 @@ namespace ProjectManager
             // Pass groups found to analysis.
             analysis.groups = groups;
         }
-        public void CalculateSzBurden()
+        private void CalculateSzBurden()
         {
             foreach (AnimalType A in Animals)
             {
@@ -395,7 +425,7 @@ namespace ProjectManager
             }
             analysis.AverageBurdens(Animals);
         }
-        public void SeizureFreedom()
+        private void SeizureFreedom()
         {
             // Answer seizure freedom question for each animal
             foreach (AnimalType A in Animals)
@@ -580,7 +610,7 @@ namespace ProjectManager
             }
             return true;
         }
-        public DateTime ConvertFileToDT(string F)
+        private DateTime ConvertFileToDT(string F)
         {
             int y, M, d;
             int h, m, s;
@@ -594,7 +624,7 @@ namespace ProjectManager
 
 
         }
-        public string DTS(DateTime dt)
+        private string DTS(DateTime dt)
         {
 
             return string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", dt);

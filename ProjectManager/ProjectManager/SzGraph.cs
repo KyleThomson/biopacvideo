@@ -57,7 +57,7 @@ namespace ProjectManager
             graph.WriteXLabel("Time (days)", aFont);
             graph.WriteYLabel("Animals", aFont);
         }
-        public List<string> GetXTickLabels(Project pjt, int xTickInterval)
+        private List<string> GetXTickLabels(Project pjt, int xTickInterval)
         {
             List<string> xTickString = new List<string>();
             //Obtain basis for y and x axis labeling
@@ -71,7 +71,7 @@ namespace ProjectManager
             }
             return xTickString;
         }
-        public List<string> GetYTickLabels(Project pjt)
+        private List<string> GetYTickLabels(Project pjt)
         {
             List<string> yTickString = new List<string>();
             //Obtain basis for y and x axis labelling

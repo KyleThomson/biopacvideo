@@ -52,6 +52,7 @@ namespace ProjectManager
                 openedFilename = F.FileName;
                 pjt.Open();
                 pjt.DetermineTest();         // Determine test to use
+                pjt.TestSort();              // Sort test, return if test is undefined
                 pjt.CompareStageConflicts(); // Find conflicts between bubble and notes
                 pjt.Analysis();              // Now perform analysis once/if any conflicts are resolved
             }
