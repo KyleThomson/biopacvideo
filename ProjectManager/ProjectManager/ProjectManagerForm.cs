@@ -14,6 +14,7 @@ namespace ProjectManager
         Project pjt;
         SzGraph pjtGraph;
         string openedFilename;
+        bool _doAnalysis; // flag on project open if we should do analysis
         public ProjectManager()
         {
             InitializeComponent();
@@ -43,18 +44,31 @@ namespace ProjectManager
         }
         private void selectProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Open file dialog to select project
             OpenFileDialog F = new OpenFileDialog();
             F.DefaultExt = ".pjt";
             F.InitialDirectory = "C:\\";
+
+            // Create message box to prompt user if they want to perform analysis on project import
+            string confirmationMessage = "Would you like to analyze the imported project file?";
+            DialogResult confirmAnalysisResult = MessageBox.Show(confirmationMessage, "Project Analysis", MessageBoxButtons.YesNo);
+            if (confirmAnalysisResult == DialogResult.Yes)
+            { _doAnalysis = true; }
+            else
+            { _doAnalysis = false; }
+
             if (F.ShowDialog() == DialogResult.OK)
             {
                 pjt = new Project(F.FileName);
                 openedFilename = F.FileName;
                 pjt.Open();
-                pjt.DetermineTest();         // Determine test to use
-                pjt.TestSort();              // Sort test, return if test is undefined
                 pjt.CompareStageConflicts(); // Find conflicts between bubble and notes
-                pjt.Analysis();              // Now perform analysis once/if any conflicts are resolved
+                if (_doAnalysis)
+                {
+                    pjt.DetermineTest();         // Determine test to use
+                    pjt.TestSort();              // Sort test, return if test is undefined
+                    pjt.Analysis();              // Now perform analysis once/if any conflicts are resolved
+                }
             }
             UpdateMainList();
         }
