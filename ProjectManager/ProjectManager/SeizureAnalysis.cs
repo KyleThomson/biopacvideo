@@ -386,7 +386,7 @@ namespace ProjectManager
             {
                 string ID = animalID + " had seizure at " + seizure.d.ToString();
                 SeizureStageDialog stageDialog = new SeizureStageDialog();
-                stageDialog.ShowDialog(bubbleSeverity, noteSeverity, ID);
+                stageDialog.ShowDialog(bubbleSeverity, noteSeverity, ID, seizure.Notes);
                 finalStage = stageDialog.returnSeverity;
             }// Do something
             else { finalStage = bubbleSeverity; }

@@ -696,7 +696,43 @@ namespace ProjectManager
             }
             return null;
         }
+        public void AreAnimalsDead()
+        {
+            // Track each animal throughout files
+            foreach (AnimalType animal in Animals)
+            {
+                animal._isDead = IsAnimalDead(animal);
+            }
+        }
+        private bool IsAnimalDead(AnimalType animal)
+        {
+            // method determines if animal is dead
+            DateTime earliest; DateTime latest = Files[0].Start;
+            bool _earliestFlag = true; // flag to account for animal id missing then reappear. if true
+            bool _animalDead;
+            
+            // Step thru files and determine if animal ID disappears and "e" appears
+            foreach (FileType file in Files)
+            {
+                if (file.AnimalIDs.Contains(animal.ID))
+                // Track earliest time that animal ID appears 
+                { earliest = file.Start; _earliestFlag = true; }
 
+                else if (file.AnimalIDs.Contains("e") && !file.AnimalIDs.Contains(animal.ID))
+                // If file doesn't have animal ID log a new latest time and set flag to false
+                {
+                    latest = file.Start; _earliestFlag = false;
+                }
+            }
+
+            // _earliestFlag being false means that last file didn't have animal ID of interest
+            if (Files[Files.Count - 1].Start.Subtract(latest).TotalHours == 0 && !_earliestFlag)
+            { _animalDead = true; }
+            else
+            { _animalDead = false; }
+
+            return _animalDead;
+        }
         public void ExportData(string Fname, ExportType E)
         {
             //Open File
@@ -880,50 +916,116 @@ namespace ProjectManager
                 binned.Title = "Binned Seizures .csv";
                 binned.DefaultExt = ".csv";
                 binned.InitialDirectory = "D:\\";
-
+                
                 if (binned.ShowDialog() == DialogResult.OK)
                 {
-
                     // Open binned seizure file
                     StreamWriter sw = new StreamWriter(binned.FileName);
                     sw.AutoFlush = true;
-                    foreach (AnimalType A in Animals)
+                    int numDays = (int)Math.Floor(Latest.Subtract(Earliest).TotalDays);
+                    if (E.ungrouped)
                     {
-                        // first injection
-                        double alignBy = Math.Round(A.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);
-
-                        // bin seizures if option was selected
-                        sz = A.ID;
-                        int numDays = (int)Math.Floor(Latest.Subtract(Earliest).TotalDays);
-                        // Create list for days that seizures happen
-                        List<double> szDay = new List<double>();
-                        List<double> binSeizures = new List<double>(new double[numDays]);
-                        foreach (SeizureType seizureType in A.Sz)
+                        foreach (AnimalType A in Animals)
                         {
-                            if (seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays >= alignBy)
+                            // first injection
+                            double alignBy = Math.Round(A.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);
+                            sz = A.ID;
+                            
+                            // Create list for days that seizures happen
+                            List<double> szDay = new List<double>();
+                            List<double> binSeizures = new List<double>(new double[numDays]);
+                            foreach (SeizureType seizureType in A.Sz)
                             {
-                                szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays - alignBy));
+                                if (seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays >= alignBy)
+                                {
+                                    szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays - alignBy));
+                                }
                             }
-                        }
-                        var g = szDay.GroupBy(i => i);
-                        foreach (var bin in g)
-                        {
-                            if (bin.Key > 0)
+                            var g = szDay.GroupBy(i => i);
+                            foreach (var bin in g)
                             {
-                                binSeizures[(int)(bin.Key - 1)] = bin.Count();
+                                if (bin.Key > 0)
+                                {
+                                    binSeizures[(int)(bin.Key - 1)] = bin.Count();
+                                }
+                                else
+                                {
+                                    binSeizures[(int)(bin.Key)] = bin.Count();
+                                }
                             }
-                            else
+                            for (int i = 0; i < binSeizures.Count; i++)
                             {
-                                binSeizures[(int)(bin.Key)] = bin.Count();
+                                sz += "," + binSeizures[i].ToString();
                             }
+                            sw.WriteLine(sz); // write seizures
                         }
-                        for (int i = 0; i < binSeizures.Count; i++)
-                        {
-                            sz += "," + binSeizures[i].ToString();
-                        }
-                        sw.WriteLine(sz); // write seizures
+                        sw.Close(); // close writer
                     }
-                    sw.Close(); // close writer
+                    else if (E.grouped)
+                    {
+                        ParseGroups();
+                        // Randomly assign groups A and B
+                        Random rand = new Random();
+                        int groupA = rand.Next(0, 2); // Either returns 0 or 1
+                        int groupB;
+
+                        // Assign other integer to group B
+                        if (groupA == 1)
+                        { groupB = 0; }
+                        else
+                        { groupB = 1; }
+                        
+                        // Key-value pairs for randomly assigned groups A and B
+                        Dictionary<string, string> groups = new Dictionary<string, string>();
+                        groups.Add("Group A", analysis.groups[groupA]);
+                        groups.Add("Group B", analysis.groups[groupB]);
+
+                        // Now that groups are established we can write to file.
+                        foreach (KeyValuePair<string, string> keyValuePair in groups)
+                        {
+                            sw.WriteLine(keyValuePair.Key);
+                            foreach (AnimalType A in Animals)
+                            {
+                                if (A.Injections.Any(I => I.ADDID == keyValuePair.Value))
+                                {
+
+                                    // first injection
+                                    double alignBy = Math.Round(A.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);
+                                    sz = A.ID;
+
+                                    // Create list for days that seizures happen
+                                    List<double> szDay = new List<double>();
+                                    List<double> binSeizures = new List<double>(new double[numDays]);
+                                    foreach (SeizureType seizureType in A.Sz)
+                                    {
+                                        if (seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays >= alignBy)
+                                        {
+                                            szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays - alignBy));
+                                        }
+                                    }
+                                    var g = szDay.GroupBy(i => i);
+                                    foreach (var bin in g)
+                                    {
+                                        if (bin.Key > 0)
+                                        {
+                                            binSeizures[(int)(bin.Key - 1)] = bin.Count();
+                                        }
+                                        else
+                                        {
+                                            binSeizures[(int)(bin.Key)] = bin.Count();
+                                        }
+                                    }
+                                    for (int i = 0; i < binSeizures.Count; i++)
+                                    {
+                                        sz += "," + binSeizures[i].ToString();
+                                    }
+                                    sw.WriteLine(sz); // write seizures
+                                }
+                            }
+
+                        }
+                        sw.Close();
+                    }
                 }
             }
             F.Close();

@@ -31,7 +31,15 @@ namespace ProjectManager
             if (SzSvBox.Checked) E.SeverityIndx = true;
             if (BloodDraw.Checked) E.BloodDraw = true;
             if (BloodDrawList.Checked) E.BloodDrawList = true;
-            if (binSeizures.Checked) E.binSz = true;
+            if (binSeizures.Checked)
+            { 
+                E.binSz = true;
+                if (groupedSz.Checked)
+                { E.grouped = true; }
+                else if (ungroupedSz.Checked)
+                { E.ungrouped = true; }
+            }
+            
             
             // Create file dialog box for saving exported project file.
             SaveFileDialog F = new SaveFileDialog();
@@ -48,11 +56,33 @@ namespace ProjectManager
 
         private void binSeizures_CheckedChanged(object sender, EventArgs e)
         {
+            if (binSeizures.Checked)
+            {
+                groupedSz.Enabled = true;
+                ungroupedSz.Enabled = true;
+            }
+            else if (!binSeizures.Checked)
+            {
+                groupedSz.Enabled = false;
+                ungroupedSz.Enabled = false;
+            }
         }
 
         private void Exporter_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void groupedSz_CheckedChanged(object sender, EventArgs e)
+        {
+            if (groupedSz.Checked)
+            { ungroupedSz.Checked = false; }
+        }
+
+        private void ungroupedSz_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ungroupedSz.Checked)
+            { groupedSz.Checked = false; }
         }
     }
 

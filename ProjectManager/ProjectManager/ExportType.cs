@@ -20,7 +20,7 @@ namespace ProjectManager
         public bool BloodDrawList;
         public bool Injections;
         public bool InjectionsList;
-        public bool binSz;
+        public bool binSz; public bool grouped; public bool ungrouped;
 
         public ExportType()
         {

@@ -49,20 +49,23 @@ namespace ProjectManager
             F.DefaultExt = ".pjt";
             F.InitialDirectory = "C:\\";
 
-            // Create message box to prompt user if they want to perform analysis on project import
-            string confirmationMessage = "Would you like to analyze the imported project file?";
-            DialogResult confirmAnalysisResult = MessageBox.Show(confirmationMessage, "Project Analysis", MessageBoxButtons.YesNo);
-            if (confirmAnalysisResult == DialogResult.Yes)
-            { _doAnalysis = true; }
-            else
-            { _doAnalysis = false; }
+            
 
             if (F.ShowDialog() == DialogResult.OK)
             {
                 pjt = new Project(F.FileName);
                 openedFilename = F.FileName;
                 pjt.Open();
+                pjt.AreAnimalsDead();
                 pjt.CompareStageConflicts(); // Find conflicts between bubble and notes
+
+                // Create message box to prompt user if they want to perform analysis on project import
+                string confirmationMessage = "Would you like to analyze the imported project file?";
+                DialogResult confirmAnalysisResult = MessageBox.Show(confirmationMessage, "Project Analysis", MessageBoxButtons.YesNo);
+                if (confirmAnalysisResult == DialogResult.Yes)
+                { _doAnalysis = true; }
+                else
+                { _doAnalysis = false; }
                 if (_doAnalysis)
                 {
                     pjt.DetermineTest();         // Determine test to use
@@ -290,7 +293,8 @@ namespace ProjectManager
                 }
             }
             //Re-do analysis once some data has been removed
-            pjt.Analysis();
+            if (_doAnalysis)
+            { pjt.Analysis(); }
             // indicate file modified
             pjt.FileChanged();
         }
@@ -307,7 +311,8 @@ namespace ProjectManager
                 pjt.Files.RemoveAt(index);
             }
             //Re-do analysis once some data has been removed
-            pjt.Analysis();
+            if (_doAnalysis)
+            { pjt.Analysis(); }
             // indicate file modified
             pjt.FileChanged();
         }
@@ -442,8 +447,6 @@ namespace ProjectManager
         private void testPlotToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SzGraph Test = new SzGraph(4000, 4000, pjt);
-            Test.GetXTickLabels(pjt,5); // pjt, tick label every 7 units
-            Test.GetYTickLabels(pjt);
             Test.PlotSz(pjt);
             Test.PlotTrt(pjt);
             Test.Legend();

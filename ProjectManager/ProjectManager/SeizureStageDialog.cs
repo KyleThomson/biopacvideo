@@ -9,10 +9,12 @@ namespace ProjectManager
     public class SeizureStageDialog
     {
         public int returnSeverity { get; set; }
-        public void ShowDialog(int bubbleStage, int notesStage, string ID)
+        public void ShowDialog(int bubbleStage, int notesStage, string ID, string notes)
         {
             // Create form and form size
             Form prompt = new Form();
+            // Turn off minimize/red x buttons
+            prompt.ControlBox = false;
             prompt.Width = 250;
             prompt.Height = 100;
             prompt.Text = "Select correct severity.";
@@ -20,7 +22,7 @@ namespace ProjectManager
             // Create label to inform user of animal that has the conflict.
             Label animalLabel = new Label();
             animalLabel.Location = new System.Drawing.Point(0, 0);
-            animalLabel.Text = ID;
+            animalLabel.Text = ID + ": " + notes;
             animalLabel.AutoSize = true;
 
             // Create buttons with stages
@@ -41,6 +43,7 @@ namespace ProjectManager
             prompt.Controls.Add(panel);
             prompt.StartPosition = FormStartPosition.CenterScreen;
             prompt.ShowDialog();
+
         }
         private void Stage_Click(object sender, EventArgs e)
         {

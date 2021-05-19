@@ -43,6 +43,8 @@
             this.BloodDraw = new System.Windows.Forms.CheckBox();
             this.BloodDrawList = new System.Windows.Forms.CheckBox();
             this.binSeizures = new System.Windows.Forms.CheckBox();
+            this.groupedSz = new System.Windows.Forms.CheckBox();
+            this.ungroupedSz = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // SzCount
@@ -196,11 +198,37 @@
             this.binSeizures.UseVisualStyleBackColor = true;
             this.binSeizures.CheckedChanged += new System.EventHandler(this.binSeizures_CheckedChanged);
             // 
+            // groupedSz
+            // 
+            this.groupedSz.AutoSize = true;
+            this.groupedSz.Enabled = false;
+            this.groupedSz.Location = new System.Drawing.Point(137, 150);
+            this.groupedSz.Name = "groupedSz";
+            this.groupedSz.Size = new System.Drawing.Size(67, 17);
+            this.groupedSz.TabIndex = 15;
+            this.groupedSz.Text = "Grouped";
+            this.groupedSz.UseVisualStyleBackColor = true;
+            this.groupedSz.CheckedChanged += new System.EventHandler(this.groupedSz_CheckedChanged);
+            // 
+            // ungroupedSz
+            // 
+            this.ungroupedSz.AutoSize = true;
+            this.ungroupedSz.Enabled = false;
+            this.ungroupedSz.Location = new System.Drawing.Point(137, 173);
+            this.ungroupedSz.Name = "ungroupedSz";
+            this.ungroupedSz.Size = new System.Drawing.Size(79, 17);
+            this.ungroupedSz.TabIndex = 16;
+            this.ungroupedSz.Text = "Ungrouped";
+            this.ungroupedSz.UseVisualStyleBackColor = true;
+            this.ungroupedSz.CheckedChanged += new System.EventHandler(this.ungroupedSz_CheckedChanged);
+            // 
             // Exporter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(224, 233);
+            this.Controls.Add(this.ungroupedSz);
+            this.Controls.Add(this.groupedSz);
             this.Controls.Add(this.binSeizures);
             this.Controls.Add(this.BloodDrawList);
             this.Controls.Add(this.BloodDraw);
@@ -241,5 +269,7 @@
         private System.Windows.Forms.CheckBox BloodDraw;
         private System.Windows.Forms.CheckBox BloodDrawList;
         private System.Windows.Forms.CheckBox binSeizures;
+        private System.Windows.Forms.CheckBox groupedSz;
+        private System.Windows.Forms.CheckBox ungroupedSz;
     }
 }
