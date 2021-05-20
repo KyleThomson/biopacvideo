@@ -12,14 +12,15 @@ namespace ProjectManager
     public partial class ProjectManager : Form
     {
         Project pjt;
-        SzGraph pjtGraph;
-        string openedFilename;
         bool _doAnalysis; // flag on project open if we should do analysis
+        bool _pjtOpened = false;
         public ProjectManager()
         {
+            this.FormClosing -= new FormClosingEventHandler(this.ProjectManager_FormClosing_1);
             InitializeComponent();
             MainSelect.SelectedIndex = 0;
-            FormClosed += new FormClosedEventHandler(ProjectManagerClosed);
+            // Handle event for form closing in case there are unsaved changes to project file.
+            //FormClosing += (sender, e) => { ProjectManager_FormClosing(sender, e); };
         }
         private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)        
         {
@@ -31,16 +32,12 @@ namespace ProjectManager
                 
                 pjt = new Project(F.FileName);
                 pjt.Open();
+                _pjtOpened = true;
             }                    
         }
         private void ProjectManagerClosed(object sender, FormClosedEventArgs e)
         {
-            // Check file changed flag in project data
-            if (pjt._fileChanged)
-            {
-                SaveReminderDialog saveReminderDialog = new SaveReminderDialog();
-                saveReminderDialog.Show();
-            }
+            
         }
         private void selectProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -54,8 +51,8 @@ namespace ProjectManager
             if (F.ShowDialog() == DialogResult.OK)
             {
                 pjt = new Project(F.FileName);
-                openedFilename = F.FileName;
                 pjt.Open();
+                _pjtOpened = true;
                 pjt.AreAnimalsDead();
                 pjt.CompareStageConflicts(); // Find conflicts between bubble and notes
 
@@ -453,7 +450,6 @@ namespace ProjectManager
             Test.DisplayHeader();
             Test.DisplayStats(pjt);
             Test.graph.DisplayGraph();
-            pjtGraph = Test;
         }
 
         private void ProjectManager_Load(object sender, EventArgs e)
@@ -470,32 +466,74 @@ namespace ProjectManager
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Save .pjt file as -
-            SaveFileDialog saveAsDialog = new SaveFileDialog();
-            saveAsDialog.Filter = "PJT files (*.pjt) |*.pjt";
-            saveAsDialog.DefaultExt = ".pjt";
-            saveAsDialog.Title = "Save as project (.pjt) file";
-            saveAsDialog.InitialDirectory = "D:\\";
-
-            if (saveAsDialog.ShowDialog() == DialogResult.OK)
-            {
-                if (saveAsDialog.FileName != "")
-                {
-                    pjt.Save(saveAsDialog.FileName);
-                }
-            }
+            pjt.SaveAs();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string confirmationMessage = "Are you sure you want to overwrite existing file?";
-            DialogResult confirmSaveResult = MessageBox.Show(confirmationMessage, "Overwrite file", MessageBoxButtons.YesNo);
+            if (pjt.Filename != "")
+            {
+                string confirmationMessage = "Are you sure you want to overwrite existing file?";
+                DialogResult confirmSaveResult = MessageBox.Show(confirmationMessage, "Overwrite file", MessageBoxButtons.YesNo);
 
-            if (confirmSaveResult == DialogResult.Yes)
-            // Save over current file
-            { pjt.Save(pjt.Filename); }
-            else 
-            { }
+                if (confirmSaveResult == DialogResult.Yes)
+                // Save over current file
+                { pjt.Save(pjt.Filename); }
+                else
+                { }
+            }
+            else
+            {
+                pjt.SaveAs();
+            }
             
+        }
+
+        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void ProjectManager_FormClosing_1(object sender, FormClosingEventArgs e)
+        {
+            SaveReminderDialog saveReminderDialog = new SaveReminderDialog();
+            if (_pjtOpened)
+            {
+                // first check for default value
+                if (pjt._fileChanged != default)
+                {
+                    // Check file changed flag in project data
+                    if (pjt._fileChanged)
+                    {
+                        // Open dialog to remind user to save
+                        saveReminderDialog.ShowDialog();
+                        // handle options that user selected
+                        if (saveReminderDialog.clickedOption == 0)
+                        {
+                            // User selected save
+                            if (pjt.Filename != "")
+                            // normal save if filename is not empty
+                            { pjt.Save(pjt.Filename); }
+                            else
+                            // Save As
+                            { pjt.SaveAs(); }
+
+                        }
+                        else if (saveReminderDialog.clickedOption == 1)
+                        // User selected don't save, do nothing so form closes
+                        {  }
+                        else
+                        // User selected cancel. DON'T CLOSE FORM!
+                        { e.Cancel = true; }
+                    }
+                    else if (!pjt._fileChanged)
+                        //close
+                    {  }
+                }
+                else
+                {  }
+            }
+            else
+            {  }
         }
     }
 }

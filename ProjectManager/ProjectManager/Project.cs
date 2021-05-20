@@ -49,7 +49,7 @@ namespace ProjectManager
         public TESTTYPES test;
         public SeizureAnalysis analysis;
         public int vehicleAnimals; public int baselineAnimals; public int drugAnimals;
-        public bool _fileChanged; // flag to indicate if changes have been made to file
+        public bool _fileChanged = default; // flag to indicate if changes have been made to file
         public Project(string Inpt)
         {
             _fileChanged = false; // initialize file as not changed
@@ -157,6 +157,23 @@ namespace ProjectManager
             F.Close();
             F.Dispose();
             _fileChanged = false; // after file has saved, we can reset flag
+        }
+        public void SaveAs()
+        {
+            // Save .pjt file as -
+            SaveFileDialog saveAsDialog = new SaveFileDialog();
+            saveAsDialog.Filter = "PJT files (*.pjt) |*.pjt";
+            saveAsDialog.DefaultExt = ".pjt";
+            saveAsDialog.Title = "Save as project (.pjt) file";
+            saveAsDialog.InitialDirectory = "D:\\";
+
+            if (saveAsDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (saveAsDialog.FileName != "")
+                {
+                    Save(saveAsDialog.FileName);
+                }
+            }
         }
         public void FileChanged()
         {
