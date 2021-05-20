@@ -518,22 +518,13 @@ namespace ProjectManager
                             { pjt.SaveAs(); }
 
                         }
-                        else if (saveReminderDialog.clickedOption == 1)
-                        // User selected don't save, do nothing so form closes
-                        {  }
-                        else
+                        else if (saveReminderDialog.clickedOption == 2)
                         // User selected cancel. DON'T CLOSE FORM!
                         { e.Cancel = true; }
+                        // else: selected don't save, do nothing so form closes
                     }
-                    else if (!pjt._fileChanged)
-                        //close
-                    {  }
                 }
-                else
-                {  }
             }
-            else
-            {  }
         }
     }
 }

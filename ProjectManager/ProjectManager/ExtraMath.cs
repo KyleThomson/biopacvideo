@@ -26,5 +26,13 @@ namespace ProjectManager
 
             return pvalue;
         }
+        public static double MannWhitneyWilcoxon(double[] sample1, double[] sample2)
+        {
+            double pvalue;
+            Accord.Statistics.Testing.MannWhitneyWilcoxonTest mwwTest = new Accord.Statistics.Testing.MannWhitneyWilcoxonTest(sample1, sample2);
+            pvalue = mwwTest.PValue;
+
+            return pvalue;
+        }
     }
 }

@@ -35,6 +35,7 @@ namespace ProjectManager
             DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
             double totalHours = Latest.Subtract(Earliest).TotalHours;
             int tempMax = (int)Math.Round(totalHours / 24, 2);
+
             // x tick every 7 days           
             int xTickInterval = 7;
             
