@@ -369,6 +369,7 @@ namespace ProjectManager
                     }
                     
                 }
+                ParseGroups();
             }
             else if (analysis.test == TESTTYPES.T36)
             {
@@ -715,15 +716,15 @@ namespace ProjectManager
             }
             return null;
         }
-        public void AreAnimalsDead()
+        public void TrackAllAnimals()
         {
             // Track each animal throughout files
             foreach (AnimalType animal in Animals)
             {
-                animal._isDead = IsAnimalDead(animal);
+                TrackAnimal(animal);
             }
         }
-        private bool IsAnimalDead(AnimalType animal)
+        private void TrackAnimal(AnimalType animal)
         {
             // method determines if animal is dead
             DateTime earliest; DateTime latest = Files[0].Start;
@@ -749,8 +750,6 @@ namespace ProjectManager
             { _animalDead = true; }
             else
             { _animalDead = false; }
-
-            return _animalDead;
         }
         public void ExportData(string Fname, ExportType E)
         {

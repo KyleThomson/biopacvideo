@@ -15,7 +15,6 @@ namespace ProjectManager
         bool _pjtOpened = false;
         public ProjectManager()
         {
-            this.FormClosing -= new FormClosingEventHandler(this.ProjectManager_FormClosing_1);
             InitializeComponent();
             MainSelect.SelectedIndex = 0;
             // Handle event for form closing in case there are unsaved changes to project file.
@@ -273,9 +272,6 @@ namespace ProjectManager
                     }
                 }
             }
-            //Re-do analysis once some data has been removed
-            if (_doAnalysis)
-            { pjt.Analysis(); }
             // indicate file modified
             pjt.FileChanged();
             ChangeTitleText(pjt.Filename);
@@ -292,9 +288,6 @@ namespace ProjectManager
             {
                 pjt.Files.RemoveAt(index);
             }
-            //Re-do analysis once some data has been removed
-            if (_doAnalysis)
-            { pjt.Analysis(); }
             // indicate file modified
             pjt.FileChanged();
             ChangeTitleText(pjt.Filename);
@@ -540,6 +533,7 @@ namespace ProjectManager
             pjt.analysis.test = TESTTYPES.T35;
             pjt.TestSort();              // Sort test, return if test is undefined
             pjt.Analysis();
+            GenerateTest();
         }
 
         private void test36ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -548,6 +542,7 @@ namespace ProjectManager
             pjt.analysis.test = TESTTYPES.T36;
             pjt.TestSort();              // Sort test, return if test is undefined
             pjt.Analysis();
+            GenerateTest();
         }
 
         private void iAKToolStripMenuItem_Click(object sender, EventArgs e)
@@ -556,6 +551,17 @@ namespace ProjectManager
             pjt.analysis.test = TESTTYPES.IAK;
             pjt.TestSort();              // Sort test, return if test is undefined
             pjt.Analysis();
+            GenerateTest();
+        }
+        private void GenerateTest()
+        {
+            SzGraph Test = new SzGraph(4000, 4000, pjt);
+            Test.PlotSz(pjt);
+            Test.PlotTrt(pjt);
+            Test.Legend();
+            Test.DisplayHeader();
+            Test.DisplayStats(pjt);
+            Test.graph.DisplayGraph();
         }
     }
 }
