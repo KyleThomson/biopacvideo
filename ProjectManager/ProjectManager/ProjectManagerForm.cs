@@ -45,7 +45,16 @@ namespace ProjectManager
             F.DefaultExt = ".pjt";
             F.InitialDirectory = "C:\\";
 
-            UpdateMainList();
+            if (F.ShowDialog() == DialogResult.OK)
+            {
+                pjt = new Project(F.FileName);
+                pjt.Open();
+                ChangeTitleText(pjt.Filename);
+                _pjtOpened = true;
+                pjt.TrackAllAnimals();
+                pjt.CompareStageConflicts(); // Find conflicts between bubble and notes
+                UpdateMainList();
+            }
         }
         
 
