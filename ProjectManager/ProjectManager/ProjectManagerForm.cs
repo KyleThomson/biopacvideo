@@ -52,6 +52,7 @@ namespace ProjectManager
             {
                 pjt = new Project(F.FileName);
                 pjt.Open();
+                ChangeTitleText(pjt.Filename);
                 _pjtOpened = true;
                 pjt.AreAnimalsDead();
                 pjt.CompareStageConflicts(); // Find conflicts between bubble and notes
@@ -525,6 +526,17 @@ namespace ProjectManager
                     }
                 }
             }
+        }
+        private void ChangeTitleText(string path)
+        {
+            // Change form title bar to match current file opened
+
+            // extract filename
+            string filename = Path.GetFileName(path);
+            if (filename != "")
+            { Text = "Project Manager - " + filename; }
+            else
+            { Text = "Project Manager - Untitled"; }
         }
     }
 }
