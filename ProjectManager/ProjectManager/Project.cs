@@ -172,6 +172,8 @@ namespace ProjectManager
                 if (saveAsDialog.FileName != "")
                 {
                     Save(saveAsDialog.FileName);
+                    // Set new filename for project
+                    Filename = saveAsDialog.FileName;
                 }
             }
         }

@@ -295,6 +295,7 @@ namespace ProjectManager
             { pjt.Analysis(); }
             // indicate file modified
             pjt.FileChanged();
+            ChangeTitleText(pjt.Filename);
         }
         private void delete_Click(object sender, EventArgs e)
         {
@@ -313,6 +314,7 @@ namespace ProjectManager
             { pjt.Analysis(); }
             // indicate file modified
             pjt.FileChanged();
+            ChangeTitleText(pjt.Filename);
         }
 
         private void MainSelect_SelectedIndexChanged(object sender, EventArgs e)
@@ -468,6 +470,7 @@ namespace ProjectManager
         {
             // Save .pjt file as -
             pjt.SaveAs();
+            ChangeTitleText(pjt.Filename);
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -479,13 +482,14 @@ namespace ProjectManager
 
                 if (confirmSaveResult == DialogResult.Yes)
                 // Save over current file
-                { pjt.Save(pjt.Filename); }
+                { pjt.Save(pjt.Filename); ChangeTitleText(pjt.Filename); }
                 else
                 { }
             }
             else
             {
-                pjt.SaveAs();
+                pjt.SaveAs(); 
+                ChangeTitleText(pjt.Filename);
             }
             
         }
@@ -530,13 +534,21 @@ namespace ProjectManager
         private void ChangeTitleText(string path)
         {
             // Change form title bar to match current file opened
-
+            string title;
             // extract filename
             string filename = Path.GetFileName(path);
             if (filename != "")
-            { Text = "Project Manager - " + filename; }
+            { title = "Project Manager - " + filename; }
             else
-            { Text = "Project Manager - Untitled"; }
+            { title = "Project Manager - Untitled"; }
+
+            // check if file has been changed
+            if (pjt._fileChanged)
+            // add asterik to indicate that file has unsaved changes
+            { title += "*"; }
+
+            // set new title
+            Text = title;
         }
     }
 }

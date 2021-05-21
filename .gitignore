@@ -6,3 +6,6 @@
 *.cache
 ProjectManager/ProjectManager/obj/x86/Debug/ProjectManager.csproj.FileListAbsolute.txt
 ProjectManager/ProjectManager/bin/Debug/ProjectManager.pdb
+*.cache
+*.pdb
+ProjectManager/.vs/ProjectManager/v16/.suo

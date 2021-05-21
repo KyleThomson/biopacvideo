@@ -8,7 +8,7 @@ namespace ProjectManager
     public class AnimalType
     {
         public string ID;
-        public bool _isDead;
+        public bool _isDead; //dont need
         public List<WeightType> WeightInfo;
         public List<SeizureType> Sz;
         public List<MealType> Meals;
