@@ -52,6 +52,7 @@ namespace ProjectManager
             {
                 pjt = new Project(F.FileName);
                 pjt.Open();
+                ChangeTitleText(pjt.Filename);
                 _pjtOpened = true;
                 pjt.AreAnimalsDead();
                 pjt.CompareStageConflicts(); // Find conflicts between bubble and notes
@@ -525,6 +526,45 @@ namespace ProjectManager
                     }
                 }
             }
+        }
+
+        private void seizureBurdenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void ChangeTitleText(string path)
+        {
+            // Change form title bar to match current file opened
+
+            // extract filename
+            string filename = Path.GetFileName(path);
+            if (filename != "")
+            { Text = "Project Manager - " + filename; }
+            else
+            { Text = "Project Manager - Untitled"; }
+        }
+
+        private void analysisToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void test35ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Test 35 under Analysis -> ETSP Tests
+            pjt.test = TESTTYPES.T35;
+        }
+
+        private void test36ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Test 36 under Analysis -> ETSP Tests
+            pjt.test = TESTTYPES.T36;
+        }
+
+        private void fullAnalysisToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AnalysisInputs analysisInputs = new AnalysisInputs(pjt);
+            analysisInputs.ShowDialog();
         }
     }
 }

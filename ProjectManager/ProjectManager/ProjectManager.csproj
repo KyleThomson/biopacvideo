@@ -102,6 +102,12 @@
     <Compile Include="AddtoProject.designer.cs">
       <DependentUpon>AddtoProject.cs</DependentUpon>
     </Compile>
+    <Compile Include="AnalysisInputs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AnalysisInputs.Designer.cs">
+      <DependentUpon>AnalysisInputs.cs</DependentUpon>
+    </Compile>
     <Compile Include="AnimalType.cs" />
     <Compile Include="BloodDrawType.cs" />
     <Compile Include="DamerauLevenshtein.cs" />
@@ -166,6 +172,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AddtoProject.resx">
       <DependentUpon>AddtoProject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AnalysisInputs.resx">
+      <DependentUpon>AnalysisInputs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Exporter.resx">
       <DependentUpon>Exporter.cs</DependentUpon>

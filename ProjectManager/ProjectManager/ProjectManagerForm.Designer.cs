@@ -56,6 +56,16 @@
             this.SecondSelect = new System.Windows.Forms.ComboBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.Info = new System.Windows.Forms.ToolStripStatusLabel();
+            this.analysisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.eTSPTestsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.test35ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.test36ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.seizureAnalysisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.seizureBurdenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.seizureFreedomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mWWTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fisherExactToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fullAnalysisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -65,7 +75,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.measurementsToolStripMenuItem,
-            this.plottingToolStripMenuItem});
+            this.plottingToolStripMenuItem,
+            this.analysisToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(555, 24);
@@ -205,7 +216,7 @@
             // calendarToolStripMenuItem
             // 
             this.calendarToolStripMenuItem.Name = "calendarToolStripMenuItem";
-            this.calendarToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.calendarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.calendarToolStripMenuItem.Text = "Calendar";
             this.calendarToolStripMenuItem.Click += new System.EventHandler(this.calendarToolStripMenuItem_Click);
             // 
@@ -214,26 +225,26 @@
             this.resultsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rawSeizuresToolStripMenuItem});
             this.resultsToolStripMenuItem.Name = "resultsToolStripMenuItem";
-            this.resultsToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.resultsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.resultsToolStripMenuItem.Text = "Results";
             // 
             // rawSeizuresToolStripMenuItem
             // 
             this.rawSeizuresToolStripMenuItem.Name = "rawSeizuresToolStripMenuItem";
-            this.rawSeizuresToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.rawSeizuresToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.rawSeizuresToolStripMenuItem.Text = "Raw Seizures";
             // 
             // testPlotToolStripMenuItem
             // 
             this.testPlotToolStripMenuItem.Name = "testPlotToolStripMenuItem";
-            this.testPlotToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.testPlotToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.testPlotToolStripMenuItem.Text = "Test Plot";
             this.testPlotToolStripMenuItem.Click += new System.EventHandler(this.testPlotToolStripMenuItem_Click);
             // 
             // exportTestToolStripMenuItem
             // 
             this.exportTestToolStripMenuItem.Name = "exportTestToolStripMenuItem";
-            this.exportTestToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.exportTestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exportTestToolStripMenuItem.Text = "Export test";
             this.exportTestToolStripMenuItem.Click += new System.EventHandler(this.exportTestToolStripMenuItem_Click);
             // 
@@ -294,6 +305,85 @@
             this.Info.Size = new System.Drawing.Size(163, 17);
             this.Info.Text = "                                                    ";
             // 
+            // analysisToolStripMenuItem
+            // 
+            this.analysisToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.eTSPTestsToolStripMenuItem,
+            this.seizureAnalysisToolStripMenuItem,
+            this.fullAnalysisToolStripMenuItem});
+            this.analysisToolStripMenuItem.Name = "analysisToolStripMenuItem";
+            this.analysisToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
+            this.analysisToolStripMenuItem.Text = "Analysis";
+            this.analysisToolStripMenuItem.Click += new System.EventHandler(this.analysisToolStripMenuItem_Click);
+            // 
+            // eTSPTestsToolStripMenuItem
+            // 
+            this.eTSPTestsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.test35ToolStripMenuItem,
+            this.test36ToolStripMenuItem});
+            this.eTSPTestsToolStripMenuItem.Name = "eTSPTestsToolStripMenuItem";
+            this.eTSPTestsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.eTSPTestsToolStripMenuItem.Text = "ETSP Tests";
+            // 
+            // test35ToolStripMenuItem
+            // 
+            this.test35ToolStripMenuItem.Name = "test35ToolStripMenuItem";
+            this.test35ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.test35ToolStripMenuItem.Text = "Test 35";
+            this.test35ToolStripMenuItem.Click += new System.EventHandler(this.test35ToolStripMenuItem_Click);
+            // 
+            // test36ToolStripMenuItem
+            // 
+            this.test36ToolStripMenuItem.Name = "test36ToolStripMenuItem";
+            this.test36ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.test36ToolStripMenuItem.Text = "Test 36";
+            this.test36ToolStripMenuItem.Click += new System.EventHandler(this.test36ToolStripMenuItem_Click);
+            // 
+            // seizureAnalysisToolStripMenuItem
+            // 
+            this.seizureAnalysisToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.seizureBurdenToolStripMenuItem,
+            this.seizureFreedomToolStripMenuItem});
+            this.seizureAnalysisToolStripMenuItem.Name = "seizureAnalysisToolStripMenuItem";
+            this.seizureAnalysisToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.seizureAnalysisToolStripMenuItem.Text = "Seizure Analysis";
+            // 
+            // seizureBurdenToolStripMenuItem
+            // 
+            this.seizureBurdenToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mWWTestToolStripMenuItem});
+            this.seizureBurdenToolStripMenuItem.Name = "seizureBurdenToolStripMenuItem";
+            this.seizureBurdenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.seizureBurdenToolStripMenuItem.Text = "Seizure Burden";
+            this.seizureBurdenToolStripMenuItem.Click += new System.EventHandler(this.seizureBurdenToolStripMenuItem_Click);
+            // 
+            // seizureFreedomToolStripMenuItem
+            // 
+            this.seizureFreedomToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fisherExactToolStripMenuItem});
+            this.seizureFreedomToolStripMenuItem.Name = "seizureFreedomToolStripMenuItem";
+            this.seizureFreedomToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.seizureFreedomToolStripMenuItem.Text = "Seizure Freedom";
+            // 
+            // mWWTestToolStripMenuItem
+            // 
+            this.mWWTestToolStripMenuItem.Name = "mWWTestToolStripMenuItem";
+            this.mWWTestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.mWWTestToolStripMenuItem.Text = "MWW Test";
+            // 
+            // fisherExactToolStripMenuItem
+            // 
+            this.fisherExactToolStripMenuItem.Name = "fisherExactToolStripMenuItem";
+            this.fisherExactToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fisherExactToolStripMenuItem.Text = "Fisher Exact";
+            // 
+            // fullAnalysisToolStripMenuItem
+            // 
+            this.fullAnalysisToolStripMenuItem.Name = "fullAnalysisToolStripMenuItem";
+            this.fullAnalysisToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fullAnalysisToolStripMenuItem.Text = "Full Analysis";
+            this.fullAnalysisToolStripMenuItem.Click += new System.EventHandler(this.fullAnalysisToolStripMenuItem_Click);
+            // 
             // ProjectManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -349,5 +439,15 @@
         private System.Windows.Forms.ToolStripMenuItem exportTestToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem analysisToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem eTSPTestsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem test35ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem test36ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem seizureAnalysisToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem seizureBurdenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mWWTestToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem seizureFreedomToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fisherExactToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fullAnalysisToolStripMenuItem;
     }
 }
