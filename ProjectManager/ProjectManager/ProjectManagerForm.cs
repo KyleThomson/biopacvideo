@@ -12,7 +12,6 @@ namespace ProjectManager
     public partial class ProjectManager : Form
     {
         Project pjt;
-        bool _doAnalysis; // flag on project open if we should do analysis
         bool _pjtOpened = false;
         public ProjectManager()
         {
@@ -46,31 +45,6 @@ namespace ProjectManager
             F.DefaultExt = ".pjt";
             F.InitialDirectory = "C:\\";
 
-            
-
-            if (F.ShowDialog() == DialogResult.OK)
-            {
-                pjt = new Project(F.FileName);
-                pjt.Open();
-                ChangeTitleText(pjt.Filename);
-                _pjtOpened = true;
-                pjt.AreAnimalsDead();
-                pjt.CompareStageConflicts(); // Find conflicts between bubble and notes
-
-                // Create message box to prompt user if they want to perform analysis on project import
-                string confirmationMessage = "Would you like to analyze the imported project file?";
-                DialogResult confirmAnalysisResult = MessageBox.Show(confirmationMessage, "Project Analysis", MessageBoxButtons.YesNo);
-                if (confirmAnalysisResult == DialogResult.Yes)
-                { _doAnalysis = true; }
-                else
-                { _doAnalysis = false; }
-                if (_doAnalysis)
-                {
-                    pjt.DetermineTest();         // Determine test to use
-                    pjt.TestSort();              // Sort test, return if test is undefined
-                    pjt.Analysis();              // Now perform analysis once/if any conflicts are resolved
-                }
-            }
             UpdateMainList();
         }
         
@@ -549,6 +523,30 @@ namespace ProjectManager
 
             // set new title
             Text = title;
+        }
+
+        private void test35ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // user selected Test 35
+            pjt.analysis.test = TESTTYPES.T35;
+            pjt.TestSort();              // Sort test, return if test is undefined
+            pjt.Analysis();
+        }
+
+        private void test36ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // user selected Test 36
+            pjt.analysis.test = TESTTYPES.T36;
+            pjt.TestSort();              // Sort test, return if test is undefined
+            pjt.Analysis();
+        }
+
+        private void iAKToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // user selected IAK Test
+            pjt.analysis.test = TESTTYPES.IAK;
+            pjt.TestSort();              // Sort test, return if test is undefined
+            pjt.Analysis();
         }
     }
 }
