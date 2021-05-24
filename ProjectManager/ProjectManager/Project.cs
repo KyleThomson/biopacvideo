@@ -727,29 +727,24 @@ namespace ProjectManager
         private void TrackAnimal(AnimalType animal)
         {
             // method determines if animal is dead
-            DateTime earliest; DateTime latest = Files[0].Start;
-            bool _earliestFlag = true; // flag to account for animal id missing then reappear. if true
-            bool _animalDead;
-            
+            DateTime earliest = default; DateTime latest = default;
+            bool _appeared = false;
+
             // Step thru files and determine if animal ID disappears and "e" appears
             foreach (FileType file in Files)
             {
                 if (file.AnimalIDs.Contains(animal.ID))
                 // Track earliest time that animal ID appears 
-                { earliest = file.Start; _earliestFlag = true; }
+                { earliest = file.Start; _appeared = true; }
 
-                else if (file.AnimalIDs.Contains("e") && !file.AnimalIDs.Contains(animal.ID))
+                else if (_appeared && !file.AnimalIDs.Contains(animal.ID))
                 // If file doesn't have animal ID log a new latest time and set flag to false
                 {
-                    latest = file.Start; _earliestFlag = false;
+                    latest = file.Start; _appeared = false;
                 }
             }
-
-            // _earliestFlag being false means that last file didn't have animal ID of interest
-            if (Files[Files.Count - 1].Start.Subtract(latest).TotalHours == 0 && !_earliestFlag)
-            { _animalDead = true; }
-            else
-            { _animalDead = false; }
+            animal.earliestAppearance = earliest;
+            animal.latestAppearance = latest;
         }
         public void ExportData(string Fname, ExportType E)
         {
@@ -981,6 +976,9 @@ namespace ProjectManager
                     }
                     else if (E.grouped)
                     {
+                        //////////////////////////////////////////////
+                        // NEED IAK PROJECT FILE TO MAKE THIS WORK //
+                        ////////////////////////////////////////////
                         ParseGroups();
                         // Randomly assign groups A and B
                         Random rand = new Random();
