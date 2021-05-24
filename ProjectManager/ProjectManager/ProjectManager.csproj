@@ -147,6 +147,12 @@
     <Compile Include="SeizureType.cs" />
     <Compile Include="SzGraph.cs" />
     <Compile Include="SzMetrics.cs" />
+    <Compile Include="TestDescription.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestDescription.Designer.cs">
+      <DependentUpon>TestDescription.cs</DependentUpon>
+    </Compile>
     <Compile Include="TestInput.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -187,6 +193,9 @@
     </Compile>
     <EmbeddedResource Include="SaveReminderDialog.resx">
       <DependentUpon>SaveReminderDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestDescription.resx">
+      <DependentUpon>TestDescription.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TestInput.resx">
       <DependentUpon>TestInput.cs</DependentUpon>

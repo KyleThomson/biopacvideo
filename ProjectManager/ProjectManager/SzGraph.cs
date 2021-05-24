@@ -21,10 +21,10 @@ namespace ProjectManager
         public TESTTYPES test;
         public string header;
         public string subHeader;
-        public string ETSP;
-        public string batch;
-        public string dose;
-        public string frequency;
+        public string ETSP = "ETSP: ";
+        public string batch = "Dose: ";
+        public string dose = "Dose: ";
+        public string frequency = "Frequency: ";
         public DateTime Earliest; public DateTime Latest;
         public SzGraph(int X, int Y, Project pjt)
         {
@@ -58,6 +58,9 @@ namespace ProjectManager
             graph.DrawTicks(numXTicks, pjt.Animals.Count, 3.0F, xTickString, yTickString);
             graph.WriteXLabel("Time (days)", aFont);
             graph.WriteYLabel("Animals", aFont);
+
+            // Set test descriptors
+            SetTestDescriptors();
         }
         private List<string> GetXTickLabels(Project pjt, int xTickInterval)
         {
@@ -72,6 +75,18 @@ namespace ProjectManager
 
             }
             return xTickString;
+        }
+        private void SetTestDescriptors()
+        {
+            TestDescription description = new TestDescription();
+            description.ShowDialog();
+            // set description for the test - this will display in subheaders
+            ETSP += description.ETSP; batch += description.Batch;
+            dose += description.Dose; frequency += description.Frequency;
+            
+            // check if form was cancelled and stop plotting
+            if (description._cancelled)
+            { return; }
         }
         private List<string> GetYTickLabels(Project pjt)
         {
@@ -309,12 +324,6 @@ namespace ProjectManager
             graph.graphics.DrawString(headerString, headerFont, headerBrush, headerPoint);
             graph.graphics.DrawString(subheader, subFont, headerBrush, subPoint);
 
-            // Set values for ETSP, Batch, Dose, and Frequency
-            // If user did not input values for these set to ----
-            ETSP = "ETSP: ----";
-            batch = "Batch: ----";
-            dose = "Dose: ----";
-            frequency = "Frequency: ----";
             // else, set to user defined values
 
             // Draw area and strings for etsp, batch, etc.

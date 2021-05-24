@@ -730,7 +730,7 @@ namespace ProjectManager
             DateTime earliest = default; DateTime latest = default;
             bool _appeared = false;
 
-            // Step thru files and determine if animal ID disappears and "e" appears
+            // Step thru files and determine if animal ID appears, disappears, or reappears
             foreach (FileType file in Files)
             {
                 if (file.AnimalIDs.Contains(animal.ID) && !_appeared)
