@@ -25,14 +25,15 @@ namespace ProjectManager
         public string batch;
         public string dose;
         public string frequency;
+        public DateTime Earliest; public DateTime Latest;
         public SzGraph(int X, int Y, Project pjt)
         {
             // Type of test
             test = pjt.test;
 
             // Find max day of project
-            DateTime Earliest = pjt.Files[0].Start.Date;
-            DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
+            Earliest = pjt.Files[0].Start.Date;
+            Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
             double totalHours = Latest.Subtract(Earliest).TotalHours;
             int tempMax = (int)Math.Round(totalHours / 24, 2);
 
@@ -87,8 +88,6 @@ namespace ProjectManager
             // Plot seizures the same for both test 35 and test 36
             int markerSize = 8;
             Color szColor = Color.FromName("Black");
-            DateTime Earliest = pjt.Files[0].Start.Date;
-            DateTime Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
             for (int i = 0; i < pjt.Animals.Count; i++)
             {
                 float yCoord = i + 1;
@@ -109,7 +108,6 @@ namespace ProjectManager
         }
         public void PlotTrt(Project pjt)
         {
-            DateTime Earliest = pjt.Files[0].Start.Date;
             float lineWidth = 4;
             Color vehicleColor = Color.FromName("Teal");
             Color drugColor = Color.FromName("Red");
@@ -184,6 +182,30 @@ namespace ProjectManager
 
                 }
 
+            }
+        }
+        public void PlotEmpty(Project pjt)
+        {
+            Color lineColor = Color.FromName("Black");
+            float lineWidth = 4;
+            float time0 = (float)Earliest.Subtract(Earliest).TotalHours;
+            float maxTime = (float)Math.Round(Latest.Subtract(Earliest).TotalHours / 24, 2);
+            // Plot the missing time an animal has
+            int i = 0;
+            foreach (AnimalType animal in pjt.Animals)
+            {
+                float yCoord = (float)(i + 0.5);
+                if (animal.earliestAppearance != default)
+                {
+                    float x2 = (float)Math.Round(animal.earliestAppearance.Subtract(Earliest).TotalHours / 24, 2);
+                    graph.Line(time0, yCoord, x2, yCoord, lineWidth, lineColor);
+                }
+                if (animal.latestAppearance != default)
+                {
+                    float x2 = (float)Math.Round(animal.latestAppearance.Subtract(Earliest).TotalHours / 24, 2);
+                    graph.Line(x2, yCoord, maxTime, yCoord, lineWidth, lineColor);
+                }
+                i++;
             }
         }
         public void Legend()

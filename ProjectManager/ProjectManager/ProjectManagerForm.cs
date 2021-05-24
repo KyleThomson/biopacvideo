@@ -419,18 +419,6 @@ namespace ProjectManager
             F.Dispose();
 
         }
-
-        private void testPlotToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SzGraph Test = new SzGraph(4000, 4000, pjt);
-            Test.PlotSz(pjt);
-            Test.PlotTrt(pjt);
-            Test.Legend();
-            Test.DisplayHeader();
-            Test.DisplayStats(pjt);
-            Test.graph.DisplayGraph();
-        }
-
         private void ProjectManager_Load(object sender, EventArgs e)
         {
 
@@ -558,6 +546,7 @@ namespace ProjectManager
             SzGraph Test = new SzGraph(4000, 4000, pjt);
             Test.PlotSz(pjt);
             Test.PlotTrt(pjt);
+            Test.PlotEmpty(pjt);
             Test.Legend();
             Test.DisplayHeader();
             Test.DisplayStats(pjt);
