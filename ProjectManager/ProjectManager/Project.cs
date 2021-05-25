@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using System.Linq;
+using Microsoft.VisualBasic;
 
 namespace ProjectManager
 {
@@ -517,27 +518,49 @@ namespace ProjectManager
             return Percent;
 
         }
-        public bool ImportDirectory(string Dir)
+        public int ImportDirectory(string Dir, bool RejectIncomplete)
         {
             ACQReader TempACQ = new ACQReader();
             FileType F = new FileType();
+            string[] IniFiles;
+            IniFile BioINI;
             //Open the ACQ file
             string[] FName = Directory.GetFiles(Dir, "*.acq");
             if (FName.Length > 0)
             {
+                IniFiles = Directory.GetFiles(Dir, "*_Settings.txt");
+                BioINI = new IniFile(IniFiles[0]);
+                double PercentCompletion = BioINI.IniReadValue("Review", "Complete", (double)0);
+                if (RejectIncomplete)
+                {
+                    if (Math.Ceiling(PercentCompletion) < 100)
+                    {
+                        DialogResult dialogResult = MessageBox.Show(
+                            FName[0] + "at %" + PercentCompletion.ToString() + " - Import Anyway?",
+                            "Review Not Complete",
+                             MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.No)
+                        {
+                            return 2;
+                        }
+                    }
+                }
+                F.Reviewer = BioINI.IniReadValue("Review", "Reviewer", "");
+                DateTime.TryParse(BioINI.IniReadValue("Review", "LastReviewed", ""), out F.ReviewDate);                    
                 TempACQ.openACQ(FName[0]);
                 string Fn = FName[0].Substring(FName[0].LastIndexOf('\\') + 1);
                 F.Start = ConvertFileToDT(Fn);
                 F.Chans = TempACQ.Chans;
                 F.AnimalIDs = TempACQ.ID;
                 F.Duration = TimeSpan.FromSeconds(TempACQ.FileTime);
+                
                 TempACQ.closeACQ();
                 FileType Fs = Files.Find(delegate (FileType Ft) { return ((DateTime.Compare(Ft.Start, F.Start) == 0) && (string.Compare(F.AnimalIDs[0], Ft.AnimalIDs[0]) == 0)); });
                 //Determine if duplicate file - compare animal name and file start
                 if (Fs != null)
                 {
                     //Boot us out of the function                   
-                    return false;
+                    return 1;
                 }
                 Files.Add(F);
                 //Open the Feeder file
@@ -551,7 +574,7 @@ namespace ProjectManager
                     int CurrentAnimal;
                     int Feeder;
                     StreamReader FLog = new StreamReader(FLogName[0]);
-
+                    
                     while (!FLog.EndOfStream)
                     {
                         //5/1/2012 3:00:04 AM  Feeder: 1  Pellets: 8 Medicated                
@@ -637,7 +660,7 @@ namespace ProjectManager
                     }
                 }
             }
-            return true;
+            return 0;
         }
         private DateTime ConvertFileToDT(string F)
         {
@@ -1067,11 +1090,12 @@ namespace ProjectManager
             //Record types - An = Animal, Fl = File, Gp = Group, Lb = Label.
             if (data[0].IndexOf("Fl") != -1)
             {
-
+                FileType F;
                 DateTime TempDate;
+                DateTime ReviewDate; 
                 try
                 {
-                    TempDate = ConvertFileToDT(data[1]);
+                    TempDate = ConvertFileToDT(data[1]);                    
                     //Get the ACQ info. 
                     int.TryParse(data[3], out Chans);
                     IDs = new string[Chans];
@@ -1079,7 +1103,15 @@ namespace ProjectManager
                     {
                         IDs[i] = data[4 + i];
                     }
-                    FileType F = new FileType(IDs, Chans, TempDate, data[2]);
+                    if (data.Length <= 5 + Chans)
+                    {
+                        F = new FileType(IDs, Chans, TempDate, data[2]);
+                    }
+                    else
+                    {
+                        DateTime.TryParse(data[5], out ReviewDate);
+                        F = new FileType(IDs, Chans, TempDate, data[2], data[4+Chans],ReviewDate);
+                    }
                     Files.Add(F);
                 }
                 catch

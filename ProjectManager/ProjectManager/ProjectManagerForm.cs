@@ -24,6 +24,8 @@ namespace ProjectManager
         {
             SaveFileDialog F = new SaveFileDialog();
             F.DefaultExt = ".pjt";
+            F.Filter =
+            "Text files (*.pjt)|*.pjt|All files (*.*)|*.*";
             F.InitialDirectory = "C:\\";
             if (F.ShowDialog() == DialogResult.OK)
             {
@@ -86,6 +88,7 @@ namespace ProjectManager
             if (pjt == null)
                 return;            
             SecondList.Items.Clear();
+            if (MainList.SelectedIndex == -1) return; //No file selected
             if (MainSelect.SelectedIndex == 0) //Files
             {
                 if (SecondSelect.SelectedIndex == 0)
@@ -169,7 +172,8 @@ namespace ProjectManager
                 FolderBrowserDialog F = new FolderBrowserDialog();                
                 if (F.ShowDialog(this) == DialogResult.OK)
                 {
-                    if (!pjt.ImportDirectory(F.SelectedPath))
+                    int result = pjt.ImportDirectory(F.SelectedPath, this.rejectUnreviewedFilesToolStripMenuItem.Checked);
+                    if (result==2)
                     {
                         MessageBox.Show("File already imported", "ERROR");
                     }
@@ -366,7 +370,8 @@ namespace ProjectManager
                 for (int i = 0; i < Frm.DirReturn.Length; i++)
                 {
                     //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
-                    if (!pjt.ImportDirectory(Frm.DirReturn[i]))
+                    int result = pjt.ImportDirectory(Frm.DirReturn[i], this.rejectUnreviewedFilesToolStripMenuItem.Checked);
+                    if (result==2)
                     {
                         DuplicateDirectoryCount++;
                     }
@@ -439,6 +444,7 @@ namespace ProjectManager
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (pjt is null) return;
             if (pjt.Filename != "")
             {
                 string confirmationMessage = "Are you sure you want to overwrite existing file?";
@@ -551,6 +557,11 @@ namespace ProjectManager
             Test.DisplayHeader();
             Test.DisplayStats(pjt);
             Test.graph.DisplayGraph();
+        }
+
+        private void rejectUnreviewedFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }

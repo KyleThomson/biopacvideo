@@ -11,12 +11,26 @@ namespace ProjectManager
         public int Chans;
         public DateTime Start;
         public TimeSpan Duration;
+        public String Reviewer;
+        public DateTime ReviewDate;
+
         public FileType(string[] A, int B, DateTime C, string D)
         {
             AnimalIDs = A;
             Chans = B;
             Start = C;
             TimeSpan.TryParse(D, out Duration);
+            Reviewer = "";
+            ReviewDate = Start; 
+        }
+        public FileType(string[] A, int B, DateTime C, string D,string E, DateTime F)
+        {
+            AnimalIDs = A;
+            Chans = B;
+            Start = C;
+            TimeSpan.TryParse(D, out Duration);
+            Reviewer = E;
+            ReviewDate = F;
         }
         public FileType()
         {
