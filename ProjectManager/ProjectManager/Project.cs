@@ -509,7 +509,7 @@ namespace ProjectManager
             return Percent;
 
         }
-        public bool ImportDirectory(string Dir, bool RejectIncomplete)
+        public int ImportDirectory(string Dir, bool RejectIncomplete)
         {
             ACQReader TempACQ = new ACQReader();
             FileType F = new FileType();
@@ -526,11 +526,13 @@ namespace ProjectManager
                 {
                     if (Math.Ceiling(PercentCompletion) < 100)
                     {
-                        DialogResult dialogResult = MessageBox.Show("Review Not Complete",
-                            FName[0] + "at %" + PercentCompletion.ToString() + "\nImport Anyway?", MessageBoxButtons.YesNo);
+                        DialogResult dialogResult = MessageBox.Show(
+                            FName[0] + "at %" + PercentCompletion.ToString() + " - Import Anyway?",
+                            "Review Not Complete",
+                             MessageBoxButtons.YesNo);
                         if (dialogResult == DialogResult.No)
                         {
-                            return false;
+                            return 2;
                         }
                     }
                 }
@@ -549,7 +551,7 @@ namespace ProjectManager
                 if (Fs != null)
                 {
                     //Boot us out of the function                   
-                    return false;
+                    return 1;
                 }
                 Files.Add(F);
                 //Open the Feeder file
@@ -649,7 +651,7 @@ namespace ProjectManager
                     }
                 }
             }
-            return true;
+            return 0;
         }
         private DateTime ConvertFileToDT(string F)
         {
