@@ -256,7 +256,7 @@ namespace ProjectManager
                 // count animals in each treatment group
                 CountTreatments();
                 // calculate pvalues
-                //EvaluateSignificance();
+                EvaluateSignificance();
             }
         }
         public void EvaluateSignificance()

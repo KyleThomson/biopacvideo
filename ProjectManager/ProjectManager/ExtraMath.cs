@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Runtime;
+using System.Numerics;
 
 namespace ProjectManager
 {
     public class ExtraMath
     {
-        public static int Factorial(int x)
+        public static BigInteger Factorial(int x)
         {
             // initialize result
-            int result = 1;
+            long result = 1;
 
             // Loop until we get to 1
             // 0! = 1, create condition
@@ -26,11 +26,13 @@ namespace ProjectManager
             {
                 // factorial of negative number? don't think this will happen but crazier things have happened
             }
-            return result;
+            BigInteger answer = result;
+            return answer;
         }
         public static double FisherExact(int a, int b, int c, int d, int N)
         {
             double pvalue;
+            Console.WriteLine((double)(Factorial(a + b) * Factorial(c + d) * Factorial(a + c) * Factorial(b + d)) / (double)(Factorial(a) * Factorial(b) * Factorial(c) * Factorial(d) * Factorial(N)));
             pvalue = (double)(Factorial(a + b) * Factorial(c + d) * Factorial(a + c) * Factorial(b + d)) / (double)(Factorial(a) * Factorial(b) * Factorial(c) * Factorial(d) * Factorial(N));
 
             return pvalue;
