@@ -101,10 +101,10 @@ namespace ProjectManager
             float yTickSpacing = (float)(yAxisLength / (yTicks * 1.5));
             Font xFont = new Font("Arial", 10 * objectScale);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
-
+            float maxXTick = (float)Convert.ToDouble(xTickLabels[xTicks - 1]);
             for (int i = 0; i < xTicks; i++)
             {
-                float currentXPoint = (float)(((Convert.ToDouble(xTickLabels[i]) + 0.5) / maxXData) * (axes[1].X - axes[0].X) * 0.95);
+                float currentXPoint = (float)(((Convert.ToDouble(xTickLabels[i]) + 0.5) / maxXTick) * (axes[1].X - axes[0].X) * 0.95);
                 // create length of x tick
                 PointF xTickStart = new PointF(xAxisStart + currentXPoint, yAxisLength);
                 xTickPoints.Add(xAxisStart + currentXPoint);
@@ -178,17 +178,17 @@ namespace ProjectManager
             float yScale = (yAxisLength - yAxisStart) / maxYData;
 
             // Convert input coordinate points
-            float realXCoord = xCoord * xScale + xTickPoints[0];
-            float realYCoord = (float)(yAxisLength - yCoord * yScale);
+            float realXCoord = xCoord * xScale + xTickPoints[0] - (markerSize * objectScale);
+            float realYCoord = (float)(yAxisLength - yCoord * yScale) + (markerSize * objectScale);
 
             // Marker type selection
             if (markerType == "o")
             {
-                graphics.DrawEllipse(dataPen, realXCoord - (markerSize * objectScale) / 2, realYCoord, markerSize * objectScale, markerSize * objectScale);
+                graphics.DrawEllipse(dataPen, realXCoord , realYCoord, markerSize * objectScale, markerSize * objectScale);
             }
             else if(markerType == ".")
             {
-                graphics.FillEllipse(dataBrush, realXCoord - (markerSize * objectScale) / 2, realYCoord, markerSize * objectScale, markerSize * objectScale);
+                graphics.FillEllipse(dataBrush, realXCoord, realYCoord - (markerSize * objectScale) / 2, markerSize * objectScale, markerSize * objectScale);
             }
             else if(markerType == "d")
             {

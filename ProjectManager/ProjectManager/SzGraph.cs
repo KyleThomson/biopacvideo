@@ -101,7 +101,7 @@ namespace ProjectManager
         public void PlotSz(Project pjt)
         {
             // Plot seizures the same for both test 35 and test 36
-            int markerSize = 8;
+            int markerSize = 6;
             Color szColor = Color.FromName("Black");
             for (int i = 0; i < pjt.Animals.Count; i++)
             {
@@ -212,12 +212,12 @@ namespace ProjectManager
                 float yCoord = (float)(i + 0.5);
                 if (animal.earliestAppearance != default)
                 {
-                    float x2 = (float)Math.Round(animal.earliestAppearance.Subtract(Earliest).TotalHours / 24, 2);
+                    float x2 = (float)Math.Round(animal.earliestAppearance.Subtract(Earliest).TotalHours / 24, 4);
                     graph.Line(time0, yCoord, x2, yCoord, lineWidth, lineColor);
                 }
                 if (animal.latestAppearance != default)
                 {
-                    float x2 = (float)Math.Round(animal.latestAppearance.Subtract(Earliest).TotalHours / 24, 2);
+                    float x2 = (float)Math.Round(animal.latestAppearance.Subtract(Earliest).TotalHours / 24, 4);
                     graph.Line(x2, yCoord, maxTime, yCoord, lineWidth, lineColor);
                 }
                 i++;
