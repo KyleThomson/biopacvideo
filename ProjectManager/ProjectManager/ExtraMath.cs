@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime;
 
 namespace ProjectManager
 {
@@ -13,16 +14,24 @@ namespace ProjectManager
             int result = 1;
 
             // Loop until we get to 1
-            for (int i = x - 1; i > 0; i-- )
+            // 0! = 1, create condition
+            if (x > 0)
             {
-                result *= i; 
+                for (int i = x; i > 0; i--)
+                {
+                    result *= i;
+                }
+            }
+            else if (x < 0)
+            {
+                // factorial of negative number? don't think this will happen but crazier things have happened
             }
             return result;
         }
         public static double FisherExact(int a, int b, int c, int d, int N)
         {
             double pvalue;
-            pvalue = Factorial(a + b) * Factorial(c + d) * Factorial(a + c) * Factorial(b + d) / (Factorial(a) * Factorial(b) * Factorial(c) * Factorial(d) * Factorial(N));
+            pvalue = (double)(Factorial(a + b) * Factorial(c + d) * Factorial(a + c) * Factorial(b + d)) / (double)(Factorial(a) * Factorial(b) * Factorial(c) * Factorial(d) * Factorial(N));
 
             return pvalue;
         }

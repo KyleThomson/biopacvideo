@@ -203,6 +203,8 @@ namespace ProjectManager
         {
             Color lineColor = Color.FromName("Black");
             float lineWidth = 4;
+            
+            // get earliest and latest time in hours
             float time0 = (float)Earliest.Subtract(Earliest).TotalHours;
             float maxTime = (float)Math.Round(Latest.Subtract(Earliest).TotalHours / 24, 2);
             // Plot the missing time an animal has
