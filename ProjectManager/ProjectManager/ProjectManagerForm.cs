@@ -24,6 +24,8 @@ namespace ProjectManager
         {
             SaveFileDialog F = new SaveFileDialog();
             F.DefaultExt = ".pjt";
+            F.Filter =
+            "Text files (*.pjt)|*.pjt|All files (*.*)|*.*";
             F.InitialDirectory = "C:\\";
             if (F.ShowDialog() == DialogResult.OK)
             {
@@ -169,7 +171,7 @@ namespace ProjectManager
                 FolderBrowserDialog F = new FolderBrowserDialog();                
                 if (F.ShowDialog(this) == DialogResult.OK)
                 {
-                    if (!pjt.ImportDirectory(F.SelectedPath))
+                    if (!pjt.ImportDirectory(F.SelectedPath,this.rejectUnreviewedFilesToolStripMenuItem.Checked))
                     {
                         MessageBox.Show("File already imported", "ERROR");
                     }
@@ -366,7 +368,7 @@ namespace ProjectManager
                 for (int i = 0; i < Frm.DirReturn.Length; i++)
                 {
                     //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
-                    if (!pjt.ImportDirectory(Frm.DirReturn[i]))
+                    if (!pjt.ImportDirectory(Frm.DirReturn[i], this.rejectUnreviewedFilesToolStripMenuItem.Checked))
                     {
                         DuplicateDirectoryCount++;
                     }
@@ -439,6 +441,7 @@ namespace ProjectManager
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (pjt is null) return;
             if (pjt.Filename != "")
             {
                 string confirmationMessage = "Are you sure you want to overwrite existing file?";
@@ -551,6 +554,11 @@ namespace ProjectManager
             Test.DisplayHeader();
             Test.DisplayStats(pjt);
             Test.graph.DisplayGraph();
+        }
+
+        private void rejectUnreviewedFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }

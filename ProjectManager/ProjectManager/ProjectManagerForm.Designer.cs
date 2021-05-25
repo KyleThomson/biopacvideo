@@ -59,6 +59,7 @@
             this.SecondSelect = new System.Windows.Forms.ComboBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.Info = new System.Windows.Forms.ToolStripStatusLabel();
+            this.rejectUnreviewedFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -86,7 +87,8 @@
             this.mergeProjectToolStripMenuItem,
             this.importFileToolStripMenuItem,
             this.addMultipleDirectoriesToolStripMenuItem,
-            this.importSeizureToolStripMenuItem});
+            this.importSeizureToolStripMenuItem,
+            this.rejectUnreviewedFilesToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
@@ -110,14 +112,14 @@
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.saveAsToolStripMenuItem.Text = "Save As";
+            this.saveAsToolStripMenuItem.Text = "Save &As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // exportDataToolStripMenuItem
@@ -208,7 +210,7 @@
             // calendarToolStripMenuItem
             // 
             this.calendarToolStripMenuItem.Name = "calendarToolStripMenuItem";
-            this.calendarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.calendarToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.calendarToolStripMenuItem.Text = "Calendar";
             this.calendarToolStripMenuItem.Click += new System.EventHandler(this.calendarToolStripMenuItem_Click);
             // 
@@ -217,7 +219,7 @@
             this.resultsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rawSeizuresToolStripMenuItem});
             this.resultsToolStripMenuItem.Name = "resultsToolStripMenuItem";
-            this.resultsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.resultsToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.resultsToolStripMenuItem.Text = "Results";
             // 
             // rawSeizuresToolStripMenuItem
@@ -229,7 +231,7 @@
             // exportTestToolStripMenuItem
             // 
             this.exportTestToolStripMenuItem.Name = "exportTestToolStripMenuItem";
-            this.exportTestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportTestToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.exportTestToolStripMenuItem.Text = "Export test";
             this.exportTestToolStripMenuItem.Click += new System.EventHandler(this.exportTestToolStripMenuItem_Click);
             // 
@@ -240,27 +242,27 @@
             this.test36ToolStripMenuItem,
             this.iAKToolStripMenuItem});
             this.testsToolStripMenuItem.Name = "testsToolStripMenuItem";
-            this.testsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.testsToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.testsToolStripMenuItem.Text = "Tests";
             // 
             // test35ToolStripMenuItem
             // 
             this.test35ToolStripMenuItem.Name = "test35ToolStripMenuItem";
-            this.test35ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.test35ToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.test35ToolStripMenuItem.Text = "Test 35";
             this.test35ToolStripMenuItem.Click += new System.EventHandler(this.test35ToolStripMenuItem_Click);
             // 
             // test36ToolStripMenuItem
             // 
             this.test36ToolStripMenuItem.Name = "test36ToolStripMenuItem";
-            this.test36ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.test36ToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.test36ToolStripMenuItem.Text = "Test 36";
             this.test36ToolStripMenuItem.Click += new System.EventHandler(this.test36ToolStripMenuItem_Click);
             // 
             // iAKToolStripMenuItem
             // 
             this.iAKToolStripMenuItem.Name = "iAKToolStripMenuItem";
-            this.iAKToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.iAKToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.iAKToolStripMenuItem.Text = "IAK";
             this.iAKToolStripMenuItem.Click += new System.EventHandler(this.iAKToolStripMenuItem_Click);
             // 
@@ -321,6 +323,16 @@
             this.Info.Size = new System.Drawing.Size(163, 17);
             this.Info.Text = "                                                    ";
             // 
+            // rejectUnreviewedFilesToolStripMenuItem
+            // 
+            this.rejectUnreviewedFilesToolStripMenuItem.Checked = true;
+            this.rejectUnreviewedFilesToolStripMenuItem.CheckOnClick = true;
+            this.rejectUnreviewedFilesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.rejectUnreviewedFilesToolStripMenuItem.Name = "rejectUnreviewedFilesToolStripMenuItem";
+            this.rejectUnreviewedFilesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.rejectUnreviewedFilesToolStripMenuItem.Text = "Reject Unreviewed Files";
+            this.rejectUnreviewedFilesToolStripMenuItem.Click += new System.EventHandler(this.rejectUnreviewedFilesToolStripMenuItem_Click);
+            // 
             // ProjectManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -379,5 +391,6 @@
         private System.Windows.Forms.ToolStripMenuItem test35ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem test36ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem iAKToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rejectUnreviewedFilesToolStripMenuItem;
     }
 }
