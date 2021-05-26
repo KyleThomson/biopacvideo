@@ -29,30 +29,29 @@ namespace ProjectManager
         public void SzFreedomSignificance(int drugAnimals, int baselineAnimals, int vehicleAnimals)
         {
             // 
-            // Get integers for fisher exact test
+            // Get integers for fisher exact test (2x2 contingency table)
             if (test == TESTTYPES.T35)
             {
                 // Do Drug vs. Baseline comparison first
-                int drugAndBaselineAnimals = drugAnimals + baselineAnimals; // total number of animals for drug and baseline
-                int seizedDrugAnimals = drugAnimals - drugFreedomSum; int seizedBaselineAnimals = baselineAnimals - baseFreedomSum;
-                int notSeizedDrugAnimals = drugFreedomSum; int notSeizedBaselineAnimals = baseFreedomSum;
-                double drugVsBaselinePvalue = ExtraMath.FisherExact(seizedDrugAnimals, seizedBaselineAnimals, notSeizedDrugAnimals, notSeizedBaselineAnimals, drugAndBaselineAnimals);
+                int seizedDrugAnimals = drugAnimals - drugFreedomSum; 
+                int seizedBaselineAnimals = baselineAnimals - baseFreedomSum;
+                int notSeizedDrugAnimals = drugFreedomSum; 
+                int notSeizedBaselineAnimals = baseFreedomSum;
+                double drugVsBaselinePvalue = ExtraMath.FisherExact(seizedDrugAnimals, seizedBaselineAnimals, notSeizedDrugAnimals, notSeizedBaselineAnimals);
 
                 // Do Vehicle vs. Baseline comparison next
-                int vehicleAndDrugAnimals = vehicleAnimals + drugAnimals; // total number of animals for vehicle and baseline
                 int seizedVehicleAnimals = vehicleAnimals - vehFreedomSum;
                 int notSeizedVehicleAnimals = vehFreedomSum;
-                double drugVsVehiclePvalue = ExtraMath.FisherExact(seizedDrugAnimals, seizedVehicleAnimals, notSeizedDrugAnimals, notSeizedVehicleAnimals, vehicleAndDrugAnimals);
+                double drugVsVehiclePvalue = ExtraMath.FisherExact(seizedDrugAnimals, seizedVehicleAnimals, notSeizedDrugAnimals, notSeizedVehicleAnimals);
                 PVALUES.Add("SF: Drug vs Baseline", drugVsBaselinePvalue);
                 PVALUES.Add("SF: Drug vs Vehicle", drugVsVehiclePvalue);
             }
             else if (test == TESTTYPES.T36)
             {
                 // Do Drug vs. Baseline comparison ONLY
-                int drugAndBaselineAnimals = drugAnimals + baselineAnimals; // total number of animals for drug and baseline
                 int seizedDrugAnimals = drugAnimals - drugFreedomSum; int seizedBaselineAnimals = baselineAnimals - baseFreedomSum;
                 int notSeizedDrugAnimals = drugFreedomSum; int notSeizedBaselineAnimals = baseFreedomSum;
-                double drugVsBaselinePvalue = ExtraMath.FisherExact(seizedDrugAnimals, seizedBaselineAnimals, notSeizedDrugAnimals, notSeizedBaselineAnimals, drugAndBaselineAnimals);
+                double drugVsBaselinePvalue = ExtraMath.FisherExact(seizedDrugAnimals, seizedBaselineAnimals, notSeizedDrugAnimals, notSeizedBaselineAnimals);
             }
 
         }

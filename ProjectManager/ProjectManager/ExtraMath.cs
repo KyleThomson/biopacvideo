@@ -11,7 +11,7 @@ namespace ProjectManager
         public static BigInteger Factorial(int x)
         {
             // initialize result
-            long result = 1;
+            BigInteger result = 1;
 
             // Loop until we get to 1
             // 0! = 1, create condition
@@ -26,14 +26,19 @@ namespace ProjectManager
             {
                 // factorial of negative number? don't think this will happen but crazier things have happened
             }
-            BigInteger answer = result;
-            return answer;
+            return result;
         }
-        public static double FisherExact(int a, int b, int c, int d, int N)
+        public static double FisherExact(int a, int b, int c, int d)
         {
+            int N = a + b + c + d;
+
+            // calculate numerator for fisher exact
+            BigInteger numerator = Factorial(a + b) * Factorial(c + d) * Factorial(a + c) * Factorial(b + d);
+            // calculate denominator
+            BigInteger denominator = Factorial(a) * Factorial(b) * Factorial(c) * Factorial(d) * Factorial(N);
+
             double pvalue;
-            Console.WriteLine((double)(Factorial(a + b) * Factorial(c + d) * Factorial(a + c) * Factorial(b + d)) / (double)(Factorial(a) * Factorial(b) * Factorial(c) * Factorial(d) * Factorial(N)));
-            pvalue = (double)(Factorial(a + b) * Factorial(c + d) * Factorial(a + c) * Factorial(b + d)) / (double)(Factorial(a) * Factorial(b) * Factorial(c) * Factorial(d) * Factorial(N));
+            pvalue = (double)numerator / (double)denominator;
 
             return pvalue;
         }
