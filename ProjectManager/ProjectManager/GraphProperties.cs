@@ -12,17 +12,14 @@ namespace ProjectManager
         public Bitmap mainPlot;
         public Graphics graphics;
         public Pen axisPen;
-        public float xAxisLength;
-        public float yAxisLength;
-        public float xAxisStart;
-        public float yAxisStart;
+        public Axes axes;
         public List<float> xTickPoints;
         public List<float> yTickPoints;
         public float maxXData;
         public float maxYData;
         public PictureBox picture = new PictureBox();
         public Form graphForm = new Form();
-        public List<PointF> axes;
+        public List<PointF> axesPoints;
         public int X; public int Y;
         public float scale;
         public float objectScale;
@@ -40,6 +37,11 @@ namespace ProjectManager
             mainPlot = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
             graphics = Graphics.FromImage(mainPlot);
             graphics.Clear(Color.White);
+
+            // Create axes
+            axes = new Axes(X, Y);
+            axesPoints = axes.axesList;
+
             xTickPoints = new List<float>();
             yTickPoints = new List<float>();
 
@@ -59,61 +61,47 @@ namespace ProjectManager
         }
         public void DrawAxes(float penWidth)
         {
-            xAxisLength = (float)(X * 0.75);
-            yAxisLength = (float)(Y * 0.75);
-            xAxisStart = (float)(X * 0.25);
-            yAxisStart = (float)(Y * 0.25);
-
-            
-            PointF xAxisStartPoint = new PointF(xAxisStart, Y - yAxisStart);
-            PointF xAxisEndPoint = new PointF(xAxisLength, Y - yAxisStart);
-            PointF yAxisStartPoint = new PointF(xAxisStart, yAxisStart);
-            PointF yAxisEndPoint = new PointF(xAxisStart, yAxisLength);
-
             Pen axisPen = new Pen(Brushes.Black);
             axisPen.Width = penWidth * objectScale;
             // X Axis First
-            graphics.DrawLine(axisPen, xAxisStartPoint, xAxisEndPoint);
+            graphics.DrawLine(axisPen, axesPoints[0], axesPoints[1]);
             // Y Axis
-            graphics.DrawLine(axisPen, yAxisStartPoint, yAxisEndPoint);
-            List<PointF> axesList = new List<PointF>();
-            axesList.Add(xAxisStartPoint);
-            axesList.Add(xAxisEndPoint);
-            axesList.Add(yAxisStartPoint);
-            axesList.Add(yAxisEndPoint);
-            axes = axesList;
+            graphics.DrawLine(axisPen, axesPoints[2], axesPoints[3]);
         }
         public void BoundingBox(float penWidth)
         {
             Pen axisPen = new Pen(Brushes.Black);
             axisPen.Width = penWidth * objectScale;
             //Horizontal bounding line
-            graphics.DrawLine(axisPen, new PointF((float)(axes[0].X*0.995), (float)(axes[2].Y - axes[2].Y * 0.011)), new PointF((float)(axes[1].X*1.0025), (float)(axes[2].Y - axes[2].Y * 0.011)));
+            graphics.DrawLine(axisPen, new PointF((float)(axesPoints[0].X*0.995), (float)(axesPoints[2].Y - axesPoints[2].Y * 0.011)), new PointF((float)(axesPoints[1].X*1.0025), (float)(axesPoints[2].Y - axesPoints[2].Y * 0.011)));
             //Vertical bounding line
-            graphics.DrawLine(axisPen, new PointF(axes[1].X, axes[2].Y), new PointF(axes[1].X, axes[3].Y));
+            graphics.DrawLine(axisPen, new PointF(axesPoints[1].X, axesPoints[2].Y), new PointF(axesPoints[1].X, axesPoints[3].Y));
 
         }
         public void DrawTicks(int xTicks, int yTicks, float tickWidth, List<string> xTickLabels, List<string> yTickLabels)
         {
             Pen tickPen = new Pen(Brushes.Black);
             tickPen.Width = tickWidth * objectScale;
-            float xTickSpacing = (float)(xAxisLength / (xTicks * 2));
-            float yTickSpacing = (float)(yAxisLength / (yTicks * 1.5));
+            axes.tickWidth = tickWidth;
+            axes.xTicks = xTicks;
+            axes.yTicks = yTicks;
+            float xTickSpacing = (float)(axes.xAxisLength / (xTicks * 2));
+            float yTickSpacing = (float)(axes.yAxisLength / (yTicks * 1.5));
             Font xFont = new Font("Arial", 10 * objectScale);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             float maxXTick = (float)Convert.ToDouble(xTickLabels[xTicks - 1]);
             for (int i = 0; i < xTicks; i++)
             {
-                float currentXPoint = (float)(((Convert.ToDouble(xTickLabels[i]) + 0.5) / maxXTick) * (axes[1].X - axes[0].X) * 0.95);
+                float currentXPoint = (float)(((Convert.ToDouble(xTickLabels[i]) + 0.5) / maxXTick) * (axesPoints[1].X - axesPoints[0].X) * 0.95);
                 // create length of x tick
-                PointF xTickStart = new PointF(xAxisStart + currentXPoint, yAxisLength);
-                xTickPoints.Add(xAxisStart + currentXPoint);
-                PointF xTickEnd = new PointF(xAxisStart + currentXPoint, (float)((yAxisLength) * 0.99));
+                PointF xTickStart = new PointF(axes.xAxisStart + currentXPoint, axes.yAxisLength);
+                xTickPoints.Add(axes.xAxisStart + currentXPoint);
+                PointF xTickEnd = new PointF(axes.xAxisStart + currentXPoint, (float)((axes.yAxisLength) * 0.99));
                 graphics.DrawLine(tickPen, xTickStart, xTickEnd);
 
                 // x tick label
                 SizeF xTickSize = graphics.MeasureString(xTickLabels[i], xFont);
-                RectangleF xTickRect = new RectangleF(xAxisStart - (xTickSize.Width) / 2 + currentXPoint, (float)(yAxisLength * 1.025), xTickSize.Width, xTickSize.Height);
+                RectangleF xTickRect = new RectangleF(axes.xAxisStart - (xTickSize.Width) / 2 + currentXPoint, (float)(axes.yAxisLength * 1.025), xTickSize.Width, xTickSize.Height);
                 graphics.DrawString(xTickLabels[i], xFont, drawBrush, xTickRect);
 
 
@@ -122,14 +110,14 @@ namespace ProjectManager
             for (int i = 0; i < yTicks; i++)
             {
                 // create length of ticks
-                PointF yTickStart = new PointF(xAxisStart, (float)(yAxisLength - yTickSpacing * (i + 0.5)));
-                yTickPoints.Add((float)(yAxisLength - yTickSpacing * (i + 0.5)));
-                PointF yTickEnd = new PointF((float)(xAxisStart * 1.02), (float)((yAxisLength - yTickSpacing * (i + 0.5))));
+                PointF yTickStart = new PointF(axes.xAxisStart, (float)(axes.yAxisLength - yTickSpacing * (i + 0.5)));
+                yTickPoints.Add((float)(axes.yAxisLength - yTickSpacing * (i + 0.5)));
+                PointF yTickEnd = new PointF((float)(axes.xAxisStart * 1.02), (float)((axes.yAxisLength - yTickSpacing * (i + 0.5))));
                 graphics.DrawLine(tickPen, yTickStart, yTickEnd);
 
                 // y tick label
                 SizeF yTickSize = graphics.MeasureString(yTickLabels[i], xFont);
-                RectangleF yTickRect = new RectangleF((float)(xAxisStart * 0.975) - yTickSize.Width, (float)(yAxisLength - yTickSpacing * (i + 0.5) - yTickSize.Height / 2), yTickSize.Width, yTickSize.Height);
+                RectangleF yTickRect = new RectangleF((float)(axes.xAxisStart * 0.975) - yTickSize.Width, (float)(axes.yAxisLength - yTickSpacing * (i + 0.5) - yTickSize.Height / 2), yTickSize.Width, yTickSize.Height);
                 graphics.DrawString(yTickLabels[i], xFont, drawBrush, yTickRect);
             }
         }
@@ -144,8 +132,8 @@ namespace ProjectManager
             SizeF xLabelSize = graphics.MeasureString(xLabel, font);
 
             // Use size of string and length of axis to center the label
-            float xPoint = (xAxisLength + xAxisStart) / 2 - xLabelSize.Width / 2;
-            float yPoint = axes[0].Y;
+            float xPoint = (axes.xAxisLength + axes.xAxisStart) / 2 - xLabelSize.Width / 2;
+            float yPoint = axesPoints[0].Y;
             RectangleF xLabelRect = new RectangleF((xPoint), (float)(yPoint * 1.05), xLabelSize.Width, xLabelSize.Height);
             graphics.DrawString(xLabel, font, drawBrush, xLabelRect, drawFormat);
         }
@@ -160,8 +148,8 @@ namespace ProjectManager
             SizeF yLabelSize = graphics.MeasureString(yLabel, font);
 
             // Use size of string and length of axis to center the label
-            float xPoint = axes[0].X;
-            float yPoint = (yAxisLength + yAxisStart) / 2 - yLabelSize.Width / 2;
+            float xPoint = axesPoints[0].X;
+            float yPoint = (axes.yAxisLength + axes.yAxisStart) / 2 - yLabelSize.Width / 2;
             RectangleF yLabelRect = new RectangleF((float)(xPoint * 0.70), yPoint, yLabelSize.Height, yLabelSize.Width);
             graphics.DrawString(yLabel, font, drawBrush, yLabelRect, yLabelFormat);
         }
@@ -175,11 +163,11 @@ namespace ProjectManager
 
             // Calculate a scale factor that is in units of Pixels/unit
             float xScale = (xTickPoints[xTickPoints.Count-1] - xTickPoints[0]) / maxXData;
-            float yScale = (yAxisLength - yAxisStart) / maxYData;
+            float yScale = (axes.yAxisLength - axes.yAxisStart) / maxYData;
 
             // Convert input coordinate points
             float realXCoord = xCoord * xScale + xTickPoints[0] - (markerSize * objectScale);
-            float realYCoord = (float)(yAxisLength - yCoord * yScale) + (markerSize * objectScale);
+            float realYCoord = (float)(axes.yAxisLength - yCoord * yScale) + (markerSize * objectScale);
 
             // Marker type selection
             if (markerType == "o")
@@ -193,7 +181,7 @@ namespace ProjectManager
             else if(markerType == "d")
             {
                 //gotta do some math to draw a rhombus/diamond marker
-                DrawDiamond(realXCoord + xAxisStart, realYCoord, markerSize * objectScale);
+                DrawDiamond(realXCoord + axes.xAxisStart, realYCoord, markerSize * objectScale);
                 // If we lived in a perfect world this would draw a diamond.
             }
             else
@@ -210,13 +198,13 @@ namespace ProjectManager
 
             // Calculate a scale factor that is in units of Pixels/unit
             float xScale = (xTickPoints[xTickPoints.Count - 1] - xTickPoints[0]) / maxXData;
-            float yScale = (yAxisLength - yAxisStart) / maxYData;
+            float yScale = (axes.yAxisLength - axes.yAxisStart) / maxYData;
 
             // Convert input coordinate points
             float realX1Coord = x1Coord * xScale + xTickPoints[0];
-            float realY1Coord = yAxisLength - y1Coord * yScale;
+            float realY1Coord = axes.yAxisLength - y1Coord * yScale;
             float realX2Coord = x2Coord * xScale + xTickPoints[0];
-            float realY2Coord = yAxisLength - y2Coord * yScale;
+            float realY2Coord = axes.yAxisLength - y2Coord * yScale;
 
             PointF startPoint = new PointF(realX1Coord, realY1Coord);
             PointF endPoint = new PointF(realX2Coord, realY2Coord);

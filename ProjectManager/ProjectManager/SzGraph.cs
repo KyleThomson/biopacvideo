@@ -27,14 +27,15 @@ namespace ProjectManager
         public string frequency = "Frequency: ";
         public DateTime Earliest; public DateTime Latest;
         ToolBar toolBar1;
+        public Project project;
         public SzGraph(int X, int Y, Project pjt)
         {
             // Type of test
             test = pjt.test;
-
+            project = pjt;
             // Find max day of project
-            Earliest = pjt.Files[0].Start.Date;
-            Latest = pjt.Files[pjt.Files.Count - 1].Start.Date;
+            Earliest = project.Files[0].Start.Date;
+            Latest = project.Files[project.Files.Count - 1].Start.Date;
             double totalHours = Latest.Subtract(Earliest).TotalHours;
             int tempMax = (int)Math.Round(totalHours / 24, 2);
 
@@ -46,17 +47,17 @@ namespace ProjectManager
             int numXTicks = (nearestMultiple / xTickInterval) + 1;
 
             // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
-            graph = new GraphProperties(X, Y, nearestMultiple, pjt.Animals.Count);
+            graph = new GraphProperties(X, Y, nearestMultiple, project.Animals.Count);
             graph.DrawAxes(4);
             graph.BoundingBox(4);
 
             // Get axis tick labels for graph properties
-            List<string> xTickString = GetXTickLabels(pjt, xTickInterval);
-            List<string> yTickString = GetYTickLabels(pjt);
+            List<string> xTickString = GetXTickLabels(xTickInterval);
+            List<string> yTickString = GetYTickLabels();
 
             // Draw ticks and label axes           
             Font aFont = new Font("Arial", 12 * graph.objectScale);
-            graph.DrawTicks(numXTicks, pjt.Animals.Count, 3.0F, xTickString, yTickString);
+            graph.DrawTicks(numXTicks, project.Animals.Count, 3.0F, xTickString, yTickString);
             graph.WriteXLabel("Time (days)", aFont);
             graph.WriteYLabel("Animals", aFont);
 
@@ -66,11 +67,11 @@ namespace ProjectManager
             // Add ToolBar
             AddButtons();
         }
-        private List<string> GetXTickLabels(Project pjt, int xTickInterval)
+        private List<string> GetXTickLabels(int xTickInterval)
         {
             List<string> xTickString = new List<string>();
             //Obtain basis for y and x axis labeling
-            for (int i = 0; i <= pjt.Files.Count; i += xTickInterval)
+            for (int i = 0; i <= project.Files.Count; i += xTickInterval)
             {
                 if (i % xTickInterval == 0)// && i != 0)
                 {
@@ -92,32 +93,32 @@ namespace ProjectManager
             if (description._cancelled)
             { return; }
         }
-        private List<string> GetYTickLabels(Project pjt)
+        private List<string> GetYTickLabels()
         {
             List<string> yTickString = new List<string>();
             //Obtain basis for y and x axis labelling
-            for (int i = 0; i < pjt.Animals.Count; i++)
+            for (int i = 0; i < project.Animals.Count; i++)
             {
-                yTickString.Add(pjt.Animals[i].ID);
+                yTickString.Add(project.Animals[i].ID);
             }
             return yTickString;
         }
-        public void PlotSz(Project pjt)
+        public void PlotSz()
         {
             // Plot seizures the same for both test 35 and test 36
             int markerSize = 6;
             Color szColor = Color.FromName("Black");
-            for (int i = 0; i < pjt.Animals.Count; i++)
+            for (int i = 0; i < project.Animals.Count; i++)
             {
                 float yCoord = i + 1;
-                for (int j = 0; j < pjt.Animals[i].Sz.Count; j++)
+                for (int j = 0; j < project.Animals[i].Sz.Count; j++)
                 {
-                    float xCoord = (float)(Math.Round((pjt.Animals[i].Sz[j].d.Date.Subtract(Earliest).TotalHours + pjt.Animals[i].Sz[j].t.TotalHours) / 24, 2));
-                    if (pjt.Animals[i].Sz[j].Severity > 0)
+                    float xCoord = (float)(Math.Round((project.Animals[i].Sz[j].d.Date.Subtract(Earliest).TotalHours + project.Animals[i].Sz[j].t.TotalHours) / 24, 2));
+                    if (project.Animals[i].Sz[j].Severity > 0)
                     {
                         graph.PlotPoints((float)(xCoord), yCoord, markerSize, "o", szColor);
                     }
-                    else if (pjt.Animals[i].Sz[j].Severity == 0)
+                    else if (project.Animals[i].Sz[j].Severity == 0)
                     {
                         graph.PlotPoints((float)(xCoord), (float)(yCoord - 0.05), markerSize, ".", szColor);
                     }
@@ -125,7 +126,7 @@ namespace ProjectManager
                 }
             }
         }
-        public void PlotTrt(Project pjt)
+        public void PlotTrt()
         {
             float lineWidth = 4;
             Color vehicleColor = Color.FromName("Teal");
@@ -134,7 +135,7 @@ namespace ProjectManager
             // If Test 35, use injections to draw lines for treatment
             if (test == TESTTYPES.T35)
             {
-                for (int i = 0; i < pjt.Animals.Count; i++)
+                for (int i = 0; i < project.Animals.Count; i++)
                 {
                     float yCoord = (float)(i + 0.5);
 
@@ -142,9 +143,9 @@ namespace ProjectManager
                     List<float> vehicleTimes = new List<float>();
                     List<float> drugTimes = new List<float>();
 
-                    for (int j = 0; j < pjt.Animals[i].Injections.Count; j++)
+                    for (int j = 0; j < project.Animals[i].Injections.Count; j++)
                     {
-                        foreach (InjectionType I in pjt.Animals[i].Injections)
+                        foreach (InjectionType I in project.Animals[i].Injections)
                         {
                             if (I.ADDID == "vehicle")
                             {
@@ -176,7 +177,7 @@ namespace ProjectManager
             {
                 Color unmedicatedColor = Color.FromName("Blue");
                 float animalCounter = 0.5F;
-                foreach (AnimalType A in pjt.Animals)
+                foreach (AnimalType A in project.Animals)
                 {
                     // Get y coordinate
                     float yCoord = animalCounter;
@@ -203,7 +204,7 @@ namespace ProjectManager
 
             }
         }
-        public void PlotEmpty(Project pjt)
+        public void PlotEmpty()
         {
             Color lineColor = Color.FromName("Black");
             float lineWidth = 4;
@@ -213,7 +214,7 @@ namespace ProjectManager
             float maxTime = (float)Math.Round(Latest.Subtract(Earliest).TotalHours / 24, 2);
             // Plot the missing time an animal has
             int i = 0;
-            foreach (AnimalType animal in pjt.Animals)
+            foreach (AnimalType animal in project.Animals)
             {
                 float yCoord = (float)(i + 0.5);
                 if (animal.earliestAppearance != default)
@@ -355,7 +356,7 @@ namespace ProjectManager
             graph.graphics.DrawString(frequency, headerFont, headerBrush, (float)(headerRect.Width * 1.5 - freqSize.Width), doseAndfreqY);
 
         }
-        public void DisplayStats(Project pjt)
+        public void DisplayStats()
         {
             Font headerFont = new Font("Arial", 12F * graph.objectScale);
             SolidBrush headerBrush = new SolidBrush(Color.Black);
@@ -380,27 +381,27 @@ namespace ProjectManager
                 boundingPen.Width = 1.25F * graph.objectScale;
                 
                 // sz burdens
-                string baselineBurden = pjt.analysis.avgBaseBurden.ToString() + "\u00B1" + pjt.analysis.baselineSEM.ToString();
-                string drugBurden = pjt.analysis.avgDrugBurden.ToString() + "\u00B1" + pjt.analysis.drugSEM.ToString();
-                string vehicleBurden = pjt.analysis.avgVehBurden.ToString() + "\u00B1" + pjt.analysis.vehicleSEM.ToString();
+                string baselineBurden = project.analysis.avgBaseBurden.ToString() + "\u00B1" + project.analysis.baselineSEM.ToString();
+                string drugBurden = project.analysis.avgDrugBurden.ToString() + "\u00B1" + project.analysis.drugSEM.ToString();
+                string vehicleBurden = project.analysis.avgVehBurden.ToString() + "\u00B1" + project.analysis.vehicleSEM.ToString();
                 SizeF baselineS = graph.graphics.MeasureString("Baseline", headerFont);
 
                 // sz freedoms
-                string vehicleFreedom = pjt.analysis.vehFreedomSum.ToString() + "/" + pjt.vehicleAnimals.ToString();
-                string drugFreedom = pjt.analysis.drugFreedomSum.ToString() + "/" + pjt.drugAnimals.ToString();
-                string baselineFreedom = pjt.analysis.baseFreedomSum.ToString() + "/" + pjt.baselineAnimals.ToString();
+                string vehicleFreedom = project.analysis.vehFreedomSum.ToString() + "/" + project.vehicleAnimals.ToString();
+                string drugFreedom = project.analysis.drugFreedomSum.ToString() + "/" + project.drugAnimals.ToString();
+                string baselineFreedom = project.analysis.baseFreedomSum.ToString() + "/" + project.baselineAnimals.ToString();
 
                 // Seizure Burden strings
                 string baselineWilcoxon;
                 string vehicleWilcoxon;
-                if (pjt.analysis.PVALUES["SB: Drug vs Baseline"] < 0.05)
+                if (project.analysis.PVALUES["SB: Drug vs Baseline"] < 0.05)
                 {
                     drugBurden += "\xB†";
                     baselineWilcoxon = "\xB† p<0.05 vs. Baseline (Wilcoxon Rank Sum)";
                 }
                 else
                 { baselineWilcoxon = "n.s. vs. Baseline (Wilcoxon Rank Sum)"; }
-                if (pjt.analysis.PVALUES["SB: Drug vs Vehicle"] < 0.05)
+                if (project.analysis.PVALUES["SB: Drug vs Vehicle"] < 0.05)
                 {
                     drugBurden += "\xB*";
                     vehicleWilcoxon = "\xB* p<0.05 vs. Vehicle (Wilcoxon Rank Sum)";
@@ -411,14 +412,14 @@ namespace ProjectManager
                 // Seizure Freedom strings
                 string baselineFisherExact;
                 string vehicleFisherExact;
-                if (pjt.analysis.PVALUES["SF: Drug vs Baseline"] < 0.05)
+                if (project.analysis.PVALUES["SF: Drug vs Baseline"] < 0.05)
                 {
                     drugFreedom += "\xB†";
                     baselineFisherExact = "\xB† p<0.05 vs. Baseline (Fisher Exact)";
                 }
                 else
                 { baselineFisherExact = "n.s. vs. Baseline (Fisher Exact)"; }
-                if (pjt.analysis.PVALUES["SF: Drug vs Vehicle"] < 0.05)
+                if (project.analysis.PVALUES["SF: Drug vs Vehicle"] < 0.05)
                 {
                     drugFreedom += "\xB*";
                     vehicleFisherExact = "\xB* p<0.05 vs. Vehicle (Fisher Exact)";
@@ -478,6 +479,8 @@ namespace ProjectManager
         }
         public void ExportGraph()
         {
+            
+
             MessageBox.Show("Testing testing this button works.");
         }
         private void AddButtons()
@@ -505,6 +508,15 @@ namespace ProjectManager
                     ExportGraph();
                     break;
             }
+        }
+        public void DrawGraph()
+        {
+            PlotSz();
+            PlotTrt();
+            PlotEmpty();
+            Legend();
+            DisplayHeader();
+            DisplayStats();
         }
 
 
