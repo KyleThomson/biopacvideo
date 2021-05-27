@@ -361,14 +361,16 @@ namespace ProjectManager
             float sem;
             float sigma;
             float variance = 0;
+            float mean = sz.Average();
+            int n = sz.Count();
             // find standard deviation of sz burden
             for (int i = 0; i < sz.Count; i++)
             {
-                variance += (float)(Math.Pow(sz[i] - sz.Average(), 2));
+                variance += (float)Math.Pow(sz[i] - mean, 2) / (n - 1);
             }
-            sigma = (float)Math.Sqrt(variance / (sz.Count - 1));
-            sem = (float)Math.Round((float)(sigma / Math.Sqrt(sz.Count - 1)), 2);
-            return (float)Math.Round(sem,2);
+            sigma = (float)Math.Sqrt(variance);
+            sem = (float)Math.Round((float)(sigma / Math.Sqrt(n - 1)), 2);
+            return sem;
         }
         public int CompareSeizures(SeizureType seizure, string animalID)
         {

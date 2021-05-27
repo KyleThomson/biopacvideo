@@ -26,6 +26,7 @@ namespace ProjectManager
         public string dose = "Dose: ";
         public string frequency = "Frequency: ";
         public DateTime Earliest; public DateTime Latest;
+        ToolBar toolBar1;
         public SzGraph(int X, int Y, Project pjt)
         {
             // Type of test
@@ -61,6 +62,9 @@ namespace ProjectManager
 
             // Set test descriptors
             SetTestDescriptors();
+
+            // Add ToolBar
+            AddButtons();
         }
         private List<string> GetXTickLabels(Project pjt, int xTickInterval)
         {
@@ -115,7 +119,7 @@ namespace ProjectManager
                     }
                     else if (pjt.Animals[i].Sz[j].Severity == 0)
                     {
-                        graph.PlotPoints((float)(xCoord), (float)(yCoord - 0.05), markerSize / 2, ".", szColor);
+                        graph.PlotPoints((float)(xCoord), (float)(yCoord - 0.05), markerSize, ".", szColor);
                     }
 
                 }
@@ -472,9 +476,35 @@ namespace ProjectManager
                 // test 36 just baseline and drug
             }
         }
-        public void ExportPDF()
+        public void ExportGraph()
         {
+            MessageBox.Show("Testing testing this button works.");
+        }
+        private void AddButtons()
+        {
+            // create control for tool bar. this will get added to top of graph
+            toolBar1 = new ToolBar();
+            ToolBarButton exportButton = new ToolBarButton();
+            exportButton.Text = "Export";
 
+            // Add button to toolbar controls
+            toolBar1.Buttons.Add(exportButton);
+
+            // Add event handler
+            toolBar1.ButtonClick += new ToolBarButtonClickEventHandler(this.toolBar1_ButtonClick);
+
+            // Add toolbar to form
+            graph.graphForm.Controls.Add(toolBar1);
+        }
+        private void toolBar1_ButtonClick(Object sender, ToolBarButtonClickEventArgs e)
+        {
+            // Figure out which button is hit
+            switch(toolBar1.Buttons.IndexOf(e.Button))
+            {
+                case 0: // export button
+                    ExportGraph();
+                    break;
+            }
         }
 
 
