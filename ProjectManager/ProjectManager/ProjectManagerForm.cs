@@ -447,14 +447,8 @@ namespace ProjectManager
             if (pjt is null) return;
             if (pjt.Filename != "")
             {
-                string confirmationMessage = "Are you sure you want to overwrite existing file?";
-                DialogResult confirmSaveResult = MessageBox.Show(confirmationMessage, "Overwrite file", MessageBoxButtons.YesNo);
-
-                if (confirmSaveResult == DialogResult.Yes)
                 // Save over current file
                 { pjt.Save(pjt.Filename); ChangeTitleText(pjt.Filename); }
-                else
-                { }
             }
             else
             {
