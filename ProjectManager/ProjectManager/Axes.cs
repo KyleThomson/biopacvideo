@@ -18,6 +18,7 @@ namespace ProjectManager
         public float maxXData;
         public float maxYData;
         public List<PointF> axesList;
+        public string xLabel; public string yLabel;
 
         // properties related to tick marks
         public List<float> xTickPoints;
@@ -47,6 +48,14 @@ namespace ProjectManager
             axesList.Add(xAxisEndPoint);
             axesList.Add(yAxisStartPoint);
             axesList.Add(yAxisEndPoint);
+        }
+        public void YLabel(string label)
+        {
+            yLabel = label;
+        }
+        public void XLabel(string label)
+        {
+            xLabel = label;
         }
     }
 }

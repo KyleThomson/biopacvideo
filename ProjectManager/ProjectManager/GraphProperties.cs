@@ -122,7 +122,10 @@ namespace ProjectManager
             }
         }
         public void WriteXLabel(string xLabel, Font font)
-        {   
+        {
+            // Update Axes properties
+            axes.XLabel(xLabel);
+
             // Format string
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             StringFormat drawFormat = new StringFormat();
@@ -139,6 +142,9 @@ namespace ProjectManager
         }
         public void WriteYLabel(string yLabel, Font font)
         {
+            // Update Axes properties
+            axes.YLabel(yLabel);
+
             // Format string
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             StringFormat yLabelFormat = new StringFormat();
