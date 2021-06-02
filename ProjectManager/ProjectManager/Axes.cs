@@ -57,5 +57,9 @@ namespace ProjectManager
         {
             xLabel = label;
         }
+        public void AxisTicks(GraphProperties graph)
+        {
+
+        }
     }
 }
