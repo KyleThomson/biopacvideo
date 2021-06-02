@@ -13,8 +13,6 @@ namespace ProjectManager
         public Graphics graphics;
         public Pen axisPen;
         public Axes axes;
-        public List<float> xTickPoints;
-        public List<float> yTickPoints;
         public float maxXData;
         public float maxYData;
         public PictureBox picture = new PictureBox();
@@ -38,13 +36,12 @@ namespace ProjectManager
             graphics = Graphics.FromImage(mainPlot);
             graphics.Clear(Color.White);
 
+            // create context object to pass to axes
+            Context context = new Context(graphics);
+
             // Create axes
-            axes = new Axes(X, Y);
+            axes = new Axes(X, Y, context);
             axesPoints = axes.axesList;
-
-            xTickPoints = new List<float>();
-            yTickPoints = new List<float>();
-
 
             // Set smoothing mode for graphics in initialization. This will smooth out edges when drawing round objects.
             graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -54,6 +51,8 @@ namespace ProjectManager
             // calculate target scaling factor to maintain graph aspect ratio on any screen
             scale = Math.Min(screenWidth / (float)width, screenHeight / (float)height);
             objectScale = 1 / scale;
+            axes.objectScale = objectScale;
+            axes.scale = scale;
 
             // Set input arguments as max data
             maxXData = maxX; maxYData = maxY;
@@ -63,63 +62,23 @@ namespace ProjectManager
         {
             Pen axisPen = new Pen(Brushes.Black);
             axisPen.Width = penWidth * objectScale;
-            // X Axis First
-            graphics.DrawLine(axisPen, axesPoints[0], axesPoints[1]);
-            // Y Axis
-            graphics.DrawLine(axisPen, axesPoints[2], axesPoints[3]);
+            axes.axesWidth = penWidth;
+            axes.DrawXAxis();
+            axes.DrawYAxis();
         }
-        public void BoundingBox(float penWidth)
+        public void BoundingBox()
         {
-            Pen axisPen = new Pen(Brushes.Black);
-            axisPen.Width = penWidth * objectScale;
-            //Horizontal bounding line
-            graphics.DrawLine(axisPen, new PointF((float)(axesPoints[0].X*0.995), (float)(axesPoints[2].Y - axesPoints[2].Y * 0.011)), new PointF((float)(axesPoints[1].X*1.0025), (float)(axesPoints[2].Y - axesPoints[2].Y * 0.011)));
-            //Vertical bounding line
-            graphics.DrawLine(axisPen, new PointF(axesPoints[1].X, axesPoints[2].Y), new PointF(axesPoints[1].X, axesPoints[3].Y));
-
+            axes.DrawBoundingBox();
         }
-        public void DrawTicks(int xTicks, int yTicks, float tickWidth, List<string> xTickLabels, List<string> yTickLabels)
+        public void DrawTicks(int xTicks, int yTicks, float tickWidth)
         {
             Pen tickPen = new Pen(Brushes.Black);
             tickPen.Width = tickWidth * objectScale;
             axes.tickWidth = tickWidth;
             axes.xTicks = xTicks;
             axes.yTicks = yTicks;
-            float xTickSpacing = (float)(axes.xAxisLength / (xTicks * 2));
-            float yTickSpacing = (float)(axes.yAxisLength / (yTicks * 1.5));
-            Font xFont = new Font("Arial", 10 * objectScale);
-            SolidBrush drawBrush = new SolidBrush(Color.Black);
-            float maxXTick = (float)Convert.ToDouble(xTickLabels[xTicks - 1]);
-            for (int i = 0; i < xTicks; i++)
-            {
-                float currentXPoint = (float)(((Convert.ToDouble(xTickLabels[i]) + 0.5) / maxXTick) * (axesPoints[1].X - axesPoints[0].X) * 0.95);
-                // create length of x tick
-                PointF xTickStart = new PointF(axes.xAxisStart + currentXPoint, axes.yAxisLength);
-                xTickPoints.Add(axes.xAxisStart + currentXPoint);
-                PointF xTickEnd = new PointF(axes.xAxisStart + currentXPoint, (float)((axes.yAxisLength) * 0.99));
-                graphics.DrawLine(tickPen, xTickStart, xTickEnd);
 
-                // x tick label
-                SizeF xTickSize = graphics.MeasureString(xTickLabels[i], xFont);
-                RectangleF xTickRect = new RectangleF(axes.xAxisStart - (xTickSize.Width) / 2 + currentXPoint, (float)(axes.yAxisLength * 1.025), xTickSize.Width, xTickSize.Height);
-                graphics.DrawString(xTickLabels[i], xFont, drawBrush, xTickRect);
-
-
-            }
-
-            for (int i = 0; i < yTicks; i++)
-            {
-                // create length of ticks
-                PointF yTickStart = new PointF(axes.xAxisStart, (float)(axes.yAxisLength - yTickSpacing * (i + 0.5)));
-                yTickPoints.Add((float)(axes.yAxisLength - yTickSpacing * (i + 0.5)));
-                PointF yTickEnd = new PointF((float)(axes.xAxisStart * 1.02), (float)((axes.yAxisLength - yTickSpacing * (i + 0.5))));
-                graphics.DrawLine(tickPen, yTickStart, yTickEnd);
-
-                // y tick label
-                SizeF yTickSize = graphics.MeasureString(yTickLabels[i], xFont);
-                RectangleF yTickRect = new RectangleF((float)(axes.xAxisStart * 0.975) - yTickSize.Width, (float)(axes.yAxisLength - yTickSpacing * (i + 0.5) - yTickSize.Height / 2), yTickSize.Width, yTickSize.Height);
-                graphics.DrawString(yTickLabels[i], xFont, drawBrush, yTickRect);
-            }
+            axes.AxisTicks();
         }
         public void WriteXLabel(string xLabel, Font font)
         {
@@ -168,11 +127,11 @@ namespace ProjectManager
             dataBrush.Color = color;
 
             // Calculate a scale factor that is in units of Pixels/unit
-            float xScale = (xTickPoints[xTickPoints.Count-1] - xTickPoints[0]) / maxXData;
+            float xScale = (axes.xTickPoints[axes.xTickPoints.Count-1] - axes.xTickPoints[0]) / maxXData;
             float yScale = (axes.yAxisLength - axes.yAxisStart) / maxYData;
 
             // Convert input coordinate points
-            float realXCoord = xCoord * xScale + xTickPoints[0] - (markerSize * objectScale);
+            float realXCoord = xCoord * xScale + axes.xTickPoints[0] - (markerSize * objectScale);
             float realYCoord = (float)(axes.yAxisLength - yCoord * yScale) + (markerSize * objectScale);
 
             // Marker type selection
@@ -203,21 +162,28 @@ namespace ProjectManager
             dataPen.Width = lineWidth * objectScale;
 
             // Calculate a scale factor that is in units of Pixels/unit
-            float xScale = (xTickPoints[xTickPoints.Count - 1] - xTickPoints[0]) / maxXData;
+            float xScale = (axes.xTickPoints[axes.xTickPoints.Count - 1] - axes.xTickPoints[0]) / maxXData;
             float yScale = (axes.yAxisLength - axes.yAxisStart) / maxYData;
 
             // Convert input coordinate points
-            float realX1Coord = x1Coord * xScale + xTickPoints[0];
+            float realX1Coord = x1Coord * xScale + axes.xTickPoints[0];
             float realY1Coord = axes.yAxisLength - y1Coord * yScale;
-            float realX2Coord = x2Coord * xScale + xTickPoints[0];
+            float realX2Coord = x2Coord * xScale + axes.xTickPoints[0];
             float realY2Coord = axes.yAxisLength - y2Coord * yScale;
 
             PointF startPoint = new PointF(realX1Coord, realY1Coord);
             PointF endPoint = new PointF(realX2Coord, realY2Coord);
             graphics.DrawLine(dataPen, startPoint, endPoint);
         }
-        public void DisplayGraph()
+        public PictureBox ScaleGraph()
         {
+            if (mainPlot == null)
+            {
+                // bitmap initialization
+                mainPlot = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
+                graphics = Graphics.FromImage(mainPlot);
+                graphics.Clear(Color.White);
+            }
             // Scaled dimensions of new graph
             var scaleWidth = (int)(mainPlot.Width * scale);
             var scaleHeight = (int)(mainPlot.Height * scale);
@@ -231,8 +197,36 @@ namespace ProjectManager
 
             // Re-draw the graphics we already created
             var brush = new SolidBrush(Color.Black);
-            //newGfx.FillRectangle(brush, new RectangleF(0, 0, mainPlot.Width, mainPlot.Height));
-            //newGfx.DrawImage(mainPlot, (screenWidth - scaleWidth) / 2, (screenHeight - scaleHeight) / 2, scaleWidth, scaleHeight);
+            newGfx.DrawImage(mainPlot, 0, 0, scaleWidth, scaleHeight);
+
+            PictureBox resizedPicture = new PictureBox();
+            resizedPicture.ClientSize = new Size(scaleWidth, scaleHeight);
+            resizedPicture.Image = bmp;
+
+            return resizedPicture;
+        }
+        public void DisplayGraph()
+        {
+            if (mainPlot == null)
+            { 
+                // bitmap initialization
+                mainPlot = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
+                graphics = Graphics.FromImage(mainPlot);
+                graphics.Clear(Color.White);
+            }
+            // Scaled dimensions of new graph
+            var scaleWidth = (int)(mainPlot.Width * scale);
+            var scaleHeight = (int)(mainPlot.Height * scale);
+
+            // Create new bitmap and graphics to fit graph to monitor
+            //Bitmap bmp = new Bitmap(mainPlot, new Size(screenWidth, screenHeight));
+            Bitmap bmp = new Bitmap(mainPlot, new Size(scaleWidth, scaleHeight));
+            var newGfx = Graphics.FromImage(bmp);
+            newGfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            newGfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            // Re-draw the graphics we already created
+            var brush = new SolidBrush(Color.Black);
             newGfx.DrawImage(mainPlot, 0, 0, scaleWidth, scaleHeight);
 
             PictureBox resizedPicture = new PictureBox();
@@ -240,10 +234,17 @@ namespace ProjectManager
             resizedPicture.Image = bmp;
 
             graphForm.Size = new Size(scaleWidth, scaleHeight);
-            //graphForm.Size = new Size(scaleWidth, scaleHeight);
             graphForm.Controls.Add(resizedPicture);
             graphForm.Show();
-            bmp.Save(@"E:\Box Sync\LABWORK\ADD_lab\testest.pdf");
+        }
+        public void ClearGraph()
+        {
+            foreach (Control control in graphForm.Controls)
+            {
+                PictureBox picture = control as PictureBox;
+                if (picture != null)
+                { graphForm.Controls.Remove(picture); }
+            }
         }
         public void DrawDiamond(float centerX, float centerY, float size)
         {

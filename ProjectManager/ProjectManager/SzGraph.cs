@@ -51,21 +51,14 @@ namespace ProjectManager
             // Get nearest multiple of 7 days
             int nearestMultiple = (int)Math.Round(tempMax / (double)xTickInterval, MidpointRounding.AwayFromZero) * xTickInterval;
             int numXTicks = (nearestMultiple / xTickInterval) + 1;
-            graph.axes.xTicks = numXTicks;
+            
             // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
             graph = new GraphProperties(X, Y, nearestMultiple, project.Animals.Count);
-            graph.DrawAxes(4);
-            graph.BoundingBox(4);
+            graph.axes.xTicks = numXTicks;
 
             // Get axis tick labels for graph properties
-            List<string> xTickString = GetXTickLabels(xTickInterval);
-            List<string> yTickString = GetYTickLabels();
-
-            // Draw ticks and label axes           
-            Font aFont = new Font("Arial", 12 * graph.objectScale);
-            graph.DrawTicks(numXTicks, project.Animals.Count, 3.0F, xTickString, yTickString);
-            graph.WriteXLabel("Time (days)", aFont);
-            graph.WriteYLabel("Animals", aFont);
+            graph.axes.xTickLabels = GetXTickLabels(xTickInterval);
+            graph.axes.yTickLabels = GetYTickLabels();
 
             // Set test descriptors
             SetTestDescriptors();
@@ -502,9 +495,13 @@ namespace ProjectManager
             ToolBarButton hideEmptyButton = new ToolBarButton();
             hideEmptyButton.Text = "Hide Empty";
 
+            ToolBarButton clearGraph = new ToolBarButton();
+            clearGraph.Text = "Clear";
+
             // Add button to toolbar controls
             toolBar1.Buttons.Add(exportButton);
             toolBar1.Buttons.Add(hideEmptyButton);
+            toolBar1.Buttons.Add(clearGraph);
 
             // Add event handler
             toolBar1.ButtonClick += new ToolBarButtonClickEventHandler(this.toolBar1_ButtonClick);
@@ -520,16 +517,20 @@ namespace ProjectManager
                 case 0: // export button
                     ExportGraph();
                     break;
-               case 1: // hide empty time
+                case 1: // hide empty time
                     if (_empty)
                     { _empty = false; }
                     else
                     { _empty = true; }
+                    graph.ClearGraph();
+                    DrawGraph();
+                    break;
+                case 2:
+                    // Clear graphics
+                    graph.ClearGraph();
                     break;
 
             }
-            DrawGraph();
-            graph.DisplayGraph();
         }
         public void DrawGraph()
         {
@@ -539,9 +540,9 @@ namespace ProjectManager
 
             // Draw axes
             graph.DrawAxes(4);
-            graph.BoundingBox(4);
+            graph.BoundingBox();
             Font aFont = new Font("Arial", 12 * graph.objectScale);
-            graph.DrawTicks(graph.axes.xTicks, project.Animals.Count, 3.0F, graph.axes.xTickLabels, graph.axes.yTickLabels);
+            graph.DrawTicks(graph.axes.xTicks, project.Animals.Count, 3.0F);
             graph.WriteXLabel("Time (days)", aFont);
             graph.WriteYLabel("Animals", aFont);
 
@@ -557,6 +558,9 @@ namespace ProjectManager
             Legend();
             DisplayHeader();
             DisplayStats();
+
+            // Display
+            graph.DisplayGraph();
         }
 
 

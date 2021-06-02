@@ -106,6 +106,7 @@
     <Compile Include="AnimalType.cs" />
     <Compile Include="Axes.cs" />
     <Compile Include="BloodDrawType.cs" />
+    <Compile Include="Context.cs" />
     <Compile Include="DamerauLevenshtein.cs" />
     <Compile Include="Exporter.cs">
       <SubType>Form</SubType>

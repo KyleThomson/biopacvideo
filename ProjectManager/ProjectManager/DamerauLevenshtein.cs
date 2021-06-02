@@ -43,7 +43,7 @@ namespace ProjectManager
             {
                 for (int j = 1; j <= d.GetUpperBound(1); j++)
                 {
-                    // Iterate through both strings and find matching characters. If character matches, cost = 1
+                    // Iterate through both strings and find matching characters. If character matches, cost = 0
                     if (string1[i - 1] == string2[j - 1]) { cost = 0; } else { cost = 1; }
 
                     del = d[i - 1, j] + 1;
