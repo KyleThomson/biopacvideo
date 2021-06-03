@@ -319,9 +319,14 @@ namespace ProjectManager
             {
                 foreach (SeizureType S in A.Sz)
                 {
-                    analysis.CompareSeizures(S, A.ID);
+                    // ask user for the seizure severity
+                    int finalStage = analysis.CompareSeizures(S, A.ID);
+                    // set new severity
+                    S.Severity = finalStage;
                 }
             }
+            // Save the changes made to severity
+            Save(Filename);
         }
         public void DetermineTest()
         {
@@ -983,19 +988,22 @@ namespace ProjectManager
                             List<double> binSeizures = new List<double>(new double[numDays]);
                             foreach (SeizureType seizureType in A.Sz)
                             {
-                                if (seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays >= alignBy)
+                                if (seizureType.Severity != -1)
                                 {
-                                    szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays - alignBy));
+                                    if (seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays >= alignBy)
+                                    {
+                                        szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays - alignBy));
+                                    }
                                 }
                             }
                             var g = szDay.GroupBy(i => i);
                             foreach (var bin in g)
                             {
-                                if (bin.Key > 0)
+                                if (bin.Key > 0 && bin.Key <= numDays)
                                 {
                                     binSeizures[(int)(bin.Key - 1)] = bin.Count();
                                 }
-                                else
+                                else if (bin.Key == 0)
                                 {
                                     binSeizures[(int)(bin.Key)] = bin.Count();
                                 }

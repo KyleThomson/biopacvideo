@@ -383,7 +383,8 @@ namespace ProjectManager
             }
             if (seizure.Notes.Length > 0)
             {
-                noteSeverity = ParseSeizure(seizure.Notes);
+                if (ParseSeizure(seizure.Notes) <= 5)
+                { noteSeverity = ParseSeizure(seizure.Notes); }
             }
 
             // Check if bubble and note match and flag if it doesn't -- want to prompt user with messagebox
