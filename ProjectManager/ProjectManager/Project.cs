@@ -985,7 +985,7 @@ namespace ProjectManager
                             
                             // Create list for days that seizures happen
                             List<double> szDay = new List<double>();
-                            List<double> binSeizures = new List<double>(new double[numDays]);
+                            
                             foreach (SeizureType seizureType in A.Sz)
                             {
                                 if (seizureType.Severity != -1)
@@ -996,10 +996,11 @@ namespace ProjectManager
                                     }
                                 }
                             }
+                            List<double> binSeizures = new List<double>(new double[(int)szDay.Max()]) ;
                             var g = szDay.GroupBy(i => i);
                             foreach (var bin in g)
                             {
-                                if (bin.Key > 0 && bin.Key <= numDays)
+                                if (bin.Key > 0)
                                 {
                                     binSeizures[(int)(bin.Key - 1)] = bin.Count();
                                 }
