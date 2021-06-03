@@ -112,22 +112,11 @@ namespace ProjectManager
                 {
                     foreach (SeizureType S in animal.Sz)
                     {
-                        if (S.Severity >= 0 && S.Severity <= 5) { bubbleSeverity = S.Severity; }
+                        if (S.Severity > 0 && S.Severity <= 5)
+                        { bubbleSeverity = S.Severity; }
 
-                        else if (S.Severity == 0) { bubbleSeverity = 1; }
-
-                        if (S.Notes.Length > 0)
-                        {
-                            noteSeverity = ParseSeizure(S.Notes);
-                            if (noteSeverity <= 5 && noteSeverity >= 0) { }
-
-                            else if (noteSeverity == 0) { noteSeverity = 1; }
-
-                            else { noteSeverity = -1; }
-                        }
-
-                        // Check if bubble and note match and flag if it doesn't
-                        if (bubbleSeverity != noteSeverity) { S.stageAgreement = false; }// Do something
+                        else if (S.Severity == 0) 
+                        { bubbleSeverity = 1; }
 
                         double szTime = S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours;
                         // Add seizure severity to running total depending on treatment that seizure occurred during
@@ -135,19 +124,19 @@ namespace ProjectManager
                         //Seizure happened during vehicle treatment
                         if (szTime >= vehicleTimes.Min() && szTime <= vehicleTimes.Max())
                         {
-                            vehicleScore += Math.Max(bubbleSeverity, noteSeverity);
+                            vehicleScore += bubbleSeverity;
                             vCounts++;
                         }
                         //Seizure happened during drug treatment
                         else if (szTime >= drugTimes.Min() && szTime <= drugTimes.Max())
                         {
-                            drugScore += Math.Max(bubbleSeverity, noteSeverity);
+                            drugScore += bubbleSeverity;
                             dCounts++;
                         }
                         //Seizure happened outside of both treatments
                         else
                         {
-                            baselineScore += Math.Max(bubbleSeverity, noteSeverity);
+                            baselineScore += bubbleSeverity;
                             blCounts++;
                         }
 
@@ -260,8 +249,8 @@ namespace ProjectManager
                 List<InjectionType> drugI = animal.Injections.Where(I => I.ADDID != "vehicle").ToList();
                 List<double> vehicleTimes = vehicleI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
                 List<double> drugTimes = drugI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
-                List<SeizureType> drugSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= drugTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= drugTimes.Max()).ToList();
-                List<SeizureType> vehicleSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= vehicleTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= vehicleTimes.Max()).ToList();
+                List<SeizureType> drugSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= drugTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= drugTimes.Max() && S.Severity != -1).ToList();
+                List<SeizureType> vehicleSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= vehicleTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= vehicleTimes.Max() && S.Severity != -1).ToList();
                 double baselineTime = -1; // initialize baseline
                 if (drugTimes.Min() < vehicleTimes.Min())
                 {
@@ -273,7 +262,7 @@ namespace ProjectManager
                 }
 
                 // where there were baseline seizures
-                List<SeizureType> baselineSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours < baselineTime).ToList();
+                List<SeizureType> baselineSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours < baselineTime && S.Severity != -1).ToList();
 
                 if (drugSz.Count > 0)
                 {
@@ -324,8 +313,8 @@ namespace ProjectManager
                 List<double> medicatedTimes = medicatedMeals.Select(m => (double)m.d.Subtract(Earliest).TotalHours).ToList();
 
                 // seizures during unmedicated and medicated meals
-                List<SeizureType> drugSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= medicatedTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= medicatedTimes.Max()).ToList();
-                List<SeizureType> baselineSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours < medicatedTimes.Min() || S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours > medicatedTimes.Max()).ToList();
+                List<SeizureType> drugSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= medicatedTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= medicatedTimes.Max() && S.Severity != -1).ToList();
+                List<SeizureType> baselineSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours < medicatedTimes.Min() || S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours > medicatedTimes.Max() && S.Severity != -1).ToList();
 
                 // Answer seizure freedom
                 if (drugSz.Count > 0)
@@ -383,8 +372,7 @@ namespace ProjectManager
             }
             if (seizure.Notes.Length > 0)
             {
-                if (ParseSeizure(seizure.Notes) <= 5)
-                { noteSeverity = ParseSeizure(seizure.Notes); }
+                noteSeverity = ParseSeizure(seizure.Notes);
             }
 
             // Check if bubble and note match and flag if it doesn't -- want to prompt user with messagebox
@@ -405,14 +393,7 @@ namespace ProjectManager
             string storeNum = String.Join("", note.Where(char.IsDigit));
             if (storeNum.Length > 0)
             {
-                if (int.Parse(storeNum) <= 5 && int.Parse(storeNum) >= 0)
-                {
                     severity = int.Parse(storeNum);
-                }
-                else
-                {
-                    severity = -1;
-                }
             }
             return severity;
         }

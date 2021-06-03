@@ -996,7 +996,10 @@ namespace ProjectManager
                                     }
                                 }
                             }
-                            List<double> binSeizures = new List<double>(new double[(int)szDay.Max()]) ;
+                            // create empty array of 0s to insert frequencies into
+                            List<double> binSeizures = new List<double>(new double[(int)szDay.Max()]);
+                            
+                            // bin seizures using GroupBy then step thru the bins and check frequency
                             var g = szDay.GroupBy(i => i);
                             foreach (var bin in g)
                             {

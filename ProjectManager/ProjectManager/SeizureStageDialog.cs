@@ -16,9 +16,9 @@ namespace ProjectManager
             // Turn off minimize/red x buttons
             prompt.ControlBox = false;
             prompt.Width = 250;
-            prompt.Height = 100;
+            prompt.Height = 150;
             prompt.Text = "Select correct severity.";
-
+            
             // Create label to inform user of animal that has the conflict.
             Label animalLabel = new Label();
             animalLabel.Location = new System.Drawing.Point(0, 0);
@@ -27,8 +27,13 @@ namespace ProjectManager
 
             // Create buttons with stages
             FlowLayoutPanel panel = new FlowLayoutPanel();
-            Button bubbled = new Button() { Text = "Bubbled Stage: " + bubbleStage.ToString(), AutoSize = true };
-            Button noted = new Button() { Text = "Notes Stage: " + notesStage.ToString(), AutoSize = true };
+            Button bubbled = new Button() { Text = "Bubbled Stage: " + bubbleStage.ToString(), AutoSize = false };
+            bubbled.Size = new System.Drawing.Size(110, 25);
+            bubbled.Location = new System.Drawing.Point(0, prompt.Height);
+
+            Button noted = new Button() { Text = "Notes Stage: " + notesStage.ToString(), AutoSize = false };
+            noted.Size = new System.Drawing.Size(110, 25);
+            noted.Location = new System.Drawing.Point(120, prompt.Height);
 
             // Click event handling
             bubbled.Click += (sender, e) => { Stage_Click(sender, e); prompt.Close(); };
