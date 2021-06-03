@@ -478,12 +478,11 @@ namespace ProjectManager
         }
         public void ExportGraph()
         {
-            
-            if (_export)
-            { _export = false; }
-            else
-            { _export = true; }
-            MessageBox.Show("Testing testing this button works.");
+            if (_empty)
+            { _empty = false; }
+            graph.ClearGraph();
+            DrawGraph();
+            graph.SaveFig();
         }
         private void AddButtons()
         {

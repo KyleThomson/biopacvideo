@@ -177,13 +177,6 @@ namespace ProjectManager
         }
         public PictureBox ScaleGraph()
         {
-            if (mainPlot == null)
-            {
-                // bitmap initialization
-                mainPlot = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
-                graphics = Graphics.FromImage(mainPlot);
-                graphics.Clear(Color.White);
-            }
             // Scaled dimensions of new graph
             var scaleWidth = (int)(mainPlot.Width * scale);
             var scaleHeight = (int)(mainPlot.Height * scale);
@@ -196,44 +189,21 @@ namespace ProjectManager
             newGfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             // Re-draw the graphics we already created
-            var brush = new SolidBrush(Color.Black);
             newGfx.DrawImage(mainPlot, 0, 0, scaleWidth, scaleHeight);
 
             PictureBox resizedPicture = new PictureBox();
             resizedPicture.ClientSize = new Size(scaleWidth, scaleHeight);
             resizedPicture.Image = bmp;
+
+            // Set size of form to fit monitor
+            graphForm.Size = new Size(scaleWidth, scaleHeight);
 
             return resizedPicture;
         }
         public void DisplayGraph()
         {
-            if (mainPlot == null)
-            { 
-                // bitmap initialization
-                mainPlot = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
-                graphics = Graphics.FromImage(mainPlot);
-                graphics.Clear(Color.White);
-            }
-            // Scaled dimensions of new graph
-            var scaleWidth = (int)(mainPlot.Width * scale);
-            var scaleHeight = (int)(mainPlot.Height * scale);
-
-            // Create new bitmap and graphics to fit graph to monitor
-            //Bitmap bmp = new Bitmap(mainPlot, new Size(screenWidth, screenHeight));
-            Bitmap bmp = new Bitmap(mainPlot, new Size(scaleWidth, scaleHeight));
-            var newGfx = Graphics.FromImage(bmp);
-            newGfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            newGfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-            // Re-draw the graphics we already created
-            var brush = new SolidBrush(Color.Black);
-            newGfx.DrawImage(mainPlot, 0, 0, scaleWidth, scaleHeight);
-
-            PictureBox resizedPicture = new PictureBox();
-            resizedPicture.ClientSize = new Size(scaleWidth, scaleHeight);
-            resizedPicture.Image = bmp;
-
-            graphForm.Size = new Size(scaleWidth, scaleHeight);
+            // re-size form and picture and show
+            PictureBox resizedPicture = ScaleGraph();
             graphForm.Controls.Add(resizedPicture);
             graphForm.Show();
         }
@@ -243,11 +213,19 @@ namespace ProjectManager
             {
                 PictureBox picture = control as PictureBox;
                 if (picture != null)
-                { graphForm.Controls.Remove(picture); }
+                {
+                    graphForm.Controls.Remove(picture);
+                    // Dispose of control to conserve memory
+                    control.Dispose();
+                    // Force Garbage Collection to work - seems to only cleanup unnecessary graph controls and not the project data
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                }
             }
         }
         public void DrawDiamond(float centerX, float centerY, float size)
         {
+            // This doesn't work.
             Pen dataPen = new Pen(Brushes.Black);
             SolidBrush dataBrush = new SolidBrush(Color.Black);
 
@@ -262,9 +240,30 @@ namespace ProjectManager
         }
         public void TextBox(string inputStr, Color color, Font font)
         {
-            Pen dataPen = new Pen(Brushes.Black);
             SolidBrush dataBrush = new SolidBrush(Color.Black);
             graphics.DrawString(inputStr, new Font("Arial",12), dataBrush, X / 2, Y / 6);
+        }
+        public void SaveFig()
+        {
+            SaveFileDialog graphSaveDialog = new SaveFileDialog();
+            graphSaveDialog.DefaultExt = ".png";
+            graphSaveDialog.Filter = "PNG files (*.png) |*.png";
+            graphSaveDialog.Title = "Save Graph (.png) file";
+            graphSaveDialog.InitialDirectory = "D:\\";
+
+            if (graphSaveDialog.ShowDialog() == DialogResult.OK)
+            {
+                // search controls for picture
+                foreach (Control control in graphForm.Controls)
+                {
+                    // when picture is found, save if not null
+                    PictureBox picture = control as PictureBox;
+                    if (picture != null)
+                    {
+                        picture.Image.Save(graphSaveDialog.FileName);
+                    }
+                }
+            }
         }
              
         
