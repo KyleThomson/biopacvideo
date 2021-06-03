@@ -428,13 +428,6 @@ namespace ProjectManager
         {
 
         }
-
-        private void exportTestToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PdfSharp.Pdf.PdfDocument pdf = new PdfSharp.Pdf.PdfDocument();
-            pdf.AddPage();
-        }
-
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Save .pjt file as -
@@ -544,12 +537,7 @@ namespace ProjectManager
         private void GenerateTest()
         {
             SzGraph Test = new SzGraph(4000, 4000, pjt);
-            Test.PlotSz(pjt);
-            Test.PlotTrt(pjt);
-            Test.PlotEmpty(pjt);
-            Test.Legend();
-            Test.DisplayHeader();
-            Test.DisplayStats(pjt);
+            Test.DrawGraph();
             Test.graph.DisplayGraph();
         }
 
