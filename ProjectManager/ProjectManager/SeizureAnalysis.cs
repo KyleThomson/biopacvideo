@@ -363,6 +363,14 @@ namespace ProjectManager
         }
         public int CompareSeizures(SeizureType seizure, string animalID)
         {
+            // dictionary to replace parsed integers with string
+            Dictionary<int, string> numbers = new Dictionary<int, string>();
+            numbers.Add(1, "one"); numbers.Add(2, "two");
+            numbers.Add(3, "three"); numbers.Add(4, "four");
+            numbers.Add(5, "five"); numbers.Add(6, "six");
+            numbers.Add(7, "one"); numbers.Add(8, "eight");
+            numbers.Add(9, "nine");
+
             int bubbleSeverity = default; // default
             int noteSeverity = default; // default
             int finalStage;
@@ -382,6 +390,19 @@ namespace ProjectManager
                 SeizureStageDialog stageDialog = new SeizureStageDialog();
                 stageDialog.ShowDialog(bubbleSeverity, noteSeverity, ID, seizure.Notes);
                 finalStage = stageDialog.returnSeverity;
+                
+                // change seizure note so that there are no more numbers
+                for (int i = seizure.Notes.Length - 1; i >= 0; i--)
+                {
+                    // step backward thru seizure notes and insert word corresponding to number in notes
+                    // solution to save conflict results between bubble and notes
+                    if (int.TryParse(seizure.Notes[i].ToString(), out int result))
+                    {
+                        string numberToInsert = numbers[result];
+                        seizure.Notes = seizure.Notes.Insert(i, numberToInsert);
+                        seizure.Notes = seizure.Notes.Remove(i + numberToInsert.Length, 1);
+                    }
+                }
             }// Do something
             else { finalStage = bubbleSeverity; }
 
@@ -393,7 +414,7 @@ namespace ProjectManager
             string storeNum = String.Join("", note.Where(char.IsDigit));
             if (storeNum.Length > 0)
             {
-                    severity = int.Parse(storeNum);
+                severity = int.Parse(storeNum);
             }
             return severity;
         }

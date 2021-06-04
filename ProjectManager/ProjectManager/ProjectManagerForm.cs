@@ -24,8 +24,7 @@ namespace ProjectManager
         {
             SaveFileDialog F = new SaveFileDialog();
             F.DefaultExt = ".pjt";
-            F.Filter =
-            "Text files (*.pjt)|*.pjt|All files (*.*)|*.*";
+            F.Filter = "Text files (*.pjt)|*.pjt|All files (*.*)|*.*";
             F.InitialDirectory = "C:\\";
             if (F.ShowDialog() == DialogResult.OK)
             {
@@ -374,6 +373,7 @@ namespace ProjectManager
         {
             if (pjt == null)
             {
+                // passing empty string to GetPathName() returns empty string
                 pjt = new Project("");
                 ChangeTitleText("");
             }

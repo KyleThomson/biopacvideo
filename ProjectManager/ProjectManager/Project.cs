@@ -484,6 +484,7 @@ namespace ProjectManager
             int i = 0;
             foreach (AnimalType A in Animals)
             {
+                //if (Files.Any(F => F.))
                 X[i] = A.ID;
                 i++;
             }
@@ -979,7 +980,7 @@ namespace ProjectManager
                     // Open binned seizure file
                     StreamWriter sw = new StreamWriter(binned.FileName);
                     sw.AutoFlush = true;
-                    int numDays = (int)Math.Floor(Latest.Subtract(Earliest).TotalDays);
+                    int numDays = (int)Math.Ceiling(Latest.Subtract(Earliest).TotalDays) + 1;
                     if (E.ungrouped)
                     {
                         foreach (AnimalType A in Animals)
@@ -1002,7 +1003,7 @@ namespace ProjectManager
                                 }
                             }
                             // create empty array of 0s to insert frequencies into
-                            List<double> binSeizures = new List<double>(new double[(int)szDay.Max()]);
+                            List<double> binSeizures = new List<double>(new double[numDays]);
                             
                             // bin seizures using GroupBy then step thru the bins and check frequency
                             var g = szDay.GroupBy(i => i);
