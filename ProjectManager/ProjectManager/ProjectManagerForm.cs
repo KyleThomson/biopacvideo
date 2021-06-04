@@ -74,7 +74,7 @@ namespace ProjectManager
                     }                                       
             }
             else if (MainSelect.SelectedIndex == 1) //Animals
-            {                
+            {
                 string[] A = pjt.Get_Animals();
                 for (int i = 0; i < A.Length; i++)
                 {
@@ -93,10 +93,13 @@ namespace ProjectManager
             {
                 if (SecondSelect.SelectedIndex == 0)
                 {
-                    SecondList.Items.Clear();
-                    foreach (string A in pjt.Files[MainList.SelectedIndex].AnimalIDs) 
+                    if (MainList.SelectedIndex >= 0)
                     {
-                        SecondList.Items.Add(A);
+                        SecondList.Items.Clear();
+                        foreach (string A in pjt.Files[MainList.SelectedIndex].AnimalIDs)
+                        {
+                            SecondList.Items.Add(A);
+                        }
                     }
                 }
             }
@@ -143,7 +146,11 @@ namespace ProjectManager
         
         private void importSeizureToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //This function probably should not be used. 
+            if (pjt == null)
+            {
+                pjt = new Project("");
+            }
+            //This function probably should not be used.
             if (pjt != null)
             {
                 OpenFileDialog F = new OpenFileDialog();
@@ -166,6 +173,11 @@ namespace ProjectManager
         
         private void importFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (pjt == null)
+            {
+                pjt = new Project("");
+                ChangeTitleText("");
+            }
             if (pjt != null)
             {
 
@@ -361,7 +373,10 @@ namespace ProjectManager
         private void addMultipleDirectoriesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (pjt == null)
-                return;
+            {
+                pjt = new Project("");
+                ChangeTitleText("");
+            }
             int DuplicateDirectoryCount = 0; 
             MultiDirectoryAdd Frm = new MultiDirectoryAdd();
             Frm.ShowDialog();

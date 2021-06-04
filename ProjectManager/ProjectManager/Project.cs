@@ -55,11 +55,14 @@ namespace ProjectManager
         {
             _fileChanged = false; // initialize file as not changed
             Filename = Inpt;
-            P = Path.GetDirectoryName(Inpt);
             Animals = new List<AnimalType>();
             Files = new List<FileType>();
             Groups = new List<GroupType>();
             analysis = new SeizureAnalysis();
+        }
+        public void GetPath()
+        {
+            P = Path.GetDirectoryName(Filename);
             if (!Directory.Exists(P + "\\Data"))
             {
                 Directory.CreateDirectory(P + "\\Data");
@@ -345,10 +348,7 @@ namespace ProjectManager
             else if (analysis.groups.Count == 2 && treatment == "meal")
             { analysis.test = TESTTYPES.T36; }
             else if (treatment == "")
-            { analysis.test = TESTTYPES.UNDEFINED; }
-
-            
-            
+            { analysis.test = TESTTYPES.UNDEFINED; }    
         }
         private string MealOrInjection()
         {
