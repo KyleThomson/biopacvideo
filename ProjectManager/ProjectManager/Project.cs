@@ -319,10 +319,15 @@ namespace ProjectManager
             {
                 foreach (SeizureType S in A.Sz)
                 {
-                    // ask user for the seizure severity
-                    int finalStage = analysis.CompareSeizures(S, A.ID);
-                    // set new severity
-                    S.Severity = finalStage;
+                    if (!S.stageAgreement)
+                    {
+                        // ask user for the seizure severity
+                        int finalStage = analysis.CompareSeizures(S, A.ID);
+                        // set new severity
+                        S.Severity = finalStage;
+                        // stages agree now
+                        S.stageAgreement = true;
+                    }
                 }
             }
             // Save the changes made to severity
