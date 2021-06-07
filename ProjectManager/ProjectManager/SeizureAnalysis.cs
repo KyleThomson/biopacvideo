@@ -14,11 +14,19 @@ namespace ProjectManager
 
         public List<string> groups;
 
+        // Variables for Test 35/36
         public float avgDrugBurden; public float avgVehBurden; public float avgBaseBurden;
         public int vehFreedomSum; public int drugFreedomSum; public int baseFreedomSum;
 
         public List<float> drugBurdenList; public List<float> vehicleBurdenList; public List<float> baselineBurdenList;
         public List<int> drugFreedomList; public List<int> vehicleFreedomList; public List<int> baselineFreedomList;
+
+        // Variables for IAK Test
+        public float avgGroupABurden; public float avgGroupBBurden;
+        public int groupAFreedomSum; public int groupBFreedomSum;
+
+        public List<float> groupABurdenList; public List<float> groupBBurdenList;
+        public List<int> groupAFreedomList; public List<int> groupBFreedomList;
 
         public Dictionary<string, double> PVALUES = new Dictionary<string, double>();
         public SeizureAnalysis()

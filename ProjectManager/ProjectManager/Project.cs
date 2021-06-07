@@ -183,6 +183,7 @@ namespace ProjectManager
         }
         public void FileChanged()
         {
+            // set flag to true to indicate that the current project file has been modified
             _fileChanged = true;
         }
         private int FindAnimal(string An) //Finds an Animal Index, or creates a new one if not found
@@ -276,9 +277,11 @@ namespace ProjectManager
                 double[] vehicleBurden = Array.ConvertAll(analysis.vehicleBurdenList.ToArray(), x => (double)x);
                 double[] baselineBurden = Array.ConvertAll(analysis.baselineBurdenList.ToArray(), x => (double)x);
 
+                // Run analysis on seizure burden
                 double drugVsVehicle = analysis.SzBurdenSignificance(drugBurden, vehicleBurden);
                 double drugVsBaseline = analysis.SzBurdenSignificance(drugBurden, baselineBurden);
 
+                // Store results
                 analysis.PVALUES.Add("SB: Drug vs Vehicle", drugVsVehicle);
                 analysis.PVALUES.Add("SB: Drug vs Baseline", drugVsBaseline);
 
@@ -289,6 +292,14 @@ namespace ProjectManager
                 // Initialize arrays!
                 double[] drugBurden = Array.ConvertAll(analysis.drugBurdenList.ToArray(), x => (double)x);
                 double[] baselineBurden = Array.ConvertAll(analysis.baselineBurdenList.ToArray(), x => (double)x);
+
+                // Run analysis on seizure burden
+                double drugVsBaseline = analysis.SzBurdenSignificance(drugBurden, baselineBurden);
+
+                // Store results
+                analysis.PVALUES.Add("SB: Drug vs Baseline", drugVsBaseline);
+
+                analysis.SzFreedomSignificance(drugAnimals, baselineAnimals, vehicleAnimals);
             }
 
         }
@@ -335,34 +346,6 @@ namespace ProjectManager
             }
             // Save the changes made to severity
             Save(Filename);
-        }
-        public void DetermineTest()
-        {
-            // check for project class traits that indicate the test that should performed, then set class variable to that test
-            string treatment = MealOrInjection();
-
-            // Find number of treatment groups
-            ParseGroups();
-            if (analysis.groups.Count == 2  && analysis.groups.Contains("vehicle") && treatment == "vehicle")
-            { analysis.test = TESTTYPES.T35; }
-            else if (analysis.groups.Count == 2 && treatment == "meal")
-            { analysis.test = TESTTYPES.T36; }
-            else if (treatment == "")
-            { analysis.test = TESTTYPES.UNDEFINED; }    
-        }
-        private string MealOrInjection()
-        {
-            // MealOrInjection() returns a string that tries to identify one of two treatment delivery methods.
-            // If the delivery method can't be determined then the string is returned empty.
-            string treatment = "";
-            foreach (AnimalType animal in Animals)
-            {
-                if (animal.Injections.Count > 0)
-                { treatment = "inject"; }
-                else if (animal.Meals.Count > 0)
-                { treatment = "meal"; }
-            }
-            return treatment;
         }
         public void TestSort()
         {
@@ -980,7 +963,7 @@ namespace ProjectManager
                     // Open binned seizure file
                     StreamWriter sw = new StreamWriter(binned.FileName);
                     sw.AutoFlush = true;
-                    int numDays = (int)Math.Ceiling(Latest.Subtract(Earliest).TotalDays) + 1;
+                    int numDays = (int)Math.Floor(Latest.Subtract(Earliest).TotalDays) + 1;
                     if (E.ungrouped)
                     {
                         foreach (AnimalType A in Animals)
@@ -1003,21 +986,9 @@ namespace ProjectManager
                                 }
                             }
                             // create empty array of 0s to insert frequencies into
-                            List<double> binSeizures = new List<double>(new double[numDays]);
+                            List<double> binSeizures = BinSeizure(numDays, szDay);
                             
-                            // bin seizures using GroupBy then step thru the bins and check frequency
-                            var g = szDay.GroupBy(i => i);
-                            foreach (var bin in g)
-                            {
-                                if (bin.Key > 0)
-                                {
-                                    binSeizures[(int)(bin.Key - 1)] = bin.Count();
-                                }
-                                else if (bin.Key == 0)
-                                {
-                                    binSeizures[(int)(bin.Key)] = bin.Count();
-                                }
-                            }
+                            // Create string of seizure occurrences to write to .csv
                             for (int i = 0; i < binSeizures.Count; i++)
                             {
                                 sz += "," + binSeizures[i].ToString();
@@ -1031,30 +1002,14 @@ namespace ProjectManager
                         //////////////////////////////////////////////
                         // NEED IAK PROJECT FILE TO MAKE THIS WORK //
                         ////////////////////////////////////////////
-                        ParseGroups();
-                        // Randomly assign groups A and B
-                        Random rand = new Random();
-                        int groupA = rand.Next(0, 2); // Either returns 0 or 1
-                        int groupB;
-
-                        // Assign other integer to group B
-                        if (groupA == 1)
-                        { groupB = 0; }
-                        else
-                        { groupB = 1; }
                         
-                        // Key-value pairs for randomly assigned groups A and B
-                        Dictionary<string, string> groups = new Dictionary<string, string>();
-                        groups.Add("Group A", analysis.groups[groupA]);
-                        groups.Add("Group B", analysis.groups[groupB]);
-
                         // Now that groups are established we can write to file.
-                        foreach (KeyValuePair<string, string> keyValuePair in groups)
+                        foreach (GroupType group in Groups)
                         {
-                            sw.WriteLine(keyValuePair.Key);
+                            sw.WriteLine(group.Name);
                             foreach (AnimalType A in Animals)
                             {
-                                if (A.Injections.Any(I => I.ADDID == keyValuePair.Value))
+                                if (A.Group.Name == group.Name)
                                 {
 
                                     // first injection
@@ -1097,6 +1052,26 @@ namespace ProjectManager
                 }
             }
             F.Close();
+        }
+        private List<double> BinSeizure(int numDays, List<double> szDay)
+        {
+            // create empty array of 0s to insert frequencies into
+            List<double> binSeizures = new List<double>(new double[numDays]);
+
+            // bin seizures using GroupBy then step thru the bins and check frequency
+            var g = szDay.GroupBy(i => i);
+            foreach (var bin in g)
+            {
+                if (bin.Key > 0)
+                {
+                    binSeizures[(int)(bin.Key - 1)] = bin.Count();
+                }
+                else if (bin.Key == 0)
+                {
+                    binSeizures[(int)(bin.Key)] = bin.Count();
+                }
+            }
+            return binSeizures;
         }
 
         //This function takes the data from the project file and loads it into memory. 

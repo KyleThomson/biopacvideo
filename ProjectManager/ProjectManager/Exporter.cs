@@ -35,7 +35,16 @@ namespace ProjectManager
             { 
                 E.binSz = true;
                 if (groupedSz.Checked)
-                { E.grouped = true; }
+                { 
+                    E.grouped = true;
+                    // Have user assign groups
+                    if (pjt == null)
+                        return;
+                    AddGroup addGroup = new AddGroup(pjt);
+                    addGroup.ShowDialog();
+                    pjt = addGroup.pjt;
+                    addGroup.Dispose();
+                }
                 else if (ungroupedSz.Checked)
                 { E.ungrouped = true; }
             }
