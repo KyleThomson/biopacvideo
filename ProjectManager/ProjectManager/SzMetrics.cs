@@ -8,12 +8,14 @@ namespace ProjectManager
     public class SzMetrics
     {
         public TRTTYPE treatment;
-        public float szBurden;
+        public double burdenSEM;
+        public double szBurden;
         public int szFreedom;
+        public int numAnimals;
 
-        public SzMetrics()
+        public SzMetrics(TRTTYPE trt)
         {
-
+            treatment = trt;
         }
     }
 }

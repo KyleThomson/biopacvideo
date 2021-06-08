@@ -380,27 +380,27 @@ namespace ProjectManager
                 boundingPen.Width = 1.25F * graph.objectScale;
                 
                 // sz burdens
-                string baselineBurden = project.analysis.avgBaseBurden.ToString() + "\u00B1" + project.analysis.baselineSEM.ToString();
-                string drugBurden = project.analysis.avgDrugBurden.ToString() + "\u00B1" + project.analysis.drugSEM.ToString();
-                string vehicleBurden = project.analysis.avgVehBurden.ToString() + "\u00B1" + project.analysis.vehicleSEM.ToString();
+                string baselineBurden = project.analysis.seizureData[TRTTYPE.Baseline].szBurden.ToString() + "\u00B1" + project.analysis.seizureData[TRTTYPE.Baseline].burdenSEM.ToString();
+                string drugBurden = project.analysis.seizureData[TRTTYPE.Drug].szBurden.ToString() + "\u00B1" + project.analysis.seizureData[TRTTYPE.Drug].burdenSEM.ToString();
+                string vehicleBurden = project.analysis.seizureData[TRTTYPE.Vehicle].szBurden.ToString() + "\u00B1" + project.analysis.seizureData[TRTTYPE.Vehicle].burdenSEM.ToString();
                 SizeF baselineS = graph.graphics.MeasureString("Baseline", headerFont);
 
                 // sz freedoms
-                string vehicleFreedom = project.analysis.vehFreedomSum.ToString() + "/" + project.vehicleAnimals.ToString();
-                string drugFreedom = project.analysis.drugFreedomSum.ToString() + "/" + project.drugAnimals.ToString();
-                string baselineFreedom = project.analysis.baseFreedomSum.ToString() + "/" + project.baselineAnimals.ToString();
+                string vehicleFreedom = project.analysis.seizureData[TRTTYPE.Vehicle].szFreedom.ToString() + "/" + project.analysis.seizureData[TRTTYPE.Vehicle].numAnimals.ToString();
+                string drugFreedom = project.analysis.seizureData[TRTTYPE.Drug].szFreedom.ToString() + "/" + project.analysis.seizureData[TRTTYPE.Drug].numAnimals.ToString();
+                string baselineFreedom = project.analysis.seizureData[TRTTYPE.Baseline].szFreedom.ToString() + "/" + project.analysis.seizureData[TRTTYPE.Baseline].numAnimals.ToString();
 
                 // Seizure Burden strings
                 string baselineWilcoxon;
                 string vehicleWilcoxon;
-                if (project.analysis.PVALUES["SB: Drug vs Baseline"] < 0.05)
+                if (project.analysis.BurdenPVALUES[AnalysisTypes.Baseline_vs_Drug] < 0.05)
                 {
                     drugBurden += "\xB†";
                     baselineWilcoxon = "\xB† p<0.05 vs. Baseline (Wilcoxon Rank Sum)";
                 }
                 else
                 { baselineWilcoxon = "n.s. vs. Baseline (Wilcoxon Rank Sum)"; }
-                if (project.analysis.PVALUES["SB: Drug vs Vehicle"] < 0.05)
+                if (project.analysis.BurdenPVALUES[AnalysisTypes.Drug_vs_Vehicle] < 0.05)
                 {
                     drugBurden += "\xB*";
                     vehicleWilcoxon = "\xB* p<0.05 vs. Vehicle (Wilcoxon Rank Sum)";
@@ -411,14 +411,14 @@ namespace ProjectManager
                 // Seizure Freedom strings
                 string baselineFisherExact;
                 string vehicleFisherExact;
-                if (project.analysis.PVALUES["SF: Drug vs Baseline"] < 0.05)
+                if (project.analysis.FreedomPVALUES[AnalysisTypes.Baseline_vs_Drug] < 0.05)
                 {
                     drugFreedom += "\xB†";
                     baselineFisherExact = "\xB† p<0.05 vs. Baseline (Fisher Exact)";
                 }
                 else
                 { baselineFisherExact = "n.s. vs. Baseline (Fisher Exact)"; }
-                if (project.analysis.PVALUES["SF: Drug vs Vehicle"] < 0.05)
+                if (project.analysis.FreedomPVALUES[AnalysisTypes.Drug_vs_Vehicle] < 0.05)
                 {
                     drugFreedom += "\xB*";
                     vehicleFisherExact = "\xB* p<0.05 vs. Vehicle (Fisher Exact)";
@@ -426,55 +426,78 @@ namespace ProjectManager
                 else
                 { vehicleFisherExact = "n.s. vs. Vehicle (Fisher Exact)"; }
 
-                SizeF baselineStringSize = graph.graphics.MeasureString(baselineBurden, statsFont);
-                SizeF drugStringSize = graph.graphics.MeasureString(drugBurden, statsFont);
-                SizeF vehicleStringSize = graph.graphics.MeasureString(vehicleBurden, statsFont);
-                float boxLength = new List<float>() { baselineS.Width, drugStringSize.Width, vehicleStringSize.Width }.Max();
-                float boxHeight = new List<float>() { baselineStringSize.Height, drugStringSize.Height, vehicleStringSize.Height }.Max();
-
-                // Baseline Burden
-                graph.graphics.DrawString(baselineBurden, statsFont, headerBrush, graph.mainPlot.Width / 4, (float)(graph.axes.yAxisStart * 0.8));
-                graph.graphics.DrawRectangle(boundingPen, graph.mainPlot.Width / 4, (float)(graph.axes.yAxisStart * 0.8), boxLength, boxHeight);
-                graph.graphics.DrawString("Baseline", headerFont, headerBrush, graph.mainPlot.Width / 4, (float)(graph.axes.yAxisStart * 0.8 - boxHeight * 1.50));
-
-                // Drug Burden       
-                graph.graphics.DrawString(drugBurden, statsFont, headerBrush, graph.mainPlot.Width / 4 + boxLength + boxLength / 4, (float)(graph.axes.yAxisStart * 0.8));
-                graph.graphics.DrawRectangle(boundingPen, graph.mainPlot.Width / 4 + boxLength + boxLength / 4, (float)(graph.axes.yAxisStart * 0.8), boxLength, boxHeight);
-                graph.graphics.DrawString("Drug", headerFont, headerBrush, graph.mainPlot.Width / 4 + boxLength + boxLength / 4, (float)(graph.axes.yAxisStart * 0.8 - boxHeight * 1.50));
-
-                // Vehicle Burden       
-                graph.graphics.DrawString(vehicleBurden, statsFont, headerBrush, graph.mainPlot.Width / 4 + boxLength * 2 + boxLength / 2, (float)(graph.axes.yAxisStart * 0.8));
-                graph.graphics.DrawRectangle(boundingPen, graph.mainPlot.Width / 4 + boxLength * 2 + boxLength / 2, (float)(graph.axes.yAxisStart * 0.8), boxLength, boxHeight);
-                graph.graphics.DrawString("Vehicle", headerFont, headerBrush, graph.mainPlot.Width / 4 + boxLength * 2 + boxLength / 2, (float)(graph.axes.yAxisStart * 0.8 - boxHeight * 1.50));
-
-                // Significance statements for Sz Burden:
-                graph.graphics.DrawString(baselineWilcoxon, statsFont, headerBrush, graph.mainPlot.Width / 4, (float)(graph.axes.yAxisStart * 0.875));
-                graph.graphics.DrawString(vehicleWilcoxon, statsFont, headerBrush, graph.mainPlot.Width / 4, (float)(graph.axes.yAxisStart * 0.925));
-
-                // Vehicle freedom
-                float boxStart = (float)(graph.mainPlot.Width * 0.75 - boxLength);
-                graph.graphics.DrawString(vehicleFreedom, statsFont, headerBrush, boxStart, (float)(graph.axes.yAxisStart * 0.8));
-                graph.graphics.DrawRectangle(boundingPen, boxStart, (float)(graph.axes.yAxisStart * 0.8), boxLength, boxHeight);
-                graph.graphics.DrawString("Vehicle", headerFont, headerBrush, boxStart, (float)(graph.axes.yAxisStart * 0.8 - boxHeight * 1.50));
-
-                // Drug freedom
-                graph.graphics.DrawString(drugFreedom, statsFont, headerBrush, boxStart - boxLength - boxLength / 4, (float)(graph.axes.yAxisStart * 0.8));
-                graph.graphics.DrawRectangle(boundingPen, boxStart - boxLength - boxLength / 4, (float)(graph.axes.yAxisStart * 0.8), boxLength, boxHeight);
-                graph.graphics.DrawString("Drug", headerFont, headerBrush, boxStart - boxLength - boxLength / 4, (float)(graph.axes.yAxisStart * 0.8 - boxHeight * 1.50));
-
-                // Baseline freedom
-                graph.graphics.DrawString(baselineFreedom, statsFont, headerBrush, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.axes.yAxisStart * 0.8));
-                graph.graphics.DrawRectangle(boundingPen, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.axes.yAxisStart * 0.8), boxLength, boxHeight);
-                graph.graphics.DrawString("Baseline", headerFont, headerBrush, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.axes.yAxisStart * 0.8 - boxHeight * 1.50));
-
-                // Significance statements for Sz Freedom:
-                graph.graphics.DrawString(baselineFisherExact, statsFont, headerBrush, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.axes.yAxisStart * 0.875));
-                graph.graphics.DrawString(vehicleFisherExact, statsFont, headerBrush, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.axes.yAxisStart * 0.925));
+                // Draw to graph
+                ThreeGroups(baselineBurden, drugBurden, vehicleBurden, baselineWilcoxon, vehicleWilcoxon, baselineFisherExact, vehicleFisherExact);
             }
             else if (test == TESTTYPES.T36)
             {
                 // test 36 just baseline and drug
             }
+        }
+        private void TwoGroups()
+        {
+
+        }
+        private void ThreeGroups(string baselineBurden, string drugBurden, string vehicleBurden, string baselineWilcoxon, string vehicleWilcoxon, string baselineFisherExact, string vehicleFisherExact)
+        {
+            // if test 35, do baseline, vehicle, and drug
+            Font headerFont = new Font("Arial", 12F * graph.objectScale);
+            SolidBrush headerBrush = new SolidBrush(Color.Black);
+            Font statsFont = new Font("Arial", 8F * graph.objectScale);
+            Pen boundingPen = new Pen(Brushes.Black);
+            boundingPen.Width = 1.25F * graph.objectScale;
+
+            SizeF baselineS = graph.graphics.MeasureString("Baseline", headerFont);
+
+            // sz freedoms
+            string vehicleFreedom = project.analysis.seizureData[TRTTYPE.Vehicle].szFreedom.ToString() + "/" + project.analysis.seizureData[TRTTYPE.Vehicle].numAnimals.ToString();
+            string drugFreedom = project.analysis.seizureData[TRTTYPE.Drug].szFreedom.ToString() + "/" + project.analysis.seizureData[TRTTYPE.Drug].numAnimals.ToString();
+            string baselineFreedom = project.analysis.seizureData[TRTTYPE.Baseline].szFreedom.ToString() + "/" + project.analysis.seizureData[TRTTYPE.Baseline].numAnimals.ToString();
+
+            SizeF baselineStringSize = graph.graphics.MeasureString(baselineBurden, statsFont);
+            SizeF drugStringSize = graph.graphics.MeasureString(drugBurden, statsFont);
+            SizeF vehicleStringSize = graph.graphics.MeasureString(vehicleBurden, statsFont);
+            float boxLength = new List<float>() { baselineS.Width, drugStringSize.Width, vehicleStringSize.Width }.Max();
+            float boxHeight = new List<float>() { baselineStringSize.Height, drugStringSize.Height, vehicleStringSize.Height }.Max();
+
+            // Baseline Burden
+            graph.graphics.DrawString(baselineBurden, statsFont, headerBrush, graph.mainPlot.Width / 4, (float)(graph.axes.yAxisStart * 0.8));
+            graph.graphics.DrawRectangle(boundingPen, graph.mainPlot.Width / 4, (float)(graph.axes.yAxisStart * 0.8), boxLength, boxHeight);
+            graph.graphics.DrawString("Baseline", headerFont, headerBrush, graph.mainPlot.Width / 4, (float)(graph.axes.yAxisStart * 0.8 - boxHeight * 1.50));
+
+            // Drug Burden       
+            graph.graphics.DrawString(drugBurden, statsFont, headerBrush, graph.mainPlot.Width / 4 + boxLength + boxLength / 4, (float)(graph.axes.yAxisStart * 0.8));
+            graph.graphics.DrawRectangle(boundingPen, graph.mainPlot.Width / 4 + boxLength + boxLength / 4, (float)(graph.axes.yAxisStart * 0.8), boxLength, boxHeight);
+            graph.graphics.DrawString("Drug", headerFont, headerBrush, graph.mainPlot.Width / 4 + boxLength + boxLength / 4, (float)(graph.axes.yAxisStart * 0.8 - boxHeight * 1.50));
+
+            // Vehicle Burden       
+            graph.graphics.DrawString(vehicleBurden, statsFont, headerBrush, graph.mainPlot.Width / 4 + boxLength * 2 + boxLength / 2, (float)(graph.axes.yAxisStart * 0.8));
+            graph.graphics.DrawRectangle(boundingPen, graph.mainPlot.Width / 4 + boxLength * 2 + boxLength / 2, (float)(graph.axes.yAxisStart * 0.8), boxLength, boxHeight);
+            graph.graphics.DrawString("Vehicle", headerFont, headerBrush, graph.mainPlot.Width / 4 + boxLength * 2 + boxLength / 2, (float)(graph.axes.yAxisStart * 0.8 - boxHeight * 1.50));
+
+            // Significance statements for Sz Burden:
+            graph.graphics.DrawString(baselineWilcoxon, statsFont, headerBrush, graph.mainPlot.Width / 4, (float)(graph.axes.yAxisStart * 0.875));
+            graph.graphics.DrawString(vehicleWilcoxon, statsFont, headerBrush, graph.mainPlot.Width / 4, (float)(graph.axes.yAxisStart * 0.925));
+
+            // Vehicle freedom
+            float boxStart = (float)(graph.mainPlot.Width * 0.75 - boxLength);
+            graph.graphics.DrawString(vehicleFreedom, statsFont, headerBrush, boxStart, (float)(graph.axes.yAxisStart * 0.8));
+            graph.graphics.DrawRectangle(boundingPen, boxStart, (float)(graph.axes.yAxisStart * 0.8), boxLength, boxHeight);
+            graph.graphics.DrawString("Vehicle", headerFont, headerBrush, boxStart, (float)(graph.axes.yAxisStart * 0.8 - boxHeight * 1.50));
+
+            // Drug freedom
+            graph.graphics.DrawString(drugFreedom, statsFont, headerBrush, boxStart - boxLength - boxLength / 4, (float)(graph.axes.yAxisStart * 0.8));
+            graph.graphics.DrawRectangle(boundingPen, boxStart - boxLength - boxLength / 4, (float)(graph.axes.yAxisStart * 0.8), boxLength, boxHeight);
+            graph.graphics.DrawString("Drug", headerFont, headerBrush, boxStart - boxLength - boxLength / 4, (float)(graph.axes.yAxisStart * 0.8 - boxHeight * 1.50));
+
+            // Baseline freedom
+            graph.graphics.DrawString(baselineFreedom, statsFont, headerBrush, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.axes.yAxisStart * 0.8));
+            graph.graphics.DrawRectangle(boundingPen, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.axes.yAxisStart * 0.8), boxLength, boxHeight);
+            graph.graphics.DrawString("Baseline", headerFont, headerBrush, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.axes.yAxisStart * 0.8 - boxHeight * 1.50));
+
+            // Significance statements for Sz Freedom:
+            graph.graphics.DrawString(baselineFisherExact, statsFont, headerBrush, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.axes.yAxisStart * 0.875));
+            graph.graphics.DrawString(vehicleFisherExact, statsFont, headerBrush, boxStart - boxLength * 2 - boxLength / 2, (float)(graph.axes.yAxisStart * 0.925));
         }
         public void ExportGraph()
         {

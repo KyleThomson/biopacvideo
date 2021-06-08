@@ -25,7 +25,9 @@ namespace ProjectManager
     {
         Baseline,
         Vehicle,
-        Drug
+        Drug,
+        GroupA,
+        GroupB
     }
 
     /****************************************************************************************************************8
@@ -58,7 +60,7 @@ namespace ProjectManager
             Animals = new List<AnimalType>();
             Files = new List<FileType>();
             Groups = new List<GroupType>();
-            analysis = new SeizureAnalysis();
+            analysis = new SeizureAnalysis(test);
         }
         public void GetPath()
         {
@@ -92,7 +94,6 @@ namespace ProjectManager
                 F.Dispose();
             }
         }
-
         public void Save(string fileToSave)
         {
             StreamWriter F = new StreamWriter(fileToSave);
@@ -205,7 +206,6 @@ namespace ProjectManager
             }
             return CurrentAnimal;
         }
-
         public string[] Get_Seizures(string A) //Get the seizure info for display
         {
             string[] Szs;
@@ -257,75 +257,8 @@ namespace ProjectManager
                 // Computer burden and freedoms
                 CalculateSzBurden();
                 SeizureFreedom();
-                // count animals in each treatment group
-                CountTreatments();
-                // calculate pvalues
-                EvaluateSignificance();
+                analysis.SzFreedomSignificance();
             }
-        }
-        public void EvaluateSignificance()
-        {
-           // Evaluate significance of seizure burden and seizure freedom
-
-           // Seizure freedom first with Fisher Exact Test
-
-           // Seizure burden next (MWW test)
-           if (test == TESTTYPES.T35)
-           {
-                // Initialize arrays!
-                double[] drugBurden = Array.ConvertAll(analysis.drugBurdenList.ToArray(), x => (double)x);
-                double[] vehicleBurden = Array.ConvertAll(analysis.vehicleBurdenList.ToArray(), x => (double)x);
-                double[] baselineBurden = Array.ConvertAll(analysis.baselineBurdenList.ToArray(), x => (double)x);
-
-                // Run analysis on seizure burden
-                double drugVsVehicle = analysis.SzBurdenSignificance(drugBurden, vehicleBurden);
-                double drugVsBaseline = analysis.SzBurdenSignificance(drugBurden, baselineBurden);
-
-                // Store results
-                analysis.PVALUES.Add("SB: Drug vs Vehicle", drugVsVehicle);
-                analysis.PVALUES.Add("SB: Drug vs Baseline", drugVsBaseline);
-
-                analysis.SzFreedomSignificance(drugAnimals, baselineAnimals, vehicleAnimals);
-            }
-            else if (test == TESTTYPES.T36)
-            {
-                // Initialize arrays!
-                double[] drugBurden = Array.ConvertAll(analysis.drugBurdenList.ToArray(), x => (double)x);
-                double[] baselineBurden = Array.ConvertAll(analysis.baselineBurdenList.ToArray(), x => (double)x);
-
-                // Run analysis on seizure burden
-                double drugVsBaseline = analysis.SzBurdenSignificance(drugBurden, baselineBurden);
-
-                // Store results
-                analysis.PVALUES.Add("SB: Drug vs Baseline", drugVsBaseline);
-
-                analysis.SzFreedomSignificance(drugAnimals, baselineAnimals, vehicleAnimals);
-            }
-
-        }
-        private void CountTreatments()
-        {
-            int tempBaselineAnimals = 0;
-            int tempVehicleAnimals = 0;
-            int tempDrugAnimals = 0;
-            // This method counts the number of animals treated with a specific treatment
-            foreach (AnimalType A in Animals)
-            {
-                foreach (SzMetrics szMetrics in A.metrics)
-                {
-                    if (szMetrics.treatment == TRTTYPE.Baseline)
-                    { tempBaselineAnimals++; }
-
-                    else if (szMetrics.treatment == TRTTYPE.Vehicle)
-                    { tempVehicleAnimals++; }
-
-                    else if (szMetrics.treatment == TRTTYPE.Drug)
-                    { tempDrugAnimals++; }
-                }
-            }
-            baselineAnimals = tempBaselineAnimals;
-            vehicleAnimals = tempVehicleAnimals;
-            drugAnimals = tempDrugAnimals;
         }
         public void CompareStageConflicts()
         {
@@ -359,19 +292,6 @@ namespace ProjectManager
                 // Sort animals according to vehicle first
                 List<AnimalType> sortedA = Animals.OrderBy(a => a.Injections[0].ADDID).ToList();
                 Animals = sortedA;
-
-                // Initialize metrics to store analysis for each animal
-                foreach (AnimalType A in Animals)
-                {
-                    SzMetrics vehicle = new SzMetrics() { treatment = TRTTYPE.Vehicle };
-                    SzMetrics baseline = new SzMetrics() { treatment = TRTTYPE.Baseline };
-                    SzMetrics drug = new SzMetrics() { treatment = TRTTYPE.Drug };
-                    if (A.metrics.Count == 0)
-                    {
-                        A.metrics.Add(vehicle); A.metrics.Add(baseline); A.metrics.Add(drug);
-                    }
-                    
-                }
                 ParseGroups();
             }
             else if (analysis.test == TESTTYPES.T36)
@@ -441,23 +361,13 @@ namespace ProjectManager
         }
         private void CalculateSzBurden()
         {
-            foreach (AnimalType A in Animals)
-            {
-                // SeizureBurden() calculates seizure burden for all relevant groups and finds their SEM's
-                analysis.SeizureBurden(A, Files[0].Start.Date);
-            }
-            analysis.AverageBurdens(Animals);
+            // SeizureBurden() calculates seizure burden for all relevant groups and finds their SEM's
+            analysis.SeizureBurden(Animals, Files[0].Start.Date);
         }
         private void SeizureFreedom()
         {
             // Answer seizure freedom question for each animal
-            foreach (AnimalType A in Animals)
-            {
-                analysis.SeizureFreedom(A, Files[0].Start.Date);
-            }
-
-            // Add up animal seizure freedoms
-            analysis.SumFreedoms(Animals);
+            analysis.SeizureFreedom(Animals, Files[0].Start.Date);
         }
 
         public string[] Get_Animals()
@@ -998,11 +908,7 @@ namespace ProjectManager
                         sw.Close(); // close writer
                     }
                     else if (E.grouped)
-                    {
-                        //////////////////////////////////////////////
-                        // NEED IAK PROJECT FILE TO MAKE THIS WORK //
-                        ////////////////////////////////////////////
-                        
+                    {   
                         // Now that groups are established we can write to file.
                         foreach (GroupType group in Groups)
                         {
