@@ -218,6 +218,7 @@ namespace ProjectManager
                     // Dispose of control to conserve memory
                     control.Dispose();
                     // Force Garbage Collection to work - seems to only cleanup unnecessary graph controls and not the project data
+                    // Using GC object, it seems, is not advisable but it doesn't interfere with other processes in this specific case.
                     GC.Collect();
                     GC.WaitForPendingFinalizers();
                 }

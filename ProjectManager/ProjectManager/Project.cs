@@ -310,6 +310,10 @@ namespace ProjectManager
                     }
                 }
             }
+            else if (analysis.test == TESTTYPES.IAK)
+            {
+                ParseGroups();
+            }
             else if (analysis.test == TESTTYPES.UNDEFINED)
             { return; }
         }
@@ -317,44 +321,64 @@ namespace ProjectManager
         {
             // Use Damerau-Levenshtein algorithm to find groups
             List<string> groups = new List<string>();
-            string notVehicle = "";
-            int notVehTest = new int();
-            foreach (AnimalType A in Animals)
-            {
-                if (A.Injections.Count > 0)
-                {
-                    foreach (InjectionType I in A.Injections)
+            switch (analysis.test)
+            { 
+                case TESTTYPES.T35:
+
+                    string notVehicle = "";
+                    int notVehTest = new int();
+                    foreach (AnimalType A in Animals)
                     {
-                        if (!String.IsNullOrEmpty(notVehicle)) 
-                        // Test if string that is found as not vehicle group is similar to current ADDID.
-                        { notVehTest = DamerauLevenshtein.DamerauLevenshteinDistanceTo(I.ADDID.ToLower(), notVehicle); }
+                        if (A.Injections.Count > 0)
+                        {
+                            foreach (InjectionType I in A.Injections)
+                            {
+                                if (!String.IsNullOrEmpty(notVehicle))
+                                // Test if string that is found as not vehicle group is similar to current ADDID.
+                                { notVehTest = DamerauLevenshtein.DamerauLevenshteinDistanceTo(I.ADDID.ToLower(), notVehicle); }
 
-                        // Test if ADDID is sufficiently similar to "vehicle".
-                        int vehTest = DamerauLevenshtein.DamerauLevenshteinDistanceTo(I.ADDID.ToLower(), "vehicle");
+                                // Test if ADDID is sufficiently similar to "vehicle".
+                                int vehTest = DamerauLevenshtein.DamerauLevenshteinDistanceTo(I.ADDID.ToLower(), "vehicle");
 
-                        // check if vehicle is a group yet
-                        if (!groups.Contains("vehicle") && groups.Count < 2) { groups.Add("vehicle"); }
+                                // check if vehicle is a group yet
+                                if (!groups.Contains("vehicle") && groups.Count < 2) { groups.Add("vehicle"); }
 
-                        // if this is satisfied then injection is vehicle
-                        if (vehTest <= 3 && groups.Contains("vehicle") && groups.Count < 3) 
-                        { I.ADDID = "vehicle"; }
+                                // if this is satisfied then injection is vehicle
+                                if (vehTest <= 3 && groups.Contains("vehicle") && groups.Count < 3)
+                                { I.ADDID = "vehicle"; }
 
-                        // Identified ADDID as unique and not vehicle.
-                        else if (vehTest > 3 && notVehTest <= 3 && groups.Count < 3)
-                        { notVehicle = I.ADDID; }
+                                // Identified ADDID as unique and not vehicle.
+                                else if (vehTest > 3 && notVehTest <= 3 && groups.Count < 3)
+                                { notVehicle = I.ADDID; }
 
-                        // check if not vehicle is a group yet
-                        if (!groups.Contains(notVehicle) && notVehTest <= 3 && vehTest > 3 && groups.Count < 2) 
-                        { groups.Add(I.ADDID); }
+                                // check if not vehicle is a group yet
+                                if (!groups.Contains(notVehicle) && notVehTest <= 3 && vehTest > 3 && groups.Count < 2)
+                                { groups.Add(I.ADDID); }
 
-                        // Throw error if we get a third group.
-                        else if (groups.Count >= 3) { throw (new Exception("More than two groups found.")); }
+                                // Throw error if we get a third group.
+                                else if (groups.Count >= 3) { throw (new Exception("More than two groups found.")); }
+                            }
+                        }
                     }
-                }
-                else if (A.Meals.Count > 0)
-                {
-                    // run block of code for medicated and unmedicated meals
-                }
+                    break;
+
+                case TESTTYPES.T36:
+
+                    break;
+
+                case TESTTYPES.IAK:
+                    // if IAK test, check for injection id in each animal. one animal gets same injections
+                    foreach (AnimalType animal in Animals)
+                    {
+                        if (!groups.Contains(animal.Injections[0].ADDID))
+                        {
+                            groups.Add(animal.Injections[0].ADDID);
+                            animal.Group.Name = animal.Injections[0].ADDID;
+                        }
+                    }
+                    break;
+                        
+                    
             }
             // Pass groups found to analysis.
             analysis.groups = groups;

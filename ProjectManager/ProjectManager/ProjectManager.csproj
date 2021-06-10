@@ -118,6 +118,7 @@
     <Compile Include="ExtraMath.cs" />
     <Compile Include="FileType.cs" />
     <Compile Include="GraphProperties.cs" />
+    <Compile Include="GroupedData.cs" />
     <Compile Include="GroupType.cs" />
     <Compile Include="ImportantDateType.cs" />
     <Compile Include="INI.cs" />

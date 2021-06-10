@@ -427,7 +427,7 @@ namespace ProjectManager
                 { vehicleFisherExact = "n.s. vs. Vehicle (Fisher Exact)"; }
 
                 // Draw to graph
-                ThreeGroups(baselineBurden, drugBurden, vehicleBurden, baselineWilcoxon, vehicleWilcoxon, baselineFisherExact, vehicleFisherExact);
+                ThreeGroups(baselineBurden, drugBurden, vehicleBurden, baselineWilcoxon, vehicleWilcoxon, baselineFisherExact, vehicleFisherExact, drugFreedom, vehicleFreedom, baselineFreedom);
             }
             else if (test == TESTTYPES.T36)
             {
@@ -438,7 +438,7 @@ namespace ProjectManager
         {
 
         }
-        private void ThreeGroups(string baselineBurden, string drugBurden, string vehicleBurden, string baselineWilcoxon, string vehicleWilcoxon, string baselineFisherExact, string vehicleFisherExact)
+        private void ThreeGroups(string baselineBurden, string drugBurden, string vehicleBurden, string baselineWilcoxon, string vehicleWilcoxon, string baselineFisherExact, string vehicleFisherExact, string drugFreedom, string vehicleFreedom, string baselineFreedom)
         {
             // if test 35, do baseline, vehicle, and drug
             Font headerFont = new Font("Arial", 12F * graph.objectScale);
@@ -448,11 +448,6 @@ namespace ProjectManager
             boundingPen.Width = 1.25F * graph.objectScale;
 
             SizeF baselineS = graph.graphics.MeasureString("Baseline", headerFont);
-
-            // sz freedoms
-            string vehicleFreedom = project.analysis.seizureData[TRTTYPE.Vehicle].szFreedom.ToString() + "/" + project.analysis.seizureData[TRTTYPE.Vehicle].numAnimals.ToString();
-            string drugFreedom = project.analysis.seizureData[TRTTYPE.Drug].szFreedom.ToString() + "/" + project.analysis.seizureData[TRTTYPE.Drug].numAnimals.ToString();
-            string baselineFreedom = project.analysis.seizureData[TRTTYPE.Baseline].szFreedom.ToString() + "/" + project.analysis.seizureData[TRTTYPE.Baseline].numAnimals.ToString();
 
             SizeF baselineStringSize = graph.graphics.MeasureString(baselineBurden, statsFont);
             SizeF drugStringSize = graph.graphics.MeasureString(drugBurden, statsFont);
@@ -517,12 +512,20 @@ namespace ProjectManager
             ToolBarButton hideEmptyButton = new ToolBarButton();
             hideEmptyButton.Text = "Hide Empty";
 
+            ToolBarButton hideSzButton = new ToolBarButton();
+            hideSzButton.Text = "Hide Seizure";
+
+            ToolBarButton hideTrtButton = new ToolBarButton();
+            hideTrtButton.Text = "Hide Treatment";
+
             ToolBarButton clearGraph = new ToolBarButton();
             clearGraph.Text = "Clear";
 
             // Add button to toolbar controls
             toolBar1.Buttons.Add(exportButton);
             toolBar1.Buttons.Add(hideEmptyButton);
+            toolBar1.Buttons.Add(hideSzButton);
+            toolBar1.Buttons.Add(hideTrtButton);
             toolBar1.Buttons.Add(clearGraph);
 
             // Add event handler
@@ -547,7 +550,26 @@ namespace ProjectManager
                     graph.ClearGraph();
                     DrawGraph();
                     break;
-                case 2:
+
+                case 2: // hide seizures
+                    if (_sz)
+                    { _sz = false; }
+                    else
+                    { _sz = true; }
+                    graph.ClearGraph();
+                    DrawGraph();
+                    break;
+
+                case 3: // hide treatments
+                    if (_treatment)
+                    { _treatment = false; }
+                    else
+                    { _treatment = true; }
+                    graph.ClearGraph();
+                    DrawGraph();
+                    break;
+
+                case 4:
                     // Clear graphics
                     graph.ClearGraph();
                     break;
