@@ -16,7 +16,8 @@ namespace ProjectManager
         public double szBurden;
         public int szFreedom;
         public int numAnimals;
-        public double pValue;
+        public double burdenPValue;
+        public double freedomPValue;
         public SzMetrics BASELINE;
         public GroupedData(string group)
         {

@@ -60,6 +60,21 @@ namespace ProjectManager
                 double drugVsBaselinePvalue = ExtraMath.FisherExact(seizedDrugAnimals, seizedBaselineAnimals, notSeizedDrugAnimals, notSeizedBaselineAnimals);
                 FreedomPVALUES.Add(AnalysisTypes.Baseline_vs_Drug, drugVsBaselinePvalue);
             }
+            else if (test == TESTTYPES.IAK)
+            {
+                // can only do this after seizure burden computation ( maybe this needs to be changed )
+                foreach (string group in groups)
+                {
+                    int groupSeizedAnimals = groupedData[group].numAnimals - groupedData[group].szFreedom;
+                    int baselineSeizedAnimals = groupedData[group].BASELINE.numAnimals - groupedData[group].BASELINE.szFreedom;
+
+                    int notSeizedGroupAnimals = groupedData[group].szFreedom;
+                    int notSeizedBaselineAnimals = groupedData[group].BASELINE.szFreedom;
+
+                    double pvalue = ExtraMath.FisherExact(groupSeizedAnimals, baselineSeizedAnimals, notSeizedGroupAnimals, notSeizedBaselineAnimals);
+                    groupedData[group].freedomPValue = pvalue;
+                }
+            }
 
         }
         public double MWWTest(double[] sample1, double[] sample2)
@@ -300,9 +315,10 @@ namespace ProjectManager
                         groupedData[group].numAnimals = groupAnimals;
                         groupedData[group].burdenSEM = SEM(groupBurden);
                         groupedData[group].szBurdens = groupBurden;
+                        groupedData[group].groupID = group;
 
                         // MWW Test
-                        groupedData[group].pValue = MWWTest(groupBurden.ToArray(), baselineBurden.ToArray());
+                        groupedData[group].burdenPValue = MWWTest(groupBurden.ToArray(), baselineBurden.ToArray());
                     }
                     break;
             }

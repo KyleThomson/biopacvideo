@@ -131,6 +131,16 @@ namespace ProjectManager
                     else if (SecondSelect.SelectedIndex == 3)
                     {
                         SecondList.Items.Clear();
+                        string[] injections = pjt.Get_Injections((string)MainList.Items[MainList.SelectedIndex]);
+                        for (int i = 0; i < injections.Length; i++)
+                        {
+                            SecondList.Items.Add(injections[i]);
+                        }
+
+                    }
+                    else if (SecondSelect.SelectedIndex == 4)
+                    {
+                        SecondList.Items.Clear();
                         if (pjt.test == TESTTYPES.T35)
                         {
                             SecondList.Items.Add("Baseline");
@@ -324,6 +334,7 @@ namespace ProjectManager
                 SecondSelect.Items.Add("Seizures");
                 SecondSelect.Items.Add("Weights");
                 SecondSelect.Items.Add("Meals");
+                SecondSelect.Items.Add("Injections");
                 SecondSelect.Items.Add("Treatments");
                 SecondSelect.SelectedIndex = 0;
             }

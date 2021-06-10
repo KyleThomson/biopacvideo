@@ -216,12 +216,28 @@ namespace ProjectManager
             foreach (SeizureType S in Animals[idx].Sz)
             {
                 answer = string.Format("{0:D2}:{1:D2}:{2:D2}", S.t.Hours, S.t.Minutes, S.t.Seconds);
-                Szs[i] = S.d.ToShortDateString() + " " + answer;
+                Szs[i] = S.d.ToShortDateString() + " " + answer + "  SEVERITY: " + S.Severity.ToString();
                 i++;
             }
 
             return Szs;
 
+        }
+        public string[] Get_Injections(string A)
+        {
+            string[] injections;
+            int i = 0;
+            int idx = FindAnimal(A);
+            string answer;
+            injections = new string[Animals[idx].Injections.Count];
+
+            foreach (InjectionType injection in Animals[idx].Injections)
+            {
+                answer = string.Format("{0:D2}:{1:D2}:{2:D2}", injection.TimePoint.Hour, injection.TimePoint.Minute, injection.TimePoint.Second);
+                injections[i] = injection.TimePoint.Date.ToShortDateString() + " " + answer + "  ADDID: " + injection.ADDID;
+                i++;
+            }
+            return injections;
         }
         public string[] Get_Meals(string A) //Get the meal info for display
         {
