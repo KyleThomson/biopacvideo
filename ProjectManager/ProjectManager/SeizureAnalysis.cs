@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Accord.Statistics.Testing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Accord.Statistics.Testing;
 
 namespace ProjectManager
 {
@@ -12,7 +11,7 @@ namespace ProjectManager
         Baseline_vs_Vehicle,
         Baseline_vs_Drug,
         Drug_vs_Vehicle,
-            
+
         // IAK
         GroupA_vs_GroupB
     }
@@ -28,7 +27,7 @@ namespace ProjectManager
 
         public SeizureAnalysis(TESTTYPES typeOfTest)
         {
-            test = typeOfTest;      
+            test = typeOfTest;
         }
         public void SzFreedomSignificance()
         {
@@ -37,7 +36,7 @@ namespace ProjectManager
             if (test == TESTTYPES.T35)
             {
                 // Do Drug vs. Baseline comparison first
-                int seizedDrugAnimals = seizureData[TRTTYPE.Drug].numAnimals - seizureData[TRTTYPE.Drug].szFreedom; 
+                int seizedDrugAnimals = seizureData[TRTTYPE.Drug].numAnimals - seizureData[TRTTYPE.Drug].szFreedom;
                 int seizedBaselineAnimals = seizureData[TRTTYPE.Baseline].numAnimals - seizureData[TRTTYPE.Baseline].szFreedom;
                 int notSeizedDrugAnimals = seizureData[TRTTYPE.Drug].szFreedom;
                 int notSeizedBaselineAnimals = seizureData[TRTTYPE.Baseline].szFreedom;
@@ -53,7 +52,7 @@ namespace ProjectManager
             else if (test == TESTTYPES.T36)
             {
                 // Do Drug vs. Baseline comparison ONLY
-                int seizedDrugAnimals = seizureData[TRTTYPE.Drug].numAnimals - seizureData[TRTTYPE.Drug].szFreedom; 
+                int seizedDrugAnimals = seizureData[TRTTYPE.Drug].numAnimals - seizureData[TRTTYPE.Drug].szFreedom;
                 int seizedBaselineAnimals = seizureData[TRTTYPE.Baseline].numAnimals - seizureData[TRTTYPE.Baseline].szFreedom;
                 int notSeizedDrugAnimals = seizureData[TRTTYPE.Drug].szFreedom;
                 int notSeizedBaselineAnimals = seizureData[TRTTYPE.Baseline].szFreedom;
@@ -80,7 +79,7 @@ namespace ProjectManager
         public double MWWTest(double[] sample1, double[] sample2)
         {
             // generate new mww test
-            var mwwTest = new MannWhitneyWilcoxonTest(sample1, sample2, TwoSampleHypothesis.FirstValueIsSmallerThanSecond , exact: false);
+            var mwwTest = new MannWhitneyWilcoxonTest(sample1, sample2, TwoSampleHypothesis.FirstValueIsSmallerThanSecond, exact: false);
 
             // extract pvalue and return
             double pvalue = mwwTest.PValue;
@@ -141,12 +140,12 @@ namespace ProjectManager
                     // running seizure stage totals
                     int vehicleScore = 0;
                     int drugScore = 0;
-                    
+
 
                     // list of each animal's seizure burden
                     List<double> vehicleBurden = new List<double>();
                     List<double> drugBurden = new List<double>();
-                    
+
                     foreach (AnimalType animal in animals)
                     {
                         // Find drug and vehicle injections so we can determine if the seizure occurred during drug/vehicle treatment
@@ -180,7 +179,7 @@ namespace ProjectManager
                         }
 
                         baselineBurden.Add(baselineScore / baselineDays);
-                        vehicleBurden.Add(vehicleScore / vehicleDays); 
+                        vehicleBurden.Add(vehicleScore / vehicleDays);
                         drugBurden.Add(drugScore / drugDays);
                     }
 
@@ -262,63 +261,67 @@ namespace ProjectManager
                         if (!groupedData.ContainsKey(group))
                         {
                             groupedData.Add(group, new GroupedData(group));
-                        }
-                        int groupScore = 0;
-                        int groupAnimals = 0;
-                        List<double> groupBurden = new List<double>();
-                        // Groups A and B: Extract treatment times for each and sum severity scores
 
-                        // iterate thru animals
-                        foreach (AnimalType animal in animals)
-                        {
-                            if (animal.Injections[0].ADDID == group)
+                            int groupScore = 0;
+                            int groupAnimals = 0;
+                            List<double> groupBurden = new List<double>();
+                            // Groups A and B: Extract treatment times for each and sum severity scores
+
+                            // iterate thru animals
+                            foreach (AnimalType animal in animals)
                             {
-                                float groupDays = default;
-                                // IAK treatment groups Group A
-                                List<double> groupTimes = new List<double>();
-                                List<InjectionType> groupTrt = animal.Injections.Where(I => I.ADDID.ToUpper() == group).ToList();
-                                if (groupTrt.Count > 0)
-                                // IAK treatment times
+                                // Set grouptype
+                                animal.Group.Name = group;
+                                if (animal.Injections[0].ADDID == group)
                                 {
-                                    groupTimes = groupTrt.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
-                                    // Number of days for each group
-                                    groupDays = (float)((groupTimes.Max() - groupTimes.Min()) / 24);
+                                    float groupDays = default;
+                                    // IAK treatment groups Group A
+                                    List<double> groupTimes = new List<double>();
+                                    List<InjectionType> groupTrt = animal.Injections.Where(I => I.ADDID.ToUpper() == group).ToList();
+                                    if (groupTrt.Count > 0)
+                                    // IAK treatment times
+                                    {
+                                        groupTimes = groupTrt.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
+                                        // Number of days for each group
+                                        groupDays = (float)((groupTimes.Max() - groupTimes.Min()) / 24);
+                                    }
+
+                                    if (groupTrt.Count > 0)
+                                    { groupAnimals++; }
+
+
+                                    // Create baselineTimes and add 0 (beginning of recording) and just before the first treatment
+                                    List<double> baselineTimes = new List<double>();
+                                    baselineTimes.Add(0); baselineTimes.Add(groupTimes.Min());
+                                    float baselineDays = (float)baselineTimes.Max() / 24;
+
+                                    // Extract severity
+                                    if (animal.Sz.Count > 0)
+                                    {
+                                        groupScore = GetSeverityScore(animal.Sz, groupTimes, Earliest);
+                                        baselineScore = GetSeverityScore(animal.Sz, baselineTimes, Earliest);
+                                    }
+                                    groupBurden.Add(groupScore / groupDays);
+                                    baselineBurden.Add(baselineScore / baselineDays);
                                 }
-
-                                if (groupTrt.Count > 0)
-                                { groupAnimals++; }
-
-
-                                // Create baselineTimes and add 0 (beginning of recording) and just before the first treatment
-                                List<double> baselineTimes = new List<double>();
-                                baselineTimes.Add(0); baselineTimes.Add(groupTimes.Min());
-                                float baselineDays = (float)baselineTimes.Max() / 24;
-
-                                // Extract severity
-                                if (animal.Sz.Count > 0)
-                                {
-                                    groupScore = GetSeverityScore(animal.Sz, groupTimes, Earliest);
-                                    baselineScore = GetSeverityScore(animal.Sz, baselineTimes, Earliest);
-                                }
-                                groupBurden.Add(groupScore / groupDays);
-                                baselineBurden.Add(baselineScore / baselineDays);
                             }
+
+
+                            // Set metrics
+                            baselineMetrics.szBurden = Math.Round(baselineBurden.Average(), 2);
+                            baselineMetrics.numAnimals = baselineAnimals;
+                            baselineMetrics.burdenSEM = SEM(baselineBurden);
+                            groupedData[group].BASELINE = baselineMetrics;
+
+                            groupedData[group].szBurden = Math.Round(groupBurden.Average(), 2);
+                            groupedData[group].numAnimals = groupAnimals;
+                            groupedData[group].burdenSEM = SEM(groupBurden);
+                            groupedData[group].szBurdens = groupBurden;
+                            groupedData[group].groupID = group;
+
+                            // MWW Test
+                            groupedData[group].burdenPValue = MWWTest(groupBurden.ToArray(), baselineBurden.ToArray());
                         }
-
-                        // Set metrics
-                        baselineMetrics.szBurden = Math.Round(baselineBurden.Average(), 2);
-                        baselineMetrics.numAnimals = baselineAnimals;
-                        baselineMetrics.burdenSEM = SEM(baselineBurden);
-                        groupedData[group].BASELINE = baselineMetrics;
-
-                        groupedData[group].szBurden = Math.Round(groupBurden.Average(), 2);
-                        groupedData[group].numAnimals = groupAnimals;
-                        groupedData[group].burdenSEM = SEM(groupBurden);
-                        groupedData[group].szBurdens = groupBurden;
-                        groupedData[group].groupID = group;
-
-                        // MWW Test
-                        groupedData[group].burdenPValue = MWWTest(groupBurden.ToArray(), baselineBurden.ToArray());
                     }
                     break;
             }

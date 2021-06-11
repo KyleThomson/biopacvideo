@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms;
 
 
 namespace ProjectManager
 {
-   
+
 
     class IniFile
     {
@@ -19,13 +18,13 @@ namespace ProjectManager
         private static extern int GetPrivateProfileString(string section,
                  string key, string def, StringBuilder retVal,
             int size, string filePath);
-       
+
         public IniFile(string INIPath)
         {
             this.path = INIPath;
-        } 
+        }
 
-    
+
 
         public string IniReadValue(string Section, string Key, string Def)
         {
@@ -47,7 +46,7 @@ namespace ProjectManager
             int i = GetPrivateProfileString(Section, Key, (Def != null ? Def : string.Empty), temp, 255, this.path);
             return double.Parse(temp.ToString());
         }
-        
+
         public float IniReadValue(string Section, string Key, float Def2)
         {
             StringBuilder temp = new StringBuilder(255);
@@ -57,23 +56,23 @@ namespace ProjectManager
         }
         public DateTime IniReadValue(string Section, string Key)
         {
-          DateTime New;
+            DateTime New;
             StringBuilder temp = new StringBuilder(255);
-          GetPrivateProfileString(Section, Key, string.Empty, temp, 255, this.path);
-          if (DateTime.TryParse(temp.ToString(), out New))
-              return New.Date;
-          else
-              return DateTime.MinValue;
+            GetPrivateProfileString(Section, Key, string.Empty, temp, 255, this.path);
+            if (DateTime.TryParse(temp.ToString(), out New))
+                return New.Date;
+            else
+                return DateTime.MinValue;
         }
         public void IniReadValue(string Section, string Key, out TimeSpan New)
         {
-            
+
             StringBuilder temp = new StringBuilder(255);
             GetPrivateProfileString(Section, Key, string.Empty, temp, 255, this.path);
             if (!TimeSpan.TryParse(temp.ToString(), out New))
             {
                 New = TimeSpan.MaxValue;
-            }            
+            }
         }
 
         public bool IniReadValue(string Section, string Key, bool Def2)
@@ -117,8 +116,8 @@ namespace ProjectManager
             if (Value)
                 IniWriteValue(Section, Key, "true");
             else
-              IniWriteValue(Section, Key, "false");
+                IniWriteValue(Section, Key, "false");
         }
-        
+
     }
 }

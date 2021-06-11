@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ProjectManager
@@ -18,7 +15,7 @@ namespace ProjectManager
             prompt.Width = 250;
             prompt.Height = 150;
             prompt.Text = "Select correct severity.";
-            
+
             // Create label to inform user of animal that has the conflict.
             Label animalLabel = new Label();
             animalLabel.Location = new System.Drawing.Point(0, 0);
@@ -40,7 +37,7 @@ namespace ProjectManager
             noted.Click += (sender, e) => { Stage_Click(sender, e); prompt.Close(); };
             bubbled.Tag = bubbleStage;
             noted.Tag = notesStage;
-            
+
             // Display selection form & add controls to form
             panel.Controls.Add(bubbled);
             panel.Controls.Add(noted);

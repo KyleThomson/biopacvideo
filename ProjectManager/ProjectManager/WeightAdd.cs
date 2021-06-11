@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ProjectManager
@@ -12,7 +7,7 @@ namespace ProjectManager
     {
         public bool OK;
         public int Count;
-        public DateTime Date; 
+        public DateTime Date;
         public int[] Pellets;
         public int[] Weights;
         public string[] ID;
@@ -65,7 +60,7 @@ namespace ProjectManager
             Pt[8] = P9;
             Pt[9] = P10;
             Pt[10] = P11;
-            Pt[11] = P12;            
+            Pt[11] = P12;
         }
 
         private void WeightAdd_Load(object sender, EventArgs e)
@@ -97,7 +92,7 @@ namespace ProjectManager
                         }
                         else
                         {
-                            Pellets[Count] = 0; 
+                            Pellets[Count] = 0;
                         }
                         Count++;
                     }

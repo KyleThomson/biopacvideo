@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using System.Diagnostics;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Threading;
-using System.Windows.Forms;
+using System.IO;
 using System.Linq;
-using Microsoft.VisualBasic;
+using System.Windows.Forms;
 
 namespace ProjectManager
 {
@@ -338,7 +332,7 @@ namespace ProjectManager
             // Use Damerau-Levenshtein algorithm to find groups
             List<string> groups = new List<string>();
             switch (analysis.test)
-            { 
+            {
                 case TESTTYPES.T35:
 
                     string notVehicle = "";
@@ -393,8 +387,8 @@ namespace ProjectManager
                         }
                     }
                     break;
-                        
-                    
+
+
             }
             // Pass groups found to analysis.
             analysis.groups = groups;
@@ -490,14 +484,14 @@ namespace ProjectManager
                     }
                 }
                 F.Reviewer = BioINI.IniReadValue("Review", "Reviewer", "");
-                DateTime.TryParse(BioINI.IniReadValue("Review", "LastReviewed", ""), out F.ReviewDate);                    
+                DateTime.TryParse(BioINI.IniReadValue("Review", "LastReviewed", ""), out F.ReviewDate);
                 TempACQ.openACQ(FName[0]);
                 string Fn = FName[0].Substring(FName[0].LastIndexOf('\\') + 1);
                 F.Start = ConvertFileToDT(Fn);
                 F.Chans = TempACQ.Chans;
                 F.AnimalIDs = TempACQ.ID;
                 F.Duration = TimeSpan.FromSeconds(TempACQ.FileTime);
-                
+
                 TempACQ.closeACQ();
                 FileType Fs = Files.Find(delegate (FileType Ft) { return ((DateTime.Compare(Ft.Start, F.Start) == 0) && (string.Compare(F.AnimalIDs[0], Ft.AnimalIDs[0]) == 0)); });
                 //Determine if duplicate file - compare animal name and file start
@@ -518,7 +512,7 @@ namespace ProjectManager
                     int CurrentAnimal;
                     int Feeder;
                     StreamReader FLog = new StreamReader(FLogName[0]);
-                    
+
                     while (!FLog.EndOfStream)
                     {
                         //5/1/2012 3:00:04 AM  Feeder: 1  Pellets: 8 Medicated                
@@ -712,7 +706,7 @@ namespace ProjectManager
             {
                 if (file.AnimalIDs.Contains(animal.ID) && !_appeared && _firstAppearance && i > 0)
                 // Track earliest time that animal ID appears 
-                { earliest = Files[i - 1].Start; _appeared = true; _firstAppearance = false; }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+                { earliest = Files[i - 1].Start; _appeared = true; _firstAppearance = false; }
 
                 else if (_appeared && !file.AnimalIDs.Contains(animal.ID))
                 // If file doesn't have animal ID log a new latest time and set flag to false
@@ -907,7 +901,7 @@ namespace ProjectManager
                 binned.Title = "Binned Seizures .csv";
                 binned.DefaultExt = ".csv";
                 binned.InitialDirectory = "D:\\";
-                
+
                 if (binned.ShowDialog() == DialogResult.OK)
                 {
                     // Open binned seizure file
@@ -921,10 +915,10 @@ namespace ProjectManager
                             // first injection
                             double alignBy = Math.Round(A.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);
                             sz = A.ID;
-                            
+
                             // Create list for days that seizures happen
                             List<double> szDay = new List<double>();
-                            
+
                             foreach (SeizureType seizureType in A.Sz)
                             {
                                 if (seizureType.Severity != -1)
@@ -937,7 +931,7 @@ namespace ProjectManager
                             }
                             // create empty array of 0s to insert frequencies into
                             List<double> binSeizures = BinSeizure(numDays, szDay);
-                            
+
                             // Create string of seizure occurrences to write to .csv
                             for (int i = 0; i < binSeizures.Count; i++)
                             {
@@ -948,7 +942,7 @@ namespace ProjectManager
                         sw.Close(); // close writer
                     }
                     else if (E.grouped)
-                    {   
+                    {
                         // Now that groups are established we can write to file.
                         foreach (GroupType group in Groups)
                         {
@@ -1033,10 +1027,10 @@ namespace ProjectManager
             {
                 FileType F;
                 DateTime TempDate;
-                DateTime ReviewDate; 
+                DateTime ReviewDate;
                 try
                 {
-                    TempDate = ConvertFileToDT(data[1]);                    
+                    TempDate = ConvertFileToDT(data[1]);
                     //Get the ACQ info. 
                     int.TryParse(data[3], out Chans);
                     IDs = new string[Chans];
@@ -1051,7 +1045,7 @@ namespace ProjectManager
                     else
                     {
                         DateTime.TryParse(data[5], out ReviewDate);
-                        F = new FileType(IDs, Chans, TempDate, data[2], data[4+Chans],ReviewDate);
+                        F = new FileType(IDs, Chans, TempDate, data[2], data[4 + Chans], ReviewDate);
                     }
                     Files.Add(F);
                 }

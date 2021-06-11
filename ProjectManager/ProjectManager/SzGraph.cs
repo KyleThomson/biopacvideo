@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Diagnostics;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Threading;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace ProjectManager
@@ -30,10 +24,10 @@ namespace ProjectManager
         public Project project;
 
         // bools for drawing graph
-        bool _treatment = true;
-        bool _sz = true;
-        bool _empty = true;
-        bool _export = true;
+        private bool _treatment = true;
+        private bool _sz = true;
+        private bool _empty = true;
+        private bool _export = true;
         public SzGraph(int X, int Y, Project pjt)
         {
             // Type of test
@@ -47,11 +41,11 @@ namespace ProjectManager
 
             // x tick every 7 days           
             int xTickInterval = 7;
-            
+
             // Get nearest multiple of 7 days
             int nearestMultiple = (int)Math.Round(tempMax / (double)xTickInterval, MidpointRounding.AwayFromZero) * xTickInterval;
             int numXTicks = (nearestMultiple / xTickInterval) + 1;
-            
+
             // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
             graph = new GraphProperties(X, Y, nearestMultiple, project.Animals.Count);
             graph.axes.xTicks = numXTicks;
@@ -87,7 +81,7 @@ namespace ProjectManager
             // set description for the test - this will display in subheaders
             ETSP += description.ETSP; batch += description.Batch;
             dose += description.Dose; frequency += description.Frequency;
-            
+
             // check if form was cancelled and stop plotting
             if (description._cancelled)
             { return; }
@@ -207,7 +201,7 @@ namespace ProjectManager
         {
             Color lineColor = Color.FromName("Black");
             float lineWidth = 4;
-            
+
             // get earliest and latest time in hours
             float time0 = (float)Earliest.Subtract(Earliest).TotalHours;
             float maxTime = (float)Math.Round(Latest.Subtract(Earliest).TotalHours / 24, 2);
@@ -378,7 +372,7 @@ namespace ProjectManager
                 Font statsFont = new Font("Arial", 8F * graph.objectScale);
                 Pen boundingPen = new Pen(Brushes.Black);
                 boundingPen.Width = 1.25F * graph.objectScale;
-                
+
                 // sz burdens
                 string baselineBurden = project.analysis.seizureData[TRTTYPE.Baseline].szBurden.ToString() + "\u00B1" + project.analysis.seizureData[TRTTYPE.Baseline].burdenSEM.ToString();
                 string drugBurden = project.analysis.seizureData[TRTTYPE.Drug].szBurden.ToString() + "\u00B1" + project.analysis.seizureData[TRTTYPE.Drug].burdenSEM.ToString();
@@ -509,8 +503,10 @@ namespace ProjectManager
             ToolBarButton exportButton = new ToolBarButton();
             exportButton.Text = "Export";
 
-            ToolBarButton hideEmptyButton = new ToolBarButton();
-            hideEmptyButton.Text = "Hide Empty";
+            ToolBarButton hideEmptyButton = new ToolBarButton
+            {
+                Text = "Hide Empty"
+            };
 
             ToolBarButton hideSzButton = new ToolBarButton();
             hideSzButton.Text = "Hide Seizure";
@@ -537,11 +533,12 @@ namespace ProjectManager
         private void toolBar1_ButtonClick(Object sender, ToolBarButtonClickEventArgs e)
         {
             // Figure out which button is hit
-            switch(toolBar1.Buttons.IndexOf(e.Button))
+            switch (toolBar1.Buttons.IndexOf(e.Button))
             {
                 case 0: // export button
                     ExportGraph();
                     break;
+
                 case 1: // hide empty time
                     if (_empty)
                     { _empty = false; }

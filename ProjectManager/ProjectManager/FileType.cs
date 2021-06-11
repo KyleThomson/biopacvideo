@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ProjectManager
 {
@@ -21,9 +18,9 @@ namespace ProjectManager
             Start = C;
             TimeSpan.TryParse(D, out Duration);
             Reviewer = "";
-            ReviewDate = Start; 
+            ReviewDate = Start;
         }
-        public FileType(string[] A, int B, DateTime C, string D,string E, DateTime F)
+        public FileType(string[] A, int B, DateTime C, string D, string E, DateTime F)
         {
             AnimalIDs = A;
             Chans = B;

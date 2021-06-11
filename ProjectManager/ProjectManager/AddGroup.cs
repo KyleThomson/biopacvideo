@@ -1,29 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ProjectManager
 {
     public partial class AddGroup : Form
     {
-        public Project pjt; 
+        public Project pjt;
         int[] IDs;
         int[] counts;
         string[] Names;
         public AddGroup(Project J)
-        {            
+        {
             InitializeComponent();
             pjt = J;
             foreach (AnimalType A in pjt.Animals)
             {
-                AnimalList.Items.Add(A.ID);                
+                AnimalList.Items.Add(A.ID);
             }
             UpdateGroupList();
-            AnimalList.SelectedIndex = 0;         
+            AnimalList.SelectedIndex = 0;
         }
 
 
@@ -35,11 +30,11 @@ namespace ProjectManager
         {
             GroupsList.Items.Clear();
             GroupsList.Items.Add("Not Assigned");
-            GroupNameBox.Items.Clear();            
+            GroupNameBox.Items.Clear();
             IDs = new int[pjt.Groups.Count];
             counts = new int[pjt.Groups.Count];
             Names = new string[pjt.Groups.Count];
-            int c = 0; 
+            int c = 0;
             foreach (GroupType G in pjt.Groups)
             {
                 IDs[c] = G.IDNum;
@@ -47,9 +42,9 @@ namespace ProjectManager
                 Names[c] = G.Name;
                 GroupsList.Items.Add(G.Name);
                 GroupNameBox.Items.Add(G.Name);
-                c++; 
+                c++;
             }
-            AnimalList.SelectedIndex = 0; 
+            AnimalList.SelectedIndex = 0;
 
         }
         private void CreateGroup_Click(object sender, EventArgs e)
@@ -58,16 +53,16 @@ namespace ProjectManager
             {
                 return;
             }
-            int IDN = 0; 
+            int IDN = 0;
             foreach (GroupType G in pjt.Groups)
-            { 
-                if (string.Compare(GroupNameBox.Text, G.Name) == 0) 
+            {
+                if (string.Compare(GroupNameBox.Text, G.Name) == 0)
                 {
                     MessageBox.Show("Group name already exists");
                     return;
                 }
-              if (IDN < G.IDNum)
-                  IDN = G.IDNum;
+                if (IDN < G.IDNum)
+                    IDN = G.IDNum;
             }
             GroupType Gt = new GroupType((IDN + 1).ToString(), GroupNameBox.Text, "0");
             pjt.Groups.Add(Gt);
@@ -77,9 +72,9 @@ namespace ProjectManager
         private void AnimalList_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (pjt.Animals[AnimalList.SelectedIndex].Group.IDNum == 0)
-                GroupsList.SelectedIndex = 0; 
+                GroupsList.SelectedIndex = 0;
             else
-                GroupsList.SelectedIndex = Array.IndexOf(IDs, pjt.Animals[AnimalList.SelectedIndex].Group.IDNum)+1;
+                GroupsList.SelectedIndex = Array.IndexOf(IDs, pjt.Animals[AnimalList.SelectedIndex].Group.IDNum) + 1;
         }
 
         private void Enroll_Click(object sender, EventArgs e)
@@ -91,8 +86,8 @@ namespace ProjectManager
             }
             else
             {
-                pjt.Animals[AnimalList.SelectedIndex].Group.IDNum = IDs[GroupsList.SelectedIndex-1];
-                pjt.Animals[AnimalList.SelectedIndex].Group.Name = Names[GroupsList.SelectedIndex - 1];                
+                pjt.Animals[AnimalList.SelectedIndex].Group.IDNum = IDs[GroupsList.SelectedIndex - 1];
+                pjt.Animals[AnimalList.SelectedIndex].Group.Name = Names[GroupsList.SelectedIndex - 1];
             }
 
         }

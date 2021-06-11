@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace ProjectManager
 {
@@ -12,7 +8,7 @@ namespace ProjectManager
         public Graphics graphics;
         // add more objects if needed. for now, just want to try this with graph
 
-        public Context(Graphics graph) 
+        public Context(Graphics graph)
         { this.graphics = graph; }
     }
 }

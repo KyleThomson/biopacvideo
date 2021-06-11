@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
 namespace ProjectManager
@@ -21,7 +18,8 @@ namespace ProjectManager
         public int X; public int Y;
         public float scale;
         public float objectScale;
-        public int screenWidth { get; set; } public int screenHeight { get; set; }
+        public int screenWidth { get; set; }
+        public int screenHeight { get; set; }
 
         public GraphProperties(int width, int height, float maxX, float maxY)
         {
@@ -119,7 +117,7 @@ namespace ProjectManager
             graphics.DrawString(yLabel, font, drawBrush, yLabelRect, yLabelFormat);
         }
         public void PlotPoints(float xCoord, float yCoord, int markerSize, string markerType, Color color)
-        {          
+        {
             Pen dataPen = new Pen(Brushes.Black);
             dataPen.Color = color;
             dataPen.Width = dataPen.Width * objectScale;
@@ -127,7 +125,7 @@ namespace ProjectManager
             dataBrush.Color = color;
 
             // Calculate a scale factor that is in units of Pixels/unit
-            float xScale = (axes.xTickPoints[axes.xTickPoints.Count-1] - axes.xTickPoints[0]) / maxXData;
+            float xScale = (axes.xTickPoints[axes.xTickPoints.Count - 1] - axes.xTickPoints[0]) / maxXData;
             float yScale = (axes.yAxisLength - axes.yAxisStart) / maxYData;
 
             // Convert input coordinate points
@@ -137,13 +135,13 @@ namespace ProjectManager
             // Marker type selection
             if (markerType == "o")
             {
-                graphics.DrawEllipse(dataPen, realXCoord , realYCoord, markerSize * objectScale, markerSize * objectScale);
+                graphics.DrawEllipse(dataPen, realXCoord, realYCoord, markerSize * objectScale, markerSize * objectScale);
             }
-            else if(markerType == ".")
+            else if (markerType == ".")
             {
                 graphics.FillEllipse(dataBrush, realXCoord, realYCoord - (markerSize * objectScale) / 2, markerSize * objectScale, markerSize * objectScale);
             }
-            else if(markerType == "d")
+            else if (markerType == "d")
             {
                 //gotta do some math to draw a rhombus/diamond marker
                 DrawDiamond(realXCoord + axes.xAxisStart, realYCoord, markerSize * objectScale);
@@ -242,7 +240,7 @@ namespace ProjectManager
         public void TextBox(string inputStr, Color color, Font font)
         {
             SolidBrush dataBrush = new SolidBrush(Color.Black);
-            graphics.DrawString(inputStr, new Font("Arial",12), dataBrush, X / 2, Y / 6);
+            graphics.DrawString(inputStr, new Font("Arial", 12), dataBrush, X / 2, Y / 6);
         }
         public void SaveFig()
         {
@@ -266,7 +264,7 @@ namespace ProjectManager
                 }
             }
         }
-             
-        
+
+
     }
 }

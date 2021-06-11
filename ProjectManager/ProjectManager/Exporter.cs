@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using System.Linq;
 
 namespace ProjectManager
 {
@@ -32,10 +26,10 @@ namespace ProjectManager
             if (BloodDraw.Checked) E.BloodDraw = true;
             if (BloodDrawList.Checked) E.BloodDrawList = true;
             if (binSeizures.Checked)
-            { 
+            {
                 E.binSz = true;
                 if (groupedSz.Checked)
-                { 
+                {
                     E.grouped = true;
                     // Have user assign groups
                     if (pjt == null)
@@ -48,8 +42,8 @@ namespace ProjectManager
                 else if (ungroupedSz.Checked)
                 { E.ungrouped = true; }
             }
-            
-            
+
+
             // Create file dialog box for saving exported project file.
             SaveFileDialog F = new SaveFileDialog();
             F.DefaultExt = ".csv";

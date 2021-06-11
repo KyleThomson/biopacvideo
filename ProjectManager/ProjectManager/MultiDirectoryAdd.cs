@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 namespace ProjectManager
 {
 
     public partial class MultiDirectoryAdd : Form
-    {        
+    {
         public bool Pass;
         public string[] DirReturn;
         public MultiDirectoryAdd()
         {
             InitializeComponent();
-            DriveInfo[]  F = DriveInfo.GetDrives();
+            DriveInfo[] F = DriveInfo.GetDrives();
             for (int i = 0; i < F.Length; i++)
             {
                 Drives.Items.Add(F[i].Name);
@@ -74,10 +69,10 @@ namespace ProjectManager
             string[] MyDirs;
             try
             {
-               MyDirs = Directory.GetDirectories((string)Drives.Items[Drives.SelectedIndex]);
+                MyDirs = Directory.GetDirectories((string)Drives.Items[Drives.SelectedIndex]);
             }
             catch
-            { return;  }
+            { return; }
             DirListBox.Items.Clear();
             for (int i = 0; i < MyDirs.Length; i++)
             {

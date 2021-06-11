@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ProjectManager
@@ -12,9 +6,9 @@ namespace ProjectManager
     // This class is used to prompt user for some inputs for plotting
     public partial class TestDescription : Form
     {
-        public string ETSP; 
+        public string ETSP;
         public string Batch;
-        public string Dose; 
+        public string Dose;
         public string Frequency;
         public bool _cancelled = false;
         public TestDescription()
@@ -45,7 +39,7 @@ namespace ProjectManager
 
             Close();
         }
-        
+
 
         private void etspEntry_TextChanged(object sender, EventArgs e)
         {

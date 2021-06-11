@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 namespace ProjectManager
 {
@@ -20,7 +15,7 @@ namespace ProjectManager
             // Handle event for form closing in case there are unsaved changes to project file.
             //FormClosing += (sender, e) => { ProjectManager_FormClosing(sender, e); };
         }
-        private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)        
+        private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveFileDialog F = new SaveFileDialog();
             F.DefaultExt = ".pjt";
@@ -28,15 +23,15 @@ namespace ProjectManager
             F.InitialDirectory = "C:\\";
             if (F.ShowDialog() == DialogResult.OK)
             {
-                
+
                 pjt = new Project(F.FileName);
                 pjt.Open();
                 _pjtOpened = true;
-            }                    
+            }
         }
         private void ProjectManagerClosed(object sender, FormClosedEventArgs e)
         {
-            
+
         }
         private void selectProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -56,7 +51,7 @@ namespace ProjectManager
                 UpdateMainList();
             }
         }
-        
+
 
         private void UpdateMainList()
         {
@@ -65,12 +60,12 @@ namespace ProjectManager
             pjt.Sort();
             MainList.Items.Clear();
             if (MainSelect.SelectedIndex == 0) //Files
-            {                    
-                    string[] Fl = pjt.Get_Files();
-                    for (int i = 0; i < Fl.Length; i++)
-                    {
-                        MainList.Items.Add(Fl[i]);
-                    }                                       
+            {
+                string[] Fl = pjt.Get_Files();
+                for (int i = 0; i < Fl.Length; i++)
+                {
+                    MainList.Items.Add(Fl[i]);
+                }
             }
             else if (MainSelect.SelectedIndex == 1) //Animals
             {
@@ -79,13 +74,13 @@ namespace ProjectManager
                 {
                     MainList.Items.Add(A[i]);
                 }
-               
+
             }
         }
         private void UpdateSecondList()
         {
             if (pjt == null)
-                return;            
+                return;
             SecondList.Items.Clear();
             if (MainList.SelectedIndex == -1) return; //No file selected
             if (MainSelect.SelectedIndex == 0) //Files
@@ -103,7 +98,7 @@ namespace ProjectManager
                 }
             }
             else if (MainSelect.SelectedIndex == 1) //Animals
-            {            
+            {
                 if (MainList.SelectedIndex != -1)
                 {
                     if (SecondSelect.SelectedIndex == 0)
@@ -147,12 +142,12 @@ namespace ProjectManager
                             SecondList.Items.Add("Vehicle");
                             SecondList.Items.Add("Drug");
                         }
-                        
+
                     }
                 }
             }
         }
-        
+
         private void importSeizureToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (pjt == null)
@@ -179,7 +174,7 @@ namespace ProjectManager
             SecondList.MouseDown += new MouseEventHandler(this.SecondList_MouseDown);
         }
 
-        
+
         private void importFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (pjt == null)
@@ -190,15 +185,15 @@ namespace ProjectManager
             if (pjt != null)
             {
 
-                FolderBrowserDialog F = new FolderBrowserDialog();                
+                FolderBrowserDialog F = new FolderBrowserDialog();
                 if (F.ShowDialog(this) == DialogResult.OK)
                 {
                     int result = pjt.ImportDirectory(F.SelectedPath, this.rejectUnreviewedFilesToolStripMenuItem.Checked);
-                    if (result==2)
+                    if (result == 2)
                     {
                         MessageBox.Show("File already imported", "ERROR");
                     }
-                }                
+                }
                 UpdateMainList();
             }
         }
@@ -231,12 +226,12 @@ namespace ProjectManager
                     rightClickMenu.AutoClose = true;
                     // Call event handler if delete was selected
                     deleteAnimal.Click += new EventHandler(delete_Click);
-                    
+
                 }
             }
         }
         private void SecondList_MouseDown(object sender, MouseEventArgs e)
-        { 
+        {
             if (e.Button == MouseButtons.Right) // check if right mouse button was clicked
             {
                 var item = SecondList.IndexFromPoint(e.Location);
@@ -245,6 +240,7 @@ namespace ProjectManager
                     ContextMenuStrip rightClickMenu = new ContextMenuStrip();
                     // add menu options
                     var deleteTrt = rightClickMenu.Items.Add("Delete");
+                    var edit = rightClickMenu.Items.Add("Edit");
                     SecondList.ContextMenuStrip = rightClickMenu;
                     SecondList.SelectedIndex = item;
                     rightClickMenu.Show(SecondList, e.Location);
@@ -252,7 +248,36 @@ namespace ProjectManager
 
                     // call event handler to delete treatment
                     deleteTrt.Click += new EventHandler(delete_secondlist);
+                    edit.Click += new EventHandler(edit_secondlist);
                 }
+            }
+        }
+        private void edit_secondlist(object sender, EventArgs e)
+        {
+            // Seizures
+            if (SecondSelect.SelectedIndex == 0)
+            {
+                /* SeizureEdits szEditWindow = new SeizuresEdit();
+                 * szEditWindow.Show()
+                 * if (szEditWindow.SeverityText.Changed)
+                 * { Animal[i].seizure[j].Severity = Convert.ToInt(szEditWindow.SeverityText); }
+                 * 
+                 */
+            }
+            // Weights
+            else if (SecondSelect.SelectedIndex == 1)
+            {
+
+            }
+            // Meal
+            else if (SecondSelect.SelectedIndex == 2)
+            {
+
+            }
+            // Treatments
+            else if (SecondSelect.SelectedIndex == 3)
+            {
+
             }
         }
         private void delete_secondlist(object sender, EventArgs e)
@@ -278,7 +303,7 @@ namespace ProjectManager
             else if (SecondSelect.SelectedIndex == 3) // Treatment box selected
             {
                 // block of code to remove treatment from analysis
-                if (MainList.SelectedIndex >= 0 )
+                if (MainList.SelectedIndex >= 0)
                 {
                     if (SecondList.Items[SecondList.SelectedIndex].ToString().ToUpper() == "BASELINE") // BASELINE CHOSEN FOR REMOVAL
                     {
@@ -309,7 +334,7 @@ namespace ProjectManager
             {
                 pjt.Animals.RemoveAt(index);
             }
-            else if(MainSelect.SelectedIndex == 0) // operate on files
+            else if (MainSelect.SelectedIndex == 0) // operate on files
             {
                 pjt.Files.RemoveAt(index);
             }
@@ -374,7 +399,7 @@ namespace ProjectManager
             {
                 for (int i = 0; i < Frm.Count; i++)
                 {
-                    pjt.AddWeight(Frm.ID[i], Frm.Weights[i], Frm.Pellets[i], Frm.Date);                
+                    pjt.AddWeight(Frm.ID[i], Frm.Weights[i], Frm.Pellets[i], Frm.Date);
                 }
             }
             Frm.Dispose();
@@ -388,7 +413,7 @@ namespace ProjectManager
                 pjt = new Project("");
                 ChangeTitleText("");
             }
-            int DuplicateDirectoryCount = 0; 
+            int DuplicateDirectoryCount = 0;
             MultiDirectoryAdd Frm = new MultiDirectoryAdd();
             Frm.ShowDialog();
             if (Frm.Pass)
@@ -397,7 +422,7 @@ namespace ProjectManager
                 {
                     //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
                     int result = pjt.ImportDirectory(Frm.DirReturn[i], this.rejectUnreviewedFilesToolStripMenuItem.Checked);
-                    if (result==2)
+                    if (result == 2)
                     {
                         DuplicateDirectoryCount++;
                     }
@@ -417,9 +442,9 @@ namespace ProjectManager
             F.InitialDirectory = "C:\\";
             if (F.ShowDialog() == DialogResult.OK)
             {
-                pjt.MergeProject(F.FileName);                
+                pjt.MergeProject(F.FileName);
             }
-            UpdateMainList();            
+            UpdateMainList();
         }
 
         private void calendarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -471,10 +496,10 @@ namespace ProjectManager
             }
             else
             {
-                pjt.SaveAs(); 
+                pjt.SaveAs();
                 ChangeTitleText(pjt.Filename);
             }
-            
+
         }
 
         private void fileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -569,7 +594,7 @@ namespace ProjectManager
 
         private void rejectUnreviewedFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+
         }
     }
 }
