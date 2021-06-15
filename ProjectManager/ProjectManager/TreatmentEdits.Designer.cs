@@ -33,11 +33,13 @@
             this.doseAmtLabel = new System.Windows.Forms.Label();
             this.idLabel = new System.Windows.Forms.Label();
             this.solventLabel = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.doseTextBox = new System.Windows.Forms.TextBox();
             this.doseAmtTextBox = new System.Windows.Forms.TextBox();
             this.addIdTextBox = new System.Windows.Forms.TextBox();
             this.solventTextBox = new System.Windows.Forms.TextBox();
+            this.routeTextBox = new System.Windows.Forms.TextBox();
+            this.ok = new System.Windows.Forms.Button();
+            this.cancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // routeLabel
@@ -86,14 +88,6 @@
             this.solventLabel.TabIndex = 4;
             this.solventLabel.Text = "Solvent";
             // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(114, 29);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 5;
-            this.textBox1.TextChanged += new System.EventHandler(this.routeTextBox);
-            // 
             // doseTextBox
             // 
             this.doseTextBox.Location = new System.Drawing.Point(114, 61);
@@ -126,16 +120,46 @@
             this.solventTextBox.TabIndex = 9;
             this.solventTextBox.TextChanged += new System.EventHandler(this.solventTextBox_TextChanged);
             // 
+            // routeTextBox
+            // 
+            this.routeTextBox.Location = new System.Drawing.Point(114, 25);
+            this.routeTextBox.Name = "routeTextBox";
+            this.routeTextBox.Size = new System.Drawing.Size(100, 20);
+            this.routeTextBox.TabIndex = 10;
+            this.routeTextBox.TextChanged += new System.EventHandler(this.routeTextBox_TextChanged);
+            // 
+            // ok
+            // 
+            this.ok.Location = new System.Drawing.Point(69, 211);
+            this.ok.Name = "ok";
+            this.ok.Size = new System.Drawing.Size(50, 24);
+            this.ok.TabIndex = 11;
+            this.ok.Text = "Ok";
+            this.ok.UseVisualStyleBackColor = true;
+            this.ok.Click += new System.EventHandler(this.ok_Click);
+            // 
+            // cancel
+            // 
+            this.cancel.Location = new System.Drawing.Point(146, 211);
+            this.cancel.Name = "cancel";
+            this.cancel.Size = new System.Drawing.Size(50, 24);
+            this.cancel.TabIndex = 12;
+            this.cancel.Text = "Cancel";
+            this.cancel.UseVisualStyleBackColor = true;
+            this.cancel.Click += new System.EventHandler(this.cancel_Click);
+            // 
             // TreatmentEdits
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(276, 247);
+            this.Controls.Add(this.cancel);
+            this.Controls.Add(this.ok);
+            this.Controls.Add(this.routeTextBox);
             this.Controls.Add(this.solventTextBox);
             this.Controls.Add(this.addIdTextBox);
             this.Controls.Add(this.doseAmtTextBox);
             this.Controls.Add(this.doseTextBox);
-            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.solventLabel);
             this.Controls.Add(this.idLabel);
             this.Controls.Add(this.doseAmtLabel);
@@ -143,6 +167,7 @@
             this.Controls.Add(this.routeLabel);
             this.Name = "TreatmentEdits";
             this.Text = "TreatmentEdits";
+            this.Load += new System.EventHandler(this.TreatmentEdits_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -155,10 +180,12 @@
         private System.Windows.Forms.Label doseAmtLabel;
         private System.Windows.Forms.Label idLabel;
         private System.Windows.Forms.Label solventLabel;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox doseTextBox;
         private System.Windows.Forms.TextBox doseAmtTextBox;
         private System.Windows.Forms.TextBox addIdTextBox;
         private System.Windows.Forms.TextBox solventTextBox;
+        private System.Windows.Forms.TextBox routeTextBox;
+        private System.Windows.Forms.Button ok;
+        private System.Windows.Forms.Button cancel;
     }
 }

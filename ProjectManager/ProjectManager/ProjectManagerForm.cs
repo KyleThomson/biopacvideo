@@ -258,13 +258,9 @@ namespace ProjectManager
             // Seizures
             if (SecondSelect.SelectedIndex == 0)
             {
-                /* SeizureEdits szEditWindow = new SeizuresEdit();
-                 * szEditWindow.Show()
-                 * if (szEditWindow.SeverityText.Changed)
-                 * { Animal[i].seizure[j].Severity = Convert.ToInt(szEditWindow.SeverityText); }
-                 * 
-                 */
-                SeizureType currentSeizure = pjt.Animals[MainList.SelectedIndex].Sz[SecondList.SelectedIndex];
+                // create seizureedits dialog
+                SeizureType currentSeizure = 
+                    pjt.Animals[MainList.SelectedIndex].Sz[SecondList.SelectedIndex];
                 SeizureEdits szEditWindow = new SeizureEdits(currentSeizure);
                 szEditWindow.ShowDialog();
                 if (szEditWindow._seizureModified)
@@ -288,7 +284,17 @@ namespace ProjectManager
             // Treatments
             else if (SecondSelect.SelectedIndex == 3)
             {
-
+                // treatmentedits dialog
+                InjectionType currentInection =
+                    pjt.Animals[MainList.SelectedIndex].Injections[SecondList.SelectedIndex];
+                TreatmentEdits treatmentEdits = new TreatmentEdits(currentInection);
+                treatmentEdits.ShowDialog();
+                if (treatmentEdits._anyChanges)
+                {
+                    // indicate file modified
+                    pjt.FileChanged();
+                    ChangeTitleText(pjt.Filename);
+                }
             }
         }
         private void delete_secondlist(object sender, EventArgs e)

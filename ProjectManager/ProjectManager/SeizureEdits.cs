@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 namespace ProjectManager
 {
+    // Windows form that presents editable fields for notes and seizure severity. 
     public partial class SeizureEdits : Form
     {
         private SeizureType currentSeizure;
