@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Linq;
 using System.Windows.Forms;
+using Accord;
 
 namespace ProjectManager
 {
@@ -431,17 +432,24 @@ namespace ProjectManager
                 if (project.analysis.BurdenPVALUES[AnalysisTypes.Baseline_vs_Drug] < 0.05)
                 {
                     drugBurden += "\xB†";
-                    baselineWilcoxon = "\xB† p<0.05 vs. Baseline (Wilcoxon Rank Sum)";
+                    baselineWilcoxon = "\xB† p<0.05 vs. Baseline (Wilcoxon Rank Sum)" 
+                                       + "(p="+ project.analysis.BurdenPVALUES[AnalysisTypes.Baseline_vs_Drug].ToString("G2") + ")";
                 }
                 else
-                { baselineWilcoxon = "n.s. vs. Baseline (Wilcoxon Rank Sum)"; }
+                { baselineWilcoxon = "n.s. vs. Baseline (Wilcoxon Rank Sum)"
+                                     + "(p=" + project.analysis.BurdenPVALUES[AnalysisTypes.Baseline_vs_Drug].ToString("G2") + ")"; }
                 if (project.analysis.BurdenPVALUES[AnalysisTypes.Drug_vs_Vehicle] < 0.05)
                 {
                     drugBurden += "\xB*";
-                    vehicleWilcoxon = "\xB* p<0.05 vs. Vehicle (Wilcoxon Rank Sum)";
+                    vehicleWilcoxon = "\xB* p<0.05 vs. Vehicle (Wilcoxon Rank Sum)"
+                                      + "(p=" + project.analysis.BurdenPVALUES[AnalysisTypes.Drug_vs_Vehicle].ToString("G2") + ")";
                 }
                 else
-                { vehicleWilcoxon = "n.s. vs. Vehicle (Wilcoxon Rank Sum)"; }
+                {
+                    vehicleWilcoxon = "n.s. vs. Vehicle (Wilcoxon Rank Sum)"
+                                      + "(p=" + project.analysis.BurdenPVALUES[AnalysisTypes.Drug_vs_Vehicle].ToString("G2") + ")"; 
+
+                }
 
                 // Seizure Freedom strings
                 string baselineFisherExact;
@@ -449,17 +457,25 @@ namespace ProjectManager
                 if (project.analysis.FreedomPVALUES[AnalysisTypes.Baseline_vs_Drug] < 0.05)
                 {
                     drugFreedom += "\xB†";
-                    baselineFisherExact = "\xB† p<0.05 vs. Baseline (Fisher Exact)";
+                    baselineFisherExact = "\xB† p<0.05 vs. Baseline (Fisher Exact)"
+                                          + "(p=" + project.analysis.FreedomPVALUES[AnalysisTypes.Baseline_vs_Drug].ToString("G2") + ")";
                 }
                 else
-                { baselineFisherExact = "n.s. vs. Baseline (Fisher Exact)"; }
+                {
+                    baselineFisherExact = "n.s. vs. Baseline (Fisher Exact)"
+                                          + "(p=" + project.analysis.FreedomPVALUES[AnalysisTypes.Baseline_vs_Drug].ToString("G2") + ")";
+                }
                 if (project.analysis.FreedomPVALUES[AnalysisTypes.Drug_vs_Vehicle] < 0.05)
                 {
                     drugFreedom += "\xB*";
-                    vehicleFisherExact = "\xB* p<0.05 vs. Vehicle (Fisher Exact)";
+                    vehicleFisherExact = "\xB* p<0.05 vs. Vehicle (Fisher Exact)"
+                                         + "(p=" + project.analysis.FreedomPVALUES[AnalysisTypes.Drug_vs_Vehicle].ToString("G2") + ")";
                 }
                 else
-                { vehicleFisherExact = "n.s. vs. Vehicle (Fisher Exact)"; }
+                {
+                    vehicleFisherExact = "n.s. vs. Vehicle (Fisher Exact)"
+                                         + "(p=" + project.analysis.FreedomPVALUES[AnalysisTypes.Drug_vs_Vehicle].ToString("G2") + ")";
+                }
 
                 // Draw to graph
                 ThreeGroups(baselineBurden, drugBurden, vehicleBurden, baselineWilcoxon, vehicleWilcoxon, baselineFisherExact, vehicleFisherExact, drugFreedom, vehicleFreedom, baselineFreedom);
