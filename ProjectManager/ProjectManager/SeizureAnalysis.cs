@@ -152,7 +152,9 @@ namespace ProjectManager
                         List<InjectionType> vehicleI = animal.Injections.Where(I => I.ADDID == "vehicle").ToList();
                         List<InjectionType> drugI = animal.Injections.Where(I => I.ADDID != "vehicle").ToList();
                         List<double> vehicleTimes = vehicleI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
+                        vehicleTimes[vehicleTimes.Count - 1] += 12;
                         List<double> drugTimes = drugI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
+                        drugTimes[drugTimes.Count - 1] += 12;
 
                         // count animals
                         if (vehicleI.Count > 0)
@@ -184,17 +186,17 @@ namespace ProjectManager
                     }
 
                     // Set metrics
-                    baselineMetrics.szBurden = Math.Round(baselineBurden.Average(), 2);
+                    baselineMetrics.szBurden = Math.Round(baselineBurden.Average(), 1);
                     baselineMetrics.numAnimals = baselineAnimals;
                     baselineMetrics.burdenSEM = SEM(baselineBurden);
 
                     SzMetrics vehicleMetrics = new SzMetrics(TRTTYPE.Vehicle);
-                    vehicleMetrics.szBurden = Math.Round(vehicleBurden.Average(), 2);
+                    vehicleMetrics.szBurden = Math.Round(vehicleBurden.Average(), 1);
                     vehicleMetrics.numAnimals = vehicleAnimals;
                     vehicleMetrics.burdenSEM = SEM(vehicleBurden);
 
                     SzMetrics drugMetrics = new SzMetrics(TRTTYPE.Drug);
-                    drugMetrics.szBurden = Math.Round(drugBurden.Average(), 2);
+                    drugMetrics.szBurden = Math.Round(drugBurden.Average(), 1);
                     drugMetrics.numAnimals = drugAnimals;
                     drugMetrics.burdenSEM = SEM(drugBurden);
 
@@ -341,7 +343,9 @@ namespace ProjectManager
                     List<InjectionType> vehicleI = animal.Injections.Where(I => I.ADDID == "vehicle").ToList();
                     List<InjectionType> drugI = animal.Injections.Where(I => I.ADDID != "vehicle").ToList();
                     List<double> vehicleTimes = vehicleI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
+                    vehicleTimes[vehicleTimes.Count - 1] += 12;
                     List<double> drugTimes = drugI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
+                    drugTimes[drugTimes.Count - 1] += 12;
                     List<SeizureType> drugSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= drugTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= drugTimes.Max() && S.Severity != -1).ToList();
                     List<SeizureType> vehicleSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= vehicleTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= vehicleTimes.Max() && S.Severity != -1).ToList();
                     double baselineTime = -1; // initialize baseline
@@ -407,8 +411,6 @@ namespace ProjectManager
         }
         public double SEM(List<double> sz)
         {
-            double sem;
-            double sigma;
             double variance = 0;
             double mean = sz.Average();
             int n = sz.Count();
@@ -417,9 +419,9 @@ namespace ProjectManager
             {
                 variance += (float)Math.Pow(sz[i] - mean, 2) / (n - 1);
             }
-            sigma = Math.Sqrt(variance);
-            sem = sigma / Math.Sqrt(n - 1);
-            return Math.Round(sem, 2);
+            var sigma = Math.Sqrt(variance);
+            var sem = sigma / Math.Sqrt(n - 1);
+            return Math.Round(sem, 1);
         }
         public int CompareSeizures(SeizureType seizure, string animalID)
         {

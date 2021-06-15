@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Media;
 using System.Windows.Forms;
 
 namespace ProjectManager
@@ -263,6 +264,16 @@ namespace ProjectManager
                  * { Animal[i].seizure[j].Severity = Convert.ToInt(szEditWindow.SeverityText); }
                  * 
                  */
+                SeizureType currentSeizure = pjt.Animals[MainList.SelectedIndex].Sz[SecondList.SelectedIndex];
+                SeizureEdits szEditWindow = new SeizureEdits(currentSeizure);
+                szEditWindow.ShowDialog();
+                if (szEditWindow._seizureModified)
+                {
+                    // indicate file modified
+                    pjt.FileChanged();
+                    ChangeTitleText(pjt.Filename);
+                }
+                
             }
             // Weights
             else if (SecondSelect.SelectedIndex == 1)
@@ -517,8 +528,12 @@ namespace ProjectManager
                     // Check file changed flag in project data
                     if (pjt._fileChanged)
                     {
+                        // Make sound to annoy user
+                        System.Media.SystemSounds.Exclamation.Play();
+
                         // Open dialog to remind user to save
                         saveReminderDialog.ShowDialog();
+
                         // handle options that user selected
                         if (saveReminderDialog.clickedOption == 0)
                         {

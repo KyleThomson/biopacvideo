@@ -148,6 +148,12 @@
       <DependentUpon>SaveReminderDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SeizureAnalysis.cs" />
+    <Compile Include="SeizureEdits.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SeizureEdits.Designer.cs">
+      <DependentUpon>SeizureEdits.cs</DependentUpon>
+    </Compile>
     <Compile Include="SeizureStageDialog.cs" />
     <Compile Include="SeizureType.cs" />
     <Compile Include="SzGraph.cs" />
@@ -163,6 +169,12 @@
     </Compile>
     <Compile Include="TestInput.Designer.cs">
       <DependentUpon>TestInput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TreatmentEdits.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TreatmentEdits.Designer.cs">
+      <DependentUpon>TreatmentEdits.cs</DependentUpon>
     </Compile>
     <Compile Include="WeightAdd.cs">
       <SubType>Form</SubType>
@@ -199,11 +211,17 @@
     <EmbeddedResource Include="SaveReminderDialog.resx">
       <DependentUpon>SaveReminderDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SeizureEdits.resx">
+      <DependentUpon>SeizureEdits.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TestDescription.resx">
       <DependentUpon>TestDescription.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TestInput.resx">
       <DependentUpon>TestInput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TreatmentEdits.resx">
+      <DependentUpon>TreatmentEdits.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WeightAdd.resx" />
     <None Include="packages.config" />

@@ -152,14 +152,14 @@ namespace ProjectManager
                         // Draw vehicle line
                         if (vehicleTimes.Count > 1)
                         {
-                            graph.Line(vehicleTimes[0], yCoord, vehicleTimes[vehicleTimes.Count - 1], yCoord, lineWidth, vehicleColor);
+                            graph.Line(vehicleTimes[0], yCoord, (float)(vehicleTimes[vehicleTimes.Count - 1] + 0.5), yCoord, lineWidth, vehicleColor);
                         }
 
 
                         // Draw drug line
                         if (drugTimes.Count > 1)
                         {
-                            graph.Line(drugTimes[0], yCoord, drugTimes[drugTimes.Count - 1], yCoord, lineWidth, drugColor);
+                            graph.Line(drugTimes[0], yCoord, (float)(drugTimes[drugTimes.Count - 1] + 0.5), yCoord, lineWidth, drugColor);
                         }
 
 
