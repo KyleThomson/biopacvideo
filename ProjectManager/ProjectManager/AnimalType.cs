@@ -16,6 +16,8 @@ namespace ProjectManager
         public GroupType Group;
         public List<InjectionType> Injections;
         public List<SzMetrics> metrics;
+        // align
+        public double alignBy7Days;
         public AnimalType()
         {
             Sz = new List<SeizureType>();

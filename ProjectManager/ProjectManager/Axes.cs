@@ -28,10 +28,13 @@ namespace ProjectManager
         public float tickWidth;
         public List<string> xTickLabels;
         public List<string> yTickLabels;
+        public List<double> xTickLocations;
 
         // drawing
         public float scale;
         public float objectScale;
+        public float xScale;
+        public float yScale;
         public Axes(int X, int Y, Context context)
         {
             // Construct wrapped graph object w/ context
@@ -73,10 +76,11 @@ namespace ProjectManager
             float yTickSpacing = (float)(yAxisLength / (yTicks * 1.5));
             Font xFont = new Font("Arial", 10 * objectScale);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
-            float maxXTick = (float)Convert.ToDouble(xTickLabels[xTicks - 1]);
+            float maxXTick = (float)xTickLocations[xTicks - 1];
+
             for (int i = 0; i < xTicks; i++)
             {
-                float currentXPoint = (float)(((Convert.ToDouble(xTickLabels[i]) + 0.5) / maxXTick) * (axesList[1].X - axesList[0].X) * 0.95);
+                float currentXPoint = (float)(xTickLocations[i] * xScale + 0.50 * xScale);
                 // create length of x tick
                 PointF xTickStart = new PointF(xAxisStart + currentXPoint, yAxisLength);
                 xTickPoints.Add(xAxisStart + currentXPoint);

@@ -296,8 +296,8 @@ namespace ProjectManager
             if (analysis.test == TESTTYPES.T35)
             {
                 // Remove animals w/o injections and one type of ADDID
-                //Animals.RemoveAll(a => a.Injections.Count == 0);
-                //Animals.RemoveAll(a => a.Injections[0].ADDID == a.Injections[a.Injections.Count - 1].ADDID);
+                Animals.RemoveAll(a => a.Injections.Count == 0);
+                Animals.RemoveAll(a => a.Injections[0].ADDID == a.Injections[a.Injections.Count - 1].ADDID);
 
                 // Sort animals according to vehicle first
                 List<AnimalType> sortedA = Animals.OrderBy(a => a.Injections[0].ADDID).ToList();

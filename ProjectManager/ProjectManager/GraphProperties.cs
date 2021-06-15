@@ -17,12 +17,17 @@ namespace ProjectManager
         public List<PointF> axesPoints;
         public int X; public int Y;
         public float scale;
+        public float xScale;
+        public float yScale;
         public float objectScale;
         public int screenWidth { get; set; }
         public int screenHeight { get; set; }
 
         public GraphProperties(int width, int height, float maxX, float maxY)
         {
+            // Set input arguments as max data
+            maxXData = maxX; maxYData = maxY;
+
             // First find resolution that graphics will be scaled to
             screenWidth = Screen.PrimaryScreen.Bounds.Width;
             screenHeight = Screen.PrimaryScreen.Bounds.Height;
@@ -40,6 +45,7 @@ namespace ProjectManager
             // Create axes
             axes = new Axes(X, Y, context);
             axesPoints = axes.axesList;
+            Scale();
 
             // Set smoothing mode for graphics in initialization. This will smooth out edges when drawing round objects.
             graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -52,9 +58,16 @@ namespace ProjectManager
             axes.objectScale = objectScale;
             axes.scale = scale;
 
-            // Set input arguments as max data
-            maxXData = maxX; maxYData = maxY;
+            
 
+        }
+
+        private void Scale()
+        {
+            xScale = (float)((axes.axesList[1].X - axes.axesList[0].X) * 0.95/ maxXData);
+            yScale = (axes.yAxisLength - axes.yAxisStart) / maxYData;
+            axes.xScale = xScale;
+            axes.yScale = yScale;
         }
         public void DrawAxes(float penWidth)
         {
@@ -123,14 +136,12 @@ namespace ProjectManager
             dataPen.Width = dataPen.Width * objectScale;
             SolidBrush dataBrush = new SolidBrush(Color.Black);
             dataBrush.Color = color;
-
+            var centerPoint = markerSize / 2 * objectScale;
             // Calculate a scale factor that is in units of Pixels/unit
-            float xScale = (axes.xTickPoints[axes.xTickPoints.Count - 1] - axes.xTickPoints[0]) / maxXData;
-            float yScale = (axes.yAxisLength - axes.yAxisStart) / maxYData;
 
             // Convert input coordinate points
-            float realXCoord = xCoord * xScale + axes.xTickPoints[0] - (markerSize * objectScale);
-            float realYCoord = (float)(axes.yAxisLength - yCoord * yScale) + (markerSize * objectScale);
+            float realXCoord = xCoord * xScale + axes.xTickPoints[0] - centerPoint;
+            float realYCoord = (float)(axes.yAxisLength - yCoord * yScale) + centerPoint;
 
             // Marker type selection
             if (markerType == "o")
@@ -160,8 +171,9 @@ namespace ProjectManager
             dataPen.Width = lineWidth * objectScale;
 
             // Calculate a scale factor that is in units of Pixels/unit
-            float xScale = (axes.xTickPoints[axes.xTickPoints.Count - 1] - axes.xTickPoints[0]) / maxXData;
-            float yScale = (axes.yAxisLength - axes.yAxisStart) / maxYData;
+            //float xScale = (axes.xTickPoints[axes.xTickPoints.Count - 1] - axes.xTickPoints[0]) / maxXData;
+            //float xScale = (float)((axes.axesList[1].X - axes.axesList[0].X) * 0.95 / maxXData);
+            //float yScale = (axes.yAxisLength - axes.yAxisStart) / maxYData;
 
             // Convert input coordinate points
             float realX1Coord = x1Coord * xScale + axes.xTickPoints[0];

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -28,8 +29,11 @@ namespace ProjectManager
         private bool _sz = true;
         private bool _empty = true;
         private bool _export = true;
+
+        
         public SzGraph(int X, int Y, Project pjt)
         {
+            
             // Type of test
             test = pjt.test;
             project = pjt;
@@ -38,7 +42,7 @@ namespace ProjectManager
             Latest = project.Files[project.Files.Count - 1].Start.Date;
             double totalHours = Latest.Subtract(Earliest).TotalHours;
             int tempMax = (int)Math.Round(totalHours / 24, 2);
-
+            AlignToInjection();
             // x tick every 7 days           
             int xTickInterval = 7;
 
@@ -60,18 +64,37 @@ namespace ProjectManager
             // Add ToolBar
             AddButtons();
         }
+
+        private void AlignToInjection()
+        {
+            List<double> align = new List<double>();
+            foreach (AnimalType animal in project.Animals)
+            {
+                var earliestIjt = animal.Injections[0].TimePoint.Subtract(Earliest).TotalDays;
+                if (earliestIjt < 10)
+                {
+                    animal.alignBy7Days = earliestIjt - 7;
+                }
+            }
+
+
+        }
         private List<string> GetXTickLabels(int xTickInterval)
         {
             List<string> xTickString = new List<string>();
+            List<double> xTickLocations = new List<double>();
             //Obtain basis for y and x axis labeling
             for (int i = 0; i <= project.Files.Count; i += xTickInterval)
             {
                 if (i % xTickInterval == 0)// && i != 0)
                 {
                     xTickString.Add((i).ToString());
+                    xTickLocations.Add(i);
                 }
 
             }
+
+            graph.axes.xTickLocations = xTickLocations;
             return xTickString;
         }
         private void SetTestDescriptors()
@@ -103,10 +126,13 @@ namespace ProjectManager
             Color szColor = Color.FromName("Black");
             for (int i = 0; i < project.Animals.Count; i++)
             {
+                var align = project.Animals[i].alignBy7Days;
                 float yCoord = i + 1;
                 for (int j = 0; j < project.Animals[i].Sz.Count; j++)
                 {
-                    float xCoord = (float)(Math.Round((project.Animals[i].Sz[j].d.Date.Subtract(Earliest).TotalHours + project.Animals[i].Sz[j].t.TotalHours) / 24, 2));
+                    float xCoord = (float)(Math.Round((project.Animals[i].Sz[j].d.Date.Subtract(Earliest).TotalHours + project.Animals[i].Sz[j].t.TotalHours) / 24 - align, 2));
+                    if (xCoord < 0)
+                    { xCoord = 0; }
                     if (project.Animals[i].Sz[j].Severity > 0)
                     {
                         graph.PlotPoints((float)(xCoord), yCoord, markerSize, "o", szColor);
@@ -130,6 +156,7 @@ namespace ProjectManager
             {
                 for (int i = 0; i < project.Animals.Count; i++)
                 {
+                    var align = project.Animals[i].alignBy7Days;
                     float yCoord = (float)(i + 0.5);
 
                     // Initialize vehicle and drug treatment times
@@ -142,16 +169,18 @@ namespace ProjectManager
                         {
                             if (I.ADDID == "vehicle")
                             {
-                                vehicleTimes.Add((float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24, 2));
+                                vehicleTimes.Add((float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24 - align, 2));
                             }
                             else
                             {
-                                drugTimes.Add((float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24, 2));
+                                drugTimes.Add((float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24 - align, 2));
                             }
                         }
                         // Draw vehicle line
                         if (vehicleTimes.Count > 1)
                         {
+                            if (vehicleTimes[0] < 0)
+                            { vehicleTimes[0] = 0; }
                             graph.Line(vehicleTimes[0], yCoord, (float)(vehicleTimes[vehicleTimes.Count - 1] + 0.5), yCoord, lineWidth, vehicleColor);
                         }
 
@@ -159,6 +188,8 @@ namespace ProjectManager
                         // Draw drug line
                         if (drugTimes.Count > 1)
                         {
+                            if (drugTimes[0] < 0)
+                            { drugTimes[0] = 0; }
                             graph.Line(drugTimes[0], yCoord, (float)(drugTimes[drugTimes.Count - 1] + 0.5), yCoord, lineWidth, drugColor);
                         }
 
@@ -205,20 +236,30 @@ namespace ProjectManager
             // get earliest and latest time in hours
             float time0 = (float)Earliest.Subtract(Earliest).TotalHours;
             float maxTime = (float)Math.Round(Latest.Subtract(Earliest).TotalHours / 24, 2);
+            
             // Plot the missing time an animal has
             int i = 0;
             foreach (AnimalType animal in project.Animals)
             {
+                var align = animal.alignBy7Days;
                 float yCoord = (float)(i + 0.5);
                 if (animal.earliestAppearance != default)
                 {
-                    float x2 = (float)Math.Round(animal.earliestAppearance.Subtract(Earliest).TotalHours / 24, 4);
-                    graph.Line(time0, yCoord, x2, yCoord, lineWidth, lineColor);
+                    
+                    float x2 = (float)Math.Round(animal.earliestAppearance.Subtract(Earliest).TotalHours / 24 - align, 4);
+                    if (x2 < 0)
+                    { x2 = 0; }
+                    if (x2 > align)
+                    {
+                        graph.Line((float)(time0), yCoord, (float)(x2), yCoord, lineWidth, lineColor);
+                    }
                 }
                 if (animal.latestAppearance != default)
                 {
-                    float x2 = (float)Math.Round(animal.latestAppearance.Subtract(Earliest).TotalHours / 24, 4);
-                    graph.Line(x2, yCoord, maxTime, yCoord, lineWidth, lineColor);
+                    float x2 = (float)Math.Round(animal.latestAppearance.Subtract(Earliest).TotalHours / 24 - align, 4);
+                    if (x2 < 0)
+                    { x2 = 0; }
+                    graph.Line((float)(x2), yCoord, maxTime, yCoord, lineWidth, lineColor);
                 }
                 i++;
             }
