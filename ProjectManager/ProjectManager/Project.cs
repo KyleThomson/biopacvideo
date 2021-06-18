@@ -327,7 +327,7 @@ namespace ProjectManager
             else if (analysis.test == TESTTYPES.UNDEFINED)
             { return; }
         }
-        private void ParseGroups()
+        public void ParseGroups()
         {
             // Use Damerau-Levenshtein algorithm to find groups
             List<string> groups = new List<string>();
@@ -380,11 +380,24 @@ namespace ProjectManager
                     // if IAK test, check for injection id in each animal. one animal gets same injections
                     foreach (AnimalType animal in Animals)
                     {
-                        if (!groups.Contains(animal.Injections[0].ADDID))
+                        if (animal.Injections.Count > 0)
                         {
-                            groups.Add(animal.Injections[0].ADDID);
+                            // Some animals MIGHT not have injections, maybe if this check fails, alert user
+                            // so if the animal does have an injection set the animal's group name to the ADDID
                             animal.Group.Name = animal.Injections[0].ADDID;
+                            if (!groups.Contains(animal.Injections[0].ADDID))
+                            {
+                                // New group found, add to Groups and the analysis groups
+                                groups.Add(animal.Injections[0].ADDID);
+                                GroupType newgroup = new GroupType()
+                                {
+                                    Name = animal.Injections[0].ADDID
+                                };
+                                Groups.Add(newgroup);
+                            }
                         }
+                        // Sort groups alphabetically
+                        Groups = Groups.OrderBy(o => o.Name).ToList();
                     }
                     break;
 
@@ -396,7 +409,7 @@ namespace ProjectManager
         private void CalculateSzBurden()
         {
             // SeizureBurden() calculates seizure burden for all relevant groups and finds their SEM's
-            analysis.SeizureBurden(Animals, Files[0].Start.Date);
+            analysis.SeizureBurden(Groups, Animals, Files[0].Start.Date);
         }
         private void SeizureFreedom()
         {

@@ -181,7 +181,6 @@ namespace ProjectManager
             if (pjt == null)
             {
                 pjt = new Project("");
-                ChangeTitleText("");
             }
             if (pjt != null)
             {
@@ -194,6 +193,8 @@ namespace ProjectManager
                     {
                         MessageBox.Show("File already imported", "ERROR");
                     }
+                    pjt.FileChanged();
+                    ChangeTitleText(pjt.Filename);
                 }
                 UpdateMainList();
             }
@@ -281,15 +282,15 @@ namespace ProjectManager
             {
 
             }
-            // Treatments
+            // Injections
             else if (SecondSelect.SelectedIndex == 3)
             {
-                // treatmentedits dialog
+                // injectionsedits dialog
                 InjectionType currentInection =
                     pjt.Animals[MainList.SelectedIndex].Injections[SecondList.SelectedIndex];
-                TreatmentEdits treatmentEdits = new TreatmentEdits(currentInection);
-                treatmentEdits.ShowDialog();
-                if (treatmentEdits._anyChanges)
+                InjectionEdits injectionEdits = new InjectionEdits(currentInection);
+                injectionEdits.ShowDialog();
+                if (injectionEdits._anyChanges)
                 {
                     // indicate file modified
                     pjt.FileChanged();
@@ -428,7 +429,7 @@ namespace ProjectManager
             {
                 // passing empty string to GetPathName() returns empty string
                 pjt = new Project("");
-                ChangeTitleText("");
+                
             }
             int DuplicateDirectoryCount = 0;
             MultiDirectoryAdd Frm = new MultiDirectoryAdd();
@@ -444,6 +445,8 @@ namespace ProjectManager
                         DuplicateDirectoryCount++;
                     }
                 }
+                pjt.FileChanged();
+                ChangeTitleText(pjt.Filename);
             }
             UpdateMainList();
             if (DuplicateDirectoryCount > 0)
@@ -526,9 +529,7 @@ namespace ProjectManager
         private void ProjectManager_FormClosing_1(object sender, FormClosingEventArgs e)
         {
             SaveReminderDialog saveReminderDialog = new SaveReminderDialog();
-            if (_pjtOpened)
-            {
-                // first check for default value
+            // first check for default value
                 if (pjt._fileChanged != default)
                 {
                     // Check file changed flag in project data
@@ -558,7 +559,6 @@ namespace ProjectManager
                         // else: selected don't save, do nothing so form closes
                     }
                 }
-            }
         }
         private void ChangeTitleText(string path)
         {

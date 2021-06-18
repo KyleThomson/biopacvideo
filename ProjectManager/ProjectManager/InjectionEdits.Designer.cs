@@ -1,6 +1,6 @@
 ﻿namespace ProjectManager
 {
-    partial class TreatmentEdits
+    partial class InjectionEdits
     {
         /// <summary>
         /// Required designer variable.
@@ -45,7 +45,7 @@
             // routeLabel
             // 
             this.routeLabel.AutoSize = true;
-            this.routeLabel.Location = new System.Drawing.Point(26, 32);
+            this.routeLabel.Location = new System.Drawing.Point(26, 28);
             this.routeLabel.Name = "routeLabel";
             this.routeLabel.Size = new System.Drawing.Size(36, 13);
             this.routeLabel.TabIndex = 0;
@@ -73,7 +73,7 @@
             // idLabel
             // 
             this.idLabel.AutoSize = true;
-            this.idLabel.Location = new System.Drawing.Point(23, 137);
+            this.idLabel.Location = new System.Drawing.Point(26, 137);
             this.idLabel.Name = "idLabel";
             this.idLabel.Size = new System.Drawing.Size(44, 13);
             this.idLabel.TabIndex = 3;
@@ -148,7 +148,7 @@
             this.cancel.UseVisualStyleBackColor = true;
             this.cancel.Click += new System.EventHandler(this.cancel_Click);
             // 
-            // TreatmentEdits
+            // InjectionEdits
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -165,8 +165,8 @@
             this.Controls.Add(this.doseAmtLabel);
             this.Controls.Add(this.doseLabel);
             this.Controls.Add(this.routeLabel);
-            this.Name = "TreatmentEdits";
-            this.Text = "TreatmentEdits";
+            this.Name = "InjectionEdits";
+            this.Text = "InjectionEdits";
             this.Load += new System.EventHandler(this.TreatmentEdits_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

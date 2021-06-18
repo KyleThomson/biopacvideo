@@ -30,14 +30,12 @@ namespace ProjectManager
                 E.binSz = true;
                 if (groupedSz.Checked)
                 {
+                    pjt.analysis.test = TESTTYPES.IAK;
                     E.grouped = true;
                     // Have user assign groups
                     if (pjt == null)
                         return;
-                    AddGroup addGroup = new AddGroup(pjt);
-                    addGroup.ShowDialog();
-                    pjt = addGroup.pjt;
-                    addGroup.Dispose();
+                    pjt.ParseGroups();
                 }
                 else if (ungroupedSz.Checked)
                 { E.ungrouped = true; }

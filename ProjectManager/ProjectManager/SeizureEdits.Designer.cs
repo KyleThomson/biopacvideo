@@ -43,46 +43,46 @@
             // severityLabel
             // 
             this.severityLabel.AutoSize = true;
-            this.severityLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.severityLabel.Location = new System.Drawing.Point(12, 19);
+            this.severityLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.severityLabel.Location = new System.Drawing.Point(21, 22);
             this.severityLabel.Name = "severityLabel";
-            this.severityLabel.Size = new System.Drawing.Size(65, 20);
+            this.severityLabel.Size = new System.Drawing.Size(45, 13);
             this.severityLabel.TabIndex = 0;
             this.severityLabel.Text = "Severity";
             // 
             // notesLabel
             // 
             this.notesLabel.AutoSize = true;
-            this.notesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.notesLabel.Location = new System.Drawing.Point(12, 71);
+            this.notesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.notesLabel.Location = new System.Drawing.Point(21, 60);
             this.notesLabel.Name = "notesLabel";
-            this.notesLabel.Size = new System.Drawing.Size(51, 20);
+            this.notesLabel.Size = new System.Drawing.Size(35, 13);
             this.notesLabel.TabIndex = 1;
             this.notesLabel.Text = "Notes";
             // 
             // timespanLabel
             // 
             this.timespanLabel.AutoSize = true;
-            this.timespanLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.timespanLabel.Location = new System.Drawing.Point(12, 133);
+            this.timespanLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.timespanLabel.Location = new System.Drawing.Point(21, 99);
             this.timespanLabel.Name = "timespanLabel";
-            this.timespanLabel.Size = new System.Drawing.Size(78, 20);
+            this.timespanLabel.Size = new System.Drawing.Size(53, 13);
             this.timespanLabel.TabIndex = 2;
             this.timespanLabel.Text = "Timespan";
             // 
             // dateLabel
             // 
             this.dateLabel.AutoSize = true;
-            this.dateLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateLabel.Location = new System.Drawing.Point(12, 185);
+            this.dateLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateLabel.Location = new System.Drawing.Point(21, 136);
             this.dateLabel.Name = "dateLabel";
-            this.dateLabel.Size = new System.Drawing.Size(44, 20);
+            this.dateLabel.Size = new System.Drawing.Size(30, 13);
             this.dateLabel.TabIndex = 3;
             this.dateLabel.Text = "Date";
             // 
             // severityField
             // 
-            this.severityField.Location = new System.Drawing.Point(127, 19);
+            this.severityField.Location = new System.Drawing.Point(110, 19);
             this.severityField.Name = "severityField";
             this.severityField.Size = new System.Drawing.Size(98, 20);
             this.severityField.TabIndex = 4;
@@ -90,7 +90,7 @@
             // 
             // notesField
             // 
-            this.notesField.Location = new System.Drawing.Point(127, 73);
+            this.notesField.Location = new System.Drawing.Point(110, 57);
             this.notesField.Name = "notesField";
             this.notesField.Size = new System.Drawing.Size(98, 20);
             this.notesField.TabIndex = 5;
@@ -98,7 +98,7 @@
             // 
             // timespanField
             // 
-            this.timespanField.Location = new System.Drawing.Point(127, 133);
+            this.timespanField.Location = new System.Drawing.Point(110, 96);
             this.timespanField.Name = "timespanField";
             this.timespanField.ReadOnly = true;
             this.timespanField.Size = new System.Drawing.Size(98, 20);
@@ -106,7 +106,7 @@
             // 
             // dateField
             // 
-            this.dateField.Location = new System.Drawing.Point(127, 185);
+            this.dateField.Location = new System.Drawing.Point(110, 133);
             this.dateField.Name = "dateField";
             this.dateField.ReadOnly = true;
             this.dateField.Size = new System.Drawing.Size(98, 20);
@@ -114,7 +114,7 @@
             // 
             // ok
             // 
-            this.ok.Location = new System.Drawing.Point(110, 214);
+            this.ok.Location = new System.Drawing.Point(64, 172);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(50, 24);
             this.ok.TabIndex = 8;
@@ -124,7 +124,7 @@
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(199, 214);
+            this.cancel.Location = new System.Drawing.Point(134, 172);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(50, 24);
             this.cancel.TabIndex = 9;
@@ -136,7 +136,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(335, 250);
+            this.ClientSize = new System.Drawing.Size(245, 208);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.ok);
             this.Controls.Add(this.dateField);

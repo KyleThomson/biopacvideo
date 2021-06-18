@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ProjectManager
 {
@@ -120,7 +121,7 @@ namespace ProjectManager
             }
             return score;
         }
-        public void SeizureBurden(List<AnimalType> animals, DateTime Earliest)
+        public void SeizureBurden(List<GroupType> Groups, List<AnimalType> animals, DateTime Earliest)
         {
             // baseline variables
             int baselineScore = 0;
@@ -258,11 +259,10 @@ namespace ProjectManager
                     break;
 
                 case TESTTYPES.IAK:
-                    foreach (string group in groups)
+                    foreach (GroupType group in Groups)
                     {
-                        if (!groupedData.ContainsKey(group))
-                        {
-                            groupedData.Add(group, new GroupedData(group));
+
+                            groupedData.Add(group.Name, new GroupedData(group.Name));
 
                             int groupScore = 0;
                             int groupAnimals = 0;
@@ -272,14 +272,12 @@ namespace ProjectManager
                             // iterate thru animals
                             foreach (AnimalType animal in animals)
                             {
-                                // Set grouptype
-                                animal.Group.Name = group;
-                                if (animal.Injections[0].ADDID == group)
+                                if (animal.Group.Name == group.Name)
                                 {
                                     float groupDays = default;
                                     // IAK treatment groups Group A
                                     List<double> groupTimes = new List<double>();
-                                    List<InjectionType> groupTrt = animal.Injections.Where(I => I.ADDID.ToUpper() == group).ToList();
+                                    List<InjectionType> groupTrt = animal.Injections.Where(I => I.ADDID.ToUpper() == group.Name.ToUpper()).ToList();
                                     if (groupTrt.Count > 0)
                                     // IAK treatment times
                                     {
@@ -307,23 +305,19 @@ namespace ProjectManager
                                     baselineBurden.Add(baselineScore / baselineDays);
                                 }
                             }
-
-
                             // Set metrics
                             baselineMetrics.szBurden = Math.Round(baselineBurden.Average(), 2);
                             baselineMetrics.numAnimals = baselineAnimals;
                             baselineMetrics.burdenSEM = SEM(baselineBurden);
-                            groupedData[group].BASELINE = baselineMetrics;
-
-                            groupedData[group].szBurden = Math.Round(groupBurden.Average(), 2);
-                            groupedData[group].numAnimals = groupAnimals;
-                            groupedData[group].burdenSEM = SEM(groupBurden);
-                            groupedData[group].szBurdens = groupBurden;
-                            groupedData[group].groupID = group;
+                            groupedData[group.Name].BASELINE = baselineMetrics;
+                            groupedData[group.Name].szBurden = Math.Round(groupBurden.Average(), 2);
+                            groupedData[group.Name].numAnimals = groupAnimals;
+                            groupedData[group.Name].burdenSEM = SEM(groupBurden);
+                            groupedData[group.Name].szBurdens = groupBurden;
+                            groupedData[group.Name].groupID = group.Name;
 
                             // MWW Test
-                            groupedData[group].burdenPValue = MWWTest(groupBurden.ToArray(), baselineBurden.ToArray());
-                        }
+                            groupedData[group.Name].burdenPValue = MWWTest(groupBurden.ToArray(), baselineBurden.ToArray());
                     }
                     break;
             }
@@ -427,11 +421,11 @@ namespace ProjectManager
         {
             // dictionary to replace parsed integers with string
             Dictionary<int, string> numbers = new Dictionary<int, string>();
-            numbers.Add(1, "one"); numbers.Add(2, "two");
-            numbers.Add(3, "three"); numbers.Add(4, "four");
-            numbers.Add(5, "five"); numbers.Add(6, "six");
-            numbers.Add(7, "one"); numbers.Add(8, "eight");
-            numbers.Add(9, "nine");
+            numbers.Add(0, "zero");  numbers.Add(1, "one"); 
+            numbers.Add(2, "two");   numbers.Add(3, "three");
+            numbers.Add(4, "four");  numbers.Add(5, "five");
+            numbers.Add(6, "six");   numbers.Add(7, "seven");
+            numbers.Add(8, "eight"); numbers.Add(9, "nine");
 
             int bubbleSeverity = default; // default
             int noteSeverity = default; // default

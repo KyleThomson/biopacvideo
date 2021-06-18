@@ -36,7 +36,7 @@ namespace ProjectManager
         {
             
             // Type of test
-            test = pjt.test;
+            test = pjt.analysis.test;
             project = pjt;
             // Find max day of project
             Earliest = project.Files[0].Start.Date;
@@ -228,6 +228,10 @@ namespace ProjectManager
                 }
 
             }
+            else if (test == TESTTYPES.IAK)
+            {
+
+            }
         }
         public void PlotEmpty()
         {
@@ -267,6 +271,7 @@ namespace ProjectManager
         }
         public void Legend()
         {
+            Legend testLegend = new Legend(new Context(graph.graphics));
             // Method that draws on legend for injection type and seizure type
             int markerSize = 8;
             Font legendFont = new Font("Arial", 12 * graph.objectScale);
@@ -304,7 +309,7 @@ namespace ProjectManager
                 graph.graphics.DrawString(drugString, legendFont, legendBrush, drugStringPoint.X, drugStringPoint.Y);
                 graph.graphics.FillEllipse(drugBrush, drugStringPoint.X + drugStringSize.Width, drugStringPoint.Y + drugStringSize.Height / 4, markerSize * graph.objectScale, markerSize * graph.objectScale);
 
-                // If Test 35
+                // If Test 36
                 // Placement for vehicle treatment
                 string vehicleString = "Unmedicated Meal:";
                 SolidBrush unmedicatedBrush = new SolidBrush(Color.Blue);
@@ -312,6 +317,33 @@ namespace ProjectManager
                 PointF vehicleStringPoint = new PointF(graph.axes.xAxisLength - vehicleStringSize.Width, (float)(graph.axes.axesList[0].Y * 1.1));
                 graph.graphics.DrawString(vehicleString, legendFont, legendBrush, vehicleStringPoint.X, vehicleStringPoint.Y);
                 graph.graphics.FillEllipse(unmedicatedBrush, vehicleStringPoint.X + vehicleStringSize.Width, vehicleStringPoint.Y + vehicleStringSize.Height / 4, markerSize * graph.objectScale, markerSize * graph.objectScale);
+            }
+            else if (test == TESTTYPES.IAK)
+            {
+                SolidBrush group1Brush = new SolidBrush(Color.Red);
+                SolidBrush group2Brush = new SolidBrush(Color.Blue);
+                int i = 1;
+                foreach (GroupType group in project.Groups)
+                {
+                    string label = "Group " + group.Name + ":";
+                    SizeF labelSize = graph.graphics.MeasureString(label, legendFont);
+                    
+                    if (i == 1) // Group 1
+                    {
+                        PointF labelPoint = new PointF(graph.axes.xAxisLength - labelSize.Width, (float)(graph.axes.axesList[0].Y * 1.1));
+                        graph.graphics.DrawString(label, legendFont, legendBrush, labelPoint.X, labelPoint.Y);
+                        graph.graphics.FillEllipse(group1Brush, labelPoint.X + labelSize.Width, labelPoint.Y + labelSize.Height / 4,
+                            markerSize * graph.objectScale, markerSize * graph.objectScale);
+                    }
+                    else if (i == 2) // Group 2
+                    {
+                        PointF labelPoint = new PointF(graph.axes.xAxisLength - labelSize.Width, (float)(graph.axes.axesList[0].Y * 1.1));
+                        graph.graphics.DrawString(label, legendFont, legendBrush, labelPoint.X + labelSize.Width, labelPoint.Y + labelSize.Height / 4);
+                        graph.graphics.FillEllipse(group2Brush, labelPoint.X + labelSize.Width, labelPoint.Y + labelSize.Height / 4,
+                            markerSize * graph.objectScale, markerSize * graph.objectScale);
+                    }
+                    i++;
+                }
             }
 
             // Placement for focal seizure
@@ -342,6 +374,11 @@ namespace ProjectManager
             else if (test == TESTTYPES.T36)
             {
                 subheader = "Test 36 - Chronic Post-SE (KA) Spontaneously Seizing Rats: Stage 2 (Oral Administration - Drug in Food)";
+            }
+            else if (test == TESTTYPES.IAK)
+            {
+                subheader =
+                    "IAK Test - This is a test. I don't know what to put here yet. So I'm going to ramble for a few more characters.";
             }
             Font subFont = new Font("Arial", 10F * graph.objectScale);
             SolidBrush headerBrush = new SolidBrush(Color.Black);
@@ -607,9 +644,13 @@ namespace ProjectManager
 
                 case 2: // hide seizures
                     if (_sz)
-                    { _sz = false; }
+                    {
+                        _sz = false;
+                    }
                     else
-                    { _sz = true; }
+                    {
+                        _sz = true;
+                    }
                     graph.ClearGraph();
                     DrawGraph();
                     break;
@@ -633,8 +674,8 @@ namespace ProjectManager
         public void DrawGraph()
         {
             // Clear graphics
-            Color bg = Color.FromName("White");
-            graph.graphics.Clear(bg);
+            //Color bg = Color.FromName("White");
+            //graph.graphics.Clear(bg);
 
             // Draw axes
             graph.DrawAxes(4);
@@ -647,8 +688,10 @@ namespace ProjectManager
             // Draw data
             if (_sz)
             { PlotSz(); }
+
             if (_treatment)
             { PlotTrt(); }
+
             if (_empty)
             { PlotEmpty(); }
 

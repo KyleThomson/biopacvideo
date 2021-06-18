@@ -124,6 +124,7 @@
     <Compile Include="INI.cs" />
     <Compile Include="InjectionType.cs" />
     <Compile Include="LabelType.cs" />
+    <Compile Include="Legend.cs" />
     <Compile Include="MealType.cs" />
     <Compile Include="MultiDirectoryAdd.cs">
       <SubType>Form</SubType>
@@ -170,11 +171,11 @@
     <Compile Include="TestInput.Designer.cs">
       <DependentUpon>TestInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="TreatmentEdits.cs">
+    <Compile Include="InjectionEdits.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TreatmentEdits.Designer.cs">
-      <DependentUpon>TreatmentEdits.cs</DependentUpon>
+    <Compile Include="InjectionEdits.Designer.cs">
+      <DependentUpon>InjectionEdits.cs</DependentUpon>
     </Compile>
     <Compile Include="WeightAdd.cs">
       <SubType>Form</SubType>
@@ -220,8 +221,8 @@
     <EmbeddedResource Include="TestInput.resx">
       <DependentUpon>TestInput.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TreatmentEdits.resx">
-      <DependentUpon>TreatmentEdits.cs</DependentUpon>
+    <EmbeddedResource Include="InjectionEdits.resx">
+      <DependentUpon>InjectionEdits.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WeightAdd.resx" />
     <None Include="packages.config" />

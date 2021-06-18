@@ -11,7 +11,7 @@ namespace ProjectManager
 {
     // This class generates a windows form that presents editable fields for each property of InjectionType in opened project
     // User is able to change injection fields
-    public partial class TreatmentEdits : Form
+    public partial class InjectionEdits : Form
     {
         private InjectionType currentInection;
         private bool _routeFlag;
@@ -20,7 +20,7 @@ namespace ProjectManager
         private bool _addIdFlag;
         private bool _solventFlag;
         public bool _anyChanges;
-        public TreatmentEdits(InjectionType injection)
+        public InjectionEdits(InjectionType injection)
         {
             InitializeComponent();
             currentInection = injection;
