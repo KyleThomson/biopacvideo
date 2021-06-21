@@ -230,7 +230,33 @@ namespace ProjectManager
             }
             else if (test == TESTTYPES.IAK)
             {
+                project.Animals = project.Animals.OrderBy(a => a.Group.Name).ToList();
+                Color group1Color = Color.Red;
+                Color group2Color = Color.Blue;
+                Color groupColor = default;
+                int i = 1;
+                
+                var yCoord = 0.6;
+                int x = 0;
+                foreach (AnimalType animal in project.Animals)
+                {
+                    yCoord = x + 0.5;
+                    var align = animal.alignBy7Days;
+                    var x1 = Math.Round(animal.Injections[0].TimePoint.Subtract(Earliest).TotalHours / 24 - align, 2);
+                    var x2 = Math.Round(animal.Injections[animal.Injections.Count - 1].TimePoint.Subtract(Earliest).TotalHours / 24 - align, 2);
+                    if (animal.Group.Name == project.Groups[0].Name) 
+                    {
+                        groupColor = group1Color;
+                    }
+                    if (animal.Group.Name == project.Groups[1].Name)
+                    {
+                        groupColor = group2Color;
+                    }
+                    graph.Line((float)x1, (float)yCoord, (float)x2, (float)yCoord, lineWidth, groupColor);
+                    x++;
 
+                    i++;
+                }
             }
         }
         public void PlotEmpty()
@@ -320,27 +346,27 @@ namespace ProjectManager
             }
             else if (test == TESTTYPES.IAK)
             {
-                SolidBrush group1Brush = new SolidBrush(Color.Red);
-                SolidBrush group2Brush = new SolidBrush(Color.Blue);
+                float lineWidth = 4 * graph.objectScale;
                 int i = 1;
                 foreach (GroupType group in project.Groups)
                 {
                     string label = "Group " + group.Name + ":";
                     SizeF labelSize = graph.graphics.MeasureString(label, legendFont);
-                    
                     if (i == 1) // Group 1
                     {
-                        PointF labelPoint = new PointF(graph.axes.xAxisLength - labelSize.Width, (float)(graph.axes.axesList[0].Y * 1.1));
+                        Color lineColor = Color.FromName("Red");
+                        PointF labelPoint = new PointF(graph.axes.xAxisStart, (float)(graph.axes.axesList[0].Y * 1.1));
                         graph.graphics.DrawString(label, legendFont, legendBrush, labelPoint.X, labelPoint.Y);
-                        graph.graphics.FillEllipse(group1Brush, labelPoint.X + labelSize.Width, labelPoint.Y + labelSize.Height / 4,
-                            markerSize * graph.objectScale, markerSize * graph.objectScale);
+                        graph.Line(labelPoint.X, labelPoint.Y + labelSize.Height,
+                            labelPoint.X + labelSize.Width * 2, labelPoint.Y + labelSize.Height, lineWidth, lineColor);
                     }
                     else if (i == 2) // Group 2
                     {
+                        Color lineColor = Color.FromName("Blue");
                         PointF labelPoint = new PointF(graph.axes.xAxisLength - labelSize.Width, (float)(graph.axes.axesList[0].Y * 1.1));
-                        graph.graphics.DrawString(label, legendFont, legendBrush, labelPoint.X + labelSize.Width, labelPoint.Y + labelSize.Height / 4);
-                        graph.graphics.FillEllipse(group2Brush, labelPoint.X + labelSize.Width, labelPoint.Y + labelSize.Height / 4,
-                            markerSize * graph.objectScale, markerSize * graph.objectScale);
+                        graph.graphics.DrawString(label, legendFont, legendBrush, labelPoint.X, labelPoint.Y + labelSize.Height / 4);
+                        graph.Line(labelPoint.X, labelPoint.Y + labelSize.Height,
+                            labelPoint.X + labelSize.Width, labelPoint.Y + labelSize.Height, lineWidth, lineColor);
                     }
                     i++;
                 }
@@ -423,9 +449,9 @@ namespace ProjectManager
 
             // Draw strings for etsp, batch, dose, frequency
             graph.graphics.DrawString(ETSP, headerFont, headerBrush, headerRect.X, etspAndbatchY);
-            graph.graphics.DrawString(batch, headerFont, headerBrush, (float)(headerRect.Width * 1.5 - batchSize.Width), etspAndbatchY);
+            graph.graphics.DrawString(batch, headerFont, headerBrush, (float)(headerRect.Width + headerRect.X - batchSize.Width), etspAndbatchY);
             graph.graphics.DrawString(dose, headerFont, headerBrush, headerRect.X, doseAndfreqY);
-            graph.graphics.DrawString(frequency, headerFont, headerBrush, (float)(headerRect.Width * 1.5 - freqSize.Width), doseAndfreqY);
+            graph.graphics.DrawString(frequency, headerFont, headerBrush, (float)(headerRect.Width + headerRect.X - freqSize.Width), doseAndfreqY);
 
         }
         public void DisplayStats()
@@ -520,6 +546,29 @@ namespace ProjectManager
             else if (test == TESTTYPES.T36)
             {
                 // test 36 just baseline and drug
+            }
+            else if (test == TESTTYPES.IAK)
+            {
+                // IAK compare to baseline for groups A and B
+                Font statsFont = new Font("Arial", 8F * graph.objectScale);
+                Pen boundingPen = new Pen(Brushes.Black);
+                boundingPen.Width = 1.25F * graph.objectScale;
+                foreach (KeyValuePair<string, GroupedData> group in project.analysis.groupedData)
+                {
+                    string baselineBurden = group.Value.BASELINE.szBurden.ToString() + "\u00B1" + group.Value.BASELINE.burdenSEM.ToString(); 
+                    string groupBurden = group.Value.szBurden.ToString() + "\u00B1" + group.Value.burdenSEM.ToString();
+                    string groupFreedom = group.Value.szFreedom.ToString() + "/" + group.Value.numAnimals.ToString();
+                }
+
+                // sz burdens
+                SizeF baselineS = graph.graphics.MeasureString("Baseline", headerFont);
+
+                // sz freedoms
+
+                // Seizure Burden strings
+                string groupAWilcoxon;
+                string groupBWilcoxon;
+
             }
         }
         private void TwoGroups()

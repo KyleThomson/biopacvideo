@@ -14,7 +14,9 @@ namespace ProjectManager
         Drug_vs_Vehicle,
 
         // IAK
-        GroupA_vs_GroupB
+        GroupA_vs_GroupB,
+        GroupA_vs_Baseline,
+        GroupB_vs_Baseline
     }
     public class SeizureAnalysis
     {
@@ -414,7 +416,7 @@ namespace ProjectManager
                 variance += (float)Math.Pow(sz[i] - mean, 2) / (n - 1);
             }
             var sigma = Math.Sqrt(variance);
-            var sem = sigma / Math.Sqrt(n - 1);
+            var sem = sigma / Math.Sqrt(n);
             return Math.Round(sem, 1);
         }
         public int CompareSeizures(SeizureType seizure, string animalID)
@@ -429,7 +431,7 @@ namespace ProjectManager
 
             int bubbleSeverity = default; // default
             int noteSeverity = default; // default
-            int finalStage;
+            int finalStage = default;
             if (seizure.Severity >= 0 && seizure.Severity <= 5)
             {
                 bubbleSeverity = seizure.Severity;
@@ -439,38 +441,57 @@ namespace ProjectManager
                 noteSeverity = ParseSeizure(seizure.Notes);
             }
 
-            // Check if bubble and note match and flag if it doesn't -- want to prompt user with messagebox
-            if (bubbleSeverity != noteSeverity)
+            if (noteSeverity >= 0 && noteSeverity <= 5)
             {
-                string ID = animalID + " had seizure at " + seizure.d.ToString();
-                SeizureStageDialog stageDialog = new SeizureStageDialog();
-                stageDialog.ShowDialog(bubbleSeverity, noteSeverity, ID, seizure.Notes);
-                finalStage = stageDialog.returnSeverity;
-
-                // Only change notes if bubble severity was selected from dialog.
-                if (finalStage == bubbleSeverity)
+                // Check if bubble and note match and flag if it doesn't -- want to prompt user with messagebox
+                if (bubbleSeverity != noteSeverity)
                 {
-                    // change seizure note so that there are no more numbers
-                    for (int i = seizure.Notes.Length - 1; i >= 0; i--)
+                    string ID = animalID + " had seizure at " + seizure.d.ToString();
+                    SeizureStageDialog stageDialog = new SeizureStageDialog();
+                    stageDialog.ShowDialog(bubbleSeverity, noteSeverity, ID, seizure.Notes);
+                    finalStage = stageDialog.returnSeverity;
+
+                    // Only change notes if bubble severity was selected from dialog.
+                    if (finalStage == bubbleSeverity)
                     {
-                        // step backward thru seizure notes and insert word corresponding to number in notes
-                        // solution to save conflict results between bubble and notes
-                        if (int.TryParse(seizure.Notes[i].ToString(), out int result))
+                        // change seizure note so that there are no more numbers
+                        for (int i = seizure.Notes.Length - 1; i >= 0; i--)
                         {
-                            string numberToInsert = numbers[result];
-                            seizure.Notes = seizure.Notes.Insert(i, numberToInsert);
-                            seizure.Notes = seizure.Notes.Remove(i + numberToInsert.Length, 1);
+                            int result = -1;
+                            // step backward thru seizure notes and insert word corresponding to number in notes
+                            // solution to save conflict results between bubble and notes
+                            if (int.TryParse(seizure.Notes[i].ToString(), out int _))
+                            {
+                                string numberToInsert = numbers[result];
+                                seizure.Notes = seizure.Notes.Insert(i, numberToInsert);
+                                seizure.Notes = seizure.Notes.Remove(i + numberToInsert.Length, 1);
+                            }
+                            else
+                            {
+
+                            }
                         }
                     }
+                } // Do something
+                else
+                {
+                    finalStage = bubbleSeverity;
                 }
-            }// Do something
-            else { finalStage = bubbleSeverity; }
+            }
+            else if (noteSeverity == -1)
+            {
+                finalStage = bubbleSeverity;
+            }
+            else
+            {
+                finalStage = bubbleSeverity;
+            }
 
             return finalStage;
         }
         public int ParseSeizure(string note)
         {
-            int severity = default;
+            int severity = -1;
             string storeNum = String.Join("", note.Where(char.IsDigit));
             if (storeNum.Length > 0)
             {

@@ -718,10 +718,14 @@ namespace ProjectManager
             foreach (FileType file in Files)
             {
                 if (file.AnimalIDs.Contains(animal.ID) && !_appeared && _firstAppearance && i > 0)
-                // Track earliest time that animal ID appears 
-                { earliest = Files[i - 1].Start; _appeared = true; _firstAppearance = false; }
+                    // Track earliest time that animal ID appears 
+                {
+                    earliest = Files[i - 1].Start; 
+                    _appeared = true; 
+                    _firstAppearance = false;
+                }
 
-                else if (_appeared && !file.AnimalIDs.Contains(animal.ID))
+                else if (_appeared && !file.AnimalIDs.Contains(animal.ID) && file.AnimalIDs.Contains("e"))
                 // If file doesn't have animal ID log a new latest time and set flag to false
                 {
                     latest = file.Start; _appeared = false;
