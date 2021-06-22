@@ -1,6 +1,7 @@
 ﻿using Accord.Statistics.Testing;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -32,52 +33,37 @@ namespace ProjectManager
         {
             test = typeOfTest;
         }
-        public void SzFreedomSignificance()
+        public void SeizureFreedomPValue()
         {
-            // 
-            // Get integers for fisher exact test (2x2 contingency table)
-            if (test == TESTTYPES.T35)
+            if (groupedData.ContainsKey("Baseline"))
             {
-                // Do Drug vs. Baseline comparison first
-                int seizedDrugAnimals = seizureData[TRTTYPE.Drug].numAnimals - seizureData[TRTTYPE.Drug].szFreedom;
-                int seizedBaselineAnimals = seizureData[TRTTYPE.Baseline].numAnimals - seizureData[TRTTYPE.Baseline].szFreedom;
-                int notSeizedDrugAnimals = seizureData[TRTTYPE.Drug].szFreedom;
-                int notSeizedBaselineAnimals = seizureData[TRTTYPE.Baseline].szFreedom;
-                double drugVsBaselinePvalue = ExtraMath.FisherExact(seizedDrugAnimals, seizedBaselineAnimals, notSeizedDrugAnimals, notSeizedBaselineAnimals);
-
-                // Do Vehicle vs. Baseline comparison next
-                int seizedVehicleAnimals = seizureData[TRTTYPE.Vehicle].numAnimals - seizureData[TRTTYPE.Vehicle].szFreedom;
-                int notSeizedVehicleAnimals = seizureData[TRTTYPE.Vehicle].szFreedom;
-                double drugVsVehiclePvalue = ExtraMath.FisherExact(seizedDrugAnimals, seizedVehicleAnimals, notSeizedDrugAnimals, notSeizedVehicleAnimals);
-                FreedomPVALUES.Add(AnalysisTypes.Baseline_vs_Drug, drugVsBaselinePvalue);
-                FreedomPVALUES.Add(AnalysisTypes.Drug_vs_Vehicle, drugVsVehiclePvalue);
-            }
-            else if (test == TESTTYPES.T36)
-            {
-                // Do Drug vs. Baseline comparison ONLY
-                int seizedDrugAnimals = seizureData[TRTTYPE.Drug].numAnimals - seizureData[TRTTYPE.Drug].szFreedom;
-                int seizedBaselineAnimals = seizureData[TRTTYPE.Baseline].numAnimals - seizureData[TRTTYPE.Baseline].szFreedom;
-                int notSeizedDrugAnimals = seizureData[TRTTYPE.Drug].szFreedom;
-                int notSeizedBaselineAnimals = seizureData[TRTTYPE.Baseline].szFreedom;
-                double drugVsBaselinePvalue = ExtraMath.FisherExact(seizedDrugAnimals, seizedBaselineAnimals, notSeizedDrugAnimals, notSeizedBaselineAnimals);
-                FreedomPVALUES.Add(AnalysisTypes.Baseline_vs_Drug, drugVsBaselinePvalue);
-            }
-            else if (test == TESTTYPES.IAK)
-            {
-                // can only do this after seizure burden computation ( maybe this needs to be changed )
-                foreach (string group in groups)
+                // Get baseline animals
+                int baselineSeized = groupedData["Baseline"].numAnimals - groupedData["Baseline"].szFreedom;
+                int baselineNotSeized = groupedData["Baseline"].szFreedom;
+                foreach (KeyValuePair<string, GroupedData> kvpGroupedData in groupedData)
                 {
-                    int groupSeizedAnimals = groupedData[group].numAnimals - groupedData[group].szFreedom;
-                    int baselineSeizedAnimals = groupedData[group].BASELINE.numAnimals - groupedData[group].BASELINE.szFreedom;
-
-                    int notSeizedGroupAnimals = groupedData[group].szFreedom;
-                    int notSeizedBaselineAnimals = groupedData[group].BASELINE.szFreedom;
-
-                    double pvalue = ExtraMath.FisherExact(groupSeizedAnimals, baselineSeizedAnimals, notSeizedGroupAnimals, notSeizedBaselineAnimals);
-                    groupedData[group].freedomPValue = pvalue;
+                    if (kvpGroupedData.Key != "Baseline")
+                    {
+                        int groupSeized = kvpGroupedData.Value.numAnimals - kvpGroupedData.Value.szFreedom;
+                        int groupNotSeized = kvpGroupedData.Value.szFreedom;
+                        kvpGroupedData.Value.freedomPValue = ExtraMath.FisherExact(groupSeized, baselineSeized,
+                                                                                    groupNotSeized, baselineNotSeized);
+                    }
                 }
             }
+        }
 
+        public void SeizureBurdenPValue()
+        {
+            if (groupedData.ContainsKey("Baseline"))
+            {
+                double[] baselineBurdens = groupedData["Baseline"].szBurdens.ToArray();
+                foreach (KeyValuePair<string, GroupedData> kvpGroupedData in groupedData)
+                {
+                    double[] groupedBurdens = kvpGroupedData.Value.szBurdens.ToArray();
+                    kvpGroupedData.Value.burdenPValue = MWWTest(baselineBurdens, groupedBurdens);
+                }
+            }
         }
         public double MWWTest(double[] sample1, double[] sample2)
         {
@@ -88,322 +74,74 @@ namespace ProjectManager
             double pvalue = mwwTest.PValue;
             return pvalue;
         }
-        private List<double> FindBaseline(List<double> group1Times, List<double> group2Times)
+        private double SumSeizures(List<SeizureType> seizures)
         {
-            // Create baselineTimes and add 0 (beginning of recording) and just before the first treatment
-            List<double> baselineTimes = new List<double>();
-            baselineTimes.Add(0);
-            if (group1Times.Min() < group2Times.Min())
-            {
-                baselineTimes.Add(group1Times.Min() - 0.01);
-            }
-            else if (group1Times.Min() > group2Times.Min())
-            {
-                baselineTimes.Add(group2Times.Min() - 0.01);
-            }
-
-            return baselineTimes;
-        }
-        private int GetSeverityScore(List<SeizureType> seizures, List<double> times, DateTime Earliest)
-        {
-            int score = default;
-            foreach (SeizureType seizure in seizures)
-            {
-                double szTime = seizure.d.Date.Subtract(Earliest).TotalHours + seizure.t.TotalHours;
-                // Add seizure severity to running total depending on treatment that seizure occurred during
-
-                //Seizure happened during vehicle treatment
-                if (szTime >= times.Min() && szTime <= times.Max())
+            // Sum severities in list of seizures
+            var severitySum = 0;
+            if (seizures.Count > 0)
+                foreach (SeizureType seizure in seizures)
                 {
-                    if (seizure.Severity > 0)
-                    { score += seizure.Severity; }
-                    else // 0 severity, increase score by 1
-                    { score++; }
+                    severitySum += seizure.Severity;
                 }
-            }
-            return score;
+
+            return severitySum;
         }
-        public void SeizureBurden(List<GroupType> Groups, List<AnimalType> animals, DateTime Earliest)
+        public void GroupAnalysis(List<AnimalType> animals, DateTime Earliest, string treatment)
         {
-            // baseline variables
-            int baselineScore = 0;
-            List<double> baselineBurden = new List<double>();
-            SzMetrics baselineMetrics = new SzMetrics(TRTTYPE.Baseline);
-            // count animals here as well
-            int baselineAnimals = animals.Count();
-            int drugAnimals = 0;
-            int vehicleAnimals = 0;
-
-            List<int> vehicleSz = new List<int>();
-            List<int> drugSz = new List<int>();
-            List<int> baselineSz = new List<int>();
-            switch (test)
+            // manually add baseline condition
+            groups.Add("Baseline");
+            foreach (string group in groups)
             {
-                case TESTTYPES.T35:
-                    // running seizure stage totals
-                    int vehicleScore = 0;
-                    int drugScore = 0;
-
-
-                    // list of each animal's seizure burden
-                    List<double> vehicleBurden = new List<double>();
-                    List<double> drugBurden = new List<double>();
-
-                    foreach (AnimalType animal in animals)
+                groupedData.Add(group, new GroupedData(group));
+                List<double> burdens = new List<double>();
+                int groupFreedom = 0;
+                int groupAnimals = 0;
+                foreach (AnimalType animal in animals)
+                {
+                    if (treatment == "injection")
                     {
-                        // Find drug and vehicle injections so we can determine if the seizure occurred during drug/vehicle treatment
-                        List<InjectionType> vehicleI = animal.Injections.Where(I => I.ADDID == "vehicle").ToList();
-                        List<InjectionType> drugI = animal.Injections.Where(I => I.ADDID != "vehicle").ToList();
-                        List<double> vehicleTimes = vehicleI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
-                        vehicleTimes[vehicleTimes.Count - 1] += 12;
-                        List<double> drugTimes = drugI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
-                        drugTimes[drugTimes.Count - 1] += 12;
-
-                        // count animals
-                        if (vehicleI.Count > 0)
-                        { vehicleAnimals++; }
-                        if (drugI.Count > 0)
-                        { drugAnimals++; }
-
-                        // Number of days for each group
-                        float vehicleDays = (float)((vehicleTimes.Max() - vehicleTimes.Min()) / 24);
-                        float drugDays = (float)((drugTimes.Max() - drugTimes.Min()) / 24);
-
-                        // Create baselineTimes and add 0 (beginning of recording) and just before the first treatment
-                        List<double> baselineTimes = FindBaseline(drugTimes, vehicleTimes);
-                        float baselineDays = (float)baselineTimes.Max() / 24;
-                        // get sum of severities for each group
-                        if (animal.Sz.Count > 0)
+                        // Extract relevant injection IDs and the injection times
+                        List<InjectionType> groupTreatment = animal.Injections.Where(I => I.ADDID == group).ToList();
+                        if (groupTreatment.Count > 0 || group == "Baseline")
                         {
-                            baselineScore = GetSeverityScore(animal.Sz, baselineTimes, Earliest);
-                            vehicleScore = GetSeverityScore(animal.Sz, vehicleTimes, Earliest);
-                            drugScore = GetSeverityScore(animal.Sz, drugTimes, Earliest);
-
-                            // count animals
-
-                        }
-
-                        baselineBurden.Add(baselineScore / baselineDays);
-                        vehicleBurden.Add(vehicleScore / vehicleDays);
-                        drugBurden.Add(drugScore / drugDays);
-                    }
-
-                    // Set metrics
-                    baselineMetrics.szBurden = Math.Round(baselineBurden.Average(), 1);
-                    baselineMetrics.numAnimals = baselineAnimals;
-                    baselineMetrics.burdenSEM = SEM(baselineBurden);
-
-                    SzMetrics vehicleMetrics = new SzMetrics(TRTTYPE.Vehicle);
-                    vehicleMetrics.szBurden = Math.Round(vehicleBurden.Average(), 1);
-                    vehicleMetrics.numAnimals = vehicleAnimals;
-                    vehicleMetrics.burdenSEM = SEM(vehicleBurden);
-
-                    SzMetrics drugMetrics = new SzMetrics(TRTTYPE.Drug);
-                    drugMetrics.szBurden = Math.Round(drugBurden.Average(), 1);
-                    drugMetrics.numAnimals = drugAnimals;
-                    drugMetrics.burdenSEM = SEM(drugBurden);
-
-                    seizureData.Add(TRTTYPE.Baseline, baselineMetrics);
-                    seizureData.Add(TRTTYPE.Vehicle, vehicleMetrics);
-                    seizureData.Add(TRTTYPE.Drug, drugMetrics);
-
-                    // MWW Test
-                    BurdenPVALUES.Add(AnalysisTypes.Drug_vs_Vehicle, MWWTest(drugBurden.ToArray(), vehicleBurden.ToArray()));
-                    BurdenPVALUES.Add(AnalysisTypes.Baseline_vs_Drug, MWWTest(drugBurden.ToArray(), baselineBurden.ToArray()));
-
-                    break;
-
-                case TESTTYPES.T36:
-                    // running seizure stage totals
-                    int medicatedScore = 0;
-                    int unmedicatedScore = 0;
-
-                    // list of each animal's seizure burden
-                    List<double> medicatedBurden = new List<double>();
-                    List<double> unmedicatedBurden = new List<double>();
-
-                    foreach (AnimalType animal in animals)
-                    {
-                        // Break up meals into both groups
-                        List<MealType> baselineMeals = animal.Meals.Where(m => m.type == "U").ToList();
-                        List<MealType> medicatedMeals = animal.Meals.Where(m => m.type == "M").ToList();
-
-                        // Get meal times
-                        List<double> baselineTimes = baselineMeals.Select(m => (double)m.d.Subtract(Earliest).TotalHours).ToList();
-                        List<double> medicatedTimes = medicatedMeals.Select(m => (double)m.d.Subtract(Earliest).TotalHours).ToList();
-
-                        // Number of days for each group
-                        float baselineDays = (float)((baselineTimes.Max() - baselineTimes.Min()) / 24);
-                        float medicatedDays = (float)((medicatedTimes.Max() - medicatedTimes.Min()) / 24);
-
-                        if (animal.Sz.Count > 0)
-                        {
-                            unmedicatedScore = GetSeverityScore(animal.Sz, baselineTimes, Earliest);
-                            medicatedScore = GetSeverityScore(animal.Sz, medicatedTimes, Earliest);
-                        }
-                        unmedicatedBurden.Add(unmedicatedScore / baselineDays);
-                        medicatedBurden.Add(medicatedScore / medicatedDays);
-                    }
-
-                    SzMetrics medicatedMetrics = new SzMetrics(TRTTYPE.Drug);
-                    medicatedMetrics.szBurden = medicatedBurden.Average();
-                    medicatedMetrics.burdenSEM = SEM(medicatedBurden);
-                    medicatedMetrics.numAnimals = medicatedBurden.Count();
-
-                    SzMetrics unmedicatedMetrics = new SzMetrics(TRTTYPE.Baseline);
-                    unmedicatedMetrics.szBurden = unmedicatedBurden.Average();
-                    unmedicatedMetrics.burdenSEM = SEM(unmedicatedBurden);
-                    unmedicatedMetrics.numAnimals = unmedicatedBurden.Count();
-
-                    seizureData.Add(TRTTYPE.Drug, medicatedMetrics);
-                    seizureData.Add(TRTTYPE.Baseline, unmedicatedMetrics);
-
-                    break;
-
-                case TESTTYPES.IAK:
-                    foreach (GroupType group in Groups)
-                    {
-
-                            groupedData.Add(group.Name, new GroupedData(group.Name));
-
-                            int groupScore = 0;
-                            int groupAnimals = 0;
-                            List<double> groupBurden = new List<double>();
-                            // Groups A and B: Extract treatment times for each and sum severity scores
-
-                            // iterate thru animals
-                            foreach (AnimalType animal in animals)
+                            List<double> groupTimes = new List<double>();
+                            //First count animal
+                            groupAnimals++;
+                            if (group != "Baseline")
                             {
-                                if (animal.Group.Name == group.Name)
-                                {
-                                    float groupDays = default;
-                                    // IAK treatment groups Group A
-                                    List<double> groupTimes = new List<double>();
-                                    List<InjectionType> groupTrt = animal.Injections.Where(I => I.ADDID.ToUpper() == group.Name.ToUpper()).ToList();
-                                    if (groupTrt.Count > 0)
-                                    // IAK treatment times
-                                    {
-                                        groupTimes = groupTrt.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
-                                        // Number of days for each group
-                                        groupDays = (float)((groupTimes.Max() - groupTimes.Min()) / 24);
-                                    }
-
-                                    if (groupTrt.Count > 0)
-                                    { groupAnimals++; }
-
-
-                                    // Create baselineTimes and add 0 (beginning of recording) and just before the first treatment
-                                    List<double> baselineTimes = new List<double>();
-                                    baselineTimes.Add(0); baselineTimes.Add(groupTimes.Min());
-                                    float baselineDays = (float)baselineTimes.Max() / 24;
-
-                                    // Extract severity
-                                    if (animal.Sz.Count > 0)
-                                    {
-                                        groupScore = GetSeverityScore(animal.Sz, groupTimes, Earliest);
-                                        baselineScore = GetSeverityScore(animal.Sz, baselineTimes, Earliest);
-                                    }
-                                    groupBurden.Add(groupScore / groupDays);
-                                    baselineBurden.Add(baselineScore / baselineDays);
-                                }
+                                groupTimes = groupTreatment
+                                    .Select(o => (double) o.TimePoint.Subtract(Earliest).TotalHours).ToList();
+                                // Expand injection window to 12 hours after injections are done
+                                groupTimes[groupTimes.Count - 1] += 12;
                             }
-                            // Set metrics
-                            baselineMetrics.szBurden = Math.Round(baselineBurden.Average(), 2);
-                            baselineMetrics.numAnimals = baselineAnimals;
-                            baselineMetrics.burdenSEM = SEM(baselineBurden);
-                            groupedData[group.Name].BASELINE = baselineMetrics;
-                            groupedData[group.Name].szBurden = Math.Round(groupBurden.Average(), 2);
-                            groupedData[group.Name].numAnimals = groupAnimals;
-                            groupedData[group.Name].burdenSEM = SEM(groupBurden);
-                            groupedData[group.Name].szBurdens = groupBurden;
-                            groupedData[group.Name].groupID = group.Name;
+                            else
+                            {
+                                groupTimes = new List<double>();
+                                groupTimes.Add(0);
+                                groupTimes.Add(animal.Injections[0].TimePoint.Subtract(Earliest).TotalHours);
+                            }
 
-                            // MWW Test
-                            groupedData[group.Name].burdenPValue = MWWTest(groupBurden.ToArray(), baselineBurden.ToArray());
+                            // Grab seizures in the injection window, then compute burden and answer freedom question
+                            List<SeizureType> groupSeizures =
+                                animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours >= groupTimes.Min()
+                                                     && S.d.Date.Subtract(Earliest).TotalHours <= groupTimes.Max()).ToList();
+
+                            double seizureSum = SumSeizures(groupSeizures);
+                            burdens.Add(seizureSum / groupSeizures.Count);
+
+                            // Seizure Freedom
+                            if (groupSeizures.Count == 0)
+                                groupFreedom++;
+                        }
                     }
-                    break;
-            }
-        }
-        public void SeizureFreedom(List<AnimalType> animals, DateTime Earliest)
-        {
-            // This method answers the question: Did animal have seizure during treatment?
-            int baselineSzFreedom = 0;
-            int vehicleSzFreedom = 0;
-            int drugSzFreedom = 0;
-
-            if (test == TESTTYPES.T35)
-            {
-                foreach (AnimalType animal in animals)
-                {
-                    // Find drug and vehicle injections so we can determine if the seizure occurred during drug/vehicle treatment
-                    List<InjectionType> vehicleI = animal.Injections.Where(I => I.ADDID == "vehicle").ToList();
-                    List<InjectionType> drugI = animal.Injections.Where(I => I.ADDID != "vehicle").ToList();
-                    List<double> vehicleTimes = vehicleI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
-                    vehicleTimes[vehicleTimes.Count - 1] += 12;
-                    List<double> drugTimes = drugI.Select(o => (double)o.TimePoint.Subtract(Earliest).TotalHours).ToList();
-                    drugTimes[drugTimes.Count - 1] += 12;
-                    List<SeizureType> drugSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= drugTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= drugTimes.Max() && S.Severity != -1).ToList();
-                    List<SeizureType> vehicleSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= vehicleTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= vehicleTimes.Max() && S.Severity != -1).ToList();
-                    double baselineTime = -1; // initialize baseline
-                    if (drugTimes.Min() < vehicleTimes.Min())
-                    {
-                        baselineTime = drugTimes.Min();
-                    }
-                    else if (drugTimes.Min() > vehicleTimes.Min())
-                    {
-                        baselineTime = vehicleTimes.Min();
-                    }
-
-                    // where there were baseline seizures
-                    List<SeizureType> baselineSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours < baselineTime && S.Severity != -1).ToList();
-
-                    if (drugSz.Count > 0)
-                    { }
-                    else
-                    { drugSzFreedom++; }
-                    if (vehicleSz.Count > 0)
-                    { }
-                    else
-                    { vehicleSzFreedom++; }
-                    if (baselineSz.Count > 0)
-                    { }
-                    else
-                    { baselineSzFreedom++; }
-
                 }
-                seizureData[TRTTYPE.Baseline].szFreedom = baselineSzFreedom;
-                seizureData[TRTTYPE.Vehicle].szFreedom = vehicleSzFreedom;
-                seizureData[TRTTYPE.Drug].szFreedom = drugSzFreedom;
+
+                groupedData[group].szBurdens = burdens;
+                groupedData[group].burdenSEM = SEM(burdens);
+                groupedData[group].szFreedom = groupFreedom;
+                groupedData[group].numAnimals = groupAnimals;
             }
-            else if (test == TESTTYPES.T36) // Test 36
-            {
-                foreach (AnimalType animal in animals)
-                {
-                    // Break up meals into both groups
-                    List<MealType> baselineMeals = animal.Meals.Where(m => m.type.ToUpper() == "U").ToList();
-                    List<MealType> medicatedMeals = animal.Meals.Where(m => m.type.ToUpper() == "M").ToList();
 
-                    // Get meal times
-                    List<double> baselineTimes = baselineMeals.Select(m => (double)m.d.Subtract(Earliest).TotalHours).ToList();
-                    List<double> medicatedTimes = medicatedMeals.Select(m => (double)m.d.Subtract(Earliest).TotalHours).ToList();
-
-                    // seizures during unmedicated and medicated meals
-                    List<SeizureType> drugSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= medicatedTimes.Min() && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= medicatedTimes.Max() && S.Severity != -1).ToList();
-                    List<SeizureType> baselineSz = animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours < medicatedTimes.Min() || S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours > medicatedTimes.Max() && S.Severity != -1).ToList();
-
-                    // Answer seizure freedom
-                    if (drugSz.Count > 0)
-                    { }
-                    else
-                    { drugSzFreedom += 1; }
-                    if (baselineSz.Count > 0)
-                    { }
-                    else
-                    { baselineSzFreedom += 1; }
-                    seizureData[TRTTYPE.Baseline].szFreedom = baselineSzFreedom;
-                    seizureData[TRTTYPE.Drug].szFreedom = drugSzFreedom;
-                }
-            }
         }
         public double SEM(List<double> sz)
         {

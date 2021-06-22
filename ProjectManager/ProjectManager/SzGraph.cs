@@ -555,9 +555,15 @@ namespace ProjectManager
                 boundingPen.Width = 1.25F * graph.objectScale;
                 foreach (KeyValuePair<string, GroupedData> group in project.analysis.groupedData)
                 {
-                    string baselineBurden = group.Value.BASELINE.szBurden.ToString() + "\u00B1" + group.Value.BASELINE.burdenSEM.ToString(); 
-                    string groupBurden = group.Value.szBurden.ToString() + "\u00B1" + group.Value.burdenSEM.ToString();
-                    string groupFreedom = group.Value.szFreedom.ToString() + "/" + group.Value.numAnimals.ToString();
+                    if (group.Key != "Baseline")
+                    {
+                        string baselineBurden = project.analysis.groupedData["Baseline"].szBurden.ToString() +
+                                                "\u00B1" + project.analysis.groupedData["Baseline"].burdenSEM.ToString();
+                        string groupBurden = group.Value.szBurden.ToString() + "\u00B1" +
+                                             group.Value.burdenSEM.ToString();
+                        string groupFreedom =
+                            group.Value.szFreedom.ToString() + "/" + group.Value.numAnimals.ToString();
+                    }
                 }
 
                 // sz burdens

@@ -265,9 +265,9 @@ namespace ProjectManager
             else
             {
                 // Computer burden and freedoms
-                CalculateSzBurden();
-                SeizureFreedom();
-                analysis.SzFreedomSignificance();
+                analysis.GroupAnalysis(Animals, Earliest: Files[0].Start.Date, "Injection");
+                analysis.SeizureFreedomPValue();
+                analysis.SeizureBurdenPValue();
             }
         }
         public void CompareStageConflicts()
@@ -351,7 +351,8 @@ namespace ProjectManager
                                 int vehTest = DamerauLevenshtein.DamerauLevenshteinDistanceTo(I.ADDID.ToLower(), "vehicle");
 
                                 // check if vehicle is a group yet
-                                if (!groups.Contains("vehicle") && groups.Count < 2) { groups.Add("vehicle"); }
+                                if (!groups.Contains("vehicle") && groups.Count < 2) 
+                                { groups.Add("vehicle"); }
 
                                 // if this is satisfied then injection is vehicle
                                 if (vehTest <= 3 && groups.Contains("vehicle") && groups.Count < 3)
@@ -366,7 +367,8 @@ namespace ProjectManager
                                 { groups.Add(I.ADDID); }
 
                                 // Throw error if we get a third group.
-                                else if (groups.Count >= 3) { throw (new Exception("More than two groups found.")); }
+                                else if (groups.Count >= 3) 
+                                { throw (new Exception("More than two groups found.")); }
                             }
                         }
                     }
@@ -406,17 +408,6 @@ namespace ProjectManager
             // Pass groups found to analysis.
             analysis.groups = groups;
         }
-        private void CalculateSzBurden()
-        {
-            // SeizureBurden() calculates seizure burden for all relevant groups and finds their SEM's
-            analysis.SeizureBurden(Groups, Animals, Files[0].Start.Date);
-        }
-        private void SeizureFreedom()
-        {
-            // Answer seizure freedom question for each animal
-            analysis.SeizureFreedom(Animals, Files[0].Start.Date);
-        }
-
         public string[] Get_Animals()
         {
             string[] X;
