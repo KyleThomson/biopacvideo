@@ -264,10 +264,14 @@ namespace ProjectManager
             { return; }
             else
             {
-                // Computer burden and freedoms
-                analysis.GroupAnalysis(Animals, Earliest: Files[0].Start.Date, "Injection");
-                analysis.SeizureFreedomPValue();
-                analysis.SeizureBurdenPValue();
+                if (!analysis._analysisDone)
+                {
+                    // Computer burden and freedoms
+                    analysis.SzBurdenAndFreedom(Animals, Earliest: Files[0].Start.Date, "Injection");
+                    analysis.SeizureFreedomPValue();
+                    analysis.SeizureBurdenPValue();
+                    analysis._analysisDone = true;
+                }
             }
         }
         public void CompareStageConflicts()
@@ -726,6 +730,7 @@ namespace ProjectManager
             animal.earliestAppearance = earliest;
             animal.latestAppearance = latest;
         }
+
         public void ExportData(string Fname, ExportType E)
         {
             //Open File
@@ -756,6 +761,7 @@ namespace ProjectManager
                                 F.WriteLine(I.Date.ToShortDateString() + ", " + I.LabelID);
                             }
                         }
+
                         F.WriteLine(S.d.ToShortDateString() + ", " + S.t.ToString() + ", " + S.Notes);
                         LastDate = S.d;
                     }
@@ -768,22 +774,27 @@ namespace ProjectManager
                         }
                     }
                 }
+
                 F.Close();
                 return;
             }
+
             if (E.BloodDrawList)
             {
                 foreach (AnimalType A in Animals)
                 {
                     foreach (BloodDrawType B in A.BloodDraws)
                     {
-                        st = A.ID + ',' + B.dt.Date.ToString("MM/dd/yyyy") + " " + B.EnteredTime.ToString() + "," + B.ID;
+                        st = A.ID + ',' + B.dt.Date.ToString("MM/dd/yyyy") + " " + B.EnteredTime.ToString() + "," +
+                             B.ID;
                         F.WriteLine(st);
                     }
                 }
+
                 F.Close();
                 return;
             }
+
             st = "Animal";
             /* for (DateTime i = Earliest; i <= Latest; i=i.AddDays(1))
             {
@@ -803,10 +814,13 @@ namespace ProjectManager
                         {
                             if (DateTime.Compare(i.Date, S.d.Date) == 0) c++;
                         }
+
                         st += "," + c;
                     }
+
                     F.WriteLine(st);
                 }
+
                 if (E.SzTime)
                 {
                     st = A.ID;
@@ -814,14 +828,17 @@ namespace ProjectManager
                     {
                         st += ", " + Math.Round(S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours, 2).ToString();
                     }
+
                     F.WriteLine(st);
                 }
+
                 if (E.SeverityIndx)
                     st = A.ID;
                 foreach (SeizureType S in A.Sz)
                 {
                     st += ", " + S.Severity.ToString();
                 }
+
                 F.WriteLine(st);
                 if (E.Notes)
                 {
@@ -830,8 +847,10 @@ namespace ProjectManager
                     {
                         st += "," + S.Notes;
                     }
+
                     F.WriteLine(st);
                 }
+
                 if (E.Meal)
                 {
                     st = A.ID;
@@ -848,39 +867,47 @@ namespace ProjectManager
                         {
                             st2 += ", 0";
                         }
+
                         if (E.Pellet)
                         {
                             st3 += ", " + M.pelletcount.ToString();
                         }
                     }
+
                     F.WriteLine(st);
                     F.WriteLine(st2);
                     F.WriteLine(st3);
                 }
+
                 if (E.BloodDraw)
                 {
                     st = "BDT," + A.ID; //Blood Draw Time
                     st2 = "BDL," + A.ID; //Blood Draw Label 
                     foreach (BloodDrawType B in A.BloodDraws)
                     {
-                        st += "," + Math.Round(B.dt.Date.Subtract(Earliest).TotalHours + B.EnteredTime.TotalHours, 2).ToString();
+                        st += "," + Math.Round(B.dt.Date.Subtract(Earliest).TotalHours + B.EnteredTime.TotalHours, 2)
+                            .ToString();
                         st2 += "," + B.ID;
                     }
+
                     F.WriteLine(st);
                     F.WriteLine(st2);
                 }
+
                 if (E.Pellet)
                 {
-                    st = "PLRT," + A.ID;  //Pellet Removal Time
-                    st2 = "PLRC," + A.ID;  //Pellet Removal Count 
+                    st = "PLRT," + A.ID; //Pellet Removal Time
+                    st2 = "PLRC," + A.ID; //Pellet Removal Count 
                     foreach (RemovalType R in A.Removals)
                     {
                         st += "," + Math.Round(R.dt.Subtract(Earliest).TotalHours, 2).ToString();
                         st2 += "," + R.count.ToString();
                     }
+
                     F.WriteLine(st);
                     F.WriteLine(st2);
                 }
+
                 if (E.Injections)
                 {
                     st = A.ID + ",IJT";
@@ -890,9 +917,11 @@ namespace ProjectManager
                         st += "," + Math.Round(I.TimePoint.Subtract(Earliest).TotalHours, 2).ToString();
                         st2 += "," + I.ADDID;
                     }
+
                     F.WriteLine(st);
                     F.WriteLine(st2);
                 }
+
                 if (E.InjectionsList)
                 {
 
@@ -900,6 +929,7 @@ namespace ProjectManager
 
 
             }
+
             if (E.binSz)
             {
                 // Create new file dialog box for saving exported binned seizures .csv
@@ -915,7 +945,7 @@ namespace ProjectManager
                     // Open binned seizure file
                     StreamWriter sw = new StreamWriter(binned.FileName);
                     sw.AutoFlush = true;
-                    int numDays = (int)Math.Floor(Latest.Subtract(Earliest).TotalDays) + 1;
+                    int numDays = (int) Math.Floor(Latest.Subtract(Earliest).TotalDays) + 1;
                     if (E.ungrouped)
                     {
                         foreach (AnimalType A in Animals)
@@ -933,10 +963,12 @@ namespace ProjectManager
                                 {
                                     if (seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays >= alignBy)
                                     {
-                                        szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays - alignBy));
+                                        szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays +
+                                            seizureType.t.TotalDays - alignBy));
                                     }
                                 }
                             }
+
                             // create empty array of 0s to insert frequencies into
                             List<double> binSeizures = BinSeizure(numDays, szDay);
 
@@ -945,62 +977,102 @@ namespace ProjectManager
                             {
                                 sz += "," + binSeizures[i].ToString();
                             }
+
                             sw.WriteLine(sz); // write seizures
                         }
+
                         sw.Close(); // close writer
                     }
                     else if (E.grouped)
                     {
                         // Now that groups are established we can write to file.
-                        foreach (GroupType group in Groups)
+                        foreach (string group in analysis.groups)
                         {
-                            sw.WriteLine(group.Name);
+                            sw.WriteLine(group);
                             foreach (AnimalType A in Animals)
                             {
-                                if (A.Group.Name == group.Name)
+                                // Extract relevant injection IDs and the injection times
+                                List<InjectionType> groupTreatment = A.Injections.Where(I => I.ADDID == group).ToList();
+                                if (groupTreatment.Count > 0 || group == "Baseline")
                                 {
 
+                                    //First count animal
+                                    List<double> groupTimes = new List<double>();
+                                    if (group != "Baseline")
+                                    {
+                                        groupTimes = groupTreatment
+                                            .Select(o => (double) o.TimePoint.Subtract(Earliest).TotalHours).ToList();
+
+                                        // Expand injection window to 12 hours after injections are done
+                                        groupTimes = groupTimes.OrderBy(x => x).ToList();
+                                        groupTimes[groupTimes.Count - 1] += 12;
+                                    }
+                                    else
+                                    {
+                                        groupTimes = new List<double>
+                                        {
+                                            0,
+                                            A.Injections[0].TimePoint.Subtract(Earliest).TotalHours - 0.1
+                                        };
+                                    }
+
+                                    // Grab seizures in the injection window, then compute burden and answer freedom question
+                                    var groupSeizures =
+                                        A.Sz.Where(S =>
+                                            S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= groupTimes.Min()
+                                            && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <=
+                                            groupTimes.Max()).ToList();
                                     // first injection
-                                    double alignBy = Math.Round(A.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);
+                                    double alignBy =
+                                        Math.Round(A.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);
                                     sz = A.ID;
 
                                     // Create list for days that seizures happen
                                     List<double> szDay = new List<double>();
                                     List<double> binSeizures = new List<double>(new double[numDays]);
-                                    foreach (SeizureType seizureType in A.Sz)
+
+                                    // Find seizures that happened in groups
+                                    foreach (SeizureType seizureType in groupSeizures)
                                     {
-                                        if (seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays >= alignBy)
+                                        if (seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays >=
+                                            alignBy)
                                         {
-                                            szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays - alignBy));
+                                            szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays +
+                                                seizureType.t.TotalDays - alignBy));
                                         }
                                     }
+
                                     var g = szDay.GroupBy(i => i);
                                     foreach (var bin in g)
                                     {
                                         if (bin.Key > 0)
                                         {
-                                            binSeizures[(int)(bin.Key - 1)] = bin.Count();
+                                            binSeizures[(int) (bin.Key - 1)] = bin.Count();
                                         }
                                         else
                                         {
-                                            binSeizures[(int)(bin.Key)] = bin.Count();
+                                            binSeizures[(int) (bin.Key)] = bin.Count();
                                         }
                                     }
+
                                     for (int i = 0; i < binSeizures.Count; i++)
                                     {
                                         sz += "," + binSeizures[i].ToString();
                                     }
+
                                     sw.WriteLine(sz); // write seizures
                                 }
-                            }
 
+                            }
                         }
                         sw.Close();
                     }
                 }
+
+                F.Close();
             }
-            F.Close();
         }
+
         private List<double> BinSeizure(int numDays, List<double> szDay)
         {
             // create empty array of 0s to insert frequencies into

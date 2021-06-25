@@ -170,11 +170,6 @@ namespace ProjectManager
             dataPen.Color = color;
             dataPen.Width = lineWidth * objectScale;
 
-            // Calculate a scale factor that is in units of Pixels/unit
-            //float xScale = (axes.xTickPoints[axes.xTickPoints.Count - 1] - axes.xTickPoints[0]) / maxXData;
-            //float xScale = (float)((axes.axesList[1].X - axes.axesList[0].X) * 0.95 / maxXData);
-            //float yScale = (axes.yAxisLength - axes.yAxisStart) / maxYData;
-
             // Convert input coordinate points
             float realX1Coord = x1Coord * xScale + axes.xTickPoints[0];
             float realY1Coord = axes.yAxisLength - y1Coord * yScale;

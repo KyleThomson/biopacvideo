@@ -1,4 +1,8 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using Accord.Statistics.Testing;
 
 namespace ProjectManager
 {
@@ -41,10 +45,33 @@ namespace ProjectManager
         public static double MannWhitneyWilcoxon(double[] sample1, double[] sample2)
         {
             double pvalue;
-            Accord.Statistics.Testing.MannWhitneyWilcoxonTest mwwTest = new Accord.Statistics.Testing.MannWhitneyWilcoxonTest(sample1, sample2);
+            MannWhitneyWilcoxonTest mwwTest = new MannWhitneyWilcoxonTest(sample1, sample2, 
+                TwoSampleHypothesis.FirstValueIsSmallerThanSecond, exact: false);
             pvalue = mwwTest.PValue;
 
             return pvalue;
+        }
+
+        public static double Variance(List<double> x)
+        {
+            double n = x.Count();
+            double variance = 0;
+            double mean = x.Average();
+
+            for (int i = 0; i < x.Count; i++)
+            {
+                variance += Math.Pow(x[i] - mean, 2) / (n - 1);
+            }
+
+            return variance;
+        }
+
+        public static double StdDev(List<double> x)
+        {
+            double variance = Variance(x);
+            double sigma = Math.Sqrt(variance);
+
+            return sigma;
         }
     }
 }

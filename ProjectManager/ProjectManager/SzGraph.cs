@@ -456,6 +456,9 @@ namespace ProjectManager
         }
         public void DisplayStats()
         {
+            // Get data
+            Dictionary<string, GroupedData> allData = project.analysis.groupedData;
+
             Font headerFont = new Font("Arial", 12F * graph.objectScale);
             SolidBrush headerBrush = new SolidBrush(Color.Black);
 
@@ -473,71 +476,76 @@ namespace ProjectManager
 
             if (test == TESTTYPES.T35)
             {
+                // Find the drug group without knowing the name of the drug
+                List<string> copyGroups = project.analysis.groups;
+                copyGroups.Remove("Baseline");
+                copyGroups.Remove("vehicle");
+                string drugGroup = copyGroups[0];
                 // if test 35, do baseline, vehicle, and drug
                 Font statsFont = new Font("Arial", 8F * graph.objectScale);
                 Pen boundingPen = new Pen(Brushes.Black);
                 boundingPen.Width = 1.25F * graph.objectScale;
 
                 // sz burdens
-                string baselineBurden = project.analysis.seizureData[TRTTYPE.Baseline].szBurden.ToString() + "\u00B1" + project.analysis.seizureData[TRTTYPE.Baseline].burdenSEM.ToString();
-                string drugBurden = project.analysis.seizureData[TRTTYPE.Drug].szBurden.ToString() + "\u00B1" + project.analysis.seizureData[TRTTYPE.Drug].burdenSEM.ToString();
-                string vehicleBurden = project.analysis.seizureData[TRTTYPE.Vehicle].szBurden.ToString() + "\u00B1" + project.analysis.seizureData[TRTTYPE.Vehicle].burdenSEM.ToString();
+                string baselineBurden = allData["Baseline"].szBurden.ToString() + "\u00B1" + allData["Baseline"].burdenSEM.ToString();
+                string drugBurden = allData[drugGroup].szBurden.ToString() + "\u00B1" + allData[drugGroup].burdenSEM.ToString();
+                string vehicleBurden = allData["vehicle"].szBurden.ToString() + "\u00B1" + allData["vehicle"].burdenSEM.ToString();
                 SizeF baselineS = graph.graphics.MeasureString("Baseline", headerFont);
 
                 // sz freedoms
-                string vehicleFreedom = project.analysis.seizureData[TRTTYPE.Vehicle].szFreedom.ToString() + "/" + project.analysis.seizureData[TRTTYPE.Vehicle].numAnimals.ToString();
-                string drugFreedom = project.analysis.seizureData[TRTTYPE.Drug].szFreedom.ToString() + "/" + project.analysis.seizureData[TRTTYPE.Drug].numAnimals.ToString();
-                string baselineFreedom = project.analysis.seizureData[TRTTYPE.Baseline].szFreedom.ToString() + "/" + project.analysis.seizureData[TRTTYPE.Baseline].numAnimals.ToString();
+                string vehicleFreedom = allData["vehicle"].szFreedom.ToString() + "/" + allData["vehicle"].numAnimals.ToString();
+                string drugFreedom = allData[drugGroup].szFreedom.ToString() + "/" + allData[drugGroup].numAnimals.ToString();
+                string baselineFreedom = allData["Baseline"].szFreedom.ToString() + "/" + allData["Baseline"].numAnimals.ToString();
 
                 // Seizure Burden strings
                 string baselineWilcoxon;
                 string vehicleWilcoxon;
-                if (project.analysis.BurdenPVALUES[AnalysisTypes.Baseline_vs_Drug] < 0.05)
+                if (allData["Baseline"].burdenPValue < 0.05)
                 {
                     drugBurden += "\xB†";
                     baselineWilcoxon = "\xB† p<0.05 vs. Baseline (Wilcoxon Rank Sum)" 
-                                       + "(p="+ project.analysis.BurdenPVALUES[AnalysisTypes.Baseline_vs_Drug].ToString("G2") + ")";
+                                       + "(p="+ allData[drugGroup].burdenPValue.ToString("G2") + ")";
                 }
                 else
                 { baselineWilcoxon = "n.s. vs. Baseline (Wilcoxon Rank Sum)"
-                                     + "(p=" + project.analysis.BurdenPVALUES[AnalysisTypes.Baseline_vs_Drug].ToString("G2") + ")"; }
-                if (project.analysis.BurdenPVALUES[AnalysisTypes.Drug_vs_Vehicle] < 0.05)
+                                     + "(p=" + allData["Baseline"].burdenPValue.ToString("G2") + ")"; }
+                if (allData["vehicle"].burdenPValue < 0.05)
                 {
                     drugBurden += "\xB*";
                     vehicleWilcoxon = "\xB* p<0.05 vs. Vehicle (Wilcoxon Rank Sum)"
-                                      + "(p=" + project.analysis.BurdenPVALUES[AnalysisTypes.Drug_vs_Vehicle].ToString("G2") + ")";
+                                      + "(p=" + allData[drugGroup].burdenPValue.ToString("G2") + ")";
                 }
                 else
                 {
                     vehicleWilcoxon = "n.s. vs. Vehicle (Wilcoxon Rank Sum)"
-                                      + "(p=" + project.analysis.BurdenPVALUES[AnalysisTypes.Drug_vs_Vehicle].ToString("G2") + ")"; 
+                                      + "(p=" + allData[drugGroup].burdenPValue.ToString("G2") + ")"; 
 
                 }
 
                 // Seizure Freedom strings
                 string baselineFisherExact;
                 string vehicleFisherExact;
-                if (project.analysis.FreedomPVALUES[AnalysisTypes.Baseline_vs_Drug] < 0.05)
+                if (allData["Baseline"].freedomPValue < 0.05)
                 {
                     drugFreedom += "\xB†";
                     baselineFisherExact = "\xB† p<0.05 vs. Baseline (Fisher Exact)"
-                                          + "(p=" + project.analysis.FreedomPVALUES[AnalysisTypes.Baseline_vs_Drug].ToString("G2") + ")";
+                                          + "(p=" + allData["Baseline"].freedomPValue.ToString("G2") + ")";
                 }
                 else
                 {
                     baselineFisherExact = "n.s. vs. Baseline (Fisher Exact)"
-                                          + "(p=" + project.analysis.FreedomPVALUES[AnalysisTypes.Baseline_vs_Drug].ToString("G2") + ")";
+                                          + "(p=" + allData["Baseline"].freedomPValue.ToString("G2") + ")";
                 }
-                if (project.analysis.FreedomPVALUES[AnalysisTypes.Drug_vs_Vehicle] < 0.05)
+                if (allData["vehicle"].freedomPValue < 0.05)
                 {
                     drugFreedom += "\xB*";
                     vehicleFisherExact = "\xB* p<0.05 vs. Vehicle (Fisher Exact)"
-                                         + "(p=" + project.analysis.FreedomPVALUES[AnalysisTypes.Drug_vs_Vehicle].ToString("G2") + ")";
+                                         + "(p=" + allData["vehicle"].freedomPValue.ToString("G2") + ")";
                 }
                 else
                 {
                     vehicleFisherExact = "n.s. vs. Vehicle (Fisher Exact)"
-                                         + "(p=" + project.analysis.FreedomPVALUES[AnalysisTypes.Drug_vs_Vehicle].ToString("G2") + ")";
+                                         + "(p=" + allData["vehicle"].freedomPValue.ToString("G2") + ")";
                 }
 
                 // Draw to graph

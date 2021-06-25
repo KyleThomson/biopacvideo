@@ -7,26 +7,11 @@ using System.Text.RegularExpressions;
 
 namespace ProjectManager
 {
-    public enum AnalysisTypes
-    {
-        // T35 & T36
-        Baseline_vs_Vehicle,
-        Baseline_vs_Drug,
-        Drug_vs_Vehicle,
-
-        // IAK
-        GroupA_vs_GroupB,
-        GroupA_vs_Baseline,
-        GroupB_vs_Baseline
-    }
     public class SeizureAnalysis
     {
         public TESTTYPES test;
         public List<string> groups;
-
-        public Dictionary<AnalysisTypes, double> BurdenPVALUES = new Dictionary<AnalysisTypes, double>();
-        public Dictionary<AnalysisTypes, double> FreedomPVALUES = new Dictionary<AnalysisTypes, double>();
-        public Dictionary<TRTTYPE, SzMetrics> seizureData = new Dictionary<TRTTYPE, SzMetrics>();
+        public bool _analysisDone = false;
         public Dictionary<string, GroupedData> groupedData = new Dictionary<string, GroupedData>();
 
         public SeizureAnalysis(TESTTYPES typeOfTest)
@@ -35,44 +20,61 @@ namespace ProjectManager
         }
         public void SeizureFreedomPValue()
         {
-            if (groupedData.ContainsKey("Baseline"))
+            switch (test)
             {
-                // Get baseline animals
-                int baselineSeized = groupedData["Baseline"].numAnimals - groupedData["Baseline"].szFreedom;
-                int baselineNotSeized = groupedData["Baseline"].szFreedom;
-                foreach (KeyValuePair<string, GroupedData> kvpGroupedData in groupedData)
-                {
-                    if (kvpGroupedData.Key != "Baseline")
-                    {
-                        int groupSeized = kvpGroupedData.Value.numAnimals - kvpGroupedData.Value.szFreedom;
-                        int groupNotSeized = kvpGroupedData.Value.szFreedom;
-                        kvpGroupedData.Value.freedomPValue = ExtraMath.FisherExact(groupSeized, baselineSeized,
-                                                                                    groupNotSeized, baselineNotSeized);
-                    }
-                }
+                case TESTTYPES.T35:
+                    List<string> copyGroups = groups;
+                    copyGroups.Remove("Baseline");
+                    copyGroups.Remove("vehicle");
+                    string drugGroup = copyGroups[0];
+                    groupedData["Baseline"].freedomPValue = FisherExact(drugGroup, "Baseline");
+                    groupedData["vehicle"].freedomPValue = FisherExact(drugGroup, "vehicle");
+
+                    break;
             }
+
         }
 
+        private double FisherExact(string group1, string group2)
+        {
+            double pvalue;
+
+            int group1Seized = groupedData[group1].numAnimals - groupedData[group1].szFreedom;
+            int group1NotSeized = groupedData[group1].szFreedom;
+
+            int group2Seized = groupedData[group2].numAnimals - groupedData[group2].szFreedom;
+            int group2NotSeized = groupedData[group2].szFreedom;
+
+            pvalue = ExtraMath.FisherExact(group1Seized, group2Seized, group1NotSeized, group2NotSeized);
+
+            return pvalue;
+        }
+        private double MWW(string group1, string group2)
+        {
+            double[] group1Burdens = groupedData[group1].szBurdens.ToArray();
+            double[] group2Burdens = groupedData[group2].szBurdens.ToArray();
+
+            var pvalue = ExtraMath.MannWhitneyWilcoxon(group1Burdens, group2Burdens);
+
+            return pvalue;
+        }
         public void SeizureBurdenPValue()
         {
-            if (groupedData.ContainsKey("Baseline"))
+            switch (test)
             {
-                double[] baselineBurdens = groupedData["Baseline"].szBurdens.ToArray();
-                foreach (KeyValuePair<string, GroupedData> kvpGroupedData in groupedData)
-                {
-                    double[] groupedBurdens = kvpGroupedData.Value.szBurdens.ToArray();
-                    kvpGroupedData.Value.burdenPValue = MWWTest(baselineBurdens, groupedBurdens);
-                }
-            }
-        }
-        public double MWWTest(double[] sample1, double[] sample2)
-        {
-            // generate new mww test
-            var mwwTest = new MannWhitneyWilcoxonTest(sample1, sample2, TwoSampleHypothesis.FirstValueIsSmallerThanSecond, exact: false);
+                case TESTTYPES.T35:
+                    List<string> copyGroups = groups;
+                    copyGroups.Remove("Baseline");
+                    copyGroups.Remove("vehicle");
+                    string drugGroup = copyGroups[0];
 
-            // extract pvalue and return
-            double pvalue = mwwTest.PValue;
-            return pvalue;
+                    groupedData["Baseline"].burdenPValue = MWW(drugGroup, "Baseline");
+                    groupedData["vehicle"].burdenPValue = MWW(drugGroup, "vehicle");
+
+                    break;
+
+            }
+
         }
         private double SumSeizures(List<SeizureType> seizures)
         {
@@ -81,12 +83,19 @@ namespace ProjectManager
             if (seizures.Count > 0)
                 foreach (SeizureType seizure in seizures)
                 {
-                    severitySum += seizure.Severity;
+                    if (seizure.Severity > 0)
+                    {
+                        severitySum += seizure.Severity;
+                    }
+                    else if (seizure.Severity == 0)
+                    {
+                        severitySum++;
+                    }
                 }
 
             return severitySum;
         }
-        public void GroupAnalysis(List<AnimalType> animals, DateTime Earliest, string treatment)
+        public void SzBurdenAndFreedom(List<AnimalType> animals, DateTime Earliest, string treatment)
         {
             // manually add baseline condition
             groups.Add("Baseline");
@@ -98,36 +107,45 @@ namespace ProjectManager
                 int groupAnimals = 0;
                 foreach (AnimalType animal in animals)
                 {
-                    if (treatment == "injection")
+                    if (treatment == "Injection")
                     {
                         // Extract relevant injection IDs and the injection times
                         List<InjectionType> groupTreatment = animal.Injections.Where(I => I.ADDID == group).ToList();
                         if (groupTreatment.Count > 0 || group == "Baseline")
                         {
-                            List<double> groupTimes = new List<double>();
+
                             //First count animal
                             groupAnimals++;
+
+                            List<double> groupTimes = new List<double>();
                             if (group != "Baseline")
                             {
                                 groupTimes = groupTreatment
                                     .Select(o => (double) o.TimePoint.Subtract(Earliest).TotalHours).ToList();
+
                                 // Expand injection window to 12 hours after injections are done
+                                groupTimes = groupTimes.OrderBy(x => x).ToList();
                                 groupTimes[groupTimes.Count - 1] += 12;
                             }
                             else
                             {
-                                groupTimes = new List<double>();
-                                groupTimes.Add(0);
-                                groupTimes.Add(animal.Injections[0].TimePoint.Subtract(Earliest).TotalHours);
+                                groupTimes = new List<double>
+                                {
+                                    0,
+                                    animal.Injections[0].TimePoint.Subtract(Earliest).TotalHours - 0.1
+                                };
                             }
 
-                            // Grab seizures in the injection window, then compute burden and answer freedom question
-                            List<SeizureType> groupSeizures =
-                                animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours >= groupTimes.Min()
-                                                     && S.d.Date.Subtract(Earliest).TotalHours <= groupTimes.Max()).ToList();
+                            var numDays = Math.Round((groupTimes.Max() - groupTimes.Min()) / 24, 1);
 
-                            double seizureSum = SumSeizures(groupSeizures);
-                            burdens.Add(seizureSum / groupSeizures.Count);
+                            // Grab seizures in the injection window, then compute burden and answer freedom question
+                            var groupSeizures =
+                                animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= groupTimes.Min()
+                                                     && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= groupTimes.Max()).ToList();
+
+                            var seizureSum = SumSeizures(groupSeizures);
+                            burdens.Add(Math.Round(seizureSum / numDays, 1));
+
 
                             // Seizure Freedom
                             if (groupSeizures.Count == 0)
@@ -140,20 +158,14 @@ namespace ProjectManager
                 groupedData[group].burdenSEM = SEM(burdens);
                 groupedData[group].szFreedom = groupFreedom;
                 groupedData[group].numAnimals = groupAnimals;
+                groupedData[group].szBurden = Math.Round(burdens.Average(), 1);
             }
 
         }
         public double SEM(List<double> sz)
         {
-            double variance = 0;
-            double mean = sz.Average();
-            int n = sz.Count();
-            // find standard deviation of sz burden
-            for (int i = 0; i < sz.Count; i++)
-            {
-                variance += (float)Math.Pow(sz[i] - mean, 2) / (n - 1);
-            }
-            var sigma = Math.Sqrt(variance);
+            var n = sz.Count;
+            var sigma = ExtraMath.StdDev(sz);
             var sem = sigma / Math.Sqrt(n);
             return Math.Round(sem, 1);
         }
