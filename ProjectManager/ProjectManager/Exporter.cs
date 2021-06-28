@@ -35,7 +35,6 @@ namespace ProjectManager
                     // Have user assign groups
                     if (pjt == null)
                         return;
-                    pjt.ParseGroups();
                 }
                 else if (ungroupedSz.Checked)
                 { E.ungrouped = true; }

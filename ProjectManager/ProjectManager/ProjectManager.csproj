@@ -158,7 +158,6 @@
     <Compile Include="SeizureStageDialog.cs" />
     <Compile Include="SeizureType.cs" />
     <Compile Include="SzGraph.cs" />
-    <Compile Include="SzMetrics.cs" />
     <Compile Include="TestDescription.cs">
       <SubType>Form</SubType>
     </Compile>

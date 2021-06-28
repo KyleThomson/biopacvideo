@@ -45,24 +45,33 @@ namespace ProjectManager
             // Create axes
             axes = new Axes(X, Y, context);
             axesPoints = axes.axesList;
-            Scale();
+            AxisScale();
 
+            // improve resolution
+            ImproveResolution();
+            
+            // Calculate scale factor for resizing objects on bitmap
+            ObjectScaling();
+            
+        }
+
+        private void ImproveResolution()
+        {
             // Set smoothing mode for graphics in initialization. This will smooth out edges when drawing round objects.
             graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             // High quality interpolation makes rescaling of image maintain resolution.
             graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        }
 
+        private void ObjectScaling()
+        {
             // calculate target scaling factor to maintain graph aspect ratio on any screen
-            scale = Math.Min(screenWidth / (float)width, screenHeight / (float)height);
+            scale = Math.Min(screenWidth / (float)X, screenHeight / (float)Y);
             objectScale = 1 / scale;
             axes.objectScale = objectScale;
             axes.scale = scale;
-
-            
-
         }
-
-        private void Scale()
+        private void AxisScale()
         {
             xScale = (float)((axes.axesList[1].X - axes.axesList[0].X) * 0.95/ maxXData);
             yScale = (axes.yAxisLength - axes.yAxisStart) / maxYData;

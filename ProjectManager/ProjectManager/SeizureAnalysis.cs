@@ -4,19 +4,27 @@ using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Accord.Math;
 
 namespace ProjectManager
 {
+    public enum Treatment
+    {
+        Default,
+        Injection,
+        Meal
+    }
     public class SeizureAnalysis
     {
         public TESTTYPES test;
         public List<string> groups;
         public bool _analysisDone = false;
+        public Treatment treatment;
         public Dictionary<string, GroupedData> groupedData = new Dictionary<string, GroupedData>();
-
         public SeizureAnalysis(TESTTYPES typeOfTest)
         {
             test = typeOfTest;
+            groups = new List<string>();
         }
         public void SeizureFreedomPValue()
         {
@@ -35,6 +43,24 @@ namespace ProjectManager
 
         }
 
+        public void DetermineTreatment(List<AnimalType> animals)
+        {
+            bool _injections = false;
+            bool _meals = false;
+
+            foreach (AnimalType animal in animals)
+            {
+                if (animal.Injections.Count > 0)
+                    _injections = true;
+                if (animal.Meals.Count > 0)
+                    _meals = true;
+            }
+
+            if (_injections)
+                treatment = Treatment.Injection;
+            else if (_meals)
+                treatment = Treatment.Meal;
+        }
         private double FisherExact(string group1, string group2)
         {
             double pvalue;
@@ -248,6 +274,34 @@ namespace ProjectManager
                 severity = int.Parse(storeNum);
             }
             return severity;
+        }
+
+        public void ParseGroups(List<AnimalType> Animals)
+        {
+            switch (treatment)
+            {
+                case Treatment.Injection:
+                    foreach (var animal in Animals)
+                    {
+                        foreach (var injection in animal.Injections)
+                        {
+                            var result = DamerauLevenshtein.DamerauLevenshteinDistanceTo(
+                                injection.ADDID.ToLower(), "vehicle") <= 3 ? "vehicle" : injection.ADDID;
+                            // New group found, add to Groups and the analysis groups
+                            if (result == "vehicle" && !groups.Contains("vehicle"))
+                                groups.Add(result);
+                            else if (result == injection.ADDID && !groups.Contains(injection.ADDID))
+                                groups.Add(result);
+                        }
+                        // Sort groups alphabetically
+                        groups = groups.OrderBy(o => o).ToList();
+                    }
+                    break;
+
+                case Treatment.Meal:
+                    break;
+            }
+
         }
     }
 }

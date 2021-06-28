@@ -49,6 +49,8 @@ namespace ProjectManager
                 _pjtOpened = true;
                 pjt.TrackAllAnimals();
                 pjt.CompareStageConflicts(); // Find conflicts between bubble and notes
+                pjt.analysis.DetermineTreatment(pjt.Animals);
+                pjt.analysis.ParseGroups(pjt.Animals);
                 UpdateMainList();
             }
         }
@@ -325,17 +327,14 @@ namespace ProjectManager
                 {
                     if (SecondList.Items[SecondList.SelectedIndex].ToString().ToUpper() == "BASELINE") // BASELINE CHOSEN FOR REMOVAL
                     {
-                        pjt.Animals[MainList.SelectedIndex].metrics.RemoveAll(M => M.treatment == TRTTYPE.Baseline);
                         SecondList.Items.RemoveAt(SecondList.SelectedIndex);
                     }
                     else if (SecondList.Items[SecondList.SelectedIndex].ToString().ToUpper() == "VEHICLE") // VEHICLE CHOSEN FOR REMOVAL
                     {
-                        pjt.Animals[MainList.SelectedIndex].metrics.RemoveAll(M => M.treatment == TRTTYPE.Vehicle);
                         SecondList.Items.RemoveAt(SecondList.SelectedIndex);
                     }
                     else if (SecondList.Items[SecondList.SelectedIndex].ToString().ToUpper() == "DRUG") // DRUG CHOSEN FOR REMOVAL
                     {
-                        pjt.Animals[MainList.SelectedIndex].metrics.RemoveAll(M => M.treatment == TRTTYPE.Drug);
                         SecondList.Items.RemoveAt(SecondList.SelectedIndex);
                     }
                 }

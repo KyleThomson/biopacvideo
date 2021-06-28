@@ -15,8 +15,6 @@ namespace ProjectManager
 
         // string variables for header info for the pdf
         public TESTTYPES test;
-        public string header;
-        public string subHeader;
         public string ETSP = "ETSP: ";
         public string batch = "Dose: ";
         public string dose = "Dose: ";
