@@ -502,7 +502,7 @@ namespace ProjectManager
                 {
                     drugBurden += "\xB†";
                     baselineWilcoxon = "\xB† p<0.05 vs. Baseline (Wilcoxon Rank Sum)" 
-                                       + "(p="+ allData[drugGroup].burdenPValue.ToString("G2") + ")";
+                                       + "(p="+ allData["Baseline"].burdenPValue.ToString("G2") + ")";
                 }
                 else
                 { baselineWilcoxon = "n.s. vs. Baseline (Wilcoxon Rank Sum)"
@@ -511,12 +511,12 @@ namespace ProjectManager
                 {
                     drugBurden += "\xB*";
                     vehicleWilcoxon = "\xB* p<0.05 vs. Vehicle (Wilcoxon Rank Sum)"
-                                      + "(p=" + allData[drugGroup].burdenPValue.ToString("G2") + ")";
+                                      + "(p=" + allData["vehicle"].burdenPValue.ToString("G2") + ")";
                 }
                 else
                 {
                     vehicleWilcoxon = "n.s. vs. Vehicle (Wilcoxon Rank Sum)"
-                                      + "(p=" + allData[drugGroup].burdenPValue.ToString("G2") + ")"; 
+                                      + "(p=" + allData["vehicle"].burdenPValue.ToString("G2") + ")"; 
 
                 }
 

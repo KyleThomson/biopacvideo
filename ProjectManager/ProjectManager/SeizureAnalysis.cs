@@ -45,6 +45,7 @@ namespace ProjectManager
 
         public void DetermineTreatment(List<AnimalType> animals)
         {
+            // This method identifies if the animals were mediated via injection or meal. Decides how to detect groups
             bool _injections = false;
             bool _meals = false;
 
@@ -63,6 +64,8 @@ namespace ProjectManager
         }
         private double FisherExact(string group1, string group2)
         {
+            // This method gets seizure freedom information and organizes it into a 2x2 contingency table.
+            // Calls on static FisherExact method
             double pvalue;
 
             int group1Seized = groupedData[group1].numAnimals - groupedData[group1].szFreedom;
@@ -77,6 +80,7 @@ namespace ProjectManager
         }
         private double MWW(string group1, string group2)
         {
+            // Gets data from two different groups and uses static MannWhitneyWilcoxon to find significance
             double[] group1Burdens = groupedData[group1].szBurdens.ToArray();
             double[] group2Burdens = groupedData[group2].szBurdens.ToArray();
 
@@ -154,6 +158,8 @@ namespace ProjectManager
                                 groupTimes[groupTimes.Count - 1] += 12;
                             }
                             else
+                            // Baseline condition manually add times - baseline always t = 0 to first injection
+                            // (This might have to be adjusted to just be 7 days before first injection, which would be a simple change in this block of code)
                             {
                                 groupTimes = new List<double>
                                 {
@@ -181,20 +187,14 @@ namespace ProjectManager
                 }
 
                 groupedData[group].szBurdens = burdens;
-                groupedData[group].burdenSEM = SEM(burdens);
+                groupedData[group].burdenSEM = ExtraMath.Sem(burdens);
                 groupedData[group].szFreedom = groupFreedom;
                 groupedData[group].numAnimals = groupAnimals;
                 groupedData[group].szBurden = Math.Round(burdens.Average(), 1);
             }
 
         }
-        public double SEM(List<double> sz)
-        {
-            var n = sz.Count;
-            var sigma = ExtraMath.StdDev(sz);
-            var sem = sigma / Math.Sqrt(n);
-            return Math.Round(sem, 1);
-        }
+        
         public int CompareSeizures(SeizureType seizure, string animalID)
         {
             // dictionary to replace parsed integers with string
@@ -222,6 +222,7 @@ namespace ProjectManager
                 // Check if bubble and note match and flag if it doesn't -- want to prompt user with messagebox
                 if (bubbleSeverity != noteSeverity)
                 {
+                    // Open dialog for user to select correct seizure
                     string ID = animalID + " had seizure at " + seizure.d.ToString();
                     SeizureStageDialog stageDialog = new SeizureStageDialog();
                     stageDialog.ShowDialog(bubbleSeverity, noteSeverity, ID, seizure.Notes);
@@ -254,9 +255,10 @@ namespace ProjectManager
                     finalStage = bubbleSeverity;
                 }
             }
+            // if user input a -1 into notes, handle it
             else if (noteSeverity == -1)
             {
-                finalStage = bubbleSeverity;
+                
             }
             else
             {
@@ -285,6 +287,7 @@ namespace ProjectManager
                     {
                         foreach (var injection in animal.Injections)
                         {
+                            // Use DL algorithm to do a check if vehicle is an injection ID. other injection IDs dont matter and should be added to groups
                             var result = DamerauLevenshtein.DamerauLevenshteinDistanceTo(
                                 injection.ADDID.ToLower(), "vehicle") <= 3 ? "vehicle" : injection.ADDID;
                             // New group found, add to Groups and the analysis groups
@@ -292,6 +295,8 @@ namespace ProjectManager
                                 groups.Add(result);
                             else if (result == injection.ADDID && !groups.Contains(injection.ADDID))
                                 groups.Add(result);
+                            if (result == "vehicle")
+                                injection.ADDID = result;
                         }
                         // Sort groups alphabetically
                         groups = groups.OrderBy(o => o).ToList();

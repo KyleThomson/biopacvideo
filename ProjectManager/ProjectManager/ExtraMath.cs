@@ -11,10 +11,11 @@ namespace ProjectManager
         public static BigInteger Factorial(int x)
         {
             // initialize result
+            // BigInteger makes this not return an absurd result since huge factorials are involved here
             BigInteger result = 1;
 
             // Loop until we get to 1
-            // 0! = 1, create condition
+            // 0! = 1, create condition by stopping loop at i == 1, no point in hard coding a rule that only multiplies by 1
             if (x > 0)
             {
                 for (int i = x; i > 0; i--)
@@ -30,6 +31,7 @@ namespace ProjectManager
         }
         public static double FisherExact(int a, int b, int c, int d)
         {
+            // hypothesis test for 2x2 contingency table
             int N = a + b + c + d;
 
             // calculate numerator for fisher exact
@@ -44,6 +46,7 @@ namespace ProjectManager
         }
         public static double MannWhitneyWilcoxon(double[] sample1, double[] sample2)
         {
+            // hypothesis test
             double pvalue;
             MannWhitneyWilcoxonTest mwwTest = new MannWhitneyWilcoxonTest(sample1, sample2, 
                 TwoSampleHypothesis.FirstValueIsSmallerThanSecond, exact: false);
@@ -54,8 +57,9 @@ namespace ProjectManager
 
         public static double Variance(List<double> x)
         {
-            double n = x.Count();
             double variance = 0;
+            if (x.Count == 0) return variance; 
+            double n = x.Count();
             double mean = x.Average();
 
             for (int i = 0; i < x.Count; i++)
@@ -68,10 +72,19 @@ namespace ProjectManager
 
         public static double StdDev(List<double> x)
         {
+            // standard deviation
             double variance = Variance(x);
             double sigma = Math.Sqrt(variance);
 
             return sigma;
+        }
+        public static double Sem(List<double> x)
+        {
+            // Computes standard error of the mean
+            var n = x.Count;
+            var sigma = StdDev(x);
+            var sem = sigma / Math.Sqrt(n);
+            return Math.Round(sem, 1);
         }
     }
 }

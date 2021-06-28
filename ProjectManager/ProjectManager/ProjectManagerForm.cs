@@ -13,6 +13,7 @@ namespace ProjectManager
         {
             InitializeComponent();
             MainSelect.SelectedIndex = 0;
+            pjt = new Project("");
             // Handle event for form closing in case there are unsaved changes to project file.
             //FormClosing += (sender, e) => { ProjectManager_FormClosing(sender, e); };
         }
