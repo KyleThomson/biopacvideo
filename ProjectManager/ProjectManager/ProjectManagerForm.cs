@@ -300,6 +300,7 @@ namespace ProjectManager
                     ChangeTitleText(pjt.Filename);
                 }
             }
+            UpdateSecondList();
         }
         private void delete_secondlist(object sender, EventArgs e)
         {

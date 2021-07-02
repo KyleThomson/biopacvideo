@@ -73,6 +73,7 @@ namespace ProjectManager
         }
         private void AxisScale()
         {
+            // scaling factor for plotting data on the 2D axes
             xScale = (float)((axes.axesList[1].X - axes.axesList[0].X) * 0.95/ maxXData);
             yScale = (axes.yAxisLength - axes.yAxisStart) / maxYData;
             axes.xScale = xScale;
@@ -80,6 +81,7 @@ namespace ProjectManager
         }
         public void DrawAxes(float penWidth)
         {
+            // call axes object
             Pen axisPen = new Pen(Brushes.Black);
             axisPen.Width = penWidth * objectScale;
             axes.axesWidth = penWidth;
@@ -103,40 +105,12 @@ namespace ProjectManager
         public void WriteXLabel(string xLabel, Font font)
         {
             // Update Axes properties
-            axes.XLabel(xLabel);
-
-            // Format string
-            SolidBrush drawBrush = new SolidBrush(Color.Black);
-            StringFormat drawFormat = new StringFormat();
-            drawFormat.Alignment = StringAlignment.Center;
-
-            // Get size of the string
-            SizeF xLabelSize = graphics.MeasureString(xLabel, font);
-
-            // Use size of string and length of axis to center the label
-            float xPoint = (axes.xAxisLength + axes.xAxisStart) / 2 - xLabelSize.Width / 2;
-            float yPoint = axesPoints[0].Y;
-            RectangleF xLabelRect = new RectangleF((xPoint), (float)(yPoint * 1.05), xLabelSize.Width, xLabelSize.Height);
-            graphics.DrawString(xLabel, font, drawBrush, xLabelRect, drawFormat);
+            axes.XLabel(xLabel, font);
         }
         public void WriteYLabel(string yLabel, Font font)
         {
             // Update Axes properties
-            axes.YLabel(yLabel);
-
-            // Format string
-            SolidBrush drawBrush = new SolidBrush(Color.Black);
-            StringFormat yLabelFormat = new StringFormat();
-            yLabelFormat.FormatFlags = StringFormatFlags.DirectionVertical;
-
-            // Get size of the string
-            SizeF yLabelSize = graphics.MeasureString(yLabel, font);
-
-            // Use size of string and length of axis to center the label
-            float xPoint = axesPoints[0].X;
-            float yPoint = (axes.yAxisLength + axes.yAxisStart) / 2 - yLabelSize.Width / 2;
-            RectangleF yLabelRect = new RectangleF((float)(xPoint * 0.70), yPoint, yLabelSize.Height, yLabelSize.Width);
-            graphics.DrawString(yLabel, font, drawBrush, yLabelRect, yLabelFormat);
+            axes.YLabel(yLabel, font);
         }
         public void PlotPoints(float xCoord, float yCoord, int markerSize, string markerType, Color color)
         {
@@ -160,12 +134,6 @@ namespace ProjectManager
             else if (markerType == ".")
             {
                 graphics.FillEllipse(dataBrush, realXCoord, realYCoord - (markerSize * objectScale) / 2, markerSize * objectScale, markerSize * objectScale);
-            }
-            else if (markerType == "d")
-            {
-                //gotta do some math to draw a rhombus/diamond marker
-                DrawDiamond(realXCoord + axes.xAxisStart, realYCoord, markerSize * objectScale);
-                // If we lived in a perfect world this would draw a diamond.
             }
             else
             {
@@ -225,41 +193,24 @@ namespace ProjectManager
         {
             foreach (Control control in graphForm.Controls)
             {
-                PictureBox picture = control as PictureBox;
-                if (picture != null)
-                {
-                    graphForm.Controls.Remove(picture);
-                    // Dispose of control to conserve memory
-                    control.Dispose();
-                    // Force Garbage Collection to work - seems to only cleanup unnecessary graph controls and not the project data
-                    // Using GC object, it seems, is not advisable but it doesn't interfere with other processes in this specific case.
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-                }
+                var currentPicture = control as PictureBox;
+
+                if (currentPicture == null) continue;
+
+                graphForm.Controls.Remove(picture);
+
+                // Dispose of control to conserve memory
+                control.Dispose();
+
+                // Force Garbage Collection to work - seems to only cleanup unnecessary graph controls and not the project data
+                // Using GC object, it seems, is not advisable but it doesn't interfere with other processes in this specific case.
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
             }
-        }
-        public void DrawDiamond(float centerX, float centerY, float size)
-        {
-            // This doesn't work.
-            Pen dataPen = new Pen(Brushes.Black);
-            SolidBrush dataBrush = new SolidBrush(Color.Black);
-
-            PointF left = new PointF(centerX - size, centerY);
-            PointF right = new PointF(centerX + size, centerY);
-            PointF top = new PointF(centerX, centerY + size);
-            PointF bottom = new PointF(centerX, centerY - size);
-
-            PointF[] dPoints = new PointF[] { left, right, top, bottom };
-
-            graphics.DrawPolygon(dataPen, dPoints);
-        }
-        public void TextBox(string inputStr, Color color, Font font)
-        {
-            SolidBrush dataBrush = new SolidBrush(Color.Black);
-            graphics.DrawString(inputStr, new Font("Arial", 12), dataBrush, X / 2, Y / 6);
         }
         public void SaveFig()
         {
+            // Open new save file dialog and define extension etc
             SaveFileDialog graphSaveDialog = new SaveFileDialog();
             graphSaveDialog.DefaultExt = ".png";
             graphSaveDialog.Filter = "PNG files (*.png) |*.png";
@@ -272,11 +223,11 @@ namespace ProjectManager
                 foreach (Control control in graphForm.Controls)
                 {
                     // when picture is found, save if not null
-                    PictureBox picture = control as PictureBox;
-                    if (picture != null)
-                    {
-                        picture.Image.Save(graphSaveDialog.FileName);
-                    }
+                    var currentPicture = control as PictureBox;
+
+                    if (currentPicture == null) continue;
+
+                    currentPicture.Image.Save(graphSaveDialog.FileName);
                 }
             }
         }

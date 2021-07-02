@@ -48,13 +48,37 @@ namespace ProjectManager
         {
             // hypothesis test
             double pvalue;
+
             MannWhitneyWilcoxonTest mwwTest = new MannWhitneyWilcoxonTest(sample1, sample2, 
-                TwoSampleHypothesis.FirstValueIsSmallerThanSecond, exact: false);
+                TwoSampleHypothesis.FirstValueIsSmallerThanSecond, exact: true);
+
             pvalue = mwwTest.PValue;
 
             return pvalue;
         }
 
+        public static double RankSum(double[] sample1, double[] sample2)
+        {
+            // method returns pvalue for wilcoxon rank sum test
+            double[] diffs = ArrayDifference(sample1, sample2);
+            int[] ranks = new int[diffs.Length];
+            WilcoxonTest wilcoxonTest = new WilcoxonTest(ranks, diffs, DistributionTail.TwoTail);
+
+            double pvalue = wilcoxonTest.PValue;
+
+            return pvalue;
+        }
+
+        public static double[] ArrayDifference(double[] xDoubles, double[] yDoubles)
+        {
+            if (xDoubles.Length != yDoubles.Length) return null;
+
+            double[] result = new double[xDoubles.Length];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = xDoubles[i] - yDoubles[i];
+
+            return result;
+        }
         public static double Variance(List<double> x)
         {
             double variance = 0;
