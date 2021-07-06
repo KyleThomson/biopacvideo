@@ -35,8 +35,8 @@ namespace ProjectManager
                     copyGroups.Remove("Baseline");
                     copyGroups.Remove("vehicle");
                     string drugGroup = copyGroups[0];
-                    groupedData["Baseline"].freedomPValue = FisherExact(drugGroup, "Baseline");
-                    groupedData["vehicle"].freedomPValue = FisherExact(drugGroup, "vehicle");
+                    groupedData[drugGroup].freedomPValue = FisherExact(drugGroup, "Baseline");
+                    groupedData["vehicle"].freedomPValue = FisherExact("vehicle", "Baseline");
 
                     break;
             }

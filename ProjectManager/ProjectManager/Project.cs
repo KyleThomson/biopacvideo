@@ -251,19 +251,14 @@ namespace ProjectManager
         public void Analysis()
         {
             // check if there was a test performed
-            if (analysis.test == TESTTYPES.UNDEFINED)
-            { return; }
-            else
-            {
-                if (!analysis._analysisDone)
-                {
-                    // Computer burden and freedoms
-                    analysis.SzBurdenAndFreedom(Animals, Earliest: Files[0].Start.Date, "Injection");
-                    analysis.SeizureFreedomPValue();
-                    analysis.SeizureBurdenPValue();
-                    analysis._analysisDone = true;
-                }
-            }
+            if (analysis.test == TESTTYPES.UNDEFINED) return;
+            if (analysis._analysisDone) return;
+
+            // Computer burden and freedoms
+            analysis.SzBurdenAndFreedom(Animals, Earliest: Files[0].Start.Date, "Injection");
+            analysis.SeizureFreedomPValue();
+            analysis.SeizureBurdenPValue();
+            analysis._analysisDone = true;
         }
         public void CompareStageConflicts()
         {

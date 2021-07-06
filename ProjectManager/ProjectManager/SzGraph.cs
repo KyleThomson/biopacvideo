@@ -36,16 +36,19 @@ namespace ProjectManager
             // Type of test
             test = pjt.analysis.test;
             project = pjt;
+
             // Find max day of project
             Earliest = project.Files[0].Start.Date;
             Latest = project.Files[project.Files.Count - 1].Start.Date;
             double totalHours = Latest.Subtract(Earliest).TotalHours;
             int tempMax = (int)Math.Round(totalHours / 24, 2);
+            // Line up first injections to 7 days
             AlignToInjection();
+
             // x tick every 7 days           
             int xTickInterval = 7;
 
-            // Get nearest multiple of 7 days
+            // Get nearest multiple of 7 days, for drawing axis ticks
             int nearestMultiple = (int)Math.Round(tempMax / (double)xTickInterval, MidpointRounding.AwayFromZero) * xTickInterval;
             int numXTicks = (nearestMultiple / xTickInterval) + 1;
 
@@ -98,6 +101,7 @@ namespace ProjectManager
         }
         private void SetTestDescriptors()
         {
+            // class has form with editable fields for etsp, dose, freq, batch
             TestDescription description = new TestDescription();
             description.ShowDialog();
             // set description for the test - this will display in subheaders
@@ -111,7 +115,8 @@ namespace ProjectManager
         private List<string> GetYTickLabels()
         {
             List<string> yTickString = new List<string>();
-            //Obtain basis for y and x axis labelling
+
+            // use animal ID for y axis tick labels
             for (int i = 0; i < project.Animals.Count; i++)
             {
                 yTickString.Add(project.Animals[i].ID);
@@ -120,13 +125,18 @@ namespace ProjectManager
         }
         public void PlotSz()
         {
-            // Plot seizures the same for both test 35 and test 36
+            // Plot seizures
             int markerSize = 6;
             Color szColor = Color.FromName("Black");
             for (int i = 0; i < project.Animals.Count; i++)
             {
+                // have to align seizures so that first injection is 7 days
                 var align = project.Animals[i].alignBy7Days;
+
+                // new y coord
                 float yCoord = i + 1;
+                
+                // plot each seizure
                 for (int j = 0; j < project.Animals[i].Sz.Count; j++)
                 {
                     float xCoord = (float)(Math.Round((project.Animals[i].Sz[j].d.Date.Subtract(Earliest).TotalHours + project.Animals[i].Sz[j].t.TotalHours) / 24 - align, 2));
@@ -134,11 +144,11 @@ namespace ProjectManager
                     { xCoord = 0; }
                     if (project.Animals[i].Sz[j].Severity > 0)
                     {
-                        graph.PlotPoints((float)(xCoord), yCoord, markerSize, "o", szColor);
+                        graph.PlotPoints(xCoord, yCoord, markerSize, "o", szColor);
                     }
                     else if (project.Animals[i].Sz[j].Severity == 0)
                     {
-                        graph.PlotPoints((float)(xCoord), (float)(yCoord - 0.05), markerSize, ".", szColor);
+                        graph.PlotPoints(xCoord, (float)(yCoord - 0.05), markerSize, ".", szColor);
                     }
 
                 }
@@ -180,7 +190,7 @@ namespace ProjectManager
                         {
                             if (vehicleTimes[0] < 0)
                             { vehicleTimes[0] = 0; }
-                            graph.Line(vehicleTimes[0], yCoord, (float)(vehicleTimes[vehicleTimes.Count - 1] + 0.5), yCoord, lineWidth, vehicleColor);
+                            graph.Line(vehicleTimes.Min(), yCoord, (float)(vehicleTimes.Max() + 0.5), yCoord, lineWidth, vehicleColor);
                         }
 
 

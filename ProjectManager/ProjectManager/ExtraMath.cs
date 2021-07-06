@@ -50,7 +50,7 @@ namespace ProjectManager
             double pvalue;
 
             MannWhitneyWilcoxonTest mwwTest = new MannWhitneyWilcoxonTest(sample1, sample2, 
-                TwoSampleHypothesis.FirstValueIsSmallerThanSecond, exact: true);
+                TwoSampleHypothesis.ValuesAreDifferent, exact: false);
 
             pvalue = mwwTest.PValue;
 
