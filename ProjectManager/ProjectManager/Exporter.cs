@@ -20,6 +20,7 @@ namespace ProjectManager
             if (MedCount.Checked) E.Med = true;
             if (MealCheck.Checked) E.Meal = true;
             if (SzTimes.Checked) E.SzTime = true;
+            if (seizureDuration.Checked) E.seizureDuration = true;
             if (DetailList.Checked) E.DetailList = true;
             if (Notes.Checked) E.Notes = true;
             if (SzSvBox.Checked) E.SeverityIndx = true;

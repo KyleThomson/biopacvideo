@@ -19,3 +19,5 @@ ProjectManager/ProjectManager/obj/x86/Debug/ProjectManager.Properties.Resources.
 ProjectManager/ProjectManager/obj/x86/Debug/ProjectManager.SaveReminderDialog.resources
 ProjectManager/ProjectManager/obj/x86/Debug/ProjectManager.TestInput.resources
 ProjectManager/ProjectManager/obj/x86/Debug/ProjectManager.WeightAdd.resources
+*.application
+*.manifest

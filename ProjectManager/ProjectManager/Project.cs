@@ -735,6 +735,16 @@ namespace ProjectManager
                     F.WriteLine(st);
                 }
 
+                if (E.seizureDuration)
+                {
+                    st = A.ID;
+                    foreach (SeizureType seizure in A.Sz)
+                    {
+                        var duration = seizure.length;
+                        st += ", " + duration.ToString();
+                    }
+                    F.WriteLine(st);
+                }
                 if (E.SeverityIndx)
                     st = A.ID;
                 foreach (SeizureType S in A.Sz)

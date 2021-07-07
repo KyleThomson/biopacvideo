@@ -45,6 +45,7 @@
             this.binSeizures = new System.Windows.Forms.CheckBox();
             this.groupedSz = new System.Windows.Forms.CheckBox();
             this.ungroupedSz = new System.Windows.Forms.CheckBox();
+            this.seizureDuration = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // SzCount
@@ -80,7 +81,7 @@
             // MedCount
             // 
             this.MedCount.AutoSize = true;
-            this.MedCount.Location = new System.Drawing.Point(12, 127);
+            this.MedCount.Location = new System.Drawing.Point(12, 152);
             this.MedCount.Name = "MedCount";
             this.MedCount.Size = new System.Drawing.Size(73, 17);
             this.MedCount.TabIndex = 3;
@@ -130,7 +131,7 @@
             // MealCheck
             // 
             this.MealCheck.AutoSize = true;
-            this.MealCheck.Location = new System.Drawing.Point(12, 104);
+            this.MealCheck.Location = new System.Drawing.Point(12, 129);
             this.MealCheck.Name = "MealCheck";
             this.MealCheck.Size = new System.Drawing.Size(49, 17);
             this.MealCheck.TabIndex = 8;
@@ -170,7 +171,7 @@
             // BloodDraw
             // 
             this.BloodDraw.AutoSize = true;
-            this.BloodDraw.Location = new System.Drawing.Point(12, 150);
+            this.BloodDraw.Location = new System.Drawing.Point(12, 175);
             this.BloodDraw.Name = "BloodDraw";
             this.BloodDraw.Size = new System.Drawing.Size(86, 17);
             this.BloodDraw.TabIndex = 12;
@@ -180,7 +181,7 @@
             // BloodDrawList
             // 
             this.BloodDrawList.AutoSize = true;
-            this.BloodDrawList.Location = new System.Drawing.Point(12, 173);
+            this.BloodDrawList.Location = new System.Drawing.Point(12, 198);
             this.BloodDrawList.Name = "BloodDrawList";
             this.BloodDrawList.Size = new System.Drawing.Size(111, 17);
             this.BloodDrawList.TabIndex = 13;
@@ -222,11 +223,22 @@
             this.ungroupedSz.UseVisualStyleBackColor = true;
             this.ungroupedSz.CheckedChanged += new System.EventHandler(this.ungroupedSz_CheckedChanged);
             // 
+            // seizureDuration
+            // 
+            this.seizureDuration.AutoSize = true;
+            this.seizureDuration.Location = new System.Drawing.Point(12, 104);
+            this.seizureDuration.Name = "seizureDuration";
+            this.seizureDuration.Size = new System.Drawing.Size(104, 17);
+            this.seizureDuration.TabIndex = 17;
+            this.seizureDuration.Text = "Seizure Duration";
+            this.seizureDuration.UseVisualStyleBackColor = true;
+            // 
             // Exporter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(224, 233);
+            this.Controls.Add(this.seizureDuration);
             this.Controls.Add(this.ungroupedSz);
             this.Controls.Add(this.groupedSz);
             this.Controls.Add(this.binSeizures);
@@ -271,5 +283,6 @@
         private System.Windows.Forms.CheckBox binSeizures;
         private System.Windows.Forms.CheckBox groupedSz;
         private System.Windows.Forms.CheckBox ungroupedSz;
+        private System.Windows.Forms.CheckBox seizureDuration;
     }
 }
