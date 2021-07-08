@@ -422,11 +422,11 @@ namespace ProjectManager
             SizeF headerSize = graph.graphics.MeasureString(headerString, headerFont);
             SizeF subSize = graph.graphics.MeasureString(subheader, subFont);
 
-            PointF headerPoint = new PointF(graph.mainPlot.Width / 2 - headerSize.Width / 2, (float)(graph.mainPlot.Height * 0.05));
-            PointF subPoint = new PointF(graph.mainPlot.Width / 2 - subSize.Width / 2, (float)(graph.mainPlot.Height * 0.05 + headerSize.Height));
+            PointF headerPoint = new PointF(graph.mainPlot.Width / 2 - headerSize.Width / 2, (float)(graph.mainPlot.Height * 0.01));
+            PointF subPoint = new PointF(graph.mainPlot.Width / 2 - subSize.Width / 2, (float)(graph.mainPlot.Height * 0.01 + headerSize.Height));
 
             // Draw rectangles first
-            RectangleF headerRect = new RectangleF((int)(graph.mainPlot.Width / 2 - subSize.Width / 2), (int)(graph.mainPlot.Height * 0.05), (int)subSize.Width, (int)(headerSize.Height + subSize.Height));
+            RectangleF headerRect = new RectangleF((int)(graph.mainPlot.Width / 2 - subSize.Width / 2), (int)(graph.mainPlot.Height * 0.01), (int)subSize.Width, (int)(headerSize.Height + subSize.Height));
             Pen headerPen = new Pen(Brushes.Black);
             headerPen.Width = 2.0F * graph.objectScale;
             SolidBrush solidBrush = new SolidBrush(Color.LightGray);
@@ -473,13 +473,13 @@ namespace ProjectManager
             // Draw Daily Seizure Burden header
             string burdenString = "Daily Seizure Burden";
             SizeF burdenSize = graph.graphics.MeasureString(burdenString, headerFont);
-            PointF burdenPoint = new PointF((float)(graph.mainPlot.Width / 2 - burdenSize.Width / 0.65), (float)(graph.axes.yAxisStart * 0.65));
+            PointF burdenPoint = new PointF((float)(graph.axes.xAxisStart + burdenSize.Width / 2), (float)(graph.axes.yAxisStart * 0.65));
             graph.graphics.DrawString(burdenString, headerFont, headerBrush, burdenPoint);
 
             // Draw Seizure Freedom header
             string freedomString = "Seizure Freedom";
             SizeF freedomSize = graph.graphics.MeasureString(freedomString, headerFont);
-            PointF freedomPoint = new PointF((float)(graph.mainPlot.Width / 2 + freedomSize.Width / 1.25), (float)(graph.axes.yAxisStart * 0.65));
+            PointF freedomPoint = new PointF((float)(graph.axes.xAxisLength - freedomSize.Width / 2), (float)(graph.axes.yAxisStart * 0.65));
             graph.graphics.DrawString(freedomString, headerFont, headerBrush, freedomPoint);
 
             if (test == TESTTYPES.T35)
@@ -659,7 +659,7 @@ namespace ProjectManager
             { _empty = false; }
             graph.ClearGraph();
             DrawGraph();
-            graph.SaveFig();
+            //graph.SaveFig();
         }
         private void AddButtons()
         {

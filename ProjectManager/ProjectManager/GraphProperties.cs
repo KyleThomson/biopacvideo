@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 namespace ProjectManager
 {
@@ -32,7 +34,11 @@ namespace ProjectManager
             screenWidth = Screen.PrimaryScreen.Bounds.Width;
             screenHeight = Screen.PrimaryScreen.Bounds.Height;
 
-            X = width; Y = height;
+            //X = width; 
+            //Y = height;
+
+            X = screenWidth;
+            Y = screenHeight;
 
             // bitmap initialization
             mainPlot = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
@@ -67,7 +73,9 @@ namespace ProjectManager
         {
             // calculate target scaling factor to maintain graph aspect ratio on any screen
             scale = Math.Min(screenWidth / (float)X, screenHeight / (float)Y);
+            scale = 1;
             objectScale = 1 / scale;
+            //objectScale = 4;
             axes.objectScale = objectScale;
             axes.scale = scale;
         }
@@ -186,8 +194,27 @@ namespace ProjectManager
         {
             // re-size form and picture and show
             PictureBox resizedPicture = ScaleGraph();
-            graphForm.Controls.Add(resizedPicture);
-            graphForm.Show();
+            //graphForm.Controls.Add(resizedPicture);
+            Bitmap resized = Resize();
+            //graphForm.Controls.Add(resized);
+            //graphForm.Show();
+            graphics.DrawImage(resized, 0, 0);
+            // Open new save file dialog and define extension etc
+            SaveFileDialog graphSaveDialog = new SaveFileDialog();
+            graphSaveDialog.DefaultExt = ".png";
+            graphSaveDialog.Filter = "PNG files (*.png) |*.png";
+            graphSaveDialog.Title = "Save Graph (.png) file";
+            graphSaveDialog.InitialDirectory = "D:\\";
+
+            if (graphSaveDialog.ShowDialog() == DialogResult.OK)
+            {
+                resized.Save(graphSaveDialog.FileName);
+            }
+        }
+
+        private void AddBmpToForm(Bitmap bitmap)
+        {
+           
         }
         public void ClearGraph()
         {
@@ -230,6 +257,38 @@ namespace ProjectManager
                     currentPicture.Image.Save(graphSaveDialog.FileName);
                 }
             }
+        }
+
+        private Bitmap Resize()
+        {
+            // get a scaled dimensions
+            int scaleWidth = (int) (X * scale);
+            int scaleHeight = (int) (Y * scale);
+
+            // get resolution for 8.5" x 11"
+            float xResolution = (float) (graphics.DpiX / 8.5);
+            float yResolution = graphics.DpiY / 11;
+
+            var resizedImage = new Rectangle((screenWidth - scaleWidth) / 2, (screenHeight - scaleHeight) / 2, scaleWidth, scaleHeight);
+            var resizedBitmap = new Bitmap(scaleWidth, scaleHeight);
+            resizedBitmap.SetResolution(xResolution, yResolution);
+
+            using (var gfx = Graphics.FromImage(resizedBitmap))
+            {
+                gfx.CompositingMode = CompositingMode.SourceCopy;
+                gfx.CompositingQuality = CompositingQuality.HighQuality;
+                gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                gfx.SmoothingMode = SmoothingMode.HighQuality;
+                gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    gfx.DrawImage(mainPlot, resizedImage, 0, 0, mainPlot.Width, mainPlot.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return resizedBitmap;
         }
 
 
