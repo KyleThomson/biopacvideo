@@ -919,12 +919,6 @@ namespace ProjectManager
                                         };
                                     }
 
-                                    // Grab seizures in the injection window, then compute burden and answer freedom question
-                                    var groupSeizures =
-                                        A.Sz.Where(S =>
-                                            S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= groupTimes.Min()
-                                            && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <=
-                                            groupTimes.Max()).ToList();
                                     // first injection
                                     double alignBy =
                                         Math.Round(A.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);

@@ -34,16 +34,17 @@ namespace ProjectManager
             screenWidth = Screen.PrimaryScreen.Bounds.Width;
             screenHeight = Screen.PrimaryScreen.Bounds.Height;
 
-            //X = width; 
+            //X = width;
             //Y = height;
-
-            X = screenWidth;
-            Y = screenHeight;
+            X = (int)(96 * 8.5 * 3.0);
+            Y = (int)(96 * 11.0 * 3.0);
 
             // bitmap initialization
             mainPlot = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
             graphics = Graphics.FromImage(mainPlot);
             graphics.Clear(Color.White);
+
+            
 
             // create context object to pass to axes
             Context context = new Context(graphics);
@@ -72,10 +73,17 @@ namespace ProjectManager
         private void ObjectScaling()
         {
             // calculate target scaling factor to maintain graph aspect ratio on any screen
-            scale = Math.Min(screenWidth / (float)X, screenHeight / (float)Y);
-            scale = 1;
-            objectScale = 1 / scale;
-            //objectScale = 4;
+            //scale = Math.Min(screenWidth / (float)X, screenHeight / (float)Y);
+            // get resolution for 8.5" x 11"
+            var xResolution = graphics.DpiX * 8.5;
+            var yResolution = graphics.DpiY * 11.0;
+
+            scale = (float)(mainPlot.Width / xResolution < mainPlot.Height / yResolution
+                ? mainPlot.Width / xResolution
+                : mainPlot.Height / yResolution);
+
+            //objectScale = 1 / scale;
+            objectScale = scale;
             axes.objectScale = objectScale;
             axes.scale = scale;
         }
@@ -165,40 +173,14 @@ namespace ProjectManager
             PointF endPoint = new PointF(realX2Coord, realY2Coord);
             graphics.DrawLine(dataPen, startPoint, endPoint);
         }
-        public PictureBox ScaleGraph()
-        {
-            // Scaled dimensions of new graph
-            var scaleWidth = (int)(mainPlot.Width * scale);
-            var scaleHeight = (int)(mainPlot.Height * scale);
-
-            // Create new bitmap and graphics to fit graph to monitor
-            //Bitmap bmp = new Bitmap(mainPlot, new Size(screenWidth, screenHeight));
-            Bitmap bmp = new Bitmap(mainPlot, new Size(scaleWidth, scaleHeight));
-            var newGfx = Graphics.FromImage(bmp);
-            newGfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            newGfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-            // Re-draw the graphics we already created
-            newGfx.DrawImage(mainPlot, 0, 0, scaleWidth, scaleHeight);
-
-            PictureBox resizedPicture = new PictureBox();
-            resizedPicture.ClientSize = new Size(scaleWidth, scaleHeight);
-            resizedPicture.Image = bmp;
-
-            // Set size of form to fit monitor
-            graphForm.Size = new Size(scaleWidth, scaleHeight);
-
-            return resizedPicture;
-        }
         public void DisplayGraph()
         {
-            // re-size form and picture and show
-            PictureBox resizedPicture = ScaleGraph();
-            //graphForm.Controls.Add(resizedPicture);
+            // Resize bitmap
             Bitmap resized = Resize();
-            //graphForm.Controls.Add(resized);
-            //graphForm.Show();
+            
+            // Draw new image
             graphics.DrawImage(resized, 0, 0);
+
             // Open new save file dialog and define extension etc
             SaveFileDialog graphSaveDialog = new SaveFileDialog();
             graphSaveDialog.DefaultExt = ".png";
@@ -207,17 +189,11 @@ namespace ProjectManager
             graphSaveDialog.InitialDirectory = "D:\\";
 
             if (graphSaveDialog.ShowDialog() == DialogResult.OK)
-            {
                 resized.Save(graphSaveDialog.FileName);
-            }
-        }
-
-        private void AddBmpToForm(Bitmap bitmap)
-        {
-           
         }
         public void ClearGraph()
         {
+            // search form for controls that are pictures and remove them
             foreach (Control control in graphForm.Controls)
             {
                 var currentPicture = control as PictureBox;
@@ -261,18 +237,20 @@ namespace ProjectManager
 
         private Bitmap Resize()
         {
-            // get a scaled dimensions
-            int scaleWidth = (int) (X * scale);
-            int scaleHeight = (int) (Y * scale);
+            // get scaled dimensions
+            int scaleWidth = (int)(X / scale);
+            int scaleHeight = (int)(Y / scale);
 
-            // get resolution for 8.5" x 11"
-            float xResolution = (float) (graphics.DpiX / 8.5);
-            float yResolution = graphics.DpiY / 11;
+            // create a resized image with new dimensions
+            var resizedImage = new Rectangle((X - scaleWidth) / 2, (Y - scaleHeight) / 2, scaleWidth, scaleHeight);
 
-            var resizedImage = new Rectangle((screenWidth - scaleWidth) / 2, (screenHeight - scaleHeight) / 2, scaleWidth, scaleHeight);
-            var resizedBitmap = new Bitmap(scaleWidth, scaleHeight);
-            resizedBitmap.SetResolution(xResolution, yResolution);
+            // make a new bitmap  - this will get drawn to with new dimensions
+            var resizedBitmap = new Bitmap(mainPlot.Width, mainPlot.Height);
 
+            // increase resolution? unsure if this is really necessary
+            resizedBitmap.SetResolution((float)300, (float)300);
+
+            // use temp graphics object to make image drawn higher quality
             using (var gfx = Graphics.FromImage(resizedBitmap))
             {
                 gfx.CompositingMode = CompositingMode.SourceCopy;
