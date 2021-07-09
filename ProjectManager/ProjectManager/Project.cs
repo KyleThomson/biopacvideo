@@ -859,37 +859,34 @@ namespace ProjectManager
                     StreamWriter sw = new StreamWriter(binned.FileName);
                     sw.AutoFlush = true;
                     int numDays = (int) Math.Floor(Latest.Subtract(Earliest).TotalDays) + 1;
+                    
+                    // Write dates
+                    var dates = "Date";
+                    for (var dt = Earliest; dt <= Latest; dt = dt.AddDays(1))
+                        dates += ", " + dt.ToString("d");
+                    sw.WriteLine(dates);
+
                     if (E.ungrouped)
                     {
                         foreach (AnimalType A in Animals)
                         {
                             // first injection
-                            double alignBy = Math.Round(A.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);
+                            double alignBy = Math.Round(A.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 1);
                             sz = A.ID;
 
                             // Create list for days that seizures happen
-                            List<double> szDay = new List<double>();
+                            var szDay = new List<double>();
 
                             foreach (SeizureType seizureType in A.Sz)
-                            {
                                 if (seizureType.Severity != -1)
-                                {
-                                    if (seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays >= alignBy)
-                                    {
-                                        szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays +
-                                            seizureType.t.TotalDays - alignBy));
-                                    }
-                                }
-                            }
+                                    szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays) + 1);
 
                             // create empty array of 0s to insert frequencies into
-                            List<double> binSeizures = BinSeizure(numDays, szDay);
+                            var binSeizures = BinSeizure(numDays, szDay);
 
                             // Create string of seizure occurrences to write to .csv
                             for (int i = 0; i < binSeizures.Count; i++)
-                            {
-                                sz += "," + binSeizures[i].ToString();
-                            }
+                                sz += "," + binSeizures[i].ToString("N");
 
                             sw.WriteLine(sz); // write seizures
                         }
@@ -932,12 +929,6 @@ namespace ProjectManager
                                         };
                                     }
 
-                                    // Grab seizures in the injection window, then compute burden and answer freedom question
-                                    var groupSeizures =
-                                        A.Sz.Where(S =>
-                                            S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= groupTimes.Min()
-                                            && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <=
-                                            groupTimes.Max()).ToList();
                                     // first injection
                                     double alignBy =
                                         Math.Round(A.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);
@@ -948,16 +939,11 @@ namespace ProjectManager
                                     List<double> binSeizures = new List<double>(new double[numDays]);
 
                                     // Find seizures that happened in groups
-                                    foreach (SeizureType seizureType in groupSeizures)
-                                    {
-                                        if (seizureType.d.Subtract(Earliest).TotalDays + seizureType.t.TotalDays >=
-                                            alignBy)
-                                        {
-                                            szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays +
-                                                seizureType.t.TotalDays - alignBy));
-                                        }
-                                    }
+                                    foreach (SeizureType seizureType in A.Sz)
+                                        if (seizureType.Severity != -1)
+                                            szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays) + 1);
 
+                                    // use LINQ to enumerate groups of doubles
                                     var g = szDay.GroupBy(i => i);
                                     foreach (var bin in g)
                                     {

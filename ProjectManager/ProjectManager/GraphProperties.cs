@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 namespace ProjectManager
 {
     public class GraphProperties
     {
         public Bitmap mainPlot;
+        public Bitmap resizedPlot;
         public Graphics graphics;
-        public Pen axisPen;
         public Axes axes;
         public float maxXData;
         public float maxYData;
@@ -20,19 +22,17 @@ namespace ProjectManager
         public float xScale;
         public float yScale;
         public float objectScale;
-        public int screenWidth { get; set; }
-        public int screenHeight { get; set; }
 
         public GraphProperties(int width, int height, float maxX, float maxY)
         {
             // Set input arguments as max data
             maxXData = maxX; maxYData = maxY;
 
-            // First find resolution that graphics will be scaled to
-            screenWidth = Screen.PrimaryScreen.Bounds.Width;
-            screenHeight = Screen.PrimaryScreen.Bounds.Height;
-
-            X = width; Y = height;
+            // initial bitmap dimensions (intentionally big)
+            // want the 8.5"x11" dimensions, DPI * inches = pixels, this should work at any screen resolution
+            // windows defaults to 96 dpi so that's what we're gonna use
+            X = (int)(96 * 8.5);
+            Y = (int)(96 * 11.0);
 
             // bitmap initialization
             mainPlot = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
@@ -58,16 +58,26 @@ namespace ProjectManager
         private void ImproveResolution()
         {
             // Set smoothing mode for graphics in initialization. This will smooth out edges when drawing round objects.
-            graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
             // High quality interpolation makes rescaling of image maintain resolution.
-            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+            graphics.CompositingQuality = CompositingQuality.HighQuality;
+            graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
         }
 
         private void ObjectScaling()
         {
+            // get resolution for 8.5" x 11"
+            var xResolution = graphics.DpiX * 8.5;
+            var yResolution = graphics.DpiY * 11.0;
+
             // calculate target scaling factor to maintain graph aspect ratio on any screen
-            scale = Math.Min(screenWidth / (float)X, screenHeight / (float)Y);
-            objectScale = 1 / scale;
+            scale = (float)(mainPlot.Width / xResolution < mainPlot.Height / yResolution
+                ? mainPlot.Width / xResolution : mainPlot.Height / yResolution);
+
+            // set properties
+            objectScale = scale;
             axes.objectScale = objectScale;
             axes.scale = scale;
         }
@@ -120,7 +130,6 @@ namespace ProjectManager
             SolidBrush dataBrush = new SolidBrush(Color.Black);
             dataBrush.Color = color;
             var centerPoint = markerSize / 2 * objectScale;
-            // Calculate a scale factor that is in units of Pixels/unit
 
             // Convert input coordinate points
             float realXCoord = xCoord * xScale + axes.xTickPoints[0] - centerPoint;
@@ -157,40 +166,25 @@ namespace ProjectManager
             PointF endPoint = new PointF(realX2Coord, realY2Coord);
             graphics.DrawLine(dataPen, startPoint, endPoint);
         }
-        public PictureBox ScaleGraph()
-        {
-            // Scaled dimensions of new graph
-            var scaleWidth = (int)(mainPlot.Width * scale);
-            var scaleHeight = (int)(mainPlot.Height * scale);
-
-            // Create new bitmap and graphics to fit graph to monitor
-            //Bitmap bmp = new Bitmap(mainPlot, new Size(screenWidth, screenHeight));
-            Bitmap bmp = new Bitmap(mainPlot, new Size(scaleWidth, scaleHeight));
-            var newGfx = Graphics.FromImage(bmp);
-            newGfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            newGfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-            // Re-draw the graphics we already created
-            newGfx.DrawImage(mainPlot, 0, 0, scaleWidth, scaleHeight);
-
-            PictureBox resizedPicture = new PictureBox();
-            resizedPicture.ClientSize = new Size(scaleWidth, scaleHeight);
-            resizedPicture.Image = bmp;
-
-            // Set size of form to fit monitor
-            graphForm.Size = new Size(scaleWidth, scaleHeight);
-
-            return resizedPicture;
-        }
         public void DisplayGraph()
         {
-            // re-size form and picture and show
-            PictureBox resizedPicture = ScaleGraph();
-            graphForm.Controls.Add(resizedPicture);
+            // Resize bitmap
+            resizedPlot = Resize();
+            
+            // Draw new image
+            graphics.DrawImage(resizedPlot, 0, 0);
+
+            // Add image to bitmap
+            picture.Image = resizedPlot;
+            graphForm.Controls.Add(picture);
             graphForm.Show();
+
+            // Save figure
+            SaveFig();
         }
         public void ClearGraph()
         {
+            // search form for controls that are pictures and remove them
             foreach (Control control in graphForm.Controls)
             {
                 var currentPicture = control as PictureBox;
@@ -218,18 +212,41 @@ namespace ProjectManager
             graphSaveDialog.InitialDirectory = "D:\\";
 
             if (graphSaveDialog.ShowDialog() == DialogResult.OK)
+                resizedPlot.Save(graphSaveDialog.FileName);
+        }
+
+        private Bitmap Resize()
+        {
+            // get scaled dimensions
+            int scaleWidth = (int)(X / scale);
+            int scaleHeight = (int)(Y / scale);
+
+            // create a resized image with new dimensions
+            var resizedImage = new Rectangle((X - scaleWidth) / 2, (Y - scaleHeight) / 2, scaleWidth, scaleHeight);
+
+            // make a new bitmap  - this will get drawn to with new dimensions
+            var resizedBitmap = new Bitmap(mainPlot.Width, mainPlot.Height);
+
+            // increase resolution? unsure if this is really necessary
+            resizedBitmap.SetResolution(mainPlot.HorizontalResolution, mainPlot.VerticalResolution);
+
+            // use temp graphics object to make image drawn higher quality
+            using (var gfx = Graphics.FromImage(resizedBitmap))
             {
-                // search controls for picture
-                foreach (Control control in graphForm.Controls)
+                gfx.CompositingMode = CompositingMode.SourceCopy;
+                gfx.CompositingQuality = CompositingQuality.HighQuality;
+                gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                gfx.SmoothingMode = SmoothingMode.HighQuality;
+                gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
                 {
-                    // when picture is found, save if not null
-                    var currentPicture = control as PictureBox;
-
-                    if (currentPicture == null) continue;
-
-                    currentPicture.Image.Save(graphSaveDialog.FileName);
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    gfx.DrawImage(mainPlot, resizedImage, 0, 0, mainPlot.Width, mainPlot.Height, GraphicsUnit.Pixel, wrapMode);
                 }
             }
+
+            return resizedBitmap;
         }
 
 

@@ -611,7 +611,7 @@ namespace ProjectManager
         {
             SzGraph Test = new SzGraph(4000, 4000, pjt);
             Test.DrawGraph();
-            Test.graph.DisplayGraph();
+            //Test.graph.DisplayGraph();
         }
 
         private void rejectUnreviewedFilesToolStripMenuItem_Click(object sender, EventArgs e)

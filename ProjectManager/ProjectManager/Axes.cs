@@ -113,7 +113,7 @@ namespace ProjectManager
             tickPen.Width = tickWidth * objectScale;
             float xTickSpacing = (float)(xAxisLength / (xTicks * 2));
             float yTickSpacing = (float)(yAxisLength / (yTicks * 1.5));
-            Font xFont = new Font("Arial", 10 * objectScale);
+            Font xFont = new Font("Arial", 12 * objectScale);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             float maxXTick = (float)xTickLocations[xTicks - 1];
 
