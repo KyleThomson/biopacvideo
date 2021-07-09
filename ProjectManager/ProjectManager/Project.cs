@@ -647,7 +647,7 @@ namespace ProjectManager
             DateTime Latest = Files[Files.Count - 1].Start.Date;
             st = Earliest.ToShortDateString() + "," + Earliest.ToShortTimeString();
             F.WriteLine(st);
-            string sz;
+            
             if (E.DetailList)
             {
 
@@ -853,6 +853,7 @@ namespace ProjectManager
                 binned.DefaultExt = ".csv";
                 binned.InitialDirectory = "D:\\";
 
+                string sz;
                 if (binned.ShowDialog() == DialogResult.OK)
                 {
                     // Open binned seizure file
@@ -862,33 +863,29 @@ namespace ProjectManager
                     
                     // Write dates
                     var dates = "Date";
+                    var allDates = new List<DateTime>();
                     for (var dt = Earliest; dt <= Latest; dt = dt.AddDays(1))
+                    {
                         dates += ", " + dt.ToString("d");
+                        allDates.Add(dt);
+                    }
+
+                    
+
                     sw.WriteLine(dates);
 
                     if (E.ungrouped)
                     {
-                        foreach (AnimalType A in Animals)
+                        foreach (var animal in Animals)
                         {
-                            // first injection
-                            double alignBy = Math.Round(A.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 1);
-                            sz = A.ID;
+                            sz = animal.ID;
+                            double alignBy = Math.Round(animal.Injections[0].TimePoint.Subtract(allDates[0]).TotalDays - 7, 1);
+                            var counts = BinSeizure(allDates, animal.Sz, alignBy);
 
-                            // Create list for days that seizures happen
-                            var szDay = new List<double>();
+                            foreach (var count in counts)
+                                sz += "," + count.ToString("D");
 
-                            foreach (SeizureType seizureType in A.Sz)
-                                if (seizureType.Severity != -1)
-                                    szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays) + 1);
-
-                            // create empty array of 0s to insert frequencies into
-                            var binSeizures = BinSeizure(numDays, szDay);
-
-                            // Create string of seizure occurrences to write to .csv
-                            for (int i = 0; i < binSeizures.Count; i++)
-                                sz += "," + binSeizures[i].ToString("N");
-
-                            sw.WriteLine(sz); // write seizures
+                            sw.WriteLine(sz);
                         }
 
                         sw.Close(); // close writer
@@ -902,10 +899,10 @@ namespace ProjectManager
                         foreach (string group in analysis.groups)
                         {
                             sw.WriteLine(group);
-                            foreach (AnimalType A in Animals)
+                            foreach (AnimalType animal in Animals)
                             {
                                 // Extract relevant injection IDs and the injection times
-                                List<InjectionType> groupTreatment = A.Injections.Where(I => I.ADDID == group).ToList();
+                                List<InjectionType> groupTreatment = animal.Injections.Where(I => I.ADDID == group).ToList();
                                 if (groupTreatment.Count > 0 || group == "Baseline")
                                 {
 
@@ -925,41 +922,24 @@ namespace ProjectManager
                                         groupTimes = new List<double>
                                         {
                                             0,
-                                            A.Injections[0].TimePoint.Subtract(Earliest).TotalHours - 0.1
+                                            animal.Injections[0].TimePoint.Subtract(Earliest).TotalHours - 0.1
                                         };
                                     }
 
                                     // first injection
                                     double alignBy =
-                                        Math.Round(A.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);
-                                    sz = A.ID;
+                                        Math.Round(animal.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);
+                                    sz = animal.ID;
 
-                                    // Create list for days that seizures happen
-                                    List<double> szDay = new List<double>();
-                                    List<double> binSeizures = new List<double>(new double[numDays]);
+                                    var groupSeizures =
+                                        animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= groupTimes.Min()
+                                                             && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= groupTimes.Max()).ToList();
 
-                                    // Find seizures that happened in groups
-                                    foreach (SeizureType seizureType in A.Sz)
-                                        if (seizureType.Severity != -1)
-                                            szDay.Add(Math.Floor(seizureType.d.Subtract(Earliest).TotalDays) + 1);
-
-                                    // use LINQ to enumerate groups of doubles
-                                    var g = szDay.GroupBy(i => i);
-                                    foreach (var bin in g)
+                                    var counts = BinSeizure(allDates, groupSeizures, alignBy);
+                                    
+                                    foreach (var count in counts)
                                     {
-                                        if (bin.Key > 0)
-                                        {
-                                            binSeizures[(int) (bin.Key - 1)] = bin.Count();
-                                        }
-                                        else
-                                        {
-                                            binSeizures[(int) (bin.Key)] = bin.Count();
-                                        }
-                                    }
-
-                                    for (int i = 0; i < binSeizures.Count; i++)
-                                    {
-                                        sz += "," + binSeizures[i].ToString();
+                                        sz += "," + count.ToString("D");
                                     }
 
                                     sw.WriteLine(sz); // write seizures
@@ -975,29 +955,32 @@ namespace ProjectManager
             }
         }
 
-        private List<double> BinSeizure(int numDays, List<double> szDay)
+        private int[] BinSeizure(List<DateTime> dates, List<SeizureType> seizures, double alignBy)
         {
-            // create empty array of 0s to insert frequencies into
-            List<double> binSeizures = new List<double>(new double[numDays]);
+            // initialize output
+            var counts = new int[dates.Count];
 
-            // bin seizures using GroupBy then step thru the bins and check frequency
-            var g = szDay.GroupBy(i => i);
-            foreach (var bin in g)
+            int i = 0; // counter for dates/bins
+            foreach (var date in dates)
             {
-                if (bin.Key > 0)
-                {
-                    binSeizures[(int)(bin.Key - 1)] = bin.Count();
-                }
-                else if (bin.Key == 0)
-                {
-                    binSeizures[(int)(bin.Key)] = bin.Count();
-                }
+                // add aligned days
+                DateTime shiftedDate = date.AddDays(alignBy);
+                
+                // get seizure datetimes
+                var seizureDates = seizures.Select(s => s.d.AddHours(s.t.TotalHours)).ToList();
+                var binnedDates = seizureDates.Where(dt => dt  >= shiftedDate && dt < shiftedDate.AddHours(24)).ToList();
+
+                // insert into array
+                counts[i] = binnedDates.Count;
+
+                i++; // next bin
             }
-            return binSeizures;
+
+            return counts;
         }
 
         //This function takes the data from the project file and loads it into memory. 
-        void ParseLine(string L)
+        private void ParseLine(string L)
         {
             string[] data;
             string[] IDs;
