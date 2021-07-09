@@ -9,8 +9,8 @@ namespace ProjectManager
     public class GraphProperties
     {
         public Bitmap mainPlot;
+        public Bitmap resizedPlot;
         public Graphics graphics;
-        public Pen axisPen;
         public Axes axes;
         public float maxXData;
         public float maxYData;
@@ -22,29 +22,22 @@ namespace ProjectManager
         public float xScale;
         public float yScale;
         public float objectScale;
-        public int screenWidth { get; set; }
-        public int screenHeight { get; set; }
 
         public GraphProperties(int width, int height, float maxX, float maxY)
         {
             // Set input arguments as max data
             maxXData = maxX; maxYData = maxY;
 
-            // First find resolution that graphics will be scaled to
-            screenWidth = Screen.PrimaryScreen.Bounds.Width;
-            screenHeight = Screen.PrimaryScreen.Bounds.Height;
-
-            //X = width;
-            //Y = height;
-            X = (int)(96 * 8.5 * 3.0);
-            Y = (int)(96 * 11.0 * 3.0);
+            // initial bitmap dimensions (intentionally big)
+            // want the 8.5"x11" dimensions, DPI * inches = pixels, this should work at any screen resolution
+            // windows defaults to 96 dpi so that's what we're gonna use
+            X = (int)(96 * 8.5);
+            Y = (int)(96 * 11.0);
 
             // bitmap initialization
             mainPlot = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
             graphics = Graphics.FromImage(mainPlot);
             graphics.Clear(Color.White);
-
-            
 
             // create context object to pass to axes
             Context context = new Context(graphics);
@@ -65,24 +58,25 @@ namespace ProjectManager
         private void ImproveResolution()
         {
             // Set smoothing mode for graphics in initialization. This will smooth out edges when drawing round objects.
-            graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
             // High quality interpolation makes rescaling of image maintain resolution.
-            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+            graphics.CompositingQuality = CompositingQuality.HighQuality;
+            graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
         }
 
         private void ObjectScaling()
         {
-            // calculate target scaling factor to maintain graph aspect ratio on any screen
-            //scale = Math.Min(screenWidth / (float)X, screenHeight / (float)Y);
             // get resolution for 8.5" x 11"
             var xResolution = graphics.DpiX * 8.5;
             var yResolution = graphics.DpiY * 11.0;
 
+            // calculate target scaling factor to maintain graph aspect ratio on any screen
             scale = (float)(mainPlot.Width / xResolution < mainPlot.Height / yResolution
-                ? mainPlot.Width / xResolution
-                : mainPlot.Height / yResolution);
+                ? mainPlot.Width / xResolution : mainPlot.Height / yResolution);
 
-            //objectScale = 1 / scale;
+            // set properties
             objectScale = scale;
             axes.objectScale = objectScale;
             axes.scale = scale;
@@ -136,7 +130,6 @@ namespace ProjectManager
             SolidBrush dataBrush = new SolidBrush(Color.Black);
             dataBrush.Color = color;
             var centerPoint = markerSize / 2 * objectScale;
-            // Calculate a scale factor that is in units of Pixels/unit
 
             // Convert input coordinate points
             float realXCoord = xCoord * xScale + axes.xTickPoints[0] - centerPoint;
@@ -176,20 +169,18 @@ namespace ProjectManager
         public void DisplayGraph()
         {
             // Resize bitmap
-            Bitmap resized = Resize();
+            resizedPlot = Resize();
             
             // Draw new image
-            graphics.DrawImage(resized, 0, 0);
+            graphics.DrawImage(resizedPlot, 0, 0);
 
-            // Open new save file dialog and define extension etc
-            SaveFileDialog graphSaveDialog = new SaveFileDialog();
-            graphSaveDialog.DefaultExt = ".png";
-            graphSaveDialog.Filter = "PNG files (*.png) |*.png";
-            graphSaveDialog.Title = "Save Graph (.png) file";
-            graphSaveDialog.InitialDirectory = "D:\\";
+            // Add image to bitmap
+            picture.Image = resizedPlot;
+            graphForm.Controls.Add(picture);
+            graphForm.Show();
 
-            if (graphSaveDialog.ShowDialog() == DialogResult.OK)
-                resized.Save(graphSaveDialog.FileName);
+            // Save figure
+            SaveFig();
         }
         public void ClearGraph()
         {
@@ -221,18 +212,7 @@ namespace ProjectManager
             graphSaveDialog.InitialDirectory = "D:\\";
 
             if (graphSaveDialog.ShowDialog() == DialogResult.OK)
-            {
-                // search controls for picture
-                foreach (Control control in graphForm.Controls)
-                {
-                    // when picture is found, save if not null
-                    var currentPicture = control as PictureBox;
-
-                    if (currentPicture == null) continue;
-
-                    currentPicture.Image.Save(graphSaveDialog.FileName);
-                }
-            }
+                resizedPlot.Save(graphSaveDialog.FileName);
         }
 
         private Bitmap Resize()
@@ -248,7 +228,7 @@ namespace ProjectManager
             var resizedBitmap = new Bitmap(mainPlot.Width, mainPlot.Height);
 
             // increase resolution? unsure if this is really necessary
-            resizedBitmap.SetResolution((float)300, (float)300);
+            resizedBitmap.SetResolution(mainPlot.HorizontalResolution, mainPlot.VerticalResolution);
 
             // use temp graphics object to make image drawn higher quality
             using (var gfx = Graphics.FromImage(resizedBitmap))
