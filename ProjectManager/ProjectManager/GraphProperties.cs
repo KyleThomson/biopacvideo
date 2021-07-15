@@ -23,7 +23,7 @@ namespace ProjectManager
         public float yScale;
         public float objectScale;
 
-        public GraphProperties(int width, int height, float maxX, float maxY)
+        public GraphProperties(float maxX, float maxY)
         {
             // Set input arguments as max data
             maxXData = maxX; maxYData = maxY;
@@ -170,12 +170,17 @@ namespace ProjectManager
         {
             // Resize bitmap
             resizedPlot = Resize();
-            
+
+            // resize form
+            graphForm.Size = new Size((int) (resizedPlot.Width * 1.00), (int) (resizedPlot.Width * 1.25));
+
             // Draw new image
             graphics.DrawImage(resizedPlot, 0, 0);
 
             // Add image to bitmap
             picture.Image = resizedPlot;
+            picture.Size = new Size((int)(resizedPlot.Width * 1.00), (int)(resizedPlot.Width * 1.25));
+            picture.Location = new Point(0, 50);
             graphForm.Controls.Add(picture);
             graphForm.Show();
 

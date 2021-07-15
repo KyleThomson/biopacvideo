@@ -26,6 +26,7 @@ namespace ProjectManager
             if (SzSvBox.Checked) E.SeverityIndx = true;
             if (BloodDraw.Checked) E.BloodDraw = true;
             if (BloodDrawList.Checked) E.BloodDrawList = true;
+            if (injections.Checked) E.Injections = true;
             if (binSeizures.Checked)
             {
                 E.binSz = true;

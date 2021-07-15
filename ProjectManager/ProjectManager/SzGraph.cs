@@ -35,7 +35,7 @@ namespace ProjectManager
         private bool _export = true;
 
         
-        public SzGraph(int X, int Y, Project pjt)
+        public SzGraph(Project pjt)
         {
             
             // Type of test
@@ -58,7 +58,7 @@ namespace ProjectManager
             int numXTicks = (nearestMultiple / xTickInterval) + 1;
 
             // Initialize graph by drawing labels, tick points, inputting numbers into GraphProperties
-            graph = new GraphProperties(X, Y, nearestMultiple, project.Animals.Count);
+            graph = new GraphProperties(nearestMultiple, project.Animals.Count);
             graph.axes.xTicks = numXTicks;
 
             // Get axis tick labels for graph properties
@@ -164,51 +164,37 @@ namespace ProjectManager
             float lineWidth = 4;
             Color vehicleColor = Color.FromName("Teal");
             Color drugColor = Color.FromName("Red");
-
+            
             // If Test 35, use injections to draw lines for treatment
             if (test == TESTTYPES.T35)
             {
-                for (int i = 0; i < project.Animals.Count; i++)
+                int i = 0;
+                // Iterate thru animals in project file
+                foreach (AnimalType animal in project.Animals)
                 {
-                    var align = project.Animals[i].alignBy7Days;
+                    var align = animal.alignBy7Days;
                     float yCoord = (float)(i + 0.5);
 
                     // Initialize vehicle and drug treatment times
-                    List<float> vehicleTimes = new List<float>();
-                    List<float> drugTimes = new List<float>();
+                    List<double> vehicleTimes = new List<double>();
+                    List<double> drugTimes = new List<double>();
 
-                    for (int j = 0; j < project.Animals[i].Injections.Count; j++)
+                    foreach (string group in project.analysis.groups)
                     {
-                        foreach (InjectionType I in project.Animals[i].Injections)
-                        {
-                            if (I.ADDID == "vehicle")
-                            {
-                                vehicleTimes.Add((float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24 - align, 2));
-                            }
-                            else
-                            {
-                                drugTimes.Add((float)Math.Round(I.TimePoint.Subtract(Earliest).TotalHours / 24 - align, 2));
-                            }
-                        }
-                        // Draw vehicle line
-                        if (vehicleTimes.Count > 1)
-                        {
-                            if (vehicleTimes[0] < 0)
-                            { vehicleTimes[0] = 0; }
-                            graph.Line(vehicleTimes.Min(), yCoord, (float)(vehicleTimes.Max() + 0.5), yCoord, lineWidth, vehicleColor);
-                        }
-
-
-                        // Draw drug line
-                        if (drugTimes.Count > 1)
-                        {
-                            if (drugTimes[0] < 0)
-                            { drugTimes[0] = 0; }
-                            graph.Line(drugTimes[0], yCoord, (float)(drugTimes[drugTimes.Count - 1] + 0.5), yCoord, lineWidth, drugColor);
-                        }
-
-
+                        if (group == "vehicle")
+                            vehicleTimes = animal.GetInjectionTimes(group, Earliest, align);
+                        else
+                            drugTimes = animal.GetInjectionTimes(group, Earliest, align);
                     }
+                    i++;
+
+                    // plot vehicle
+                    if (vehicleTimes.Count > 0)
+                        graph.Line((float)vehicleTimes.Min(), i, (float)vehicleTimes.Max(), i, lineWidth, vehicleColor);
+
+                    // plot drug
+                    if (drugTimes.Count > 0)
+                        graph.Line((float)drugTimes.Min(), i, (float)drugTimes.Max(), i, lineWidth, drugColor);
                 }
             }
             else if (test == TESTTYPES.T36)
@@ -244,31 +230,34 @@ namespace ProjectManager
             else if (test == TESTTYPES.IAK)
             {
                 project.Animals = project.Animals.OrderBy(a => a.Group.Name).ToList();
-                Color group1Color = Color.Red;
-                Color group2Color = Color.Blue;
-                Color groupColor = default;
-                int i = 1;
-                
-                var yCoord = 0.6;
-                int x = 0;
+                List<Color> groupColors = new List<Color>()
+                {
+                    Color.Red, 
+                    Color.Blue
+                };
+
+                // initialize y coordinate
+                var yCoord = 0.5;
                 foreach (AnimalType animal in project.Animals)
                 {
-                    yCoord = x + 0.5;
+                    // get value to align injections to 7 days
                     var align = animal.alignBy7Days;
-                    var x1 = Math.Round(animal.Injections[0].TimePoint.Subtract(Earliest).TotalHours / 24 - align, 2);
-                    var x2 = Math.Round(animal.Injections[animal.Injections.Count - 1].TimePoint.Subtract(Earliest).TotalHours / 24 - align, 2);
-                    if (animal.Group.Name == project.Groups[0].Name) 
+                    // determine which color to use with this counter
+                    int colorCounter = 0;
+                    foreach (string group in project.analysis.groups)
                     {
-                        groupColor = group1Color;
-                    }
-                    if (animal.Group.Name == project.Groups[1].Name)
-                    {
-                        groupColor = group2Color;
-                    }
-                    graph.Line((float)x1, (float)yCoord, (float)x2, (float)yCoord, lineWidth, groupColor);
-                    x++;
+                        if (group == "Baseline") continue;
+                        // get times for a specific group, we don't know need to know which group it is
+                        var groupTimes = animal.GetInjectionTimes(group, Earliest, align);
 
-                    i++;
+                        // plot line
+                        graph.Line((float)groupTimes.Min(), (float)yCoord, (float)groupTimes.Max(), (float)yCoord, 
+                            lineWidth, groupColors[colorCounter]);
+
+                        colorCounter++;
+                    }
+                    // step y coordinate
+                    yCoord++;
                 }
             }
         }
@@ -310,8 +299,9 @@ namespace ProjectManager
         }
         public void Legend()
         {
-            Legend testLegend = new Legend(new Context(graph.graphics));
             // Method that draws on legend for injection type and seizure type
+
+            // Set drawing properties
             int markerSize = 8;
             Font legendFont = new Font("Arial", 12 * graph.objectScale);
             SolidBrush legendBrush = new SolidBrush(Color.Black);
@@ -359,27 +349,28 @@ namespace ProjectManager
             }
             else if (test == TESTTYPES.IAK)
             {
-                float lineWidth = 4 * graph.objectScale;
                 int i = 1;
                 foreach (GroupType group in project.Groups)
                 {
-                    string label = "Group " + group.Name + ":";
+                    string label = "Group " + group.Name;
                     SizeF labelSize = graph.graphics.MeasureString(label, legendFont);
                     if (i == 1) // Group 1
                     {
-                        Color lineColor = Color.FromName("Red");
+                        Pen label1Pen = new Pen(Brushes.Red);
+                        label1Pen.Width = 4F * graph.objectScale;
                         PointF labelPoint = new PointF(graph.axes.xAxisStart, (float)(graph.axes.axesList[0].Y * 1.1));
                         graph.graphics.DrawString(label, legendFont, legendBrush, labelPoint.X, labelPoint.Y);
-                        graph.Line(labelPoint.X, labelPoint.Y + labelSize.Height,
-                            labelPoint.X + labelSize.Width * 2, labelPoint.Y + labelSize.Height, lineWidth, lineColor);
+                        graph.graphics.DrawLine(label1Pen, labelPoint.X, labelPoint.Y + labelSize.Height,
+                            labelPoint.X + labelSize.Width, labelPoint.Y + labelSize.Height);
                     }
                     else if (i == 2) // Group 2
                     {
-                        Color lineColor = Color.FromName("Blue");
+                        Pen label2Pen = new Pen(Brushes.Blue);
+                        label2Pen.Width = 4F * graph.objectScale;
                         PointF labelPoint = new PointF(graph.axes.xAxisLength - labelSize.Width, (float)(graph.axes.axesList[0].Y * 1.1));
-                        graph.graphics.DrawString(label, legendFont, legendBrush, labelPoint.X, labelPoint.Y + labelSize.Height / 4);
-                        graph.Line(labelPoint.X, labelPoint.Y + labelSize.Height,
-                            labelPoint.X + labelSize.Width, labelPoint.Y + labelSize.Height, lineWidth, lineColor);
+                        graph.graphics.DrawString(label, legendFont, legendBrush, labelPoint.X, labelPoint.Y);
+                        graph.graphics.DrawLine(label2Pen, labelPoint.X, labelPoint.Y + labelSize.Height,
+                            labelPoint.X + labelSize.Width, labelPoint.Y + labelSize.Height);
                     }
                     i++;
                 }
@@ -476,26 +467,27 @@ namespace ProjectManager
 
         private void StatsLabels(double L, double height, int numBoxes)
         {
+            // set properties for text
+            // fonts
             Font headerFont = new Font("Arial", 12F * graph.objectScale);
             SolidBrush headerBrush = new SolidBrush(Color.Black);
-            // Draw Daily Seizure Burden header
+
+            // Strings, string size, string placement
             string burdenString = "Daily Seizure Burden";
             SizeF burdenSize = graph.graphics.MeasureString(burdenString, headerFont);
             var x0 = headerX - burdenSize.Width / 2;
             var y0 = graph.axes.yAxisStart - height * 8;
             var stringPlacement = ((5.0 / 4.0) * L * numBoxes) / 2;
-
             PointF burdenPoint = new PointF((float)(x0 + stringPlacement), (float)y0);
-            graph.graphics.DrawString(burdenString, headerFont, headerBrush, burdenPoint);
 
-            // Draw Seizure Freedom header
             string freedomString = "Seizure Freedom";
-            SizeF freedomSize = graph.graphics.MeasureString(freedomString, headerFont);
+            SizeF freedomSize = graph.graphics.MeasureString(freedomString, headerFont); 
             var x1 = headerLength - freedomSize.Width / 2;
             PointF freedomPoint = new PointF((float)(x1 - stringPlacement), (float)y0);
-            graph.graphics.DrawString(freedomString, headerFont, headerBrush, freedomPoint);
 
-            
+            // Draw
+            graph.graphics.DrawString(burdenString, headerFont, headerBrush, burdenPoint);
+            graph.graphics.DrawString(freedomString, headerFont, headerBrush, freedomPoint);
         }
         public void DisplayStats()
         {
@@ -519,7 +511,6 @@ namespace ProjectManager
                 string baselineBurden = allData["Baseline"].szBurden.ToString("N1") + "\u00B1" + allData["Baseline"].burdenSEM.ToString("N1");
                 string drugBurden = allData[drugGroup].szBurden.ToString("N1") + "\u00B1" + allData[drugGroup].burdenSEM.ToString("N1");
                 string vehicleBurden = allData["vehicle"].szBurden.ToString("N1") + "\u00B1" + allData["vehicle"].burdenSEM.ToString("N1");
-                SizeF baselineS = graph.graphics.MeasureString("Baseline", headerFont);
 
                 // sz freedoms
                 string vehicleFreedom = allData["vehicle"].szFreedom.ToString("D") + "/" + allData["vehicle"].numAnimals.ToString("D");
@@ -581,7 +572,44 @@ namespace ProjectManager
             }
             else if (test == TESTTYPES.T36)
             {
+                // Find the drug group without knowing the name of the drug
+                List<string> copyGroups = project.analysis.groups;
+                copyGroups.Remove("Baseline");
+                copyGroups.Remove("vehicle");
+                string drugGroup = copyGroups[0];
+
+                string drugBurden = allData[drugGroup].szBurden.ToString("N1") + "\u00B1" + allData[drugGroup].burdenSEM.ToString("N1");
                 // test 36 just baseline and drug
+                string baselineWilcoxon;
+                string vehicleWilcoxon;
+                if (allData["Baseline"].burdenPValue < 0.05)
+                {
+                    drugBurden += "\xB†";
+                    baselineWilcoxon = "\xB† p<0.05 vs. Baseline (Wilcoxon Rank Sum)"
+                                       + "(p=" + allData["Baseline"].burdenPValue.ToString("G2") + ")";
+                }
+                else
+                {
+                    baselineWilcoxon = "n.s. vs. Baseline (Wilcoxon Rank Sum)"
+                                       + "(p=" + allData["Baseline"].burdenPValue.ToString("G2") + ")";
+                }
+
+                // Seizure Freedom strings
+                string drugFreedom = allData[drugGroup].szFreedom.ToString("D") + "/" + allData[drugGroup].numAnimals.ToString("D");
+                string baselineFisherExact;
+                string vehicleFisherExact;
+                if (allData["Baseline"].freedomPValue < 0.05)
+                {
+                    drugFreedom += "\xB†";
+                    baselineFisherExact = "\xB† p<0.05 vs. Baseline (Fisher Exact)"
+                                          + "(p=" + allData["Baseline"].freedomPValue.ToString("G2") + ")";
+                }
+                else
+                {
+                    baselineFisherExact = "n.s. vs. Baseline (Fisher Exact)"
+                                          + "(p=" + allData["Baseline"].freedomPValue.ToString("G2") + ")";
+                }
+
             }
             else if (test == TESTTYPES.IAK)
             {
@@ -776,10 +804,6 @@ namespace ProjectManager
         }
         public void DrawGraph()
         {
-            // Clear graphics
-            //Color bg = Color.FromName("White");
-            //graph.graphics.Clear(bg);
-
             // Draw axes
             graph.DrawAxes(4);
             graph.BoundingBox();

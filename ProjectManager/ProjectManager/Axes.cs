@@ -29,7 +29,7 @@ namespace ProjectManager
         public List<string> yTickLabels;
         public List<double> xTickLocations;
 
-        // drawing
+        // Drawing
         public float scale;
         public float objectScale;
         public float xScale;
@@ -43,9 +43,9 @@ namespace ProjectManager
             xTickPoints = new List<float>();
             yTickPoints = new List<float>();
 
-            xAxisLength = (float)(X * 0.75);
+            xAxisLength = (float)(X * 0.85);
             yAxisLength = (float)(Y * 0.75);
-            xAxisStart = (float)(X * 0.25);
+            xAxisStart = (float)(X * 0.15);
             yAxisStart = (float)(Y * 0.25);
 
             PointF xAxisStartPoint = new PointF(xAxisStart, Y - yAxisStart);

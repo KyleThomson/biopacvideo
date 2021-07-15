@@ -609,9 +609,8 @@ namespace ProjectManager
         }
         private void GenerateTest()
         {
-            SzGraph Test = new SzGraph(4000, 4000, pjt);
-            Test.DrawGraph();
-            //Test.graph.DisplayGraph();
+            SzGraph Test = new SzGraph(pjt);
+            Test.DrawGraph();                                                                                                                                                                                                                                                                                                                                                                                                  
         }
 
         private void rejectUnreviewedFilesToolStripMenuItem_Click(object sender, EventArgs e)

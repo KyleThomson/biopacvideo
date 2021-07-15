@@ -861,7 +861,7 @@ namespace ProjectManager
                     sw.AutoFlush = true;
                     int numDays = (int) Math.Floor(Latest.Subtract(Earliest).TotalDays) + 1;
                     
-                    // Write dates
+                    // get dates that animal recordings span
                     var dates = "Date";
                     var allDates = new List<DateTime>();
                     for (var dt = Earliest; dt <= Latest; dt = dt.AddDays(1))
@@ -879,9 +879,13 @@ namespace ProjectManager
                         foreach (var animal in Animals)
                         {
                             sz = animal.ID;
+                            // get fractional days 
                             double alignBy = Math.Round(animal.Injections[0].TimePoint.Subtract(allDates[0]).TotalDays - 7, 1);
+
+                            // bin seizures into integer array
                             var counts = BinSeizure(allDates, animal.Sz, alignBy);
 
+                            // add counts to string that gets written to file
                             foreach (var count in counts)
                                 sz += "," + count.ToString("D");
 
@@ -893,9 +897,8 @@ namespace ProjectManager
                     else if (E.grouped)
                     {
                         // Now that groups are established we can write to file.
-                        if (analysis.groups.Count < 1)
-                        {
-                        }
+                        if (analysis.groups.Count < 1) return;
+
                         foreach (string group in analysis.groups)
                         {
                             sw.WriteLine(group);
@@ -919,6 +922,7 @@ namespace ProjectManager
                                     }
                                     else
                                     {
+                                        // get times for baseline, since we already know what they are
                                         groupTimes = new List<double>
                                         {
                                             0,
@@ -931,12 +935,15 @@ namespace ProjectManager
                                         Math.Round(animal.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);
                                     sz = animal.ID;
 
+                                    // group seizures based on injection/treatment times
                                     var groupSeizures =
                                         animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= groupTimes.Min()
                                                              && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= groupTimes.Max()).ToList();
 
+                                    // bin into array
                                     var counts = BinSeizure(allDates, groupSeizures, alignBy);
                                     
+                                    // write to file
                                     foreach (var count in counts)
                                     {
                                         sz += "," + count.ToString("D");
@@ -957,17 +964,22 @@ namespace ProjectManager
 
         private int[] BinSeizure(List<DateTime> dates, List<SeizureType> seizures, double alignBy)
         {
+            // Function takes seizures, range of dates, and a time to align (days)
+            // the seizures by to bin them into counts, relative to the align time
+
             // initialize output
             var counts = new int[dates.Count];
+
+            // get seizure datetimes
+            var seizureDates = seizures.Select(s => s.d.AddHours(s.t.TotalHours - alignBy * 24)).ToList();
 
             int i = 0; // counter for dates/bins
             foreach (var date in dates)
             {
                 // add aligned days
-                DateTime shiftedDate = date.AddDays(alignBy);
+                DateTime shiftedDate = date.AddDays(-alignBy);
                 
-                // get seizure datetimes
-                var seizureDates = seizures.Select(s => s.d.AddHours(s.t.TotalHours)).ToList();
+                // bin by date
                 var binnedDates = seizureDates.Where(dt => dt  >= shiftedDate && dt < shiftedDate.AddHours(24)).ToList();
 
                 // insert into array

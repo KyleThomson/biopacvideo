@@ -46,6 +46,7 @@
             this.groupedSz = new System.Windows.Forms.CheckBox();
             this.ungroupedSz = new System.Windows.Forms.CheckBox();
             this.seizureDuration = new System.Windows.Forms.CheckBox();
+            this.injections = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // SzCount
@@ -60,7 +61,7 @@
             // 
             // ExportBtn
             // 
-            this.ExportBtn.Location = new System.Drawing.Point(146, 198);
+            this.ExportBtn.Location = new System.Drawing.Point(141, 215);
             this.ExportBtn.Name = "ExportBtn";
             this.ExportBtn.Size = new System.Drawing.Size(75, 23);
             this.ExportBtn.TabIndex = 1;
@@ -233,11 +234,22 @@
             this.seizureDuration.Text = "Seizure Duration";
             this.seizureDuration.UseVisualStyleBackColor = true;
             // 
+            // injections
+            // 
+            this.injections.AutoSize = true;
+            this.injections.Location = new System.Drawing.Point(12, 221);
+            this.injections.Name = "injections";
+            this.injections.Size = new System.Drawing.Size(71, 17);
+            this.injections.TabIndex = 18;
+            this.injections.Text = "Injections";
+            this.injections.UseVisualStyleBackColor = true;
+            // 
             // Exporter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(224, 233);
+            this.ClientSize = new System.Drawing.Size(224, 252);
+            this.Controls.Add(this.injections);
             this.Controls.Add(this.seizureDuration);
             this.Controls.Add(this.ungroupedSz);
             this.Controls.Add(this.groupedSz);
@@ -284,5 +296,6 @@
         private System.Windows.Forms.CheckBox groupedSz;
         private System.Windows.Forms.CheckBox ungroupedSz;
         private System.Windows.Forms.CheckBox seizureDuration;
+        private System.Windows.Forms.CheckBox injections;
     }
 }
