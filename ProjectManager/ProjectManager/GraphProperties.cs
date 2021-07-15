@@ -12,12 +12,14 @@ namespace ProjectManager
         public Bitmap resizedPlot;
         public Graphics graphics;
         public Axes axes;
-        public float maxXData;
-        public float maxYData;
         public PictureBox picture = new PictureBox();
         public Form graphForm = new Form();
+
+        public float maxXData;
+        public float maxYData;
+        
         public List<PointF> axesPoints;
-        public int X; public int Y;
+        public int X, Y;
         public float scale;
         public float xScale;
         public float yScale;

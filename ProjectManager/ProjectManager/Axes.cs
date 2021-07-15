@@ -137,7 +137,7 @@ namespace ProjectManager
                 // create length of ticks
                 PointF yTickStart = new PointF(xAxisStart, (float)(yAxisLength - yTickSpacing * (i + 0.5)));
                 yTickPoints.Add((float)(yAxisLength - yTickSpacing * (i + 0.5)));
-                PointF yTickEnd = new PointF((float)(xAxisStart * 1.02), (float)((yAxisLength - yTickSpacing * (i + 0.5))));
+                PointF yTickEnd = new PointF((float)(xAxisStart * 1.04), (float)((yAxisLength - yTickSpacing * (i + 0.5))));
                 graphContext.graphics.DrawLine(tickPen, yTickStart, yTickEnd);
 
                 // y tick label

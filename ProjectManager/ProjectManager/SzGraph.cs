@@ -144,9 +144,14 @@ namespace ProjectManager
                 // plot each seizure
                 for (int j = 0; j < project.Animals[i].Sz.Count; j++)
                 {
+                    // calculate x coordinate in days and align to first injection at 7 days
                     float xCoord = (float)(Math.Round((project.Animals[i].Sz[j].d.Date.Subtract(Earliest).TotalHours + project.Animals[i].Sz[j].t.TotalHours) / 24 - align, 2));
+                    
+                    // alignment might make seizure less than 0 days, set it back to zero? or exclude??
                     if (xCoord < 0)
                     { xCoord = 0; }
+
+                    // logic for drawing open circle (generalized seizure) vs filled circle (focal seizure)
                     if (project.Animals[i].Sz[j].Severity > 0)
                     {
                         graph.PlotPoints(xCoord, yCoord, markerSize, "o", szColor);
@@ -161,6 +166,7 @@ namespace ProjectManager
         }
         public void PlotTrt()
         {
+            // line properties
             float lineWidth = 4;
             Color vehicleColor = Color.FromName("Teal");
             Color drugColor = Color.FromName("Red");
@@ -168,34 +174,37 @@ namespace ProjectManager
             // If Test 35, use injections to draw lines for treatment
             if (test == TESTTYPES.T35)
             {
-                int i = 0;
+                var yCoord = 0.5;
                 // Iterate thru animals in project file
                 foreach (AnimalType animal in project.Animals)
                 {
                     var align = animal.alignBy7Days;
-                    float yCoord = (float)(i + 0.5);
 
                     // Initialize vehicle and drug treatment times
                     List<double> vehicleTimes = new List<double>();
                     List<double> drugTimes = new List<double>();
 
+                    // Iterate through each group found earlier in ParseGroups()
                     foreach (string group in project.analysis.groups)
                     {
+                        // get times for vehicle injections
                         if (group == "vehicle")
                             vehicleTimes = animal.GetInjectionTimes(group, Earliest, align);
-                        else
+                        // get times for drug group injections
+                        else if (group != "vehicle" && group != "Baseline")
                             drugTimes = animal.GetInjectionTimes(group, Earliest, align);
                     }
-                    i++;
-
                     // plot vehicle
                     if (vehicleTimes.Count > 0)
-                        graph.Line((float)vehicleTimes.Min(), i, (float)vehicleTimes.Max(), i, lineWidth, vehicleColor);
+                        graph.Line((float)vehicleTimes.Min(), (float)yCoord, (float)vehicleTimes.Max(), (float)yCoord, lineWidth, vehicleColor);
 
                     // plot drug
                     if (drugTimes.Count > 0)
-                        graph.Line((float)drugTimes.Min(), i, (float)drugTimes.Max(), i, lineWidth, drugColor);
+                        graph.Line((float)drugTimes.Min(), (float)yCoord, (float)drugTimes.Max(), (float)yCoord, lineWidth, drugColor);
+
+                    yCoord++;
                 }
+                
             }
             else if (test == TESTTYPES.T36)
             {
@@ -315,35 +324,43 @@ namespace ProjectManager
             // Placement point for drug treatment legend
             if (test == TESTTYPES.T35)
             {
+                // string to draw and properties
                 string drugString = "Drug Treatment";
                 PointF drugStringPoint = new PointF(graph.axes.xAxisStart, (float)(graph.axes.axesList[0].Y * 1.1));
                 SizeF drugStringSize = graph.graphics.MeasureString(drugString, legendFont);
+
+                // Draw the string 
                 graph.graphics.DrawString(drugString, legendFont, legendBrush, drugStringPoint.X, drugStringPoint.Y);
                 graph.graphics.DrawLine(drugPen, drugStringPoint.X, drugStringPoint.Y + drugStringSize.Height, drugStringPoint.X + drugStringSize.Width, drugStringPoint.Y + drugStringSize.Height);
 
-                // If Test 35
-                // Placement for vehicle treatment
+                // string to draw and properties
                 string vehicleString = "Vehicle Treatment";
                 SizeF vehicleStringSize = graph.graphics.MeasureString(vehicleString, legendFont);
                 PointF vehicleStringPoint = new PointF(graph.axes.xAxisLength - vehicleStringSize.Width, (float)(graph.axes.axesList[0].Y * 1.1));
+
+                // Draw the string 
                 graph.graphics.DrawString(vehicleString, legendFont, legendBrush, vehicleStringPoint.X, vehicleStringPoint.Y);
                 graph.graphics.DrawLine(vehiclePen, vehicleStringPoint.X, vehicleStringPoint.Y + vehicleStringSize.Height, vehicleStringPoint.X + vehicleStringSize.Width, vehicleStringPoint.Y + vehicleStringSize.Height);
             }
             else if (test == TESTTYPES.T36)
             {
+                // string to draw and properties
                 string drugString = "Medicated Meal:";
                 SolidBrush drugBrush = new SolidBrush(Color.Red);
                 PointF drugStringPoint = new PointF(graph.axes.xAxisStart, (float)(graph.axes.axesList[0].Y * 1.1));
                 SizeF drugStringSize = graph.graphics.MeasureString(drugString, legendFont);
+
+                // Draw the string 
                 graph.graphics.DrawString(drugString, legendFont, legendBrush, drugStringPoint.X, drugStringPoint.Y);
                 graph.graphics.FillEllipse(drugBrush, drugStringPoint.X + drugStringSize.Width, drugStringPoint.Y + drugStringSize.Height / 4, markerSize * graph.objectScale, markerSize * graph.objectScale);
 
-                // If Test 36
-                // Placement for vehicle treatment
+                // string to draw and properties
                 string vehicleString = "Unmedicated Meal:";
                 SolidBrush unmedicatedBrush = new SolidBrush(Color.Blue);
                 SizeF vehicleStringSize = graph.graphics.MeasureString(vehicleString, legendFont);
                 PointF vehicleStringPoint = new PointF(graph.axes.xAxisLength - vehicleStringSize.Width, (float)(graph.axes.axesList[0].Y * 1.1));
+
+                // Draw the string
                 graph.graphics.DrawString(vehicleString, legendFont, legendBrush, vehicleStringPoint.X, vehicleStringPoint.Y);
                 graph.graphics.FillEllipse(unmedicatedBrush, vehicleStringPoint.X + vehicleStringSize.Width, vehicleStringPoint.Y + vehicleStringSize.Height / 4, markerSize * graph.objectScale, markerSize * graph.objectScale);
             }
