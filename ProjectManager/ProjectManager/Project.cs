@@ -626,7 +626,8 @@ namespace ProjectManager
                 else if (_appeared && !file.AnimalIDs.Contains(animal.ID) && file.AnimalIDs.Contains("e"))
                 // If file doesn't have animal ID log a new latest time and set flag to false
                 {
-                    latest = file.Start; _appeared = false;
+                    latest = file.Start;
+                    _appeared = false;
                 }
                 i++;
             }
@@ -896,62 +897,47 @@ namespace ProjectManager
                     }
                     else if (E.grouped)
                     {
-                        // Now that groups are established we can write to file.
+                        // Check for number of groups first and return out of function if there aren't any
                         if (analysis.groups.Count < 1) return;
 
                         foreach (string group in analysis.groups)
                         {
+                            // Write the group name to file
                             sw.WriteLine(group);
+
+                            // if the group is baseline go to next group
+                            if (group == "Baseline") continue;
+
                             foreach (AnimalType animal in Animals)
                             {
-                                // Extract relevant injection IDs and the injection times
-                                List<InjectionType> groupTreatment = animal.Injections.Where(I => I.ADDID == group).ToList();
-                                if (groupTreatment.Count > 0 || group == "Baseline")
-                                {
+                                // first injection to align to
+                                double alignBy =
+                                    Math.Round(animal.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);
 
-                                    //First count animal
-                                    List<double> groupTimes = new List<double>();
-                                    if (group != "Baseline")
-                                    {
-                                        groupTimes = groupTreatment
-                                            .Select(o => (double) o.TimePoint.Subtract(Earliest).TotalHours).ToList();
+                                // Extract Injection times for the specific group
+                                var groupTimes = animal.GetInjectionTimes(group, Earliest, alignBy);
+                                
+                                // Check if any grouped times were found and if they weren't move on to next animal
+                                if (groupTimes.Count < 1) continue;
 
-                                        // Expand injection window to 12 hours after injections are done
-                                        groupTimes = groupTimes.OrderBy(x => x).ToList();
-                                        groupTimes[groupTimes.Count - 1] += 12;
-                                    }
-                                    else
-                                    {
-                                        // get times for baseline, since we already know what they are
-                                        groupTimes = new List<double>
-                                        {
-                                            0,
-                                            animal.Injections[0].TimePoint.Subtract(Earliest).TotalHours - 0.1
-                                        };
-                                    }
+                                // Add 12 hours/half day to last injection for cross-over
+                                groupTimes[groupTimes.Count - 1] += 0.5;
 
-                                    // first injection
-                                    double alignBy =
-                                        Math.Round(animal.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);
-                                    sz = animal.ID;
+                                // group seizures based on injection/treatment times
+                                var groupSeizures =
+                                    animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalDays + S.t.TotalDays >= groupTimes.Min()
+                                                            && S.d.Date.Subtract(Earliest).TotalDays + S.t.TotalDays <= groupTimes.Max()).ToList();
 
-                                    // group seizures based on injection/treatment times
-                                    var groupSeizures =
-                                        animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours >= groupTimes.Min()
-                                                             && S.d.Date.Subtract(Earliest).TotalHours + S.t.TotalHours <= groupTimes.Max()).ToList();
+                                // bin into array
+                                var counts = BinSeizure(allDates, groupSeizures, alignBy);
 
-                                    // bin into array
-                                    var counts = BinSeizure(allDates, groupSeizures, alignBy);
-                                    
-                                    // write to file
-                                    foreach (var count in counts)
-                                    {
-                                        sz += "," + count.ToString("D");
-                                    }
+                                // initialize string to write seizures to with animal name
+                                sz = animal.ID;
+                                // write to file
+                                foreach (var count in counts)
+                                    sz += "," + count.ToString("D");
 
-                                    sw.WriteLine(sz); // write seizures
-                                }
-
+                                sw.WriteLine(sz); // write seizures
                             }
                         }
                         sw.Close();
@@ -971,7 +957,7 @@ namespace ProjectManager
             var counts = new int[dates.Count];
 
             // get seizure datetimes
-            var seizureDates = seizures.Select(s => s.d.AddHours(s.t.TotalHours - alignBy * 24)).ToList();
+            var seizureDates = seizures.Select(s => s.d.AddDays(s.t.TotalDays - alignBy)).ToList();
 
             int i = 0; // counter for dates/bins
             foreach (var date in dates)
@@ -979,8 +965,8 @@ namespace ProjectManager
                 // add aligned days
                 DateTime shiftedDate = date.AddDays(-alignBy);
                 
-                // bin by date
-                var binnedDates = seizureDates.Where(dt => dt  >= shiftedDate && dt < shiftedDate.AddHours(24)).ToList();
+                // bin by date, need to add upper limit by 1 day to bin by entire day
+                var binnedDates = seizureDates.Where(dt => dt  >= shiftedDate && dt < shiftedDate.AddDays(1)).ToList();
 
                 // insert into array
                 counts[i] = binnedDates.Count;

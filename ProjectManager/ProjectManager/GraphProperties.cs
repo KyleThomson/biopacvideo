@@ -184,6 +184,8 @@ namespace ProjectManager
             picture.Size = new Size((int)(resizedPlot.Width * 1.00), (int)(resizedPlot.Width * 1.25));
             picture.Location = new Point(0, 50);
             graphForm.Controls.Add(picture);
+            graphForm.Location = new Point(Screen.PrimaryScreen.Bounds.X, 0);
+            graphForm.TopMost = true;
             graphForm.Show();
 
             // Save figure
