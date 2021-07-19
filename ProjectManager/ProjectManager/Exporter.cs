@@ -34,12 +34,14 @@ namespace ProjectManager
                 {
                     pjt.analysis.test = TESTTYPES.IAK;
                     E.grouped = true;
-                    // Have user assign groups
+                    
                     if (pjt == null)
                         return;
                 }
                 else if (ungroupedSz.Checked)
                 { E.ungrouped = true; }
+                if (align.Checked = true)
+                    E.align = true;
             }
 
 
@@ -85,6 +87,10 @@ namespace ProjectManager
         {
             if (ungroupedSz.Checked)
             { groupedSz.Checked = false; }
+        }
+
+        private void align_CheckedChanged(object sender, EventArgs e)
+        {
         }
     }
 

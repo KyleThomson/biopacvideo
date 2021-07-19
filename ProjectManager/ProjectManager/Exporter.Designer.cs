@@ -47,6 +47,7 @@
             this.ungroupedSz = new System.Windows.Forms.CheckBox();
             this.seizureDuration = new System.Windows.Forms.CheckBox();
             this.injections = new System.Windows.Forms.CheckBox();
+            this.align = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // SzCount
@@ -244,11 +245,24 @@
             this.injections.Text = "Injections";
             this.injections.UseVisualStyleBackColor = true;
             // 
+            // align
+            // 
+            this.align.AutoSize = true;
+            this.align.Enabled = false;
+            this.align.Location = new System.Drawing.Point(137, 196);
+            this.align.Name = "align";
+            this.align.Size = new System.Drawing.Size(49, 17);
+            this.align.TabIndex = 19;
+            this.align.Text = "Align";
+            this.align.UseVisualStyleBackColor = true;
+            this.align.CheckedChanged += new System.EventHandler(this.align_CheckedChanged);
+            // 
             // Exporter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(224, 252);
+            this.Controls.Add(this.align);
             this.Controls.Add(this.injections);
             this.Controls.Add(this.seizureDuration);
             this.Controls.Add(this.ungroupedSz);
@@ -297,5 +311,6 @@
         private System.Windows.Forms.CheckBox ungroupedSz;
         private System.Windows.Forms.CheckBox seizureDuration;
         private System.Windows.Forms.CheckBox injections;
+        private System.Windows.Forms.CheckBox align;
     }
 }

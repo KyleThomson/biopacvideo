@@ -19,6 +19,7 @@
         public bool binSz; 
         public bool grouped; 
         public bool ungrouped;
+        public bool align;
 
         public ExportType()
         {
@@ -36,6 +37,7 @@
             Injections = false;
             InjectionsList = false;
             binSz = false;
+            align = false;
         }
 
     }

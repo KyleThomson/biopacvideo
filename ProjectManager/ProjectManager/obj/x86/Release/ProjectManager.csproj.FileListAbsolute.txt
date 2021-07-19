@@ -34,3 +34,8 @@ C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Release\ProjectManager.csproj.CopyComplete
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Release\ProjectManager.exe
 C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Release\ProjectManager.pdb
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Release\ProjectManager.exe.manifest
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\bin\Release\ProjectManager.application
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Release\ProjectManager.TrustInfo.xml
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Release\ProjectManager.exe.manifest
+C:\Users\John\Documents\GitHub\biopacvideo\ProjectManager\ProjectManager\obj\x86\Release\ProjectManager.application

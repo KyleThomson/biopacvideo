@@ -880,8 +880,16 @@ namespace ProjectManager
                         foreach (var animal in Animals)
                         {
                             sz = animal.ID;
-                            // get fractional days 
-                            double alignBy = Math.Round(animal.Injections[0].TimePoint.Subtract(allDates[0]).TotalDays - 7, 1);
+                            // align seizure dates by this value
+
+                            // assign alignBy to zero first
+                            double alignBy = 0;
+
+                            // check if user selected align
+                            if (E.align)
+                                // change alignBy only if there are injections
+                                if (animal.Injections.Count > 0)
+                                    alignBy = Math.Round(animal.Injections[0].TimePoint.Subtract(allDates[0]).TotalDays - 7, 1);
 
                             // bin seizures into integer array
                             var counts = BinSeizure(allDates, animal.Sz, alignBy);
@@ -947,7 +955,6 @@ namespace ProjectManager
                 F.Close();
             }
         }
-
         private int[] BinSeizure(List<DateTime> dates, List<SeizureType> seizures, double alignBy)
         {
             // Function takes seizures, range of dates, and a time to align (days)

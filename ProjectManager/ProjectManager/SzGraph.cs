@@ -74,12 +74,16 @@ namespace ProjectManager
 
         private void AlignToInjection()
         {
-            List<double> align = new List<double>();
+            // This function gets the earliest injection in days and subtracts 7 days by it. This value will align injections to start at day 7.
+
+            // Iterate thru animals and get unique align time for each
             foreach (AnimalType animal in project.Animals)
             {
+                // earliest injection time
                 var earliestIjt = animal.Injections[0].TimePoint.Subtract(Earliest).TotalDays;
                 if (earliestIjt < 10)
                 {
+                    // set align property for the animal
                     animal.alignBy7Days = earliestIjt - 7;
                 }
             }
@@ -367,9 +371,11 @@ namespace ProjectManager
             else if (test == TESTTYPES.IAK)
             {
                 int i = 1;
-                foreach (GroupType group in project.Groups)
+                foreach (string group in project.analysis.groups)
                 {
-                    string label = "Group " + group.Name;
+                    if (group == "Baseline") continue;
+
+                    string label = "Group " + group;
                     SizeF labelSize = graph.graphics.MeasureString(label, legendFont);
                     if (i == 1) // Group 1
                     {
