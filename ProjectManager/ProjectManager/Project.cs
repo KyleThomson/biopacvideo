@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -66,6 +67,21 @@ namespace ProjectManager
                 }
                 F.Dispose();
             }
+        }
+        public bool ParseNegativeOne(string input)
+        {
+            bool _ignoreNumber = false;
+
+            for (int i = 1; i < input.Length; i++)
+            {
+                if (!int.TryParse(input[i].ToString(), out _))
+                    continue;
+
+                if (int.Parse(input[i].ToString()) == 1 && input[i - 1].ToString() == "-")
+                    _ignoreNumber = true;
+            }
+            return _ignoreNumber;
+                
         }
         public void Open()
         {
@@ -268,6 +284,11 @@ namespace ProjectManager
                 {
                     if (!S.stageAgreement)
                     {
+                        if (ParseNegativeOne(S.Notes))
+                        {
+                            S.keepInAnalysis = false;
+                            continue;
+                        }
                         // ask user for the seizure severity
                         int finalStage = analysis.CompareSeizures(S, A.ID);
                         // set new severity
@@ -926,15 +947,17 @@ namespace ProjectManager
                                 var groupTimes = animal.GetInjectionTimes(group, Earliest, alignBy);
                                 
                                 // Check if any grouped times were found and if they weren't move on to next animal
-                                if (groupTimes.Count < 1) continue;
+                                if (groupTimes.Count < 1)
+                                    continue;
 
                                 // Add 12 hours/half day to last injection for cross-over
                                 groupTimes[groupTimes.Count - 1] += 0.5;
 
                                 // group seizures based on injection/treatment times
                                 var groupSeizures =
-                                    animal.Sz.Where(S => S.d.Date.Subtract(Earliest).TotalDays + S.t.TotalDays >= groupTimes.Min()
-                                                            && S.d.Date.Subtract(Earliest).TotalDays + S.t.TotalDays <= groupTimes.Max()).ToList();
+                                    animal.Sz.Where(S => Math.Floor(S.d.Date.Subtract(Earliest).TotalDays) + S.t.TotalDays >= groupTimes.Min()
+                                                            && Math.Floor(S.d.Date.Subtract(Earliest).TotalDays) + S.t.TotalDays <= groupTimes.Max()
+                                                            && S.keepInAnalysis).ToList();
 
                                 // bin into array
                                 var counts = BinSeizure(allDates, groupSeizures, alignBy);
@@ -964,7 +987,7 @@ namespace ProjectManager
             var counts = new int[dates.Count];
 
             // get seizure datetimes
-            var seizureDates = seizures.Select(s => s.d.AddDays(s.t.TotalDays - alignBy)).ToList();
+            var seizureDates = seizures.Select(s => s.d.Date.AddDays(s.t.TotalDays - alignBy)).ToList();
 
             int i = 0; // counter for dates/bins
             foreach (var date in dates)

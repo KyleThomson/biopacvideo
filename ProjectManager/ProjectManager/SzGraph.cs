@@ -148,12 +148,14 @@ namespace ProjectManager
                 // plot each seizure
                 for (int j = 0; j < project.Animals[i].Sz.Count; j++)
                 {
+                    if (!project.Animals[i].Sz[j].keepInAnalysis)
+                        continue;
                     // calculate x coordinate in days and align to first injection at 7 days
                     float xCoord = (float)(Math.Round((project.Animals[i].Sz[j].d.Date.Subtract(Earliest).TotalHours + project.Animals[i].Sz[j].t.TotalHours) / 24 - align, 2));
                     
                     // alignment might make seizure less than 0 days, set it back to zero? or exclude??
                     if (xCoord < 0)
-                    { xCoord = 0; }
+                        xCoord = 0;
 
                     // logic for drawing open circle (generalized seizure) vs filled circle (focal seizure)
                     if (project.Animals[i].Sz[j].Severity > 0)
@@ -404,7 +406,7 @@ namespace ProjectManager
             SizeF focalSzStringSize = graph.graphics.MeasureString(focalSzString, legendFont);
             PointF focalSzStringPoint = new PointF(graph.axes.xAxisStart, (float)(graph.axes.axesList[0].Y * 1.15));
             graph.graphics.DrawString(focalSzString, legendFont, legendBrush, focalSzStringPoint.X, focalSzStringPoint.Y);
-            graph.graphics.FillEllipse(legendBrush, focalSzStringPoint.X + focalSzStringSize.Width, focalSzStringPoint.Y + focalSzStringSize.Height / 4, markerSize / 2, markerSize / 2);
+            graph.graphics.FillEllipse(legendBrush, focalSzStringPoint.X + focalSzStringSize.Width, focalSzStringPoint.Y + focalSzStringSize.Height / 4, markerSize, markerSize);
 
             // Placement for generalized seizure
             string generalSzString = "Generalized Seizure:";
@@ -739,31 +741,41 @@ namespace ProjectManager
         public void ExportGraph()
         {
             if (_empty)
-            { _empty = false; }
+                _empty = false;
+
             graph.ClearGraph();
             DrawGraph();
-            //graph.SaveFig();
+            graph.SaveFig();
         }
         private void AddButtons()
         {
             // create control for tool bar. this will get added to top of graph
             toolBar1 = new ToolBar();
-            ToolBarButton exportButton = new ToolBarButton();
-            exportButton.Text = "Export";
+
+            ToolBarButton exportButton = new ToolBarButton
+            {
+                Text = "Export"
+            };
 
             ToolBarButton hideEmptyButton = new ToolBarButton
             {
                 Text = "Hide Empty"
             };
 
-            ToolBarButton hideSzButton = new ToolBarButton();
-            hideSzButton.Text = "Hide Seizure";
+            ToolBarButton hideSzButton = new ToolBarButton
+            {
+                Text = "Hide Seizure"
+            };
 
-            ToolBarButton hideTrtButton = new ToolBarButton();
-            hideTrtButton.Text = "Hide Treatment";
+            ToolBarButton hideTrtButton = new ToolBarButton
+            {
+                Text = "Hide Treatment"
+            };
 
-            ToolBarButton clearGraph = new ToolBarButton();
-            clearGraph.Text = "Clear";
+            ToolBarButton clearGraph = new ToolBarButton
+            {
+                Text = "Clear"
+            };
 
             // Add button to toolbar controls
             toolBar1.Buttons.Add(exportButton);
@@ -783,37 +795,40 @@ namespace ProjectManager
             // Figure out which button is hit
             switch (toolBar1.Buttons.IndexOf(e.Button))
             {
-                case 0: // export button
+                case 0: 
+                    // export button
                     ExportGraph();
                     break;
 
-                case 1: // hide empty time
+                case 1: 
+                    // hide empty time
                     if (_empty)
-                    { _empty = false; }
+                         _empty = false;
                     else
-                    { _empty = true; }
+                        _empty = true;
+
                     graph.ClearGraph();
                     DrawGraph();
                     break;
 
-                case 2: // hide seizures
+                case 2: 
+                    // hide seizures
                     if (_sz)
-                    {
                         _sz = false;
-                    }
                     else
-                    {
                         _sz = true;
-                    }
+
                     graph.ClearGraph();
                     DrawGraph();
                     break;
 
-                case 3: // hide treatments
+                case 3: 
+                    // hide treatments
                     if (_treatment)
-                    { _treatment = false; }
+                        _treatment = false;
                     else
-                    { _treatment = true; }
+                        _treatment = true;
+
                     graph.ClearGraph();
                     DrawGraph();
                     break;
@@ -822,7 +837,6 @@ namespace ProjectManager
                     // Clear graphics
                     graph.ClearGraph();
                     break;
-
             }
         }
         public void DrawGraph()
@@ -830,20 +844,20 @@ namespace ProjectManager
             // Draw axes
             graph.DrawAxes(4);
             graph.BoundingBox();
-            Font aFont = new Font("Arial", 12 * graph.objectScale);
+            Font aFont = new Font("Arial", 14 * graph.objectScale);
             graph.DrawTicks(graph.axes.xTicks, project.Animals.Count, 3.0F);
             graph.WriteXLabel("Time (days)", aFont);
             graph.WriteYLabel("Animals", aFont);
 
             // Draw data
             if (_sz)
-            { PlotSz(); }
+                PlotSz();
 
             if (_treatment)
-            { PlotTrt(); }
+                PlotTrt();
 
             if (_empty)
-            { PlotEmpty(); }
+                PlotEmpty();
 
             // Draw descriptors
             Legend();

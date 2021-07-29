@@ -244,7 +244,7 @@ namespace ProjectManager
                             }
                             else
                             {
-
+                                finalStage = bubbleSeverity;
                             }
                         }
                     }

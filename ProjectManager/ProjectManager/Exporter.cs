@@ -40,7 +40,8 @@ namespace ProjectManager
                 }
                 else if (ungroupedSz.Checked)
                 { E.ungrouped = true; }
-                if (align.Checked = true)
+
+                if (align.Checked)
                     E.align = true;
             }
 
@@ -64,11 +65,13 @@ namespace ProjectManager
             {
                 groupedSz.Enabled = true;
                 ungroupedSz.Enabled = true;
+                align.Enabled = true;
             }
             else if (!binSeizures.Checked)
             {
                 groupedSz.Enabled = false;
                 ungroupedSz.Enabled = false;
+                align.Enabled = false;
             }
         }
 

@@ -251,9 +251,9 @@
             this.align.Enabled = false;
             this.align.Location = new System.Drawing.Point(137, 196);
             this.align.Name = "align";
-            this.align.Size = new System.Drawing.Size(49, 17);
+            this.align.Size = new System.Drawing.Size(116, 17);
             this.align.TabIndex = 19;
-            this.align.Text = "Align";
+            this.align.Text = "Align To Treatment";
             this.align.UseVisualStyleBackColor = true;
             this.align.CheckedChanged += new System.EventHandler(this.align_CheckedChanged);
             // 
@@ -261,7 +261,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(224, 252);
+            this.ClientSize = new System.Drawing.Size(261, 252);
             this.Controls.Add(this.align);
             this.Controls.Add(this.injections);
             this.Controls.Add(this.seizureDuration);

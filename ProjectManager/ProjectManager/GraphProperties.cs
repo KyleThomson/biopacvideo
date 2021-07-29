@@ -187,18 +187,14 @@ namespace ProjectManager
             graphForm.Location = new Point(Screen.PrimaryScreen.Bounds.X, 0);
             graphForm.TopMost = true;
             graphForm.Show();
-
-            // Save figure
-            SaveFig();
         }
         public void ClearGraph()
         {
             // search form for controls that are pictures and remove them
             foreach (Control control in graphForm.Controls)
             {
-                var currentPicture = control as PictureBox;
-
-                if (currentPicture == null) continue;
+                // Check next control if not a picture
+                if (!(control is PictureBox _)) continue;
 
                 graphForm.Controls.Remove(picture);
 

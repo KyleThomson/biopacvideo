@@ -68,24 +68,18 @@ namespace ProjectManager
             yLabel = label;
             // Format string
             SolidBrush drawBrush = new SolidBrush(Color.Black);
-            StringFormat yLabelFormat = new StringFormat();
-            yLabelFormat.Alignment = StringAlignment.Center;
 
             // Get size of the string and bounds
-            SizeF yLabelSize = graphContext.graphics.MeasureString(yLabel, font);
             SizeF bounds = graphContext.graphics.VisibleClipBounds.Size;
 
-            // Use size of string and length of axis to center the label
-            float xPoint = axesList[0].X;
-            float yPoint = (yAxisLength + yAxisStart) / 2 - yLabelSize.Width / 2;
-            //RectangleF yLabelRect = new RectangleF((float)(xPoint * 0.70), yPoint, yLabelSize.Width, yLabelSize.Height);
-            RectangleF yLabelRect = new RectangleF(bounds.ToPointF().X, bounds.ToPointF().Y, bounds.Width, bounds.Height);
-
             // Rotate graphics first
-            graphContext.graphics.TranslateTransform(bounds.Width, 0);
-            graphContext.graphics.RotateTransform(90);
+            graphContext.graphics.TranslateTransform(bounds.Width / 2f, bounds.Height / 2f);
+            graphContext.graphics.RotateTransform(270);
 
-            graphContext.graphics.DrawString(yLabel, font, drawBrush, yLabelRect, yLabelFormat);
+            // Draw string on transformed graphics
+            graphContext.graphics.DrawString(yLabel, font, drawBrush, 0, (-bounds.Width / 2f) * 0.95f);
+
+            // Set graphics back to normal coordinate system
             graphContext.graphics.ResetTransform();
         }
         public void XLabel(string label, Font font)
