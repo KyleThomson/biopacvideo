@@ -406,7 +406,7 @@ namespace ProjectManager
                     if (Math.Ceiling(PercentCompletion) < 100)
                     {
                         DialogResult dialogResult = MessageBox.Show(
-                            FName[0] + "at %" + PercentCompletion.ToString() + " - Import Anyway?",
+                            FName[0] + " at %" + Math.Round(PercentCompletion,2).ToString() + " - Import Anyway?",
                             "Review Not Complete",
                              MessageBoxButtons.YesNo);
                         if (dialogResult == DialogResult.No)
