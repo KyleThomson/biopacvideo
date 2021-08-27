@@ -409,7 +409,7 @@ namespace ProjectManager
             Frm.Dispose();
         }
 
-        private void addMultipleDirectoriesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void addMultipleDirectoriesToolStripMenuItem_Click(object sender, EventArgs e) 
         {
             if (pjt == null)
             {
@@ -418,6 +418,8 @@ namespace ProjectManager
                 
             }
             int DuplicateDirectoryCount = 0;
+            int SuccessfullyImportedDirectory = 0;
+            int NotImported = 0;
             MultiDirectoryAdd Frm = new MultiDirectoryAdd();
             Frm.ShowDialog();
             if (Frm.Pass)
@@ -428,7 +430,18 @@ namespace ProjectManager
                     int result = pjt.ImportDirectory(Frm.DirReturn[i], this.rejectUnreviewedFilesToolStripMenuItem.Checked);
                     if (result == 2)
                     {
+                        // User elected to not include file during import
+                        NotImported++;
+                    }
+                    else if (result == 1)
+                    {
+                        // User tried adding directory that was already in .pjt file
                         DuplicateDirectoryCount++;
+                    }
+                    else if (result == 0)
+                    {
+                        // The file was imported into the current .pjt file
+                        SuccessfullyImportedDirectory++;
                     }
                 }
                 pjt.FileChanged();

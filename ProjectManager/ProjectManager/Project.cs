@@ -413,6 +413,10 @@ namespace ProjectManager
                         {
                             return 2;
                         }
+                        else if (dialogResult == DialogResult.Yes)
+                        {
+                            //return 1;
+                        }
                     }
                 }
                 F.Reviewer = BioINI.IniReadValue("Review", "Reviewer", "");
@@ -425,7 +429,8 @@ namespace ProjectManager
                 F.Duration = TimeSpan.FromSeconds(TempACQ.FileTime);
 
                 TempACQ.closeACQ();
-                FileType Fs = Files.Find(delegate (FileType Ft) { return ((DateTime.Compare(Ft.Start, F.Start) == 0) && (string.Compare(F.AnimalIDs[0], Ft.AnimalIDs[0]) == 0)); });
+                FileType Fs = Files.Find(delegate (FileType Ft) { return ((DateTime.Compare(Ft.Start, F.Start) == 0) &&
+                    (string.Compare(F.AnimalIDs[0], Ft.AnimalIDs[0]) == 0)); });
                 //Determine if duplicate file - compare animal name and file start
                 if (Fs != null)
                 {
