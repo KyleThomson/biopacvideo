@@ -19,6 +19,7 @@ namespace ProjectManager
             //t = t + TimeSpan.FromSeconds(d.TimeOfDay.TotalSeconds);
             int.TryParse(e, out length);
             file = f;
+            TrimFileName();
             Notes = c;
             Severity = -1;
         }
@@ -29,6 +30,7 @@ namespace ProjectManager
             //t = t + TimeSpan.FromSeconds(d.TimeOfDay.TotalSeconds);
             int.TryParse(e, out length);
             file = f;
+            TrimFileName();
             Notes = c;
             int.TryParse(g, out Severity);
         }
@@ -38,6 +40,12 @@ namespace ProjectManager
                 return true;
             else
                 return false;
+        }
+        private void TrimFileName()
+        {
+            int index = file.IndexOf("_");
+            if (index >= 0)
+                file = file.Substring(0, index);
         }
     }
 }

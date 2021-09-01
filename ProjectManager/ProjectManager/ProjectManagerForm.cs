@@ -80,6 +80,7 @@ namespace ProjectManager
                 }
 
             }
+            MainSelect.SelectedIndex = 0;
         }
         private void UpdateSecondList()
         {
@@ -87,6 +88,7 @@ namespace ProjectManager
                 return;
             SecondList.Items.Clear();
             if (MainList.SelectedIndex == -1) return; //No file selected
+
             if (MainSelect.SelectedIndex == 0) //Files
             {
                 if (SecondSelect.SelectedIndex == 0)
@@ -99,6 +101,18 @@ namespace ProjectManager
                             SecondList.Items.Add(A);
                         }
                     }
+                }
+                else if (SecondSelect.SelectedIndex == 1)
+                {
+                    // reset list
+                    SecondList.Items.Clear();
+
+                    // call method to get array of strings for all seizures in selected file
+                    string[] seizures = pjt.GetSeizuresInFile(pjt.Files[MainList.SelectedIndex]);
+
+                    // populate secondlist with seizures from string array
+                    for (int i = 0; i < seizures.Length; i++)
+                        SecondList.Items.Add(seizures[i]);
                 }
             }
             else if (MainSelect.SelectedIndex == 1) //Animals
@@ -356,6 +370,7 @@ namespace ProjectManager
             {
                 SecondSelect.Items.Clear();
                 SecondSelect.Items.Add("Animals");
+                SecondSelect.Items.Add("Seizures");
                 SecondSelect.SelectedIndex = 0;
             }
             else if (MainSelect.SelectedIndex == 1)

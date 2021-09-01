@@ -224,6 +224,37 @@ namespace ProjectManager
             return Szs;
 
         }
+        public string[] GetSeizuresInFile(FileType file)
+        {
+            // initialize list of seizure output
+            string[] seizures;
+
+            // create list to add seizures to for the input file
+            List<SeizureType> fileSeizures = new List<SeizureType>();
+            List<SeizureType> tempSeizures = new List<SeizureType>();
+
+            // iterate thru animals and create list of seizures for the animals in file
+            foreach (string animalID in file.AnimalIDs)
+            {
+                // locate animal in list
+                int idx = FindAnimal(animalID);
+
+                // match animal seizures to file
+                tempSeizures = Animals[idx].Sz.Where(s => s.file.Contains(file.fileName)).ToList();
+                fileSeizures.AddRange(tempSeizures);
+            }
+
+            seizures = new string[fileSeizures.Count];
+            string date;
+            int i = 0;
+            foreach (SeizureType seizure in fileSeizures)
+            {
+                date = string.Format("{0:D2}:{1:D2}:{2:D2}", seizure.t.Hours, seizure.t.Minutes, seizure.t.Seconds);
+                seizures[i] = seizure.d.ToShortDateString() + " " + date;
+                i++;
+            }
+            return seizures;
+        }
         public string[] Get_Injections(string A)
         {
             string[] injections;
@@ -1038,12 +1069,12 @@ namespace ProjectManager
                     }
                     if (data.Length <= 5 + Chans)
                     {
-                        F = new FileType(IDs, Chans, TempDate, data[2]);
+                        F = new FileType(IDs, Chans, TempDate, data[2], data[1]);
                     }
                     else
                     {
                         DateTime.TryParse(data[5], out ReviewDate);
-                        F = new FileType(IDs, Chans, TempDate, data[2], data[4 + Chans], ReviewDate);
+                        F = new FileType(IDs, Chans, TempDate, data[2], data[4 + Chans], data[1], ReviewDate);
                     }
                     Files.Add(F);
                 }
@@ -1141,7 +1172,7 @@ namespace ProjectManager
                     {
                         IDs[i] = data[4 + i];
                     }
-                    FileType F = new FileType(IDs, Chans, TempDate, data[2]);
+                    FileType F = new FileType(IDs, Chans, TempDate, data[2], data[1]);
                     Pass = true;
                     foreach (FileType C in Files)
                     {
