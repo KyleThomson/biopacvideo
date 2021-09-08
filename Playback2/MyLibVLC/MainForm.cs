@@ -599,7 +599,11 @@ namespace SeizurePlayback
 
         private void Rewind_Click(object sender, EventArgs e)
         {
-            ACQ.Position = Math.Max(0, ACQ.Position - MaxDispSize);
+            if (Int32.TryParse(rewindStep.Text, out int result))
+                ACQ.Position = Math.Max(0, ACQ.Position - result);
+            else
+                ACQ.Position = Math.Max(0, ACQ.Position - MaxDispSize);
+
             if (player != null) 
                 player.seek(player.getpos() - MaxDispSize * 1000);
             Step = MaxDispSize;
@@ -951,6 +955,11 @@ namespace SeizurePlayback
             QuitHighlight();
             Paused = false;
             RealTime = true;         
+        }
+
+        private void rewindStep_TextChanged(object sender, EventArgs e)
+        {
+
         }
 
         private void FixChan_Click(object sender, EventArgs e)

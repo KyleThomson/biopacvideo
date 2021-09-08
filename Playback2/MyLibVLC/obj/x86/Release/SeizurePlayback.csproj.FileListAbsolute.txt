@@ -22,3 +22,10 @@ C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\Se
 C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.WeightAdd.resources
 C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.csproj.GenerateResource.cache
 C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.csproj.CoreCompileInputs.cache
+C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.exe
+C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.pdb
+C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\bin\x86\Release\SeizurePlayback.exe
+C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\bin\x86\Release\SeizurePlayback.pdb
+C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\bin\x86\Release\Microsoft.VisualBasic.dll
+C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\bin\x86\Release\Microsoft.VisualBasic.PowerPacks.Vs.dll
+C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.csproj.CopyComplete

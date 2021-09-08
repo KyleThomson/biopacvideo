@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.shapeContainer1 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
-            this.lineShape1 = new Microsoft.VisualBasic.PowerPacks.LineShape();
+            //this.shapeContainer1 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
+            //this.lineShape1 = new Microsoft.VisualBasic.PowerPacks.LineShape();
             this.AnimalSel = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.MMY = new System.Windows.Forms.Label();
@@ -39,22 +39,22 @@
             // 
             // shapeContainer1
             // 
-            this.shapeContainer1.Location = new System.Drawing.Point(0, 0);
-            this.shapeContainer1.Margin = new System.Windows.Forms.Padding(0);
-            this.shapeContainer1.Name = "shapeContainer1";
-            this.shapeContainer1.Shapes.AddRange(new Microsoft.VisualBasic.PowerPacks.Shape[] {
-            this.lineShape1});
-            this.shapeContainer1.Size = new System.Drawing.Size(604, 595);
-            this.shapeContainer1.TabIndex = 1;
-            this.shapeContainer1.TabStop = false;
+            //this.shapeContainer1.Location = new System.Drawing.Point(0, 0);
+            //this.shapeContainer1.Margin = new System.Windows.Forms.Padding(0);
+            //this.shapeContainer1.Name = "shapeContainer1";
+            //this.shapeContainer1.Shapes.AddRange(new Microsoft.VisualBasic.PowerPacks.Shape[] {
+            //this.lineShape1});
+            //this.shapeContainer1.Size = new System.Drawing.Size(604, 595);
+            //this.shapeContainer1.TabIndex = 1;
+            //this.shapeContainer1.TabStop = false;
             // 
             // lineShape1
             // 
-            this.lineShape1.Name = "lineShape1";
-            this.lineShape1.X1 = 57;
-            this.lineShape1.X2 = 589;
-            this.lineShape1.Y1 = 41;
-            this.lineShape1.Y2 = 41;
+            //this.lineShape1.Name = "lineShape1";
+            //this.lineShape1.X1 = 57;
+            //this.lineShape1.X2 = 589;
+            //this.lineShape1.Y1 = 41;
+            //this.lineShape1.Y2 = 41;
             // 
             // AnimalSel
             // 
@@ -115,7 +115,7 @@
             this.Controls.Add(this.MMY);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.AnimalSel);
-            this.Controls.Add(this.shapeContainer1);
+            //this.Controls.Add(this.shapeContainer1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Calendar";
             this.Text = "Calendar";
@@ -127,8 +127,8 @@
 
         #endregion
 
-        private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer1;
-        private Microsoft.VisualBasic.PowerPacks.LineShape lineShape1;
+        //private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer1;
+        //private Microsoft.VisualBasic.PowerPacks.LineShape lineShape1;
         private System.Windows.Forms.ComboBox AnimalSel;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label MMY;
