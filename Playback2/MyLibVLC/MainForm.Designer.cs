@@ -678,6 +678,7 @@ namespace SeizurePlayback
             // 
             // rewindStep
             // 
+            this.rewindStep.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.rewindStep.Location = new System.Drawing.Point(1428, 695);
             this.rewindStep.Name = "rewindStep";
             this.rewindStep.Size = new System.Drawing.Size(100, 20);
