@@ -251,6 +251,7 @@ namespace SeizurePlayback
             g = Graphics.FromImage(offscreen);
             g.Clear(Color.White);
         }
+        
         public void cleargraph()
         {
             g.Clear(Color.White);

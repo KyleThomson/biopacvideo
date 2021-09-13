@@ -109,6 +109,7 @@ namespace SeizurePlayback
             //Add Mouse Handlers
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MyMouseUp);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownHandler);
+            this.MouseHover += new EventHandler(this.MousePositionHandler);
             this.KeyPreview = true;
             this.KeyPress += new KeyPressEventHandler(Form1_KeyPress);
             ResizeBool = true;
@@ -608,7 +609,28 @@ namespace SeizurePlayback
                 player.seek(player.getpos() - MaxDispSize * 1000);
             Step = MaxDispSize;
         }
+        private void MousePositionHandler(object sender, EventArgs e)
+        {
+            GetMousePosition();
+        }
+        private void GetMousePosition()
+        {
+            // Grab screen coordinates of mouse cursor and convert to coordinate system relative to EEG graph display
+            int mouseX = Cursor.Position.X - (graph.X2 - graph.X1);
+            int mouseY = Cursor.Position.Y - (graph.Y2 - graph.Y1);
 
+            // Do a check if new cursor coordinates are within tolerance of left side of screen
+            if (mouseX < (graph.X2 - graph.X1)*2*0.05)
+                // begin rewinding if condition met
+                AutoRewind();
+            else
+                // else get out of function
+                return;
+        }
+        private void AutoRewind()
+        {
+            // similar functionality to Rewind_Click but responsive to cursor position rather than a click handling event
+        }
         private void TimeBar_Scroll(object sender, EventArgs e)
         {
             if (!ignore_change)
