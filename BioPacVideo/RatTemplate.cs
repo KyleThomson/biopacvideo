@@ -13,6 +13,7 @@ namespace BioPacVideo
         public DateTime Injection;
         public DateTime Surgery;
         public int Medication;
+        public int DoseID;
         public bool[] Meals;
         public RatTemplate()
         {

@@ -1068,6 +1068,7 @@
             this.Name = "PelletCounts";
             this.RightToLeftLayout = true;
             this.Text = "Add Pellet Counts";
+            this.Load += new System.EventHandler(this.PelletCounts_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

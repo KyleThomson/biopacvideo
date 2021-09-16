@@ -16,61 +16,56 @@ namespace BioPacVideo
     {
         int Cam;
         IntPtr pDF;
-        private VideoTemplate Video;
-        private Bitmap Still;
-        Thread ThreadDisplay;
+        private VideoWrapper Video;        
         Graphics g;
         public CameraAssc()
         {
             
             InitializeComponent();
-            Video = VideoTemplate.Instance;
+            Video = VideoWrapper.Instance;
             g = this.CreateGraphics();
             Cam = 0;
-            ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
-            ThreadDisplay.Start();
+  
             for (int i = 0; i < 16; i++)
                 ChanSel.Items.Add("Channel " + (i + 1).ToString());
-            for (int i = 0; i < Video.Device_Count * 4; i++)
+            for (int i = 0; i < Video.maxdevices; i++)
                 CamSel.Items.Add("Camera " + (i + 1).ToString());
             for (int i = 0; i < 16; i++)
                 CABox.Text += "Channel " + (i + 1).ToString() + " - Camera " + (Video.CameraAssociation[i]+1).ToString() + Environment.NewLine;
             ChanSel.SelectedIndex = 0;
             CamSel.SelectedIndex = Video.CameraAssociation[0];
+            
 
         }
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Video.DestroyTempCloneVideo();
             Cam = CamSel.SelectedIndex;
+            Video.TempCloneVideo(Cam, CamPanel.Handle.ToInt32());
         }
-        private void DisplayThread()
-        {
-            while (true)
-            {
-                Thread.Sleep(30);
-                pDF = VideoWrapper.GetCurrentBuffer(Cam);                
-                if (pDF != null)
-                {
-                    Still = new Bitmap(Video.XRes, Video.YRes, Video.XRes * 3, PixelFormat.Format24bppRgb, pDF);
-                    Still.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                }            
-                if (this.Visible)
-                    g.DrawImage(Still,200,20, 640,480);
-                Still.Dispose();
-            }
-        }
+        
 
         private void SetButton_Click(object sender, EventArgs e)
         {
+            int Temp1, Temp2;
+            Temp1 = 0; 
+            for (int i = 0; i < 16; i++)
+            {
+                if (Video.CameraAssociation[i] == CamSel.SelectedIndex)
+                {
+                    Temp1 = i;                                      
+                }
+            }
+            Temp2 = Video.CameraAssociation[ChanSel.SelectedIndex];
             Video.CameraAssociation[ChanSel.SelectedIndex] = CamSel.SelectedIndex;
+            Video.CameraAssociation[Temp1] = Temp2;
             CABox.Text = "";
             for (int i = 0; i < 16; i++)
                 CABox.Text += "Channel " + (i + 1).ToString() + " - Camera " + (Video.CameraAssociation[i] + 1).ToString() + Environment.NewLine;
         }
 
         private void FinishButton_Click(object sender, EventArgs e)
-        {
-            ThreadDisplay.Abort();
+        {          
             this.Close();
         }
 

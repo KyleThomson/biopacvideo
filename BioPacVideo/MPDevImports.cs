@@ -36,6 +36,7 @@ namespace Biopac.API.MPDevice
 		public enum MPTYPE 
 		{
 			MP150 = 101,
+            MP160 = 103,
 			//MP35,
 			MP36
 		}

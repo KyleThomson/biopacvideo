@@ -35,13 +35,6 @@ namespace BioPacVideo
             this.openSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.videoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.initializeVideoCardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cameraAssociationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.videoSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sensorControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.videoCaptureEnabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bioPacToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.initializeBioPacToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.IDM_DISCONNECTBIOPAC = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,10 +42,19 @@ namespace BioPacVideo
             this.IDM_SELECTCHANNELS = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.bioPacEnabledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.videoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cameraAssociationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.videoSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sensorControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.automaticFeederToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setFeedingProtocolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.testFeedersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AddPelletCountMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.injectionManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.feedersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.feederTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.feederAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.feederStatusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusBar = new System.Windows.Forms.StatusStrip();
             this.SpaceLeft = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_BIOPACSTAT = new System.Windows.Forms.ToolStripStatusLabel();
@@ -67,7 +69,22 @@ namespace BioPacVideo
             this.TimeScale = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.showFeederStatusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CloneChannelPanel1 = new System.Windows.Forms.Panel();
+            this.CloneChannelPanel2 = new System.Windows.Forms.Panel();
+            this.CloneChannelPanel3 = new System.Windows.Forms.Panel();
+            this.CloneChannelPanel4 = new System.Windows.Forms.Panel();
+            this.CloneChannelPanel6 = new System.Windows.Forms.Panel();
+            this.CloneChannelPanel7 = new System.Windows.Forms.Panel();
+            this.CloneChannelPanel8 = new System.Windows.Forms.Panel();
+            this.CloneChannelPanel10 = new System.Windows.Forms.Panel();
+            this.CloneChannelPanel11 = new System.Windows.Forms.Panel();
+            this.CloneChannelPanel12 = new System.Windows.Forms.Panel();
+            this.CloneChannelPanel13 = new System.Windows.Forms.Panel();
+            this.CloneChannelPanel14 = new System.Windows.Forms.Panel();
+            this.CloneChannelPanel15 = new System.Windows.Forms.Panel();
+            this.CloneChannelPanel5 = new System.Windows.Forms.Panel();
+            this.CloneChannelPanel9 = new System.Windows.Forms.Panel();
+            this.CloneChannelPanel16 = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -87,9 +104,10 @@ namespace BioPacVideo
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.videoToolStripMenuItem,
             this.bioPacToolStripMenuItem,
-            this.automaticFeederToolStripMenuItem});
+            this.videoToolStripMenuItem,
+            this.automaticFeederToolStripMenuItem,
+            this.feedersToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1286, 24);
@@ -104,87 +122,33 @@ namespace BioPacVideo
             this.toolStripSeparator1,
             this.quitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // selectDirectoryToolStripMenuItem
             // 
             this.selectDirectoryToolStripMenuItem.Name = "selectDirectoryToolStripMenuItem";
-            this.selectDirectoryToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.selectDirectoryToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
             this.selectDirectoryToolStripMenuItem.Text = "Select &Recording Directory";
             this.selectDirectoryToolStripMenuItem.Click += new System.EventHandler(this.selectDirectoryToolStripMenuItem_Click);
             // 
             // openSettingsToolStripMenuItem
             // 
             this.openSettingsToolStripMenuItem.Name = "openSettingsToolStripMenuItem";
-            this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
             this.openSettingsToolStripMenuItem.Text = "&Open Settings";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(198, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(210, 6);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
             this.quitToolStripMenuItem.Text = "&Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
-            // 
-            // videoToolStripMenuItem
-            // 
-            this.videoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.initializeVideoCardToolStripMenuItem,
-            this.cameraAssociationsToolStripMenuItem,
-            this.videoSettingsToolStripMenuItem,
-            this.sensorControlToolStripMenuItem,
-            this.toolStripSeparator3,
-            this.videoCaptureEnabledToolStripMenuItem});
-            this.videoToolStripMenuItem.Name = "videoToolStripMenuItem";
-            this.videoToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
-            this.videoToolStripMenuItem.Text = "Video";
-            // 
-            // initializeVideoCardToolStripMenuItem
-            // 
-            this.initializeVideoCardToolStripMenuItem.Name = "initializeVideoCardToolStripMenuItem";
-            this.initializeVideoCardToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.initializeVideoCardToolStripMenuItem.Text = "Initialize Video Card";
-            this.initializeVideoCardToolStripMenuItem.Click += new System.EventHandler(this.initializeVideoCardToolStripMenuItem_Click);
-            // 
-            // cameraAssociationsToolStripMenuItem
-            // 
-            this.cameraAssociationsToolStripMenuItem.Name = "cameraAssociationsToolStripMenuItem";
-            this.cameraAssociationsToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.cameraAssociationsToolStripMenuItem.Text = "Camera Associations";
-            this.cameraAssociationsToolStripMenuItem.Click += new System.EventHandler(this.cameraAssociationsToolStripMenuItem_Click);
-            // 
-            // videoSettingsToolStripMenuItem
-            // 
-            this.videoSettingsToolStripMenuItem.Name = "videoSettingsToolStripMenuItem";
-            this.videoSettingsToolStripMenuItem.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.videoSettingsToolStripMenuItem.Size = new System.Drawing.Size(223, 20);
-            this.videoSettingsToolStripMenuItem.Text = "Video Settings";
-            this.videoSettingsToolStripMenuItem.Click += new System.EventHandler(this.videoSettingsToolStripMenuItem_Click);
-            // 
-            // sensorControlToolStripMenuItem
-            // 
-            this.sensorControlToolStripMenuItem.Name = "sensorControlToolStripMenuItem";
-            this.sensorControlToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.sensorControlToolStripMenuItem.Text = "Sensor Control";
-            this.sensorControlToolStripMenuItem.Click += new System.EventHandler(this.sensorControlToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(180, 6);
-            // 
-            // videoCaptureEnabledToolStripMenuItem
-            // 
-            this.videoCaptureEnabledToolStripMenuItem.Name = "videoCaptureEnabledToolStripMenuItem";
-            this.videoCaptureEnabledToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.videoCaptureEnabledToolStripMenuItem.Text = "Video Capture Enabled";
-            this.videoCaptureEnabledToolStripMenuItem.Click += new System.EventHandler(this.videoCaptureEnabledToolStripMenuItem_Click);
             // 
             // bioPacToolStripMenuItem
             // 
@@ -196,80 +160,148 @@ namespace BioPacVideo
             this.toolStripSeparator2,
             this.bioPacEnabledToolStripMenuItem});
             this.bioPacToolStripMenuItem.Name = "bioPacToolStripMenuItem";
-            this.bioPacToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
+            this.bioPacToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.bioPacToolStripMenuItem.Text = "BioPac";
             // 
             // initializeBioPacToolStripMenuItem
             // 
             this.initializeBioPacToolStripMenuItem.Name = "initializeBioPacToolStripMenuItem";
-            this.initializeBioPacToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.initializeBioPacToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.initializeBioPacToolStripMenuItem.Text = "Connect BioPac";
             this.initializeBioPacToolStripMenuItem.Click += new System.EventHandler(this.initializeBioPacToolStripMenuItem_Click);
             // 
             // IDM_DISCONNECTBIOPAC
             // 
             this.IDM_DISCONNECTBIOPAC.Name = "IDM_DISCONNECTBIOPAC";
-            this.IDM_DISCONNECTBIOPAC.Size = new System.Drawing.Size(160, 22);
+            this.IDM_DISCONNECTBIOPAC.Size = new System.Drawing.Size(172, 22);
             this.IDM_DISCONNECTBIOPAC.Text = "Disconnect BioPac";
             this.IDM_DISCONNECTBIOPAC.Click += new System.EventHandler(this.disconnectBioPacToolStripMenuItem_Click);
             // 
             // IDM_SETTINGS
             // 
             this.IDM_SETTINGS.Name = "IDM_SETTINGS";
-            this.IDM_SETTINGS.Size = new System.Drawing.Size(160, 22);
+            this.IDM_SETTINGS.Size = new System.Drawing.Size(172, 22);
             this.IDM_SETTINGS.Text = "Settings";
             this.IDM_SETTINGS.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // IDM_SELECTCHANNELS
             // 
             this.IDM_SELECTCHANNELS.Name = "IDM_SELECTCHANNELS";
-            this.IDM_SELECTCHANNELS.Size = new System.Drawing.Size(160, 22);
+            this.IDM_SELECTCHANNELS.Size = new System.Drawing.Size(172, 22);
             this.IDM_SELECTCHANNELS.Text = "Select Channels";
             this.IDM_SELECTCHANNELS.Click += new System.EventHandler(this.selectChannelsToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(169, 6);
             // 
             // bioPacEnabledToolStripMenuItem
             // 
             this.bioPacEnabledToolStripMenuItem.Name = "bioPacEnabledToolStripMenuItem";
-            this.bioPacEnabledToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.bioPacEnabledToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.bioPacEnabledToolStripMenuItem.Text = "BioPac Enabled";
             this.bioPacEnabledToolStripMenuItem.Click += new System.EventHandler(this.bioPacEnabledToolStripMenuItem_Click);
+            // 
+            // videoToolStripMenuItem
+            // 
+            this.videoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cameraAssociationsToolStripMenuItem,
+            this.videoSettingsToolStripMenuItem,
+            this.sensorControlToolStripMenuItem,
+            this.toolStripSeparator3});
+            this.videoToolStripMenuItem.Name = "videoToolStripMenuItem";
+            this.videoToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
+            this.videoToolStripMenuItem.Text = "Video";
+            // 
+            // cameraAssociationsToolStripMenuItem
+            // 
+            this.cameraAssociationsToolStripMenuItem.Name = "cameraAssociationsToolStripMenuItem";
+            this.cameraAssociationsToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.cameraAssociationsToolStripMenuItem.Text = "Camera Associations";
+            this.cameraAssociationsToolStripMenuItem.Click += new System.EventHandler(this.cameraAssociationsToolStripMenuItem_Click);
+            // 
+            // videoSettingsToolStripMenuItem
+            // 
+            this.videoSettingsToolStripMenuItem.Name = "videoSettingsToolStripMenuItem";
+            this.videoSettingsToolStripMenuItem.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
+            this.videoSettingsToolStripMenuItem.Size = new System.Drawing.Size(234, 20);
+            this.videoSettingsToolStripMenuItem.Text = "Video Settings";
+            this.videoSettingsToolStripMenuItem.Click += new System.EventHandler(this.videoSettingsToolStripMenuItem_Click);
+            // 
+            // sensorControlToolStripMenuItem
+            // 
+            this.sensorControlToolStripMenuItem.Name = "sensorControlToolStripMenuItem";
+            this.sensorControlToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.sensorControlToolStripMenuItem.Text = "Sensor Control";
+            this.sensorControlToolStripMenuItem.Click += new System.EventHandler(this.sensorControlToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(191, 6);
             // 
             // automaticFeederToolStripMenuItem
             // 
             this.automaticFeederToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setFeedingProtocolToolStripMenuItem,
-            this.testFeedersToolStripMenuItem,
-            this.AddPelletCountMenuItem,
-            this.showFeederStatusToolStripMenuItem});
+            this.injectionManagerToolStripMenuItem,
+            this.AddPelletCountMenuItem});
             this.automaticFeederToolStripMenuItem.Name = "automaticFeederToolStripMenuItem";
-            this.automaticFeederToolStripMenuItem.Size = new System.Drawing.Size(92, 20);
+            this.automaticFeederToolStripMenuItem.Size = new System.Drawing.Size(102, 20);
             this.automaticFeederToolStripMenuItem.Text = "Animal Settings";
             // 
             // setFeedingProtocolToolStripMenuItem
             // 
             this.setFeedingProtocolToolStripMenuItem.Name = "setFeedingProtocolToolStripMenuItem";
-            this.setFeedingProtocolToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.setFeedingProtocolToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.setFeedingProtocolToolStripMenuItem.Text = "Animal Settings";
             this.setFeedingProtocolToolStripMenuItem.Click += new System.EventHandler(this.setFeedingProtocolToolStripMenuItem_Click);
-            // 
-            // testFeedersToolStripMenuItem
-            // 
-            this.testFeedersToolStripMenuItem.Name = "testFeedersToolStripMenuItem";
-            this.testFeedersToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.testFeedersToolStripMenuItem.Text = "Feeder Test";
-            this.testFeedersToolStripMenuItem.Click += new System.EventHandler(this.testFeedersToolStripMenuItem_Click);
             // 
             // AddPelletCountMenuItem
             // 
             this.AddPelletCountMenuItem.Name = "AddPelletCountMenuItem";
-            this.AddPelletCountMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.AddPelletCountMenuItem.Size = new System.Drawing.Size(180, 22);
             this.AddPelletCountMenuItem.Text = "Add Pellet Count";
             this.AddPelletCountMenuItem.Click += new System.EventHandler(this.AddPelletCountMenuItem_Click);
+            // 
+            // injectionManagerToolStripMenuItem
+            // 
+            this.injectionManagerToolStripMenuItem.Name = "injectionManagerToolStripMenuItem";
+            this.injectionManagerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.injectionManagerToolStripMenuItem.Text = "Injection Manager";
+            this.injectionManagerToolStripMenuItem.Click += new System.EventHandler(this.injectionManagerToolStripMenuItem_Click);
+            // 
+            // feedersToolStripMenuItem
+            // 
+            this.feedersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.feederTestToolStripMenuItem,
+            this.feederAddressToolStripMenuItem,
+            this.feederStatusToolStripMenuItem});
+            this.feedersToolStripMenuItem.Name = "feedersToolStripMenuItem";
+            this.feedersToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
+            this.feedersToolStripMenuItem.Text = "Feeders";
+            // 
+            // feederTestToolStripMenuItem
+            // 
+            this.feederTestToolStripMenuItem.Name = "feederTestToolStripMenuItem";
+            this.feederTestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.feederTestToolStripMenuItem.Text = "Feeder Test";
+            this.feederTestToolStripMenuItem.Click += new System.EventHandler(this.feederTestToolStripMenuItem_Click);
+            // 
+            // feederAddressToolStripMenuItem
+            // 
+            this.feederAddressToolStripMenuItem.Name = "feederAddressToolStripMenuItem";
+            this.feederAddressToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.feederAddressToolStripMenuItem.Text = "Feeder Address";
+            this.feederAddressToolStripMenuItem.Click += new System.EventHandler(this.feederAddressToolStripMenuItem_Click);
+            // 
+            // feederStatusToolStripMenuItem
+            // 
+            this.feederStatusToolStripMenuItem.Name = "feederStatusToolStripMenuItem";
+            this.feederStatusToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.feederStatusToolStripMenuItem.Text = "Feeder Status";
+            this.feederStatusToolStripMenuItem.Click += new System.EventHandler(this.feederStatusToolStripMenuItem_Click);
             // 
             // StatusBar
             // 
@@ -292,9 +324,9 @@ namespace BioPacVideo
             // 
             // SpaceLeft
             // 
-            this.SpaceLeft.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.SpaceLeft.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.SpaceLeft.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.SpaceLeft.Font = new System.Drawing.Font("Tahoma", 12F);
             this.SpaceLeft.Name = "SpaceLeft";
@@ -305,9 +337,9 @@ namespace BioPacVideo
             // 
             // IDT_BIOPACSTAT
             // 
-            this.IDT_BIOPACSTAT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.IDT_BIOPACSTAT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.IDT_BIOPACSTAT.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_BIOPACSTAT.Font = new System.Drawing.Font("Tahoma", 10F);
             this.IDT_BIOPACSTAT.Name = "IDT_BIOPACSTAT";
@@ -317,79 +349,79 @@ namespace BioPacVideo
             // 
             // IDT_MPLASTMESSAGE
             // 
-            this.IDT_MPLASTMESSAGE.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.IDT_MPLASTMESSAGE.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.IDT_MPLASTMESSAGE.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_MPLASTMESSAGE.Name = "IDT_MPLASTMESSAGE";
             this.IDT_MPLASTMESSAGE.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_MPLASTMESSAGE.Size = new System.Drawing.Size(107, 23);
+            this.IDT_MPLASTMESSAGE.Size = new System.Drawing.Size(110, 23);
             this.IDT_MPLASTMESSAGE.Text = "NO STATUS";
             // 
             // IDT_VIDEOSTATUS
             // 
-            this.IDT_VIDEOSTATUS.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.IDT_VIDEOSTATUS.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.IDT_VIDEOSTATUS.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_VIDEOSTATUS.Name = "IDT_VIDEOSTATUS";
             this.IDT_VIDEOSTATUS.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_VIDEOSTATUS.Size = new System.Drawing.Size(123, 23);
+            this.IDT_VIDEOSTATUS.Size = new System.Drawing.Size(125, 23);
             this.IDT_VIDEOSTATUS.Text = "VIDEO STATUS";
             // 
             // IDT_VIDEORESULT
             // 
-            this.IDT_VIDEORESULT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.IDT_VIDEORESULT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.IDT_VIDEORESULT.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_VIDEORESULT.Name = "IDT_VIDEORESULT";
             this.IDT_VIDEORESULT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_VIDEORESULT.Size = new System.Drawing.Size(122, 23);
+            this.IDT_VIDEORESULT.Size = new System.Drawing.Size(125, 23);
             this.IDT_VIDEORESULT.Text = "VIDEO RESULT";
             // 
             // IDT_DEVICECOUNT
             // 
-            this.IDT_DEVICECOUNT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.IDT_DEVICECOUNT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.IDT_DEVICECOUNT.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_DEVICECOUNT.Name = "IDT_DEVICECOUNT";
             this.IDT_DEVICECOUNT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_DEVICECOUNT.Size = new System.Drawing.Size(105, 23);
+            this.IDT_DEVICECOUNT.Size = new System.Drawing.Size(108, 23);
             this.IDT_DEVICECOUNT.Text = "Devices (0)";
             // 
             // IDT_ENCODERSTATUS
             // 
-            this.IDT_ENCODERSTATUS.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.IDT_ENCODERSTATUS.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.IDT_ENCODERSTATUS.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_ENCODERSTATUS.Name = "IDT_ENCODERSTATUS";
             this.IDT_ENCODERSTATUS.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_ENCODERSTATUS.Size = new System.Drawing.Size(106, 23);
+            this.IDT_ENCODERSTATUS.Size = new System.Drawing.Size(108, 23);
             this.IDT_ENCODERSTATUS.Text = "ENCR STAT";
             // 
             // IDT_ENCSTAT
             // 
-            this.IDT_ENCSTAT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.IDT_ENCSTAT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.IDT_ENCSTAT.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_ENCSTAT.Name = "IDT_ENCSTAT";
             this.IDT_ENCSTAT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_ENCSTAT.Size = new System.Drawing.Size(101, 23);
+            this.IDT_ENCSTAT.Size = new System.Drawing.Size(105, 23);
             this.IDT_ENCSTAT.Text = "ENCDR RS";
             // 
             // IDT_FEEDST
             // 
-            this.IDT_FEEDST.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.IDT_FEEDST.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.IDT_FEEDST.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_FEEDST.Name = "IDT_FEEDST";
             this.IDT_FEEDST.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_FEEDST.Size = new System.Drawing.Size(89, 23);
+            this.IDT_FEEDST.Size = new System.Drawing.Size(106, 23);
             this.IDT_FEEDST.Text = "FEEDER";
             // 
             // VoltScale
@@ -428,12 +460,133 @@ namespace BioPacVideo
             this.label3.TabIndex = 8;
             this.label3.Text = "Volt Scale";
             // 
-            // showFeederStatusToolStripMenuItem
+            // CloneChannelPanel1
             // 
-            this.showFeederStatusToolStripMenuItem.Name = "showFeederStatusToolStripMenuItem";
-            this.showFeederStatusToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.showFeederStatusToolStripMenuItem.Text = "Show Feeder Status";
-            this.showFeederStatusToolStripMenuItem.Click += new System.EventHandler(this.showFeederStatusToolStripMenuItem_Click);
+            this.CloneChannelPanel1.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CloneChannelPanel1.Location = new System.Drawing.Point(127, 37);
+            this.CloneChannelPanel1.Name = "CloneChannelPanel1";
+            this.CloneChannelPanel1.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel1.TabIndex = 9;
+            // 
+            // CloneChannelPanel2
+            // 
+            this.CloneChannelPanel2.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CloneChannelPanel2.Location = new System.Drawing.Point(269, 37);
+            this.CloneChannelPanel2.Name = "CloneChannelPanel2";
+            this.CloneChannelPanel2.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel2.TabIndex = 10;
+            // 
+            // CloneChannelPanel3
+            // 
+            this.CloneChannelPanel3.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CloneChannelPanel3.Location = new System.Drawing.Point(411, 37);
+            this.CloneChannelPanel3.Name = "CloneChannelPanel3";
+            this.CloneChannelPanel3.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel3.TabIndex = 10;
+            // 
+            // CloneChannelPanel4
+            // 
+            this.CloneChannelPanel4.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CloneChannelPanel4.Location = new System.Drawing.Point(553, 37);
+            this.CloneChannelPanel4.Name = "CloneChannelPanel4";
+            this.CloneChannelPanel4.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel4.TabIndex = 10;
+            // 
+            // CloneChannelPanel6
+            // 
+            this.CloneChannelPanel6.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CloneChannelPanel6.Location = new System.Drawing.Point(837, 37);
+            this.CloneChannelPanel6.Name = "CloneChannelPanel6";
+            this.CloneChannelPanel6.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel6.TabIndex = 10;
+            // 
+            // CloneChannelPanel7
+            // 
+            this.CloneChannelPanel7.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CloneChannelPanel7.Location = new System.Drawing.Point(979, 37);
+            this.CloneChannelPanel7.Name = "CloneChannelPanel7";
+            this.CloneChannelPanel7.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel7.TabIndex = 10;
+            // 
+            // CloneChannelPanel8
+            // 
+            this.CloneChannelPanel8.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CloneChannelPanel8.Location = new System.Drawing.Point(1121, 37);
+            this.CloneChannelPanel8.Name = "CloneChannelPanel8";
+            this.CloneChannelPanel8.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel8.TabIndex = 10;
+            // 
+            // CloneChannelPanel10
+            // 
+            this.CloneChannelPanel10.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CloneChannelPanel10.Location = new System.Drawing.Point(269, 158);
+            this.CloneChannelPanel10.Name = "CloneChannelPanel10";
+            this.CloneChannelPanel10.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel10.TabIndex = 11;
+            // 
+            // CloneChannelPanel11
+            // 
+            this.CloneChannelPanel11.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CloneChannelPanel11.Location = new System.Drawing.Point(411, 158);
+            this.CloneChannelPanel11.Name = "CloneChannelPanel11";
+            this.CloneChannelPanel11.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel11.TabIndex = 11;
+            // 
+            // CloneChannelPanel12
+            // 
+            this.CloneChannelPanel12.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CloneChannelPanel12.Location = new System.Drawing.Point(553, 158);
+            this.CloneChannelPanel12.Name = "CloneChannelPanel12";
+            this.CloneChannelPanel12.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel12.TabIndex = 11;
+            // 
+            // CloneChannelPanel13
+            // 
+            this.CloneChannelPanel13.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CloneChannelPanel13.Location = new System.Drawing.Point(695, 158);
+            this.CloneChannelPanel13.Name = "CloneChannelPanel13";
+            this.CloneChannelPanel13.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel13.TabIndex = 11;
+            // 
+            // CloneChannelPanel14
+            // 
+            this.CloneChannelPanel14.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CloneChannelPanel14.Location = new System.Drawing.Point(837, 158);
+            this.CloneChannelPanel14.Name = "CloneChannelPanel14";
+            this.CloneChannelPanel14.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel14.TabIndex = 11;
+            // 
+            // CloneChannelPanel15
+            // 
+            this.CloneChannelPanel15.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CloneChannelPanel15.Location = new System.Drawing.Point(979, 158);
+            this.CloneChannelPanel15.Name = "CloneChannelPanel15";
+            this.CloneChannelPanel15.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel15.TabIndex = 11;
+            // 
+            // CloneChannelPanel5
+            // 
+            this.CloneChannelPanel5.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CloneChannelPanel5.Location = new System.Drawing.Point(695, 37);
+            this.CloneChannelPanel5.Name = "CloneChannelPanel5";
+            this.CloneChannelPanel5.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel5.TabIndex = 11;
+            // 
+            // CloneChannelPanel9
+            // 
+            this.CloneChannelPanel9.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CloneChannelPanel9.Location = new System.Drawing.Point(127, 158);
+            this.CloneChannelPanel9.Name = "CloneChannelPanel9";
+            this.CloneChannelPanel9.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel9.TabIndex = 11;
+            // 
+            // CloneChannelPanel16
+            // 
+            this.CloneChannelPanel16.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CloneChannelPanel16.Location = new System.Drawing.Point(1121, 158);
+            this.CloneChannelPanel16.Name = "CloneChannelPanel16";
+            this.CloneChannelPanel16.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel16.TabIndex = 12;
             // 
             // MainForm
             // 
@@ -441,6 +594,22 @@ namespace BioPacVideo
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1286, 887);
+            this.Controls.Add(this.CloneChannelPanel16);
+            this.Controls.Add(this.CloneChannelPanel9);
+            this.Controls.Add(this.CloneChannelPanel5);
+            this.Controls.Add(this.CloneChannelPanel15);
+            this.Controls.Add(this.CloneChannelPanel14);
+            this.Controls.Add(this.CloneChannelPanel13);
+            this.Controls.Add(this.CloneChannelPanel12);
+            this.Controls.Add(this.CloneChannelPanel11);
+            this.Controls.Add(this.CloneChannelPanel10);
+            this.Controls.Add(this.CloneChannelPanel8);
+            this.Controls.Add(this.CloneChannelPanel7);
+            this.Controls.Add(this.CloneChannelPanel6);
+            this.Controls.Add(this.CloneChannelPanel4);
+            this.Controls.Add(this.CloneChannelPanel3);
+            this.Controls.Add(this.CloneChannelPanel2);
+            this.Controls.Add(this.CloneChannelPanel1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.TimeScale);
@@ -452,7 +621,7 @@ namespace BioPacVideo
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "BioPac Video Recording";
+            this.Text = "BioPacVideo";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
@@ -472,7 +641,6 @@ namespace BioPacVideo
         private System.Windows.Forms.ToolStripMenuItem videoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bioPacToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem automaticFeederToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem testFeedersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem selectDirectoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -490,11 +658,9 @@ namespace BioPacVideo
         private System.Windows.Forms.ToolStripMenuItem videoSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sensorControlToolStripMenuItem;
         internal System.Windows.Forms.ToolStripStatusLabel IDT_FEEDST;
-        private System.Windows.Forms.ToolStripMenuItem initializeVideoCardToolStripMenuItem;
         internal System.Windows.Forms.ToolStripStatusLabel IDT_ENCODERSTATUS;
         private System.Windows.Forms.ToolStripStatusLabel IDT_VIDEORESULT;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem videoCaptureEnabledToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem bioPacEnabledToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cameraAssociationsToolStripMenuItem;
@@ -505,7 +671,27 @@ namespace BioPacVideo
         internal System.Windows.Forms.ToolStripStatusLabel IDT_ENCSTAT;
         private System.Windows.Forms.ToolStripMenuItem AddPelletCountMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel SpaceLeft;
-        private System.Windows.Forms.ToolStripMenuItem showFeederStatusToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem injectionManagerToolStripMenuItem;
+        private System.Windows.Forms.Panel CloneChannelPanel1;
+        private System.Windows.Forms.Panel CloneChannelPanel2;
+        private System.Windows.Forms.Panel CloneChannelPanel3;
+        private System.Windows.Forms.Panel CloneChannelPanel4;
+        private System.Windows.Forms.Panel CloneChannelPanel6;
+        private System.Windows.Forms.Panel CloneChannelPanel7;
+        private System.Windows.Forms.Panel CloneChannelPanel8;
+        private System.Windows.Forms.Panel CloneChannelPanel10;
+        private System.Windows.Forms.Panel CloneChannelPanel11;
+        private System.Windows.Forms.Panel CloneChannelPanel12;
+        private System.Windows.Forms.Panel CloneChannelPanel13;
+        private System.Windows.Forms.Panel CloneChannelPanel14;
+        private System.Windows.Forms.Panel CloneChannelPanel15;
+        private System.Windows.Forms.Panel CloneChannelPanel5;
+        private System.Windows.Forms.Panel CloneChannelPanel9;
+        private System.Windows.Forms.Panel CloneChannelPanel16;
+        private System.Windows.Forms.ToolStripMenuItem feedersToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem feederTestToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem feederAddressToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem feederStatusToolStripMenuItem;
     }
 }
 

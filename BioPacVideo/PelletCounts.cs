@@ -155,7 +155,7 @@ namespace BioPacVideo
                 {
                     if (int.TryParse(MDB.Text, out PelletCount))
                     {
-                        LogList.Add("Removal: " + (i + 1).ToString() +  " MedP: " + PelletCount.ToString("D3"));
+                        LogList.Add("Removal: " + (i + 1).ToString() +  " MedP: " + PelletCount.ToString("D3"));                        
                     }
                     else
                     {
@@ -192,6 +192,11 @@ namespace BioPacVideo
         private void CancelButton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void PelletCounts_Load(object sender, EventArgs e)
+        {
+
         }
 
         

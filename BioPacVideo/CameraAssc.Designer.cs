@@ -35,6 +35,7 @@
             this.CABox = new System.Windows.Forms.TextBox();
             this.SetButton = new System.Windows.Forms.Button();
             this.FinishButton = new System.Windows.Forms.Button();
+            this.CamPanel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // CamSel
@@ -104,11 +105,20 @@
             this.FinishButton.UseVisualStyleBackColor = true;
             this.FinishButton.Click += new System.EventHandler(this.FinishButton_Click);
             // 
+            // CamPanel
+            // 
+            this.CamPanel.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CamPanel.Location = new System.Drawing.Point(190, 15);
+            this.CamPanel.Name = "CamPanel";
+            this.CamPanel.Size = new System.Drawing.Size(667, 441);
+            this.CamPanel.TabIndex = 10;
+            // 
             // CameraAssc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(869, 482);
+            this.Controls.Add(this.CamPanel);
             this.Controls.Add(this.FinishButton);
             this.Controls.Add(this.SetButton);
             this.Controls.Add(this.CABox);
@@ -133,5 +143,6 @@
         private System.Windows.Forms.TextBox CABox;
         private System.Windows.Forms.Button SetButton;
         private System.Windows.Forms.Button FinishButton;
+        private System.Windows.Forms.Panel CamPanel;
     }
 }

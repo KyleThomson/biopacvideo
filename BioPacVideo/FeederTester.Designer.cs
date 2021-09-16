@@ -32,6 +32,8 @@
             this.PelletsNum = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.FeederNum = new System.Windows.Forms.Label();
+            this.TestAll = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // IDC_RUNTEST
@@ -69,11 +71,33 @@
             this.FeederNum.TabIndex = 5;
             this.FeederNum.Text = "Feeder:";
             // 
+            // TestAll
+            // 
+            this.TestAll.Location = new System.Drawing.Point(12, 156);
+            this.TestAll.Name = "TestAll";
+            this.TestAll.Size = new System.Drawing.Size(127, 33);
+            this.TestAll.TabIndex = 6;
+            this.TestAll.Text = "Test All (No Pellets)";
+            this.TestAll.UseVisualStyleBackColor = true;
+            this.TestAll.Click += new System.EventHandler(this.TestAll_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(12, 195);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(127, 33);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "ExecuteAck";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // FeederTester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(852, 449);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.TestAll);
             this.Controls.Add(this.FeederNum);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.PelletsNum);
@@ -95,5 +119,7 @@
         private System.Windows.Forms.TextBox PelletsNum;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label FeederNum;
+        private System.Windows.Forms.Button TestAll;
+        private System.Windows.Forms.Button button1;
     }
 }

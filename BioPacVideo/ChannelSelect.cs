@@ -11,10 +11,10 @@ using System.Windows.Forms;
 namespace BioPacVideo
 {
     public partial class RecordSelect : Form
-    {        
-        public RecordSelect(bool[] RecordAC)
+    {
+        public RecordSelect(bool[] RecordAC, bool[] RecordingDevice)
         {
-            InitializeComponent();            
+            InitializeComponent();
             ChannelAcq1.Checked = RecordAC[0];
             ChannelAcq2.Checked = RecordAC[1];
             ChannelAcq3.Checked = RecordAC[2];
@@ -31,6 +31,22 @@ namespace BioPacVideo
             ChannelAcq14.Checked = RecordAC[13];
             ChannelAcq15.Checked = RecordAC[14];
             ChannelAcq16.Checked = RecordAC[15];
+            TelemetryCh1.Checked = RecordingDevice[0];
+            TelemetryCh2.Checked = RecordingDevice[1];
+            TelemetryCh3.Checked = RecordingDevice[2];
+            TelemetryCh4.Checked = RecordingDevice[3];
+            TelemetryCh5.Checked = RecordingDevice[4];
+            TelemetryCh6.Checked = RecordingDevice[5];
+            TelemetryCh7.Checked = RecordingDevice[6];
+            TelemetryCh8.Checked = RecordingDevice[7];
+            TelemetryCh9.Checked = RecordingDevice[8];
+            TelemetryCh10.Checked = RecordingDevice[9];
+            TelemetryCh11.Checked = RecordingDevice[10];
+            TelemetryCh12.Checked = RecordingDevice[11];
+            TelemetryCh13.Checked = RecordingDevice[12];
+            TelemetryCh14.Checked = RecordingDevice[13];
+            TelemetryCh15.Checked = RecordingDevice[14];
+            TelemetryCh16.Checked = RecordingDevice[15];
         }
         public bool[] AC()
         {
@@ -38,11 +54,23 @@ namespace BioPacVideo
                 ChannelAcq5.Checked,ChannelAcq6.Checked,ChannelAcq7.Checked,ChannelAcq8.Checked,
             ChannelAcq9.Checked,ChannelAcq10.Checked,ChannelAcq11.Checked,ChannelAcq12.Checked,
             ChannelAcq13.Checked,ChannelAcq14.Checked,ChannelAcq15.Checked,ChannelAcq16.Checked};
+
+            return allchan;
+        }
+        public bool[] RC()
+        {
+            bool[] allchan = new bool[] {TelemetryCh1.Checked, TelemetryCh2.Checked, TelemetryCh3.Checked, TelemetryCh4.Checked, TelemetryCh5.Checked, 
+                TelemetryCh6.Checked, TelemetryCh7.Checked, TelemetryCh8.Checked, TelemetryCh9.Checked, TelemetryCh10.Checked, TelemetryCh11.Checked, 
+                TelemetryCh12.Checked, TelemetryCh13.Checked, TelemetryCh14.Checked, TelemetryCh15.Checked, TelemetryCh16.Checked};
             return allchan;
         }
         private void ID_OK_Click(object sender, EventArgs e)
         {
-            this.Close();             
+            this.Close();
         }
+
     }
+
+        
+       
 }

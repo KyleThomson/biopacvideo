@@ -20,13 +20,25 @@ namespace BioPacVideo
         public double PelletsPerGram;
         public bool ErrorState;
         public bool Enabled;
+        public bool Activated; 
         public int State;
         public string StateText;
+        public string ADDC1;
+        public string ADDC2;
+        public string Dose1;
+        public string Dose2;
+        public int Route1;
+        public int Route2;
+        public int Solve1;
+        public int Solve2;
+        public bool AlternateAddress;
+        public int[] AddressTable;
         private Queue<byte> Commands;
         private Stack<string> CommandText;
         public int CommandSize = 0;  //Number of commands left to run. 
         public bool CommandReady; //Set once all commands queued.
         public int gap = 0;
+        private Random Randomizer;
         public RatTemplate[] Rats;
         public StreamWriter log;
         private string LogFileName;
@@ -69,7 +81,7 @@ namespace BioPacVideo
         }
         public void GenMeals(int Rat, bool MidWeek)
         {
-            Random random = new Random();
+            Random random = new Random(Randomizer.Next(0,Int32.MaxValue));
             for (int i = 0; i < 7 * 6; i++)
             {
                 Rats[Rat].Meals[i] = false;
@@ -86,7 +98,7 @@ namespace BioPacVideo
             {
                 MealsLeft = DailyMealCount * 7;
                 StartPoint = 0;
-            }
+            } 
             List<int> MealMatrix = new List<int>();
             for (int i = StartPoint; i < DailyMealCount * 7; i++)
             {
@@ -113,13 +125,16 @@ namespace BioPacVideo
         public FeederTemplate()
         {
             Commands = new Queue<byte>();
-            CommandText = new Stack<string>(); 
+            CommandText = new Stack<string>();
+            Activated = false;
             CommandReady = false;
             ErrorState = false;
             State = 3;
             StateText = "READY";
+            AddressTable = new int[32];
             Rats = RatTemplate.NewInitArray(16);
             LogFileName = "";
+            Randomizer = new Random(); 
         }
         public string GetLastCommandText()
         {
@@ -128,11 +143,21 @@ namespace BioPacVideo
             else
                 return "No Text in Stack";
         }
+        public bool CommandWaitEx()
+        {
+            if (CommandText.Count>0)
+            {
+                return true;
+            }
+            else
+            {
+                return false; 
+            }
+        }
         public byte GetTopCommand()
         {
             CommandSize--;
-            byte v = Commands.Dequeue();
-            if (v == 255) { CommandReady = false; }
+            byte v = Commands.Dequeue();          
             return v;
         }
         public void SetLogName(string FName)
@@ -162,19 +187,28 @@ namespace BioPacVideo
             string Txt = "Feeder-" + Feeder.ToString() + "  Pellets-" + Pellets.ToString();
             CommandText.Push(Txt); 
             CommandSize = Commands.Count;
+            Activated = true;
         }
         public void ExecuteAck()
-        {
-            Commands.Enqueue((byte)255);
+        {           
+            Commands.Enqueue((byte)31);
             CommandSize = Commands.Count;
             CommandReady = true;
-        }        
+            
+        }
+        public void ExecuteTest()
+        {
+            Commands.Enqueue((byte)30);
+            CommandSize = Commands.Count;
+            CommandReady = true; 
+        }
         public void GoMeal(int MealNum)
         {
             int MealSize;
             int Feeder;
-            string Medi;            
-            
+            string Medi;
+            int ActualFeeder; //Need to keep track of the feeder we're sending to
+
             //int a, b, tmp;            
             DateTime Start = DateTime.Now;                        
             for (int RC = 0; RC < 16; RC++)
@@ -182,6 +216,7 @@ namespace BioPacVideo
                 if (Rats[RC].Weight > 0)
                 {
                     Feeder = RC * 2;
+                    
                     MealSize = (int)Math.Round(Rats[RC].Weight * PelletsPerGram);
                     if (Rats[RC].Meals[MealNum])
                     {
@@ -192,14 +227,21 @@ namespace BioPacVideo
                     {                        
                         Medi = "Unmedicated";
                     }
-                    
+                    if (AlternateAddress)
+                    {
+                        ActualFeeder = AddressTable[Feeder]; //Translate new address from the table
+                    }
+                    else
+                    {
+                        ActualFeeder = Feeder; //Otherwise use default feeder
+                    }
                     while (MealSize > 30)
                     {
-                        AddCommand(Feeder, 30);
+                        AddCommand(ActualFeeder, 30);
                         Log("Feeder: " + Feeder + "  Pellets: 30 " + Medi);
                         MealSize -= 30;
                     }
-                    AddCommand(Feeder, MealSize);
+                    AddCommand(ActualFeeder, MealSize);
                     Log("Feeder: " + Feeder.ToString() + "  Pellets: " + MealSize.ToString() + " " + Medi);
                     if (MealNum + 1 == DailyMealCount * 7)
                     {

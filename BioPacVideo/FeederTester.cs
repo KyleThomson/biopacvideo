@@ -18,8 +18,7 @@ namespace BioPacVideo
     {
 
         MPTemplate MP;
-        FeederTemplate Feeder;
-        VideoTemplate Video;
+        FeederTemplate Feeder;      
         Graphics g;
         Pen p; 
         int FeederPos = -1;
@@ -29,7 +28,7 @@ namespace BioPacVideo
         {
             InitializeComponent();
             MP = MPTemplate.Instance;
-            Video = VideoTemplate.Instance;
+        
             Feeder = FeederTemplate.Instance;
             p = new Pen(Color.Red, 2);
             RoomImage = new Bitmap(Path.GetDirectoryName(Application.ExecutablePath) + "\\FeederTester.png");         
@@ -156,7 +155,7 @@ namespace BioPacVideo
             Feeder.AddCommand((byte)2, (byte)3);
             Feeder.AddCommand((byte)1, (byte)3);
             Feeder.AddCommand((byte)0, (byte)3);           
-            Feeder.Execute();*/
+            Feeder.Execute();
             /* while (Feeder.State != 2) 
              {
              }
@@ -174,7 +173,14 @@ namespace BioPacVideo
         {            
         }
 
-       
+        private void TestAll_Click(object sender, EventArgs e)
+        {
+            Feeder.ExecuteTest();
+        }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Feeder.ExecuteAck();
+        }
     }
 }

@@ -1,0 +1,7 @@
+﻿  stdafx.cpp
+  VideoWrapper.cpp
+     Creating library ..\BioPacVideo\bin\Release\VideoWrapper.lib and object ..\BioPacVideo\bin\Release\VideoWrapper.exp
+  Generating code
+  All 156 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+LINK : fatal error LNK1207: incompatible PDB format in 'C:\Users\addlab\Desktop\biopacvideo\BioPacVideo\bin\Release\VideoWrapper.pdb'; delete and rebuild

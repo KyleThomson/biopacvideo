@@ -11,71 +11,40 @@ namespace BioPacVideo
 {
     public partial class VideoSettings : Form
     {
-        VideoTemplate Video;
+        int BitRate;
+        int Quality; 
+        VideoWrapper Video = VideoWrapper.Instance; 
         public VideoSettings()
         {
             InitializeComponent();
-            Video = VideoTemplate.Instance;
-            if (Video.XRes == 640)
-            {
-                V1.Checked = true;
-            }
-            else if (Video.XRes == 320)
-            {
-                V2.Checked = true;
-            }
-            else if (Video.XRes == 160)
-            {
-                V3.Checked = true;
-            }
-            if (Video.LengthWise == 4)
-            {
-                comboBox1.SelectedIndex = 0;
-            }else 
-            {
-                comboBox1.SelectedIndex = 1;
-            }
-            IDT_KEYINT.Text = Video.KeyFrames.ToString();
-            IDT_QUANT.Text = Video.Quant.ToString();
+
+            QualityBar.Value = Video.Quality; 
+            trackBar1.Value = Video.Bitrate; 
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            BitRate = trackBar1.Value;
+            label4.Text = (BitRate * 1024 * 1024).ToString(); 
+        }
+
+        private void QualityBar_Scroll(object sender, EventArgs e)
+        {
+            Quality = QualityBar.Value;
+            label2.Text = Quality.ToString(); 
         }
 
         private void button1_Click(object sender, EventArgs e)
-        {            
-            int test;
-            if (int.TryParse(IDT_KEYINT.Text, out test))
-                Video.KeyFrames = test;
-            if (int.TryParse(IDT_QUANT.Text, out test))
-                Video.Quant = test;
-            if (V1.Checked)
-            {
-                Video.XRes = 640;
-                Video.YRes = 480;
-            }
-            else if (V2.Checked)
-            {
-                Video.XRes = 320;
-                Video.YRes = 240;
-            }
-            else
-            {
-                Video.XRes = 160;
-                Video.YRes = 120;
-            }
-            VideoWrapper.SetCaptureRes(Video.XRes, Video.YRes);
-            this.Close();
+        {
+            this.DialogResult = DialogResult.OK;
+            Video.Quality = Quality;
+            Video.Bitrate = BitRate;
+            this.Close();            
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedIndex == 0)
-            {
-                Video.LengthWise = 4;
-            }
-            else
-            {
-                Video.LengthWise = 8;
-            }
-
+            this.DialogResult = DialogResult.Cancel; 
         }
     }
 }
