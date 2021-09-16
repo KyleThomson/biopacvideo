@@ -42,6 +42,8 @@
             this.S5 = new System.Windows.Forms.RadioButton();
             this.RadioBox = new System.Windows.Forms.GroupBox();
             this.Unknown = new System.Windows.Forms.RadioButton();
+            this.label2 = new System.Windows.Forms.Label();
+            this.VideoSave = new System.Windows.Forms.CheckBox();
             this.RadioBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,7 +77,7 @@
             // 
             // CurFileProg
             // 
-            this.CurFileProg.Location = new System.Drawing.Point(15, 80);
+            this.CurFileProg.Location = new System.Drawing.Point(15, 103);
             this.CurFileProg.Name = "CurFileProg";
             this.CurFileProg.Size = new System.Drawing.Size(382, 25);
             this.CurFileProg.TabIndex = 3;
@@ -197,11 +199,32 @@
             this.Unknown.UseVisualStyleBackColor = true;
             this.Unknown.CheckedChanged += new System.EventHandler(this.RadioButtonChanged);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 87);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(63, 13);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "Enter Notes";
+            // 
+            // VideoSave
+            // 
+            this.VideoSave.AutoSize = true;
+            this.VideoSave.Location = new System.Drawing.Point(416, 123);
+            this.VideoSave.Name = "VideoSave";
+            this.VideoSave.Size = new System.Drawing.Size(93, 17);
+            this.VideoSave.TabIndex = 14;
+            this.VideoSave.Text = "Capture Video";
+            this.VideoSave.UseVisualStyleBackColor = true;
+            // 
             // SzPrompt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(661, 283);
+            this.ClientSize = new System.Drawing.Size(661, 233);
+            this.Controls.Add(this.VideoSave);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PleaseWait);
             this.Controls.Add(this.CurFileProg);
@@ -235,5 +258,7 @@
         private System.Windows.Forms.RadioButton S5;
         private System.Windows.Forms.GroupBox RadioBox;
         private System.Windows.Forms.RadioButton Unknown;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox VideoSave;
     }
 }

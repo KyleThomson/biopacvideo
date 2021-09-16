@@ -37,7 +37,7 @@ namespace SeizurePlayback
         {
             InitializeComponent();
             Data = PassData;            
-            Zoom = 0.15f;
+            Zoom = 0.3f;
             WavePen = new Pen(Color.Black);
             CaptureBMP = new Bitmap(CapPanel.Width, CapPanel.Height);
             VideoBMP = new Bitmap(640, 480);
@@ -93,7 +93,7 @@ namespace SeizurePlayback
 
             float m = (maxPixel - minPixel) / (65536);
             float b = 2 ^ 15;
-            float result = ((m * volt) + b)*Zoom;
+            float result = ((m * volt) + b)*Zoom*2;
             //result = (result > maxPixel) ? maxPixel: result;
             //result = (result < minPixel) ? minPixel: result;
             return (result);
@@ -109,11 +109,11 @@ namespace SeizurePlayback
                 f = Graphics.FromImage(TempEEG);
                 f.DrawLine(LinePen, new Point((int)((float)i * Step), 0), new Point((int)((float)i * Step), 221));
                 EEGPanel.BackgroundImage = TempEEG;
-                VideoPanel.BackgroundImage = new Bitmap(string.Format("C:\\test\\a{0:D5}.png", i));
+                VideoPanel.BackgroundImage = new Bitmap(string.Format("D:\\test\\a{0:D5}.png", i));
                 //CapPanel.DrawToBitmap(CaptureBMP, rect);
                 //CaptureBMP.Save(string.Format("C:\\TEST\\Img{0:D5}.png", i), System.Drawing.Imaging.ImageFormat.Png);
                 CapPanel.Invoke((MethodInvoker)delegate {CapPanel.DrawToBitmap(CaptureBMP, rect);});
-                CapPanel.Invoke((MethodInvoker)delegate { CaptureBMP.Save(string.Format("C:\\TEST\\Img{0:D5}.png", i), System.Drawing.Imaging.ImageFormat.Png); });
+                CapPanel.Invoke((MethodInvoker)delegate { CaptureBMP.Save(string.Format("D:\\TEST\\Img{0:D5}.png", i), System.Drawing.Imaging.ImageFormat.Png); });
                 Thread.Sleep(50);
                 try {            
                     
@@ -145,7 +145,7 @@ namespace SeizurePlayback
             }
             ProgText.Invoke((MethodInvoker)delegate { ProgText.Text = "Creating Video..."; });
             Process p = new Process();
-            string CmdString =" -i C:\\TEST\\Img%05d.png C:\\OUTPUT.avi -y";            
+            string CmdString =" -i D:\\TEST\\Img%05d.png C:\\OUTPUT.avi -y";            
             p.StartInfo.FileName = "C:\\x264\\ffmpeg.exe";
             p.StartInfo.Arguments = CmdString;
             p.StartInfo.CreateNoWindow = true;
@@ -180,21 +180,20 @@ namespace SeizurePlayback
         private void ZoomScale_Scroll(object sender, EventArgs e)
         {
             EEGPanel.BackgroundImage.Dispose();
-            Zoom = (float)ZoomScale.Value / 10;
+            Zoom = (float)ZoomScale.Value / 50;
             drawCapture(Data, f, 950, 221, 1);
             EEGPanel.BackgroundImage = EEG;
         }
         private void DumpFrames()
         {
-           
+            ProgText.Invoke((MethodInvoker)delegate { ProgText.Text = "Starting Dump..."; }); 
 
             for (int i = 0; i < LiS * 30; i++)
-            {
-                ProgText.Invoke((MethodInvoker)delegate { ProgText.Text = "Starting Dump..."; }); 
+            {                
                 Mem.NextFrame();
                 NewFrame = true;
                 while (NewFrame) { };
-                VideoBMP.Save(string.Format("C:\\TEST\\a{0:D5}.png", cnt++), System.Drawing.Imaging.ImageFormat.Png);
+                VideoBMP.Save(string.Format("D:\\TEST\\a{0:D5}.png", cnt++), System.Drawing.Imaging.ImageFormat.Png);
                 VideoPanel.BackgroundImage = VideoBMP;
                 Thread.Sleep(200);
                 ProgText.Invoke((MethodInvoker)delegate { ProgText.Text = "Frame " + (i+1) + " of " + LiS * 30; });

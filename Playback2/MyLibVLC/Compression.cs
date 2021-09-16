@@ -70,7 +70,7 @@ namespace SeizurePlayback
             FileInfo FI;
             bool ResetFailCount = false;
             string Command;
-            Test = new StreamWriter("E:\\TEST.TXT");
+            Test = new StreamWriter(Path + "\\TEST.TXT");
             Test.AutoFlush = true;
             bool fail = false;
             int failcount = 0;

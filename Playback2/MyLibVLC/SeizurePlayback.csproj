@@ -6,13 +6,13 @@
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3EA5C550-DD0C-4E38-964E-18CF17668B48}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SeizurePlayback</RootNamespace>
     <AssemblyName>SeizurePlayback</AssemblyName>
     <StartupObject>
     </StartupObject>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -32,6 +32,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -79,25 +80,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ACQReader.cs" />
-    <Compile Include="AddDate.cs">
+    <Compile Include="ProjectManager\AddDate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddDate.Designer.cs">
+    <Compile Include="ProjectManager\AddDate.Designer.cs">
       <DependentUpon>AddDate.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddGroup.cs">
+    <Compile Include="ProjectManager\AddGroup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddGroup.Designer.cs">
+    <Compile Include="ProjectManager\AddGroup.Designer.cs">
       <DependentUpon>AddGroup.cs</DependentUpon>
     </Compile>
     <Compile Include="DetectedSeizureList.cs" />
-    <Compile Include="FixChan.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FixChan.Designer.cs">
-      <DependentUpon>FixChan.cs</DependentUpon>
-    </Compile>
     <Compile Include="ReviewLogger.cs" />
     <Compile Include="Compression.cs">
       <SubType>Form</SubType>
@@ -111,10 +106,10 @@
     <Compile Include="CompressionManager.Designer.cs">
       <DependentUpon>CompressionManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="Exporter.cs">
+    <Compile Include="ProjectManager\Exporter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Exporter.Designer.cs">
+    <Compile Include="ProjectManager\Exporter.Designer.cs">
       <DependentUpon>Exporter.cs</DependentUpon>
     </Compile>
     <Compile Include="AdvanceSettings.cs">
@@ -123,16 +118,10 @@
     <Compile Include="AdvanceSettings.Designer.cs">
       <DependentUpon>AdvanceSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Calendar.cs">
+    <Compile Include="ProjectManager\AddtoProject.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Calendar.Designer.cs">
-      <DependentUpon>Calendar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AddtoProject.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AddtoProject.Designer.cs">
+    <Compile Include="ProjectManager\AddtoProject.Designer.cs">
       <DependentUpon>AddtoProject.cs</DependentUpon>
     </Compile>
     <Compile Include="GetACQ.cs">
@@ -142,16 +131,22 @@
       <DependentUpon>GetACQ.cs</DependentUpon>
     </Compile>
     <Compile Include="Render.cs" />
+    <Compile Include="SzDetPrompt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SzDetPrompt.Designer.cs">
+      <DependentUpon>SzDetPrompt.cs</DependentUpon>
+    </Compile>
     <Compile Include="VideoCreator.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="VideoCreator.Designer.cs">
       <DependentUpon>VideoCreator.cs</DependentUpon>
     </Compile>
-    <Compile Include="MultiDirectoryAdd.cs">
+    <Compile Include="ProjectManager\MultiDirectoryAdd.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MultiDirectoryAdd.Designer.cs">
+    <Compile Include="ProjectManager\MultiDirectoryAdd.Designer.cs">
       <DependentUpon>MultiDirectoryAdd.cs</DependentUpon>
     </Compile>
     <Compile Include="NotesBox.cs">
@@ -167,11 +162,11 @@
     <Compile Include="OpenFrm.Designer.cs">
       <DependentUpon>OpenFrm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Project.cs" />
-    <Compile Include="ProjectManager.cs">
+    <Compile Include="ProjectManager\Project.cs" />
+    <Compile Include="ProjectManager\ProjectManager.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProjectManager.Designer.cs">
+    <Compile Include="ProjectManager\ProjectManager.Designer.cs">
       <DependentUpon>ProjectManager.cs</DependentUpon>
     </Compile>
     <Compile Include="RenameChans.cs">
@@ -202,23 +197,20 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WeightAdd.cs">
+    <Compile Include="ProjectManager\WeightAdd.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WeightAdd.Designer.cs">
+    <Compile Include="ProjectManager\WeightAdd.Designer.cs">
       <DependentUpon>WeightAdd.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AddDate.resx">
+    <EmbeddedResource Include="ProjectManager\AddDate.resx">
       <DependentUpon>AddDate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddGroup.resx">
+    <EmbeddedResource Include="ProjectManager\AddGroup.resx">
       <DependentUpon>AddGroup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AdvanceSettings.resx">
       <DependentUpon>AdvanceSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Calendar.resx">
-      <DependentUpon>Calendar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Compression.resx">
       <DependentUpon>Compression.cs</DependentUpon>
@@ -226,22 +218,22 @@
     <EmbeddedResource Include="CompressionManager.resx">
       <DependentUpon>CompressionManager.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Exporter.resx">
+    <EmbeddedResource Include="ProjectManager\Exporter.resx">
       <DependentUpon>Exporter.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddtoProject.resx">
+    <EmbeddedResource Include="ProjectManager\AddtoProject.resx">
       <DependentUpon>AddtoProject.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FixChan.resx">
-      <DependentUpon>FixChan.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GetACQ.resx">
       <DependentUpon>GetACQ.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SzDetPrompt.resx">
+      <DependentUpon>SzDetPrompt.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="VideoCreator.resx">
       <DependentUpon>VideoCreator.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MultiDirectoryAdd.resx">
+    <EmbeddedResource Include="ProjectManager\MultiDirectoryAdd.resx">
       <DependentUpon>MultiDirectoryAdd.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NotesBox.resx">
@@ -254,7 +246,7 @@
     <EmbeddedResource Include="OpenFrm.resx">
       <DependentUpon>OpenFrm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProjectManager.resx">
+    <EmbeddedResource Include="ProjectManager\ProjectManager.resx">
       <DependentUpon>ProjectManager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RenameChans.resx">
@@ -276,9 +268,10 @@
     <EmbeddedResource Include="SzPrompt.resx">
       <DependentUpon>SzPrompt.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WeightAdd.resx">
+    <EmbeddedResource Include="ProjectManager\WeightAdd.resx">
       <DependentUpon>WeightAdd.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

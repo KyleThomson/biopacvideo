@@ -16,6 +16,9 @@ namespace SeizurePlayback
         public int Chans;
         public int SelectedChan;
         public int SampleRate;
+        public bool Randomized;
+        public bool Telemetry; 
+        public int[] RandomOrder;
         private BinaryReader FID;
         private FileStream FILE;
         private BinaryReader FID2;
@@ -48,6 +51,7 @@ namespace SeizurePlayback
         private List<TimeSpan> SzTime;
         private List<int> SzChannel; 
         Graphics g;
+        
         public ACQReader()
         {
             Zoom = 1; 
@@ -56,8 +60,10 @@ namespace SeizurePlayback
             HideChan = new bool[16];            
             Voltage = 2000*1000;                        
             WavePen = new Pen(Color.Black);
-            SelectedPen = new Pen(Color.Red);
+            SelectedPen = new Pen(Color.Red);            
             SelectedChan = -1;
+            RandomOrder = new int[16];
+            Randomized = false; 
         }
         public void closeACQ()
         {
@@ -101,7 +107,7 @@ namespace SeizurePlayback
             TotFileTime = FileTime;
             Position = 0;
             Loaded = true;
-            VoltageSpacing = (int)(Ymax / (Chans+.5));
+            VoltageSpacing = (int)(Ymax / (Chans));
         }
         public void AppendACQ(string FName)
         {
@@ -114,7 +120,7 @@ namespace SeizurePlayback
         }
         public void RefreshDisplay()
         {
-            VoltageSpacing = (int)(Ymax / (Chans + .5));
+            VoltageSpacing = (int)(Ymax / (Chans));
             PointSpacing = (float)Xmax / MaxDrawSize;
         }
         public void UpdateIDs()
@@ -132,6 +138,42 @@ namespace SeizurePlayback
                     FID2.Write((byte)0);
                 }
             }
+        }
+        public bool DisplayDetection(int TimeStart, int Channel, int X, int Y, bool Display)
+        {
+                       
+            PointF[] WaveC;
+            float YPoint;
+            Pen BoxPen = new Pen(Color.Red, 3);
+            ReadData(TimeStart, 30);
+            Font F = new Font("Arial", 10);
+                    
+                float YDraw;
+                WaveC = new PointF[30*SampleRate];
+                YDraw = (Ymax/8) * Y;                                                               
+                for (int i = 0; i < SampleSize; i++)
+                {
+                    YPoint = ScaleVoltsToPixel(Convert.ToSingle(data[Channel - 1][i]), Ymax / 8);
+                    if (YPoint > Ymax / 8) YPoint = (Ymax / 8);                     
+                    if (YPoint < 0) YPoint = 0;
+                    PointF TempPoint = new PointF((float)(i + (X*SampleSize)) * PointSpacing, YDraw + YPoint);
+                    WaveC[i] = TempPoint;
+                }          
+                g.DrawLines(WavePen, WaveC);
+                if (Display)
+                {
+                   g.DrawRectangle(BoxPen, 3+(X*(Xmax/2)),3+YDraw, (Xmax / 2)-6, (Ymax / 8)-6);
+                }
+                else
+                 {
+                    g.DrawRectangle(WavePen, X * (Xmax / 2), YDraw, Xmax / 2, Ymax / 8);
+                }
+            /*}
+            catch
+            {
+                return false; 
+            }*/
+            return true; 
         }
         public bool ReadData(int TimeStart, int Length) // In seconds
         {
@@ -249,7 +291,8 @@ namespace SeizurePlayback
             Xmax = X;
             Ymax = Y;            
             g = Graphics.FromImage(offscreen);
-            g.Clear(Color.White);
+            g.Clear(Color.White);   
+            
         }
         public void cleargraph()
         {
@@ -257,16 +300,25 @@ namespace SeizurePlayback
         }
         public void ResetScale()
         {
-            VoltageSpacing = (int)(Ymax / (VisibleChans + .5));
+            VoltageSpacing = (int)(Ymax / (VisibleChans));
         }
         private float ScaleVoltsToPixel(float volt, float pixelHeight)
         {
             float maxPixel = (pixelHeight * .15F);
             float minPixel = (pixelHeight * .95F);
-
-            float m = (maxPixel - minPixel) / (65536);
-            float b = 2^15;
-            float result = ((m * volt) + b)*Zoom;
+            float m;
+            float b;
+            if (Telemetry)
+            {
+                m = (maxPixel - minPixel) / (Int32.MaxValue / 2);
+                b = 2 ^ 30;
+            }
+            else
+            {
+                m = (maxPixel - minPixel) / (65536);
+                b = 2 ^ 15;
+            }            
+            float result = ((m * volt) * Zoom) + b;
             //result = (result > maxPixel) ? maxPixel: result;
             //result = (result < minPixel) ? minPixel: result;
             return (result);
@@ -336,55 +388,6 @@ namespace SeizurePlayback
             FOUT_ID.Close();
             FOUT.Close();
         }
-
-        public void FixChans(int BreakNum)
-        {
-            
-            string Fname = FullName.Substring(0,FullName.Length-4) + "_F.acq";
-            FileStream FOUT = new FileStream(Fname, FileMode.Create);
-            BinaryWriter FOUT_ID = new BinaryWriter(FOUT);
-            long EndPoint = DataStart + SampleRate * Chans * Position * 4;
-            FILE.Seek(0, SeekOrigin.Begin);
-            //Copy data up to the broken part            
-            if (BreakNum > 0)
-            {
-                for (long i = 0; i < EndPoint; i++)
-                {
-                    FOUT_ID.Write(FID.ReadByte()); //Read a byte and write it
-                }
-                for (int i=0; i < BreakNum; i++)
-                {
-                    FOUT_ID.Write((Int32)0); //Write the two missing samples
-                }
-
-            }
-            else
-            {
-                for (long i = 0; i < EndPoint+4*BreakNum; i++)
-                {
-                    FOUT_ID.Write(FID.ReadByte()); //Read a byte and write it
-                }
-                FILE.Seek(-4 * BreakNum, SeekOrigin.Current);
-            }
-            long EndPoint2 = FID.BaseStream.Length-FID.BaseStream.Position;
-            for (long i = 0; i < EndPoint2; i++)
-            {
-               FOUT_ID.Write(FID.ReadByte());
-            }
-            FOUT_ID.Close();
-            FOUT.Close();
-            FILE.Close();
-            FID.Close(); 
-            if (File.Exists(FullName.Substring(0, FullName.Length - 4) + ".bak"))
-            {
-                File.Delete(FullName.Substring(0, FullName.Length - 4) + ".bak");
-            }
-            File.Move(FullName, FullName.Substring(0, FullName.Length - 4) + ".bak");
-            File.Move(FullName.Substring(0, FullName.Length - 4) + "_F.acq", FullName);
-            FILE = new FileStream(FullName, FileMode.Open, FileAccess.Read);
-            FID = new BinaryReader(FILE);
-
-        }
         public void sethighlight(int Start, int End)
         {
             HLS = Start;
@@ -418,6 +421,7 @@ namespace SeizurePlayback
             {
              g.Clear(Color.White);
              NotDisp = 0;
+             float YDraw; 
              
                  WaveC = new PointF[Chans][];
                  for (int i = 0; i < Chans; i++)
@@ -429,17 +433,27 @@ namespace SeizurePlayback
 
                      if (!HideChan[j])
                      {
+
+                         if (Randomized)
+                         {
+                             YDraw = VoltageSpacing * (Array.FindIndex(RandomOrder, item => item ==  j));
+                         }
+                         else
+                         {
+                             YDraw = VoltageSpacing * (j - NotDisp);
+                             g.DrawString(ID[j], F, B, new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans)));
+                         }
                          if (HL && (SelectedChan == j))
                          {
                              SolidBrush myBrush = new SolidBrush(System.Drawing.Color.LightGreen);
-                             g.FillRectangle(myBrush, new Rectangle((int)(HLS * PointSpacing * SampleRate), (int)(VoltageSpacing * (SelectedChan - NotDisp + 0.25F)), (int)((HLE - HLS) * PointSpacing * SampleRate), (Ymax / VisibleChans)));
+                             g.FillRectangle(myBrush, new Rectangle((int)(HLS * PointSpacing * SampleRate), (int)(YDraw + (VoltageSpacing * 0.25F)), (int)((HLE - HLS) * PointSpacing * SampleRate), (Ymax / VisibleChans)));
 
-                         }                         
-                         g.DrawString(ID[j], F, B, new PointF(1, .25F + (j - NotDisp) * (Ymax / VisibleChans)));
+                         }
+                         
                          for (int i = 0; i < SampleSize; i++)
                          {
 
-                             PointF TempPoint = new PointF((float)i * PointSpacing, VoltageSpacing * ((j - NotDisp) + (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(data[j][i]), Ymax / VisibleChans));
+                             PointF TempPoint = new PointF((float)i * PointSpacing, YDraw + ScaleVoltsToPixel(Convert.ToSingle(data[j][i]), Ymax / VisibleChans));
                              WaveC[j][i] = TempPoint;
                          }
                          if (j == SelectedChan)
@@ -456,7 +470,43 @@ namespace SeizurePlayback
              catch
              {
              }
-            }        
+            }
+        public void Randomizer()
+        {
+            Random rnd = new Random();                      
+            int[] TempHold = new int[Chans];
+            int TotChan = -1; //Total Number of Channels displayed            
+            int RChan;                     
+            for (int i = 0; i < Chans; i++) 
+            {
+                if (!HideChan[i])
+                {
+                    TotChan++; //increment number of channels
+                    TempHold[TotChan] = i; //Generate Temporary (Visible) Channel list. 
+                }
+            }
+            for (int i = 0; i < TotChan+1; i++)
+            {
+                RChan = rnd.Next(0, TotChan - i); //Get Random Number the length of remaining channels
+                RandomOrder[i] = TempHold[RChan]; //Take that channel from the array
+                int TempPlace = 0; //Need to skip Channel that is taken
+                for (int j = 0; j < TotChan - i; j++) //Rebuild Random order
+                {
+                    if (j == RChan) 
+                    {
+                        TempPlace++; //Skip the channel we took from the array
+                    }
+                    TempHold[j] = TempHold[TempPlace]; //Grab number 
+                    TempPlace++; //Increment location regardless 
+                }
+            }
+            for (int i = 0; i < TotChan+1; i++)
+            {
+                Console.WriteLine("C" + (i + 1).ToString() + " - " + (RandomOrder[i]+1).ToString());
+            }
+                
+        }
 
     }
+
 } 

@@ -104,7 +104,7 @@ namespace SeizurePlayback
                     FI = new FileInfo(AVIFiles[i]);                    
                     CurrentFile = i;
                     UpdateINI();
-                    Command = "-i " + AVIFiles[i] + " -y -vcodec libx264 -crf 28 -coder 0 -an ";
+                    Command = "-i " + AVIFiles[i] + " -y -vcodec libx264 -crf 10 -coder 0 -an ";
                     Command += CurPath + "\\temp.avi";
                     CurFileProg.Invoke((MethodInvoker)delegate { CurFileProg.Value = 0; });
                     CurrentLabel.Invoke((MethodInvoker)delegate { CurrentLabel.Text = "Current File: " + AVIFiles[i]; });

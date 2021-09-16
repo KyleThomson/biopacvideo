@@ -8,11 +8,13 @@ namespace SeizurePlayback
     class DetectedSeizureType
     {
         public int TimeInSec; 
-        public int Channel;        
-        public DetectedSeizureType(int a, int b)
+        public int Channel;
+        public bool Display; 
+        public DetectedSeizureType(int a, int b, bool c)
         {
             Channel = a; 
-            TimeInSec = b;            
+            TimeInSec = b;
+            Display = c; 
         }
     }
 
@@ -31,6 +33,7 @@ namespace SeizurePlayback
         }
         public void OpenFile(string FN)
         {
+            DetectedSeizures.Clear(); 
             DetectedSeizureType TempSz; 
             FileName =FN;
             StreamReader F = new StreamReader(FN);
@@ -51,22 +54,56 @@ namespace SeizurePlayback
             string[] data = p.Split(',');
             int.TryParse(data[0], out Ch);
             int.TryParse(data[1], out T);
-            TempSz = new DetectedSeizureType(Ch, T);
+            TempSz = new DetectedSeizureType(Ch, T, true);
             return TempSz;
         }
-        public void Inc()
+        public bool Inc()
         {
             SeizureNumber = SeizureNumber + 1; 
             if (SeizureNumber+1 > DetectedSeizures.Count)
             {
                 SeizureNumber = DetectedSeizures.Count-1;
+                return false;
             }
+            return true;
         }
-       public void Dec()
+        public bool SetSeizureNumber(int Number)
+        {
+            
+            if (Number+1 > DetectedSeizures.Count)
+            {
+                SeizureNumber = DetectedSeizures.Count - 1;
+                return false;
+            }
+            SeizureNumber = Number;
+            return true;
+        }
+        public bool ChangeDisplaySeizure(int Number)
+        {
+            if (Number+1>DetectedSeizures.Count)
+            {
+                return false;
+            }
+            DetectedSeizures[Number].Display = !DetectedSeizures[Number].Display;
+            return true; 
+            
+        }
+       public bool Dec()
         {
             SeizureNumber = SeizureNumber - 1;
             if (SeizureNumber < 0)
-                SeizureNumber = 0; 
+            {
+                SeizureNumber = 0;
+                return false;
+            }
+            return true;
+        }
+        public void ResetDisplay()
+        {
+            for(int i=0; i<DetectedSeizures.Count; i++)
+            {
+                DetectedSeizures[i].Display = false; 
+            }
         }
         public DetectedSeizureType GetCurrentSeizure()
         {

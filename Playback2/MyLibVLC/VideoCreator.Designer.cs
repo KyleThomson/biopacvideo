@@ -107,14 +107,14 @@
             // 
             this.ZoomScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomScale.Location = new System.Drawing.Point(274, 738);
-            this.ZoomScale.Maximum = 20;
+            this.ZoomScale.Maximum = 15;
             this.ZoomScale.Minimum = 1;
             this.ZoomScale.Name = "ZoomScale";
             this.ZoomScale.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.ZoomScale.Size = new System.Drawing.Size(171, 42);
             this.ZoomScale.TabIndex = 44;
             this.ZoomScale.TabStop = false;
-            this.ZoomScale.Value = 10;
+            this.ZoomScale.Value = 12;
             this.ZoomScale.Scroll += new System.EventHandler(this.ZoomScale_Scroll);
             // 
             // CurProg

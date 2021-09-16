@@ -17,6 +17,7 @@ namespace SeizurePlayback
         public string Notes;
         public bool Ok;        
         public string Result;
+        public bool VideoCapture; 
         public infopass Pass;
         Thread CT;        
         public SzPrompt()
@@ -25,6 +26,7 @@ namespace SeizurePlayback
             Notes = "";
             Unknown.Checked = true;
             Ok = false;
+            
         }
 
         private void OKBtn_Click(object sender, EventArgs e)
@@ -33,6 +35,8 @@ namespace SeizurePlayback
             NotesBx.Enabled = false;
             OKBtn.Enabled = false;
             CancelBtn.Enabled = false;
+            Pass.VideoCapture = VideoSave.Checked;
+            VideoCapture = VideoSave.Checked; 
             CurFileProg.Maximum = Pass.length * 30;
             if (S1.Checked)
                 Pass.Stage = 1;
@@ -57,28 +61,45 @@ namespace SeizurePlayback
             Result = Pass.Sz + Notes + "," + Pass.outfile;
             string outfile = Pass.FPath + "\\" + Pass.outfile;
             Pass.ACQ.DumpData(outfile + ".dat", Pass.ACQ.SelectedChan, Pass.StartTime, Pass.HighlightEnd - Pass.HighlightStart + 1);
-            int StartTime = (int)((((float)Pass.StartTime * 1000F * (1F + Pass.VideoOffset)) - Pass.Subtractor)/1000F);                            
-            Process p = new Process();
-            string CmdString = " -y -ss " + StartTime.ToString() + " -t " + Pass.length.ToString();
-            CmdString += " -i " + Pass.CurrentAVI;
-            CmdString += " -sameq " + outfile + ".avi";
-            p.StartInfo.Arguments = CmdString;
-            p.StartInfo.FileName = "C:\\x264\\ffmpeg.exe";
-            p.StartInfo.CreateNoWindow = true;
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.RedirectStandardError = true;    
-            p.ErrorDataReceived += new DataReceivedEventHandler(process_OutputDataReceived); 
-            p.Start();
-            p.BeginErrorReadLine();
-            while (!p.WaitForExit(1000))
-            { };
-            Notes = Notes.Replace(",", string.Empty);
-            
-          
+            int StartTime;
+            if (Pass.VideoCapture)
+            { 
+                if (Pass.AVIMode == "mp4")
+                    {
+                        StartTime = (int)(((float)Pass.StartTime * 1000F - Pass.Subtractor) / 1000F);
+                    }
+                    else
+                    {
+                        StartTime = (int)((((float)Pass.StartTime * 1000F * (1F + Pass.VideoOffset)) - Pass.Subtractor) / 1000F);
+                    }
+                Process p = new Process();
+                string CmdString = " -y -ss " + StartTime.ToString() + " -t " + Pass.length.ToString();
+                CmdString += " -i " + Pass.CurrentAVI;
+                if (Pass.AVIMode == "mp4")
+                {
+                    CmdString += " -sameq " + outfile + ".mp4";
+                }
+                else
+                {
+                    CmdString += " -sameq " + outfile + ".avi";
+                }
+
+                p.StartInfo.Arguments = CmdString;
+                p.StartInfo.FileName = Pass.X264path + "\\ffmpeg.exe";
+                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.RedirectStandardError = true;
+                p.ErrorDataReceived += new DataReceivedEventHandler(process_OutputDataReceived);
+                p.Start();
+                p.BeginErrorReadLine();
+                while (!p.WaitForExit(1000))
+                { };
+            }
+            Notes = Notes.Replace(",", string.Empty);                      
             Result = Pass.Sz + Notes + ", " + Pass.outfile + ", " + Pass.Stage.ToString();
             PleaseWait.Invoke((MethodInvoker)delegate { PleaseWait.Text = "Finished!"; });
-            Thread.Sleep(1000);
+            Thread.Sleep(300);
             this.Invoke((MethodInvoker)delegate { this.Close(); });
         }
 
@@ -94,7 +115,7 @@ namespace SeizurePlayback
         }
         private void SzPrompt_Load(object sender, EventArgs e)
         {
-
+            VideoSave.Checked = Pass.VideoCapture;
         }
 
         private void Cancel_Click(object sender, EventArgs e)
@@ -137,6 +158,9 @@ namespace SeizurePlayback
         public int StartTime;
         public int Stage;
         public double duration;
+        public string AVIMode;
+        public string X264path;
+        public bool VideoCapture; 
         public infopass()
         { }
     }
