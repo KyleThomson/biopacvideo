@@ -7,6 +7,7 @@
         public bool Med;
         public bool wt;
         public bool SzTime;
+        public bool seizureDuration;
         public bool Meal;
         public bool DetailList;
         public bool Notes;
@@ -15,7 +16,10 @@
         public bool BloodDrawList;
         public bool Injections;
         public bool InjectionsList;
-        public bool binSz; public bool grouped; public bool ungrouped;
+        public bool binSz; 
+        public bool grouped; 
+        public bool ungrouped;
+        public bool align;
 
         public ExportType()
         {
@@ -33,6 +37,7 @@
             Injections = false;
             InjectionsList = false;
             binSz = false;
+            align = false;
         }
 
     }

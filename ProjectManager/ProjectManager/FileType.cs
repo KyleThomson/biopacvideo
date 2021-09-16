@@ -10,8 +10,9 @@ namespace ProjectManager
         public TimeSpan Duration;
         public String Reviewer;
         public DateTime ReviewDate;
+        public string fileName;
 
-        public FileType(string[] A, int B, DateTime C, string D)
+        public FileType(string[] A, int B, DateTime C, string D, string file)
         {
             AnimalIDs = A;
             Chans = B;
@@ -19,8 +20,9 @@ namespace ProjectManager
             TimeSpan.TryParse(D, out Duration);
             Reviewer = "";
             ReviewDate = Start;
+            fileName = file;
         }
-        public FileType(string[] A, int B, DateTime C, string D, string E, DateTime F)
+        public FileType(string[] A, int B, DateTime C, string D, string E, string file, DateTime F)
         {
             AnimalIDs = A;
             Chans = B;
@@ -28,6 +30,7 @@ namespace ProjectManager
             TimeSpan.TryParse(D, out Duration);
             Reviewer = E;
             ReviewDate = F;
+            fileName = file;
         }
         public FileType()
         {

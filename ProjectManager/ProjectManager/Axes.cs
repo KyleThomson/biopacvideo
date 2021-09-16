@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace ProjectManager
 {
@@ -15,8 +16,6 @@ namespace ProjectManager
         public float yAxisLength;
         public float xAxisStart;
         public float yAxisStart;
-        public float maxXData;
-        public float maxYData;
         public List<PointF> axesList;
         public string xLabel; public string yLabel;
         public float axesWidth;
@@ -30,7 +29,7 @@ namespace ProjectManager
         public List<string> yTickLabels;
         public List<double> xTickLocations;
 
-        // drawing
+        // Drawing
         public float scale;
         public float objectScale;
         public float xScale;
@@ -44,9 +43,9 @@ namespace ProjectManager
             xTickPoints = new List<float>();
             yTickPoints = new List<float>();
 
-            xAxisLength = (float)(X * 0.75);
+            xAxisLength = (float)(X * 0.85);
             yAxisLength = (float)(Y * 0.75);
-            xAxisStart = (float)(X * 0.25);
+            xAxisStart = (float)(X * 0.15);
             yAxisStart = (float)(Y * 0.25);
 
             PointF xAxisStartPoint = new PointF(xAxisStart, Y - yAxisStart);
@@ -60,13 +59,47 @@ namespace ProjectManager
             axesList.Add(yAxisStartPoint);
             axesList.Add(yAxisEndPoint);
         }
-        public void YLabel(string label)
+        public void YLabel(string label, Font font)
         {
+            // get current graphics state
+            GraphicsState state = graphContext.graphics.Save();
+            graphContext.graphics.ResetTransform();
+
             yLabel = label;
+            // Format string
+            SolidBrush drawBrush = new SolidBrush(Color.Black);
+
+            // Get size of the string and bounds
+            SizeF bounds = graphContext.graphics.VisibleClipBounds.Size;
+
+            // Rotate graphics first
+            graphContext.graphics.TranslateTransform(bounds.Width / 2f, bounds.Height / 2f);
+            graphContext.graphics.RotateTransform(270);
+
+            // Draw string on transformed graphics
+            graphContext.graphics.DrawString(yLabel, font, drawBrush, 0, (-bounds.Width / 2f) * 0.95f);
+
+            // Set graphics back to normal coordinate system
+            graphContext.graphics.ResetTransform();
         }
-        public void XLabel(string label)
+        public void XLabel(string label, Font font)
         {
             xLabel = label;
+
+            // Format string
+            SolidBrush drawBrush = new SolidBrush(Color.Black);
+            StringFormat drawFormat = new StringFormat();
+            drawFormat.Alignment = StringAlignment.Center;
+
+            // Get size of the string
+            SizeF xLabelSize = graphContext.graphics.MeasureString(xLabel, font);
+
+            // Use size of string and length of axis to center the label
+            float xPoint = (xAxisLength + xAxisStart) / 2 - xLabelSize.Width / 2;
+            float yPoint = axesList[0].Y;
+            RectangleF xLabelRect = new RectangleF((xPoint), (float)(yPoint * 1.05), xLabelSize.Width, xLabelSize.Height);
+
+            graphContext.graphics.DrawString(xLabel, font, drawBrush, xLabelRect, drawFormat);
         }
         public void AxisTicks()
         {
@@ -74,7 +107,7 @@ namespace ProjectManager
             tickPen.Width = tickWidth * objectScale;
             float xTickSpacing = (float)(xAxisLength / (xTicks * 2));
             float yTickSpacing = (float)(yAxisLength / (yTicks * 1.5));
-            Font xFont = new Font("Arial", 10 * objectScale);
+            Font xFont = new Font("Arial", 12 * objectScale);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             float maxXTick = (float)xTickLocations[xTicks - 1];
 
@@ -98,7 +131,7 @@ namespace ProjectManager
                 // create length of ticks
                 PointF yTickStart = new PointF(xAxisStart, (float)(yAxisLength - yTickSpacing * (i + 0.5)));
                 yTickPoints.Add((float)(yAxisLength - yTickSpacing * (i + 0.5)));
-                PointF yTickEnd = new PointF((float)(xAxisStart * 1.02), (float)((yAxisLength - yTickSpacing * (i + 0.5))));
+                PointF yTickEnd = new PointF((float)(xAxisStart * 1.04), (float)((yAxisLength - yTickSpacing * (i + 0.5))));
                 graphContext.graphics.DrawLine(tickPen, yTickStart, yTickEnd);
 
                 // y tick label

@@ -31,12 +31,12 @@ namespace ProjectManager
             switch (test)
             {
                 case TESTTYPES.T35:
-                    List<string> copyGroups = groups;
-                    copyGroups.Remove("Baseline");
-                    copyGroups.Remove("vehicle");
-                    string drugGroup = copyGroups[0];
-                    groupedData["Baseline"].freedomPValue = FisherExact(drugGroup, "Baseline");
-                    groupedData["vehicle"].freedomPValue = FisherExact(drugGroup, "vehicle");
+                    var drugGroup = groups.Where(g => g != "vehicle" && g != "Baseline").ToList();
+
+                    if (drugGroup.Count < 1) throw new NullReferenceException("Could not find drug");
+
+                    groupedData[drugGroup[0]].freedomPValue = FisherExact(drugGroup[0], "Baseline");
+                    groupedData["vehicle"].freedomPValue = FisherExact("vehicle", "Baseline");
 
                     break;
             }
@@ -93,13 +93,12 @@ namespace ProjectManager
             switch (test)
             {
                 case TESTTYPES.T35:
-                    List<string> copyGroups = groups;
-                    copyGroups.Remove("Baseline");
-                    copyGroups.Remove("vehicle");
-                    string drugGroup = copyGroups[0];
+                    var drugGroup = groups.Where(g => g != "vehicle" && g != "Baseline").ToList();
 
-                    groupedData["Baseline"].burdenPValue = MWW(drugGroup, "Baseline");
-                    groupedData["vehicle"].burdenPValue = MWW(drugGroup, "vehicle");
+                    if (drugGroup.Count < 1) throw new NullReferenceException("Could not find drug");
+
+                    groupedData["Baseline"].burdenPValue = MWW(drugGroup[0], "Baseline");
+                    groupedData["vehicle"].burdenPValue = MWW(drugGroup[0], "vehicle");
 
                     break;
 
@@ -245,7 +244,7 @@ namespace ProjectManager
                             }
                             else
                             {
-
+                                finalStage = bubbleSeverity;
                             }
                         }
                     }
@@ -290,6 +289,7 @@ namespace ProjectManager
                             // Use DL algorithm to do a check if vehicle is an injection ID. other injection IDs dont matter and should be added to groups
                             var result = DamerauLevenshtein.DamerauLevenshteinDistanceTo(
                                 injection.ADDID.ToLower(), "vehicle") <= 3 ? "vehicle" : injection.ADDID;
+
                             // New group found, add to Groups and the analysis groups
                             if (result == "vehicle" && !groups.Contains("vehicle"))
                                 groups.Add(result);

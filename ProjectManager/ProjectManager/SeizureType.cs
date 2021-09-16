@@ -11,6 +11,7 @@ namespace ProjectManager
         public string file;
         public int Severity;
         public bool stageAgreement = false; // Do bubble and note severity agree?
+        public bool keepInAnalysis = true; // if seizure is not -1 in notes
         public SeizureType(string a, string b, string c, string e, string f)
         {
             DateTime.TryParse(a, out d);
@@ -18,6 +19,7 @@ namespace ProjectManager
             //t = t + TimeSpan.FromSeconds(d.TimeOfDay.TotalSeconds);
             int.TryParse(e, out length);
             file = f;
+            TrimFileName();
             Notes = c;
             Severity = -1;
         }
@@ -28,6 +30,7 @@ namespace ProjectManager
             //t = t + TimeSpan.FromSeconds(d.TimeOfDay.TotalSeconds);
             int.TryParse(e, out length);
             file = f;
+            TrimFileName();
             Notes = c;
             int.TryParse(g, out Severity);
         }
@@ -37,6 +40,12 @@ namespace ProjectManager
                 return true;
             else
                 return false;
+        }
+        private void TrimFileName()
+        {
+            int index = file.IndexOf("_");
+            if (index >= 0)
+                file = file.Substring(0, index);
         }
     }
 }

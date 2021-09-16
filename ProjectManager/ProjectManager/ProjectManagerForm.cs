@@ -80,6 +80,7 @@ namespace ProjectManager
                 }
 
             }
+            MainSelect.SelectedIndex = 0;
         }
         private void UpdateSecondList()
         {
@@ -87,6 +88,7 @@ namespace ProjectManager
                 return;
             SecondList.Items.Clear();
             if (MainList.SelectedIndex == -1) return; //No file selected
+
             if (MainSelect.SelectedIndex == 0) //Files
             {
                 if (SecondSelect.SelectedIndex == 0)
@@ -99,6 +101,18 @@ namespace ProjectManager
                             SecondList.Items.Add(A);
                         }
                     }
+                }
+                else if (SecondSelect.SelectedIndex == 1)
+                {
+                    // reset list
+                    SecondList.Items.Clear();
+
+                    // call method to get array of strings for all seizures in selected file
+                    string[] seizures = pjt.GetSeizuresInFile(pjt.Files[MainList.SelectedIndex]);
+
+                    // populate secondlist with seizures from string array
+                    for (int i = 0; i < seizures.Length; i++)
+                        SecondList.Items.Add(seizures[i]);
                 }
             }
             else if (MainSelect.SelectedIndex == 1) //Animals
@@ -300,6 +314,7 @@ namespace ProjectManager
                     ChangeTitleText(pjt.Filename);
                 }
             }
+            UpdateSecondList();
         }
         private void delete_secondlist(object sender, EventArgs e)
         {
@@ -321,24 +336,11 @@ namespace ProjectManager
                     SecondList.Items.RemoveAt(SecondList.SelectedIndex);
                 }
             }
-            else if (SecondSelect.SelectedIndex == 3) // Treatment box selected
+            else if (SecondSelect.SelectedIndex == 3) // Injections selected
             {
-                // block of code to remove treatment from analysis
-                if (MainList.SelectedIndex >= 0)
-                {
-                    if (SecondList.Items[SecondList.SelectedIndex].ToString().ToUpper() == "BASELINE") // BASELINE CHOSEN FOR REMOVAL
-                    {
-                        SecondList.Items.RemoveAt(SecondList.SelectedIndex);
-                    }
-                    else if (SecondList.Items[SecondList.SelectedIndex].ToString().ToUpper() == "VEHICLE") // VEHICLE CHOSEN FOR REMOVAL
-                    {
-                        SecondList.Items.RemoveAt(SecondList.SelectedIndex);
-                    }
-                    else if (SecondList.Items[SecondList.SelectedIndex].ToString().ToUpper() == "DRUG") // DRUG CHOSEN FOR REMOVAL
-                    {
-                        SecondList.Items.RemoveAt(SecondList.SelectedIndex);
-                    }
-                }
+                // block of code to remove injection from file
+                pjt.Animals[MainList.SelectedIndex].Injections.RemoveAt(SecondList.SelectedIndex);
+                SecondList.Items.RemoveAt(SecondList.SelectedIndex);
             }
             // indicate file modified
             pjt.FileChanged();
@@ -360,7 +362,6 @@ namespace ProjectManager
             pjt.FileChanged();
             ChangeTitleText(pjt.Filename);
         }
-
         private void MainSelect_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (pjt == null)
@@ -369,6 +370,7 @@ namespace ProjectManager
             {
                 SecondSelect.Items.Clear();
                 SecondSelect.Items.Add("Animals");
+                SecondSelect.Items.Add("Seizures");
                 SecondSelect.SelectedIndex = 0;
             }
             else if (MainSelect.SelectedIndex == 1)
@@ -378,7 +380,6 @@ namespace ProjectManager
                 SecondSelect.Items.Add("Weights");
                 SecondSelect.Items.Add("Meals");
                 SecondSelect.Items.Add("Injections");
-                SecondSelect.Items.Add("Treatments");
                 SecondSelect.SelectedIndex = 0;
             }
             UpdateMainList();
@@ -423,7 +424,7 @@ namespace ProjectManager
             Frm.Dispose();
         }
 
-        private void addMultipleDirectoriesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void addMultipleDirectoriesToolStripMenuItem_Click(object sender, EventArgs e) 
         {
             if (pjt == null)
             {
@@ -432,6 +433,8 @@ namespace ProjectManager
                 
             }
             int DuplicateDirectoryCount = 0;
+            int SuccessfullyImportedDirectory = 0;
+            int NotImported = 0;
             MultiDirectoryAdd Frm = new MultiDirectoryAdd();
             Frm.ShowDialog();
             if (Frm.Pass)
@@ -442,7 +445,18 @@ namespace ProjectManager
                     int result = pjt.ImportDirectory(Frm.DirReturn[i], this.rejectUnreviewedFilesToolStripMenuItem.Checked);
                     if (result == 2)
                     {
+                        // User elected to not include file during import
+                        NotImported++;
+                    }
+                    else if (result == 1)
+                    {
+                        // User tried adding directory that was already in .pjt file
                         DuplicateDirectoryCount++;
+                    }
+                    else if (result == 0)
+                    {
+                        // The file was imported into the current .pjt file
+                        SuccessfullyImportedDirectory++;
                     }
                 }
                 pjt.FileChanged();
@@ -512,7 +526,7 @@ namespace ProjectManager
             if (pjt.Filename != "")
             {
                 // Save over current file
-                { pjt.Save(pjt.Filename); ChangeTitleText(pjt.Filename); }
+                pjt.Save(pjt.Filename); ChangeTitleText(pjt.Filename);
             }
             else
             {
@@ -530,35 +544,35 @@ namespace ProjectManager
         {
             SaveReminderDialog saveReminderDialog = new SaveReminderDialog();
             // first check for default value
-                if (pjt._fileChanged != default)
+            if (pjt._fileChanged != default)
+            {
+                // Check file changed flag in project data
+                if (pjt._fileChanged)
                 {
-                    // Check file changed flag in project data
-                    if (pjt._fileChanged)
+                    // Make sound to annoy user
+                    System.Media.SystemSounds.Exclamation.Play();
+
+                    // Open dialog to remind user to save
+                    saveReminderDialog.ShowDialog();
+
+                    // handle options that user selected
+                    if (saveReminderDialog.clickedOption == 0)
                     {
-                        // Make sound to annoy user
-                        System.Media.SystemSounds.Exclamation.Play();
+                        // User selected save
+                        if (pjt.Filename != "")
+                        // normal save if filename is not empty
+                        { pjt.Save(pjt.Filename); }
+                        else
+                        // Save As
+                        { pjt.SaveAs(); }
 
-                        // Open dialog to remind user to save
-                        saveReminderDialog.ShowDialog();
-
-                        // handle options that user selected
-                        if (saveReminderDialog.clickedOption == 0)
-                        {
-                            // User selected save
-                            if (pjt.Filename != "")
-                            // normal save if filename is not empty
-                            { pjt.Save(pjt.Filename); }
-                            else
-                            // Save As
-                            { pjt.SaveAs(); }
-
-                        }
-                        else if (saveReminderDialog.clickedOption == 2)
-                        // User selected cancel. DON'T CLOSE FORM!
-                        { e.Cancel = true; }
-                        // else: selected don't save, do nothing so form closes
                     }
+                    else if (saveReminderDialog.clickedOption == 2)
+                    // User selected cancel. DON'T CLOSE FORM!
+                    { e.Cancel = true; }
+                    // else: selected don't save, do nothing so form closes
                 }
+            }
         }
         private void ChangeTitleText(string path)
         {
@@ -567,14 +581,14 @@ namespace ProjectManager
             // extract filename
             string filename = Path.GetFileName(path);
             if (filename != "")
-            { title = "Project Manager - " + filename; }
+                title = "Project Manager - " + filename;
             else
-            { title = "Project Manager - Untitled"; }
+                title = "Project Manager - Untitled";
 
             // check if file has been changed
             if (pjt._fileChanged)
             // add asterik to indicate that file has unsaved changes
-            { title += "*"; }
+                title += "*";
 
             // set new title
             Text = title;
@@ -608,9 +622,8 @@ namespace ProjectManager
         }
         private void GenerateTest()
         {
-            SzGraph Test = new SzGraph(4000, 4000, pjt);
-            Test.DrawGraph();
-            Test.graph.DisplayGraph();
+            SzGraph Test = new SzGraph(pjt);
+            Test.DrawGraph();                                                                                                                                                                                                                                                                                                                                                                                                  
         }
 
         private void rejectUnreviewedFilesToolStripMenuItem_Click(object sender, EventArgs e)

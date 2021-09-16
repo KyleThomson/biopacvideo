@@ -20,11 +20,13 @@ namespace ProjectManager
             if (MedCount.Checked) E.Med = true;
             if (MealCheck.Checked) E.Meal = true;
             if (SzTimes.Checked) E.SzTime = true;
+            if (seizureDuration.Checked) E.seizureDuration = true;
             if (DetailList.Checked) E.DetailList = true;
             if (Notes.Checked) E.Notes = true;
             if (SzSvBox.Checked) E.SeverityIndx = true;
             if (BloodDraw.Checked) E.BloodDraw = true;
             if (BloodDrawList.Checked) E.BloodDrawList = true;
+            if (injections.Checked) E.Injections = true;
             if (binSeizures.Checked)
             {
                 E.binSz = true;
@@ -32,12 +34,15 @@ namespace ProjectManager
                 {
                     pjt.analysis.test = TESTTYPES.IAK;
                     E.grouped = true;
-                    // Have user assign groups
+                    
                     if (pjt == null)
                         return;
                 }
                 else if (ungroupedSz.Checked)
                 { E.ungrouped = true; }
+
+                if (align.Checked)
+                    E.align = true;
             }
 
 
@@ -60,11 +65,13 @@ namespace ProjectManager
             {
                 groupedSz.Enabled = true;
                 ungroupedSz.Enabled = true;
+                align.Enabled = true;
             }
             else if (!binSeizures.Checked)
             {
                 groupedSz.Enabled = false;
                 ungroupedSz.Enabled = false;
+                align.Enabled = false;
             }
         }
 
@@ -83,6 +90,10 @@ namespace ProjectManager
         {
             if (ungroupedSz.Checked)
             { groupedSz.Checked = false; }
+        }
+
+        private void align_CheckedChanged(object sender, EventArgs e)
+        {
         }
     }
 

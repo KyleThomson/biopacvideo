@@ -1,38 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 namespace ProjectManager
 {
     public class GraphProperties
     {
         public Bitmap mainPlot;
+        public Bitmap resizedPlot;
         public Graphics graphics;
-        public Pen axisPen;
         public Axes axes;
-        public float maxXData;
-        public float maxYData;
         public PictureBox picture = new PictureBox();
         public Form graphForm = new Form();
+
+        public float maxXData;
+        public float maxYData;
+        
         public List<PointF> axesPoints;
-        public int X; public int Y;
+        public int X, Y;
         public float scale;
         public float xScale;
         public float yScale;
         public float objectScale;
-        public int screenWidth { get; set; }
-        public int screenHeight { get; set; }
 
-        public GraphProperties(int width, int height, float maxX, float maxY)
+        public GraphProperties(float maxX, float maxY)
         {
             // Set input arguments as max data
             maxXData = maxX; maxYData = maxY;
 
-            // First find resolution that graphics will be scaled to
-            screenWidth = Screen.PrimaryScreen.Bounds.Width;
-            screenHeight = Screen.PrimaryScreen.Bounds.Height;
-
-            X = width; Y = height;
+            // initial bitmap dimensions (intentionally big)
+            // want the 8.5"x11" dimensions, DPI * inches = pixels, this should work at any screen resolution
+            // windows defaults to 96 dpi so that's what we're gonna use
+            X = (int)(96 * 8.5);
+            Y = (int)(96 * 11.0);
 
             // bitmap initialization
             mainPlot = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
@@ -58,21 +60,32 @@ namespace ProjectManager
         private void ImproveResolution()
         {
             // Set smoothing mode for graphics in initialization. This will smooth out edges when drawing round objects.
-            graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
             // High quality interpolation makes rescaling of image maintain resolution.
-            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+            graphics.CompositingQuality = CompositingQuality.HighQuality;
+            graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
         }
 
         private void ObjectScaling()
         {
+            // get resolution for 8.5" x 11"
+            var xResolution = graphics.DpiX * 8.5;
+            var yResolution = graphics.DpiY * 11.0;
+
             // calculate target scaling factor to maintain graph aspect ratio on any screen
-            scale = Math.Min(screenWidth / (float)X, screenHeight / (float)Y);
-            objectScale = 1 / scale;
+            scale = (float)(mainPlot.Width / xResolution < mainPlot.Height / yResolution
+                ? mainPlot.Width / xResolution : mainPlot.Height / yResolution);
+
+            // set properties
+            objectScale = scale;
             axes.objectScale = objectScale;
             axes.scale = scale;
         }
         private void AxisScale()
         {
+            // scaling factor for plotting data on the 2D axes
             xScale = (float)((axes.axesList[1].X - axes.axesList[0].X) * 0.95/ maxXData);
             yScale = (axes.yAxisLength - axes.yAxisStart) / maxYData;
             axes.xScale = xScale;
@@ -80,6 +93,7 @@ namespace ProjectManager
         }
         public void DrawAxes(float penWidth)
         {
+            // call axes object
             Pen axisPen = new Pen(Brushes.Black);
             axisPen.Width = penWidth * objectScale;
             axes.axesWidth = penWidth;
@@ -103,40 +117,12 @@ namespace ProjectManager
         public void WriteXLabel(string xLabel, Font font)
         {
             // Update Axes properties
-            axes.XLabel(xLabel);
-
-            // Format string
-            SolidBrush drawBrush = new SolidBrush(Color.Black);
-            StringFormat drawFormat = new StringFormat();
-            drawFormat.Alignment = StringAlignment.Center;
-
-            // Get size of the string
-            SizeF xLabelSize = graphics.MeasureString(xLabel, font);
-
-            // Use size of string and length of axis to center the label
-            float xPoint = (axes.xAxisLength + axes.xAxisStart) / 2 - xLabelSize.Width / 2;
-            float yPoint = axesPoints[0].Y;
-            RectangleF xLabelRect = new RectangleF((xPoint), (float)(yPoint * 1.05), xLabelSize.Width, xLabelSize.Height);
-            graphics.DrawString(xLabel, font, drawBrush, xLabelRect, drawFormat);
+            axes.XLabel(xLabel, font);
         }
         public void WriteYLabel(string yLabel, Font font)
         {
             // Update Axes properties
-            axes.YLabel(yLabel);
-
-            // Format string
-            SolidBrush drawBrush = new SolidBrush(Color.Black);
-            StringFormat yLabelFormat = new StringFormat();
-            yLabelFormat.FormatFlags = StringFormatFlags.DirectionVertical;
-
-            // Get size of the string
-            SizeF yLabelSize = graphics.MeasureString(yLabel, font);
-
-            // Use size of string and length of axis to center the label
-            float xPoint = axesPoints[0].X;
-            float yPoint = (axes.yAxisLength + axes.yAxisStart) / 2 - yLabelSize.Width / 2;
-            RectangleF yLabelRect = new RectangleF((float)(xPoint * 0.70), yPoint, yLabelSize.Height, yLabelSize.Width);
-            graphics.DrawString(yLabel, font, drawBrush, yLabelRect, yLabelFormat);
+            axes.YLabel(yLabel, font);
         }
         public void PlotPoints(float xCoord, float yCoord, int markerSize, string markerType, Color color)
         {
@@ -146,7 +132,6 @@ namespace ProjectManager
             SolidBrush dataBrush = new SolidBrush(Color.Black);
             dataBrush.Color = color;
             var centerPoint = markerSize / 2 * objectScale;
-            // Calculate a scale factor that is in units of Pixels/unit
 
             // Convert input coordinate points
             float realXCoord = xCoord * xScale + axes.xTickPoints[0] - centerPoint;
@@ -160,12 +145,6 @@ namespace ProjectManager
             else if (markerType == ".")
             {
                 graphics.FillEllipse(dataBrush, realXCoord, realYCoord - (markerSize * objectScale) / 2, markerSize * objectScale, markerSize * objectScale);
-            }
-            else if (markerType == "d")
-            {
-                //gotta do some math to draw a rhombus/diamond marker
-                DrawDiamond(realXCoord + axes.xAxisStart, realYCoord, markerSize * objectScale);
-                // If we lived in a perfect world this would draw a diamond.
             }
             else
             {
@@ -189,77 +168,48 @@ namespace ProjectManager
             PointF endPoint = new PointF(realX2Coord, realY2Coord);
             graphics.DrawLine(dataPen, startPoint, endPoint);
         }
-        public PictureBox ScaleGraph()
-        {
-            // Scaled dimensions of new graph
-            var scaleWidth = (int)(mainPlot.Width * scale);
-            var scaleHeight = (int)(mainPlot.Height * scale);
-
-            // Create new bitmap and graphics to fit graph to monitor
-            //Bitmap bmp = new Bitmap(mainPlot, new Size(screenWidth, screenHeight));
-            Bitmap bmp = new Bitmap(mainPlot, new Size(scaleWidth, scaleHeight));
-            var newGfx = Graphics.FromImage(bmp);
-            newGfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            newGfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-            // Re-draw the graphics we already created
-            newGfx.DrawImage(mainPlot, 0, 0, scaleWidth, scaleHeight);
-
-            PictureBox resizedPicture = new PictureBox();
-            resizedPicture.ClientSize = new Size(scaleWidth, scaleHeight);
-            resizedPicture.Image = bmp;
-
-            // Set size of form to fit monitor
-            graphForm.Size = new Size(scaleWidth, scaleHeight);
-
-            return resizedPicture;
-        }
         public void DisplayGraph()
         {
-            // re-size form and picture and show
-            PictureBox resizedPicture = ScaleGraph();
-            graphForm.Controls.Add(resizedPicture);
+            // Resize bitmap
+            resizedPlot = Resize();
+
+            // resize form
+            graphForm.Size = new Size((int) (resizedPlot.Width * 1.00), (int) (resizedPlot.Width * 1.25));
+
+            // Draw new image
+            graphics.DrawImage(resizedPlot, 0, 0);
+
+            // Add image to bitmap
+            picture.Image = resizedPlot;
+            picture.Size = new Size((int)(resizedPlot.Width * 1.00), (int)(resizedPlot.Width * 1.25));
+            picture.Location = new Point(0, 50);
+            graphForm.Controls.Add(picture);
+            graphForm.Location = new Point(Screen.PrimaryScreen.Bounds.X, 0);
+            graphForm.TopMost = true;
             graphForm.Show();
         }
         public void ClearGraph()
         {
+            // search form for controls that are pictures and remove them
             foreach (Control control in graphForm.Controls)
             {
-                PictureBox picture = control as PictureBox;
-                if (picture != null)
-                {
-                    graphForm.Controls.Remove(picture);
-                    // Dispose of control to conserve memory
-                    control.Dispose();
-                    // Force Garbage Collection to work - seems to only cleanup unnecessary graph controls and not the project data
-                    // Using GC object, it seems, is not advisable but it doesn't interfere with other processes in this specific case.
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-                }
+                // Check next control if not a picture
+                if (!(control is PictureBox _)) continue;
+
+                graphForm.Controls.Remove(picture);
+
+                // Dispose of control to conserve memory
+                control.Dispose();
+
+                // Force Garbage Collection to work - seems to only cleanup unnecessary graph controls and not the project data
+                // Using GC object, it seems, is not advisable but it doesn't interfere with other processes in this specific case.
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
             }
-        }
-        public void DrawDiamond(float centerX, float centerY, float size)
-        {
-            // This doesn't work.
-            Pen dataPen = new Pen(Brushes.Black);
-            SolidBrush dataBrush = new SolidBrush(Color.Black);
-
-            PointF left = new PointF(centerX - size, centerY);
-            PointF right = new PointF(centerX + size, centerY);
-            PointF top = new PointF(centerX, centerY + size);
-            PointF bottom = new PointF(centerX, centerY - size);
-
-            PointF[] dPoints = new PointF[] { left, right, top, bottom };
-
-            graphics.DrawPolygon(dataPen, dPoints);
-        }
-        public void TextBox(string inputStr, Color color, Font font)
-        {
-            SolidBrush dataBrush = new SolidBrush(Color.Black);
-            graphics.DrawString(inputStr, new Font("Arial", 12), dataBrush, X / 2, Y / 6);
         }
         public void SaveFig()
         {
+            // Open new save file dialog and define extension etc
             SaveFileDialog graphSaveDialog = new SaveFileDialog();
             graphSaveDialog.DefaultExt = ".png";
             graphSaveDialog.Filter = "PNG files (*.png) |*.png";
@@ -267,18 +217,41 @@ namespace ProjectManager
             graphSaveDialog.InitialDirectory = "D:\\";
 
             if (graphSaveDialog.ShowDialog() == DialogResult.OK)
+                resizedPlot.Save(graphSaveDialog.FileName);
+        }
+
+        private Bitmap Resize()
+        {
+            // get scaled dimensions
+            int scaleWidth = (int)(X / scale);
+            int scaleHeight = (int)(Y / scale);
+
+            // create a resized image with new dimensions
+            var resizedImage = new Rectangle((X - scaleWidth) / 2, (Y - scaleHeight) / 2, scaleWidth, scaleHeight);
+
+            // make a new bitmap  - this will get drawn to with new dimensions
+            var resizedBitmap = new Bitmap(mainPlot.Width, mainPlot.Height);
+
+            // increase resolution? unsure if this is really necessary
+            resizedBitmap.SetResolution(mainPlot.HorizontalResolution, mainPlot.VerticalResolution);
+
+            // use temp graphics object to make image drawn higher quality
+            using (var gfx = Graphics.FromImage(resizedBitmap))
             {
-                // search controls for picture
-                foreach (Control control in graphForm.Controls)
+                gfx.CompositingMode = CompositingMode.SourceCopy;
+                gfx.CompositingQuality = CompositingQuality.HighQuality;
+                gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                gfx.SmoothingMode = SmoothingMode.HighQuality;
+                gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
                 {
-                    // when picture is found, save if not null
-                    PictureBox picture = control as PictureBox;
-                    if (picture != null)
-                    {
-                        picture.Image.Save(graphSaveDialog.FileName);
-                    }
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    gfx.DrawImage(mainPlot, resizedImage, 0, 0, mainPlot.Width, mainPlot.Height, GraphicsUnit.Pixel, wrapMode);
                 }
             }
+
+            return resizedBitmap;
         }
 
 
