@@ -115,7 +115,11 @@ namespace SeizurePlayback
             ResizeBool = true;
             //Start up the display thread. 
             this.Resize += new System.EventHandler(this.MainForm_Resize);
-            ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
+            ThreadDisplay = new Thread( ()=>
+            {
+                DisplayThread();
+                GetMousePosition();
+            });
             ThreadDisplay.Start();
             OffsetBox.Enabled = false;
             graph.X1 = 5;
@@ -597,7 +601,11 @@ namespace SeizurePlayback
                 player.Stop();                
             
         }
-
+        
+        private void InvokeAutoRewind()
+        {
+            
+        }
         private void Rewind_Click(object sender, EventArgs e)
         {
             if (Int32.TryParse(rewindStep.Text, out int result))
@@ -615,21 +623,28 @@ namespace SeizurePlayback
         }
         private void GetMousePosition()
         {
-            // Grab screen coordinates of mouse cursor and convert to coordinate system relative to EEG graph display
-            int mouseX = Cursor.Position.X - (graph.X2 - graph.X1);
-            int mouseY = Cursor.Position.Y - (graph.Y2 - graph.Y1);
+            Rectangle displayRect = new Rectangle(graph.X1, graph.Y1, graph.X2 - graph.X1, graph.Y2 - graph.Y1);
 
             // Do a check if new cursor coordinates are within tolerance of left side of screen
-            if (mouseX < (graph.X2 - graph.X1)*2*0.05)
+            if (displayRect.Contains(Cursor.Position))
+            {
                 // begin rewinding if condition met
                 AutoRewind();
+                this.Cursor = Cursors.PanWest;
+            }
             else
-                // else get out of function
+            // else get out of function
+            {
+                this.Cursor = Cursors.Default;
                 return;
+            }
         }
         private void AutoRewind()
         {
             // similar functionality to Rewind_Click but responsive to cursor position rather than a click handling event
+            if (player != null)
+                player.seek(player.getpos() - MaxDispSize * 1000);
+            Step = MaxDispSize;
         }
         private void TimeBar_Scroll(object sender, EventArgs e)
         {
