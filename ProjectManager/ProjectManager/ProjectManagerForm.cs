@@ -80,7 +80,7 @@ namespace ProjectManager
                 }
 
             }
-            MainSelect.SelectedIndex = 0;
+            //MainSelect.SelectedIndex = 0;
         }
         private void UpdateSecondList()
         {
