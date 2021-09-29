@@ -109,7 +109,6 @@ namespace SeizurePlayback
             //Add Mouse Handlers
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MyMouseUp);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownHandler);
-            this.MouseHover += new EventHandler(this.MousePositionHandler);
             this.KeyPreview = true;
             this.KeyPress += new KeyPressEventHandler(Form1_KeyPress);
             ResizeBool = true;
@@ -118,7 +117,6 @@ namespace SeizurePlayback
             ThreadDisplay = new Thread( ()=>
             {
                 DisplayThread();
-                GetMousePosition();
             });
             ThreadDisplay.Start();
             OffsetBox.Enabled = false;
@@ -129,6 +127,9 @@ namespace SeizurePlayback
             Console.WriteLine(this.Size.Height);
             Console.WriteLine(VideoPanel.Location.Y - 11);        
             ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);    //Create the graphics box to display EEG. 
+
+            // start finding mouse position
+            SetMouseTimer();
         }
         private void INIload()
         {
@@ -602,10 +603,6 @@ namespace SeizurePlayback
             
         }
         
-        private void InvokeAutoRewind()
-        {
-            
-        }
         private void Rewind_Click(object sender, EventArgs e)
         {
             if (Int32.TryParse(rewindStep.Text, out int result))
@@ -617,13 +614,20 @@ namespace SeizurePlayback
                 player.seek(player.getpos() - MaxDispSize * 1000);
             Step = MaxDispSize;
         }
-        private void MousePositionHandler(object sender, EventArgs e)
+        private void SetMouseTimer()
         {
-            GetMousePosition();
+            // create timer to get mouse position every 100 ms
+            System.Timers.Timer mouseTimer = new System.Timers.Timer(100);
+
+            // Assign timed event
+            mouseTimer.Elapsed += GetMousePosition;
+            mouseTimer.AutoReset = true;
+            mouseTimer.Enabled = true;
+
         }
-        private void GetMousePosition()
+        private void GetMousePosition(Object source, System.Timers.ElapsedEventArgs e)
         {
-            Rectangle displayRect = new Rectangle(graph.X1, graph.Y1, graph.X2 - graph.X1, graph.Y2 - graph.Y1);
+            Rectangle displayRect = new Rectangle(graph.X1, graph.Y1, graph.X1 * 7, graph.Y2 - graph.Y1);
 
             // Do a check if new cursor coordinates are within tolerance of left side of screen
             if (displayRect.Contains(Cursor.Position))
@@ -636,15 +640,20 @@ namespace SeizurePlayback
             // else get out of function
             {
                 this.Cursor = Cursors.Default;
+                Paused = true;
+                if (player != null)
+                    player.Pause();
                 return;
             }
         }
         private void AutoRewind()
         {
             // similar functionality to Rewind_Click but responsive to cursor position rather than a click handling event
+            ACQ.SelectedChan = -1;
+            OffsetBox.Enabled = false;
+            RealTime = false;
             if (player != null)
-                player.seek(player.getpos() - MaxDispSize * 1000);
-            Step = MaxDispSize;
+                player.Stop();
         }
         private void TimeBar_Scroll(object sender, EventArgs e)
         {
