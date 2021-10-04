@@ -76,7 +76,6 @@ namespace SeizurePlayback
             this.Download_ACQ = new System.Windows.Forms.Button();
             this.DetSezLabel = new System.Windows.Forms.Label();
             this.FixChan = new System.Windows.Forms.Button();
-            this.rewindStep = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.SuspendLayout();
@@ -676,22 +675,12 @@ namespace SeizurePlayback
             this.FixChan.UseVisualStyleBackColor = true;
             this.FixChan.Click += new System.EventHandler(this.FixChan_Click);
             // 
-            // rewindStep
-            // 
-            this.rewindStep.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.rewindStep.Location = new System.Drawing.Point(1428, 695);
-            this.rewindStep.Name = "rewindStep";
-            this.rewindStep.Size = new System.Drawing.Size(100, 20);
-            this.rewindStep.TabIndex = 58;
-            this.rewindStep.TextChanged += new System.EventHandler(this.rewindStep_TextChanged);
-            // 
             // CManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1672, 845);
-            this.Controls.Add(this.rewindStep);
             this.Controls.Add(this.FixChan);
             this.Controls.Add(this.DetSezLabel);
             this.Controls.Add(this.Download_ACQ);
@@ -804,7 +793,6 @@ namespace SeizurePlayback
         private System.Windows.Forms.Button Download_ACQ;
         private System.Windows.Forms.Label DetSezLabel;
         private System.Windows.Forms.Button FixChan;
-        private System.Windows.Forms.TextBox rewindStep;
     }
 }
 

@@ -28,6 +28,7 @@ namespace ProjectManager
 
                 pjt = new Project(F.FileName);
                 pjt.Open();
+                pjt.RemoveNegativeOnes();
                 _pjtOpened = true;
             }
         }
@@ -46,6 +47,7 @@ namespace ProjectManager
             {
                 pjt = new Project(F.FileName);
                 pjt.Open();
+                pjt.RemoveNegativeOnes();
                 ChangeTitleText(pjt.Filename);
                 _pjtOpened = true;
                 pjt.TrackAllAnimals();
@@ -80,7 +82,6 @@ namespace ProjectManager
                 }
 
             }
-            MainSelect.SelectedIndex = 0;
         }
         private void UpdateSecondList()
         {
@@ -213,6 +214,7 @@ namespace ProjectManager
                     pjt.FileChanged();
                     ChangeTitleText(pjt.Filename);
                 }
+                pjt.RemoveNegativeOnes();
                 UpdateMainList();
             }
         }
@@ -462,6 +464,7 @@ namespace ProjectManager
                 pjt.FileChanged();
                 ChangeTitleText(pjt.Filename);
             }
+            pjt.RemoveNegativeOnes();
             UpdateMainList();
             if (DuplicateDirectoryCount > 0)
                 Info.Text = DuplicateDirectoryCount.ToString() + " duplicate directories skipped.";

@@ -44,7 +44,7 @@ namespace ProjectManager
                 if (align.Checked)
                     E.align = true;
             }
-
+            E.IsExport();
 
             // Create file dialog box for saving exported project file.
             SaveFileDialog F = new SaveFileDialog();
@@ -53,10 +53,15 @@ namespace ProjectManager
             F.Title = "Save project (.csv) file";
             F.InitialDirectory = "D:\\";
 
-            if (F.ShowDialog() == DialogResult.OK)
+            if (E.exportData)
             {
-                pjt.ExportData(F.FileName, E);
+                if (F.ShowDialog() == DialogResult.OK)
+                {
+                    pjt.ExportData(F.FileName, E);
+                }
             }
+            if (E.binSz)
+                pjt.ExportBinnedSz(E);
         }
 
         private void binSeizures_CheckedChanged(object sender, EventArgs e)

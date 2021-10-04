@@ -32,6 +32,7 @@ namespace SeizurePlayback
         int HighlightStart, HighlightEnd;
         bool Highlighting;
         bool RealTime;
+        bool FastRewind;
         bool Redraw;
         string[] SzInfo;
         int SzInfoIndex;
@@ -114,10 +115,7 @@ namespace SeizurePlayback
             ResizeBool = true;
             //Start up the display thread. 
             this.Resize += new System.EventHandler(this.MainForm_Resize);
-            ThreadDisplay = new Thread( ()=>
-            {
-                DisplayThread();
-            });
+            ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
             ThreadDisplay.Start();
             OffsetBox.Enabled = false;
             graph.X1 = 5;
@@ -239,9 +237,21 @@ namespace SeizurePlayback
                             if (Redraw)
                                 ACQ.drawbuffer();
                             g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
-                            g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));                         
-                            ACQ.Position += 10;
-                            Step += 10;
+                            g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
+
+                            if (FastRewind)
+                            {
+                                // check that drawing isn't going out of range
+                                if (ACQ.Position - 10 <= 0) return;
+                                // step back 10x faster
+                                ACQ.Position -= 10;
+                                Step -= 10;
+                            }
+                            else
+                            {
+                                ACQ.Position += 10;
+                                Step += 10;
+                            }
                         }
                         else
                         {
@@ -605,10 +615,7 @@ namespace SeizurePlayback
         
         private void Rewind_Click(object sender, EventArgs e)
         {
-            if (Int32.TryParse(rewindStep.Text, out int result))
-                ACQ.Position = Math.Max(0, ACQ.Position - result);
-            else
-                ACQ.Position = Math.Max(0, ACQ.Position - MaxDispSize);
+            ACQ.Position = Math.Max(0, ACQ.Position - MaxDispSize);
 
             if (player != null) 
                 player.seek(player.getpos() - MaxDispSize * 1000);
@@ -616,16 +623,20 @@ namespace SeizurePlayback
         }
         private void SetMouseTimer()
         {
-            // create timer to get mouse position every 100 ms
-            System.Timers.Timer mouseTimer = new System.Timers.Timer(100);
+            // use forms timer so that event fires only on the main UI thread (avoids unsafe  and unnecessasary multi-threading)
+            System.Windows.Forms.Timer mouseTimer = new System.Windows.Forms.Timer();
 
-            // Assign timed event
-            mouseTimer.Elapsed += GetMousePosition;
-            mouseTimer.AutoReset = true;
+            // set timer interval in ms
+            mouseTimer.Interval = 100;
+
+            // assign new event to timer
+            mouseTimer.Tick += new EventHandler(GetMousePosition);
             mouseTimer.Enabled = true;
 
+            // start timer
+            mouseTimer.Start();
         }
-        private void GetMousePosition(Object source, System.Timers.ElapsedEventArgs e)
+        private void GetMousePosition(Object source, EventArgs e)
         {
             Rectangle displayRect = new Rectangle(graph.X1, graph.Y1, graph.X1 * 7, graph.Y2 - graph.Y1);
 
@@ -633,6 +644,7 @@ namespace SeizurePlayback
             if (displayRect.Contains(Cursor.Position))
             {
                 // begin rewinding if condition met
+                FastRewind = true;
                 AutoRewind();
                 this.Cursor = Cursors.PanWest;
             }
@@ -640,7 +652,13 @@ namespace SeizurePlayback
             // else get out of function
             {
                 this.Cursor = Cursors.Default;
-                Paused = true;
+                // only true if cursor is in the rewind zone
+                if (FastRewind)
+                {
+                    // so pause and set rewind to false
+                    Paused = true;
+                    FastRewind = false;
+                }
                 if (player != null)
                     player.Pause();
                 return;
