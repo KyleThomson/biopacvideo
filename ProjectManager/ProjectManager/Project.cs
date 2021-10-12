@@ -702,6 +702,23 @@ namespace ProjectManager
             animal.earliestAppearance = earliest;
             animal.latestAppearance = latest;
         }
+        public void ShowCalendar()
+        {
+            DateTime Earliest = Files[0].Start.Date;
+            DateTime Latest = Files[Files.Count - 1].Start.Date;
+
+            // Get dates and animal IDs to construct calendar
+            var allDates = new List<DateTime>();
+            for (var dt = Earliest; dt <= Latest; dt = dt.AddDays(1))
+                allDates.Add(dt);
+            
+            var animalIDs = new List<string>();
+            foreach (AnimalType animal in Animals)
+                animalIDs.Add(animal.ID);
+
+            DataCalendar calendar = new DataCalendar(allDates, animalIDs);
+            calendar.dataFiles = Files;
+        }
         public void ExportBinnedSz(ExportType exporter)
         {
             // Create new file dialog box for saving exported binned seizures .csv
@@ -761,7 +778,6 @@ namespace ProjectManager
                         sw.WriteLine(sz);
                     }
 
-                    sw.Close(); // close writer
                 }
                 else if (exporter.grouped)
                 {
@@ -810,6 +826,7 @@ namespace ProjectManager
                             sw.WriteLine(sz); // write seizures
                         }
                     }
+                    // close file writer
                     sw.Close();
                 }
             }
@@ -1031,6 +1048,9 @@ namespace ProjectManager
 
             // initialize output
             var counts = new int[dates.Count];
+
+            // ignore seizures that still have severity of -1
+            seizures.RemoveAll(s => s.Severity == -1);
 
             // get seizure datetimes
             var seizureDates = seizures.Select(s => s.d.Date.AddDays(s.t.TotalDays - alignBy)).ToList();

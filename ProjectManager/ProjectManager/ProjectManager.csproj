@@ -127,6 +127,7 @@
     <Compile Include="BloodDrawType.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="DamerauLevenshtein.cs" />
+    <Compile Include="DataCalendar.cs" />
     <Compile Include="Exporter.cs">
       <SubType>Form</SubType>
     </Compile>

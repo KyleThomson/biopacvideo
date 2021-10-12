@@ -58,11 +58,11 @@ namespace ProjectManager
             MMY.Text = N.ToString("MMMM") + "/" + N.AddMonths(1).ToString("MMMM") + " " + N.AddMonths(1).Year.ToString();
             for (int w = 0; w < DaysShown; w++)                
             {
-                for (int d = 0; d < 7; d++)
+                for (int day = 0; day < 7; day++)
                 {
                     //Draw inital box
                     //g.FillRectangle(WhiteFill, new Rectangle(new Point(DW * d, DW * w), S));
-                    g.DrawRectangle(Day, new Rectangle(new Point(DW * d, DW * w), S));
+                    g.DrawRectangle(Day, new Rectangle(new Point(DW * day, DW * w), S));
                     //Draw Data box    
                 }
             }

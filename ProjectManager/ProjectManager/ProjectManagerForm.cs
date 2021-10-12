@@ -12,6 +12,7 @@ namespace ProjectManager
         public ProjectManager()
         {
             InitializeComponent();
+            
             MainSelect.SelectedIndex = 0;
             pjt = new Project("");
             // Handle event for form closing in case there are unsaved changes to project file.
@@ -28,7 +29,7 @@ namespace ProjectManager
 
                 pjt = new Project(F.FileName);
                 pjt.Open();
-                pjt.RemoveNegativeOnes();
+                //pjt.RemoveNegativeOnes();
                 _pjtOpened = true;
             }
         }
@@ -47,7 +48,8 @@ namespace ProjectManager
             {
                 pjt = new Project(F.FileName);
                 pjt.Open();
-                pjt.RemoveNegativeOnes();
+                //pjt.RemoveNegativeOnes();
+                //Calendar calendar = new Calendar(pjt);
                 ChangeTitleText(pjt.Filename);
                 _pjtOpened = true;
                 pjt.TrackAllAnimals();
@@ -55,9 +57,11 @@ namespace ProjectManager
                 pjt.analysis.DetermineTreatment(pjt.Animals);
                 pjt.analysis.ParseGroups(pjt.Animals);
                 UpdateMainList();
+
+                //  TESTING CALEDNAR HERE
+                pjt.ShowCalendar();
             }
         }
-
 
         private void UpdateMainList()
         {
@@ -214,7 +218,7 @@ namespace ProjectManager
                     pjt.FileChanged();
                     ChangeTitleText(pjt.Filename);
                 }
-                pjt.RemoveNegativeOnes();
+                //pjt.RemoveNegativeOnes();
                 UpdateMainList();
             }
         }
