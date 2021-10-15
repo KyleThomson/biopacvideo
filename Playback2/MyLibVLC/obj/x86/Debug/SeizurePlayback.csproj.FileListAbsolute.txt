@@ -26,3 +26,4 @@ C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\obj\x86\Debug\Seiz
 C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\bin\x86\Debug\SeizurePlayback.exe.config
 C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\bin\x86\Debug\SeizurePlayback.exe
 C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\bin\x86\Debug\SeizurePlayback.pdb
+C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\obj\x86\Debug\SeizurePlayback.ExtraButtons.resources

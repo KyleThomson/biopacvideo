@@ -42,6 +42,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -50,6 +51,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -58,6 +60,7 @@
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -80,6 +83,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ACQReader.cs" />
+    <Compile Include="ExtraButtons.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExtraButtons.Designer.cs">
+      <DependentUpon>ExtraButtons.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProjectManager\AddDate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -203,6 +212,9 @@
     <Compile Include="ProjectManager\WeightAdd.Designer.cs">
       <DependentUpon>WeightAdd.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ExtraButtons.resx">
+      <DependentUpon>ExtraButtons.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ProjectManager\AddDate.resx">
       <DependentUpon>AddDate.cs</DependentUpon>
     </EmbeddedResource>

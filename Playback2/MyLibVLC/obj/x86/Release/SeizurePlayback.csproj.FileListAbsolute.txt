@@ -165,3 +165,4 @@ C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\Se
 C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.csproj.CoreCompileInputs.cache
 C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.exe
 C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.pdb
+C:\Users\John\Documents\GitHub\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.ExtraButtons.resources

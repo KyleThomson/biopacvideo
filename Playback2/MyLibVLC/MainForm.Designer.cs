@@ -62,26 +62,19 @@ namespace SeizurePlayback
             this.VisChan9 = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.ZoomScale = new System.Windows.Forms.TrackBar();
-            this.CompressFinish = new System.Windows.Forms.Button();
             this.RvwSz = new System.Windows.Forms.Button();
-            this.PMButton = new System.Windows.Forms.Button();
             this.OffsetLabel = new System.Windows.Forms.Label();
             this.OffsetBox = new System.Windows.Forms.TextBox();
-            this.Renamer = new System.Windows.Forms.Button();
             this.HighlightLabel = new System.Windows.Forms.Label();
-            this.NotesButton = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.VideoCreate = new System.Windows.Forms.Button();
             this.AddtoProject = new System.Windows.Forms.Button();
-            this.Download_ACQ = new System.Windows.Forms.Button();
             this.DetSezLabel = new System.Windows.Forms.Label();
             this.Randomization = new System.Windows.Forms.CheckBox();
-            this.FixChan = new System.Windows.Forms.Button();
             this.AVILoadBar = new System.Windows.Forms.ProgressBar();
             this.LoadText = new System.Windows.Forms.Label();
             this.FastReview = new System.Windows.Forms.Button();
             this.TelemetryBox = new System.Windows.Forms.CheckBox();
             this.VideoFix = new System.Windows.Forms.CheckBox();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.SuspendLayout();
@@ -234,7 +227,7 @@ namespace SeizurePlayback
             this.DetectionLoadButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.DetectionLoadButton.BackColor = System.Drawing.Color.DarkGray;
             this.DetectionLoadButton.ForeColor = System.Drawing.Color.Black;
-            this.DetectionLoadButton.Location = new System.Drawing.Point(832, 537);
+            this.DetectionLoadButton.Location = new System.Drawing.Point(994, 479);
             this.DetectionLoadButton.Name = "DetectionLoadButton";
             this.DetectionLoadButton.Size = new System.Drawing.Size(156, 23);
             this.DetectionLoadButton.TabIndex = 21;
@@ -247,7 +240,7 @@ namespace SeizurePlayback
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button2.BackColor = System.Drawing.Color.DarkGray;
             this.button2.ForeColor = System.Drawing.Color.Black;
-            this.button2.Location = new System.Drawing.Point(913, 595);
+            this.button2.Location = new System.Drawing.Point(1075, 539);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 22;
@@ -260,7 +253,7 @@ namespace SeizurePlayback
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button3.BackColor = System.Drawing.Color.DarkGray;
             this.button3.ForeColor = System.Drawing.Color.Black;
-            this.button3.Location = new System.Drawing.Point(832, 595);
+            this.button3.Location = new System.Drawing.Point(994, 539);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 23;
@@ -523,44 +516,18 @@ namespace SeizurePlayback
             this.ZoomScale.Value = 10;
             this.ZoomScale.Scroll += new System.EventHandler(this.ZoomScale_Scroll);
             // 
-            // CompressFinish
-            // 
-            this.CompressFinish.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.CompressFinish.BackColor = System.Drawing.Color.DarkGray;
-            this.CompressFinish.ForeColor = System.Drawing.Color.Black;
-            this.CompressFinish.Location = new System.Drawing.Point(669, 537);
-            this.CompressFinish.Name = "CompressFinish";
-            this.CompressFinish.Size = new System.Drawing.Size(156, 23);
-            this.CompressFinish.TabIndex = 44;
-            this.CompressFinish.Text = "Compress Directory";
-            this.CompressFinish.UseVisualStyleBackColor = false;
-            this.CompressFinish.Click += new System.EventHandler(this.CompressFinish_Click);
-            // 
             // RvwSz
             // 
             this.RvwSz.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.RvwSz.BackColor = System.Drawing.Color.DarkGray;
             this.RvwSz.ForeColor = System.Drawing.Color.Black;
-            this.RvwSz.Location = new System.Drawing.Point(669, 566);
+            this.RvwSz.Location = new System.Drawing.Point(669, 539);
             this.RvwSz.Name = "RvwSz";
             this.RvwSz.Size = new System.Drawing.Size(156, 23);
             this.RvwSz.TabIndex = 45;
             this.RvwSz.Text = "Review Seizures";
             this.RvwSz.UseVisualStyleBackColor = false;
             this.RvwSz.Click += new System.EventHandler(this.RvwSz_Click);
-            // 
-            // PMButton
-            // 
-            this.PMButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.PMButton.BackColor = System.Drawing.Color.DarkGray;
-            this.PMButton.ForeColor = System.Drawing.Color.Black;
-            this.PMButton.Location = new System.Drawing.Point(669, 595);
-            this.PMButton.Name = "PMButton";
-            this.PMButton.Size = new System.Drawing.Size(156, 23);
-            this.PMButton.TabIndex = 46;
-            this.PMButton.Text = "Project Manager";
-            this.PMButton.UseVisualStyleBackColor = false;
-            this.PMButton.Click += new System.EventHandler(this.PMButton_Click);
             // 
             // OffsetLabel
             // 
@@ -584,19 +551,6 @@ namespace SeizurePlayback
             this.OffsetBox.TextChanged += new System.EventHandler(this.OffsetBox_TextChanged_1);
             this.OffsetBox.LostFocus += new System.EventHandler(this.OffsetBox_TextChanged);
             // 
-            // Renamer
-            // 
-            this.Renamer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Renamer.BackColor = System.Drawing.Color.DarkGray;
-            this.Renamer.ForeColor = System.Drawing.Color.Black;
-            this.Renamer.Location = new System.Drawing.Point(1155, 539);
-            this.Renamer.Name = "Renamer";
-            this.Renamer.Size = new System.Drawing.Size(123, 23);
-            this.Renamer.TabIndex = 49;
-            this.Renamer.Text = "Rename Channels";
-            this.Renamer.UseVisualStyleBackColor = false;
-            this.Renamer.Click += new System.EventHandler(this.Renamer_Click);
-            // 
             // HighlightLabel
             // 
             this.HighlightLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -610,70 +564,18 @@ namespace SeizurePlayback
             this.HighlightLabel.Text = "        HL";
             this.HighlightLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // NotesButton
-            // 
-            this.NotesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.NotesButton.BackColor = System.Drawing.Color.DarkGray;
-            this.NotesButton.ForeColor = System.Drawing.Color.Black;
-            this.NotesButton.Location = new System.Drawing.Point(993, 479);
-            this.NotesButton.Name = "NotesButton";
-            this.NotesButton.Size = new System.Drawing.Size(156, 23);
-            this.NotesButton.TabIndex = 51;
-            this.NotesButton.Text = "Enter Notes";
-            this.NotesButton.UseVisualStyleBackColor = false;
-            this.NotesButton.Click += new System.EventHandler(this.NotesButton_Click);
-            // 
-            // button5
-            // 
-            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button5.BackColor = System.Drawing.Color.DarkGray;
-            this.button5.ForeColor = System.Drawing.Color.Black;
-            this.button5.Location = new System.Drawing.Point(993, 508);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(156, 23);
-            this.button5.TabIndex = 52;
-            this.button5.Text = "Compression Manager";
-            this.button5.UseVisualStyleBackColor = false;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // VideoCreate
-            // 
-            this.VideoCreate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.VideoCreate.BackColor = System.Drawing.Color.DarkGray;
-            this.VideoCreate.ForeColor = System.Drawing.Color.Black;
-            this.VideoCreate.Location = new System.Drawing.Point(993, 537);
-            this.VideoCreate.Name = "VideoCreate";
-            this.VideoCreate.Size = new System.Drawing.Size(156, 23);
-            this.VideoCreate.TabIndex = 53;
-            this.VideoCreate.Text = "Video Creator";
-            this.VideoCreate.UseVisualStyleBackColor = false;
-            this.VideoCreate.Click += new System.EventHandler(this.VideoCreate_Click);
-            // 
             // AddtoProject
             // 
             this.AddtoProject.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.AddtoProject.BackColor = System.Drawing.Color.DarkGray;
             this.AddtoProject.ForeColor = System.Drawing.Color.Black;
-            this.AddtoProject.Location = new System.Drawing.Point(993, 566);
+            this.AddtoProject.Location = new System.Drawing.Point(832, 539);
             this.AddtoProject.Name = "AddtoProject";
             this.AddtoProject.Size = new System.Drawing.Size(156, 23);
             this.AddtoProject.TabIndex = 54;
             this.AddtoProject.Text = "Finalize Review";
             this.AddtoProject.UseVisualStyleBackColor = false;
             this.AddtoProject.Click += new System.EventHandler(this.AddtoProj_Click);
-            // 
-            // Download_ACQ
-            // 
-            this.Download_ACQ.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Download_ACQ.BackColor = System.Drawing.Color.DarkGray;
-            this.Download_ACQ.ForeColor = System.Drawing.Color.Black;
-            this.Download_ACQ.Location = new System.Drawing.Point(993, 595);
-            this.Download_ACQ.Name = "Download_ACQ";
-            this.Download_ACQ.Size = new System.Drawing.Size(156, 23);
-            this.Download_ACQ.TabIndex = 55;
-            this.Download_ACQ.Text = "Download ACQ";
-            this.Download_ACQ.UseVisualStyleBackColor = false;
-            this.Download_ACQ.Click += new System.EventHandler(this.Download_ACQ_Click);
             // 
             // DetSezLabel
             // 
@@ -700,19 +602,6 @@ namespace SeizurePlayback
             this.Randomization.Text = "Randomize";
             this.Randomization.UseVisualStyleBackColor = true;
             this.Randomization.CheckedChanged += new System.EventHandler(this.Randomization_CheckedChanged);
-            // 
-            // FixChan
-            // 
-            this.FixChan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.FixChan.BackColor = System.Drawing.Color.DarkGray;
-            this.FixChan.ForeColor = System.Drawing.Color.Black;
-            this.FixChan.Location = new System.Drawing.Point(1155, 479);
-            this.FixChan.Name = "FixChan";
-            this.FixChan.Size = new System.Drawing.Size(123, 53);
-            this.FixChan.TabIndex = 57;
-            this.FixChan.Text = "Fix Channel at Timepoint";
-            this.FixChan.UseVisualStyleBackColor = false;
-            this.FixChan.Click += new System.EventHandler(this.FixChan_Click);
             // 
             // AVILoadBar
             // 
@@ -743,7 +632,7 @@ namespace SeizurePlayback
             this.FastReview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.FastReview.BackColor = System.Drawing.Color.DarkGray;
             this.FastReview.ForeColor = System.Drawing.Color.Black;
-            this.FastReview.Location = new System.Drawing.Point(832, 566);
+            this.FastReview.Location = new System.Drawing.Point(994, 508);
             this.FastReview.Name = "FastReview";
             this.FastReview.Size = new System.Drawing.Size(156, 23);
             this.FastReview.TabIndex = 60;
@@ -769,13 +658,26 @@ namespace SeizurePlayback
             this.VideoFix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VideoFix.AutoSize = true;
             this.VideoFix.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VideoFix.Location = new System.Drawing.Point(1155, 572);
+            this.VideoFix.Location = new System.Drawing.Point(1070, 602);
             this.VideoFix.Name = "VideoFix";
             this.VideoFix.Size = new System.Drawing.Size(72, 17);
             this.VideoFix.TabIndex = 62;
             this.VideoFix.Text = "Video Fix ";
             this.VideoFix.UseVisualStyleBackColor = true;
             this.VideoFix.CheckedChanged += new System.EventHandler(this.VideoFix_CheckedChanged);
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button1.BackColor = System.Drawing.Color.DarkGray;
+            this.button1.ForeColor = System.Drawing.Color.Black;
+            this.button1.Location = new System.Drawing.Point(1156, 539);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(156, 23);
+            this.button1.TabIndex = 63;
+            this.button1.Text = "Additional Menu";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.additionalMenu_Click);
             // 
             // CManage
             // 
@@ -784,26 +686,19 @@ namespace SeizurePlayback
             this.BackColor = System.Drawing.Color.Black;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(1444, 845);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.VideoFix);
             this.Controls.Add(this.TelemetryBox);
             this.Controls.Add(this.FastReview);
             this.Controls.Add(this.LoadText);
             this.Controls.Add(this.AVILoadBar);
-            this.Controls.Add(this.FixChan);
             this.Controls.Add(this.Randomization);
             this.Controls.Add(this.DetSezLabel);
-            this.Controls.Add(this.Download_ACQ);
             this.Controls.Add(this.AddtoProject);
-            this.Controls.Add(this.VideoCreate);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.NotesButton);
             this.Controls.Add(this.HighlightLabel);
-            this.Controls.Add(this.Renamer);
             this.Controls.Add(this.OffsetBox);
             this.Controls.Add(this.OffsetLabel);
-            this.Controls.Add(this.PMButton);
             this.Controls.Add(this.RvwSz);
-            this.Controls.Add(this.CompressFinish);
             this.Controls.Add(this.VideoPanel);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.VisChan16);
@@ -889,27 +784,20 @@ namespace SeizurePlayback
         private System.Windows.Forms.CheckBox VisChan9;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TrackBar ZoomScale;
-        private System.Windows.Forms.Button CompressFinish;
         private System.Windows.Forms.Button RvwSz;
-        private System.Windows.Forms.Button PMButton;
         private System.Windows.Forms.Label OffsetLabel;
         private System.Windows.Forms.TextBox OffsetBox;
-        private System.Windows.Forms.Button Renamer;
         private System.Windows.Forms.Label HighlightLabel;
-        private System.Windows.Forms.Button NotesButton;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button VideoCreate;
         private System.Windows.Forms.Button AddtoProject;
-        private System.Windows.Forms.Button Download_ACQ;
         private System.Windows.Forms.Label DetSezLabel;
 
         private System.Windows.Forms.CheckBox Randomization;
-        private System.Windows.Forms.Button FixChan;
         private System.Windows.Forms.ProgressBar AVILoadBar;
         private System.Windows.Forms.Label LoadText;
         private System.Windows.Forms.Button FastReview;
         private System.Windows.Forms.CheckBox TelemetryBox;
         private System.Windows.Forms.CheckBox VideoFix;
+        private System.Windows.Forms.Button button1;
     }
 }
 

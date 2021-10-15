@@ -1030,7 +1030,7 @@ namespace SeizurePlayback
             doublesize = !doublesize;
         }
 
-        private void CompressFinish_Click(object sender, EventArgs e)
+        public void CompressFinish_Click()
         {
             if (ACQ.Loaded)
             {
@@ -1118,7 +1118,7 @@ namespace SeizurePlayback
             }
         }
 
-        private void Renamer_Click(object sender, EventArgs e)
+        public void Renamer_Click()
         {
             RenameChans frm = new RenameChans(ACQ.Chans, ACQ.ID);
             frm.ShowDialog();
@@ -1148,7 +1148,7 @@ namespace SeizurePlayback
 
         }
 
-        private void NotesButton_Click(object sender, EventArgs e)
+        public void NotesButton_Click()
         {
             if (ACQ.Loaded)
             {
@@ -1171,13 +1171,13 @@ namespace SeizurePlayback
             }
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        public void CompressionManager()
         {
             CompressionManager frm = new CompressionManager();
             frm.Show();
         }
 
-        private void VideoCreate_Click(object sender, EventArgs e)
+        public void VideoCreate_Click()
         {
             if (CurrentAVI == "")
                 return;
@@ -1215,7 +1215,7 @@ namespace SeizurePlayback
             }
         }
 
-        private void Download_ACQ_Click(object sender, EventArgs e)
+        public void Download_ACQ_Click()
         {
             GetACQ F = new GetACQ();
             F.ShowDialog();
@@ -1320,7 +1320,7 @@ namespace SeizurePlayback
             }
         }
 
-        private void FixChan_Click(object sender, EventArgs e)
+        public void FixChan_Click()
         {
            /* FixChan F = new FixChan();
             F.ShowDialog();
@@ -1340,6 +1340,13 @@ namespace SeizurePlayback
 
         private void VideoFix_CheckedChanged(object sender, EventArgs e)
         {
+
+        }
+
+        private void additionalMenu_Click(object sender, EventArgs e)
+        {
+            ExtraButtons extraButtons = new ExtraButtons(this);
+            extraButtons.Show();
 
         }
 
