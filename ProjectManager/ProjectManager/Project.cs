@@ -1023,8 +1023,17 @@ namespace ProjectManager
             var counts = new int[dates.Count];
 
             // get seizure datetimes
-            var seizureDates = seizures.Select(s => s.d.Date.AddDays(s.t.TotalDays - alignBy)).ToList();
-
+            //SeizureType seizures2;
+            List<DateTime> seizureDates = new List<DateTime>();             
+            foreach (SeizureType S in seizures)
+            {
+                if (S.Severity>-1)
+                {
+                    seizureDates.Add(S.d.Date.AddDays(S.t.TotalDays - alignBy)); 
+                }
+            }
+            //var seizureDates = seizures.Select(s => s.d.Date.AddDays(s.t.TotalDays - alignBy)).ToList();
+            
             int i = 0; // counter for dates/bins
             foreach (var date in dates)
             {
@@ -1033,10 +1042,8 @@ namespace ProjectManager
                 
                 // bin by date, need to add upper limit by 1 day to bin by entire day
                 var binnedDates = seizureDates.Where(dt => dt  >= shiftedDate && dt < shiftedDate.AddDays(1)).ToList();
-
                 // insert into array
                 counts[i] = binnedDates.Count;
-
                 i++; // next bin
             }
 
