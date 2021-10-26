@@ -691,7 +691,118 @@ namespace ProjectManager
             animal.earliestAppearance = earliest;
             animal.latestAppearance = latest;
         }
+        public void ExportBinnedSz(ExportType exporter)
+        {
+            // Create new file dialog box for saving exported binned seizures .csv
+            SaveFileDialog binned = new SaveFileDialog();
+            binned.Filter = "CSV files (*.csv) |*.csv";
+            binned.DefaultExt = "csv";
+            binned.Title = "Binned Seizures .csv";
+            binned.InitialDirectory = "D:\\";
 
+            DateTime Earliest = Files[0].Start.Date;
+            DateTime Latest = Files[Files.Count - 1].Start.Date;
+
+            string sz;
+            if (binned.ShowDialog() == DialogResult.OK)
+            {
+                // Open binned seizure file
+                StreamWriter sw = new StreamWriter(binned.FileName);
+                sw.AutoFlush = true;
+                int numDays = (int)Math.Floor(Latest.Subtract(Earliest).TotalDays) + 1;
+
+                // get dates that animal recordings span
+                var dates = "Date";
+                var allDates = new List<DateTime>();
+                for (var dt = Earliest; dt <= Latest; dt = dt.AddDays(1))
+                {
+                    dates += ", " + dt.ToString("d");
+                    allDates.Add(dt);
+                }
+
+
+
+                sw.WriteLine(dates);
+
+                if (exporter.ungrouped)
+                {
+                    foreach (var animal in Animals)
+                    {
+                        sz = animal.ID;
+                        // align seizure dates by this value
+
+                        // assign alignBy to zero first
+                        double alignBy = 0;
+
+                        // check if user selected align
+                        if (exporter.align)
+                            // change alignBy only if there are injections
+                            if (animal.Injections.Count > 0)
+                                alignBy = Math.Round(animal.Injections[0].TimePoint.Subtract(allDates[0]).TotalDays - 7, 1);
+
+                        // bin seizures into integer array
+                        var counts = BinSeizure(allDates, animal.Sz, alignBy);
+
+                        // add counts to string that gets written to file
+                        foreach (var count in counts)
+                            sz += "," + count.ToString("D");
+
+                        sw.WriteLine(sz);
+                    }
+
+                    sw.Close(); // close writer
+                }
+                else if (exporter.grouped)
+                {
+                    // Check for number of groups first and return out of function if there aren't any
+                    if (analysis.groups.Count < 1) return;
+
+                    foreach (string group in analysis.groups)
+                    {
+                        // Write the group name to file
+                        sw.WriteLine(group);
+
+                        // if the group is baseline go to next group
+                        if (group == "Baseline") continue;
+
+                        foreach (AnimalType animal in Animals)
+                        {
+                            // first injection to align to
+                            double alignBy =
+                                Math.Round(animal.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);
+
+                            // Extract Injection times for the specific group
+                            var groupTimes = animal.GetInjectionTimes(group, Earliest, alignBy);
+
+                            // Check if any grouped times were found and if they weren't move on to next animal
+                            if (groupTimes.Count < 1)
+                                continue;
+
+                            // Add 12 hours/half day to last injection for cross-over
+                            groupTimes[groupTimes.Count - 1] += 0.5;
+
+                            // group seizures based on injection/treatment times
+                            var groupSeizures =
+                                animal.Sz.Where(S => Math.Floor(S.d.Date.Subtract(Earliest).TotalDays) + S.t.TotalDays >= groupTimes.Min()
+                                                        && Math.Floor(S.d.Date.Subtract(Earliest).TotalDays) + S.t.TotalDays <= groupTimes.Max()
+                                                        && S.keepInAnalysis).ToList();
+
+                            // bin into array
+                            var counts = BinSeizure(allDates, groupSeizures, alignBy);
+
+                            // initialize string to write seizures to with animal name
+                            sz = animal.ID;
+                            // write to file
+                            foreach (var count in counts)
+                                sz += "," + count.ToString("D");
+
+                            sw.WriteLine(sz); // write seizures
+                        }
+                    }
+                    sw.Close();
+                }
+            }
+        }
         public void ExportData(string Fname, ExportType E)
         {
             //Open File
@@ -900,119 +1011,7 @@ namespace ProjectManager
 
 
             }
-
-            if (E.binSz)
-            {
-                // Create new file dialog box for saving exported binned seizures .csv
-                SaveFileDialog binned = new SaveFileDialog();
-                binned.Filter = "CSV files (*.csv) |*.csv";
-                binned.DefaultExt = "csv";
-                binned.Title = "Binned Seizures .csv";
-                binned.DefaultExt = ".csv";
-                binned.InitialDirectory = "D:\\";
-
-                string sz;
-                if (binned.ShowDialog() == DialogResult.OK)
-                {
-                    // Open binned seizure file
-                    StreamWriter sw = new StreamWriter(binned.FileName);
-                    sw.AutoFlush = true;
-                    int numDays = (int) Math.Floor(Latest.Subtract(Earliest).TotalDays) + 1;
-                    
-                    // get dates that animal recordings span
-                    var dates = "Date";
-                    var allDates = new List<DateTime>();
-                    for (var dt = Earliest; dt <= Latest; dt = dt.AddDays(1))
-                    {
-                        dates += ", " + dt.ToString("d");
-                        allDates.Add(dt);
-                    }
-
-                    
-
-                    sw.WriteLine(dates);
-
-                    if (E.ungrouped)
-                    {
-                        foreach (var animal in Animals)
-                        {
-                            sz = animal.ID;
-                            // align seizure dates by this value
-
-                            // assign alignBy to zero first
-                            double alignBy = 0;
-
-                            // check if user selected align
-                            if (E.align)
-                                // change alignBy only if there are injections
-                                if (animal.Injections.Count > 0)
-                                    alignBy = Math.Round(animal.Injections[0].TimePoint.Subtract(allDates[0]).TotalDays - 7, 1);
-
-                            // bin seizures into integer array
-                            var counts = BinSeizure(allDates, animal.Sz, alignBy);
-
-                            // add counts to string that gets written to file
-                            foreach (var count in counts)
-                                sz += "," + count.ToString("D");
-
-                            sw.WriteLine(sz);
-                        }
-
-                        sw.Close(); // close writer
-                    }
-                    else if (E.grouped)
-                    {
-                        // Check for number of groups first and return out of function if there aren't any
-                        if (analysis.groups.Count < 1) return;
-
-                        foreach (string group in analysis.groups)
-                        {
-                            // Write the group name to file
-                            sw.WriteLine(group);
-
-                            // if the group is baseline go to next group
-                            if (group == "Baseline") continue;
-
-                            foreach (AnimalType animal in Animals)
-                            {
-                                // first injection to align to
-                                double alignBy =
-                                    Math.Round(animal.Injections[0].TimePoint.Subtract(Earliest).TotalDays - 7, 2);
-
-                                // Extract Injection times for the specific group
-                                var groupTimes = animal.GetInjectionTimes(group, Earliest, alignBy);
-                                
-                                // Check if any grouped times were found and if they weren't move on to next animal
-                                if (groupTimes.Count < 1)
-                                    continue;
-
-                                // Add 12 hours/half day to last injection for cross-over
-                                groupTimes[groupTimes.Count - 1] += 0.5;
-
-                                // group seizures based on injection/treatment times
-                                var groupSeizures =
-                                    animal.Sz.Where(S => Math.Floor(S.d.Date.Subtract(Earliest).TotalDays) + S.t.TotalDays >= groupTimes.Min()
-                                                            && Math.Floor(S.d.Date.Subtract(Earliest).TotalDays) + S.t.TotalDays <= groupTimes.Max()
-                                                            && S.keepInAnalysis).ToList();
-
-                                // bin into array
-                                var counts = BinSeizure(allDates, groupSeizures, alignBy);
-
-                                // initialize string to write seizures to with animal name
-                                sz = animal.ID;
-                                // write to file
-                                foreach (var count in counts)
-                                    sz += "," + count.ToString("D");
-
-                                sw.WriteLine(sz); // write seizures
-                            }
-                        }
-                        sw.Close();
-                    }
-                }
-
-                F.Close();
-            }
+            F.Close();
         }
         private int[] BinSeizure(List<DateTime> dates, List<SeizureType> seizures, double alignBy)
         {
@@ -1023,16 +1022,15 @@ namespace ProjectManager
             var counts = new int[dates.Count];
 
             // get seizure datetimes
-            //SeizureType seizures2;
             List<DateTime> seizureDates = new List<DateTime>();             
             foreach (SeizureType S in seizures)
             {
+                // solution to exclude seizures marked with "-1" stage from output
                 if (S.Severity>-1)
                 {
                     seizureDates.Add(S.d.Date.AddDays(S.t.TotalDays - alignBy)); 
                 }
             }
-            //var seizureDates = seizures.Select(s => s.d.Date.AddDays(s.t.TotalDays - alignBy)).ToList();
             
             int i = 0; // counter for dates/bins
             foreach (var date in dates)
