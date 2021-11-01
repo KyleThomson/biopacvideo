@@ -149,6 +149,7 @@
             this.DetailList.TabIndex = 9;
             this.DetailList.Text = "Detailed List";
             this.DetailList.UseVisualStyleBackColor = true;
+            this.DetailList.CheckedChanged += new System.EventHandler(this.DetailList_CheckedChanged);
             // 
             // Notes
             // 

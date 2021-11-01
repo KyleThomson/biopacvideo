@@ -822,7 +822,7 @@ namespace ProjectManager
 
                 foreach (AnimalType A in Animals)
                 {
-                    F.WriteLine(A.ID);
+                    //F.WriteLine(A.ID);
                     DateTime LastDate = Earliest;
                     foreach (SeizureType S in A.Sz)
                     {
@@ -834,7 +834,7 @@ namespace ProjectManager
                             }
                         }
 
-                        F.WriteLine(S.d.ToShortDateString() + ", " + S.t.ToString() + ", " + S.Notes);
+                        F.WriteLine(A.ID + ", " + S.d.ToShortDateString() + ", " + S.t.ToString() + ", " + S.Severity.ToString() + ", " + S.Notes + ", " + S.length.ToString());
                         LastDate = S.d;
                     }
 
@@ -1022,10 +1022,10 @@ namespace ProjectManager
             var counts = new int[dates.Count];
 
             // get seizure datetimes
+            //SeizureType seizures2;
             List<DateTime> seizureDates = new List<DateTime>();             
             foreach (SeizureType S in seizures)
             {
-                // solution to exclude seizures marked with "-1" stage from output
                 if (S.Severity>-1)
                 {
                     seizureDates.Add(S.d.Date.AddDays(S.t.TotalDays - alignBy)); 
