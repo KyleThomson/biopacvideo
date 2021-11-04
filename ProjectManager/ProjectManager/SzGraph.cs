@@ -148,7 +148,8 @@ namespace ProjectManager
                 // plot each seizure
                 for (int j = 0; j < project.Animals[i].Sz.Count; j++)
                 {
-                    if (!project.Animals[i].Sz[j].keepInAnalysis)
+                    // Handle the case where racine score is still marked as -1
+                    if (project.Animals[i].Sz[j].Severity == -1)
                         continue;
                     // calculate x coordinate in days and align to first injection at 7 days
                     float xCoord = (float)(Math.Round((project.Animals[i].Sz[j].d.Date.Subtract(Earliest).TotalHours + project.Animals[i].Sz[j].t.TotalHours) / 24 - align, 2));

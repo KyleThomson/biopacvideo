@@ -313,20 +313,10 @@ namespace ProjectManager
             {
                 foreach (SeizureType S in A.Sz)
                 {
-                    if (!S.stageAgreement)
-                    {
-                        if (ParseNegativeOne(S.Notes))
-                        {
-                            S.keepInAnalysis = false;
-                            continue;
-                        }
-                        // ask user for the seizure severity
-                        int finalStage = analysis.CompareSeizures(S, A.ID);
-                        // set new severity
-                        S.Severity = finalStage;
-                        // stages agree now
-                        S.stageAgreement = true;
-                    }
+                    // ask user for the seizure severity
+                    int finalStage = analysis.CompareSeizures(S, A.ID);
+                    // set new severity
+                    S.Severity = finalStage;
                 }
             }
             // Save the changes made to severity
@@ -781,11 +771,11 @@ namespace ProjectManager
                             // Add 12 hours/half day to last injection for cross-over
                             groupTimes[groupTimes.Count - 1] += 0.5;
 
-                            // group seizures based on injection/treatment times
+                            // group seizures based on injection/treatment times and exclude -1 racine score
                             var groupSeizures =
                                 animal.Sz.Where(S => Math.Floor(S.d.Date.Subtract(Earliest).TotalDays) + S.t.TotalDays >= groupTimes.Min()
                                                         && Math.Floor(S.d.Date.Subtract(Earliest).TotalDays) + S.t.TotalDays <= groupTimes.Max()
-                                                        && S.keepInAnalysis).ToList();
+                                                        && S.Severity != -1).ToList();
 
                             // bin into array
                             var counts = BinSeizure(allDates, groupSeizures, alignBy);

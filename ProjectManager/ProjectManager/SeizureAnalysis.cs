@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Accord.Math;
+using System.Globalization;
 
 namespace ProjectManager
 {
@@ -204,71 +205,59 @@ namespace ProjectManager
             numbers.Add(6, "six");   numbers.Add(7, "seven");
             numbers.Add(8, "eight"); numbers.Add(9, "nine");
 
-            int bubbleSeverity = default; // default
-            int noteSeverity = default; // default
-            int finalStage = default;
-            if (seizure.Severity >= 0 && seizure.Severity <= 5)
-            {
-                bubbleSeverity = seizure.Severity;
-            }
+            // assign bubble severity as the checked severity value
+            int bubbleSeverity = seizure.Severity;
+            // initialize noteSeverity
+            int noteSeverity;
             if (seizure.Notes.Length > 0)
             {
                 noteSeverity = ParseSeizure(seizure.Notes);
             }
+            else
+                // if notes are empty just take bubble severity
+                return bubbleSeverity;
+            // if severities already match then get out of this function
+            if (bubbleSeverity == noteSeverity)
+                return bubbleSeverity;
 
-            if (noteSeverity >= 0 && noteSeverity <= 5)
-            {
-                // Check if bubble and note match and flag if it doesn't -- want to prompt user with messagebox
-                if (bubbleSeverity != noteSeverity)
+            // Open dialog for user to select correct seizure
+            string ID = animalID + " had seizure at " + seizure.d.ToString();
+            SeizureStageDialog stageDialog = new SeizureStageDialog();
+            stageDialog.ShowDialog(bubbleSeverity, noteSeverity, ID, seizure.Notes);
+
+            // set function return value to the severity that the user selected
+            int finalStage = stageDialog.returnSeverity;
+
+            // Only change notes if bubble severity was selected from dialog.
+            if (finalStage == bubbleSeverity)
                 {
-                    // Open dialog for user to select correct seizure
-                    string ID = animalID + " had seizure at " + seizure.d.ToString();
-                    SeizureStageDialog stageDialog = new SeizureStageDialog();
-                    stageDialog.ShowDialog(bubbleSeverity, noteSeverity, ID, seizure.Notes);
-                    finalStage = stageDialog.returnSeverity;
-
-                    // Only change notes if bubble severity was selected from dialog.
-                    if (finalStage == bubbleSeverity)
+                    // change seizure note so that there are no more numbers
+                    for (int i = seizure.Notes.Length - 1; i >= 0; i--)
                     {
-                        // change seizure note so that there are no more numbers
-                        for (int i = seizure.Notes.Length - 1; i >= 0; i--)
+                        // step backward thru seizure notes and insert word corresponding to number in notes
+                        // solution to save conflict results between bubble and notes
+                        if (int.TryParse(seizure.Notes[i].ToString(), out _))
                         {
-                            int result = -1;
-                            // step backward thru seizure notes and insert word corresponding to number in notes
-                            // solution to save conflict results between bubble and notes
-                            if (int.TryParse(seizure.Notes[i].ToString(), out int _))
-                            {
-                                string numberToInsert = numbers[result];
-                                seizure.Notes = seizure.Notes.Insert(i, numberToInsert);
-                                seizure.Notes = seizure.Notes.Remove(i + numberToInsert.Length, 1);
-                            }
-                            else
-                            {
-                                finalStage = bubbleSeverity;
-                            }
+                            // find string to replace number with
+                            // this is a crude solution to not have the dialog repeatedly show up when re-opening a project file
+                            string numberToInsert = numbers[bubbleSeverity];
+                            seizure.Notes = seizure.Notes.Insert(i, numberToInsert);
+                            seizure.Notes = seizure.Notes.Remove(i + numberToInsert.Length, 1);
                         }
                     }
-                } // Do something
-                else
-                {
-                    finalStage = bubbleSeverity;
                 }
-            }
-            // if user input a -1 into notes, handle it
-            else if (noteSeverity == -1)
-            {
-                
-            }
-            else
-            {
-                finalStage = bubbleSeverity;
-            }
-
+            // return final stage if code makes it all the way to this return pathway
             return finalStage;
         }
         public int ParseSeizure(string note)
         {
-            int severity = -1;
+            int severity = default;
+
+            // Check if negaitve one is contained in this
+            if (note.Contains('-') && note.Contains('1'))
+                return -1;
+
+            // if no negative one then parse stage 'normally'
             string storeNum = String.Join("", note.Where(char.IsDigit));
             if (storeNum.Length > 0)
             {
