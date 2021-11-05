@@ -217,6 +217,7 @@ namespace ProjectManager
             else
                 // if notes are empty just take bubble severity
                 return bubbleSeverity;
+
             // if severities already match then get out of this function
             if (bubbleSeverity == noteSeverity)
                 return bubbleSeverity;

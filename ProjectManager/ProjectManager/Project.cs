@@ -315,6 +315,7 @@ namespace ProjectManager
                 {
                     // ask user for the seizure severity
                     int finalStage = analysis.CompareSeizures(S, A.ID);
+
                     // set new severity
                     S.Severity = finalStage;
                 }
