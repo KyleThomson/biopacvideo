@@ -253,7 +253,7 @@ namespace ProjectManager
         {
             int severity = default;
 
-            // Check if negaitve one is contained in this
+            // Check if negaitve one is contained in the notes
             if (note.Contains('-') && note.Contains('1'))
                 return -1;
 
@@ -263,6 +263,9 @@ namespace ProjectManager
             {
                 severity = int.Parse(storeNum);
             }
+            else
+                // if notes are empty just return -1 so it doesn't return 0 and look like a nc seizure
+                return -1;
             return severity;
         }
 

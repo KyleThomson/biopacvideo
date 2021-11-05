@@ -23,3 +23,5 @@ ProjectManager/ProjectManager/obj/x86/Debug/ProjectManager.WeightAdd.resources
 ProjectManager/.vs/ProjectManager/v16/.suo
 ProjectManager\.vs\ProjectManager\v16\.suo
 ProjectManager/.vs/ProjectManager/v16/.suo
+*.cache
+ProjectManager/.vs/ProjectManager/v16/.suo
