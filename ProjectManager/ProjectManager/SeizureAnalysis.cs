@@ -207,6 +207,7 @@ namespace ProjectManager
 
             // assign bubble severity as the checked severity value
             int bubbleSeverity = seizure.Severity;
+
             // initialize noteSeverity
             int noteSeverity;
             if (seizure.Notes.Length > 0)
