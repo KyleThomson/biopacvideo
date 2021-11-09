@@ -463,8 +463,9 @@ namespace ProjectManager
                 ChangeTitleText(pjt.Filename);
             }
             UpdateMainList();
-            if (DuplicateDirectoryCount > 0)
-                Info.Text = DuplicateDirectoryCount.ToString() + " duplicate directories skipped.";
+            Info.Text = SuccessfullyImportedDirectory.ToString() + " directories imported. " + 
+                DuplicateDirectoryCount.ToString() + " duplicate directories skipped. " +
+                NotImported.ToString() + " directories not imported."; ;
         }
 
         private void mergeProjectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -627,6 +628,26 @@ namespace ProjectManager
         }
 
         private void rejectUnreviewedFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void successfulImport(object sender, EventArgs e)
+        {
+
+        }
+
+        private void alreadyImport_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void notImported_Click(object sender, EventArgs e)
         {
 
         }
