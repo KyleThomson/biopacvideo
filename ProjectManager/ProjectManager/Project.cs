@@ -688,7 +688,7 @@ namespace ProjectManager
             SaveFileDialog binned = new SaveFileDialog();
             binned.Filter = "CSV files (*.csv) |*.csv";
             binned.DefaultExt = "csv";
-            binned.Title = "Binned Seizures .csv";
+            binned.Title = "Seizure Frequency per Day .csv";
             binned.InitialDirectory = "D:\\";
 
             DateTime Earliest = Files[0].Start.Date;
@@ -1228,7 +1228,7 @@ namespace ProjectManager
                         Animals[CurrentAnimal].WeightInfo.Add(W);
                         break;
                     case " sz":
-                        SeizureType S = new SeizureType(data[3], data[4], data[5], data[6], data[7]);
+                        SeizureType S = new SeizureType(data[3], data[4], data[5], data[6], data[7], data[8]);
                         Pass = true;
                         foreach (SeizureType C in Animals[CurrentAnimal].Sz)
                         {

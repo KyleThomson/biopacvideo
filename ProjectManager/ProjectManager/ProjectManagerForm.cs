@@ -463,6 +463,8 @@ namespace ProjectManager
                 ChangeTitleText(pjt.Filename);
             }
             UpdateMainList();
+
+            // inform user of import results
             Info.Text = SuccessfullyImportedDirectory.ToString() + " directories imported. " + 
                 DuplicateDirectoryCount.ToString() + " duplicate directories skipped. " +
                 NotImported.ToString() + " directories not imported."; ;
