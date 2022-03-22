@@ -126,6 +126,8 @@ namespace ProjectManager
         }
         public void PlotPoints(float xCoord, float yCoord, int markerSize, string markerType, Color color)
         {
+            // draw a data point at specified coordinates. Inputs should already be scaled to pixels.
+
             Pen dataPen = new Pen(Brushes.Black);
             dataPen.Color = color;
             dataPen.Width = dataPen.Width * objectScale;
@@ -153,6 +155,8 @@ namespace ProjectManager
         }
         public void Line(float x1Coord, float y1Coord, float x2Coord, float y2Coord, float lineWidth, Color color)
         {
+            // draw a line at specified coordinates. Inputs should already be scaled to pixels.
+
             // Adjust pen to user inputted width and color
             Pen dataPen = new Pen(Brushes.Black);
             dataPen.Color = color;

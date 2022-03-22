@@ -81,6 +81,8 @@ namespace ProjectManager
         }
         private double MWW(string group1, string group2)
         {
+            // Mann-Whitney Wilcoxon hypothesis test between seizure burdens
+
             // Gets data from two different groups and uses static MannWhitneyWilcoxon to find significance
             double[] group1Burdens = groupedData[group1].szBurdens.ToArray();
             double[] group2Burdens = groupedData[group2].szBurdens.ToArray();
@@ -127,6 +129,8 @@ namespace ProjectManager
         }
         public void SzBurdenAndFreedom(List<AnimalType> animals, DateTime Earliest, string treatment)
         {
+            // Calculate seizure burden and freedom. Currently only supports injection
+
             // manually add baseline condition
             groups.Add("Baseline");
             foreach (string group in groups)
@@ -197,6 +201,9 @@ namespace ProjectManager
         
         public int CompareSeizures(SeizureType seizure, string animalID)
         {
+            // Compare seizure stages from bubble and the stage written in the note.
+            // Give user the end decision through a dialog box.
+
             // dictionary to replace parsed integers with string
             Dictionary<int, string> numbers = new Dictionary<int, string>();
             numbers.Add(0, "zero");  numbers.Add(1, "one"); 
@@ -253,6 +260,8 @@ namespace ProjectManager
         }
         public int ParseSeizure(string note)
         {
+            // ParseSeizure takes an input string and returns an integer as the seizure severity stage. Used to compare to the bubble severity.
+
             int severity = default;
 
             // Check if negaitve one is contained in the notes
@@ -273,6 +282,8 @@ namespace ProjectManager
 
         public void ParseGroups(List<AnimalType> Animals)
         {
+            // ParseGroups identifies the different treatments and adds them to groups. Currently only supports injections and is used to calculate seizure burdens and seizure freedom for distinct groups.
+
             switch (treatment)
             {
                 case Treatment.Injection:

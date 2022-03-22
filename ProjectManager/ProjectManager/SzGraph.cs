@@ -92,6 +92,8 @@ namespace ProjectManager
         }
         private List<string> GetXTickLabels(int xTickInterval)
         {
+            // Set x axis tick labels and their locations - locations get converted into pixel coordinates in the drawing phase
+
             List<string> xTickString = new List<string>();
             List<double> xTickLocations = new List<double>();
             //Obtain basis for y and x axis labeling
@@ -114,15 +116,19 @@ namespace ProjectManager
             TestDescription description = new TestDescription();
             description.ShowDialog();
             // set description for the test - this will display in subheaders
-            ETSP += description.ETSP; batch += description.Batch;
-            dose += description.Dose; frequency += description.Frequency;
+            ETSP += description.ETSP; 
+            batch += description.Batch;
+            dose += description.Dose; 
+            frequency += description.Frequency;
 
             // check if form was cancelled and stop plotting
             if (description._cancelled)
-            { return; }
+                return;
         }
         private List<string> GetYTickLabels()
         {
+            // Set y axis tick labels
+
             List<string> yTickString = new List<string>();
 
             // use animal ID for y axis tick labels
@@ -173,6 +179,8 @@ namespace ProjectManager
         }
         public void PlotTrt()
         {
+            // Plot time periods where animal was treated.
+
             // line properties
             float lineWidth = 4;
             Color vehicleColor = Color.FromName("Teal");
@@ -279,6 +287,8 @@ namespace ProjectManager
         }
         public void PlotEmpty()
         {
+            // Plot lines that indicate missing recording time in a channel.
+
             Color lineColor = Color.FromName("Black");
             float lineWidth = 4;
 
@@ -673,6 +683,8 @@ namespace ProjectManager
         }
         private void ThreeGroups(string baselineBurden, string drugBurden, string vehicleBurden, string baselineWilcoxon, string vehicleWilcoxon, string baselineFisherExact, string vehicleFisherExact, string drugFreedom, string vehicleFreedom, string baselineFreedom)
         {
+            // Draw stats from treatment groups onto graph form.
+
             // initialize properties for string placement
             int burdenStart = headerX;
             int freedomStart = headerLength;
@@ -750,6 +762,8 @@ namespace ProjectManager
         }
         private void AddButtons()
         {
+            // This add buttons to a tool bar on form. Not fully functional yet, but would be good feature to have ironed out.
+
             // create control for tool bar. this will get added to top of graph
             toolBar1 = new ToolBar();
 
@@ -793,6 +807,8 @@ namespace ProjectManager
         }
         private void toolBar1_ButtonClick(Object sender, ToolBarButtonClickEventArgs e)
         {
+            // Click handler for tool bar button
+
             // Figure out which button is hit
             switch (toolBar1.Buttons.IndexOf(e.Button))
             {
