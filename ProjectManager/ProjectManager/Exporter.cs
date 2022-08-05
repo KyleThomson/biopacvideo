@@ -104,11 +104,6 @@ namespace ProjectManager
         private void align_CheckedChanged(object sender, EventArgs e)
         {
         }
-
-        private void DetailList_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 
 }
