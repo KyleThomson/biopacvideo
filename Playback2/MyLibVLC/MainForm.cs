@@ -1298,7 +1298,6 @@ namespace SeizurePlayback
                     //QuitHighlight();
                     //Paused = false;
                     //RealTime = true;
-                    return;
                 }
                 Sz = DSF.GetCurrentSeizure();
                 if (!ACQ.HideChan[Sz.Channel - 1] && Sz.Display)  //This adds the functionality that next has, skipping to the selected seizures. 
