@@ -71,7 +71,7 @@ namespace SeizurePlayback
         float[] VideoOffset;
         float[] Rates = { 0.25F, 0.5F, 1, 2, 5, 10, 20, 30, 50, 100 };
         int fastReviewCounter = 0;
-        string DSFoCount;
+        
         public CManage()
         {
             InitializeComponent();
@@ -671,6 +671,13 @@ namespace SeizurePlayback
                     ACQ.Position = (int)Math.Floor((PercentCompletion * (double)ACQ.TotFileTime) / (double)100);
                     Step = MaxDispSize;
                 }
+                string[] detName = Directory.GetFiles(Path, "*.det");           //this section autoloads a .det file if it exists within the directory.
+                if (detName.Length != 0)            
+                {
+                    DSF.OpenFile(detName[0]);
+                    DetSezLabel.Text = ".det Loaded";
+                }
+                else DetSezLabel.Text = ".det Not Found";
             }
         }
 
@@ -1104,7 +1111,6 @@ namespace SeizurePlayback
             if (Res == DialogResult.OK)
             {
                 DSF.OpenFile(FD.FileName);
-                DSFoCount = (DSF.Count).ToString();
             }
             DetSezLabel.Text = ".det Loaded";
         }
