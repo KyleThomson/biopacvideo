@@ -5,6 +5,17 @@ using System.IO;
 
 namespace SeizurePlayback
 {
+
+
+    /* The DetectedSeizureType class is used for objects designated as "detected seizures". 
+     A detected seizure is any seizure flagged by the seizure detection software, and are what is shown during Fast Review
+    They have three properties:
+        TimeInSec: The time (in seconds) where the seizure segment began
+        Channel: The channel of the detected seizure
+        Display: A boolean value that is true if the seizures are selected during fast review, and false if not
+            This display value determines which seizures are highlighted and stepped to during normal playback    
+     
+     */
     class DetectedSeizureType
     {
         public int TimeInSec; 

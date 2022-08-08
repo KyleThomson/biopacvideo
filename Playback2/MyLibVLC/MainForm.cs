@@ -71,6 +71,7 @@ namespace SeizurePlayback
         float[] VideoOffset;
         float[] Rates = { 0.25F, 0.5F, 1, 2, 5, 10, 20, 30, 50, 100 };
         int fastReviewCounter = 0;
+        string DSFoCount;
         public CManage()
         {
             InitializeComponent();
@@ -1102,6 +1103,7 @@ namespace SeizurePlayback
             if (Res == DialogResult.OK)
             {
                 DSF.OpenFile(FD.FileName);
+                DSFoCount = (DSF.Count).ToString();
             }
             DetSezLabel.Text = ".det Loaded";
         }
@@ -1229,7 +1231,7 @@ namespace SeizurePlayback
             if (FastReviewState)
             {
                 FastReviewPage++;
-                DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16).ToString();
+                DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16 + " of " + DSFoCount).ToString();
                 FastReviewChange = true;
             }
             else
@@ -1268,7 +1270,7 @@ namespace SeizurePlayback
             {
                 if (FastReviewPage == 0) return;
                 FastReviewPage--;
-                DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16).ToString();
+                DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16 + " of " + DSFoCount).ToString();
                 FastReviewChange = true;
                 return;
             }
@@ -1278,7 +1280,7 @@ namespace SeizurePlayback
             {
                 if (!DSF.Dec()) return;
                 Sz = DSF.GetCurrentSeizure();
-                if (!ACQ.HideChan[Sz.Channel - 1])
+                if (!ACQ.HideChan[Sz.Channel - 1] && Sz.Display)  //This adds the functionality that next has, skipping to the selected seizures. 
                     pass = true;
             }
             DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
@@ -1349,7 +1351,12 @@ namespace SeizurePlayback
         {
 
             if (!DSF.isLoaded) return; //Don't want to go into fastreview mode if file not loaded
-            if (!Paused) return; //If things are actively playing, it's gonna suck to deal with. 
+            //if (!Paused) return; //If things are actively playing, it's gonna suck to deal with. 
+            if (!Paused) //possible solution so it auto pauses? There may be more to add but this seems to work nicely
+            {
+                Paused = true;
+                player.Pause();
+            }
             bool del; ;
             if (!FastReviewState)
             {
@@ -1357,13 +1364,13 @@ namespace SeizurePlayback
                 if (fastReviewCounter == 0)
                 {
                     DSF.ResetDisplay();
-                    fastReviewCounter++;
+                    fastReviewCounter = 1;
                 }
 
 
                 DSF.SetSeizureNumber(0);
                 FastReviewPage = 0;
-                DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16).ToString();
+                DetSezLabel.Text = ((FastReviewPage * 16) + DSFoCount).ToString() + " to " + ((FastReviewPage + 1) * 16 + DSFoCount).ToString();
                 FastReviewState = true;
                 FastReviewChange = true;
                 //Disable Buttons 
