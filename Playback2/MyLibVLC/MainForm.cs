@@ -462,6 +462,7 @@ namespace SeizurePlayback
         }
         private void Open_Click(object sender, EventArgs e)
         {
+            fastReviewCounter = 0;
             DialogResult tempRes;
             FBD = new FolderBrowserDialog();
             FBD.SelectedPath = DefaultFolder;
@@ -1378,11 +1379,11 @@ namespace SeizurePlayback
                 Paused = true;
                 player.Pause();
             }
-            bool del; ;
+            bool del;
             if (!FastReviewState)
             {
 
-                if (fastReviewCounter == 0)
+                if (fastReviewCounter == 0)  //we do want to initially reset the displayed seizures so that all of them aren't highlighted, but this only has to happen when you open fast review for the first time.
                 {
                     DSF.ResetDisplay();
                     fastReviewCounter = 1;
@@ -1391,6 +1392,8 @@ namespace SeizurePlayback
 
                 DSF.SetSeizureNumber(0);
                 FastReviewPage = 0;
+
+                //below is code used to show page numbers in fast review state
                 //DetSezLabel.Text = ((FastReviewPage * 16) + DSFoCount).ToString() + " to " + ((FastReviewPage + 1) * 16 + DSFoCount).ToString();
                 //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16).ToString() + " of " + (DSF.Count).ToString();
                 string displayPageMin = minMaxPage("min");
@@ -1422,6 +1425,10 @@ namespace SeizurePlayback
         }
 
 
+        /*
+        deleteMessageBox is the prompt message for the user to delete fastreview save data.  
+         
+        */
         private bool deleteMessageBox()
         {
 
@@ -1452,7 +1459,14 @@ namespace SeizurePlayback
 
         }
 
-        public string minMaxPage(string a)
+
+        /*
+        minMagePage is a string method that returns the lower bound and upper bound of the page you are on during fast review
+        if you pass "min" it will give the lower bound and "max" will return what you think
+        This method also checks if the numbers are over the total number of detections, in which case it will simply return the seizure count as a string
+        This method is simply to make printing easier for me
+         */
+        public string minMaxPage(string a) //must be "min" or "max"
         {
             
             if (a == "min")
