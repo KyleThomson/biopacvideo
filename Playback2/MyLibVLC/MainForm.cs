@@ -1231,7 +1231,11 @@ namespace SeizurePlayback
             if (FastReviewState)
             {
                 FastReviewPage++;
-                DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16 + " of " + DSFoCount).ToString();
+                //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16 + " of " + DSFoCount).ToString();
+                //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16).ToString() + " of " + (DSF.Count).ToString();
+                string displayPageMin = minMaxPage("min");
+                string displayPageMax = minMaxPage("max");
+                DetSezLabel.Text = (displayPageMin + " to " + displayPageMax + " of " + (DSF.Count).ToString());
                 FastReviewChange = true;
             }
             else
@@ -1270,7 +1274,11 @@ namespace SeizurePlayback
             {
                 if (FastReviewPage == 0) return;
                 FastReviewPage--;
-                DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16 + " of " + DSFoCount).ToString();
+                //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16 + " of " + DSFoCount).ToString();
+                //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16).ToString() + " of " + (DSF.Count).ToString();
+                string displayPageMin = minMaxPage("min");
+                string displayPageMax = minMaxPage("max");
+                DetSezLabel.Text = (displayPageMin + " to " + displayPageMax + " of " + (DSF.Count).ToString());
                 FastReviewChange = true;
                 return;
             }
@@ -1279,9 +1287,22 @@ namespace SeizurePlayback
             while (!pass)
             {
                 if (!DSF.Dec()) return;
+                ///if (!dsf.dec())
+                {
+                    //ACQ.Position = 0;
+                    //Step = MaxDispSize;
+                    //if (player != null)
+                    //    player.Stop();
+                    //SeekToCurrentPos(false);
+                    //QuitHighlight();
+                    //Paused = false;
+                    //RealTime = true;
+                    return;
+                }
                 Sz = DSF.GetCurrentSeizure();
                 if (!ACQ.HideChan[Sz.Channel - 1] && Sz.Display)  //This adds the functionality that next has, skipping to the selected seizures. 
                     pass = true;
+                
             }
             DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
             ACQ.SelectedChan = Sz.Channel - 1;
@@ -1370,7 +1391,12 @@ namespace SeizurePlayback
 
                 DSF.SetSeizureNumber(0);
                 FastReviewPage = 0;
-                DetSezLabel.Text = ((FastReviewPage * 16) + DSFoCount).ToString() + " to " + ((FastReviewPage + 1) * 16 + DSFoCount).ToString();
+                //DetSezLabel.Text = ((FastReviewPage * 16) + DSFoCount).ToString() + " to " + ((FastReviewPage + 1) * 16 + DSFoCount).ToString();
+                //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16).ToString() + " of " + (DSF.Count).ToString();
+                string displayPageMin = minMaxPage("min");
+                string displayPageMax = minMaxPage("max");
+                DetSezLabel.Text = (displayPageMin + " to " + displayPageMax + " of " + (DSF.Count).ToString());
+
                 FastReviewState = true;
                 FastReviewChange = true;
                 //Disable Buttons 
@@ -1426,6 +1452,23 @@ namespace SeizurePlayback
 
         }
 
+        public string minMaxPage(string a)
+        {
+            
+            if (a == "min")
+            {
+                if (((FastReviewPage * 16) + 1) > DSF.Count) return (DSF.Count.ToString());
+                return ((FastReviewPage * 16) + 1).ToString();
+            }
+            if (a == "max")
+            {
+                if (((FastReviewPage + 1) * 16) > DSF.Count) return (DSF.Count.ToString());
+                return ((FastReviewPage + 1) * 16).ToString();
+            } else
+            {
+                return null;
+            }
+        }
 
 
     }

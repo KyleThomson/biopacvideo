@@ -680,10 +680,10 @@ namespace SeizurePlayback
             this.DetSezLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.DetSezLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DetSezLabel.ForeColor = System.Drawing.Color.White;
-            this.DetSezLabel.Location = new System.Drawing.Point(531, 536);
+            this.DetSezLabel.Location = new System.Drawing.Point(499, 536);
             this.DetSezLabel.Name = "DetSezLabel";
             this.DetSezLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.DetSezLabel.Size = new System.Drawing.Size(127, 24);
+            this.DetSezLabel.Size = new System.Drawing.Size(159, 24);
             this.DetSezLabel.TabIndex = 56;
             this.DetSezLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.DetSezLabel.Click += new System.EventHandler(this.DetSezLabel_Click);
