@@ -300,7 +300,7 @@ namespace SeizurePlayback
         }
         public void ResetScale()
         {
-            VoltageSpacing = (int)(Ymax / (VisibleChans));
+            VoltageSpacing = (int)(Ymax / (Math.Max(VisibleChans, 1)));
         }
         private float ScaleVoltsToPixel(float volt, float pixelHeight)
         {

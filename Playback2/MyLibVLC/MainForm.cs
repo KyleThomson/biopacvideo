@@ -24,6 +24,7 @@ namespace SeizurePlayback
         DateTime LastOpen;
         ACQReader ACQ;
         DetectedSeizureFileType DSF;
+        DetectedSeizureFileType VisCL;
         string[] AVIFiles;
         string AVIMode;
         bool SuppressChange;
@@ -70,8 +71,11 @@ namespace SeizurePlayback
         Mygraph graph;
         float[] VideoOffset;
         float[] Rates = { 0.25F, 0.5F, 1, 2, 5, 10, 20, 30, 50, 100 };
-        int fastReviewCounter = 0;
-        
+        int fastReviewCounter;
+        int fastReviewLastPage = 0;
+        bool checkedChange = false;
+        List<int> HCL;
+
         public CManage()
         {
             InitializeComponent();
@@ -79,8 +83,14 @@ namespace SeizurePlayback
             ACQ = new ACQReader(); //Class to read from ACQ file
             graph = new Mygraph(); //Small Class for containing EEG area. 
             DSF = new DetectedSeizureFileType();
+            HCL = DSF.HCL;
+            VisCL = new DetectedSeizureFileType();
+            
+
             FastReviewState = false;
             FastReviewChange = false;
+            
+            
             VideoOffset = new float[16];
             string[] args = new string[] { "" };
             instance = new VlcInstance(args);
@@ -233,18 +243,19 @@ namespace SeizurePlayback
                         {
                             int SeizureCount;
                             SeizureCount = FastReviewPage * 16;
-                            DSF.SetSeizureNumber(SeizureCount);
+                            //DSF.SetSeizureNumber(SeizureCount);
+                            VisCL.SetSeizureNumber(SeizureCount);
                             DetectedSeizureType Sz;
-                            ACQ.cleargraph();
+                            ACQ.cleargraph();                       
                             for (int i = 0; i < 16; i++)
                             {
-                                Sz = DSF.GetCurrentSeizure();
-                                if (!ACQ.DisplayDetection(Math.Max(Sz.TimeInSec - 15, 0), Sz.Channel, i % 2, i / 2, Sz.Display))
-                                {
-                                    MessageBox.Show("FAILED DRAWING");
-                                }
-                                if (!DSF.Inc()) break;
-                            }
+                                Sz = VisCL.GetCurrentSeizure();                             
+                                    if (!ACQ.DisplayDetection(Math.Max(Sz.TimeInSec - 15, 0), Sz.Channel, i % 2, i / 2, Sz.Display))
+                                    {
+                                        MessageBox.Show("FAILED DRAWING");
+                                    }                              
+                                if (!VisCL.Inc()) break;
+                            }                
                             g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
                             FastReviewChange = false;
                         }
@@ -671,11 +682,15 @@ namespace SeizurePlayback
                     ACQ.Position = (int)Math.Floor((PercentCompletion * (double)ACQ.TotFileTime) / (double)100);
                     Step = MaxDispSize;
                 }
+       
                 string[] detName = Directory.GetFiles(Path, "*.det");           //this section autoloads a .det file if it exists within the directory.
-                if (detName.Length != 0)            
+                if (detName.Length != 0)
                 {
+                    
                     DSF.OpenFile(detName[0]);
+                    VisCL = DSF;
                     DetSezLabel.Text = ".det Loaded";
+                    fastReviewCounter = 0;
                 }
                 else DetSezLabel.Text = ".det Not Found";
             }
@@ -701,7 +716,8 @@ namespace SeizurePlayback
                     }
                     int Y = (e.Y - graph.Y1);
                     Y = Y / ((graph.Y2 - graph.Y1) / 8);
-                    if (DSF.ChangeDisplaySeizure((FastReviewPage * 16) + (Y * 2) + X))
+                    //if (DSF.ChangeDisplaySeizure((FastReviewPage * 16) + (Y * 2) + X))
+                    if (VisCL.ChangeDisplaySeizure((FastReviewPage * 16) + (Y * 2) + X))
                     {
                         FastReviewChange = true;
                     }
@@ -995,27 +1011,71 @@ namespace SeizurePlayback
 
         private void VisChan_CheckedChanged(object sender, EventArgs e)
         {
+
             int VChan;
             if (!SuppressChange)
             {
+                //Console.WriteLine("checked!");
                 VChan = 0;
                 for (int i = 0; i < 16; i++)
                 {
                     if (VisChecks[i].Checked)
                     {
+                        //if (HCL.Contains((i + 1)))
+                        //{
+                        //    HCL.Remove((i + 1));
+                        //    checkedChange = true;
+                        //}
                         ACQ.HideChan[i] = false;
                         ChanPos[VChan] = i;
                         VChan++;
                     }
                     else
                     {
+
                         ACQ.HideChan[i] = true;
+                        //if (!HCL.Contains((i + 1)))
+                        //{
+                        //    HCL.Add((i + 1));
+                        //    checkedChange = true;
+                        //}
                     }
                 }
                 ACQ.VisibleChans = VChan;
                 ACQ.ResetScale();
                 Step = MaxDispSize;
             }
+        }
+
+        private void VisChan_CheckedChanged_List(object sender, EventArgs e, int chanPass, bool chanClicked)
+        {
+
+
+            if (!SuppressChange)
+            {
+                if (!HCL.Contains(chanPass) && !chanClicked)
+                {
+                    HCL.Add(chanPass);
+                    checkedChange = true;
+                    Console.WriteLine("Channel " + chanPass + " Hidden");
+                }
+                if (HCL.Contains(chanPass) && chanClicked)
+                {
+                    HCL.Remove(chanPass);
+                    DSF.ResetVisI();
+                    checkedChange = true;
+                    Console.WriteLine("Channel " + chanPass + " Visible");
+                }
+
+                
+                Console.WriteLine("All Hidden Channels: \n");
+                foreach (int HC in HCL)
+                {
+                    Console.WriteLine(HC);
+
+                }
+            }
+
         }
 
         private void ZoomScale_Scroll(object sender, EventArgs e)
@@ -1113,6 +1173,8 @@ namespace SeizurePlayback
                 DSF.OpenFile(FD.FileName);
             }
             DetSezLabel.Text = ".det Loaded";
+            VisCL = DSF;
+            fastReviewCounter = 0;
         }
 
         private void PMButton_Click(object sender, EventArgs e)
@@ -1240,10 +1302,11 @@ namespace SeizurePlayback
                 FastReviewPage++;
                 //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16 + " of " + DSFoCount).ToString();
                 //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16).ToString() + " of " + (DSF.Count).ToString();
-                string displayPageMin = minMaxPage("min");
-                string displayPageMax = minMaxPage("max");
-                DetSezLabel.Text = (displayPageMin + " to " + displayPageMax + " of " + (DSF.Count).ToString());
+                string displayPageMin = MinMaxPage("min");
+                string displayPageMax = MinMaxPage("max");
+                DetSezLabel.Text = (displayPageMin + " to " + displayPageMax + " of " + (VisCL.Count).ToString());
                 FastReviewChange = true;
+                fastReviewLastPage++;
             }
             else
             {
@@ -1251,16 +1314,16 @@ namespace SeizurePlayback
                 DetectedSeizureType Sz = new DetectedSeizureType(0, 0, true);
                 while (!pass)
                 {
-                    if (!DSF.Inc())
+                    if (!VisCL.Inc())
                     {
                         DetSezLabel.Text = "Finished!";
                         return;
                     }
-                    Sz = DSF.GetCurrentSeizure();
+                    Sz = VisCL.GetCurrentSeizure();
                     if ((!ACQ.HideChan[Sz.Channel - 1]) && Sz.Display)
                         pass = true;
                 }
-                DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
+                DetSezLabel.Text = (VisCL.SeizureNumber + 1).ToString() + " of " + VisCL.Count.ToString();
                 ACQ.SelectedChan = Sz.Channel - 1;
                 ACQ.Position = Math.Max(0, Sz.TimeInSec - 30);
                 Step = MaxDispSize;
@@ -1283,10 +1346,11 @@ namespace SeizurePlayback
                 FastReviewPage--;
                 //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16 + " of " + DSFoCount).ToString();
                 //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16).ToString() + " of " + (DSF.Count).ToString();
-                string displayPageMin = minMaxPage("min");
-                string displayPageMax = minMaxPage("max");
-                DetSezLabel.Text = (displayPageMin + " to " + displayPageMax + " of " + (DSF.Count).ToString());
+                string displayPageMin = MinMaxPage("min");
+                string displayPageMax = MinMaxPage("max");
+                DetSezLabel.Text = (displayPageMin + " to " + displayPageMax + " of " + (VisCL.Count).ToString());
                 FastReviewChange = true;
+                fastReviewLastPage--;
                 return;
             }
             bool pass = false;
@@ -1305,12 +1369,12 @@ namespace SeizurePlayback
                     //Paused = false;
                     //RealTime = true;
                 }
-                Sz = DSF.GetCurrentSeizure();
+                Sz = VisCL.GetCurrentSeizure();
                 if (!ACQ.HideChan[Sz.Channel - 1] && Sz.Display)  //This adds the functionality that next has, skipping to the selected seizures. 
                     pass = true;
                 
             }
-            DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
+            DetSezLabel.Text = (VisCL.SeizureNumber + 1).ToString() + " of " + VisCL.Count.ToString();
             ACQ.SelectedChan = Sz.Channel - 1;
             ACQ.Position = Math.Max(0, Sz.TimeInSec - 30);
             Step = MaxDispSize;
@@ -1387,23 +1451,56 @@ namespace SeizurePlayback
             bool del;
             if (!FastReviewState)
             {
-
+                
+                Console.WriteLine(checkedChange);
+                Console.WriteLine("DSF Count: " + DSF.Count + " | VisCL Count: " + VisCL.Count);
                 if (fastReviewCounter == 0)  //we do want to initially reset the displayed seizures so that all of them aren't highlighted, but this only has to happen when you open fast review for the first time.
                 {
+
                     DSF.ResetDisplay();
                     fastReviewCounter = 1;
                 }
+                //int tempHid = HCL.Count;
+                //HCL = HiddenChannelList();
+                //if (HCL.Count > tempHid)
+                //{
+                //    if (RemoveChannelMessage())
+                //    {
+                //        for (int i = 0; i < HCL.Count; i++)
+                //        {
+                //            DSF.RemoveChannel(HCL[i]);
+                //        }
+                //    }
 
-
+                //}
+                //if (HCL.Count < tempHid)
+                //{
+                //    string[] detName = Directory.GetFiles(Path, "*.det");           //this section autoloads a .det file if it exists within the directory.
+                //    if (detName.Length != 0)
+                //    {
+                //        DSF.OpenFile(detName[0]);                      
+                //    }
+                //}
+                
+                if (checkedChange)
+                {
+                    VisCL = DSF;
+                    //VisCL.RemoveChannel(HCL);
+                    checkedChange = false;
+                }
+                
+                
                 DSF.SetSeizureNumber(0);
-                FastReviewPage = 0;
+                VisCL.SetSeizureNumber(0);
+                FastReviewPage = fastReviewLastPage;
+                DSF.VisCount();
 
                 //below is code used to show page numbers in fast review state
                 //DetSezLabel.Text = ((FastReviewPage * 16) + DSFoCount).ToString() + " to " + ((FastReviewPage + 1) * 16 + DSFoCount).ToString();
                 //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16).ToString() + " of " + (DSF.Count).ToString();
-                string displayPageMin = minMaxPage("min");
-                string displayPageMax = minMaxPage("max");
-                DetSezLabel.Text = (displayPageMin + " to " + displayPageMax + " of " + (DSF.Count).ToString());
+                string displayPageMin = MinMaxPage("min");
+                string displayPageMax = MinMaxPage("max");
+                DetSezLabel.Text = (displayPageMin + " to " + displayPageMax + " of " + (VisCL.Count).ToString());
 
                 FastReviewState = true;
                 FastReviewChange = true;
@@ -1414,17 +1511,63 @@ namespace SeizurePlayback
             }
             else
             {
-                del = deleteMessageBox();
+                del = DeleteMessageBox();
                 if (del == true)
                 {
+                    fastReviewLastPage = 0;
                     DSF.ResetDisplay();
+                    VisCL.ResetDisplay();
                 }
                 DSF.SetSeizureNumber(0);
+                VisCL.SetSeizureNumber(0);
 
                 FastReviewState = false;
                 Play.Enabled = true;
                 SpeedUp.Enabled = true;
                 Rewind.Enabled = true;
+
+                /*
+                 * Experimental autoreturn to first selected seizure
+               */
+                DetectedSeizureType Sz = new DetectedSeizureType(0, 0, true);
+                //Sz = DSF.GetCurrentSeizure();
+                Sz = VisCL.GetCurrentSeizure();
+                bool pass = false;
+
+                if ((!ACQ.HideChan[Sz.Channel - 1]) && Sz.Display) pass = true;
+
+                while (!pass)
+                {
+
+                    if (!VisCL.Inc())
+                    {
+                        DetSezLabel.Text = "None Selected";
+                        ACQ.Position = 0;
+                        Step = MaxDispSize;
+                        if (player != null)
+                            player.Stop();
+                        Paused = true;
+                        RealTime = true;
+                        if (player != null)
+                            player.Stop();
+                        return;
+                    }
+                    Sz = VisCL.GetCurrentSeizure();
+                    if ((!ACQ.HideChan[Sz.Channel - 1]) && Sz.Display)
+                        pass = true;
+                }
+
+                DetSezLabel.Text = (VisCL.SeizureNumber + 1).ToString() + " of " + VisCL.Count.ToString();
+                ACQ.SelectedChan = Sz.Channel - 1;
+                ACQ.Position = Math.Max(0, Sz.TimeInSec - 30);
+                Step = MaxDispSize;
+                if (player != null)
+                    player.Stop();
+                SeekToCurrentPos(false);
+                QuitHighlight();
+                Paused = false;
+                RealTime = true;
+
 
             }
         }
@@ -1434,7 +1577,10 @@ namespace SeizurePlayback
         deleteMessageBox is the prompt message for the user to delete fastreview save data.  
          
         */
-        private bool deleteMessageBox()
+
+
+
+        private bool DeleteMessageBox()
         {
 
             string message = "Do you want to delete all previous progress?";
@@ -1449,6 +1595,11 @@ namespace SeizurePlayback
             }
             else return false;
 
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
 
         }
 
@@ -1471,23 +1622,54 @@ namespace SeizurePlayback
         This method also checks if the numbers are over the total number of detections, in which case it will simply return the seizure count as a string
         This method is simply to make printing easier for me
          */
-        public string minMaxPage(string a) //must be "min" or "max"
+        public string MinMaxPage(string a) //must be "min" or "max"
         {
             
             if (a == "min")
             {
-                if (((FastReviewPage * 16) + 1) > DSF.Count) return (DSF.Count.ToString());
+                if (((FastReviewPage * 16) + 1) > VisCL.Count) return (VisCL.Count.ToString());
                 return ((FastReviewPage * 16) + 1).ToString();
             }
             if (a == "max")
             {
-                if (((FastReviewPage + 1) * 16) > DSF.Count) return (DSF.Count.ToString());
+                if (((FastReviewPage + 1) * 16) > VisCL.Count) return (VisCL.Count.ToString());
                 return ((FastReviewPage + 1) * 16).ToString();
             } else
             {
                 return null;
             }
         }
+
+        
+
+        //private bool RemoveChannelMessage()
+        //{
+
+        //    string message = "Do you want to remove unselected channels from Fast Review?";
+        //    string caption = "Fast Review Channel Removal";
+        //    //MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+        //    //DialogResult answer;
+        //    var answer = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+        //    if (answer == DialogResult.Yes)
+        //    {
+        //        return true;
+        //    }
+        //    else return false;
+
+
+        //}
+
+        //public List<int> HiddenChannelList()
+        //{
+        //    for (int i = 0; i < 16; i++)
+        //    {
+        //        if (ACQ.HideChan[i] && !HCL.Contains(i)) HCL.Add(i);
+        //        if (!ACQ.HideChan[i] && HCL.Contains(i)) HCL.Remove(i);
+        //    }
+
+        //    return HCL;
+        //}
 
 
     }

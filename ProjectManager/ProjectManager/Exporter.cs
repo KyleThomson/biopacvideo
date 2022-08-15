@@ -45,7 +45,7 @@ namespace ProjectManager
                     E.align = true;
             }
             // Check if data should be exported
-            E.IsExport();
+            //E.IsExport();
 
             // Create file dialog box for saving exported project file.
             SaveFileDialog F = new SaveFileDialog();
@@ -55,13 +55,14 @@ namespace ProjectManager
             F.InitialDirectory = "D:\\";
 
             // Only open file dialog if user wanted to export project data
-            if (E.exportData)
-            {
+            //if (E.exportData)
+            //{
                 if (F.ShowDialog() == DialogResult.OK)
                 {
                     pjt.ExportData(F.FileName, E);
                 }
-            }
+            //}
+            
             // Only open file dialog if user selected binned seizures
             if (E.binSz)
                 pjt.ExportBinnedSz(E);
