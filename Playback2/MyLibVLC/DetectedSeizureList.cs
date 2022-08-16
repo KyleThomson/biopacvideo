@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 
 
@@ -18,15 +17,15 @@ namespace SeizurePlayback
      
      */
     class DetectedSeizureType
-    {
+    {        
         public int TimeInSec; 
         public int Channel;
-        public bool Display; 
+        public bool Display;    
         public DetectedSeizureType(int a, int b, bool c)
         {
             Channel = a; 
             TimeInSec = b;
-            Display = c; 
+            Display = c;         
         }
     }
 
@@ -35,40 +34,46 @@ namespace SeizurePlayback
         private string FileName;
         public int SeizureNumber;
         public int Count; //shows the count of VISIBLE channel seizures
-        //public int VisChanCount;
         public bool isLoaded;
         private List<DetectedSeizureType> DetectedSeizures;
+        private List<DetectedSeizureType> DetectedSeizuresBackup;
         public List<int> HCL;
-        public List<int> VisIndex;
-        
-        
+
+
+
         //private List<DetectedSeizureType> VisSeizures;
         public DetectedSeizureFileType()
         {
             FileName = "";
             DetectedSeizures = new List<DetectedSeizureType>();
-            //VisSeizures = new List<DetectedSeizureType>();
+            DetectedSeizuresBackup = new List<DetectedSeizureType>();
+
             isLoaded = false;
             HCL = new List<int>();
-            VisIndex = new List<int>();
+
+
         }
         public void OpenFile(string FN)
         {
             DetectedSeizures.Clear();
-            DetectedSeizureType TempSz; 
-            FileName =FN;
+            DetectedSeizuresBackup.Clear();
+            DetectedSeizureType TempSz;
+            FileName = FN;
             StreamReader F = new StreamReader(FN);
             while (!F.EndOfStream)
             {
-               TempSz = ParseLine(F.ReadLine());
-               DetectedSeizures.Add(TempSz);
-               
+                TempSz = ParseLine(F.ReadLine());
+                DetectedSeizures.Add(TempSz);
+                Console.WriteLine(TempSz.Channel);
+                DetectedSeizuresBackup.Add(TempSz);
+
             }
             Count = DetectedSeizures.Count;
-            //VisChanCount = DetectedSeizures.Count;
+
             SeizureNumber = -1;
             isLoaded = true;
-            ResetVisI();
+
+
         }
 
         private DetectedSeizureType ParseLine(string p)
@@ -84,18 +89,18 @@ namespace SeizurePlayback
         }
         public bool Inc()
         {
-            SeizureNumber = SeizureNumber + 1; 
-            if (SeizureNumber+1 > DetectedSeizures.Count)
+            SeizureNumber = SeizureNumber + 1;
+            if (SeizureNumber + 1 > DetectedSeizures.Count)
             {
-                SeizureNumber = DetectedSeizures.Count-1;
+                SeizureNumber = DetectedSeizures.Count - 1;
                 return false;
             }
             return true;
         }
         public bool SetSeizureNumber(int Number)
         {
-            
-            if (Number+1 > DetectedSeizures.Count)
+
+            if (Number + 1 > DetectedSeizures.Count)
             {
                 SeizureNumber = DetectedSeizures.Count - 1;
                 return false;
@@ -105,16 +110,20 @@ namespace SeizurePlayback
         }
         public bool ChangeDisplaySeizure(int Number)
         {
-            Number = VisIndex[Number];
-            if (Number+1> DetectedSeizures.Count)
+
+            if (Number + 1 > DetectedSeizures.Count)
             {
                 return false;
             }
             DetectedSeizures[Number].Display = !DetectedSeizures[Number].Display;
-            return true; 
-            
+
+            return true;
+
         }
-       public bool Dec()
+
+
+
+        public bool Dec()
         {
             SeizureNumber = SeizureNumber - 1;
             if (SeizureNumber < 0)
@@ -122,132 +131,140 @@ namespace SeizurePlayback
                 SeizureNumber = 0;
                 return false;
             }
+
             return true;
         }
         public void ResetDisplay()
         {
-            for(int i=0; i< DetectedSeizures.Count; i++)
+            for (int i = 0; i < DetectedSeizures.Count; i++)
             {
-                DetectedSeizures[i].Display = false; 
+                DetectedSeizures[i].Display = false;
             }
         }
         public DetectedSeizureType GetCurrentSeizure()
         {
-            SkipToVisChan();
+
+            if (DetectedSeizures.Count == 0)
+            {
+                return null;
+            }
 
             DetectedSeizureType TempSz = DetectedSeizures[SeizureNumber];
-            
-            return TempSz; 
+
+            return TempSz;
         }
 
-        //public bool IsSelected(int sN)
-        //{
-        //    for (int i = 0; i < DetectedSeizures.Count; i++)
-        //    {
-        //        if (DetectedSeizures[sN].Display == true) return true;
-                
-        //    }
-        //    return false;
-        //}
-
-        //public void RemoveChannel(int a)
-        //{
-        //    for (int i = 0; i < DetectedSeizures.Count; i++)
-        //    {
-        //        if (DetectedSeizures[i].Channel == a)
-        //        {
-        //            DetectedSeizures.RemoveAt(i);
-                    
-        //        }
-        //    }
-        //    Count = DetectedSeizures.Count;
-        //}
-
-        //public void RemoveChannel(List<int> hcl)
-        //{
-        //    if (hcl.Count < 1) return;
-
-        //    for (int i = 0; i < DetectedSeizures.Count; i++)
-        //    {
-        //        if (hcl.Contains(DetectedSeizures[i].Channel))
-        //        {
-        //            DetectedSeizures.RemoveAt(i);
-        //        }
-        //    }
-
-        //    Count = DetectedSeizures.Count;
 
 
-        //    //foreach (int hc in hcl)
-        //    //{
-                
-        //    //}
-
-
-        //}
-
-        private void SkipToVisChan()
+        public void HCLSync(List<int> a)
         {
-            while (HCL.Contains(DetectedSeizures[SeizureNumber].Channel))
+            HCL = a;
+        }
+
+
+
+        public void ResetDFS()
+        {
+
+            Console.WriteLine("Count before Reset: " + Count);
+            DetectedSeizureType TempSz;
+            DetectedSeizures.Clear();
+            for (int i = 0; i < DetectedSeizuresBackup.Count; i++)
             {
-                //VisChanCount--;
-                VisIndex.Remove(SeizureNumber);
-                Inc();
-            }
-        }
+                TempSz = DetectedSeizuresBackup[i];
 
-        public void VisCount()
-        {
+                DetectedSeizures.Add(TempSz);
+
+
+            }
+
             Count = DetectedSeizures.Count;
+            Console.WriteLine("Count after Reset: " + Count);
+            Console.WriteLine(DetectedSeizures[0].Channel + "    " + DetectedSeizuresBackup[0].Channel);
 
-            for (int i = 0; i < DetectedSeizures.Count; i ++)
-            {
-                if (HCL.Contains(DetectedSeizures[i].Channel))
-                {
-                    Count--;
-                }
-            }
-            
+            RemoveHiddenChan();
+
+
+
         }
 
-        public void ResetVisI()
+        public void RemoveHiddenChan()
         {
-            for (int i = 0; i < DetectedSeizures.Count; i++)
+
+            Console.WriteLine("Count before removing hidden channels " + Count);
+            //for (int i = 0; i < DetectedSeizures.Count; i++)
+            //{
+            //    if (HCL.Contains(DetectedSeizures[i].Channel))
+            //    {
+            //        DetectedSeizures.RemoveAt(i);
+            //    }
+            //}
+
+            for (int i = 0; i < HCL.Count; i++)
             {
-                VisIndex.Add(i);
-            }
-
-
-            if (HCL.Count > 0)
-            {
-
-                for (int i = 0; i < DetectedSeizures.Count; i++)
-                {   
-                    if (HCL.Contains(VisIndex[i]))
+                for (int j = 0; j < DetectedSeizures.Count; j++)
+                {
+                    if ((int)HCL[i] == (int)DetectedSeizures[j].Channel)
                     {
-                    VisIndex.Remove(i);
+                        DetectedSeizures.RemoveAt(j);
+                        j--; 
                     }
-
                 }
             }
+
+            foreach (DetectedSeizureType Seizure in DetectedSeizures)
+            {
+                Console.WriteLine(Seizure.Channel);
+                Console.WriteLine(Seizure.TimeInSec);
+            }
+
+            Console.WriteLine("HCL Contains: ");
+            foreach (int hc in HCL)
+            {
+                Console.WriteLine(hc);
+            }
+
+
+
+            Count = DetectedSeizures.Count;
+            Console.WriteLine("Count after removing hidden channels " + Count);
         }
 
-        //public void EqualizeLists()
-        //{
-        //    VisSeizures.Clear();
-        //    DetectedSeizureType TempSz;
-            
-        //    int tempChan;
-        //    int tempTime;
-        //    int tempDisp;
-        //    foreach (DetectedSeizureType Seizure in DetectedSeizures)
-        //    {
-        //        TempSz = Seizure;
-        //        tempChan = TempSz.Channel;
-        //        tempTime = TempSz.TimeInSec;
-        //        tempDisp = TempSz.Display;
 
-        //    }
-        //}
+        public int IsDisplayed()
+        {
+            int r = 0;
+            foreach (DetectedSeizureType DS in DetectedSeizures)
+            {
+                if (DS.Display) r++;
+            }
+
+            return r;
+
+
+        }
+
+        public int FRIndex()
+        {
+            
+            int i = 0;
+            DetectedSeizureType TempSZ = GetCurrentSeizure();
+            foreach (DetectedSeizureType DS in DetectedSeizures)
+            {
+                if (DS.Display)
+                {
+                    
+                    i++;
+                    if (DS == TempSZ)
+                    {
+                        
+                        return i;
+                    }
+                    
+                }
+            }
+            return i;
+        }
     }
 }
+
