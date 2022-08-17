@@ -1,0 +1,66 @@
+Changelog: JW
+
+0805-0808 2022
+
+MainForm.cs (Seizure Playback)
+
+Defined int fastReviewCounter (initialized at 0) to keep track of whether or not the fast review state has been entered yet
+
+In method FastReview_Click(object sender, EventArgs e) (line: 1350):
+	created bool del
+		del is passed through to the deleteMessageBox() method, which returns true or false
+		if true, del will delete all of the progress made during fast review
+		if false, del will save the selected seizures and allow the user to go back and select more/less
+	
+
+Added stepping feature in "previous click" for fast review. 
+
+
+MainForm.cs (Seizure Playback)
+Defined string DSFoCount on line 74
+	
+
+
+DetSezLabel increased in length to fit full page# sizes
+
+
+Changelog for 8/16/22
+
+DetectedSeizureList.cs
+
+Removed VisCL and implemented a new way to remove hidden channels from fast review
+	This new way relies on a "backup" list (DetectedSeizuresBackup) in the Detected Seizures class that holds a deep copy of the original
+	If the flag in MainForm, checkedchange, is true, the resetDFS() method will first ensure that the backup list is copied to the original, and then 
+	calls the RemoveHiddenChan() method to remove the channels that are unchecked, stored in list HCL.
+	
+	This ensures that if one accidentally unchecks a channel, it is able to revert to the original
+
+Created IsDisplayed() and FRIndex, which allow the program to display the count selected FR seizures on the main page, rather than the total detected.
+	Implemented in Next Click, Previous, and fast review click
+
+HCLsync() method added to sync the Hidden Channel Lists in MainForm and DSL
+
+
+MainForm.cs
+
+Created int regularReviewReturn to return the user to the seizure they were reviewing even after going into FR mode
+
+Created bool testMode for testing
+
+Created bool finishedReview, set automatically to false, that is set equal to true if the INI shows that the review is 100% complete
+	this allows for the ability to properly rewind to the beginning when opening a finished file
+	finishedReview is set to true in the ReadReviewINI method
+
+Added delagating calls for CheckedChanged events for all 16 channels, which allows direct control over both FR and NR
+Added delagating call for the channel name switch, which allows the user to either view channel names as literal or generic
+
+
+added autoload for test call in Open_Click() (will be removed for release version)
+
+Added a conditional in the Open_Click() method that will display "Finished!" if the file is marked as finished
+
+Added a error return in the DetectionLoadButton_Click method that will stop the function if an ACQ isn't loaded
+
+
+In Next_Click
+

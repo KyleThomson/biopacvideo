@@ -12,6 +12,8 @@ namespace SeizurePlayback
         public Int32[][] data;
         public bool[] HideChan;
         public string[] ID;
+        public string[] ID2; //holds the alternative ID for the channels
+        public bool ChanID = true;
         public int VisibleChans; 
         public int Chans;
         public int SelectedChan;
@@ -57,6 +59,7 @@ namespace SeizurePlayback
             Zoom = 1; 
             Chans = new int();
             ID = new string[16];
+            ID2 = new string[16];
             HideChan = new bool[16];            
             Voltage = 2000*1000;                        
             WavePen = new Pen(Color.Black);
@@ -89,6 +92,7 @@ namespace SeizurePlayback
             for (int i = 0; i < Chans; i++)
             {
                 ID[i] = "";
+                ID2[i] = ("Channel " + (i + 1));
                 FILE.Seek(ExtLenHeader + ChanLenHeader * i + 6, SeekOrigin.Begin);
                 CharN = FID.ReadByte();
                 while (CharN != 0)
@@ -285,6 +289,7 @@ namespace SeizurePlayback
             MaxDrawSize = SampleRate * DisplayLength;
             PointSpacing = (float)Xmax / MaxDrawSize;
         }
+
         public void initDisplay(int X, int Y)
         {
             offscreen = new Bitmap(Math.Max(X,1),Math.Max(1,Y));
@@ -300,7 +305,7 @@ namespace SeizurePlayback
         }
         public void ResetScale()
         {
-            VoltageSpacing = (int)(Ymax / (VisibleChans));
+            VoltageSpacing = (int)(Ymax / (Math.Max(VisibleChans, 1)));
         }
         private float ScaleVoltsToPixel(float volt, float pixelHeight)
         {
@@ -441,7 +446,14 @@ namespace SeizurePlayback
                          else
                          {
                              YDraw = VoltageSpacing * (j - NotDisp);
-                             g.DrawString(ID[j], F, B, new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans)));
+                            if (ChanID)
+                            {
+                                g.DrawString(ID2[j], F, B, new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans)));
+                            } else
+                            {
+                                g.DrawString(ID[j], F, B, new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans)));
+                            }
+                             
                          }
                          if (HL && (SelectedChan == j))
                          {
@@ -506,6 +518,39 @@ namespace SeizurePlayback
             }
                 
         }
+
+        public void SwapIDs(object sender, EventArgs e, bool check)
+        {
+
+            if (check)
+            {
+                ChanID = true;
+            }
+            if (!check)
+            {
+                ChanID = false;
+            }
+
+            
+            drawbuffer();
+
+        }
+
+        //public void ResetID()
+        //{
+        //    if (ID[0] == "Channel 1")
+        //    {
+        //        for (int i = 0; i < Chans; i++)
+        //        {
+        //            ID[i] = ID2[i];
+        //        }
+        //        for (int i = 0; i < Chans; i++)
+        //        {
+        //            ID2[i] = "Channel " + (i + 1);
+        //        }
+        //    }
+        //}
+
 
     }
 

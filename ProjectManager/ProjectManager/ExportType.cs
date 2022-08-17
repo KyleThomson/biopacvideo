@@ -2,7 +2,6 @@
 {
     public class ExportType
     {
-        public bool exportData;
         public bool Sz;
         public bool Pellet;
         public bool Med;
@@ -39,13 +38,6 @@
             InjectionsList = false;
             binSz = false;
             align = false;
-        }
-        public void IsExport()
-        {
-            if (Sz || Pellet || Med || Meal || SzTime || seizureDuration || DetailList || Notes || SeverityIndx || BloodDraw || BloodDrawList || Injections)
-                exportData = true;
-            else
-                exportData = false;
         }
 
     }
