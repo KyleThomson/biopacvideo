@@ -678,7 +678,7 @@ namespace SeizurePlayback
             // 
             // FixChan
             // 
-            this.FixChan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.FixChan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.FixChan.BackColor = System.Drawing.Color.DarkGray;
             this.FixChan.ForeColor = System.Drawing.Color.Black;
             this.FixChan.Location = new System.Drawing.Point(994, 479);
