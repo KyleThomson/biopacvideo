@@ -193,3 +193,8 @@ C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj
 C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.exe
 C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.pdb
 C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.csproj.AssemblyReference.cache
+C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\UserControl1.g.cs
+C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback_MarkupCompile.cache
+C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback_MarkupCompile.lref
+C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\UserControl1.baml
+C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.g.resources
