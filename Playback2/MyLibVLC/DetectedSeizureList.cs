@@ -121,6 +121,14 @@ namespace SeizurePlayback
 
         }
 
+        public int GetChannelNumber(int Number)
+        {
+            if (Number + 1 > DetectedSeizures.Count)
+            {
+                return -1;
+            }
+            return DetectedSeizures[Number].Channel;
+        }
 
 
         public bool Dec()

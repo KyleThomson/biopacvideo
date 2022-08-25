@@ -69,6 +69,7 @@ namespace SeizurePlayback
         long[,] AVILengths;
         FolderBrowserDialog TempDiag;
         Mygraph graph;
+        Mygraph FRgraph;
         float[] VideoOffset;
         float[] Rates = { 0.25F, 0.5F, 1, 2, 5, 10, 20, 30, 50, 100 };
         int fastReviewCounter;
@@ -83,6 +84,9 @@ namespace SeizurePlayback
         string[,] AVINameList;
         bool[] VLCisLoaded = new bool[16];
         long totms;
+        int[,] ButtonLoc;
+        public int numPerPage;
+        
 
         public CManage()
         {
@@ -90,10 +94,13 @@ namespace SeizurePlayback
             this.WindowState = FormWindowState.Maximized;
             ACQ = new ACQReader(); //Class to read from ACQ file
             graph = new Mygraph(); //Small Class for containing EEG area. 
+            FRgraph = new Mygraph();
             DSF = new DetectedSeizureFileType();
+            numPerPage = 24;
             HCL = DSF.HCL;         
             FastReviewState = false;
             FastReviewChange = false;
+            ButtonLoc = new int[3, 2] { { this.FastReview.Location.X, this.FastReview.Location.Y}, { this.button3.Location.X, this.button3.Location.Y}, { this.button2.Location.X, this.button2.Location.Y} };
 
 
 
@@ -101,7 +108,7 @@ namespace SeizurePlayback
             string[] args = new string[] { "" };
             instance = new VlcInstance(args);
             INI = new IniFile(Directory.GetCurrentDirectory() + "\\SeizurePlayback.ini");
-            ACQ.initDisplay(10, 10);
+            ACQ.initDisplay(10, 10, 10);
             g = this.CreateGraphics(); //Graphics object for main form                      
             OffsetBox.Text = VideoOffset[0].ToString();
             //Create Instances                       
@@ -166,9 +173,13 @@ namespace SeizurePlayback
             graph.X2 = this.Size.Width - 10;
             graph.Y1 = 6;
             graph.Y2 = VideoPanel.Location.Y - 11; //this.Size.Height - VideoPanel.Location.Y;    
+            FRgraph.X1 = 5;
+            FRgraph.X2 = this.Size.Width - 10;
+            FRgraph.Y1 = 6;
+            FRgraph.Y2 = FRZoomBlock.Location.Y - 20;
             Console.WriteLine(this.Size.Height);
             Console.WriteLine(VideoPanel.Location.Y - 11);
-            ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);    //Create the graphics box to display EEG. 
+            ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1, FRZoomBlock.Location.Y - 20);    //Create the graphics box to display EEG. 
             this.BackColor = Color.Black;
             this.Opacity = 100;
             this.Refresh();
@@ -192,6 +203,8 @@ namespace SeizurePlayback
 
             this.SwitchChan.CheckedChanged += delegate (object sender, System.EventArgs e) { SwitchChan_CheckedChanged(sender, e, this.SwitchChan.Checked); };
 
+            this.numPerBox.SelectedItem = "24";
+
 
         }
         private void INIload()
@@ -205,6 +218,8 @@ namespace SeizurePlayback
             X264path = INI.IniReadValue("General", "X264path", "C:\\X264");
             VideoCapture = INI.IniReadValue("General", "SaveVideo", true);
             ACQ.Telemetry = INI.IniReadValue("General", "Telemetry", true);
+            
+            //ACQ.Telemetry = INI.IniReadValue("BioPac", "RecordingDevice_Channel0", true);
             TelemetryBox.Checked = ACQ.Telemetry;
         }
         private void INISave()
@@ -226,8 +241,13 @@ namespace SeizurePlayback
             {
                 CamerAssc[cloop] = F.IniReadValue("Video", "Camera" + cloop.ToString(), cloop);
             }
+            
             CrashWarning = F.IniReadValue("General", "Crash", false);
             Compressed = F.IniReadValue("Review", "Compressed", false);
+
+            
+            
+
             PercentCompletion = F.IniReadValue("Review", "Complete", (double)0);
             if (PercentCompletion == 100) finsihedReview = true;
             if (PercentCompletion > 0)
@@ -267,15 +287,17 @@ namespace SeizurePlayback
                 {                    
                     if (FastReviewState)
                     {
+                       
                         if (FastReviewChange)
                         {
                             int SeizureCount;
-                            SeizureCount = FastReviewPage * 16;
+                            SeizureCount = FastReviewPage * numPerPage;
                             //DSF.SetSeizureNumber(SeizureCount);
                             DSF.SetSeizureNumber(SeizureCount);
                             DetectedSeizureType Sz;
                             ACQ.cleargraph();
-                            for (int i = 0; i < 16; i++)
+                            
+                            for (int i = 0; i < numPerPage; i++)
                             {
                                 Sz = DSF.GetCurrentSeizure();
                                 if (!ACQ.DisplayDetection(Math.Max(Sz.TimeInSec - 15, 0), Sz.Channel, i % 2, i / 2, Sz.Display))
@@ -284,9 +306,13 @@ namespace SeizurePlayback
                                 }
                                 if (!DSF.Inc()) break;
                             }
-                            g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
+                            g.DrawImage(ACQ.frOffscreen, FRgraph.X1, FRgraph.Y1);
                             FastReviewChange = false;
+                            Redraw = false;
+                            
                         }
+
+                        if (Redraw) FastReviewChange = true;
                     }
                     else
                     {
@@ -387,6 +413,10 @@ namespace SeizurePlayback
                                 ACQ.sethighlight(HighlightStart, HighlightEnd);
                                 string s = ((int)((HighlightEnd - HighlightStart) / 60)).ToString() + ":" + string.Format("{0:00}", ((HighlightEnd - HighlightStart) % 60));
                                 HighlightLabel.Invoke(new MethodInvoker(delegate { HighlightLabel.Text = s; }));
+                                if (HighlightEnd - HighlightStart < 5)
+                                {
+
+                                }
                                 ACQ.drawbuffer();
                                 g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
                                 Thread.Sleep(30);
@@ -410,6 +440,8 @@ namespace SeizurePlayback
                                 Thread.Sleep(100);
                             }
                         }
+
+                       
                     }
                 } //if ACQLoaded
                 else
@@ -513,6 +545,7 @@ namespace SeizurePlayback
             //    return;
             //}
             fastReviewCounter = 0;
+            fastReviewLastPage = 0;
 
             DialogResult tempRes;
             FBD = new FolderBrowserDialog();
@@ -541,6 +574,7 @@ namespace SeizurePlayback
                 IniFiles = Directory.GetFiles(Path, "*_Settings.txt");
                 BioINI = new IniFile(IniFiles[0]);
                 ReadReviewINI(BioINI);
+                
                 AVIMode = "avi";
                 AVIFiles = Directory.GetFiles(Path, "*.avi");
                 LoadText.Visible = true;
@@ -765,20 +799,22 @@ namespace SeizurePlayback
 
         private void MouseDownHandler(object sender, MouseEventArgs e)
         {
-            if ((e.X > graph.X1) && (e.X < graph.X2) && (e.Y > graph.Y1) && (e.Y < graph.Y2))
+            if ((e.X > graph.X1) && (e.X < graph.X2) && (e.Y > graph.Y1) && ((e.Y < graph.Y2) || (FastReviewState && e.Y < FRgraph.Y2)))
             {
                 if (FastReviewState)
                 {
                     int X = 1;
-                    if (e.X < (((graph.X2 - graph.X1) / 2) + graph.X1))
+                    if (e.X < (((FRgraph.X2 - FRgraph.X1) / 2) + FRgraph.X1))
                     {
                         X = 0;
                     }
-                    int Y = (e.Y - graph.Y1);
-                    Y = Y / ((graph.Y2 - graph.Y1) / 8);
+                    int Y = (e.Y - FRgraph.Y1);
+                    Y = Y / ((FRgraph.Y2 - FRgraph.Y1) / (numPerPage/2));
                     //if (DSF.ChangeDisplaySeizure((FastReviewPage * 16) + (Y * 2) + X))
-                    if (DSF.ChangeDisplaySeizure((FastReviewPage * 16) + (Y * 2) + X))
+                    loadVid(DSF.GetChannelNumber((FastReviewPage * numPerPage) + (Y * 2) + X));
+                    if (DSF.ChangeDisplaySeizure((FastReviewPage * numPerPage) + (Y * 2) + X))
                     {
+                        
                         FastReviewChange = true;
                     }
 
@@ -1039,6 +1075,8 @@ namespace SeizurePlayback
                 P.VideoOffset = VideoOffset[ACQ.SelectedChan];
                 SzPrompt Frm = new SzPrompt();
                 Frm.Pass = P;
+                Frm.CaptureLen.Text = "Capture Length: " + P.length + " Seconds";
+                if (P.length < 10) Frm.ShortCapWarning.Show();
                 Frm.ShowDialog(this);
                 if (Frm.Ok)
                 {
@@ -1052,6 +1090,8 @@ namespace SeizurePlayback
                         VideoCapture = Frm.VideoCapture;
                         INISave();
                     }
+                    //SeizureHighlight tempSH = new SeizureHighlight(ACQ.SelectedChan, HighlightStart, HighlightEnd);
+                    //ACQ.SeizureHighlights.Add(tempSH);
                     //ACQ.AddSz(HighlightStart, HilightEnd); 
                 }
                 Frm.Dispose();
@@ -1139,6 +1179,9 @@ namespace SeizurePlayback
         {
             ACQ.Zoom = (float)ZoomScale.Value / 10;
             Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+           
+            
         }
 
         private void VideoPanel_Click(object sender, EventArgs e)
@@ -1267,7 +1310,7 @@ namespace SeizurePlayback
                 Redraw = true;
                 graph.X2 = CManage.ActiveForm.Size.Width - 10; //Eat at joes
                 graph.Y2 = VideoPanel.Location.Y - 11; //this does whatever it does 
-                ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);    //Create the graphics box to display EEG.       
+                ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1, FRZoomBlock.Location.Y - 20);    //Create the graphics box to display EEG.       
                 VideoPanel.Location = new Point(VideoPanel.Location.X, CManage.ActiveForm.Height - 395);
                 TimeBar.Size = new Size(CManage.ActiveForm.Size.Width - TimeBar.Location.X - 5, TimeBar.Size.Height);
                 if (ACQ.Loaded) { ACQ.RefreshDisplay(); }
@@ -1359,14 +1402,15 @@ namespace SeizurePlayback
             
             if (FastReviewState)
             {
-                if ((FastReviewPage * 16) + 16 > DSF.Count) return;
-                 
+                if ((FastReviewPage * numPerPage) + numPerPage > DSF.Count) return;
+                
                 FastReviewPage++;
+
                 //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16 + " of " + DSFoCount).ToString();
                 //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16).ToString() + " of " + (DSF.Count).ToString();
                 string displayPageMin = MinMaxPage("min");
                 string displayPageMax = MinMaxPage("max");
-                DetSezLabel.Text = (displayPageMin + " to " + displayPageMax + " of " + (DSF.Count).ToString());
+                FRPageNum.Text = (displayPageMin + " to " + displayPageMax + " of " + (DSF.Count).ToString());
                 FastReviewChange = true;
                 fastReviewLastPage++;
                 
@@ -1421,7 +1465,7 @@ namespace SeizurePlayback
                 //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16).ToString() + " of " + (DSF.Count).ToString();
                 string displayPageMin = MinMaxPage("min");
                 string displayPageMax = MinMaxPage("max");
-                DetSezLabel.Text = (displayPageMin + " to " + displayPageMax + " of " + (DSF.Count).ToString());
+                FRPageNum.Text = (displayPageMin + " to " + displayPageMax + " of " + (DSF.Count).ToString());
                 FastReviewChange = true;
                 fastReviewLastPage--;
                 return;
@@ -1545,13 +1589,21 @@ namespace SeizurePlayback
             if (!Paused) //possible solution so it auto pauses? There may be more to add but this seems to work nicely
             {
                 Paused = true;
-                player.Pause();
+                if (player != null)
+                    player.Pause();
             }
             bool del;
+            
+            
             if (!FastReviewState)
             {
 
                 
+
+                FRView(true);
+               
+
+
 
 
 
@@ -1621,7 +1673,7 @@ namespace SeizurePlayback
                 //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16).ToString() + " of " + (DSF.Count).ToString();
                 string displayPageMin = MinMaxPage("min");
                 string displayPageMax = MinMaxPage("max");
-                DetSezLabel.Text = (displayPageMin + " to " + displayPageMax + " of " + (DSF.Count).ToString());
+                FRPageNum.Text = (displayPageMin + " to " + displayPageMax + " of " + (DSF.Count).ToString());
 
                 FastReviewState = true;
                 FastReviewChange = true;
@@ -1633,10 +1685,12 @@ namespace SeizurePlayback
             else
             {
 
-                
-                
 
-                
+                FRView(false);
+                g.Clear(Color.Black);
+
+
+
                 DSF.SetSeizureNumber(0);
 
 
@@ -1674,6 +1728,7 @@ namespace SeizurePlayback
                     Sz = DSF.GetCurrentSeizure();
                     if ((!ACQ.HideChan[Sz.Channel - 1]) && Sz.Display && ((DSF.FRIndex() == regularReviewReturn) || regularReviewReturn == 0))
                         pass = true;
+                        loadVid(Sz.Channel);
                 }
 
                 //DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
@@ -1741,6 +1796,76 @@ namespace SeizurePlayback
             
         }
 
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (comboBox1.SelectedIndex)
+            {
+                case 0: //Compression Manager
+                    CompressionManager frm = new CompressionManager();
+                    frm.Show();
+                    break;
+
+                case 1: //Compress Directory 
+                    if (ACQ.Loaded)
+                    {
+                        if (player != null)
+                        {
+                            player.Stop();
+                            player.Dispose();
+                        }
+                        Compression Frm = new Compression(Path);
+                        Frm.ShowDialog();
+                        if (Frm.HitStart)
+                        {
+                            BioINI.IniWriteValue("Review", "Compressed", true);
+                        }
+                    }
+                    break;
+
+                case 2: //Enter Notes
+                    if (ACQ.Loaded)
+                    {
+                        NotesBox N = new NotesBox(ReviewNotes);
+                        N.ShowDialog();
+                        if (N.OK)
+                        {
+                            ReviewNotes = N.Notes;
+                            UpdateReviewINI(BioINI);
+                        }
+                    }
+                    break;
+                case 3: //Fix Channel at Timepoint 
+                    /* FixChan F = new FixChan();
+                        F.ShowDialog();
+                        if (F.pass)
+                         {
+                             ACQ.FixChans(F.FixNum); 
+                             }
+                             F.Dispose();
+                            */
+                    break;
+                case 4: //Download ACQ 
+                    GetACQ F = new GetACQ();
+                    F.ShowDialog();
+                    break;
+                case 5: //Rename Channels 
+                    RenameChans frm1 = new RenameChans(ACQ.Chans, ACQ.ID);
+                    frm1.ShowDialog();
+                    ACQ.UpdateIDs(); //Write the IDs to the ACQ file 
+                    break;
+                case 6: //Video Creator 
+                    if (CurrentAVI == "")
+                        return;
+                    int Start = (ACQ.Position - Step + HighlightStart);
+                    long Seek;
+                    Seek = (long)((float)Start * 1000F * (1F + VideoOffset[ACQ.SelectedChan]) - Subtractor);
+                    VideoCreator frm2 = new VideoCreator(ACQ.GetData(ACQ.SelectedChan, Start, HighlightEnd - HighlightStart + 1), HighlightEnd - HighlightStart + 1, CurrentAVI, Seek);
+                    frm2.Show();
+                    break;
+
+            }
+        }
+
 
         /*
         minMagePage is a string method that returns the lower bound and upper bound of the page you are on during fast review
@@ -1753,13 +1878,13 @@ namespace SeizurePlayback
 
             if (a == "min")
             {
-                if (((FastReviewPage * 16) + 1) > DSF.Count) return (DSF.Count.ToString());
-                return ((FastReviewPage * 16) + 1).ToString();
+                if (((FastReviewPage * numPerPage) + 1) > DSF.Count) return (DSF.Count.ToString());
+                return ((FastReviewPage * numPerPage) + 1).ToString();
             }
             if (a == "max")
             {
-                if (((FastReviewPage + 1) * 16) > DSF.Count) return (DSF.Count.ToString());
-                return ((FastReviewPage + 1) * 16).ToString();
+                if (((FastReviewPage + 1) * numPerPage) > DSF.Count) return (DSF.Count.ToString());
+                return ((FastReviewPage + 1) * numPerPage).ToString();
             }
             else
             {
@@ -1767,6 +1892,63 @@ namespace SeizurePlayback
             }
         }
 
+        private void HighlightLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+ 
+
+
+        private void numPerBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int temp = int.Parse(this.numPerBox.SelectedItem.ToString());
+
+            int FRPtemp = numPerPage * FastReviewPage;
+            FastReviewPage = FRPtemp / temp;
+            
+            numPerPage = temp;
+            ACQ.numPerPage = temp;
+
+            switch (numPerBox.SelectedIndex)
+            {
+                case 0:
+                    ACQ.frepos = 26;
+                    break;
+
+                case 1:
+                    ACQ.frepos = 32;
+                    break;
+
+                case 2:
+                    ACQ.frepos = 42;
+                    break;
+
+                case 3:
+                    ACQ.frepos = 52;
+                    break;
+
+                case 4:
+                    ACQ.frepos = 64;
+                    break;
+
+                case 5:
+                    ACQ.frepos = 86;
+                    break;
+
+                case 6:
+                    ACQ.frepos = 120;
+                    break;
+
+            }
+
+            FRPageNum.Text = (MinMaxPage("min") + " to " + MinMaxPage("max") + " of " + (DSF.Count).ToString());
+
+            FastReviewChange = true;
+            
+        }
+
+        
 
         public void loadVid(int chanloop)
         {
@@ -1851,6 +2033,217 @@ namespace SeizurePlayback
             Console.WriteLine("Loaded VLC for channel " + chanloop);
             LoadText.Visible = false;
             VLCisLoaded[chanloop] = true;
+        }
+
+
+        public void FRView(bool FRMode)
+        {
+            if (FRMode)
+            {
+                this.Play.Hide();
+                this.Play.Enabled = false;
+                this.VideoPanel.Hide();
+                this.VideoPanel.Enabled = false;
+                this.Open.Hide();
+                this.Open.Enabled = false;
+                this.Pause.Hide();
+                this.Pause.Enabled = false;
+                this.TimeBar.Hide();
+                this.TimeBar.Enabled = false;
+                this.Rewind.Hide();
+                this.Rewind.Enabled = false;
+                this.SpeedUp.Hide();
+                this.SpeedUp.Enabled = false;
+                this.TimeLabel.Hide();
+                this.TimeLabel.Enabled = false;
+                //this.TimeBox.Hide();
+                //this.TimeBox.Enabled = false;
+                this.label1.Hide();
+                this.label1.Enabled = false;
+                this.SzCaptureButton.Hide();
+                this.SzCaptureButton.Enabled = false;
+                this.DetectionLoadButton.Hide();
+                this.DetectionLoadButton.Enabled = false;
+
+                this.FastReview.Hide();
+                this.FastReview.Enabled = false;
+                this.button2.Hide();
+                this.button2.Enabled = false;
+                this.button3.Hide();
+                this.button3.Enabled = false;
+                this.RvwSz.Hide();
+                this.RvwSz.Enabled = false;
+                this.TelemetryBox.Hide();
+                this.TelemetryBox.Enabled = false;
+                this.Randomization.Hide();
+                this.Randomization.Enabled = false;
+                this.VideoFix.Hide();
+                this.VideoFix.Enabled = false;
+                this.comboBox1.Hide();
+                this.comboBox1.Enabled = false;
+
+
+                this.FRButtonGroup.Show();
+                this.FRButtonGroup.Enabled = true;
+                this.FRZoomBlock.Show();
+                this.FRZoomBlock.Enabled = true;
+                this.FRPageNum.Show();
+                this.FRPageNum.Enabled = true;
+
+
+                this.label2.Hide();
+                this.label2.Enabled = false;
+                this.TimeJump.Hide();
+                this.TimeJump.Enabled = false;
+                this.VisChan1.Hide();
+                this.VisChan1.Enabled = false;
+                this.VisChan2.Hide();
+                this.VisChan2.Enabled = false;
+                this.VisChan3.Hide();
+                this.VisChan3.Enabled = false;
+                this.VisChan4.Hide();
+                this.VisChan4.Enabled = false;
+                this.VisChan5.Hide();
+                this.VisChan5.Enabled = false;
+                this.VisChan6.Hide();
+                this.VisChan6.Enabled = false;
+                this.VisChan7.Hide();
+                this.VisChan7.Enabled = false;
+                this.VisChan8.Hide();
+                this.VisChan8.Enabled = false;
+                this.VisChan16.Hide();
+                this.VisChan16.Enabled = false;
+                this.VisChan15.Hide();
+                this.VisChan15.Enabled = false;
+                this.VisChan14.Hide();
+                this.VisChan14.Enabled = false;
+                this.VisChan13.Hide();
+                this.VisChan13.Enabled = false;
+                this.VisChan12.Hide();
+                this.VisChan12.Enabled = false;
+                this.VisChan11.Hide();
+                this.VisChan11.Enabled = false;
+                this.VisChan10.Hide();
+                this.VisChan10.Enabled = false;
+                this.VisChan9.Hide();
+                this.VisChan9.Enabled = false;
+                this.label3.Hide();
+                this.label3.Enabled = false;
+                this.SwitchChan.Hide();
+                this.SwitchChan.Enabled = false;
+                this.ZoomScale.Hide();
+                this.ZoomScale.Enabled = false;
+                this.DetSezLabel.Hide();
+                this.DetSezLabel.Enabled = false;
+                this.TimeBox.Hide();
+                this.TimeBox.Enabled = false;
+                this.HighlightLabel.Hide();
+                this.HighlightLabel.Enabled = false;
+
+
+            } else
+            {
+                this.Play.Show();
+                this.Play.Enabled = true;
+                this.VideoPanel.Show();
+                this.VideoPanel.Enabled = true;
+                this.Open.Show();
+                this.Open.Enabled = true;
+                this.Pause.Show();
+                this.Pause.Enabled = true;
+                this.TimeBar.Show();
+                this.TimeBar.Enabled = true;
+                this.Rewind.Show();
+                this.Rewind.Enabled = true;
+                this.SpeedUp.Show();
+                this.SpeedUp.Enabled = true;
+                this.TimeLabel.Show();
+                this.TimeLabel.Enabled = true;
+                this.TimeBox.Show();
+                this.TimeBox.Enabled = true;
+                this.label1.Show();
+                this.label1.Enabled = true;
+                this.SzCaptureButton.Show();
+                this.SzCaptureButton.Enabled = true;
+                this.DetectionLoadButton.Show();
+                this.DetectionLoadButton.Enabled = true;
+                this.FastReview.Show();
+                this.FastReview.Enabled = true;
+                this.button2.Show();
+                this.button2.Enabled = true;
+                this.button3.Show();
+                this.button3.Enabled = true;
+
+                this.RvwSz.Show();
+                this.RvwSz.Enabled = true;
+                this.TelemetryBox.Show();
+                this.TelemetryBox.Enabled = true;
+                this.Randomization.Show();
+                this.Randomization.Enabled = true;
+                this.VideoFix.Show();
+                this.VideoFix.Enabled = true;
+                this.comboBox1.Show();
+                this.comboBox1.Enabled = true;
+
+
+                this.FRButtonGroup.Hide();
+                this.FRButtonGroup.Enabled = false;
+                this.FRZoomBlock.Hide();
+                this.FRZoomBlock.Enabled = false;
+                this.FRPageNum.Hide();
+                this.FRPageNum.Enabled = false;
+
+
+                this.label2.Show();
+                this.label2.Enabled = true;
+                this.TimeJump.Show();
+                this.TimeJump.Enabled = true;
+                this.VisChan1.Show();
+                this.VisChan1.Enabled = true;
+                this.VisChan2.Show();
+                this.VisChan2.Enabled = true;
+                this.VisChan3.Show();
+                this.VisChan3.Enabled = true;
+                this.VisChan4.Show();
+                this.VisChan4.Enabled = true;
+                this.VisChan5.Show();
+                this.VisChan5.Enabled = true;
+                this.VisChan6.Show();
+                this.VisChan6.Enabled = true;
+                this.VisChan7.Show();
+                this.VisChan7.Enabled = true;
+                this.VisChan8.Show();
+                this.VisChan8.Enabled = true;
+                this.VisChan16.Show();
+                this.VisChan16.Enabled = true;
+                this.VisChan15.Show();
+                this.VisChan15.Enabled = true;
+                this.VisChan14.Show();
+                this.VisChan14.Enabled = true;
+                this.VisChan13.Show();
+                this.VisChan13.Enabled = true;
+                this.VisChan12.Show();
+                this.VisChan12.Enabled = true;
+                this.VisChan11.Show();
+                this.VisChan11.Enabled = true;
+                this.VisChan10.Show();
+                this.VisChan10.Enabled = true;
+                this.VisChan9.Show();
+                this.VisChan9.Enabled = true;
+                this.label3.Show();
+                this.label3.Enabled = true;
+                this.SwitchChan.Show();
+                this.SwitchChan.Enabled = true;
+                this.ZoomScale.Show();
+                this.ZoomScale.Enabled = true;
+                this.DetSezLabel.Show();
+                this.DetSezLabel.Enabled = true;
+                this.TimeBox.Show();
+                this.TimeBox.Enabled = true;
+                this.HighlightLabel.Show();
+                this.HighlightLabel.Enabled = true;
+
+            }
         }
 
         

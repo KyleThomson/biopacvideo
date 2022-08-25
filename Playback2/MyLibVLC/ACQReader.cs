@@ -6,6 +6,21 @@ using System.Drawing;
 using System.IO;
 namespace SeizurePlayback
 {
+
+    //public class SeizureHighlight
+    //{
+    //    public int Channel;
+    //    public int tS;
+    //    public int tE;
+    //    public SeizureHighlight(int c, int s, int e)
+    //    {
+    //        Channel = c;
+    //        tS = s;
+    //        tE = e;
+    //    }
+    //}
+
+
     public class ACQReader
     {
         public string FullName;
@@ -45,14 +60,19 @@ namespace SeizurePlayback
         public bool Loaded;
         Pen WavePen, SelectedPen;
         private int VoltageSpacing;
-        private int Xmax,Ymax;
+        private int Xmax,Ymax, FRYmax;
+        public float frepos = 60;
         private int Voltage;
         private int DataType;
         public Bitmap offscreen;
         public Bitmap ScreenCopy;
+        public Bitmap frOffscreen;
         private List<TimeSpan> SzTime;
         private List<int> SzChannel; 
         Graphics g;
+        Graphics frg;
+        public int numPerPage = 24;
+        //public List<SeizureHighlight> SeizureHighlights;
         
         public ACQReader()
         {
@@ -66,7 +86,8 @@ namespace SeizurePlayback
             SelectedPen = new Pen(Color.Red);            
             SelectedChan = -1;
             RandomOrder = new int[16];
-            Randomized = false; 
+            Randomized = false;
+            //SeizureHighlights = new List<SeizureHighlight>();
         }
         public void closeACQ()
         {
@@ -151,26 +172,28 @@ namespace SeizurePlayback
             Pen BoxPen = new Pen(Color.Red, 3);
             ReadData(TimeStart, 30);
             Font F = new Font("Arial", 10);
+            
                     
                 float YDraw;
                 WaveC = new PointF[30*SampleRate];
-                YDraw = (Ymax/8) * Y;                                                               
+                YDraw = (FRYmax / (numPerPage / 2)) * Y;                                                               
                 for (int i = 0; i < SampleSize; i++)
                 {
-                    YPoint = ScaleVoltsToPixel(Convert.ToSingle(data[Channel - 1][i]), Ymax / 8);
-                    if (YPoint > Ymax / 8) YPoint = (Ymax / 8);                     
+                    YPoint = ScaleVoltsToPixel(Convert.ToSingle(data[Channel - 1][i]), (FRYmax / (float)(numPerPage / 2))); // -(Ymax / (float)16) 
+                    YPoint += (float)FRYmax / (float)frepos;
+                    if (YPoint > FRYmax / (numPerPage/2)) YPoint = (FRYmax / (numPerPage / 2));        //Kyle's Mistake                                                                        
                     if (YPoint < 0) YPoint = 0;
                     PointF TempPoint = new PointF((float)(i + (X*SampleSize)) * PointSpacing, YDraw + YPoint);
                     WaveC[i] = TempPoint;
                 }          
-                g.DrawLines(WavePen, WaveC);
+                frg.DrawLines(WavePen, WaveC);
                 if (Display)
                 {
-                   g.DrawRectangle(BoxPen, 3+(X*(Xmax/2)),3+YDraw, (Xmax / 2)-6, (Ymax / 8)-6);
+                   frg.DrawRectangle(BoxPen, 3+(X*(Xmax/2)),3+YDraw, (Xmax / 2)-6, (FRYmax / (numPerPage / 2)) -6);
                 }
                 else
                  {
-                    g.DrawRectangle(WavePen, X * (Xmax / 2), YDraw, Xmax / 2, Ymax / 8);
+                    frg.DrawRectangle(WavePen, X * (Xmax / 2), YDraw, Xmax / 2, FRYmax / (numPerPage / 2));
                 }
             /*}
             catch
@@ -290,19 +313,26 @@ namespace SeizurePlayback
             PointSpacing = (float)Xmax / MaxDrawSize;
         }
 
-        public void initDisplay(int X, int Y)
+        public void initDisplay(int X, int Y, int FRY)
         {
             offscreen = new Bitmap(Math.Max(X,1),Math.Max(1,Y));
+            frOffscreen = new Bitmap(Math.Max(X, 1), Math.Max(1, FRY));
             Xmax = X;
-            Ymax = Y;            
+            Ymax = Y;
+            FRYmax = FRY;
             g = Graphics.FromImage(offscreen);
+            frg = Graphics.FromImage(frOffscreen);
+            frg.Clear(Color.White);
+            
             g.Clear(Color.White);   
             
         }
         public void cleargraph()
         {
             g.Clear(Color.White);
+            frg.Clear(Color.White);
         }
+
         public void ResetScale()
         {
             VoltageSpacing = (int)(Ymax / (Math.Max(VisibleChans, 1)));
@@ -468,10 +498,20 @@ namespace SeizurePlayback
                              PointF TempPoint = new PointF((float)i * PointSpacing, YDraw + ScaleVoltsToPixel(Convert.ToSingle(data[j][i]), Ymax / VisibleChans));
                              WaveC[j][i] = TempPoint;
                          }
+
+                        //for (int k = 0; k < SeizureHighlights.Count; k++)
+                        //{
+                        //    if (j == SeizureHighlights[k].Channel && (Position - SeizureHighlights[k].tS < 5 && Position - SeizureHighlights[k].tS > -2))
+                        //    {
+
+                        //    }
+
                          if (j == SelectedChan)
                              g.DrawLines(SelectedPen, WaveC[j]);
                          else
                              g.DrawLines(WavePen, WaveC[j]);
+
+                        if (true) ;
                      }
                      else
                      {

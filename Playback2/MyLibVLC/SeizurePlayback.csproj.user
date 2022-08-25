@@ -12,5 +12,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <StartArguments>/unsafe</StartArguments>
+    <EnableSQLServerDebugging>false</EnableSQLServerDebugging>
   </PropertyGroup>
 </Project>
