@@ -86,6 +86,7 @@ namespace SeizurePlayback
         long totms;
         int[,] ButtonLoc;
         public int numPerPage;
+        bool vLoading = false;
         
 
         public CManage()
@@ -177,8 +178,8 @@ namespace SeizurePlayback
             FRgraph.X2 = this.Size.Width - 10;
             FRgraph.Y1 = 6;
             FRgraph.Y2 = FRZoomBlock.Location.Y - 20;
-            Console.WriteLine(this.Size.Height);
-            Console.WriteLine(VideoPanel.Location.Y - 11);
+           // Console.WriteLine(this.Size.Height);
+           //Console.WriteLine(VideoPanel.Location.Y - 11);
             ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1, FRZoomBlock.Location.Y - 20);    //Create the graphics box to display EEG. 
             this.BackColor = Color.Black;
             this.Opacity = 100;
@@ -204,6 +205,8 @@ namespace SeizurePlayback
             this.SwitchChan.CheckedChanged += delegate (object sender, System.EventArgs e) { SwitchChan_CheckedChanged(sender, e, this.SwitchChan.Checked); };
 
             this.numPerBox.SelectedItem = "24";
+
+            
 
 
         }
@@ -332,6 +335,7 @@ namespace SeizurePlayback
                                 s = ACQ.Position - h * 3600 - m * 60;
                                 //C# sucks at handling string formating.
                                 TimeLabel.Text = string.Format("{0:00}:", h) + string.Format("{0:00}:", m) + string.Format("{0:00}", s);
+                                //ACQ.DrawHL();
                             }));
                         }
 
@@ -579,7 +583,7 @@ namespace SeizurePlayback
                 AVIFiles = Directory.GetFiles(Path, "*.avi");
                 LoadText.Visible = true;
                 this.Refresh();
-                AVILoadBar.Visible = true;
+                //AVILoadBar.Visible = true;
                 if (AVIFiles.Length == 0)
                 {
                     AVIFiles = Directory.GetFiles(Path, "*.mp4");
@@ -593,7 +597,7 @@ namespace SeizurePlayback
                         BaseName = AVIFiles[0].Substring(Path.Length + 1, 15);
                         OffsetBox.Visible = false;
                         OffsetLabel.Visible = false;
-                        AVILoadBar.Maximum = AVIFiles.Length;
+                        //AVILoadBar.Maximum = AVIFiles.Length;
 
                         //JOSH
                         for (int chanloop = 0; chanloop < 16; chanloop++)
@@ -650,7 +654,7 @@ namespace SeizurePlayback
                     for (int chanloop = 0; chanloop < 16; chanloop++)
                     {
                         totms = 0;
-                        AVILoadBar.Maximum = AVIFiles.Length;
+                        //AVILoadBar.Maximum = AVIFiles.Length;
                         for (int fileloop = 1; fileloop < 10; fileloop++)
                         {
                             AVIname = Path + "\\" + BaseName + string.Format("_{0:d2}", chanloop) + string.Format("_{0:d4}.avi", fileloop);
@@ -691,7 +695,7 @@ namespace SeizurePlayback
 
                 }
                 LoadText.Visible = false;
-                AVILoadBar.Visible = false;
+                //AVILoadBar.Visible = false;
                 ACQ.openACQ(FName[0]);
                 Console.WriteLine(FName[0]);
                 if (FName.Length > 1)
@@ -738,8 +742,24 @@ namespace SeizurePlayback
                         int.TryParse(TmpStr[0], out Animal);
                         int.TryParse(TmpStr[2], out SzC);
                         SeizureCount[Animal - 1] = Math.Max(SzC, SeizureCount[Animal - 1]);
+
+                        TimeSpan t;
+                        int sT;
+                        int tL;
+                        int C;
+                        TimeSpan.TryParse(TmpStr[3], out t);
+                        sT = (int)t.TotalSeconds;
+                        //Console.WriteLine(t);
+                        //Console.WriteLine(sT);
+                        int.TryParse(TmpStr[4], out tL);
+                        int.TryParse(TmpStr[0], out C);
+                        SeizureHighlight tempSH = new SeizureHighlight(C, sT, tL);
+                        ACQ.SeizureHighlights.Add(tempSH);
+
                         SzInfoIndex++;
                     }
+                    Console.WriteLine(ACQ.SeizureHighlights.Count);
+                    
                     TmpTxt.Dispose();
                     SzTxt = new System.IO.StreamWriter(FPath + "\\" + BaseName + ".txt");
                     for (int k = 0; k < SzInfoIndex; k++)
@@ -799,6 +819,9 @@ namespace SeizurePlayback
 
         private void MouseDownHandler(object sender, MouseEventArgs e)
         {
+
+            if (vLoading) return;
+            
             if ((e.X > graph.X1) && (e.X < graph.X2) && (e.Y > graph.Y1) && ((e.Y < graph.Y2) || (FastReviewState && e.Y < FRgraph.Y2)))
             {
                 if (FastReviewState)
@@ -822,12 +845,14 @@ namespace SeizurePlayback
                 else
                 {
                     //JOSH
+                    
                     Paused = true;
                     OffsetBox.Enabled = true;
                     int TempChan = (int)((float)ACQ.VisibleChans * (float)(((float)e.Y - (float)graph.Y1) / (float)(graph.Y2 - graph.Y1)));
                     if (ACQ.Randomized)
                     {
                         ACQ.SelectedChan = ACQ.RandomOrder[TempChan];
+                        loadVid(ChanPos[TempChan]);
                     }
                     else
                     {
@@ -854,6 +879,7 @@ namespace SeizurePlayback
         }
         private void MyMouseUp(Object sender, MouseEventArgs e)
         {
+            //if (vLoading) return;
             if (FastReviewState) return;
             if (ACQ.Loaded)
                 if ((e.X > graph.X1) && (e.X < graph.X2) && (e.Y > graph.Y1) && (e.Y < graph.Y2))
@@ -911,7 +937,7 @@ namespace SeizurePlayback
 
                 while (TimeSeek > AVILengths[ACQ.SelectedChan, FNum - 1])
                 {
-                    Console.WriteLine(TimeSeek);
+                    //Console.WriteLine(TimeSeek);
                     TimeSeek -= AVILengths[ACQ.SelectedChan, FNum - 1];
                     FNum++;
                     if (AVILengths[ACQ.SelectedChan, FNum - 1] == 0)// no avi file
@@ -929,6 +955,7 @@ namespace SeizurePlayback
                 {
                     int FixedChan = 0;
                     FixedChan = CamerAssc[CamerAssc[ACQ.SelectedChan]];
+                    //loadVid(FixedChan);
                     FNum = 0;
                     while (TimeSeek > AVILengths[FixedChan, FNum])
                     {
@@ -1090,8 +1117,8 @@ namespace SeizurePlayback
                         VideoCapture = Frm.VideoCapture;
                         INISave();
                     }
-                    //SeizureHighlight tempSH = new SeizureHighlight(ACQ.SelectedChan, HighlightStart, HighlightEnd);
-                    //ACQ.SeizureHighlights.Add(tempSH);
+                    SeizureHighlight tempSH = new SeizureHighlight(ACQ.SelectedChan, P.StartTime, P.length);
+                    ACQ.SeizureHighlights.Add(tempSH);
                     //ACQ.AddSz(HighlightStart, HilightEnd); 
                 }
                 Frm.Dispose();
@@ -1160,16 +1187,19 @@ namespace SeizurePlayback
                 {
                     HCL.Add(chanPass);
                     checkedChange = true;
-                    Console.WriteLine("Channel " + chanPass + " Hidden");
+                    //Console.WriteLine("Channel " + chanPass + " Hidden");
+                    VLCisLoaded[chanPass] = true;
                 }
                 if (HCL.Contains(chanPass) && chanClicked)
                 {
                     HCL.Remove(chanPass);                   
                     checkedChange = true;
-                    Console.WriteLine("Channel " + chanPass + " Visible");
+                    //Console.WriteLine("Channel " + chanPass + " Visible");
+                    VLCisLoaded[chanPass] = false;
                 }
 
                 DSF.HCLSync(HCL);
+               
 
             }
 
@@ -1571,10 +1601,7 @@ namespace SeizurePlayback
             INISave();
         }
 
-        private void VideoFix_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
+ 
 
         private void FastReview_Click(object sender, EventArgs e)
         {
@@ -1948,92 +1975,241 @@ namespace SeizurePlayback
             
         }
 
-        
+        private void LoadAll_Click(object sender, EventArgs e)
+        {
+            bool a= true;
+            for (int i = 0; i < 16; i++)
+            {
+                if (!VLCisLoaded[i]) a = false;
+            }
+            if (a == false) loadVid(-1);
+        }
+
+        private void VideoFix_CheckedChanged(object sender, EventArgs e)
+        {
+            bool a = true;
+            for (int i = 0; i < 16; i++)
+            {
+                if (!VLCisLoaded[i]) a = false;
+            }
+            if (a == false) loadVid(-1);
+            
+        }
 
         public void loadVid(int chanloop)
         {
-            if (VLCisLoaded[chanloop]) return;
+            if (vLoading) return;
+            if (chanloop >= 0)
+            {
+                if (VLCisLoaded[chanloop]) return;
+            }
+            vLoading = true;
+            
+           
+            
             if (!ACQ.Loaded) return;
             string AVIname;
+            VLoadWait vLoad = new VLoadWait();
+            vLoad.Show();
+
             //AVIFiles = Directory.GetFiles(Path, "*.avi");
-            LoadText.Visible = true;
+            
+            LoadText.Show();
+            LoadText.BringToFront();
+            
             //this.Refresh();
-            //AVILoadBar.Visible = true;
+            AVILoadBar.Value = 0;
+            AVILoadBar.Visible = true;
+            
             if (player == null) Console.WriteLine("Player does not exist yet");
 
            
-            if (!isMP4)
+           if (chanloop >= 0)
             {
-                for (int fileloop = 0; fileloop < 10; fileloop++)
-                {
-                    AVIname = AVINameList[chanloop, fileloop];
-                    if (File.Exists(AVIname))
-                    {
-                        //Console.WriteLine(AVIname);
-                        media = new VlcMedia(instance, AVIname);
-                        if (player == null)
-                        {
-                            player = new VlcMediaPlayer(media);
-                            player.Drawable = VideoPanel.Handle;
-                        }
-                       
-                        else player.Media = media;
-                        player.Play();
-                        while (player.GetLengthMs() == 0)
-                        { }
-                        AVILengths[chanloop, fileloop - 1] = player.GetLengthMs();
-                        totms += AVILengths[chanloop, fileloop - 1];
-                        //Console.WriteLine(AVIname + "  " + AVILengths[chanloop, fileloop - 1].ToString());
-                        player.Stop();
-                        media.Dispose();
-                        //AVILoadBar.Increment(1);
-                    }
-                }
-                for (int fileloop = 10; fileloop < 30; fileloop++)
-                {
-                    AVILengths[chanloop, fileloop - 1] = 0;
-                }
                 
-            } else
-            {
-                for (int fileloop = 0; fileloop < 30; fileloop++)
+                LoadText.Text = "Loading Video for Channel: " + ((int)chanloop + (int)1);
+                if (!isMP4)
                 {
-                    AVIname = AVINameList[chanloop, fileloop];
-                    if (File.Exists(AVIname))
+                    vLoad.VideoLoadProgressBar.Maximum = 10;
+                    for (int fileloop = 0; fileloop < 10; fileloop++)
                     {
-                        //Console.WriteLine(AVIname);
-                        media = new VlcMedia(instance, AVIname);
-                        if (player == null)
+                        vLoad.VideoLoadProgressBar.Maximum = 10;
+                        AVILoadBar.Increment(3);
+                        vLoad.VideoLoadProgressBar.Increment(1);
+                        AVIname = AVINameList[chanloop, fileloop];
+                        if (File.Exists(AVIname))
                         {
-                            player = new VlcMediaPlayer(media);
-                            player.Drawable = VideoPanel.Handle;
+                            //Console.WriteLine(AVIname);
+                            media = new VlcMedia(instance, AVIname);
+
+                            if (player == null)
+                            {
+
+                                player = new VlcMediaPlayer(media);
+                                player.Drawable = VideoPanel.Handle;
+                            }
+
+                            else player.Media = media;
+                            player.Play();
+                            while (player.GetLengthMs() == 0)
+                            { }
+                            AVILengths[chanloop, fileloop - 1] = player.GetLengthMs();
+                            totms += AVILengths[chanloop, fileloop - 1];
+                            //Console.WriteLine(AVIname + "  " + AVILengths[chanloop, fileloop - 1].ToString());
+                            player.Stop();
+                            media.Dispose();
+                            // vLoad.VideoLoadProgressBar.Increment(1);
+                            //AVILoadBar.Increment(3);
                         }
-                        else player.Media = media;
-                        player.Play();
-                        while (player.GetLengthMs() == 0)
-                        { }
-                        AVILengths[chanloop, fileloop] = player.GetLengthMs();
-                        totms += AVILengths[chanloop, fileloop];
-                        player.Stop();
-                        media.Dispose();
-                        AVILoadBar.Increment(1);
-                        VLCisLoaded[chanloop] = true;
+                    }
+                    for (int fileloop = 10; fileloop < 30; fileloop++)
+                    {
+                        AVILengths[chanloop, fileloop - 1] = 0;
+                    }
+                    VLCisLoaded[chanloop] = true;
+
+                }
+                else
+                {
+                    vLoad.VideoLoadProgressBar.Maximum = 30;
+                    for (int fileloop = 0; fileloop < 30; fileloop++)
+                    {
+                        vLoad.VideoLoadProgressBar.Increment(1);
+                        AVIname = AVINameList[chanloop, fileloop];
+                        if (File.Exists(AVIname))
+                        {
+                            //Console.WriteLine(AVIname);
+                            media = new VlcMedia(instance, AVIname);
+                            if (player == null)
+                            {
+                                player = new VlcMediaPlayer(media);
+                                player.Drawable = VideoPanel.Handle;
+                            }
+                            else player.Media = media;
+                            player.Play();
+                            while (player.GetLengthMs() == 0)
+                            { }
+                            AVILengths[chanloop, fileloop] = player.GetLengthMs();
+                            totms += AVILengths[chanloop, fileloop];
+                            player.Stop();
+                            media.Dispose();
+
+                            VLCisLoaded[chanloop] = true;
+                            //vLoad.VideoLoadProgressBar.Increment(1);
+                        }
+                        else
+                        {
+                            AVILengths[chanloop, fileloop] = 0;
+                        }
+                    }
+                    
+                }
+                VLCisLoaded[chanloop] = true;
+            } 
+            else
+            {
+                LoadText.Text = "Loading All Video Files";
+                if (player != null)
+                {
+                    player.Dispose();
+                }
+                vLoad.VideoLoadProgressBar.Maximum = 30;
+                for (chanloop = 0; chanloop < 16; chanloop++)
+                {
+                    if (!isMP4)
+                    {
+                        
+                        for (int fileloop = 0; fileloop < 10; fileloop++)
+                        {
+                            //vLoad.VideoLoadProgressBar.Maximum = 10;
+                            AVILoadBar.Increment(3);
+                            //vLoad.VideoLoadProgressBar.Increment(1);
+                            AVIname = AVINameList[chanloop, fileloop];
+                            if (File.Exists(AVIname))
+                            {
+                                //Console.WriteLine(AVIname);
+                                media = new VlcMedia(instance, AVIname);
+
+                                if (chanloop == 0)
+                                {
+
+                                    player = new VlcMediaPlayer(media);
+                                    player.Drawable = VideoPanel.Handle;
+                                }
+
+                                else player.Media = media;
+                                player.Play();
+                                while (player.GetLengthMs() == 0)
+                                { }
+                                AVILengths[chanloop, fileloop - 1] = player.GetLengthMs();
+                                totms += AVILengths[chanloop, fileloop - 1];
+                                //Console.WriteLine(AVIname + "  " + AVILengths[chanloop, fileloop - 1].ToString());
+                                player.Stop();
+                                media.Dispose();
+                                // vLoad.VideoLoadProgressBar.Increment(1);
+                                //AVILoadBar.Increment(3);
+                            }
+                        }
+                        for (int fileloop = 10; fileloop < 30; fileloop++)
+                        {
+                            AVILengths[chanloop, fileloop - 1] = 0;
+                        }
+                        vLoad.VideoLoadProgressBar.Increment(3);
                     }
                     else
                     {
-                        AVILengths[chanloop, fileloop] = 0;
+                        //vLoad.VideoLoadProgressBar.Maximum = 30;
+                        for (int fileloop = 0; fileloop < 30; fileloop++)
+                        {
+                            //vLoad.VideoLoadProgressBar.Increment(1);
+                            AVIname = AVINameList[chanloop, fileloop];
+                            if (File.Exists(AVIname))
+                            {
+                                //Console.WriteLine(AVIname);
+                                media = new VlcMedia(instance, AVIname);
+                                if (chanloop == 0)
+                                {
+                                    player = new VlcMediaPlayer(media);
+                                    player.Drawable = VideoPanel.Handle;
+                                }
+                                else player.Media = media;
+                                player.Play();
+                                while (player.GetLengthMs() == 0)
+                                { }
+                                AVILengths[chanloop, fileloop] = player.GetLengthMs();
+                                totms += AVILengths[chanloop, fileloop];
+                                player.Stop();
+                                media.Dispose();
+
+                                VLCisLoaded[chanloop] = true;
+                                //vLoad.VideoLoadProgressBar.Increment(1);
+                            }
+                            else
+                            {
+                                AVILengths[chanloop, fileloop] = 0;
+                            }
+                            vLoad.VideoLoadProgressBar.Increment(1);
+                        }
                     }
+                    VLCisLoaded[chanloop] = true;
                 }
             }
 
 
+            vLoad.Dispose();
+                     
+            AVILoadBar.Visible = false;
 
-
-
-            Console.WriteLine("Loaded VLC for channel " + chanloop);
+            //Console.WriteLine("Loaded VLC for channel " + chanloop);
             LoadText.Visible = false;
-            VLCisLoaded[chanloop] = true;
+            
+            vLoading = false;
+
+            
         }
+
+
+
 
 
         public void FRView(bool FRMode)

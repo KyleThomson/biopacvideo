@@ -83,6 +83,7 @@
             this.CurFileProg.Name = "CurFileProg";
             this.CurFileProg.Size = new System.Drawing.Size(382, 25);
             this.CurFileProg.TabIndex = 3;
+            this.CurFileProg.Click += new System.EventHandler(this.CurFileProg_Click);
             // 
             // PleaseWait
             // 

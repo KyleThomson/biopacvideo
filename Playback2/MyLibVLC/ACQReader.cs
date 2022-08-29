@@ -7,18 +7,18 @@ using System.IO;
 namespace SeizurePlayback
 {
 
-    //public class SeizureHighlight
-    //{
-    //    public int Channel;
-    //    public int tS;
-    //    public int tE;
-    //    public SeizureHighlight(int c, int s, int e)
-    //    {
-    //        Channel = c;
-    //        tS = s;
-    //        tE = e;
-    //    }
-    //}
+    public class SeizureHighlight
+    {
+        public int Channel;
+        public int tS;
+        public int tE;
+        public SeizureHighlight(int c, int s, int e)
+        {
+            Channel = c;
+            tS = s;
+            tE = e;
+        }
+    }
 
 
     public class ACQReader
@@ -72,7 +72,7 @@ namespace SeizurePlayback
         Graphics g;
         Graphics frg;
         public int numPerPage = 24;
-        //public List<SeizureHighlight> SeizureHighlights;
+        public List<SeizureHighlight> SeizureHighlights;
         
         public ACQReader()
         {
@@ -87,7 +87,7 @@ namespace SeizurePlayback
             SelectedChan = -1;
             RandomOrder = new int[16];
             Randomized = false;
-            //SeizureHighlights = new List<SeizureHighlight>();
+            SeizureHighlights = new List<SeizureHighlight>();
         }
         public void closeACQ()
         {
@@ -499,20 +499,31 @@ namespace SeizurePlayback
                              WaveC[j][i] = TempPoint;
                          }
 
-                        //for (int k = 0; k < SeizureHighlights.Count; k++)
-                        //{
-                        //    if (j == SeizureHighlights[k].Channel && (Position - SeizureHighlights[k].tS < 5 && Position - SeizureHighlights[k].tS > -2))
-                        //    {
-
-                        //    }
+                        
 
                          if (j == SelectedChan)
                              g.DrawLines(SelectedPen, WaveC[j]);
                          else
                              g.DrawLines(WavePen, WaveC[j]);
 
-                        if (true) ;
-                     }
+                        Console.WriteLine(Position);
+
+
+                        for (int k = 0; k < SeizureHighlights.Count; k++)
+                        {
+                            if (j == SeizureHighlights[k].Channel && (Position - SeizureHighlights[k].tS < 10 && Position - SeizureHighlights[k].tS > -10))
+                            {
+
+                                {
+                                    SolidBrush myBrush = new SolidBrush(System.Drawing.Color.Gray);
+                                    g.FillRectangle(myBrush, new Rectangle((int)(SeizureHighlights[k].tS * PointSpacing * SampleRate), (int)(YDraw + (VoltageSpacing * 0.25F)), (int)((SeizureHighlights[k].tE) * PointSpacing * SampleRate), (Ymax / VisibleChans)));
+
+                                }
+                            }
+                        }
+
+
+                    }
                      else
                      {
                          NotDisp++;

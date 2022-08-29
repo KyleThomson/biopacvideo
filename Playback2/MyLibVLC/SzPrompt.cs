@@ -151,6 +151,11 @@ namespace SeizurePlayback
         {
 
         }
+
+        private void CurFileProg_Click(object sender, EventArgs e)
+        {
+
+        }
     }
     public class infopass
     {

@@ -197,3 +197,5 @@ C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj
 C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback_MarkupCompile.lref
 C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\UserControl1.baml
 C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.g.resources
+C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.csproj.AssemblyReference.cache
+C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.VLoadWait.resources

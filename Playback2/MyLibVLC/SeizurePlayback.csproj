@@ -211,6 +211,12 @@
     <Compile Include="ProjectManager\WeightAdd.Designer.cs">
       <DependentUpon>WeightAdd.cs</DependentUpon>
     </Compile>
+    <Compile Include="VLoadWait.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VLoadWait.Designer.cs">
+      <DependentUpon>VLoadWait.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="ProjectManager\AddDate.resx">
       <DependentUpon>AddDate.cs</DependentUpon>
     </EmbeddedResource>
@@ -278,6 +284,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProjectManager\WeightAdd.resx">
       <DependentUpon>WeightAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VLoadWait.resx">
+      <DependentUpon>VLoadWait.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

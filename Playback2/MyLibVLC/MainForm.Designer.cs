@@ -79,11 +79,12 @@ namespace SeizurePlayback
             this.PreviousFR = new System.Windows.Forms.Button();
             this.NextFR = new System.Windows.Forms.Button();
             this.FRButtonGroup = new System.Windows.Forms.FlowLayoutPanel();
+            this.numPerBox = new System.Windows.Forms.ComboBox();
             this.FRZoomBar = new System.Windows.Forms.TrackBar();
             this.FRZoomBlock = new System.Windows.Forms.FlowLayoutPanel();
             this.label4 = new System.Windows.Forms.Label();
             this.FRPageNum = new System.Windows.Forms.Label();
-            this.numPerBox = new System.Windows.Forms.ComboBox();
+            this.LoadAll = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.FRButtonGroup.SuspendLayout();
@@ -609,6 +610,7 @@ namespace SeizurePlayback
             // 
             this.AVILoadBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.AVILoadBar.Location = new System.Drawing.Point(861, 789);
+            this.AVILoadBar.Maximum = 30;
             this.AVILoadBar.Name = "AVILoadBar";
             this.AVILoadBar.Size = new System.Drawing.Size(445, 25);
             this.AVILoadBar.Step = 1;
@@ -617,16 +619,14 @@ namespace SeizurePlayback
             // 
             // LoadText
             // 
-            this.LoadText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.LoadText.AutoSize = true;
+            this.LoadText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.LoadText.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LoadText.ForeColor = System.Drawing.Color.White;
             this.LoadText.Location = new System.Drawing.Point(867, 762);
             this.LoadText.Name = "LoadText";
-            this.LoadText.Size = new System.Drawing.Size(155, 24);
+            this.LoadText.Size = new System.Drawing.Size(439, 24);
             this.LoadText.TabIndex = 59;
-            this.LoadText.Text = "Indexing AVI files";
-            this.LoadText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.LoadText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.LoadText.Visible = false;
             // 
             // FastReview
@@ -755,6 +755,23 @@ namespace SeizurePlayback
             this.FRButtonGroup.TabIndex = 68;
             this.FRButtonGroup.Visible = false;
             // 
+            // numPerBox
+            // 
+            this.numPerBox.FormattingEnabled = true;
+            this.numPerBox.Items.AddRange(new object[] {
+            "16",
+            "18",
+            "20",
+            "22",
+            "24",
+            "26",
+            "28"});
+            this.numPerBox.Location = new System.Drawing.Point(327, 3);
+            this.numPerBox.Name = "numPerBox";
+            this.numPerBox.Size = new System.Drawing.Size(121, 21);
+            this.numPerBox.TabIndex = 72;
+            this.numPerBox.SelectedIndexChanged += new System.EventHandler(this.numPerBox_SelectedIndexChanged);
+            // 
             // FRZoomBar
             // 
             this.FRZoomBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -809,22 +826,15 @@ namespace SeizurePlayback
             this.FRPageNum.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.FRPageNum.Visible = false;
             // 
-            // numPerBox
+            // LoadAll
             // 
-            this.numPerBox.FormattingEnabled = true;
-            this.numPerBox.Items.AddRange(new object[] {
-            "16",
-            "18",
-            "20",
-            "22",
-            "24",
-            "26",
-            "28"});
-            this.numPerBox.Location = new System.Drawing.Point(327, 3);
-            this.numPerBox.Name = "numPerBox";
-            this.numPerBox.Size = new System.Drawing.Size(121, 21);
-            this.numPerBox.TabIndex = 72;
-            this.numPerBox.SelectedIndexChanged += new System.EventHandler(this.numPerBox_SelectedIndexChanged);
+            this.LoadAll.Location = new System.Drawing.Point(1008, 739);
+            this.LoadAll.Name = "LoadAll";
+            this.LoadAll.Size = new System.Drawing.Size(91, 23);
+            this.LoadAll.TabIndex = 72;
+            this.LoadAll.Text = "Load All Videos";
+            this.LoadAll.UseVisualStyleBackColor = true;
+            this.LoadAll.Click += new System.EventHandler(this.LoadAll_Click);
             // 
             // CManage
             // 
@@ -833,6 +843,7 @@ namespace SeizurePlayback
             this.BackColor = System.Drawing.Color.Black;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(1444, 845);
+            this.Controls.Add(this.LoadAll);
             this.Controls.Add(this.FRPageNum);
             this.Controls.Add(this.FRZoomBlock);
             this.Controls.Add(this.FRButtonGroup);
@@ -946,7 +957,6 @@ namespace SeizurePlayback
 
         private System.Windows.Forms.CheckBox Randomization;
         private System.Windows.Forms.ProgressBar AVILoadBar;
-        private System.Windows.Forms.Label LoadText;
         private System.Windows.Forms.Button FastReview;
         private System.Windows.Forms.CheckBox TelemetryBox;
         private System.Windows.Forms.CheckBox VideoFix;
@@ -961,6 +971,8 @@ namespace SeizurePlayback
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label FRPageNum;
         public System.Windows.Forms.ComboBox numPerBox;
+        public System.Windows.Forms.Label LoadText;
+        private System.Windows.Forms.Button LoadAll;
     }
 }
 
