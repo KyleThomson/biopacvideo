@@ -672,8 +672,6 @@ namespace SeizurePlayback
             // 
             this.SwitchChan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.SwitchChan.AutoSize = true;
-            this.SwitchChan.Checked = true;
-            this.SwitchChan.CheckState = System.Windows.Forms.CheckState.Checked;
             this.SwitchChan.ForeColor = System.Drawing.Color.Transparent;
             this.SwitchChan.Location = new System.Drawing.Point(861, 743);
             this.SwitchChan.Name = "SwitchChan";
@@ -681,6 +679,7 @@ namespace SeizurePlayback
             this.SwitchChan.TabIndex = 63;
             this.SwitchChan.Text = "Channel Name Switch";
             this.SwitchChan.UseVisualStyleBackColor = true;
+            this.SwitchChan.CheckedChanged += new System.EventHandler(this.SwitchChan_CheckedChanged);
             // 
             // comboBox1
             // 

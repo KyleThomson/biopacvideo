@@ -61,7 +61,7 @@ namespace SeizurePlayback
         bool ignore_change;
         bool Reviewing;
         string CurrentAVI;
-        int MaxDispSize;
+        public int MaxDispSize;
         string DefaultFolder;
         float Subtractor;
         string CurrentProject;
@@ -807,8 +807,8 @@ namespace SeizurePlayback
                 {
                     DetSezLabel.Text = "Finished!";
                 }
-            }   
-           
+            }
+            if (ACQ.Loaded) ACQ.drawbuffer();
         }
 
 
@@ -905,6 +905,7 @@ namespace SeizurePlayback
                         QuitHighlight();
                         Paused = false;
                         RealTime = true;
+                        Redraw = true;
                     }
                     else
                     {
@@ -1997,6 +1998,11 @@ namespace SeizurePlayback
             }
             if (a == false) loadVid(-1);
             
+        }
+
+        private void SwitchChan_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
 
         public void loadVid(int chanloop)
