@@ -753,6 +753,7 @@ namespace SeizurePlayback
                         //Console.WriteLine(sT);
                         int.TryParse(TmpStr[4], out tL);
                         int.TryParse(TmpStr[0], out C);
+                        C = C - 1;
                         SeizureHighlight tempSH = new SeizureHighlight(C, sT, tL);
                         ACQ.SeizureHighlights.Add(tempSH);
 
@@ -1263,9 +1264,11 @@ namespace SeizurePlayback
             ACQ.SelectedChan = Channel;
             Paused = false;
             RealTime = true;
-            ACQ.Position = (int)Time.TotalSeconds;
+            ACQ.Position = (int)Time.TotalSeconds; //doesn't draw rectangles in the right place
             Step = MaxDispSize;
+            
             SeekToCurrentPos();
+            //ACQ.drawbuffer();
         }
         public void DeleteSz(int Index)
         {
