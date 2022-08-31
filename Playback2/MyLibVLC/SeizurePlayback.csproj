@@ -67,16 +67,21 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <WarningLevel>2</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.VisualBasic.PowerPacks.Vs, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ACQReader.cs" />
@@ -136,6 +141,9 @@
     </Compile>
     <Compile Include="SzDetPrompt.Designer.cs">
       <DependentUpon>SzDetPrompt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControl1.xaml.cs">
+      <DependentUpon>UserControl1.xaml</DependentUpon>
     </Compile>
     <Compile Include="VideoCreator.cs">
       <SubType>Form</SubType>
@@ -202,6 +210,12 @@
     </Compile>
     <Compile Include="ProjectManager\WeightAdd.Designer.cs">
       <DependentUpon>WeightAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VLoadWait.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VLoadWait.Designer.cs">
+      <DependentUpon>VLoadWait.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="ProjectManager\AddDate.resx">
       <DependentUpon>AddDate.cs</DependentUpon>
@@ -271,6 +285,9 @@
     <EmbeddedResource Include="ProjectManager\WeightAdd.resx">
       <DependentUpon>WeightAdd.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="VLoadWait.resx">
+      <DependentUpon>VLoadWait.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -299,6 +316,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="UserControl1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -27,6 +27,7 @@ namespace SeizurePlayback
             Unknown.Checked = true;
             Ok = false;
             
+            
         }
 
         private void OKBtn_Click(object sender, EventArgs e)
@@ -140,8 +141,21 @@ namespace SeizurePlayback
                 }         
             }
         }
-       
 
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ShortCapWarning_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CurFileProg_Click(object sender, EventArgs e)
+        {
+
+        }
     }
     public class infopass
     {

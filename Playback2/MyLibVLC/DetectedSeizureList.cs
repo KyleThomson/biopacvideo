@@ -64,7 +64,7 @@ namespace SeizurePlayback
             {
                 TempSz = ParseLine(F.ReadLine());
                 DetectedSeizures.Add(TempSz);
-                Console.WriteLine(TempSz.Channel);
+                //Console.WriteLine(TempSz.Channel);
                 DetectedSeizuresBackup.Add(TempSz);
 
             }
@@ -121,6 +121,14 @@ namespace SeizurePlayback
 
         }
 
+        public int GetChannelNumber(int Number)
+        {
+            if (Number + 1 > DetectedSeizures.Count)
+            {
+                return -1;
+            }
+            return DetectedSeizures[Number].Channel;
+        }
 
 
         public bool Dec()
@@ -166,7 +174,7 @@ namespace SeizurePlayback
         public void ResetDFS()
         {
 
-            Console.WriteLine("Count before Reset: " + Count);
+            //Console.WriteLine("Count before Reset: " + Count);
             DetectedSeizureType TempSz;
             DetectedSeizures.Clear();
             for (int i = 0; i < DetectedSeizuresBackup.Count; i++)
@@ -179,8 +187,8 @@ namespace SeizurePlayback
             }
 
             Count = DetectedSeizures.Count;
-            Console.WriteLine("Count after Reset: " + Count);
-            Console.WriteLine(DetectedSeizures[0].Channel + "    " + DetectedSeizuresBackup[0].Channel);
+            //Console.WriteLine("Count after Reset: " + Count);
+            //Console.WriteLine(DetectedSeizures[0].Channel + "    " + DetectedSeizuresBackup[0].Channel);
 
             RemoveHiddenChan();
 
@@ -191,7 +199,7 @@ namespace SeizurePlayback
         public void RemoveHiddenChan()
         {
 
-            Console.WriteLine("Count before removing hidden channels " + Count);
+            //Console.WriteLine("Count before removing hidden channels " + Count);
             //for (int i = 0; i < DetectedSeizures.Count; i++)
             //{
             //    if (HCL.Contains(DetectedSeizures[i].Channel))
@@ -212,22 +220,11 @@ namespace SeizurePlayback
                 }
             }
 
-            foreach (DetectedSeizureType Seizure in DetectedSeizures)
-            {
-                Console.WriteLine(Seizure.Channel);
-                Console.WriteLine(Seizure.TimeInSec);
-            }
-
-            Console.WriteLine("HCL Contains: ");
-            foreach (int hc in HCL)
-            {
-                Console.WriteLine(hc);
-            }
 
 
 
             Count = DetectedSeizures.Count;
-            Console.WriteLine("Count after removing hidden channels " + Count);
+            //Console.WriteLine("Count after removing hidden channels " + Count);
         }
 
 

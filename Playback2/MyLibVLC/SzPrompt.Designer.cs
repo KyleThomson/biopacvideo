@@ -44,6 +44,8 @@
             this.Unknown = new System.Windows.Forms.RadioButton();
             this.label2 = new System.Windows.Forms.Label();
             this.VideoSave = new System.Windows.Forms.CheckBox();
+            this.CaptureLen = new System.Windows.Forms.Label();
+            this.ShortCapWarning = new System.Windows.Forms.Label();
             this.RadioBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,6 +83,7 @@
             this.CurFileProg.Name = "CurFileProg";
             this.CurFileProg.Size = new System.Drawing.Size(382, 25);
             this.CurFileProg.TabIndex = 3;
+            this.CurFileProg.Click += new System.EventHandler(this.CurFileProg_Click);
             // 
             // PleaseWait
             // 
@@ -218,11 +221,39 @@
             this.VideoSave.Text = "Capture Video";
             this.VideoSave.UseVisualStyleBackColor = true;
             // 
+            // CaptureLen
+            // 
+            this.CaptureLen.AutoSize = true;
+            this.CaptureLen.BackColor = System.Drawing.SystemColors.Menu;
+            this.CaptureLen.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.CaptureLen.Location = new System.Drawing.Point(12, 160);
+            this.CaptureLen.Name = "CaptureLen";
+            this.CaptureLen.Size = new System.Drawing.Size(2, 15);
+            this.CaptureLen.TabIndex = 15;
+            // 
+            // ShortCapWarning
+            // 
+            this.ShortCapWarning.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ShortCapWarning.AutoSize = true;
+            this.ShortCapWarning.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ShortCapWarning.ForeColor = System.Drawing.Color.Red;
+            this.ShortCapWarning.Location = new System.Drawing.Point(12, 197);
+            this.ShortCapWarning.Name = "ShortCapWarning";
+            this.ShortCapWarning.Size = new System.Drawing.Size(372, 16);
+            this.ShortCapWarning.TabIndex = 16;
+            this.ShortCapWarning.Text = "WARNING: Your Selected Seizure is Under 10 Seconds Long";
+            this.ShortCapWarning.Visible = false;
+            this.ShortCapWarning.Click += new System.EventHandler(this.ShortCapWarning_Click);
+            // 
             // SzPrompt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(661, 233);
+            this.Controls.Add(this.ShortCapWarning);
+            this.Controls.Add(this.CaptureLen);
             this.Controls.Add(this.VideoSave);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -260,5 +291,7 @@
         private System.Windows.Forms.RadioButton Unknown;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox VideoSave;
+        public System.Windows.Forms.Label CaptureLen;
+        public System.Windows.Forms.Label ShortCapWarning;
     }
 }
