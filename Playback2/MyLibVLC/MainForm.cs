@@ -2266,6 +2266,8 @@ namespace SeizurePlayback
                 this.VideoFix.Enabled = false;
                 this.comboBox1.Hide();
                 this.comboBox1.Enabled = false;
+                this.OffsetBox.Hide();
+                this.OffsetBox.Enabled = false;
 
 
                 this.FRButtonGroup.Show();
@@ -2358,6 +2360,8 @@ namespace SeizurePlayback
                 this.button2.Enabled = true;
                 this.button3.Show();
                 this.button3.Enabled = true;
+                this.OffsetBox.Show();
+                this.OffsetBox.Enabled = true;
 
                 this.RvwSz.Show();
                 this.RvwSz.Enabled = true;
