@@ -457,6 +457,12 @@ namespace SeizurePlayback
         }
         public void drawbuffer()
         {
+            if (VisibleChans < 1) return;
+            
+            int YMoVC = Ymax / VisibleChans;
+            //if (VisibleChans == 1) YMoVC = Ymax / 2;
+            
+            
             int NotDisp;
             PointF[][] WaveC;
             Font F = new Font("Arial", 10);
@@ -500,39 +506,35 @@ namespace SeizurePlayback
                              g.FillRectangle(myBrush, new Rectangle((int)(HLS * PointSpacing * SampleRate), (int)(YDraw + (VoltageSpacing * 0.25F)), (int)((HLE - HLS) * PointSpacing * SampleRate), (Ymax / VisibleChans)));
 
                          }
-                         
-                         for (int i = 0; i < SampleSize; i++)
-                         {
+                        for (int k = 0; k < SeizureHighlights.Count; k++)
+                        {
+                            //if (j == SeizureHighlights[k].Channel && (PosInSample - (SeizureHighlights[k].tS * ) > -DisplayLength && Position - SeizureHighlights[k].tS < DisplayLength))
+                            if (j == SeizureHighlights[k].Channel && (Math.Abs(SeizureHighlights[k].tS - Position) < (DisplayLength + SeizureHighlights[k].tE)))
+                            {
+                                //Console.WriteLine("PASS - Channel " + j + ", TIME: " + PosInSample);
+                                {
+                                    SolidBrush myBrush2 = new SolidBrush(System.Drawing.Color.LightGray);
 
-                             PointF TempPoint = new PointF((float)i * PointSpacing, YDraw + ScaleVoltsToPixel(Convert.ToSingle(data[j][i]), Ymax / VisibleChans));
+                                    g.FillRectangle(myBrush2, new Rectangle((int)((SeizureHighlights[k].tS - PosInSample) * PointSpacing * SampleRate), (int)(YDraw + (VoltageSpacing * 0.25F)), (int)((SeizureHighlights[k].tE) * PointSpacing * SampleRate), (Ymax / VisibleChans)));
+                                    //g.FillRectangle(myBrush2, new Rectangle((int)(SeizureHighlights[k].tS * PointSpacing * SampleRate), (int)(YDraw + (VoltageSpacing * 0.25F)), (int)((SeizureHighlights[k].tE) * PointSpacing * SampleRate), (Ymax / VisibleChans)));
+
+                                }
+
+                            }
+
+                        }
+                        for (int i = 0; i < SampleSize; i++)
+                         {
+                            
+                             PointF TempPoint = new PointF((float)i * PointSpacing, YDraw + ScaleVoltsToPixel(Convert.ToSingle(data[j][i]), YMoVC));
                             //
+
+                            if (VisibleChans == 1) TempPoint.Y += Ymax/2;
                              WaveC[j][i] = TempPoint;
 
 
 
-                            //g.Clear(Color.White);
-                            if (i % (SampleRate) == 0)
-                            {
-                                
-                                
-                                for (int k = 0; k < SeizureHighlights.Count; k++)
-                                {
-                                    //if (j == SeizureHighlights[k].Channel && (PosInSample - (SeizureHighlights[k].tS * ) > -DisplayLength && Position - SeizureHighlights[k].tS < DisplayLength))
-                                    if (j == SeizureHighlights[k].Channel && (Math.Abs(SeizureHighlights[k].tS - Position) < DisplayLength))
-                                    {
-                                        Console.WriteLine("PASS - Channel " + j + ", TIME: " + PosInSample);
-                                        {
-                                            SolidBrush myBrush2 = new SolidBrush(System.Drawing.Color.LightGray);
-
-                                            g.FillRectangle(myBrush2, new Rectangle((int)((SeizureHighlights[k].tS-PosInSample) * PointSpacing * SampleRate), (int)(YDraw + (VoltageSpacing * 0.25F)), (int)((SeizureHighlights[k].tE) * PointSpacing * SampleRate), (Ymax / VisibleChans)));
-                                            //g.FillRectangle(myBrush2, new Rectangle((int)(SeizureHighlights[k].tS * PointSpacing * SampleRate), (int)(YDraw + (VoltageSpacing * 0.25F)), (int)((SeizureHighlights[k].tE) * PointSpacing * SampleRate), (Ymax / VisibleChans)));
-
-                                        }
-
-                                    }
-
-                                }
-                            }
+                        
                             
                          }
 
@@ -547,7 +549,7 @@ namespace SeizurePlayback
                          else
                              g.DrawLines(WavePen, WaveC[j]);
 
-                        Console.WriteLine(Position);
+                        //Console.WriteLine(Position);
 
 
  

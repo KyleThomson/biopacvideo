@@ -826,11 +826,12 @@ namespace SeizurePlayback
             // 
             // LoadAll
             // 
+            this.LoadAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LoadAll.Location = new System.Drawing.Point(1008, 739);
             this.LoadAll.Name = "LoadAll";
-            this.LoadAll.Size = new System.Drawing.Size(91, 23);
+            this.LoadAll.Size = new System.Drawing.Size(95, 23);
             this.LoadAll.TabIndex = 72;
-            this.LoadAll.Text = "Load All Videos";
+            this.LoadAll.Text = "Pre-Index Videos";
             this.LoadAll.UseVisualStyleBackColor = true;
             this.LoadAll.Click += new System.EventHandler(this.LoadAll_Click);
             // 

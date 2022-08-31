@@ -86,6 +86,7 @@ namespace SeizurePlayback
                 }
 
                 p.StartInfo.Arguments = CmdString;
+
                 p.StartInfo.FileName = Pass.X264path + "\\ffmpeg.exe";
                 p.StartInfo.CreateNoWindow = true;
                 p.StartInfo.UseShellExecute = false;

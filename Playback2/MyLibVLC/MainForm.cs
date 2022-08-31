@@ -516,6 +516,8 @@ namespace SeizurePlayback
 
         private void Pause_Click(object sender, EventArgs e)
         {
+
+            if (Paused == true) return;
             Paused = true;
             if (player != null)
                 player.Pause();
@@ -957,7 +959,7 @@ namespace SeizurePlayback
                 {
                     int FixedChan = 0;
                     FixedChan = CamerAssc[CamerAssc[ACQ.SelectedChan]];
-                    //loadVid(FixedChan);
+                    loadVid(FixedChan);
                     FNum = 0;
                     while (TimeSeek > AVILengths[FixedChan, FNum])
                     {
@@ -1529,6 +1531,7 @@ namespace SeizurePlayback
                 {
                     ACQ.Position = 0;
                     Step = MaxDispSize;
+                    if (player == null) return;
                     if (player != null)
                         player.Stop();
                     SeekToCurrentPos(false);
@@ -1759,7 +1762,7 @@ namespace SeizurePlayback
                     Sz = DSF.GetCurrentSeizure();
                     if ((!ACQ.HideChan[Sz.Channel - 1]) && Sz.Display && ((DSF.FRIndex() == regularReviewReturn) || regularReviewReturn == 0))
                         pass = true;
-                        loadVid(Sz.Channel);
+                       // if (regularReviewReturn != 0) loadVid(Sz.Channel);
                 }
 
                 //DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
@@ -1991,12 +1994,12 @@ namespace SeizurePlayback
 
         private void VideoFix_CheckedChanged(object sender, EventArgs e)
         {
-            bool a = true;
-            for (int i = 0; i < 16; i++)
-            {
-                if (!VLCisLoaded[i]) a = false;
-            }
-            if (a == false) loadVid(-1);
+            //bool a = true;
+            //for (int i = 0; i < 16; i++)
+            //{
+            //    if (!VLCisLoaded[i]) a = false;
+            //}
+            //if (a == false) loadVid(-1);
             
         }
 
@@ -2268,6 +2271,8 @@ namespace SeizurePlayback
                 this.comboBox1.Enabled = false;
                 this.OffsetBox.Hide();
                 this.OffsetBox.Enabled = false;
+                this.LoadAll.Hide();
+                this.LoadAll.Enabled = false;
 
 
                 this.FRButtonGroup.Show();
@@ -2362,6 +2367,8 @@ namespace SeizurePlayback
                 this.button3.Enabled = true;
                 this.OffsetBox.Show();
                 this.OffsetBox.Enabled = true;
+                this.LoadAll.Show();
+                this.LoadAll.Enabled = true;
 
                 this.RvwSz.Show();
                 this.RvwSz.Enabled = true;
