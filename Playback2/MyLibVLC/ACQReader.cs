@@ -75,6 +75,9 @@ namespace SeizurePlayback
         public List<SeizureHighlight> SeizureHighlights;
         public int PosInSample;
         public int TotalSamples;
+        public int ChanPass;
+        public float[] CurrentChannelZoom;
+        public bool MasterZoom = true;
         
 
         
@@ -92,6 +95,7 @@ namespace SeizurePlayback
             RandomOrder = new int[16];
             Randomized = false;
             SeizureHighlights = new List<SeizureHighlight>();
+            CurrentChannelZoom = new float[] {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
             
         }
         public void closeACQ()
@@ -348,6 +352,9 @@ namespace SeizurePlayback
         }
         private float ScaleVoltsToPixel(float volt, float pixelHeight)
         {
+            float tempZoom;
+            if (MasterZoom) tempZoom = Zoom;
+            else tempZoom = CurrentChannelZoom[ChanPass];
             float maxPixel = (pixelHeight * .15F);
             float minPixel = (pixelHeight * .95F);
             float m;
@@ -362,7 +369,7 @@ namespace SeizurePlayback
                 m = (maxPixel - minPixel) / (65536);
                 b = 2 ^ 15;
             }            
-            float result = ((m * volt) * Zoom) + b;
+            float result = ((m * volt) * tempZoom) + b;
             //result = (result > maxPixel) ? maxPixel: result;
             //result = (result < minPixel) ? minPixel: result;
             return (result);
@@ -480,6 +487,7 @@ namespace SeizurePlayback
                  }
                  for (int j = 0; j < Chans; j++)
                  {
+                    ChanPass = j;
 
                      if (!HideChan[j])
                      {
