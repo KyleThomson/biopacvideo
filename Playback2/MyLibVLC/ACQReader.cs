@@ -354,7 +354,7 @@ namespace SeizurePlayback
         {
             float tempZoom;
             if (MasterZoom) tempZoom = Zoom;
-            else tempZoom = CurrentChannelZoom[ChanPass];
+            else tempZoom = Zoom * CurrentChannelZoom[ChanPass];
             float maxPixel = (pixelHeight * .15F);
             float minPixel = (pixelHeight * .95F);
             float m;

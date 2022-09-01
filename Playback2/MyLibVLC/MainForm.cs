@@ -87,6 +87,7 @@ namespace SeizurePlayback
         int[,] ButtonLoc;
         public int numPerPage;
         bool vLoading = false;
+        TrackBar[] ChanZooms;
 
         
 
@@ -104,7 +105,13 @@ namespace SeizurePlayback
             FastReviewChange = false;
             ButtonLoc = new int[3, 2] { { this.FastReview.Location.X, this.FastReview.Location.Y}, { this.button3.Location.X, this.button3.Location.Y}, { this.button2.Location.X, this.button2.Location.Y} };
 
+            ChanZooms = new TrackBar[] { ZoomChan1, ZoomChan2, ZoomChan3, ZoomChan4, ZoomChan5, ZoomChan6, ZoomChan7, ZoomChan8, ZoomChan9, ZoomChan10, ZoomChan11, ZoomChan12 };
 
+
+
+
+            comboBox1.Items.RemoveAt(8);
+            comboBox1.Items.Insert(8, "Channel Zoom Control [   ]");
 
             VideoOffset = new float[16];
             string[] args = new string[] { "" };
@@ -254,6 +261,7 @@ namespace SeizurePlayback
 
             PercentCompletion = F.IniReadValue("Review", "Complete", (double)0);
             if (PercentCompletion == 100) finsihedReview = true;
+            if (PercentCompletion == 100) this.ColorClear.BackColor = Color.Green;
             if (PercentCompletion > 0)
             {
                 Reviewer = F.IniReadValue("Review", "Reviewer", Reviewer);
@@ -809,6 +817,7 @@ namespace SeizurePlayback
                 if (PercentCompletion == 100)
                 {
                     DetSezLabel.Text = "Finished!";
+                    ColorClear.BackColor = Color.Green;
                 }
             }
             if (ACQ.Loaded) ACQ.drawbuffer();
@@ -1184,13 +1193,14 @@ namespace SeizurePlayback
 
         private void VisChan_CheckedChanged_List(object sender, EventArgs e, int chanPass, bool chanClicked)
         {
-
+            
+            
 
             if (!SuppressChange)
             {
                 if (!HCL.Contains(chanPass) && !chanClicked)
                 {
-
+                    ChanZooms[chanPass - 1].Enabled = false;
                     HCL.Add(chanPass);
                     checkedChange = true;
                     //Console.WriteLine("Channel " + chanPass + " Hidden");
@@ -1198,6 +1208,7 @@ namespace SeizurePlayback
                 }
                 if (HCL.Contains(chanPass) && chanClicked)
                 {
+                    ChanZooms[chanPass - 1].Enabled = true;
                     HCL.Remove(chanPass);                   
                     checkedChange = true;
                     //Console.WriteLine("Channel " + chanPass + " Visible");
@@ -1463,6 +1474,7 @@ namespace SeizurePlayback
                     {
                         DetSezLabel.Text = "Finished!";
                         PercentCompletion = 100;
+                        ColorClear.BackColor = Color.Green;
                         UpdateReviewINI(BioINI);
                         Paused = true;
                         RealTime = false;
@@ -1478,7 +1490,7 @@ namespace SeizurePlayback
                         pass = true;
                 }
                 //DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
-                DetSezLabel.Text = DSF.FRIndex() + " of " + (DSF.IsDisplayed()+1).ToString();
+                DetSezLabel.Text = DSF.FRIndex() + " of " + (DSF.IsDisplayed()).ToString();
                 regularReviewReturn = (Math.Min(regularReviewReturn + 1, DSF.Count - 1));
                 ACQ.SelectedChan = Sz.Channel - 1;
                 ACQ.Position = Math.Max(0, Sz.TimeInSec - 30);
@@ -1529,7 +1541,7 @@ namespace SeizurePlayback
                     RealTime = true;
                     finsihedReview = false;
                     //DetSezLabel.Text = (0 + " of " + DSF.Count.ToString());
-                    DetSezLabel.Text = (0 + " of " + (DSF.IsDisplayed() + 1).ToString());
+                    DetSezLabel.Text = (0 + " of " + (DSF.IsDisplayed()).ToString());
                     return;
                 }
                 if (!DSF.Dec())
@@ -1544,7 +1556,7 @@ namespace SeizurePlayback
                     Paused = false;
                     RealTime = true;
                     //DetSezLabel.Text = (0 + " of " + DSF.Count.ToString());
-                    DetSezLabel.Text = (0 + " of " + (DSF.IsDisplayed() + 1).ToString());
+                    DetSezLabel.Text = (0 + " of " + (DSF.IsDisplayed()).ToString());
                     return;
                 }
                 Sz = DSF.GetCurrentSeizure();
@@ -1553,7 +1565,7 @@ namespace SeizurePlayback
 
             }
             //DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
-            DetSezLabel.Text = DSF.FRIndex() + " of " + (DSF.IsDisplayed() + 1).ToString();
+            DetSezLabel.Text = DSF.FRIndex() + " of " + (DSF.IsDisplayed()).ToString();
             regularReviewReturn = (Math.Max(regularReviewReturn - 1, 0));
             ACQ.SelectedChan = Sz.Channel - 1;
             ACQ.Position = Math.Max(0, Sz.TimeInSec - 30);
@@ -1747,6 +1759,32 @@ namespace SeizurePlayback
                 bool pass = false;
 
                 if ((!ACQ.HideChan[Sz.Channel - 1]) && Sz.Display) pass = true;
+                if (DSF.IsDisplayed() == 1)
+                {
+                    DetSezLabel.Text = "Finished!";
+                    PercentCompletion = 100;
+                    UpdateReviewINI(BioINI);
+                    ColorClear.BackColor = Color.Green;
+                }
+                if (DSF.IsDisplayed() == 0)
+                {
+                    bool MarkAs = MarkAsCompleteBox();
+                    if (MarkAs)
+                    {
+                        DetSezLabel.Text = "Finished!";
+                        PercentCompletion = 100;
+                        ColorClear.BackColor = Color.Green;
+                        UpdateReviewINI(BioINI);
+                        Paused = true;
+                        RealTime = false;
+                        ACQ.Position = (int)ACQ.TotFileTime;
+                        Step = MaxDispSize;
+                        
+                        if (player != null) player.Pause();
+
+                        return;
+                    }
+                }
 
                 while (!pass)
                 {
@@ -1765,13 +1803,13 @@ namespace SeizurePlayback
                         return;
                     }
                     Sz = DSF.GetCurrentSeizure();
-                    if ((!ACQ.HideChan[Sz.Channel - 1]) && Sz.Display && ((DSF.FRIndex() == regularReviewReturn) || regularReviewReturn == 0))
+                    if ((!ACQ.HideChan[Sz.Channel - 1]) && Sz.Display)
                         pass = true;
                        // if (regularReviewReturn != 0) loadVid(Sz.Channel);
                 }
 
                 //DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
-                DetSezLabel.Text = DSF.FRIndex().ToString() + " of " + (DSF.IsDisplayed() + 1).ToString();
+                DetSezLabel.Text = DSF.FRIndex().ToString() + " of " + (DSF.IsDisplayed()).ToString();
                 ACQ.SelectedChan = Sz.Channel - 1;
                 ACQ.Position = Math.Max(0, Sz.TimeInSec - 30);
                 loadVid(ACQ.SelectedChan);
@@ -1794,7 +1832,23 @@ namespace SeizurePlayback
          
         */
 
+        private bool MarkAsCompleteBox()
+        {
 
+            string message = "\t You Have Not Selected Any Seizures \n Would You Like to Finish and Mark this File as Complete?";
+            string caption = "Seizure Review";
+            //MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            //DialogResult answer;
+            var answer = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (answer == DialogResult.Yes)
+            {
+                return true;
+            }
+            else return false;
+
+
+        }
 
         private bool DeleteMessageBox()
         {
@@ -1839,6 +1893,8 @@ namespace SeizurePlayback
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+
+            
             switch (comboBox1.SelectedIndex)
             {
                 case 0: //Compression Manager
@@ -1902,6 +1958,54 @@ namespace SeizurePlayback
                     Seek = (long)((float)Start * 1000F * (1F + VideoOffset[ACQ.SelectedChan]) - Subtractor);
                     VideoCreator frm2 = new VideoCreator(ACQ.GetData(ACQ.SelectedChan, Start, HighlightEnd - HighlightStart + 1), HighlightEnd - HighlightStart + 1, CurrentAVI, Seek);
                     frm2.Show();
+                    break;
+                case 7:
+                    bool a = true;
+                    for (int i = 0; i < 16; i++)
+                    {
+                        if (!VLCisLoaded[i]) a = false;
+                    }
+                    if (a == false) loadVid(-1);
+                    break;
+                case 8: //Channel Zoom
+                    if (ACQ.MasterZoom)
+                    {
+                        comboBox1.Items.RemoveAt(8);
+                        comboBox1.Items.Insert(8, "Channel Zoom Control [\u2714]");
+                        comboBox1.Text = "Channel Zoom Control [\u2714]";
+
+
+                        ACQ.MasterZoom = false;
+                        ZoomChanPanel.Show();
+                        ZoomChanPanel.Enabled = true;
+
+                        //ZoomChan1.Value = ZoomScale.Value;
+                        //ZoomChan2.Value = ZoomScale.Value;
+                        //ZoomChan3.Value = ZoomScale.Value;
+                        //ZoomChan4.Value = ZoomScale.Value;
+                        //ZoomChan5.Value = ZoomScale.Value;
+                        //ZoomChan6.Value = ZoomScale.Value;
+                        //ZoomChan7.Value = ZoomScale.Value;
+                        //ZoomChan8.Value = ZoomScale.Value;
+                        //ZoomChan9.Value = ZoomScale.Value;
+                        //ZoomChan10.Value = ZoomScale.Value;
+                        //ZoomChan11.Value = ZoomScale.Value;
+                        //ZoomChan12.Value = ZoomScale.Value;
+
+                        ZoomScale.Enabled = false;
+                    }
+                    else
+                    {
+                        comboBox1.Items.RemoveAt(8);
+                        comboBox1.Items.Insert(8, "Channel Zoom Control [   ]");
+                        comboBox1.Text = "Channel Zoom Control [   ]";
+                        ACQ.MasterZoom = true;
+                        ACQ.drawbuffer();
+                        ZoomChanPanel.Hide();
+                        ZoomChanPanel.Enabled = false;
+                        ZoomScale.Enabled = true;
+                        
+                    }
                     break;
 
             }
@@ -1989,15 +2093,15 @@ namespace SeizurePlayback
             
         }
 
-        private void LoadAll_Click(object sender, EventArgs e)
-        {
-            bool a= true;
-            for (int i = 0; i < 16; i++)
-            {
-                if (!VLCisLoaded[i]) a = false;
-            }
-            if (a == false) loadVid(-1);
-        }
+        //private void LoadAll_Click(object sender, EventArgs e)
+        //{
+        //    bool a= true;
+        //    for (int i = 0; i < 16; i++)
+        //    {
+        //        if (!VLCisLoaded[i]) a = false;
+        //    }
+        //    if (a == false) loadVid(-1);
+        //}
 
         private void VideoFix_CheckedChanged(object sender, EventArgs e)
         {
@@ -2015,39 +2119,39 @@ namespace SeizurePlayback
 
         }
 
-        private void ChanZoomCheck_CheckedChanged(object sender, EventArgs e)
-        {
+        //private void ChanZoomCheck_CheckedChanged(object sender, EventArgs e)
+        //{
             
-            if (this.ChanZoomCheck.Checked)
-            {
-                ACQ.MasterZoom = false;
-                ZoomChanPanel.Show();
-                ZoomChanPanel.Enabled = true;
+        //    if (this.ChanZoomCheck.Checked)
+        //    {
+        //        ACQ.MasterZoom = false;
+        //        ZoomChanPanel.Show();
+        //        ZoomChanPanel.Enabled = true;
                 
-                ZoomChan1.Value = ZoomScale.Value;
-                ZoomChan2.Value = ZoomScale.Value;
-                ZoomChan3.Value = ZoomScale.Value;
-                ZoomChan4.Value = ZoomScale.Value;
-                ZoomChan5.Value = ZoomScale.Value;
-                ZoomChan6.Value = ZoomScale.Value;
-                ZoomChan7.Value = ZoomScale.Value;
-                ZoomChan8.Value = ZoomScale.Value;
-                ZoomChan9.Value = ZoomScale.Value;
-                ZoomChan10.Value = ZoomScale.Value;
-                ZoomChan11.Value = ZoomScale.Value;
-                ZoomChan12.Value = ZoomScale.Value;
+        //        ZoomChan1.Value = ZoomScale.Value;
+        //        ZoomChan2.Value = ZoomScale.Value;
+        //        ZoomChan3.Value = ZoomScale.Value;
+        //        ZoomChan4.Value = ZoomScale.Value;
+        //        ZoomChan5.Value = ZoomScale.Value;
+        //        ZoomChan6.Value = ZoomScale.Value;
+        //        ZoomChan7.Value = ZoomScale.Value;
+        //        ZoomChan8.Value = ZoomScale.Value;
+        //        ZoomChan9.Value = ZoomScale.Value;
+        //        ZoomChan10.Value = ZoomScale.Value;
+        //        ZoomChan11.Value = ZoomScale.Value;
+        //        ZoomChan12.Value = ZoomScale.Value;
                 
-                ZoomScale.Enabled = false;
-            } else
-            {
-                ACQ.MasterZoom = true;
-                ZoomChanPanel.Hide();
-                ZoomChanPanel.Enabled = false;
-                ZoomScale.Enabled = true;
-                ACQ.drawbuffer();
-            }
+        //        ZoomScale.Enabled = false;
+        //    } else
+        //    {
+        //        ACQ.MasterZoom = true;
+        //        ZoomChanPanel.Hide();
+        //        ZoomChanPanel.Enabled = false;
+        //        ZoomScale.Enabled = true;
+        //        ACQ.drawbuffer();
+        //    }
 
-        }
+        //}
 
         private void ZoomChan1_Scroll(object sender, EventArgs e)
         {
@@ -2135,6 +2239,13 @@ namespace SeizurePlayback
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
     }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+            ZoomScale.Value = 10;
+            ACQ.Zoom = 1;
+            Redraw = true;
+        }
 
         public void loadVid(int chanloop)
         {
@@ -2407,8 +2518,8 @@ namespace SeizurePlayback
                 this.comboBox1.Enabled = false;
                 this.OffsetBox.Hide();
                 this.OffsetBox.Enabled = false;
-                this.LoadAll.Hide();
-                this.LoadAll.Enabled = false;
+                //this.LoadAll.Hide();
+                //this.LoadAll.Enabled = false;
 
 
                 this.FRButtonGroup.Show();
@@ -2467,7 +2578,8 @@ namespace SeizurePlayback
                 this.TimeBox.Enabled = false;
                 this.HighlightLabel.Hide();
                 this.HighlightLabel.Enabled = false;
-
+                this.ColorClear.Hide();
+                this.ColorClear.Enabled = false;
 
             } else
             {
@@ -2503,8 +2615,8 @@ namespace SeizurePlayback
                 this.button3.Enabled = true;
                 this.OffsetBox.Show();
                 this.OffsetBox.Enabled = true;
-                this.LoadAll.Show();
-                this.LoadAll.Enabled = true;
+                //this.LoadAll.Show();
+                //this.LoadAll.Enabled = true;
 
                 this.RvwSz.Show();
                 this.RvwSz.Enabled = true;
@@ -2574,6 +2686,8 @@ namespace SeizurePlayback
                 this.TimeBox.Enabled = true;
                 this.HighlightLabel.Show();
                 this.HighlightLabel.Enabled = true;
+                this.ColorClear.Show();
+                this.ColorClear.Enabled = true;
 
             }
         }
