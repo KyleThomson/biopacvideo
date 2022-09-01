@@ -837,7 +837,7 @@ namespace SeizurePlayback
                     int Y = (e.Y - FRgraph.Y1);
                     Y = Y / ((FRgraph.Y2 - FRgraph.Y1) / (numPerPage/2));
                     //if (DSF.ChangeDisplaySeizure((FastReviewPage * 16) + (Y * 2) + X))
-                    loadVid(DSF.GetChannelNumber((FastReviewPage * numPerPage) + (Y * 2) + X));
+                    //loadVid(DSF.GetChannelNumber((FastReviewPage * numPerPage) + (Y * 2) + X));
                     if (DSF.ChangeDisplaySeizure((FastReviewPage * numPerPage) + (Y * 2) + X))
                     {
                         
@@ -1467,6 +1467,7 @@ namespace SeizurePlayback
                         ACQ.Position = (int)ACQ.TotFileTime;
                         Step = MaxDispSize;
                         SeekToCurrentPos(false);
+                        if (player != null) player.Pause();
                         
                         return;
                     }
@@ -1475,14 +1476,16 @@ namespace SeizurePlayback
                         pass = true;
                 }
                 //DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
-                DetSezLabel.Text = DSF.FRIndex() + " of " + DSF.IsDisplayed().ToString();
+                DetSezLabel.Text = DSF.FRIndex() + " of " + (DSF.IsDisplayed()+1).ToString();
                 regularReviewReturn = (Math.Min(regularReviewReturn + 1, DSF.Count - 1));
                 ACQ.SelectedChan = Sz.Channel - 1;
                 ACQ.Position = Math.Max(0, Sz.TimeInSec - 30);
                 Step = MaxDispSize;
+                loadVid(ACQ.SelectedChan);
                 if (player != null)
                     player.Stop();
-                SeekToCurrentPos(false);
+                if (player != null) SeekToCurrentPos();
+                if (player != null) player.Play();
                 QuitHighlight();
                 Paused = false;
                 RealTime = true;
@@ -1524,7 +1527,7 @@ namespace SeizurePlayback
                     RealTime = true;
                     finsihedReview = false;
                     //DetSezLabel.Text = (0 + " of " + DSF.Count.ToString());
-                    DetSezLabel.Text = (0 + " of " + DSF.IsDisplayed().ToString());
+                    DetSezLabel.Text = (0 + " of " + (DSF.IsDisplayed() + 1).ToString());
                     return;
                 }
                 if (!DSF.Dec())
@@ -1539,7 +1542,7 @@ namespace SeizurePlayback
                     Paused = false;
                     RealTime = true;
                     //DetSezLabel.Text = (0 + " of " + DSF.Count.ToString());
-                    DetSezLabel.Text = (0 + " of " + DSF.IsDisplayed().ToString());
+                    DetSezLabel.Text = (0 + " of " + (DSF.IsDisplayed() + 1).ToString());
                     return;
                 }
                 Sz = DSF.GetCurrentSeizure();
@@ -1548,7 +1551,7 @@ namespace SeizurePlayback
 
             }
             //DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
-            DetSezLabel.Text = DSF.FRIndex() + " of " + DSF.IsDisplayed().ToString();
+            DetSezLabel.Text = DSF.FRIndex() + " of " + (DSF.IsDisplayed() + 1).ToString();
             regularReviewReturn = (Math.Max(regularReviewReturn - 1, 0));
             ACQ.SelectedChan = Sz.Channel - 1;
             ACQ.Position = Math.Max(0, Sz.TimeInSec - 30);
@@ -1766,13 +1769,15 @@ namespace SeizurePlayback
                 }
 
                 //DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
-                DetSezLabel.Text = DSF.FRIndex().ToString() + " of " + DSF.IsDisplayed().ToString();
+                DetSezLabel.Text = DSF.FRIndex().ToString() + " of " + (DSF.IsDisplayed() + 1).ToString();
                 ACQ.SelectedChan = Sz.Channel - 1;
                 ACQ.Position = Math.Max(0, Sz.TimeInSec - 30);
+                loadVid(ACQ.SelectedChan);
                 Step = MaxDispSize;
                 if (player != null)
                     player.Stop();
-                SeekToCurrentPos(false);
+                if (player != null) SeekToCurrentPos();
+                if (player != null) player.Play();
                 QuitHighlight();
                 Paused = false;
                 RealTime = true;
@@ -2022,7 +2027,10 @@ namespace SeizurePlayback
             if (!ACQ.Loaded) return;
             string AVIname;
             VLoadWait vLoad = new VLoadWait();
+            vLoad.LT.Text = "LOADING";
             vLoad.Show();
+            
+            
 
             //AVIFiles = Directory.GetFiles(Path, "*.avi");
             
@@ -2031,6 +2039,7 @@ namespace SeizurePlayback
             
             //this.Refresh();
             AVILoadBar.Value = 0;
+            AVILoadBar.Maximum = 30;
             AVILoadBar.Visible = true;
             
             if (player == null) Console.WriteLine("Player does not exist yet");
@@ -2043,9 +2052,10 @@ namespace SeizurePlayback
                 if (!isMP4)
                 {
                     vLoad.VideoLoadProgressBar.Maximum = 10;
+                    
                     for (int fileloop = 0; fileloop < 10; fileloop++)
                     {
-                        vLoad.VideoLoadProgressBar.Maximum = 10;
+                        
                         AVILoadBar.Increment(3);
                         vLoad.VideoLoadProgressBar.Increment(1);
                         AVIname = AVINameList[chanloop, fileloop];
@@ -2128,11 +2138,13 @@ namespace SeizurePlayback
                 vLoad.VideoLoadProgressBar.Maximum = 30;
                 for (chanloop = 0; chanloop < 16; chanloop++)
                 {
+                    AVILoadBar.Value = 0;
                     if (!isMP4)
                     {
                         
                         for (int fileloop = 0; fileloop < 10; fileloop++)
                         {
+                            //AVILoadBar.Increment(3);
                             //vLoad.VideoLoadProgressBar.Maximum = 10;
                             AVILoadBar.Increment(3);
                             //vLoad.VideoLoadProgressBar.Increment(1);
@@ -2173,6 +2185,7 @@ namespace SeizurePlayback
                         //vLoad.VideoLoadProgressBar.Maximum = 30;
                         for (int fileloop = 0; fileloop < 30; fileloop++)
                         {
+                            AVILoadBar.Increment(1);
                             //vLoad.VideoLoadProgressBar.Increment(1);
                             AVIname = AVINameList[chanloop, fileloop];
                             if (File.Exists(AVIname))
