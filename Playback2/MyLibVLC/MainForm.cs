@@ -87,6 +87,7 @@ namespace SeizurePlayback
         int[,] ButtonLoc;
         public int numPerPage;
         bool vLoading = false;
+
         
 
         public CManage()
@@ -1189,6 +1190,7 @@ namespace SeizurePlayback
             {
                 if (!HCL.Contains(chanPass) && !chanClicked)
                 {
+
                     HCL.Add(chanPass);
                     checkedChange = true;
                     //Console.WriteLine("Channel " + chanPass + " Hidden");
@@ -2007,6 +2009,127 @@ namespace SeizurePlayback
         {
 
         }
+
+        private void ChanZoomCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            
+            if (this.ChanZoomCheck.Checked)
+            {
+                ACQ.MasterZoom = false;
+                ZoomChanPanel.Show();
+                ZoomChanPanel.Enabled = true;
+                
+                ZoomChan1.Value = ZoomScale.Value;
+                ZoomChan2.Value = ZoomScale.Value;
+                ZoomChan3.Value = ZoomScale.Value;
+                ZoomChan4.Value = ZoomScale.Value;
+                ZoomChan5.Value = ZoomScale.Value;
+                ZoomChan6.Value = ZoomScale.Value;
+                ZoomChan7.Value = ZoomScale.Value;
+                ZoomChan8.Value = ZoomScale.Value;
+                ZoomChan9.Value = ZoomScale.Value;
+                ZoomChan10.Value = ZoomScale.Value;
+                ZoomChan11.Value = ZoomScale.Value;
+                ZoomChan12.Value = ZoomScale.Value;
+                
+                ZoomScale.Enabled = false;
+            } else
+            {
+                ACQ.MasterZoom = true;
+                ZoomChanPanel.Hide();
+                ZoomChanPanel.Enabled = false;
+                ZoomScale.Enabled = true;
+                ACQ.drawbuffer();
+            }
+
+        }
+
+        private void ZoomChan1_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[0] = (float)ZoomChan1.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        
+        private void ZoomChan2_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[1] = (float)ZoomChan2.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+        
+
+        private void ZoomChan3_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[2] = (float)ZoomChan3.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan4_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[3] = (float)ZoomChan4.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan5_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[4] = (float)ZoomChan5.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan6_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[5] = (float)ZoomChan6.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan7_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[6] = (float)ZoomChan7.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan8_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[7] = (float)ZoomChan8.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan9_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[8] = (float)ZoomChan9.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan10_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[9] = (float)ZoomChan10.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan11_Scroll(object sender, EventArgs e)            
+        {
+            ACQ.CurrentChannelZoom[10] = (float)ZoomChan11.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan12_Scroll(object sender, EventArgs e)
+
+        {
+            ACQ.CurrentChannelZoom[11] = (float)ZoomChan12.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+    }
 
         public void loadVid(int chanloop)
         {
