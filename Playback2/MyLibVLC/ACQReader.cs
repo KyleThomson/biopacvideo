@@ -474,6 +474,7 @@ namespace SeizurePlayback
             PointF[][] WaveC;
             Font F = new Font("Arial", 10);
             SolidBrush B = new SolidBrush(Color.Red);
+            SolidBrush C = new SolidBrush(Color.Black);
             try
             {
              g.Clear(Color.White);
@@ -498,14 +499,18 @@ namespace SeizurePlayback
                          }
                          else
                          {
-                             YDraw = VoltageSpacing * (j - NotDisp);
-                            if (ChanID)
-                            {
-                                g.DrawString(ID2[j], F, B, new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans)));
-                            } else
-                            {
-                                g.DrawString(ID[j], F, B, new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans)));
-                            }
+                            YDraw = VoltageSpacing * (j - NotDisp);
+                            //PointF temp = new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans));
+                            
+                            //if (ChanID)
+                            //{
+                            //    g.FillRectangle(C, new Rectangle((int)temp.X, (int)temp.Y, 65, 20));
+                            //    g.DrawString(ID2[j], F, B, new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans)));
+                            //} else
+                            //{
+                            //    g.FillRectangle(C, new Rectangle((int)temp.X, (int)temp.Y, 65, 20));
+                            //    g.DrawString(ID[j], F, B, new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans)));
+                            //}
                              
                          }
                          if (HL && (SelectedChan == j))
@@ -558,9 +563,18 @@ namespace SeizurePlayback
                              g.DrawLines(WavePen, WaveC[j]);
 
                         //Console.WriteLine(Position);
+                        PointF temp = new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans));
+                        if (ChanID)
+                        {
+                            g.FillRectangle(C, new Rectangle((int)temp.X, (int)temp.Y, 70, 20));
+                            g.DrawString(ID2[j], F, B, new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans)));
+                        }
+                        else
+                        {
+                            //g.FillRectangle(C, new Rectangle((int)temp.X, (int)temp.Y, 65, 20));
+                            g.DrawString(ID[j], F, B, new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans)));
+                        }
 
-
- 
 
 
                     }

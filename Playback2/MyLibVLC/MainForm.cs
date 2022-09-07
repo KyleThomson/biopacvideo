@@ -88,6 +88,7 @@ namespace SeizurePlayback
         public int numPerPage;
         bool vLoading = false;
         TrackBar[] ChanZooms;
+        int RewindVal = 30;
 
         
 
@@ -104,14 +105,15 @@ namespace SeizurePlayback
             FastReviewState = false;
             FastReviewChange = false;
             ButtonLoc = new int[3, 2] { { this.FastReview.Location.X, this.FastReview.Location.Y}, { this.button3.Location.X, this.button3.Location.Y}, { this.button2.Location.X, this.button2.Location.Y} };
-
+            
             ChanZooms = new TrackBar[] { ZoomChan1, ZoomChan2, ZoomChan3, ZoomChan4, ZoomChan5, ZoomChan6, ZoomChan7, ZoomChan8, ZoomChan9, ZoomChan10, ZoomChan11, ZoomChan12 };
-
+            
 
 
 
             comboBox1.Items.RemoveAt(8);
             comboBox1.Items.Insert(8, "Channel Zoom Control [   ]");
+            comboBox1.Text = "More Options";
 
             VideoOffset = new float[16];
             string[] args = new string[] { "" };
@@ -150,6 +152,7 @@ namespace SeizurePlayback
             INIload();
             TimeBox.SelectedIndex = 1; //Default Time Scale
             Step = MaxDispSize; //Setting Step to max display size makes sure the image refreshes. 
+            RewindVal = MaxDispSize;
             Console.WriteLine(X264path + "\\ffmpeg.exe");
             if (!File.Exists(X264path + "\\ffmpeg.exe"))
             {
@@ -211,6 +214,9 @@ namespace SeizurePlayback
             this.VisChan9.CheckedChanged += delegate (object sender, System.EventArgs e) { VisChan_CheckedChanged_List(sender, e, (VisChan9.TabIndex - 25), VisChan9.Checked); };
 
             this.SwitchChan.CheckedChanged += delegate (object sender, System.EventArgs e) { SwitchChan_CheckedChanged(sender, e, this.SwitchChan.Checked); };
+            this.Rewind_Dec.Click += delegate (object sender, System.EventArgs e) { Rewind_Change(sender, e, 0); };
+            this.Rewind_Inc.Click += delegate (object sender, System.EventArgs e) { Rewind_Change(sender, e, 1); };
+
 
             this.numPerBox.SelectedItem = "24";
 
@@ -459,6 +465,7 @@ namespace SeizurePlayback
                 } //if ACQLoaded
                 else
                 {
+                   
                     g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
                     Thread.Sleep(100);
                 }
@@ -548,10 +555,28 @@ namespace SeizurePlayback
         }
         private void Open_Click(object sender, EventArgs e)
         {
-
+            //Open.Enabled = false;
+            TimeJump.Enabled = true;
+            comboBox1.Enabled = true;
             for (int i = 0; i <16; i++)
             {
                 VLCisLoaded[i] = false;
+
+            }
+
+            if (ACQ.Loaded)
+            {
+                //DefaultFolder = INI.IniReadValue("General", "DefaultFolder", "C:\\");
+                //Paused = true;
+                //ACQ = new ACQReader();
+                //ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1, FRZoomBlock.Location.Y - 20);
+
+                var ex = MessageBox.Show("In order to open a new EEG, you must restart the application. \n \t \t Would you like to exit?", "Restart", MessageBoxButtons.OKCancel);
+
+                if (ex == DialogResult.OK) Application.Exit(); //for now, until I can figure out what's wrong with the load
+                return;
+                //player = null;
+                //g.Clear(Color.Black);
             }
 
             //if (testMode)
@@ -563,6 +588,7 @@ namespace SeizurePlayback
             fastReviewLastPage = 0;
 
             DialogResult tempRes;
+
             FBD = new FolderBrowserDialog();
             FBD.SelectedPath = DefaultFolder;
             
@@ -1050,9 +1076,16 @@ namespace SeizurePlayback
 
         private void Rewind_Click(object sender, EventArgs e)
         {
-            ACQ.Position = Math.Max(0, ACQ.Position - MaxDispSize);
+          
+
+            //ACQ.Position = Math.Max(0, ACQ.Position - MaxDispSize);
+            //if (player != null)
+            //    player.seek(player.getpos() - MaxDispSize * 1000);
+            //Step = MaxDispSize;
+
+            ACQ.Position = Math.Max(0, ACQ.Position - RewindVal);
             if (player != null)
-                player.seek(player.getpos() - MaxDispSize * 1000);
+                player.seek(player.getpos() - RewindVal * 1000);
             Step = MaxDispSize;
         }
 
@@ -1074,6 +1107,8 @@ namespace SeizurePlayback
         {
             int[] TimeScales = { 30, 60, 120, 300, 600, 1800, 3600 };
             MaxDispSize = TimeScales[TimeBox.SelectedIndex];
+            RewindVal = MaxDispSize;
+
             Rewind.Text = "Rewind " + MaxDispSize.ToString() + "s";
             Step = MaxDispSize;
             ACQ.SetDispLength(MaxDispSize);
@@ -1193,8 +1228,8 @@ namespace SeizurePlayback
 
         private void VisChan_CheckedChanged_List(object sender, EventArgs e, int chanPass, bool chanClicked)
         {
-            
-            
+
+            if (!ACQ.Loaded) return;
 
             if (!SuppressChange)
             {
@@ -2247,6 +2282,66 @@ namespace SeizurePlayback
             Redraw = true;
         }
 
+        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label16_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Console.WriteLine(sender);
+        }
+
+        public void Rewind_Change(Object sender, EventArgs e, int dir) //1 for increase, 0 for decrease
+        {
+            if (dir == 1)
+            {
+                if (RewindVal * 2 >= MaxDispSize)
+                {
+                    RewindVal = MaxDispSize;
+                    Rewind.Text = "Rewind " + MaxDispSize.ToString() + "s";
+                    return;
+                }
+                if (RewindVal == 10) RewindVal = 15;
+                RewindVal = (RewindVal - (RewindVal % 5));
+                RewindVal *= 2;
+                Rewind.Text = "Rewind " + RewindVal + "s";
+            }
+            else if (dir == 0)
+            {
+                if (RewindVal <= 5) return;
+                if (RewindVal <= 10)
+                {
+                    RewindVal = 5;
+                    Rewind.Text = "Rewind " + RewindVal + "s";
+                    return;
+                }
+                if (RewindVal <= 15)
+                {
+                    RewindVal = 10;
+                    Rewind.Text = "Rewind " + RewindVal + "s";
+                    return;
+                }
+
+                RewindVal /= 2;
+                RewindVal = RewindVal - RewindVal % 15;
+                Rewind.Text = "Rewind " + RewindVal + "s";
+
+            }
+            else return;
+
+
+        }
+
+
+
+
+
         public void loadVid(int chanloop)
         {
             if (vLoading) return;
@@ -2255,6 +2350,8 @@ namespace SeizurePlayback
                 if (VLCisLoaded[chanloop]) return;
             }
             vLoading = true;
+
+            
             
            
             
@@ -2520,6 +2617,8 @@ namespace SeizurePlayback
                 this.OffsetBox.Enabled = false;
                 //this.LoadAll.Hide();
                 //this.LoadAll.Enabled = false;
+                this.Rewind_ChangeBox.Hide();
+                this.Rewind_ChangeBox.Enabled = false;
 
 
                 this.FRButtonGroup.Show();
@@ -2617,6 +2716,8 @@ namespace SeizurePlayback
                 this.OffsetBox.Enabled = true;
                 //this.LoadAll.Show();
                 //this.LoadAll.Enabled = true;
+                this.Rewind_ChangeBox.Show();
+                this.Rewind_ChangeBox.Enabled = true;
 
                 this.RvwSz.Show();
                 this.RvwSz.Enabled = true;

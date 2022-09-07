@@ -28,6 +28,7 @@ namespace SeizurePlayback
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CManage));
             this.Play = new System.Windows.Forms.Button();
             this.VideoPanel = new System.Windows.Forms.Panel();
             this.Open = new System.Windows.Forms.Button();
@@ -110,6 +111,10 @@ namespace SeizurePlayback
             this.ZoomChan2 = new System.Windows.Forms.TrackBar();
             this.ZoomChan1 = new System.Windows.Forms.TrackBar();
             this.ColorClear = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.Rewind_Dec = new System.Windows.Forms.Button();
+            this.Rewind_Inc = new System.Windows.Forms.Button();
+            this.Rewind_ChangeBox = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.FRButtonGroup.SuspendLayout();
@@ -128,6 +133,7 @@ namespace SeizurePlayback
             ((System.ComponentModel.ISupportInitialize)(this.ZoomChan3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomChan2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomChan1)).BeginInit();
+            this.Rewind_ChangeBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // Play
@@ -193,6 +199,7 @@ namespace SeizurePlayback
             // Rewind
             // 
             this.Rewind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Rewind.AutoSize = true;
             this.Rewind.BackColor = System.Drawing.Color.DarkGray;
             this.Rewind.ForeColor = System.Drawing.Color.Black;
             this.Rewind.Location = new System.Drawing.Point(913, 507);
@@ -327,6 +334,7 @@ namespace SeizurePlayback
             // TimeJump
             // 
             this.TimeJump.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.TimeJump.Enabled = false;
             this.TimeJump.Location = new System.Drawing.Point(669, 652);
             this.TimeJump.Name = "TimeJump";
             this.TimeJump.Size = new System.Drawing.Size(161, 20);
@@ -636,7 +644,7 @@ namespace SeizurePlayback
             this.Randomization.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Randomization.AutoSize = true;
             this.Randomization.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Randomization.Location = new System.Drawing.Point(994, 530);
+            this.Randomization.Location = new System.Drawing.Point(994, 558);
             this.Randomization.Name = "Randomization";
             this.Randomization.Size = new System.Drawing.Size(79, 17);
             this.Randomization.TabIndex = 57;
@@ -685,7 +693,7 @@ namespace SeizurePlayback
             this.TelemetryBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.TelemetryBox.AutoSize = true;
             this.TelemetryBox.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.TelemetryBox.Location = new System.Drawing.Point(994, 507);
+            this.TelemetryBox.Location = new System.Drawing.Point(994, 604);
             this.TelemetryBox.Name = "TelemetryBox";
             this.TelemetryBox.Size = new System.Drawing.Size(78, 17);
             this.TelemetryBox.TabIndex = 61;
@@ -698,7 +706,7 @@ namespace SeizurePlayback
             this.VideoFix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VideoFix.AutoSize = true;
             this.VideoFix.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VideoFix.Location = new System.Drawing.Point(994, 553);
+            this.VideoFix.Location = new System.Drawing.Point(994, 581);
             this.VideoFix.Name = "VideoFix";
             this.VideoFix.Size = new System.Drawing.Size(72, 17);
             this.VideoFix.TabIndex = 62;
@@ -722,8 +730,10 @@ namespace SeizurePlayback
             // comboBox1
             // 
             this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.comboBox1.BackColor = System.Drawing.Color.Silver;
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.DropDownWidth = 135;
+            this.comboBox1.Enabled = false;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "Compression Manager",
@@ -735,10 +745,11 @@ namespace SeizurePlayback
             "Video Creator",
             "Index All Videos",
             "Channel Zoom Control"});
-            this.comboBox1.Location = new System.Drawing.Point(994, 595);
+            this.comboBox1.Location = new System.Drawing.Point(1017, 651);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(150, 21);
             this.comboBox1.TabIndex = 64;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged_1);
             this.comboBox1.SelectionChangeCommitted += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // FastReviewFR
@@ -1206,10 +1217,57 @@ namespace SeizurePlayback
             // ColorClear
             // 
             this.ColorClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.ColorClear.Location = new System.Drawing.Point(994, 573);
+            this.ColorClear.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ColorClear.Location = new System.Drawing.Point(968, 621);
             this.ColorClear.Name = "ColorClear";
             this.ColorClear.Size = new System.Drawing.Size(20, 16);
             this.ColorClear.TabIndex = 74;
+            // 
+            // label16
+            // 
+            this.label16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.ForeColor = System.Drawing.Color.White;
+            this.label16.Location = new System.Drawing.Point(1016, 624);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(139, 24);
+            this.label16.TabIndex = 75;
+            this.label16.Text = "More Options...";
+            this.label16.Click += new System.EventHandler(this.label16_Click);
+            // 
+            // Rewind_Dec
+            // 
+            this.Rewind_Dec.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Rewind_Dec.Location = new System.Drawing.Point(0, 3);
+            this.Rewind_Dec.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+            this.Rewind_Dec.Name = "Rewind_Dec";
+            this.Rewind_Dec.Size = new System.Drawing.Size(24, 23);
+            this.Rewind_Dec.TabIndex = 76;
+            this.Rewind_Dec.Text = "<";
+            this.Rewind_Dec.UseVisualStyleBackColor = true;
+            // 
+            // Rewind_Inc
+            // 
+            this.Rewind_Inc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Rewind_Inc.Location = new System.Drawing.Point(24, 3);
+            this.Rewind_Inc.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.Rewind_Inc.Name = "Rewind_Inc";
+            this.Rewind_Inc.Size = new System.Drawing.Size(24, 23);
+            this.Rewind_Inc.TabIndex = 77;
+            this.Rewind_Inc.Text = ">";
+            this.Rewind_Inc.UseVisualStyleBackColor = true;
+            // 
+            // Rewind_ChangeBox
+            // 
+            this.Rewind_ChangeBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Rewind_ChangeBox.AutoSize = true;
+            this.Rewind_ChangeBox.Controls.Add(this.Rewind_Dec);
+            this.Rewind_ChangeBox.Controls.Add(this.Rewind_Inc);
+            this.Rewind_ChangeBox.Location = new System.Drawing.Point(992, 504);
+            this.Rewind_ChangeBox.Name = "Rewind_ChangeBox";
+            this.Rewind_ChangeBox.Size = new System.Drawing.Size(51, 29);
+            this.Rewind_ChangeBox.TabIndex = 78;
             // 
             // CManage
             // 
@@ -1218,6 +1276,8 @@ namespace SeizurePlayback
             this.BackColor = System.Drawing.Color.Black;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(1444, 845);
+            this.Controls.Add(this.Rewind_ChangeBox);
+            this.Controls.Add(this.label16);
             this.Controls.Add(this.ColorClear);
             this.Controls.Add(this.ZoomChanPanel);
             this.Controls.Add(this.FRPageNum);
@@ -1271,6 +1331,7 @@ namespace SeizurePlayback
             this.Controls.Add(this.Play);
             this.Controls.Add(this.ZoomScale);
             this.ForeColor = System.Drawing.Color.Black;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "CManage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Seizure Video Playback";
@@ -1298,6 +1359,7 @@ namespace SeizurePlayback
             ((System.ComponentModel.ISupportInitialize)(this.ZoomChan3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomChan2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomChan1)).EndInit();
+            this.Rewind_ChangeBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1388,6 +1450,10 @@ namespace SeizurePlayback
         public System.Windows.Forms.TrackBar ZoomChan1;
         public System.Windows.Forms.ComboBox comboBox1;
         public System.Windows.Forms.Label ColorClear;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Button Rewind_Dec;
+        private System.Windows.Forms.Button Rewind_Inc;
+        private System.Windows.Forms.FlowLayoutPanel Rewind_ChangeBox;
     }
 }
 
