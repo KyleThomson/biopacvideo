@@ -25,6 +25,7 @@ namespace SeizurePlayback
             InitializeComponent();
             Notes = "";
             Unknown.Checked = true;
+            OKBtn.Enabled = false;
             Ok = false;
             
             
@@ -110,10 +111,16 @@ namespace SeizurePlayback
             Notes = NotesBx.Text;
         }
         private void RadioButtonChanged(object sender, EventArgs e)
-        {         
-           
+        {
+            OKBtn.Enabled = true;
 
             
+        }
+        private void RadioButtonClicked(object sender, EventArgs e)
+        {
+            OKBtn.Enabled = true;
+
+
         }
         private void SzPrompt_Load(object sender, EventArgs e)
         {

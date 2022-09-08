@@ -566,6 +566,8 @@ namespace SeizurePlayback
 
             if (ACQ.Loaded)
             {
+                
+
                 //DefaultFolder = INI.IniReadValue("General", "DefaultFolder", "C:\\");
                 //Paused = true;
                 //ACQ = new ACQReader();
@@ -573,7 +575,7 @@ namespace SeizurePlayback
 
                 var ex = MessageBox.Show("In order to open a new EEG, you must restart the application. \n \t \t Would you like to exit?", "Restart", MessageBoxButtons.OKCancel);
 
-                if (ex == DialogResult.OK) Application.Exit(); //for now, until I can figure out what's wrong with the load
+                if (ex == DialogResult.OK) Application.Restart(); //for now, until I can figure out what's wrong with the load
                 return;
                 //player = null;
                 //g.Clear(Color.Black);
@@ -2572,6 +2574,12 @@ namespace SeizurePlayback
         {
             if (FRMode)
             {
+
+                if (ZoomChanPanel.Visible)
+                {
+                    ZoomChanPanel.Hide();
+                    comboBox1.SelectedIndex = 8;
+                }
                 this.Play.Hide();
                 this.Play.Enabled = false;
                 this.VideoPanel.Hide();
@@ -2679,6 +2687,13 @@ namespace SeizurePlayback
                 this.HighlightLabel.Enabled = false;
                 this.ColorClear.Hide();
                 this.ColorClear.Enabled = false;
+                this.MoreOp.Hide();
+                this.OffsetLabel.Hide();
+
+                
+
+                
+                
 
             } else
             {
@@ -2789,7 +2804,8 @@ namespace SeizurePlayback
                 this.HighlightLabel.Enabled = true;
                 this.ColorClear.Show();
                 this.ColorClear.Enabled = true;
-
+                this.MoreOp.Show();
+                this.OffsetLabel.Show();
             }
         }
 

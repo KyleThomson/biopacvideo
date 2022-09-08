@@ -78,6 +78,7 @@ namespace SeizurePlayback
         public int ChanPass;
         public float[] CurrentChannelZoom;
         public bool MasterZoom = true;
+        public int TelemHLOffset = 0;
         
 
         
@@ -363,11 +364,13 @@ namespace SeizurePlayback
             {
                 m = (maxPixel - minPixel) / (Int32.MaxValue / 2);
                 b = 2 ^ 30;
+                TelemHLOffset = 0;
             }
             else
             {
                 m = (maxPixel - minPixel) / (65536);
                 b = 2 ^ 15;
+                TelemHLOffset = 25;
             }            
             float result = ((m * volt) * tempZoom) + b;
             //result = (result > maxPixel) ? maxPixel: result;
@@ -516,7 +519,7 @@ namespace SeizurePlayback
                          if (HL && (SelectedChan == j))
                          {
                              SolidBrush myBrush = new SolidBrush(System.Drawing.Color.LightGreen);
-                             g.FillRectangle(myBrush, new Rectangle((int)(HLS * PointSpacing * SampleRate), (int)(YDraw + (VoltageSpacing * 0.25F)), (int)((HLE - HLS) * PointSpacing * SampleRate), (Ymax / VisibleChans)));
+                             g.FillRectangle(myBrush, new Rectangle((int)(HLS * PointSpacing * SampleRate), (int)(YDraw + (VoltageSpacing * 0.25F) - TelemHLOffset), (int)((HLE - HLS) * PointSpacing * SampleRate), (Ymax / VisibleChans)));
 
                          }
                         for (int k = 0; k < SeizureHighlights.Count; k++)
@@ -528,7 +531,7 @@ namespace SeizurePlayback
                                 {
                                     SolidBrush myBrush2 = new SolidBrush(System.Drawing.Color.LightGray);
 
-                                    g.FillRectangle(myBrush2, new Rectangle((int)((SeizureHighlights[k].tS - PosInSample) * PointSpacing * SampleRate), (int)(YDraw + (VoltageSpacing * 0.25F)), (int)((SeizureHighlights[k].tE) * PointSpacing * SampleRate), (Ymax / VisibleChans)));
+                                    g.FillRectangle(myBrush2, new Rectangle((int)((SeizureHighlights[k].tS - PosInSample) * PointSpacing * SampleRate), (int)(YDraw + (VoltageSpacing * 0.25F) - TelemHLOffset), (int)((SeizureHighlights[k].tE) * PointSpacing * SampleRate), (Ymax / VisibleChans)));
                                     //g.FillRectangle(myBrush2, new Rectangle((int)(SeizureHighlights[k].tS * PointSpacing * SampleRate), (int)(YDraw + (VoltageSpacing * 0.25F)), (int)((SeizureHighlights[k].tE) * PointSpacing * SampleRate), (Ymax / VisibleChans)));
 
                                 }

@@ -59,6 +59,7 @@
             // 
             // OKBtn
             // 
+            this.OKBtn.Enabled = false;
             this.OKBtn.Location = new System.Drawing.Point(241, 51);
             this.OKBtn.Name = "OKBtn";
             this.OKBtn.Size = new System.Drawing.Size(75, 23);
@@ -112,7 +113,6 @@
             this.NonConv.TabStop = true;
             this.NonConv.Text = "Nonconvulsive";
             this.NonConv.UseVisualStyleBackColor = true;
-            this.NonConv.CheckedChanged += new System.EventHandler(this.RadioButtonChanged);
             // 
             // S1
             // 
@@ -201,6 +201,7 @@
             this.Unknown.Text = "Unknown/\r\nNonSeizure\r\n";
             this.Unknown.UseVisualStyleBackColor = true;
             this.Unknown.CheckedChanged += new System.EventHandler(this.RadioButtonChanged);
+            this.Unknown.Click += new System.EventHandler(this.RadioButtonClicked);
             // 
             // label2
             // 

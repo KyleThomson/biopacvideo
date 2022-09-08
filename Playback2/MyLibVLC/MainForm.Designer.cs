@@ -111,7 +111,7 @@ namespace SeizurePlayback
             this.ZoomChan2 = new System.Windows.Forms.TrackBar();
             this.ZoomChan1 = new System.Windows.Forms.TrackBar();
             this.ColorClear = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
+            this.MoreOp = new System.Windows.Forms.Label();
             this.Rewind_Dec = new System.Windows.Forms.Button();
             this.Rewind_Inc = new System.Windows.Forms.Button();
             this.Rewind_ChangeBox = new System.Windows.Forms.FlowLayoutPanel();
@@ -1223,18 +1223,18 @@ namespace SeizurePlayback
             this.ColorClear.Size = new System.Drawing.Size(20, 16);
             this.ColorClear.TabIndex = 74;
             // 
-            // label16
+            // MoreOp
             // 
-            this.label16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.ForeColor = System.Drawing.Color.White;
-            this.label16.Location = new System.Drawing.Point(1016, 624);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(139, 24);
-            this.label16.TabIndex = 75;
-            this.label16.Text = "More Options...";
-            this.label16.Click += new System.EventHandler(this.label16_Click);
+            this.MoreOp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.MoreOp.AutoSize = true;
+            this.MoreOp.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MoreOp.ForeColor = System.Drawing.Color.White;
+            this.MoreOp.Location = new System.Drawing.Point(1016, 624);
+            this.MoreOp.Name = "MoreOp";
+            this.MoreOp.Size = new System.Drawing.Size(139, 24);
+            this.MoreOp.TabIndex = 75;
+            this.MoreOp.Text = "More Options...";
+            this.MoreOp.Click += new System.EventHandler(this.label16_Click);
             // 
             // Rewind_Dec
             // 
@@ -1277,7 +1277,7 @@ namespace SeizurePlayback
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(1444, 845);
             this.Controls.Add(this.Rewind_ChangeBox);
-            this.Controls.Add(this.label16);
+            this.Controls.Add(this.MoreOp);
             this.Controls.Add(this.ColorClear);
             this.Controls.Add(this.ZoomChanPanel);
             this.Controls.Add(this.FRPageNum);
@@ -1450,7 +1450,7 @@ namespace SeizurePlayback
         public System.Windows.Forms.TrackBar ZoomChan1;
         public System.Windows.Forms.ComboBox comboBox1;
         public System.Windows.Forms.Label ColorClear;
-        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label MoreOp;
         private System.Windows.Forms.Button Rewind_Dec;
         private System.Windows.Forms.Button Rewind_Inc;
         private System.Windows.Forms.FlowLayoutPanel Rewind_ChangeBox;
