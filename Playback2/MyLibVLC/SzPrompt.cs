@@ -73,7 +73,8 @@ namespace SeizurePlayback
                     }
                     else
                     {
-                        StartTime = (int)((((float)Pass.StartTime * 1000F * (1F + Pass.VideoOffset)) - Pass.Subtractor) / 1000F);
+                        //StartTime = (int)((((float)Pass.StartTime * 1000F * (1F + Pass.VideoOffset)) - Pass.Subtractor) / 1000F);
+                        StartTime = (int)((Pass.Subtractor - ((float)1000F * (1F + Pass.VideoOffset))) / 1000F);
                     }
                 Process p = new Process();
                 string CmdString = " -y -ss " + StartTime.ToString() + " -t " + Pass.length.ToString();

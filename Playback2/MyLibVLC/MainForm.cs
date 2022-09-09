@@ -1707,8 +1707,8 @@ namespace SeizurePlayback
 
             if (!FastReviewState)
             {
-
-
+                TimeBox.SelectedItem = "60s";
+                //MaxDispSize = 60;
 
                 FRView(true);
 
