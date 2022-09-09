@@ -1,14 +1,10 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Threading;
-using System.Text;
-using System.Windows.Forms;
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
+using System.Drawing;
+using System.IO;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace SeizurePlayback
 {
@@ -89,8 +85,9 @@ namespace SeizurePlayback
         bool vLoading = false;
         TrackBar[] ChanZooms;
         int RewindVal = 30;
+        public long[,] vidRanges = new long[16, 30];
 
-        
+
 
         public CManage()
         {
@@ -101,13 +98,13 @@ namespace SeizurePlayback
             FRgraph = new Mygraph();
             DSF = new DetectedSeizureFileType();
             numPerPage = 24;
-            HCL = DSF.HCL;         
+            HCL = DSF.HCL;
             FastReviewState = false;
             FastReviewChange = false;
-            ButtonLoc = new int[3, 2] { { this.FastReview.Location.X, this.FastReview.Location.Y}, { this.button3.Location.X, this.button3.Location.Y}, { this.button2.Location.X, this.button2.Location.Y} };
+            ButtonLoc = new int[3, 2] { { this.FastReview.Location.X, this.FastReview.Location.Y }, { this.button3.Location.X, this.button3.Location.Y }, { this.button2.Location.X, this.button2.Location.Y } };
             
             ChanZooms = new TrackBar[] { ZoomChan1, ZoomChan2, ZoomChan3, ZoomChan4, ZoomChan5, ZoomChan6, ZoomChan7, ZoomChan8, ZoomChan9, ZoomChan10, ZoomChan11, ZoomChan12 };
-            
+
 
 
 
@@ -189,8 +186,8 @@ namespace SeizurePlayback
             FRgraph.X2 = this.Size.Width - 10;
             FRgraph.Y1 = 6;
             FRgraph.Y2 = FRZoomBlock.Location.Y - 20;
-           // Console.WriteLine(this.Size.Height);
-           //Console.WriteLine(VideoPanel.Location.Y - 11);
+            // Console.WriteLine(this.Size.Height);
+            //Console.WriteLine(VideoPanel.Location.Y - 11);
             ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1, FRZoomBlock.Location.Y - 20);    //Create the graphics box to display EEG. 
             this.BackColor = Color.Black;
             this.Opacity = 100;
@@ -220,7 +217,7 @@ namespace SeizurePlayback
 
             this.numPerBox.SelectedItem = "24";
 
-            
+
 
 
         }
@@ -235,7 +232,7 @@ namespace SeizurePlayback
             X264path = INI.IniReadValue("General", "X264path", "C:\\X264");
             VideoCapture = INI.IniReadValue("General", "SaveVideo", true);
             ACQ.Telemetry = INI.IniReadValue("General", "Telemetry", true);
-            
+
             //ACQ.Telemetry = INI.IniReadValue("BioPac", "RecordingDevice_Channel0", true);
             TelemetryBox.Checked = ACQ.Telemetry;
         }
@@ -258,12 +255,12 @@ namespace SeizurePlayback
             {
                 CamerAssc[cloop] = F.IniReadValue("Video", "Camera" + cloop.ToString(), cloop);
             }
-            
+
             CrashWarning = F.IniReadValue("General", "Crash", false);
             Compressed = F.IniReadValue("Review", "Compressed", false);
 
-            
-            
+
+
 
             PercentCompletion = F.IniReadValue("Review", "Complete", (double)0);
             if (PercentCompletion == 100) finsihedReview = true;
@@ -302,10 +299,10 @@ namespace SeizurePlayback
             while (true)
             {
                 if (ACQ.Loaded)
-                {                    
+                {
                     if (FastReviewState)
                     {
-                       
+
                         if (FastReviewChange)
                         {
                             int SeizureCount;
@@ -314,7 +311,7 @@ namespace SeizurePlayback
                             DSF.SetSeizureNumber(SeizureCount);
                             DetectedSeizureType Sz;
                             ACQ.cleargraph();
-                            
+
                             for (int i = 0; i < numPerPage; i++)
                             {
                                 Sz = DSF.GetCurrentSeizure();
@@ -327,7 +324,7 @@ namespace SeizurePlayback
                             g.DrawImage(ACQ.frOffscreen, FRgraph.X1, FRgraph.Y1);
                             FastReviewChange = false;
                             Redraw = false;
-                            
+
                         }
 
                         if (Redraw) FastReviewChange = true;
@@ -460,12 +457,12 @@ namespace SeizurePlayback
                             }
                         }
 
-                       
+
                     }
                 } //if ACQLoaded
                 else
                 {
-                   
+
                     g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
                     Thread.Sleep(100);
                 }
@@ -558,7 +555,7 @@ namespace SeizurePlayback
             //Open.Enabled = false;
             TimeJump.Enabled = true;
             comboBox1.Enabled = true;
-            for (int i = 0; i <16; i++)
+            for (int i = 0; i < 16; i++)
             {
                 VLCisLoaded[i] = false;
 
@@ -566,7 +563,7 @@ namespace SeizurePlayback
 
             if (ACQ.Loaded)
             {
-                
+ 
 
                 //DefaultFolder = INI.IniReadValue("General", "DefaultFolder", "C:\\");
                 //Paused = true;
@@ -593,7 +590,7 @@ namespace SeizurePlayback
 
             FBD = new FolderBrowserDialog();
             FBD.SelectedPath = DefaultFolder;
-            
+
             float hrs;
             OpenFrm frm;
             Paused = true;
@@ -605,7 +602,7 @@ namespace SeizurePlayback
             if (FBD.SelectedPath != "")
             {
                 Path = FBD.SelectedPath;
-                
+
                 string[] FName = Directory.GetFiles(Path, "*.acq");
                 if (FName.Length == 0) return;
                 DefaultFolder = Path.Substring(0, Path.LastIndexOf("\\"));
@@ -617,7 +614,7 @@ namespace SeizurePlayback
                 IniFiles = Directory.GetFiles(Path, "*_Settings.txt");
                 BioINI = new IniFile(IniFiles[0]);
                 ReadReviewINI(BioINI);
-                
+
                 AVIMode = "avi";
                 AVIFiles = Directory.GetFiles(Path, "*.avi");
                 LoadText.Visible = true;
@@ -697,7 +694,7 @@ namespace SeizurePlayback
                         for (int fileloop = 1; fileloop < 10; fileloop++)
                         {
                             AVIname = Path + "\\" + BaseName + string.Format("_{0:d2}", chanloop) + string.Format("_{0:d4}.avi", fileloop);
-                            AVINameList[chanloop, fileloop] = Path + "\\" + BaseName + string.Format("_{0:d2}", chanloop) + string.Format("_{0:d4}.avi", fileloop);
+                            AVINameList[chanloop, fileloop - 1] = Path + "\\" + BaseName + string.Format("_{0:d2}", chanloop) + string.Format("_{0:d4}.avi", fileloop);
 
                             //if (File.Exists(AVIname) && chanloop == 0)
                             //{
@@ -799,7 +796,7 @@ namespace SeizurePlayback
                         SzInfoIndex++;
                     }
                     Console.WriteLine(ACQ.SeizureHighlights.Count);
-                    
+
                     TmpTxt.Dispose();
                     SzTxt = new System.IO.StreamWriter(FPath + "\\" + BaseName + ".txt");
                     for (int k = 0; k < SzInfoIndex; k++)
@@ -838,7 +835,7 @@ namespace SeizurePlayback
 
                     DetSezLabel.Text = ".det Loaded";
                     fastReviewCounter = 0;
-                    
+
                 }
                 else DetSezLabel.Text = ".det Not Found";
 
@@ -862,7 +859,7 @@ namespace SeizurePlayback
         {
 
             if (vLoading) return;
-            
+
             if ((e.X > graph.X1) && (e.X < graph.X2) && (e.Y > graph.Y1) && ((e.Y < graph.Y2) || (FastReviewState && e.Y < FRgraph.Y2)))
             {
                 if (FastReviewState)
@@ -873,12 +870,12 @@ namespace SeizurePlayback
                         X = 0;
                     }
                     int Y = (e.Y - FRgraph.Y1);
-                    Y = Y / ((FRgraph.Y2 - FRgraph.Y1) / (numPerPage/2));
+                    Y = Y / ((FRgraph.Y2 - FRgraph.Y1) / (numPerPage / 2));
                     //if (DSF.ChangeDisplaySeizure((FastReviewPage * 16) + (Y * 2) + X))
                     //loadVid(DSF.GetChannelNumber((FastReviewPage * numPerPage) + (Y * 2) + X));
                     if (DSF.ChangeDisplaySeizure((FastReviewPage * numPerPage) + (Y * 2) + X))
                     {
-                        
+
                         FastReviewChange = true;
                     }
 
@@ -886,7 +883,7 @@ namespace SeizurePlayback
                 else
                 {
                     //JOSH
-                    
+
                     Paused = true;
                     OffsetBox.Enabled = true;
                     int TempChan = (int)((float)ACQ.VisibleChans * (float)(((float)e.Y - (float)graph.Y1) / (float)(graph.Y2 - graph.Y1)));
@@ -899,7 +896,7 @@ namespace SeizurePlayback
                     {
                         ACQ.SelectedChan = ChanPos[TempChan];
                         loadVid(ChanPos[TempChan]);
-                        
+
                     }
                     HighlightStart = (int)((float)MaxDispSize * (float)(e.X - graph.X1) / (graph.X2 - graph.X1));
                     Highlighting = true;
@@ -1031,6 +1028,7 @@ namespace SeizurePlayback
                             break;
                         }
                     }
+                    
                     if (FNum == 0)
                     {
                         Fname = Path + "\\" + BaseName + string.Format("_{0:d3}", ACQ.SelectedChan) + ".mp4";
@@ -1078,7 +1076,7 @@ namespace SeizurePlayback
 
         private void Rewind_Click(object sender, EventArgs e)
         {
-          
+
 
             //ACQ.Position = Math.Max(0, ACQ.Position - MaxDispSize);
             //if (player != null)
@@ -1120,7 +1118,7 @@ namespace SeizurePlayback
 
         private void SzCaptureButton_Click(object sender, EventArgs e)
         {
-            
+
             infopass P;
             P = new infopass();
             if ((CurrentAVI != "") && (ACQ.SelectedChan != -1))
@@ -1148,6 +1146,8 @@ namespace SeizurePlayback
                     + answer + ", " + (HighlightEnd - HighlightStart + 1).ToString() + " , ";
                 P.CurrentAVI = CurrentAVI;
                 P.Subtractor = Subtractor;
+                //P.subVidOffset = DetermineRVT(ACQ.SelectedChan, P.StartTime * 1000);
+                              
                 P.X264path = X264path;
                 P.ACQ = ACQ;
                 P.VideoOffset = VideoOffset[ACQ.SelectedChan];
@@ -1176,6 +1176,18 @@ namespace SeizurePlayback
                 Step = MaxDispSize;
                 QuitHighlight();
             }
+        }
+
+
+        public long DetermineRVT(int chan, long ttms)
+        {
+            int FNum = 0;
+            while (ttms > AVILengths[chan, FNum])
+            {
+                ttms -= AVILengths[chan, FNum];
+                FNum++;
+            }
+            return ttms;
         }
 
         private void TimeJump_TextChanged(object sender, EventArgs e)
@@ -1246,14 +1258,14 @@ namespace SeizurePlayback
                 if (HCL.Contains(chanPass) && chanClicked)
                 {
                     ChanZooms[chanPass - 1].Enabled = true;
-                    HCL.Remove(chanPass);                   
+                    HCL.Remove(chanPass);
                     checkedChange = true;
                     //Console.WriteLine("Channel " + chanPass + " Visible");
                     VLCisLoaded[chanPass] = false;
                 }
 
                 DSF.HCLSync(HCL);
-               
+
 
             }
 
@@ -1261,11 +1273,21 @@ namespace SeizurePlayback
 
         private void ZoomScale_Scroll(object sender, EventArgs e)
         {
-            ACQ.Zoom = (float)ZoomScale.Value / 10;
-            Redraw = true;
-            if (FastReviewState) FastReviewChange = true;
-           
-            
+
+            if (!FastReviewState)
+            {
+                ACQ.Zoom = (float)ZoomScale.Value / 10;
+                FRZoomBar.Value = ZoomScale.Value;
+                Redraw = true;
+            }
+            if (FastReviewState)
+            {
+                ACQ.Zoom = (float)FRZoomBar.Value / 10;
+                FastReviewChange = true;
+                ZoomScale.Value = FRZoomBar.Value;
+            }
+
+
         }
 
         private void VideoPanel_Click(object sender, EventArgs e)
@@ -1319,7 +1341,7 @@ namespace SeizurePlayback
             RealTime = true;
             ACQ.Position = (int)Time.TotalSeconds; //doesn't draw rectangles in the right place
             Step = MaxDispSize;
-            
+
             SeekToCurrentPos();
             //ACQ.drawbuffer();
         }
@@ -1472,7 +1494,7 @@ namespace SeizurePlayback
                 pjt.ImportDirectory(Path);
                 pjt.Save();
                 INISave();
-                 
+
             }
         }
 
@@ -1485,11 +1507,11 @@ namespace SeizurePlayback
         private void Next_Click(object sender, EventArgs e)
         {
             if (!DSF.isLoaded) return;
-            
+
             if (FastReviewState)
             {
                 if ((FastReviewPage * numPerPage) + numPerPage > DSF.Count) return;
-                
+
                 FastReviewPage++;
 
                 //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16 + " of " + DSFoCount).ToString();
@@ -1499,7 +1521,7 @@ namespace SeizurePlayback
                 FRPageNum.Text = (displayPageMin + " to " + displayPageMax + " of " + (DSF.Count).ToString());
                 FastReviewChange = true;
                 fastReviewLastPage++;
-                
+
             }
             else
             {
@@ -1519,7 +1541,7 @@ namespace SeizurePlayback
                         Step = MaxDispSize;
                         SeekToCurrentPos(false);
                         if (player != null) player.Pause();
-                        
+
                         return;
                     }
                     Sz = DSF.GetCurrentSeizure();
@@ -1662,14 +1684,14 @@ namespace SeizurePlayback
             INISave();
         }
 
- 
+
 
         private void FastReview_Click(object sender, EventArgs e)
         {
 
 
             DSF.HCLSync(HCL);
-            
+
 
 
             if (!DSF.isLoaded) return; //Don't want to go into fastreview mode if file not loaded
@@ -1681,15 +1703,15 @@ namespace SeizurePlayback
                     player.Pause();
             }
             bool del;
-            
-            
+
+
             if (!FastReviewState)
             {
 
-                
+
 
                 FRView(true);
-               
+
 
 
 
@@ -1736,19 +1758,19 @@ namespace SeizurePlayback
 
                 if (checkedChange)
                 {
-                    
+
                     DSF.ResetDFS();
-                    
+
                     checkedChange = false;
                     if (DSF.Count == 0)
                     {
                         Console.WriteLine("NO SEIZURES VISIBLE!");
                         return;
                     }
-                 
+
                 }
 
-               
+
 
 
                 DSF.SetSeizureNumber(0);
@@ -1791,7 +1813,7 @@ namespace SeizurePlayback
                  * Experimental autoreturn to first selected seizure
                */
                 DetectedSeizureType Sz;
-                
+
                 Sz = DSF.GetCurrentSeizure();
                 bool pass = false;
 
@@ -1816,7 +1838,7 @@ namespace SeizurePlayback
                         RealTime = false;
                         ACQ.Position = (int)ACQ.TotFileTime;
                         Step = MaxDispSize;
-                        
+
                         if (player != null) player.Pause();
 
                         return;
@@ -1842,7 +1864,7 @@ namespace SeizurePlayback
                     Sz = DSF.GetCurrentSeizure();
                     if ((!ACQ.HideChan[Sz.Channel - 1]) && Sz.Display)
                         pass = true;
-                       // if (regularReviewReturn != 0) loadVid(Sz.Channel);
+                    // if (regularReviewReturn != 0) loadVid(Sz.Channel);
                 }
 
                 //DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
@@ -1925,13 +1947,13 @@ namespace SeizurePlayback
         private void SwitchChan_CheckedChanged(object sender, EventArgs e, bool check)
         {
             ACQ.SwapIDs(sender, e, check);
-            
+
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-            
+
             switch (comboBox1.SelectedIndex)
             {
                 case 0: //Compression Manager
@@ -2041,7 +2063,7 @@ namespace SeizurePlayback
                         ZoomChanPanel.Hide();
                         ZoomChanPanel.Enabled = false;
                         ZoomScale.Enabled = true;
-                        
+
                     }
                     break;
 
@@ -2079,7 +2101,7 @@ namespace SeizurePlayback
 
         }
 
- 
+
 
 
         private void numPerBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -2088,7 +2110,7 @@ namespace SeizurePlayback
 
             int FRPtemp = numPerPage * FastReviewPage;
             FastReviewPage = FRPtemp / temp;
-            
+
             numPerPage = temp;
             ACQ.numPerPage = temp;
 
@@ -2127,7 +2149,7 @@ namespace SeizurePlayback
             FRPageNum.Text = (MinMaxPage("min") + " to " + MinMaxPage("max") + " of " + (DSF.Count).ToString());
 
             FastReviewChange = true;
-            
+
         }
 
         //private void LoadAll_Click(object sender, EventArgs e)
@@ -2148,7 +2170,7 @@ namespace SeizurePlayback
             //    if (!VLCisLoaded[i]) a = false;
             //}
             //if (a == false) loadVid(-1);
-            
+
         }
 
         private void SwitchChan_CheckedChanged(object sender, EventArgs e)
@@ -2158,13 +2180,13 @@ namespace SeizurePlayback
 
         //private void ChanZoomCheck_CheckedChanged(object sender, EventArgs e)
         //{
-            
+
         //    if (this.ChanZoomCheck.Checked)
         //    {
         //        ACQ.MasterZoom = false;
         //        ZoomChanPanel.Show();
         //        ZoomChanPanel.Enabled = true;
-                
+
         //        ZoomChan1.Value = ZoomScale.Value;
         //        ZoomChan2.Value = ZoomScale.Value;
         //        ZoomChan3.Value = ZoomScale.Value;
@@ -2177,7 +2199,7 @@ namespace SeizurePlayback
         //        ZoomChan10.Value = ZoomScale.Value;
         //        ZoomChan11.Value = ZoomScale.Value;
         //        ZoomChan12.Value = ZoomScale.Value;
-                
+
         //        ZoomScale.Enabled = false;
         //    } else
         //    {
@@ -2197,14 +2219,14 @@ namespace SeizurePlayback
             if (FastReviewState) FastReviewChange = true;
         }
 
-        
+
         private void ZoomChan2_Scroll(object sender, EventArgs e)
         {
             ACQ.CurrentChannelZoom[1] = (float)ZoomChan2.Value / 10;
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
         }
-        
+
 
         private void ZoomChan3_Scroll(object sender, EventArgs e)
         {
@@ -2262,7 +2284,7 @@ namespace SeizurePlayback
             if (FastReviewState) FastReviewChange = true;
         }
 
-        private void ZoomChan11_Scroll(object sender, EventArgs e)            
+        private void ZoomChan11_Scroll(object sender, EventArgs e)
         {
             ACQ.CurrentChannelZoom[10] = (float)ZoomChan11.Value / 10;
             Redraw = true;
@@ -2275,7 +2297,7 @@ namespace SeizurePlayback
             ACQ.CurrentChannelZoom[11] = (float)ZoomChan12.Value / 10;
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
-    }
+        }
 
         private void label3_Click(object sender, EventArgs e)
         {
@@ -2353,45 +2375,47 @@ namespace SeizurePlayback
             }
             vLoading = true;
 
-            
-            
-           
-            
+
+
+
+
             if (!ACQ.Loaded) return;
             string AVIname;
             VLoadWait vLoad = new VLoadWait();
             vLoad.LT.Text = "LOADING";
             vLoad.Show();
-            
-            
+
+
 
             //AVIFiles = Directory.GetFiles(Path, "*.avi");
-            
+
             LoadText.Show();
             LoadText.BringToFront();
-            
+
             //this.Refresh();
             AVILoadBar.Value = 0;
             AVILoadBar.Maximum = 30;
             AVILoadBar.Visible = true;
-            
+
             if (player == null) Console.WriteLine("Player does not exist yet");
 
-           
-           if (chanloop >= 0)
+
+            if (chanloop >= 0)
             {
-                
+
+                long tottemp = 0;
+
                 LoadText.Text = "Loading Video for Channel: " + ((int)chanloop + (int)1);
                 if (!isMP4)
                 {
                     vLoad.VideoLoadProgressBar.Maximum = 10;
-                    
-                    for (int fileloop = 0; fileloop < 10; fileloop++)
+
+                    for (int fileloop = 1; fileloop < 10; fileloop++)
                     {
-                        
+
                         AVILoadBar.Increment(3);
                         vLoad.VideoLoadProgressBar.Increment(1);
-                        AVIname = AVINameList[chanloop, fileloop];
+                        AVIname = AVINameList[chanloop, fileloop - 1];
                         if (File.Exists(AVIname))
                         {
                             //Console.WriteLine(AVIname);
@@ -2410,6 +2434,8 @@ namespace SeizurePlayback
                             { }
                             AVILengths[chanloop, fileloop - 1] = player.GetLengthMs();
                             totms += AVILengths[chanloop, fileloop - 1];
+                            tottemp += AVILengths[chanloop, fileloop - 1];
+                            vidRanges[chanloop, fileloop - 1] = tottemp;
                             //Console.WriteLine(AVIname + "  " + AVILengths[chanloop, fileloop - 1].ToString());
                             player.Stop();
                             media.Dispose();
@@ -2446,6 +2472,8 @@ namespace SeizurePlayback
                             { }
                             AVILengths[chanloop, fileloop] = player.GetLengthMs();
                             totms += AVILengths[chanloop, fileloop];
+                            tottemp += AVILengths[chanloop, fileloop];
+                            vidRanges[chanloop, fileloop] = tottemp;
                             player.Stop();
                             media.Dispose();
 
@@ -2457,10 +2485,10 @@ namespace SeizurePlayback
                             AVILengths[chanloop, fileloop] = 0;
                         }
                     }
-                    
+
                 }
                 VLCisLoaded[chanloop] = true;
-            } 
+            }
             else
             {
                 LoadText.Text = "Loading All Video Files";
@@ -2471,10 +2499,11 @@ namespace SeizurePlayback
                 vLoad.VideoLoadProgressBar.Maximum = 30;
                 for (chanloop = 0; chanloop < 16; chanloop++)
                 {
+                    long tottemp = 0;
                     AVILoadBar.Value = 0;
                     if (!isMP4)
                     {
-                        
+
                         for (int fileloop = 0; fileloop < 10; fileloop++)
                         {
                             //AVILoadBar.Increment(3);
@@ -2498,8 +2527,10 @@ namespace SeizurePlayback
                                 player.Play();
                                 while (player.GetLengthMs() == 0)
                                 { }
-                                AVILengths[chanloop, fileloop - 1] = player.GetLengthMs();
-                                totms += AVILengths[chanloop, fileloop - 1];
+                                AVILengths[chanloop, fileloop] = player.GetLengthMs();
+                                totms += AVILengths[chanloop, fileloop];
+                                tottemp += AVILengths[chanloop, fileloop];
+                                vidRanges[chanloop, fileloop] = tottemp;
                                 //Console.WriteLine(AVIname + "  " + AVILengths[chanloop, fileloop - 1].ToString());
                                 player.Stop();
                                 media.Dispose();
@@ -2536,6 +2567,8 @@ namespace SeizurePlayback
                                 { }
                                 AVILengths[chanloop, fileloop] = player.GetLengthMs();
                                 totms += AVILengths[chanloop, fileloop];
+                                tottemp += AVILengths[chanloop, fileloop];
+                                vidRanges[chanloop, fileloop - 1] = tottemp;
                                 player.Stop();
                                 media.Dispose();
 
@@ -2555,15 +2588,15 @@ namespace SeizurePlayback
 
 
             vLoad.Dispose();
-                     
+
             AVILoadBar.Visible = false;
 
             //Console.WriteLine("Loaded VLC for channel " + chanloop);
             LoadText.Visible = false;
-            
+
             vLoading = false;
 
-            
+
         }
 
 
@@ -2690,12 +2723,13 @@ namespace SeizurePlayback
                 this.MoreOp.Hide();
                 this.OffsetLabel.Hide();
 
-                
 
-                
-                
 
-            } else
+
+
+
+            }
+            else
             {
                 this.Play.Show();
                 this.Play.Enabled = true;
@@ -2809,7 +2843,7 @@ namespace SeizurePlayback
             }
         }
 
-        
+
 
 
 

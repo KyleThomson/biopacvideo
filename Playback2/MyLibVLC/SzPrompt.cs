@@ -68,7 +68,8 @@ namespace SeizurePlayback
             { 
                 if (Pass.AVIMode == "mp4")
                     {
-                        StartTime = (int)(((float)Pass.StartTime * 1000F - Pass.Subtractor) / 1000F);
+                        //StartTime = (int)(((float)Pass.StartTime * 1000F - Pass.Subtractor) / 1000F);
+                        StartTime = (int)(Pass.Subtractor/1000F);
                     }
                     else
                     {
@@ -76,14 +77,14 @@ namespace SeizurePlayback
                     }
                 Process p = new Process();
                 string CmdString = " -y -ss " + StartTime.ToString() + " -t " + Pass.length.ToString();
-                CmdString += " -i " + Pass.CurrentAVI;
+                CmdString += " -i \"" + Pass.CurrentAVI + "\"";
                 if (Pass.AVIMode == "mp4")
                 {
-                    CmdString += " -sameq " + outfile + ".mp4";
+                    CmdString += " -sameq \"" + outfile + ".mp4\"";
                 }
                 else
                 {
-                    CmdString += " -sameq " + outfile + ".avi";
+                    CmdString += " -sameq \"" + outfile + ".avi\"";
                 }
 
                 p.StartInfo.Arguments = CmdString;
@@ -182,7 +183,8 @@ namespace SeizurePlayback
         public double duration;
         public string AVIMode;
         public string X264path;
-        public bool VideoCapture; 
+        public bool VideoCapture;
+        public long subVidOffset;
         public infopass()
         { }
     }
