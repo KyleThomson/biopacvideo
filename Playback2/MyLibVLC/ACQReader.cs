@@ -97,6 +97,7 @@ namespace SeizurePlayback
             Randomized = false;
             SeizureHighlights = new List<SeizureHighlight>();
             CurrentChannelZoom = new float[] {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+            Position = 0;
             
         }
         public void closeACQ()

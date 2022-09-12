@@ -48,12 +48,15 @@ namespace SeizurePlayback
             // LT
             // 
             this.LT.AutoSize = true;
+            this.LT.BackColor = System.Drawing.Color.White;
             this.LT.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LT.Location = new System.Drawing.Point(93, 36);
+            this.LT.Location = new System.Drawing.Point(90, 35);
             this.LT.Name = "LT";
-            this.LT.Size = new System.Drawing.Size(185, 42);
+            this.LT.Size = new System.Drawing.Size(184, 50);
             this.LT.TabIndex = 2;
             this.LT.Text = "LOADING";
+            this.LT.UseCompatibleTextRendering = true;
+            this.LT.UseWaitCursor = true;
             // 
             // VLoadWait
             // 
