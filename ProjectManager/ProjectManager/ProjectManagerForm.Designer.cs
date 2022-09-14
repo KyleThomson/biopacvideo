@@ -59,6 +59,8 @@
             this.SecondSelect = new System.Windows.Forms.ComboBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.Info = new System.Windows.Forms.ToolStripStatusLabel();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.eEGViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -68,7 +70,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.measurementsToolStripMenuItem,
-            this.plottingToolStripMenuItem});
+            this.plottingToolStripMenuItem,
+            this.viewToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(555, 24);
@@ -325,6 +328,21 @@
             this.Info.Size = new System.Drawing.Size(163, 17);
             this.Info.Text = "                                                    ";
             // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.eEGViewToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // eEGViewToolStripMenuItem
+            // 
+            this.eEGViewToolStripMenuItem.CheckOnClick = true;
+            this.eEGViewToolStripMenuItem.Name = "eEGViewToolStripMenuItem";
+            this.eEGViewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.eEGViewToolStripMenuItem.Text = "EEG View";
+            // 
             // ProjectManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -383,5 +401,7 @@
         private System.Windows.Forms.ToolStripMenuItem test36ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem iAKToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rejectUnreviewedFilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem eEGViewToolStripMenuItem;
     }
 }

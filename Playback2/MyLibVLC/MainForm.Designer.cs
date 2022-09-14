@@ -253,7 +253,11 @@ namespace SeizurePlayback
             this.TimeBox.Name = "TimeBox";
             this.TimeBox.Size = new System.Drawing.Size(161, 21);
             this.TimeBox.TabIndex = 18;
+            this.TimeBox.TabStop = false;
             this.TimeBox.SelectedIndexChanged += new System.EventHandler(this.TimeBox_SelectedIndexChanged);
+            this.TimeBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.TimeBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.noEventKeyPress);
+            this.TimeBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.noEventKey);
             // 
             // label1
             // 
@@ -744,13 +748,16 @@ namespace SeizurePlayback
             "Rename Channels",
             "Video Creator",
             "Index All Videos",
-            "Channel Zoom Control"});
+            "Channel Zoom Control",
+            "Shortcut Guide"});
             this.comboBox1.Location = new System.Drawing.Point(1017, 651);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(150, 21);
             this.comboBox1.TabIndex = 64;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged_1);
             this.comboBox1.SelectionChangeCommitted += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.comboBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.noEventKey);
             // 
             // FastReviewFR
             // 

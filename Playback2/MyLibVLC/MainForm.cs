@@ -87,6 +87,7 @@ namespace SeizurePlayback
         int RewindVal = 30;
         public long[,] vidRanges = new long[16, 30];
         public bool wasLoaded;
+        public float Speed = 1;
         
 
 
@@ -107,7 +108,12 @@ namespace SeizurePlayback
             
             ChanZooms = new TrackBar[] { ZoomChan1, ZoomChan2, ZoomChan3, ZoomChan4, ZoomChan5, ZoomChan6, ZoomChan7, ZoomChan8, ZoomChan9, ZoomChan10, ZoomChan11, ZoomChan12 };
 
+            //foreach (Control control in this.Controls)
+            //{
+            //    control.PreviewKeyDown += new PreviewKeyDownEventHandler(control_PreviewKeyDown);
 
+            //}
+            SetFeatureToAllControls(this.Controls);
 
 
             comboBox1.Items.RemoveAt(8);
@@ -173,7 +179,9 @@ namespace SeizurePlayback
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownHandler);
             this.KeyPreview = true;
             this.KeyPress += new KeyPressEventHandler(Form1_KeyPress);
-            this.KeyDown += new KeyEventHandler(Form1_KeyDown);
+            
+            //this.PreviewKeyDown += new PreviewKeyDownEventHandler(ArrowPress);
+            KeyDown += new KeyEventHandler(Form1_KeyDown);
             ResizeBool = true;
             //Start up the display thread. 
             this.Resize += new System.EventHandler(this.MainForm_Resize);
@@ -223,6 +231,16 @@ namespace SeizurePlayback
 
 
         }
+
+        public void noEventKey(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+        public void noEventKeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
         private void INIload()
         {
             DefaultFolder = INI.IniReadValue("General", "DefaultFolder", "C:\\");
@@ -384,8 +402,8 @@ namespace SeizurePlayback
                                     ACQ.drawbuffer();
                                 g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
                                 g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
-                                ACQ.Position += 10;
-                                Step += 10;
+                                ACQ.Position += (int)(10 * Speed);
+                                Step += (int)(10 * Speed);
                             }
                             else
                             {
@@ -473,15 +491,98 @@ namespace SeizurePlayback
         }
         void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Left)
+            
+
+            if (!FastReviewState)
             {
-                Previous_Click(null, null);
+                if (Paused)
+                {
+                    switch (e.KeyCode)
+                    {
+
+                        case Keys.NumPad4:
+                        case Keys.Left:
+                            ACQ.Position = Math.Max(0, ACQ.Position - ((int)MaxDispSize / 10));
+                            if (player != null)
+                                player.seek(player.getpos() - ((int)MaxDispSize / 10) * 1000);
+                            Step = MaxDispSize;
+                            break;
+                        case Keys.NumPad6:
+                        case Keys.Right:
+                            ACQ.Position = Math.Min(ACQ.TotFileTime, ACQ.Position + ((int)MaxDispSize / 10));
+                            if (player != null)
+                                player.seek(Math.Min(player.GetLengthMs(), (player.getpos() + ((int)MaxDispSize / 10) * 1000)));
+                            Step = MaxDispSize;
+                            break;
+                        case Keys.NumPad5:
+                            Play_Click(null, null);                           
+                            break;
+                        case Keys.NumPad7:
+                            ACQ.Position = Math.Max(0, ACQ.Position - ((int)MaxDispSize));
+                            if (player != null)
+                                player.seek(player.getpos() - ((int)MaxDispSize) * 1000);
+                            Step = MaxDispSize;
+                            break;
+                        case Keys.NumPad9:
+                            ACQ.Position = Math.Min(ACQ.TotFileTime, ACQ.Position + ((int)MaxDispSize));
+                            if (player != null)
+                                player.seek(Math.Min(player.GetLengthMs(), (player.getpos() + ((int)MaxDispSize) * 1000)));
+                            Step = MaxDispSize;
+                            break;
+                    }
+                } else
+                {
+                    switch (e.KeyCode)
+                    {
+
+                        case Keys.NumPad4:
+                            Speed = Math.Max(0.1f, Speed - 0.1f);
+                            break;
+                        case Keys.NumPad6:
+                            Speed = Math.Min(2f, Speed + 0.1f);
+                            break;
+                        case Keys.NumPad5:
+                            
+                            Pause_Click(null, null);                           
+                            break;
+                        
+                    }
+                }
+            } else
+            {
+                if (e.KeyCode == Keys.Left)
+                {
+                    Previous_Click(null, null);
+                }
+                if (e.KeyCode == Keys.Right)
+                {
+                    Next_Click(null, null);
+                }
             }
-            if (e.KeyCode == Keys.Right)
+            e.Handled = true;
+        }
+
+        private void SetFeatureToAllControls(Control.ControlCollection cc)
+        {
+            if (cc != null)
             {
-                Next_Click(null, null);
+                foreach (Control control in cc)
+                {
+                    control.PreviewKeyDown += new PreviewKeyDownEventHandler(control_PreviewKeyDown);
+                    SetFeatureToAllControls(control.Controls);
+                }
             }
         }
+
+        void control_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right || e.KeyCode == Keys.NumPad4 || e.KeyCode == Keys.NumPad5 || e.KeyCode == Keys.NumPad6 || e.KeyCode == Keys.NumPad7 || e.KeyCode == Keys.NumPad8 || e.KeyCode == Keys.NumPad9 || e.KeyCode == Keys.NumPad0 || e.KeyCode == Keys.NumPad1 || e.KeyCode == Keys.NumPad2 || e.KeyCode == Keys.NumPad3)
+            {
+                e.IsInputKey = true;
+                
+            }
+        }
+
         void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
             string s = e.KeyChar.ToString();
@@ -508,8 +609,21 @@ namespace SeizurePlayback
             {
                 Pause_Click(null, null);
             }
+            if (string.Compare(s, "c", true) == 0)
+            {
+                
+                    SzCaptureButton.PerformClick();
+                
+            }
+
+            
+            
 
 
+        }
+        void ArrowPress(object sender, PreviewKeyDownEventArgs e)
+        {
+            Console.WriteLine(sender.ToString() + " | " + e.KeyCode);
         }
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -531,7 +645,7 @@ namespace SeizurePlayback
 
         private void Pause_Click(object sender, EventArgs e)
         {
-
+            Speed = 1;
             if (Paused == true) return;
             Paused = true;
             if (player != null)
@@ -1030,6 +1144,7 @@ namespace SeizurePlayback
                 }
                 else
                 {
+                    loadVid(ACQ.SelectedChan);
                     FNum = 0;
                     while (TimeSeek > AVILengths[ACQ.SelectedChan, FNum])
                     {
@@ -1347,7 +1462,7 @@ namespace SeizurePlayback
             {
                 TmpStr = SzInfo[i].Split(',');
                                 
-                SRF.Add(TmpStr);
+                SRF.Add(TmpStr, i);
                 SRF.Add(SzInfo[i]);
             }
             SRF.Show();
@@ -1355,6 +1470,7 @@ namespace SeizurePlayback
         public void ChildSend(TimeSpan Time, int Channel)
         {
             ACQ.SelectedChan = Channel;
+            loadVid(Channel);
             Paused = false;
             RealTime = true;
             ACQ.Position = (int)Time.TotalSeconds; //doesn't draw rectangles in the right place
@@ -1375,6 +1491,7 @@ namespace SeizurePlayback
                 SzInfo[i] = SzInfo[i + 1];
             }
             SzInfoIndex--;
+            ACQ.SeizureHighlights.RemoveAt(Index);
             SzTxt.Close();
             SzTxt = new System.IO.StreamWriter(FPath + "\\" + BaseName + ".txt");
             SzTxt.AutoFlush = true;

@@ -151,6 +151,12 @@
     <Compile Include="MultiDirectoryAdd.designer.cs">
       <DependentUpon>MultiDirectoryAdd.cs</DependentUpon>
     </Compile>
+    <Compile Include="PMEEGView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PMEEGView.Designer.cs">
+      <DependentUpon>PMEEGView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="ProjectManagerForm.cs">
@@ -214,6 +220,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MultiDirectoryAdd.resx">
       <DependentUpon>MultiDirectoryAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PMEEGView.resx">
+      <DependentUpon>PMEEGView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProjectManagerForm.resx">
       <DependentUpon>ProjectManagerForm.cs</DependentUpon>

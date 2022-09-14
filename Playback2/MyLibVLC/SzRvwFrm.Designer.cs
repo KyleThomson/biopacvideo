@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SzRvwFrm));
             this.SzBox = new System.Windows.Forms.ListBox();
             this.SzListView = new System.Windows.Forms.ListView();
             this.Channel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -38,19 +39,21 @@
             this.Notes = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Output = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Score = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.IndexSZ = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // SzBox
             // 
-            this.SzBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.SzBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.SzBox.Enabled = false;
             this.SzBox.FormattingEnabled = true;
             this.SzBox.HorizontalScrollbar = true;
             this.SzBox.Location = new System.Drawing.Point(12, 10);
             this.SzBox.Name = "SzBox";
-            this.SzBox.Size = new System.Drawing.Size(198, 186);
+            this.SzBox.Size = new System.Drawing.Size(192, 199);
             this.SzBox.TabIndex = 0;
+            this.SzBox.Visible = false;
             this.SzBox.SelectedIndexChanged += new System.EventHandler(this.SzBox_SelectedIndexChanged);
             this.SzBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SzBox_MouseDown);
             // 
@@ -65,33 +68,37 @@
             this.Length,
             this.Notes,
             this.Output,
-            this.Score});
+            this.Score,
+            this.IndexSZ});
+            this.SzListView.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SzListView.FullRowSelect = true;
             this.SzListView.HideSelection = false;
-            this.SzListView.Location = new System.Drawing.Point(226, 10);
+            this.SzListView.Location = new System.Drawing.Point(12, 10);
+            this.SzListView.MinimumSize = new System.Drawing.Size(438, 186);
             this.SzListView.MultiSelect = false;
             this.SzListView.Name = "SzListView";
-            this.SzListView.Size = new System.Drawing.Size(583, 186);
+            this.SzListView.Size = new System.Drawing.Size(1092, 213);
             this.SzListView.TabIndex = 2;
             this.SzListView.UseCompatibleStateImageBehavior = false;
             this.SzListView.View = System.Windows.Forms.View.Details;
             this.SzListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.SzListView_ColumnClick);
-            this.SzListView.SelectedIndexChanged += new System.EventHandler(this.SzListView_SelectedIndexChanged);
+            this.SzListView.SelectedIndexChanged += new System.EventHandler(this.SzBox_SelectedIndexChanged);
+            this.SzListView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.SzView_MouseDown);
             // 
             // Channel
             // 
             this.Channel.Text = "Ch";
-            this.Channel.Width = 28;
+            this.Channel.Width = 34;
             // 
             // AName
             // 
             this.AName.Text = "Animal";
-            this.AName.Width = 105;
+            this.AName.Width = 113;
             // 
             // szNum
             // 
             this.szNum.Text = "Sz#";
-            this.szNum.Width = 86;
+            this.szNum.Width = 38;
             // 
             // TimeStamp
             // 
@@ -106,31 +113,38 @@
             // Notes
             // 
             this.Notes.Text = "Notes";
-            this.Notes.Width = 53;
+            this.Notes.Width = 254;
             // 
             // Output
             // 
             this.Output.Text = "File";
-            this.Output.Width = 98;
+            this.Output.Width = 0;
             // 
             // Score
             // 
             this.Score.Text = "Score";
-            this.Score.Width = 46;
+            this.Score.Width = 57;
+            // 
+            // IndexSZ
+            // 
+            this.IndexSZ.Text = "Index";
             // 
             // SzRvwFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.BackColor = System.Drawing.SystemColors.ControlText;
-            this.ClientSize = new System.Drawing.Size(838, 215);
+            this.ClientSize = new System.Drawing.Size(1130, 235);
             this.Controls.Add(this.SzListView);
             this.Controls.Add(this.SzBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(482, 254);
             this.Name = "SzRvwFrm";
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
@@ -153,5 +167,6 @@
         private System.Windows.Forms.ColumnHeader Output;
         private System.Windows.Forms.ColumnHeader Score;
         public System.Windows.Forms.ListView SzListView;
+        private System.Windows.Forms.ColumnHeader IndexSZ;
     }
 }
