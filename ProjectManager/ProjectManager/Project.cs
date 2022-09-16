@@ -5,6 +5,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Threading;
+
 
 namespace ProjectManager
 {
@@ -39,14 +41,30 @@ namespace ProjectManager
         public TESTTYPES test;
         public SeizureAnalysis analysis;
         public bool _fileChanged = default; // flag to indicate if changes have been made to file
+        //public List<EEGOrganizer> SList;
+        public bool pDir = false;
+        public FileStream BigDAT;
+        public BinaryWriter BBigDAT;
+        public long Offset;
+        public string CDatName;
+        public int DatCount;
+       
         public Project(string Inpt)
         {
             _fileChanged = false; // initialize file as not changed
-            Filename = Inpt;
+
+
+            Filename = Inpt + ".pjt";
+            CDatName = Inpt + ".dat";
+
             Animals = new List<AnimalType>();
             Files = new List<FileType>();
             Groups = new List<GroupType>();
             analysis = new SeizureAnalysis(test);
+            //SList = new List<EEGOrganizer>();
+            Offset = 0;
+            
+            createCDat(CDatName);
         }
         public void GetPath()
         {
@@ -54,8 +72,141 @@ namespace ProjectManager
             if (!Directory.Exists(P + "\\Data"))
             {
                 Directory.CreateDirectory(P + "\\Data");
+                //Directory.Move(Filename, P + "\\Data");
+                
+            } 
+                //Directory.Move(Filename, P + "\\Data");
+            
+        }
+
+        //public void checkCD(bool exists)
+        //{
+        //    P = Path.GetDirectoryName(Filename);
+
+        //    if (exists)
+        //    {
+        //        char[] splitter = new char[2];
+        //        splitter[0] = '\\';
+        //        splitter[1] = '.';
+        //        string[] pathA = P.ToString().Split(splitter);
+                
+        //        string[] fileA = Filename.Split(splitter);
+        //        if (!fileA[fileA.Length-1].Equals(".pjt"))
+        //        {
+        //            string[] temp = new string[fileA.Length + 1];
+        //            for (int i = 0; i < fileA.Length; i++)
+        //            {
+        //                temp[i] = fileA[i];
+        //            }
+        //            temp[temp.Length - 1] = ".pjt";
+        //            fileA = temp;
+        //        }
+
+        //        //if (!pathA[pathA.Length - 1].Equals(fileA[fileA.Length - 2]))
+        //        if (!pathA[pathA.Length-1].Equals("PM_" + fileA[fileA.Length-2]))
+        //        {
+                    
+        //        Console.WriteLine("File Before: " + Filename);
+        //        Directory.CreateDirectory(P + "\\PM_" + fileA[fileA.Length - 2]);
+        //        P = P + "\\PM_" + fileA[fileA.Length - 2];
+        //        Console.WriteLine(P);
+        //        //File tempFI = new File(Filename);
+        //        File.Move(Filename, P + "\\" + fileA[fileA.Length-2] + ".pjt");
+        //        //tempFI.mo(P + "\\" + fileA[fileA.Length - 2] + @".pjt");
+        //            string[] fName1 = Directory.GetFiles(P + "\\", "*.pjt");
+        //            Filename = fName1[0];
+        //            Console.WriteLine(P);
+        //            Console.WriteLine("File After: " + Filename);
+        //        }
+
+                
+
+
+
+        //    } else
+        //    {
+
+        //    }
+
+        //}
+
+        public void createCDat(string name) //IMPORTANT! First 4 Bytes of the CDat are reserved for DATCount
+        {
+            //File.Create(name);
+            
+            Offset = 0;
+            DatCount = 0;
+            BigDAT = new FileStream(name, FileMode.Create, FileAccess.ReadWrite);
+            BBigDAT = new BinaryWriter(BigDAT);
+            Int32 TotCount = 0;
+            BBigDAT.Write(TotCount);
+            
+        }
+
+        public void closeCDat()
+        {
+            BigDAT.Close();
+            BBigDAT.Close();
+        }
+
+        public void OpenCDat(string name)
+        {
+            if (BigDAT != null) return;
+            if (File.Exists(name))
+            {
+                //BigDAT = new FileStream(name, FileMode.Append, FileAccess.Write);
+                BigDAT = new FileStream(name, FileMode.Open, FileAccess.ReadWrite);
+                BBigDAT = new BinaryWriter(BigDAT);
+            } else
+            {
+                createCDat(name);
             }
         }
+
+        public long AppendCDat(string FileN)
+        {
+            if (!File.Exists(FileN)) return -1;
+
+
+            //if (DatCount < 2)
+            //{
+            //    Console.WriteLine("Number: " + DatCount);
+            //    Console.WriteLine("For: " + FileN);
+            //    Console.WriteLine("Pos Start: " + BigDAT.Position);
+            //}
+            long r = BigDAT.Position;
+            
+
+            FileStream InFile = new FileStream(FileN, FileMode.Open, FileAccess.Read);
+            BinaryReader BInFile = new BinaryReader(InFile);
+            
+
+            for (int i = 0; i < InFile.Length / 4; i++)
+            {
+                //Int32 temp = BInFile.ReadInt32();
+                //BBigDAT.Write(temp);
+                BBigDAT.Write(BInFile.ReadInt32());
+                //if (DatCount == 0 && i == 0) Console.WriteLine(temp);
+            }
+
+            //if (DatCount < 2) Console.WriteLine("Pos End: " + BigDAT.Position + "\n\n\n");
+            InFile.Close();
+            BInFile.Close();
+            DatCount++;
+
+            return r;
+            //for (int i = 0; i < data.Length; i ++)
+            //{
+            //    BBigDAT.Write(data[i]);
+            //}
+
+            
+
+            
+
+
+        }
+
         public void MergeProject(string Inpt)
         {
             if (File.Exists(Inpt))
@@ -92,8 +243,17 @@ namespace ProjectManager
                 {
                     ParseLine(F.ReadLine());
                 }
+                
                 F.Dispose();
+                //checkCD(true);
             }
+        }
+
+        public void pjtCreate()
+        {
+            StreamWriter F = new StreamWriter(Filename);
+            F.Write("");
+            F.Close();
         }
         public void Save(string fileToSave)
         {
@@ -125,7 +285,7 @@ namespace ProjectManager
                 foreach (SeizureType S in A.Sz)
                 {
                     answer = string.Format("{0:D2}:{1:D2}:{2:D2}", S.t.Hours, S.t.Minutes, S.t.Seconds);
-                    s = "An," + A.ID + ", sz, " + S.d.ToString() + ", " + answer + ", " + S.Notes + "," + S.length + "," + S.file + "," + S.Severity;
+                    s = "An," + A.ID + ", sz, " + S.d.ToString() + ", " + answer + ", " + S.Notes + "," + S.length + "," + S.file + "," + S.Severity + "," + S.Offset;
                     F.WriteLine(s);
                 }
                 foreach (WeightType W in A.WeightInfo)
@@ -160,6 +320,7 @@ namespace ProjectManager
                 }
 
             }
+            
             F.Close();
             F.Dispose();
             _fileChanged = false; // after file has saved, we can reset flag
@@ -187,6 +348,11 @@ namespace ProjectManager
         {
             // set flag to true to indicate that the current project file has been modified
             _fileChanged = true;
+        }
+
+        public bool OpenEEGView()
+        {
+            return true;
         }
         private int FindAnimal(string An) //Finds an Animal Index, or creates a new one if not found
         {
@@ -553,7 +719,7 @@ namespace ProjectManager
                     string[] SZFile = Directory.GetFiles(Dir + "\\Seizure", "*.txt");
                     if (SZFile[0] != null)
                     {
-                        ImportSzFile(SZFile[0]);
+                        ImportSzFile(SZFile[0], Dir + "\\Seizure\\");
                     }
                 }
             }
@@ -578,35 +744,64 @@ namespace ProjectManager
 
             return string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", dt);
         }
-        public void ImportSzFile(string File)
+        public void ImportSzFile(string File, string Dir)
         {
             DateTime dt;
+            if (Dir == null) return;
             string[] TmpStr;
             int CurrentAnimal;
             string str;
             TimeSpan t;
             SeizureType S;
+            
             string F = File.Substring(File.LastIndexOf('\\') + 1);
             dt = ConvertFileToDT(F);
             StreamReader TmpTxt = new StreamReader(File);
+            //long offset = 0;
             while (!TmpTxt.EndOfStream)
             {
                 str = TmpTxt.ReadLine();
+                
                 TmpStr = str.Split(',');
+                string tempDAT = Dir + TmpStr[6].Replace(" ", string.Empty) + ".dat";
+                long offset = AppendCDat(tempDAT);
+
                 CurrentAnimal = FindAnimal(TmpStr[1]);
                 TimeSpan.TryParse(TmpStr[3], out t);
                 t = t.Add(dt.TimeOfDay);
+                //Read in DAT file
+                //Append to Current Data stream
+                //Copy video file into subdirectory
+                //Put offset into into S 
                 if (TmpStr.Length == 7)
                 {
                     S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6]);
                 }
-                else
+                else if (offset < 0)
                 {
                     S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6], TmpStr[7]);
                 }
+                else
+                {
+                    S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6], TmpStr[7], offset); //
+                }
+
                 Animals[CurrentAnimal].Sz.Add(S);
+                //This should be part of S 
+                
+                //Animals[CurrentAnimal].SZF.Add(Dir +  TmpStr[6].Replace(" ", string.Empty));
+                //Console.WriteLine("Clear: " + Dir + TmpStr[6].Replace(" ", string.Empty)); //you're working on adding file names!
+                //EEGOrganizer tempEO = new EEGOrganizer(TmpStr[1], Dir + TmpStr[6], CurrentAnimal);
+                //SList.Add(tempEO);
+
+
             }
             TmpTxt.Close();
+        }
+
+        public long loadDats(string Path)
+        {
+            return 1;
         }
         public void AddImportantDate(string AnimalName, string d, string Text)
         {
@@ -1046,6 +1241,10 @@ namespace ProjectManager
             string[] IDs;
             int Chans;
             data = L.Split(',');
+            if (data.Length == 1)
+            {
+                long.TryParse(data[0], out Offset);
+            }
             //Data format - Record Type - Record Start
             //Record types - An = Animal, Fl = File, Gp = Group, Lb = Label.
             if (data[0].IndexOf("Fl") != -1)

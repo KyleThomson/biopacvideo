@@ -53,14 +53,14 @@
             this.test35ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.test36ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.iAKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.eEGViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SecondList = new System.Windows.Forms.ListBox();
             this.MainList = new System.Windows.Forms.ListBox();
             this.MainSelect = new System.Windows.Forms.ComboBox();
             this.SecondSelect = new System.Windows.Forms.ComboBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.Info = new System.Windows.Forms.ToolStripStatusLabel();
-            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.eEGViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -112,6 +112,7 @@
             // 
             // saveToolStripMenuItem
             // 
+            this.saveToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.saveToolStripMenuItem.Text = "&Save";
@@ -119,6 +120,7 @@
             // 
             // saveAsToolStripMenuItem
             // 
+            this.saveAsToolStripMenuItem.Enabled = false;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.saveAsToolStripMenuItem.Text = "Save &As";
@@ -127,6 +129,7 @@
             // exportDataToolStripMenuItem
             // 
             this.exportDataToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.exportDataToolStripMenuItem.Enabled = false;
             this.exportDataToolStripMenuItem.Name = "exportDataToolStripMenuItem";
             this.exportDataToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.exportDataToolStripMenuItem.Text = "&Export Data";
@@ -134,6 +137,7 @@
             // 
             // mergeProjectToolStripMenuItem
             // 
+            this.mergeProjectToolStripMenuItem.Enabled = false;
             this.mergeProjectToolStripMenuItem.Name = "mergeProjectToolStripMenuItem";
             this.mergeProjectToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.mergeProjectToolStripMenuItem.Text = "Merge Project";
@@ -141,6 +145,7 @@
             // 
             // importFileToolStripMenuItem
             // 
+            this.importFileToolStripMenuItem.Enabled = false;
             this.importFileToolStripMenuItem.Name = "importFileToolStripMenuItem";
             this.importFileToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.importFileToolStripMenuItem.Text = "Add Directory";
@@ -148,6 +153,7 @@
             // 
             // addMultipleDirectoriesToolStripMenuItem
             // 
+            this.addMultipleDirectoriesToolStripMenuItem.Enabled = false;
             this.addMultipleDirectoriesToolStripMenuItem.Name = "addMultipleDirectoriesToolStripMenuItem";
             this.addMultipleDirectoriesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.addMultipleDirectoriesToolStripMenuItem.Text = "Add &Multiple Directories";
@@ -155,6 +161,7 @@
             // 
             // importSeizureToolStripMenuItem
             // 
+            this.importSeizureToolStripMenuItem.Enabled = false;
             this.importSeizureToolStripMenuItem.Name = "importSeizureToolStripMenuItem";
             this.importSeizureToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.importSeizureToolStripMenuItem.Text = "&Import Seizure File";
@@ -270,6 +277,22 @@
             this.iAKToolStripMenuItem.Text = "IAK";
             this.iAKToolStripMenuItem.Click += new System.EventHandler(this.iAKToolStripMenuItem_Click);
             // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.eEGViewToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // eEGViewToolStripMenuItem
+            // 
+            this.eEGViewToolStripMenuItem.CheckOnClick = true;
+            this.eEGViewToolStripMenuItem.Name = "eEGViewToolStripMenuItem";
+            this.eEGViewToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.eEGViewToolStripMenuItem.Text = "EEG View";
+            this.eEGViewToolStripMenuItem.Click += new System.EventHandler(this.eEGViewToolStripMenuItem_Click);
+            // 
             // SecondList
             // 
             this.SecondList.FormattingEnabled = true;
@@ -327,21 +350,6 @@
             this.Info.Name = "Info";
             this.Info.Size = new System.Drawing.Size(163, 17);
             this.Info.Text = "                                                    ";
-            // 
-            // viewToolStripMenuItem
-            // 
-            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.eEGViewToolStripMenuItem});
-            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.viewToolStripMenuItem.Text = "View";
-            // 
-            // eEGViewToolStripMenuItem
-            // 
-            this.eEGViewToolStripMenuItem.CheckOnClick = true;
-            this.eEGViewToolStripMenuItem.Name = "eEGViewToolStripMenuItem";
-            this.eEGViewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.eEGViewToolStripMenuItem.Text = "EEG View";
             // 
             // ProjectManager
             // 

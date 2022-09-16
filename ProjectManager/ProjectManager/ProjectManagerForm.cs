@@ -7,13 +7,13 @@ namespace ProjectManager
 {
     public partial class ProjectManager : Form
     {
-        Project pjt;
+        public Project pjt;
         bool _pjtOpened = false;
         public ProjectManager()
         {
             InitializeComponent();
             MainSelect.SelectedIndex = 0;
-            pjt = new Project("");
+            //pjt = new Project("");
             // Handle event for form closing in case there are unsaved changes to project file.
             //FormClosing += (sender, e) => { ProjectManager_FormClosing(sender, e); };
         }
@@ -26,13 +26,39 @@ namespace ProjectManager
             if (F.ShowDialog() == DialogResult.OK)
             {
 
-                pjt = new Project(F.FileName);
+                
+                char[] splitter = new char[] { '\\', '.' };
+                string temp0 = F.FileName.Substring(0, (F.FileName.Length - 4));
+                
+                string[] temp = F.FileName.Split(splitter);
+                                
+                Directory.CreateDirectory(temp0);
+
+                string FN = temp0 + "\\" + temp[temp.Length - 2];
+                Console.WriteLine(FN);
+                
+                pjt = new Project(FN);
+                pjt.pjtCreate();
+                
                 pjt.Open();
                 _pjtOpened = true;
             }
+            EnableFileTools();
         }
         private void ProjectManagerClosed(object sender, FormClosedEventArgs e)
         {
+            
+        }
+
+        public void EnableFileTools()
+        {
+            saveAsToolStripMenuItem.Enabled = true;
+            saveToolStripMenuItem.Enabled = true;
+            exportDataToolStripMenuItem.Enabled = true;
+            mergeProjectToolStripMenuItem.Enabled = true;
+            addMultipleDirectoriesToolStripMenuItem.Enabled = true;
+            importFileToolStripMenuItem.Enabled = true;
+            importSeizureToolStripMenuItem.Enabled = true;
 
         }
         private void selectProjectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -54,6 +80,11 @@ namespace ProjectManager
                 pjt.analysis.ParseGroups(pjt.Animals);
                 UpdateMainList();
             }
+        }
+
+        public void ccDir(string path)
+        {
+
         }
 
 
@@ -180,8 +211,15 @@ namespace ProjectManager
                 F.InitialDirectory = "C:\\";
                 if (F.ShowDialog() == DialogResult.OK)
                 {
-                    //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
-                    pjt.ImportSzFile(F.FileName);
+                    string[] SZFile = Directory.GetFiles(F.FileName + "\\Seizure", "*.txt");
+                    if (SZFile[0] != null)
+                    {
+                        //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
+                        pjt.ImportSzFile(F.FileName, F.FileName + "\\Seizure\\");
+                    } else
+                    {
+                        
+                    }
                 }
                 UpdateMainList();
             }
@@ -439,6 +477,8 @@ namespace ProjectManager
             Frm.ShowDialog();
             if (Frm.Pass)
             {
+
+                //BigDAT = new StreamReader
                 for (int i = 0; i < Frm.DirReturn.Length; i++)
                 {
                     //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
@@ -460,9 +500,33 @@ namespace ProjectManager
                     }
                 }
                 pjt.FileChanged();
+
+                //show total number of DATS in BigDAT
+
+                pjt.BigDAT.Position = 0;
+
+                
+
+
+
+                Int32 tDat = pjt.DatCount;
+                pjt.BBigDAT.Write(tDat);
+
+                pjt.BBigDAT.Close();
+                pjt.BigDAT.Close();
+
+                FileStream tempF = new FileStream(pjt.CDatName, FileMode.Open, FileAccess.Read);
+                BinaryReader tempB = new BinaryReader(tempF);
+
+                Console.WriteLine(tempB.ReadInt32());
+                Console.WriteLine(pjt.DatCount);
+
+
                 ChangeTitleText(pjt.Filename);
             }
             UpdateMainList();
+
+            //MessageBox newDir = new MessageBox;
 
             // inform user of import results
             Info.Text = SuccessfullyImportedDirectory.ToString() + " directories imported. " + 
@@ -652,6 +716,11 @@ namespace ProjectManager
         private void notImported_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void eEGViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }

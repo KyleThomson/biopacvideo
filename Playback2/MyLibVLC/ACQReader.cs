@@ -439,7 +439,7 @@ namespace SeizurePlayback
                     FOUT_ID.Write(data[Chan][j]);
                 }
             }
-
+            Console.WriteLine(FOUT.Length);
             FOUT_ID.Close();
             FOUT.Close();
         }

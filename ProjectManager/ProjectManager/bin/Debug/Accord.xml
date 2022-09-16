@@ -314,88 +314,15 @@
             <returns>Returns point's distance from (0, 0) point.</returns>
             
         </member>
-        <member name="T:Accord.FormatHandlerAttribute">
-            <summary>
-              Specifies that a class can be used to decode a particular file type.
-            </summary>
-            
-        </member>
-        <member name="P:Accord.FormatHandlerAttribute.Extension">
-            <summary>
-              Gets or sets the file extension that this format decoder applies to (i.e. "wav").
-            </summary>
-            
-        </member>
-        <member name="M:Accord.FormatHandlerAttribute.#ctor(System.String)">
-            <summary>
-              Initializes a new instance of the <see cref="T:Accord.FormatHandlerAttribute"/> class.
-            </summary>
-            
-        </member>
-        <member name="M:Accord.FormatHandlerAttribute.GetNormalizedExtension(System.String)">
-            <summary>
-              Extracts and normalizes a file extension in the same format that is used when 
-              specifying which formats are supported by each decoder (e.g. "file.wav" would
-              become "WAV", "image.png" would become "PNG", etc).
-            </summary>
-            
-        </member>
-        <member name="M:Accord.FormatHandlerAttribute.GetHandler``2(System.String,System.Collections.Generic.Dictionary{System.String,System.Type},System.Collections.Generic.Dictionary{System.String,``0})">
-            <summary>
-              Finds a file handler that can process the given normalized file extension.
-            </summary>
-            
-            <typeparam name="TInterface">The type of the the handler to be found (e.g. IImageDecoder or IAudioDecoder).</typeparam>
-            <typeparam name="TAttribute">The type of the attribute to be found (e.g. <see cref="T:Accord.FormatDecoderAttribute"/> or <see cref="T:Accord.FormatEncoderAttribute"/>).</typeparam>
-            <param name="fileExtension">The normalized file extension (<see cref="M:Accord.FormatHandlerAttribute.GetNormalizedExtension(System.String)"/>.</param>
-            <param name="handlerTypes">The handler types.</param>
-            <param name="cache">The cache of already instantiated handler types.</param>
-            
-            <returns>A file decoder or encoder implementing the <typeparamref name="TInterface"/> interface, or null if none have been found.</returns>
-            
-        </member>
-        <member name="M:Accord.FormatHandlerAttribute.PopulateDictionaryWithHandlersFromAllAssemblies``2(System.Collections.Generic.Dictionary{System.String,System.Type})">
-            <summary>
-              Populates the dictionary with available decoders of a particular category by 
-              inspecting types from all referenced assemblies. Note: calling this method
-              will force all referenced assemblies to be loaded into the current AppDomain.
-            </summary>
-            
-            <typeparam name="TInterface">The base type for the decoders. This should be an interface such as IImageDecoder or IAudioDecoder.</typeparam>
-            <typeparam name="TAttribute">The type of the attribute to be found (e.g. <see cref="T:Accord.FormatDecoderAttribute"/> or <see cref="T:Accord.FormatEncoderAttribute"/>).</typeparam>
-            
-            <param name="dictionary">The dictionary where the found decoders will be stored.</param>
-            
-        </member>
-        <member name="T:Accord.FormatEncoderAttribute">
-            <summary>
-              Specifies that a class can be used to encode a particular file type.
-            </summary>
-            
-        </member>
-        <member name="M:Accord.FormatEncoderAttribute.#ctor(System.String)">
-            <summary>
-              Initializes a new instance of the <see cref="T:Accord.FormatEncoderAttribute"/> class.
-            </summary>
-            
-        </member>
-        <member name="M:Accord.FormatEncoderAttribute.GetEncoder``1(System.String,System.Collections.Generic.Dictionary{System.String,System.Type},System.Collections.Generic.Dictionary{System.String,``0})">
-            <summary>
-              Finds a encoder that can process the given normalized file extension.
-            </summary>
-            
-            <typeparam name="TEncoder">The type of the the decoder to be found (e.g. IImageEncoder or IAudioEncoder).</typeparam>
-            
-            <param name="fileExtension">The normalized file extension (<see cref="M:Accord.FormatHandlerAttribute.GetNormalizedExtension(System.String)"/>)</param>
-            <param name="encoderTypes">The encoder types.</param>
-            <param name="cache">The cache of already instantiated encoder types.</param>
-            
-            <returns>An encoder implementing the <typeparamref name="TEncoder"/> interface, or null if none have been found.</returns>
-            
-        </member>
         <member name="T:Accord.FormatDecoderAttribute">
             <summary>
               Specifies that a class can be used to decode a particular file type.
+            </summary>
+            
+        </member>
+        <member name="P:Accord.FormatDecoderAttribute.Extension">
+            <summary>
+              Gets or sets the file extension that this format decoder applies to (i.e. "wav").
             </summary>
             
         </member>
@@ -405,17 +332,17 @@
             </summary>
             
         </member>
-        <member name="M:Accord.FormatDecoderAttribute.GetDecoders``1(System.String,System.Collections.Generic.Dictionary{System.String,System.Type},System.Collections.Generic.Dictionary{System.String,``0})">
+        <member name="M:Accord.FormatDecoderAttribute.PopulateDictionaryWithDecodersFromAllAssemblies``1(System.Collections.Generic.Dictionary{System.String,System.Type},System.String)">
             <summary>
-              Finds a decoder that can process the given normalized file extension.
+              Populates the dictionary with available decoders of a particular category by 
+              inspecting types from all referenced assemblies. Note: calling this method
+              will force all referenced assemblies to be loaded into the current AppDomain.
             </summary>
             
-            <typeparam name="TDecoder">The type of the the decoder to be found (e.g. IImageDecoder or IAudioDecoder).</typeparam>
-            <param name="fileExtension">The normalized file extension (<see cref="M:Accord.FormatHandlerAttribute.GetNormalizedExtension(System.String)"/>.</param>
-            <param name="decoderTypes">The decoder types.</param>
-            <param name="cache">The cache of already instantiated decoder types.</param>
+            <typeparam name="T">The base type for the decoders. This should be an interface such as IImageDecoder or IAudioDecoder.</typeparam>
             
-            <returns>A decoder implementing the <typeparamref name="TDecoder"/> interface, or null if none have been found.</returns>
+            <param name="dictionary">The dictionary where the found decoders will be stored.</param>
+            <param name="extension">The extension we are interested in.</param>
             
         </member>
         <member name="T:Accord.SourceTypeAttribute">
@@ -1527,7 +1454,7 @@
             </summary>
             
         </member>
-        <member name="P:Accord.Collections.TwoWayDictionary`2.Accord#Compat#IReadOnlyDictionary{TFirst,TSecond}#Keys">
+        <member name="P:Accord.Collections.TwoWayDictionary`2.System#Collections#Generic#IReadOnlyDictionary{TFirst,TSecond}#Keys">
             <summary>
               Gets an <see cref="T:System.Collections.Generic.ICollection`1" /> containing the keys of the <see cref="T:System.Collections.Generic.IDictionary`2" />.
             </summary>
@@ -1545,7 +1472,7 @@
             </summary>
             
         </member>
-        <member name="P:Accord.Collections.TwoWayDictionary`2.Accord#Compat#IReadOnlyDictionary{TFirst,TSecond}#Values">
+        <member name="P:Accord.Collections.TwoWayDictionary`2.System#Collections#Generic#IReadOnlyDictionary{TFirst,TSecond}#Values">
             <summary>
               Gets an <see cref="T:System.Collections.Generic.ICollection`1" /> containing the values in the <see cref="T:System.Collections.Generic.IDictionary`2" />.
             </summary>
@@ -2664,255 +2591,6 @@
             <param name="node">The node to be re-balanced.</param>
             
             <returns>The same node, or a new one if it had to be recreated.</returns>
-            
-        </member>
-        <member name="T:Accord.Compat.EnvironmentEx">
-            <summary>
-              Set of methods necessary to make Accord.NET work in .NET 3.5 and .NET 4.0. 
-              Those methods are not available in other versions of the framework and should
-              not be called by user code.
-            </summary>
-            
-        </member>
-        <member name="M:Accord.Compat.EnvironmentEx.GetWindowsSystemDirectory32">
-            <summary>
-              Gets the 32-bit system path.
-            </summary>
-        </member>
-        <member name="M:Accord.Compat.EnvironmentEx.GetWindowsSystemDirectory64">
-            <summary>
-              Gets the 64-bit system path.
-            </summary>
-        </member>
-        <member name="F:Accord.Compat.EnvironmentEx.Is64BitProcess">
-            <summary>
-              Gets wether the process (not the system) is running in 64-bits.
-            </summary>
-        </member>
-        <member name="T:Accord.Compat.IReadOnlyCollection`1">
-            <summary>
-              Minimum IReadOnlyCollection implementation for .NET 3.5 to
-              make Accord.NET work. This is not a complete implementation.
-            </summary>
-            
-        </member>
-        <member name="P:Accord.Compat.IReadOnlyCollection`1.Count">
-            <summary>
-              Gets the number of elements in the collection.
-            </summary>
-            
-        </member>
-        <member name="T:Accord.Compat.IReadOnlyDictionary`2">
-            <summary>
-              Minimum IReadOnlyDictionary implementation for .NET 3.5 to
-              make Accord.NET work. This is not a complete implementation.
-            </summary>
-            
-        </member>
-        <member name="P:Accord.Compat.IReadOnlyDictionary`2.Keys">
-            <summary>
-              Gets the keys.
-            </summary>
-            
-        </member>
-        <member name="P:Accord.Compat.IReadOnlyDictionary`2.Values">
-            <summary>
-              Gets the values.
-            </summary>
-            
-        </member>
-        <member name="P:Accord.Compat.IReadOnlyDictionary`2.Item(`0)">
-            <summary>
-              Gets the value associated with the specified key.
-            </summary>
-            
-        </member>
-        <member name="M:Accord.Compat.IReadOnlyDictionary`2.ContainsKey(`0)">
-            <summary>
-              Determines whether the dictionary contains the specified key.
-            </summary>
-            
-        </member>
-        <member name="M:Accord.Compat.IReadOnlyDictionary`2.TryGetValue(`0,`1@)">
-            <summary>
-              Tries to get a value.
-            </summary>
-            
-        </member>
-        <member name="T:Accord.Compat.ReadOnlyDictionary`2">
-            <summary>
-              Read-only dictionary wrapper.
-            </summary>
-            
-            <remarks>
-              This collection implements a read-only dictionary. Read-only collections
-              can not be changed once they are created and are useful for presenting
-              information to the user without allowing alteration.
-            </remarks>
-            
-            <typeparam name="TKey">The types of the keys in the dictionary.</typeparam>
-            <typeparam name="TValue">The type of values in the dictionary.</typeparam>
-            
-        </member>
-        <member name="M:Accord.Compat.ReadOnlyDictionary`2.#ctor(System.Collections.Generic.IDictionary{`0,`1})">
-            <summary>
-              Constructs a new read-only wrapper around a <see cref="T:Accord.Compat.ReadOnlyDictionary`2"/>.
-            </summary>
-            
-            <param name="dictionary">The dictionary to wrap.</param>
-            
-        </member>
-        <member name="M:Accord.Compat.ReadOnlyDictionary`2.Add(`0,`1)">
-            <summary>
-              Does nothing, as this collection is read-only.
-            </summary>
-            
-        </member>
-        <member name="M:Accord.Compat.ReadOnlyDictionary`2.ContainsKey(`0)">
-            <summary>
-              Determines whether the <see cref="T:Accord.Compat.ReadOnlyDictionary`2"/>
-              contains an element with the specified key.
-            </summary>
-            
-            <param name="key">The key to locate in the <see cref="T:Accord.Compat.ReadOnlyDictionary`2"/>.</param>
-            
-            <returns>
-               <c>true</c> if the <see cref="T:System.Collections.Generic.IDictionary`2"/> contains
-                an element with the key; otherwise, false.
-            </returns>
-            
-        </member>
-        <member name="P:Accord.Compat.ReadOnlyDictionary`2.Keys">
-            <summary>
-              Gets an <see cref="T:System.Collections.Generic.ICollection`1"/> containing the keys of
-              the <see cref="T:Accord.Compat.ReadOnlyDictionary`2"/>.
-            </summary>
-            
-            <value>The keys.</value>
-            
-        </member>
-        <member name="M:Accord.Compat.ReadOnlyDictionary`2.Remove(`0)">
-            <summary>
-              Does nothing, as this collection is read-only.
-            </summary>
-            
-        </member>
-        <member name="M:Accord.Compat.ReadOnlyDictionary`2.TryGetValue(`0,`1@)">
-            <summary>
-               Gets the value associated with the specified key.
-            </summary>
-            
-            <param name="key">The key whose value to get.</param>
-            
-            <param name="value">
-               When this method returns, the value associated with the specified key, if
-               the key is found; otherwise, the default value for the type of the value
-               parameter. This parameter is passed uninitialized.</param>
-               
-            <returns>
-                true if the <see cref="T:Accord.Compat.ReadOnlyDictionary`2"/>
-                contains an element with the specified key; otherwise, false.</returns>
-                
-        </member>
-        <member name="P:Accord.Compat.ReadOnlyDictionary`2.Values">
-            <summary>
-             Gets an <see cref="T:System.Collections.Generic.ICollection`1"/> containing the values in
-             the <see cref="T:Accord.Compat.ReadOnlyDictionary`2"/>.
-            </summary>
-            
-            <value>
-              An <see cref="T:System.Collections.Generic.ICollection`1"/> containing the
-              values in the <see cref="T:Accord.Compat.ReadOnlyDictionary`2"/>.
-             </value>
-             
-        </member>
-        <member name="P:Accord.Compat.ReadOnlyDictionary`2.Item(`0)">
-            <summary>
-              Gets the element with the specified key. Set is not supported.
-            </summary>
-            
-            <value>The element with the specified key.</value>
-            
-        </member>
-        <member name="M:Accord.Compat.ReadOnlyDictionary`2.Add(System.Collections.Generic.KeyValuePair{`0,`1})">
-            <summary>
-              Does nothing, as this collection is read-only.
-            </summary>
-            
-        </member>
-        <member name="M:Accord.Compat.ReadOnlyDictionary`2.Clear">
-            <summary>
-              Does nothing, as this collection is read-only.
-            </summary>
-            
-        </member>
-        <member name="M:Accord.Compat.ReadOnlyDictionary`2.Contains(System.Collections.Generic.KeyValuePair{`0,`1})">
-            <summary>
-              Determines whether the <see cref="T:Accord.Compat.ReadOnlyDictionary`2"/>
-              contains an element with the specified key.
-            </summary>
-            
-            <param name="item">The key to locate in the <see cref="T:Accord.Compat.ReadOnlyDictionary`2"/>.</param>
-            
-            <returns>
-              <c>true</c> if the <see cref="T:Accord.Compat.ReadOnlyDictionary`2"/>
-              contains an element with the key; otherwise, false.
-            </returns>
-            
-        </member>
-        <member name="M:Accord.Compat.ReadOnlyDictionary`2.CopyTo(System.Collections.Generic.KeyValuePair{`0,`1}[],System.Int32)">
-            <summary>
-              Copies the entire <see cref="T:Accord.Compat.ReadOnlyDictionary`2"/> to a 
-              compatible one-dimensional Array, starting at the specified index of 
-              the target array.
-            </summary>
-            
-            <param name="array">
-              The one-dimensional Array that is the destination
-              of the elements copied from <see cref="T:Accord.Compat.ReadOnlyDictionary`2"/>. The 
-              Array must have zero-based indexing.</param>
-            
-            <param name="arrayIndex">
-              The zero-based index in array at which copying begins. </param>
-            
-        </member>
-        <member name="P:Accord.Compat.ReadOnlyDictionary`2.Count">
-            <summary>
-              Gets the number of elements contained in this
-              <see cref="T:Accord.Compat.ReadOnlyDictionary`2"/>.
-            </summary>
-            
-        </member>
-        <member name="P:Accord.Compat.ReadOnlyDictionary`2.IsReadOnly">
-            <summary>
-              Always returns true.
-            </summary>
-            
-        </member>
-        <member name="M:Accord.Compat.ReadOnlyDictionary`2.Remove(System.Collections.Generic.KeyValuePair{`0,`1})">
-            <summary>
-              Does nothing, as this collection is read-only.
-            </summary>
-            
-        </member>
-        <member name="M:Accord.Compat.ReadOnlyDictionary`2.GetEnumerator">
-            <summary>
-              Returns an enumerator that iterates through a collection.
-            </summary>
-            
-            <returns>
-              An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
-            </returns>
-            
-        </member>
-        <member name="M:Accord.Compat.ReadOnlyDictionary`2.System#Collections#IEnumerable#GetEnumerator">
-            <summary>
-              Returns an enumerator that iterates through a collection.
-            </summary>
-            
-            <returns>
-              An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
-            </returns>
             
         </member>
         <member name="T:Accord.Diagnostics.Debug">
@@ -8347,14 +8025,6 @@
             <returns>The result of the conversion.</returns>
             
         </member>
-        <member name="M:Accord.ExtensionMethods.GetInnerMostType(System.Type)">
-            <summary>
-            Gets the type of the element in a jagged or multi-dimensional matrix.
-            </summary>
-            
-            <param name="type">The array type whose element type should be computed.</param>
-            
-        </member>
         <member name="M:Accord.ExtensionMethods.HasDefaultConstructor(System.Type)">
             <summary>
               Determines whether the given type has a public default (parameterless) constructor.
@@ -8459,29 +8129,6 @@
             <param name="fileName">The disk location where the file should be stored.</param>
             <param name="maxAttempts">The maximum number of attempts.</param>
             <param name="overwrite">Do not overwrite <paramref name="fileName"/> if it already exists.</param>
-            
-        </member>
-        <member name="M:Accord.ExtensionMethods.ToByteArray``1(``0)">
-            <summary>
-             Serializes (converts) a structure to a byte array.
-            </summary>
-            
-            <param name="value">The structure to be serialized.</param>
-            <returns>The byte array containing the serialized structure.</returns>
-            
-        </member>
-        <member name="M:Accord.ExtensionMethods.ToStruct``1(System.Byte[],System.Int32)">
-            <summary>
-              Deserializes (converts) a byte array to a given structure type.
-            </summary>
-            
-            <remarks>
-             This is a potentiality unsafe operation.
-            </remarks>
-            
-            <param name="rawData">The byte array containing the serialized object.</param>
-            <param name="position">The starting position in the rawData array where the object is located.</param>
-            <returns>The object stored in the byte array.</returns>
             
         </member>
         <member name="T:Accord.ConvergenceException">

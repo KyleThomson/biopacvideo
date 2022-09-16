@@ -11,9 +11,10 @@ namespace ProjectManager
 {
     public partial class PMEEGView : Form
     {
-        public PMEEGView()
+        public PMEEGView(List<EEGOrganizer> EFileList)
         {
             InitializeComponent();
+            
         }
     }
 }

@@ -21,6 +21,7 @@ namespace ProjectManager
             TrimFileName();
             Notes = c;
             Severity = -1;
+            Offset = -1; 
         }
         public SeizureType(string a, string b, string c, string e, string f, string g)
         {
@@ -31,6 +32,19 @@ namespace ProjectManager
             file = f;
             TrimFileName();
             Notes = c;
+            Offset = -1;
+            int.TryParse(g, out Severity);
+        }
+        public SeizureType(string a, string b, string c, string e, string f, string g, long h)
+        {
+            DateTime.TryParse(a, out d);
+            TimeSpan.TryParse(b, out t);
+            //t = t + TimeSpan.FromSeconds(d.TimeOfDay.TotalSeconds);
+            int.TryParse(e, out length);
+            file = f;
+            TrimFileName();
+            Notes = c;
+            Offset = h;
             int.TryParse(g, out Severity);
         }
         public bool Compare(SeizureType C)
