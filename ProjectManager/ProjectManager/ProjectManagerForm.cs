@@ -37,13 +37,14 @@ namespace ProjectManager
                 string FN = temp0 + "\\" + temp[temp.Length - 2];
                 Console.WriteLine(FN);
                 
-                pjt = new Project(FN);
+                pjt = new Project(FN, true);
                 pjt.pjtCreate();
                 
                 pjt.Open();
                 _pjtOpened = true;
             }
             EnableFileTools();
+            addMultipleDirectoriesToolStripMenuItem.PerformClick();
         }
         private void ProjectManagerClosed(object sender, FormClosedEventArgs e)
         {
@@ -66,11 +67,12 @@ namespace ProjectManager
             // Open file dialog to select project
             OpenFileDialog F = new OpenFileDialog();
             F.DefaultExt = ".pjt";
+            F.Filter = "Project Files (*.pjt)|*.pjt";
             F.InitialDirectory = "C:\\";
 
             if (F.ShowDialog() == DialogResult.OK)
             {
-                pjt = new Project(F.FileName);
+                pjt = new Project(F.FileName, false);
                 pjt.Open();
                 ChangeTitleText(pjt.Filename);
                 _pjtOpened = true;
@@ -79,6 +81,7 @@ namespace ProjectManager
                 pjt.analysis.DetermineTreatment(pjt.Animals);
                 pjt.analysis.ParseGroups(pjt.Animals);
                 UpdateMainList();
+                EnableFileTools();
             }
         }
 
@@ -201,7 +204,7 @@ namespace ProjectManager
         {
             if (pjt == null)
             {
-                pjt = new Project("");
+                pjt = new Project("", true);
             }
             //This function probably should not be used.
             if (pjt != null)
@@ -235,7 +238,7 @@ namespace ProjectManager
         {
             if (pjt == null)
             {
-                pjt = new Project("");
+                pjt = new Project("", false);
             }
             if (pjt != null)
             {
@@ -467,7 +470,7 @@ namespace ProjectManager
             if (pjt == null)
             {
                 // passing empty string to GetPathName() returns empty string
-                pjt = new Project("");
+                pjt = new Project("", true);
                 
             }
             int DuplicateDirectoryCount = 0;
@@ -503,23 +506,18 @@ namespace ProjectManager
 
                 //show total number of DATS in BigDAT
 
-                pjt.BigDAT.Position = 0;
-
-                
-
-
-
-                Int32 tDat = pjt.DatCount;
-                pjt.BBigDAT.Write(tDat);
-
                 pjt.BBigDAT.Close();
                 pjt.BigDAT.Close();
 
-                FileStream tempF = new FileStream(pjt.CDatName, FileMode.Open, FileAccess.Read);
-                BinaryReader tempB = new BinaryReader(tempF);
+                FileStream tempF = new FileStream(pjt.CDatName, FileMode.Open, FileAccess.ReadWrite);
+                BinaryWriter tempB = new BinaryWriter(tempF);
 
-                Console.WriteLine(tempB.ReadInt32());
-                Console.WriteLine(pjt.DatCount);
+                tempF.Position = 0;
+                
+                Int32 tDat = pjt.DatCount;
+                tempB.Write(tDat);
+
+                pjt.Save(pjt.Filename);
 
 
                 ChangeTitleText(pjt.Filename);
@@ -720,7 +718,11 @@ namespace ProjectManager
 
         private void eEGViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            if (_pjtOpened)
+            {
+                PMEEGView EEGFrm = new PMEEGView(pjt.Animals);
+                EEGFrm.Show();
+            }
         }
     }
 }

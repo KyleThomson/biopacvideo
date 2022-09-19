@@ -229,6 +229,11 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="WeightAdd.Designer.cs" />
+    <Compile Include="WeightAdd1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WeightAdd.resx</DependentUpon>
+    </Compile>
     <Compile Include="WeightType.cs" />
     <EmbeddedResource Include="AddDate.resx">
       <DependentUpon>AddDate.cs</DependentUpon>
@@ -276,7 +281,10 @@
     <EmbeddedResource Include="InjectionEdits.resx">
       <DependentUpon>InjectionEdits.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WeightAdd.resx" />
+    <EmbeddedResource Include="WeightAdd.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WeightAdd1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="ProjectManager_TemporaryKey.pfx" />

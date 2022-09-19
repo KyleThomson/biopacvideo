@@ -48,14 +48,35 @@ namespace ProjectManager
         public long Offset;
         public string CDatName;
         public int DatCount;
+        public bool CDatExists;
+        
        
-        public Project(string Inpt)
+        public Project(string Inpt, bool newP)
         {
             _fileChanged = false; // initialize file as not changed
 
-
-            Filename = Inpt + ".pjt";
-            CDatName = Inpt + ".dat";
+            if (newP)
+            {
+                Filename = Inpt + ".pjt";
+                CDatName = Inpt + ".dat";
+                CDatExists = true;
+                createCDat(CDatName);
+            } else
+            {
+                Filename = Inpt;
+                string tempDir = Inpt.Substring(0, Inpt.Length - 4);
+                if (File.Exists(tempDir + ".dat"))
+                {
+                    CDatName = tempDir + ".dat";
+                    CDatExists = true;
+                    OpenCDat(CDatName);
+                } else
+                {
+                    CDatExists = true;
+                    createCDat(CDatName);
+                }
+            }
+            
 
             Animals = new List<AnimalType>();
             Files = new List<FileType>();
@@ -64,7 +85,7 @@ namespace ProjectManager
             //SList = new List<EEGOrganizer>();
             Offset = 0;
             
-            createCDat(CDatName);
+            
         }
         public void GetPath()
         {
@@ -154,9 +175,17 @@ namespace ProjectManager
             if (BigDAT != null) return;
             if (File.Exists(name))
             {
+
+                FileStream tempRead = new FileStream(name, FileMode.Open, FileAccess.Read);
+                BinaryReader tempBRead = new BinaryReader(tempRead);
+                DatCount = tempBRead.ReadInt32();
+                tempBRead.Close();
+                tempRead.Close();
                 //BigDAT = new FileStream(name, FileMode.Append, FileAccess.Write);
-                BigDAT = new FileStream(name, FileMode.Open, FileAccess.ReadWrite);
+                BigDAT = new FileStream(name, FileMode.Append, FileAccess.Write);
                 BBigDAT = new BinaryWriter(BigDAT);
+                
+                
             } else
             {
                 createCDat(name);
@@ -165,6 +194,12 @@ namespace ProjectManager
 
         public long AppendCDat(string FileN)
         {
+
+            if (BigDAT == null)
+            {
+                BigDAT = new FileStream(CDatName, FileMode.Append, FileAccess.Write);
+                BBigDAT = new BinaryWriter(BigDAT);
+            }
             if (!File.Exists(FileN)) return -1;
 
 
@@ -174,6 +209,7 @@ namespace ProjectManager
             //    Console.WriteLine("For: " + FileN);
             //    Console.WriteLine("Pos Start: " + BigDAT.Position);
             //}
+            
             long r = BigDAT.Position;
             
 
@@ -761,10 +797,13 @@ namespace ProjectManager
             while (!TmpTxt.EndOfStream)
             {
                 str = TmpTxt.ReadLine();
-                
+                long offset;
                 TmpStr = str.Split(',');
+                if (TmpStr.Length == 0) return;
                 string tempDAT = Dir + TmpStr[6].Replace(" ", string.Empty) + ".dat";
-                long offset = AppendCDat(tempDAT);
+                offset = AppendCDat(tempDAT);
+                
+                
 
                 CurrentAnimal = FindAnimal(TmpStr[1]);
                 TimeSpan.TryParse(TmpStr[3], out t);
