@@ -47,6 +47,7 @@ namespace ProjectManager
         public BinaryWriter BBigDAT;
         public long Offset;
         public string CDatName;
+        
         public int DatCount;
         public bool CDatExists;
         
@@ -612,7 +613,7 @@ namespace ProjectManager
             return Percent;
 
         }
-        public int ImportDirectory(string Dir, bool RejectIncomplete)
+        public int ImportDirectory(string Dir, bool RejectIncomplete, bool vidImport)
         {
             ACQReader TempACQ = new ACQReader();
             FileType F = new FileType();
@@ -755,7 +756,7 @@ namespace ProjectManager
                     string[] SZFile = Directory.GetFiles(Dir + "\\Seizure", "*.txt");
                     if (SZFile[0] != null)
                     {
-                        ImportSzFile(SZFile[0], Dir + "\\Seizure\\");
+                        ImportSzFile(SZFile[0], Dir + "\\Seizure\\", vidImport);
                     }
                 }
             }
@@ -780,7 +781,7 @@ namespace ProjectManager
 
             return string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", dt);
         }
-        public void ImportSzFile(string File, string Dir)
+        public void ImportSzFile(string Fname, string Dir, bool vidImport)
         {
             DateTime dt;
             if (Dir == null) return;
@@ -790,9 +791,9 @@ namespace ProjectManager
             TimeSpan t;
             SeizureType S;
             
-            string F = File.Substring(File.LastIndexOf('\\') + 1);
+            string F = Fname.Substring(Fname.LastIndexOf('\\') + 1);
             dt = ConvertFileToDT(F);
-            StreamReader TmpTxt = new StreamReader(File);
+            StreamReader TmpTxt = new StreamReader(Fname);
             //long offset = 0;
             while (!TmpTxt.EndOfStream)
             {
@@ -826,6 +827,30 @@ namespace ProjectManager
                 }
 
                 Animals[CurrentAnimal].Sz.Add(S);
+
+                if (vidImport)
+                {
+                    bool skip = false;
+                    string type = ".mp4";
+                    string tempVid = Dir + TmpStr[6].Replace(" ", string.Empty) + ".mp4";
+                    if (!File.Exists(tempVid))
+                    {
+                        tempVid = Dir + TmpStr[6].Replace(" ", string.Empty) + ".avi";
+                        type = ".avi";
+                        if (!File.Exists(tempVid))
+                        {
+                            skip = true;
+                        }
+                    }
+                    if (!skip)
+                    {
+                        string vidCop = Directory.GetParent(Filename).ToString();
+                        if (!Directory.Exists(vidCop + "\\Videos")) Directory.CreateDirectory(vidCop + "\\Videos");
+                        vidCop += "\\Videos\\" + TmpStr[6].Replace(" ", string.Empty) + type;
+                        File.Copy(tempVid, vidCop);
+                    }
+                    
+                }
                 //This should be part of S 
                 
                 //Animals[CurrentAnimal].SZF.Add(Dir +  TmpStr[6].Replace(" ", string.Empty));
@@ -840,6 +865,7 @@ namespace ProjectManager
 
         public long loadDats(string Path)
         {
+            
             return 1;
         }
         public void AddImportantDate(string AnimalName, string d, string Text)
@@ -1357,9 +1383,12 @@ namespace ProjectManager
                             //Old way - no severity score
                             S = new SeizureType(data[3], data[4], data[5], data[6], data[7]);
                         }
-                        else
+                        else if (data.Length == 10)
                         {
                             //New way, has severity info
+                            S = new SeizureType(data[3], data[4], data[5], data[6], data[7], data[8], long.Parse(data[9]));
+                        } else
+                        {
                             S = new SeizureType(data[3], data[4], data[5], data[6], data[7], data[8]);
                         }
                         Animals[CurrentAnimal].Sz.Add(S);

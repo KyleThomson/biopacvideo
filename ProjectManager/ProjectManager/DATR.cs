@@ -12,16 +12,15 @@ using System.Drawing.Drawing2D;
 namespace ProjectManager
 {
     
-    class OffsetName
+    public class OffsetName
     {
-        int AnimalIndex;
-        long Offset;
-        int length;
-        int SZNum;
-        public OffsetName(int Animal, int Num) 
+        public int AnimalIndex;
+        public int SZNum;
+        public bool Selected;
+        public OffsetName(int Animal, int Num, bool sel) 
         {
             AnimalIndex = Animal;
-            
+            Selected = sel;
             SZNum = Num;
         }
 
@@ -30,7 +29,7 @@ namespace ProjectManager
 }
 
 
-class NewACQR
+class DATR
     {
         public string FullName;
         public Int32[][] data;
@@ -47,7 +46,7 @@ class NewACQR
         public bool Telemetry;
         public int[] RandomOrder;
         private BinaryReader FID;
-        private FileStream FILE;
+        private FileStream FILES;
         private BinaryReader FID2;
         private FileStream FILE2;
         private bool MultiFile;
@@ -78,23 +77,24 @@ class NewACQR
         public Bitmap GVOffscreen;
         private List<TimeSpan> SzTime;
         private List<int> SzChannel;
-        Graphics g;
+        public Graphics g;
         Graphics GVg;
         public int numPerPage;
-        public int PosInSample;
+        public int PosInSample = 0;
         public int TotalSamples;
         public int ChanPass;
-        
+        Int32[] TData;
+        public int yOff = 50;
         public bool MasterZoom = true;
         public int TelemHLOffset = 0;
         public int totalFiles;
-        public List<AnimalType> AnimalList;
-        public List<OffsetName> Offset;
+        public int drawMode = 0;
+
         
         
 
 
-        public NewACQR(List<AnimalType> AL, int numDats)
+        public DATR(string Fname)
         {
             Zoom = 1;
             ID = new string[16];
@@ -105,66 +105,131 @@ class NewACQR
             RandomOrder = new int[16];
             Randomized = false;
             Position = 0;
-            data = new Int32[AL.Count][];
-            AnimalList = AL;
-            totalFiles = numDats;
+            
+            
+            
+          
+            openACQ(Fname);
 
         }
         public void closeACQ()
         {
-            FILE.Close();
+            FILES.Close();
             FID.Close();
         }
 
-        public void ListCreation()
+        public void DrawSZ(long offset, int length, int X, int Y, int index)
         {
-            Offset = new List<OffsetName>();
-            OffsetName tempOff;
-            int aCount = 0;
-            int totalSZ = 0;
-
-            foreach (AnimalType A in AnimalList)
+            PointF[] WaveC;
+            int expectedSampleSize = DisplayLength * SampleRate;
+            float YPoint;
+            Pen BoxPen = new Pen(Color.Red, 3);
+            Pen empty = new Pen(Color.LightGray, 1);
+            SampleSize = length * SampleRate;
+            TData = new Int32[SampleSize];
+            ReadData(offset);
+            float YDraw;
+            WaveC = new PointF[expectedSampleSize];
+            YDraw = (Ymax / (numPerPage / 2)) * Y;
+            if (SampleSize < expectedSampleSize)
             {
-                int numSz = 0;
-                foreach (SeizureType S in A.Sz)
+                int diff = (expectedSampleSize - SampleSize);
+                int DiffF = diff/2;
+                int j = 0;
+                for (int i = 0; i < expectedSampleSize; i++)
                 {
-                    tempOff = new OffsetName(aCount, numSz);
-                    Offset.Add(tempOff);
-                    numSz++;
-                    totalSZ++;
                     
+                    if (i < DiffF)
+                    {
+                        YPoint = 0;
+                        
+                    } else if (i >= SampleSize + DiffF)
+                    {
+                        YPoint = 0;
+                    }
+                    else
+                    {
+                        YPoint = ScaleVoltsToPixel(Convert.ToSingle(TData[j]), (Ymax / (float)(numPerPage / 2)));
+                        YPoint += yOff;
+                        j++;
+                    }
+
+                    if (YPoint > Ymax / (numPerPage / 2) + yOff) YPoint = (Ymax / (numPerPage / 2) + yOff);        //Kyle's Mistake                                                                        
+                    if (YPoint < 0) YPoint = 0;
+                    PointF TempPoint = new PointF((float)(i + (X * expectedSampleSize)) * PointSpacing, YDraw + YPoint);
+                    WaveC[i] = TempPoint;
                 }
-                aCount++;
+            } else
+            {
+                int diff = (SampleSize - expectedSampleSize);
+                int DiffF = diff / 2;
+                
+                for (int i = 0; i < expectedSampleSize; i++)
+                {
+
+                    
+                        YPoint = ScaleVoltsToPixel(Convert.ToSingle(TData[i + DiffF]), (Ymax / (float)(numPerPage / 2)));
+                    YPoint += yOff;
+                    
+
+                    if (YPoint > Ymax / (numPerPage / 2) + yOff) YPoint = (Ymax / (numPerPage / 2) + yOff);        //Kyle's Mistake                                                                        
+                    if (YPoint < 0) YPoint = 0;
+                    PointF TempPoint = new PointF((float)(i + (X * expectedSampleSize)) * PointSpacing, YDraw + YPoint);
+                    if (TempPoint.X > offscreen.Width)
+                    {
+
+                    }
+                    WaveC[i] = TempPoint;
+                }
             }
-            totalFiles = totalSZ;
             
+
+            g.DrawLines(WavePen, WaveC);
+            int xOff = 2;
+            if (drawMode == 1) xOff = 1;
+            g.DrawRectangle(WavePen, X * (Xmax / xOff), YDraw, Xmax / xOff, Ymax / (numPerPage / 2));
+
 
         }
 
+        public bool ReadData(long pos)
+        {
+            FILES.Seek(pos, 0);
+
+            for (int i = 0; i < SampleSize; i++)
+            {
+                if (i + pos > EOF) return false;
+                TData[i] = FID.ReadInt32();
+            }
+            return true;
+        }
+
+
         public void openACQ(string FName)
         { //open File for reading
-            byte CharN;
+            
             FullName = FName;
-            FILE = new FileStream(FName, FileMode.Open, FileAccess.Read);
-            FID = new BinaryReader(FILE);
-            FILE.Seek(0, SeekOrigin.End);
-            EOF = FILE.Position;
+            FILES = new FileStream(FName, FileMode.Open, FileAccess.Read);
+            FID = new BinaryReader(FILES);
+            FILES.Seek(0, SeekOrigin.End);
+            EOF = FILES.Position;
             //Get header info            
-            FILE.Seek(0, SeekOrigin.Begin);
+            FILES.Seek(0, SeekOrigin.Begin);
             totalFiles = FID.ReadInt32();
             
-            FILE.Seek(4, SeekOrigin.Begin);
+            FILES.Seek(4, SeekOrigin.Begin);
             SampleRate = 500;
 
             numPerPage = 8;
          
             DataType = 4;
             DataStart = 4;
-            FileTime = (int)((FILE.Length - (long)DataStart) / (DataType * SampleRate));
+            FileTime = (int)((FILES.Length - (long)DataStart) / (DataType * SampleRate));
             TotFileTime = FileTime;
             Position = 0;
             Loaded = true;
             VoltageSpacing = (int)(Ymax / (numPerPage));
+            SetDispLength(30);
         }
 
         public void SetDispLength(int DS)
@@ -174,24 +239,28 @@ class NewACQR
             PointSpacing = (float)Xmax / MaxDrawSize;
         }
 
-        public void initDisplay(int X, int Y, int GVY)
+        public void initDisplay(int X, int Y)
         {
+
+            if (offscreen != null) offscreen.Dispose();
             offscreen = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
-            GVOffscreen = new Bitmap(Math.Max(X, 1), Math.Max(1, GVY));
+            
             Xmax = X;
             Ymax = Y;
-            GVmax = GVY;
+            
             g = Graphics.FromImage(offscreen);
-            GVg = Graphics.FromImage(GVOffscreen);
-            GVg.Clear(Color.White);
+            
+           
             g.Clear(Color.White);
         }
 
         public void cleargraph()
         {
             g.Clear(Color.White);
-            GVg.Clear(Color.White);
+            
         }
+
+   
 
         public void ResetScale()
         {
@@ -208,6 +277,7 @@ class NewACQR
             else return 0;
 
         }
+
 
         
         private float ScaleVoltsToPixel(float volt, float pixelHeight)
@@ -236,22 +306,7 @@ class NewACQR
             return (result);
         }
 
-        public void DisplayDraw(int ViewType)
-        {
-
-            if (ViewType == 1)  //gallery mode drawing
-            {
-
-            } else if (ViewType == 2) //animal mode drawing
-            {
-
-            } else //default mode drawing
-            {
-
-            }
-
-
-        }
+        
 
     }
 }

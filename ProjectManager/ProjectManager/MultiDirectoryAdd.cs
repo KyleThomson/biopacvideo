@@ -33,12 +33,16 @@ namespace ProjectManager
 
         private void OKbttn_Click(object sender, EventArgs e)
         {
-            
+
             //if (DirListBox.SelectedIndex == -1)
             //{
             //    Pass = false;
             //    this.Close();
             //}
+            
+
+
+
             if (DirListView.SelectedIndices.Count <= 0)
             {
                 Pass = false;

@@ -13,6 +13,7 @@ namespace ProjectManager
         {
             InitializeComponent();
             MainSelect.SelectedIndex = 0;
+            
             //pjt = new Project("");
             // Handle event for form closing in case there are unsaved changes to project file.
             //FormClosing += (sender, e) => { ProjectManager_FormClosing(sender, e); };
@@ -80,6 +81,8 @@ namespace ProjectManager
                 pjt.CompareStageConflicts(); // Find conflicts between bubble and notes
                 pjt.analysis.DetermineTreatment(pjt.Animals);
                 pjt.analysis.ParseGroups(pjt.Animals);
+                if (pjt.BBigDAT != null) pjt.BBigDAT.Close();
+                if (pjt.BigDAT != null) pjt.BigDAT.Close();
                 UpdateMainList();
                 EnableFileTools();
             }
@@ -218,7 +221,7 @@ namespace ProjectManager
                     if (SZFile[0] != null)
                     {
                         //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
-                        pjt.ImportSzFile(F.FileName, F.FileName + "\\Seizure\\");
+                        pjt.ImportSzFile(F.FileName, F.FileName + "\\Seizure\\", false);
                     } else
                     {
                         
@@ -242,11 +245,11 @@ namespace ProjectManager
             }
             if (pjt != null)
             {
-
+                var moveVid = MessageBox.Show("You must import videos to view them, would you like to import videos?", "Video Importer", MessageBoxButtons.YesNo);
                 FolderBrowserDialog F = new FolderBrowserDialog();
                 if (F.ShowDialog(this) == DialogResult.OK)
                 {
-                    int result = pjt.ImportDirectory(F.SelectedPath, this.rejectUnreviewedFilesToolStripMenuItem.Checked);
+                    int result = pjt.ImportDirectory(F.SelectedPath, this.rejectUnreviewedFilesToolStripMenuItem.Checked, moveVid == DialogResult.Yes);
                     if (result == 2)
                     {
                         MessageBox.Show("File already imported", "ERROR");
@@ -480,12 +483,12 @@ namespace ProjectManager
             Frm.ShowDialog();
             if (Frm.Pass)
             {
-
+                var moveVid = MessageBox.Show("You must import videos to view them, would you like to import videos?", "Video Importer", MessageBoxButtons.YesNo);
                 //BigDAT = new StreamReader
                 for (int i = 0; i < Frm.DirReturn.Length; i++)
                 {
                     //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
-                    int result = pjt.ImportDirectory(Frm.DirReturn[i], this.rejectUnreviewedFilesToolStripMenuItem.Checked);
+                    int result = pjt.ImportDirectory(Frm.DirReturn[i], this.rejectUnreviewedFilesToolStripMenuItem.Checked, moveVid == DialogResult.Yes);
                     if (result == 2)
                     {
                         // User elected to not include file during import
@@ -516,7 +519,8 @@ namespace ProjectManager
                 
                 Int32 tDat = pjt.DatCount;
                 tempB.Write(tDat);
-
+                tempB.Close();
+                tempF.Close();
                 pjt.Save(pjt.Filename);
 
 
@@ -608,6 +612,7 @@ namespace ProjectManager
         private void ProjectManager_FormClosing_1(object sender, FormClosingEventArgs e)
         {
             SaveReminderDialog saveReminderDialog = new SaveReminderDialog();
+            if (!_pjtOpened) return;
             // first check for default value
             if (pjt._fileChanged != default)
             {
@@ -720,9 +725,14 @@ namespace ProjectManager
         {
             if (_pjtOpened)
             {
-                PMEEGView EEGFrm = new PMEEGView(pjt.Animals);
+                if (pjt.DatCount <= 0) return;
+                PMEEGView EEGFrm = new PMEEGView(pjt.Animals, pjt.DatCount, pjt.CDatName);
                 EEGFrm.Show();
+               
+                
             }
         }
+
+       
     }
 }

@@ -174,7 +174,7 @@
     <Compile Include="MultiDirectoryAdd.designer.cs">
       <DependentUpon>MultiDirectoryAdd.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewACQR.cs" />
+    <Compile Include="DATR.cs" />
     <Compile Include="PMEEGView.cs">
       <SubType>Form</SubType>
     </Compile>
