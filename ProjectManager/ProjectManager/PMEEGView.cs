@@ -60,7 +60,7 @@ namespace ProjectManager
             #region FORM EVENTS
 
             this.Resize += new System.EventHandler(this.MainForm_Resize);
-
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GalArea_MouseDown);
 
 
 
@@ -83,6 +83,7 @@ namespace ProjectManager
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
             ThreadDisplay.Start();
             Redraw = true;
+            pg.Text = (pageNum + 1) + " / " + pageCalc();
 
         }
 
@@ -90,6 +91,13 @@ namespace ProjectManager
         {
             
 
+        }
+
+        public int pageCalc()
+        {
+            int r = numDats / numPerPage;
+            if (numDats % numPerPage != 0) r++;
+            return r;
         }
 
 
@@ -150,11 +158,13 @@ namespace ProjectManager
                             DAT.SetDispLength(TimeFrame);
                             int count = pageNum * numPerPage;
                             DAT.cleargraph();
+                            int tempIn;
+                            if (DAT.oneCol) tempIn = numPerPage / 2;
 
                             for (int i = 0; i < numPerPage; i++)
                             {
                                 if (count >= Offset.Count) break;
-                                DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, 0, i, i);
+                                DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, 0, i, Offset[count].Selected);
                                 Console.WriteLine(Animals[Offset[count].AnimalIndex].ID);
                                 count++;
                             }
@@ -179,7 +189,7 @@ namespace ProjectManager
                             for (int i = 0; i < numPerPage; i++)
                             {
                                 if (count >= Offset.Count) break;
-                                DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, i % 2, i / 2, i);
+                                DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, i % 2, i / 2, Offset[count].Selected);
                                 Console.WriteLine(Animals[Offset[count].AnimalIndex].ID);
                                 count++;
                             }
@@ -259,6 +269,8 @@ namespace ProjectManager
                     break;
                 case "Gallery":
                     ViewMode = 1;
+                    g.Clear(Color.Black);
+                    DAT.cleargraph();
                     DefaultView.Checked = false;
                     animalView.Checked = false;
                     galleryView.Checked = true;
@@ -422,10 +434,12 @@ namespace ProjectManager
 
         private void TFSelect_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int[] TimeScales = { 30, 60, 120, 300, 600 };
+            int[] TimeScales = {10, 15, 30, 60, 120, 300, 600 };
             TimeFrame = TimeScales[TFSelect.SelectedIndex];           
 
             DAT.SetDispLength(TimeFrame);
+            if (TimeFrame > 30) DAT.oneCol = true;
+            else DAT.oneCol = false;
             Redraw = true;
         }
 
@@ -610,8 +624,72 @@ namespace ProjectManager
 
         private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
         {
-            DAT.yOff = 104 - vScrollBar1.Value;
+            DAT.yOff = vScrollBar1.Value;
             Redraw = true;
+        }
+
+        private void Next_Click(object sender, EventArgs e)
+        {
+            if (pageNum * numPerPage + numPerPage > numDats) return;
+            pageNum += 1;
+            Redraw = true;
+            pg.Text = (pageNum + 1) + " / " + pageCalc();
+        }
+
+        private void Previous_Click(object sender, EventArgs e)
+        {
+            if (pageNum == 0) return;
+            pageNum -= 1;
+            Redraw = true;
+            pg.Text = (pageNum + 1)+ " / " + pageCalc();
+        }
+
+        private void GalArea_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (ViewMode == 1)
+            {
+
+                int galOff = GalArea.Location.Y;
+                if (e.Y >= 0 + galOff && e.Y < (GalArea.Height / 4) + galOff)
+                {
+                    int temp = pageNum * numPerPage;
+                    if (Offset[temp].Selected) Offset[temp].Selected = false;
+
+                    else Offset[temp].Selected = true;
+
+                }
+                else if (e.Y >= (GalArea.Height / 4) + galOff && e.Y < (GalArea.Height / 2) + galOff)
+                {
+                    int temp = pageNum * numPerPage + 1;
+
+                    if (Offset[temp].Selected) Offset[temp].Selected = false;
+
+                    else Offset[temp].Selected = true;
+
+                }
+                else if (e.Y >= (GalArea.Height / 2) + galOff && e.Y < (GalArea.Height - (GalArea.Height / 4)) + galOff)
+                {
+                    int temp = pageNum * numPerPage + 2;
+
+                    if (Offset[temp].Selected) Offset[temp].Selected = false;
+
+                    else Offset[temp].Selected = true;
+
+                }
+                else if (e.Y >= (GalArea.Height - (GalArea.Height / 4)) + galOff && e.Y <= (GalArea.Height) + galOff)
+                {
+                    int temp = pageNum * numPerPage + 3;
+
+                    if (Offset[temp].Selected) Offset[temp].Selected = false;
+
+                    else Offset[temp].Selected = true;
+
+                }
+
+                Redraw = true;
+
+
+            }
         }
     }
 

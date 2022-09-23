@@ -89,6 +89,7 @@ class DATR
         public int TelemHLOffset = 0;
         public int totalFiles;
         public int drawMode = 0;
+        public bool oneCol = false;
 
         
         
@@ -118,7 +119,7 @@ class DATR
             FID.Close();
         }
 
-        public void DrawSZ(long offset, int length, int X, int Y, int index)
+        public void DrawSZ(long offset, int length, int X, int Y, bool display)
         {
             PointF[] WaveC;
             int expectedSampleSize = DisplayLength * SampleRate;
@@ -127,6 +128,8 @@ class DATR
             Pen empty = new Pen(Color.LightGray, 1);
             SampleSize = length * SampleRate;
             TData = new Int32[SampleSize];
+            int xOff = 2;
+            if (drawMode == 1) xOff = 1;
             ReadData(offset);
             float YDraw;
             WaveC = new PointF[expectedSampleSize];
@@ -141,11 +144,11 @@ class DATR
                     
                     if (i < DiffF)
                     {
-                        YPoint = 0;
+                        YPoint = Ymax / numPerPage / 2 + yOff - 10;
                         
                     } else if (i >= SampleSize + DiffF)
                     {
-                        YPoint = 0;
+                        YPoint = Ymax/numPerPage/2 + yOff - 10;
                     }
                     else
                     {
@@ -154,9 +157,9 @@ class DATR
                         j++;
                     }
 
-                    if (YPoint > Ymax / (numPerPage / 2) + yOff) YPoint = (Ymax / (numPerPage / 2) + yOff);        //Kyle's Mistake                                                                        
+                    if (YPoint > Ymax / (numPerPage / 2) ) YPoint = (Ymax / (numPerPage / 2) );        //Kyle's Mistake                                                                        
                     if (YPoint < 0) YPoint = 0;
-                    PointF TempPoint = new PointF((float)(i + (X * expectedSampleSize)) * PointSpacing, YDraw + YPoint);
+                    PointF TempPoint = new PointF((float)(i + (X * expectedSampleSize)) / xOff * PointSpacing, YDraw + YPoint);
                     WaveC[i] = TempPoint;
                 }
             } else
@@ -172,9 +175,9 @@ class DATR
                     YPoint += yOff;
                     
 
-                    if (YPoint > Ymax / (numPerPage / 2) + yOff) YPoint = (Ymax / (numPerPage / 2) + yOff);        //Kyle's Mistake                                                                        
+                    if (YPoint > Ymax / (numPerPage / 2) ) YPoint = (Ymax / (numPerPage / 2));        //Kyle's Mistake                                                                        
                     if (YPoint < 0) YPoint = 0;
-                    PointF TempPoint = new PointF((float)(i + (X * expectedSampleSize)) * PointSpacing, YDraw + YPoint);
+                    PointF TempPoint = new PointF((float)(i + (X * expectedSampleSize)) / xOff * PointSpacing, YDraw + YPoint);
                     if (TempPoint.X > offscreen.Width)
                     {
 
@@ -185,9 +188,16 @@ class DATR
             
 
             g.DrawLines(WavePen, WaveC);
-            int xOff = 2;
-            if (drawMode == 1) xOff = 1;
-            g.DrawRectangle(WavePen, X * (Xmax / xOff), YDraw, Xmax / xOff, Ymax / (numPerPage / 2));
+       
+            
+            
+            if (display)
+            {
+                g.DrawRectangle(BoxPen, 3 + X * (Xmax / xOff),3 + YDraw, Xmax / xOff - 6, Ymax / (numPerPage / 2) - 6);
+            } else
+            {
+                g.DrawRectangle(WavePen, X * (Xmax / xOff), YDraw, Xmax / xOff, Ymax / (numPerPage / 2));
+            }
 
 
         }
@@ -200,6 +210,7 @@ class DATR
             {
                 if (i + pos > EOF) return false;
                 TData[i] = FID.ReadInt32();
+                
             }
             return true;
         }

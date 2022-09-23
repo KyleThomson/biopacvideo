@@ -61,6 +61,8 @@ namespace ProjectManager
             this.GVGrouping = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
+            this.pg = new System.Windows.Forms.Label();
+            this.GalArea = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.myVLC)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -86,6 +88,8 @@ namespace ProjectManager
             this.TFSelect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.TFSelect.FormattingEnabled = true;
             this.TFSelect.Items.AddRange(new object[] {
+            "10s",
+            "15s",
             "30s",
             "60s",
             "2m",
@@ -312,6 +316,7 @@ namespace ProjectManager
             this.Next.TabIndex = 9;
             this.Next.Text = "Next";
             this.Next.UseVisualStyleBackColor = true;
+            this.Next.Click += new System.EventHandler(this.Next_Click);
             // 
             // Previous
             // 
@@ -322,6 +327,7 @@ namespace ProjectManager
             this.Previous.TabIndex = 10;
             this.Previous.Text = "Previous";
             this.Previous.UseVisualStyleBackColor = true;
+            this.Previous.Click += new System.EventHandler(this.Previous_Click);
             // 
             // TimeFrameLabel
             // 
@@ -389,6 +395,29 @@ namespace ProjectManager
             this.vScrollBar1.Value = 100;
             this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
             // 
+            // pg
+            // 
+            this.pg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pg.AutoSize = true;
+            this.pg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pg.ForeColor = System.Drawing.Color.Cornsilk;
+            this.pg.Location = new System.Drawing.Point(242, 716);
+            this.pg.Name = "pg";
+            this.pg.Size = new System.Drawing.Size(32, 16);
+            this.pg.TabIndex = 18;
+            this.pg.Text = "0 / 0";
+            // 
+            // GalArea
+            // 
+            this.GalArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.GalArea.Location = new System.Drawing.Point(0, 24);
+            this.GalArea.Name = "GalArea";
+            this.GalArea.Size = new System.Drawing.Size(533, 648);
+            this.GalArea.TabIndex = 20;
+            this.GalArea.Visible = false;
+            this.GalArea.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GalArea_MouseDown);
+            // 
             // PMEEGView
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -396,6 +425,7 @@ namespace ProjectManager
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(1184, 761);
+            this.Controls.Add(this.pg);
             this.Controls.Add(this.vScrollBar1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.TimeLabel);
@@ -411,6 +441,7 @@ namespace ProjectManager
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.GVGrouping);
             this.Controls.Add(this.BottomLabel);
+            this.Controls.Add(this.GalArea);
             this.MinimumSize = new System.Drawing.Size(1040, 600);
             this.Name = "PMEEGView";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
@@ -461,5 +492,7 @@ namespace ProjectManager
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ToolStripMenuItem telemetryToolStripMenuItem1;
         private System.Windows.Forms.VScrollBar vScrollBar1;
+        private System.Windows.Forms.Label pg;
+        private System.Windows.Forms.Panel GalArea;
     }
 }
