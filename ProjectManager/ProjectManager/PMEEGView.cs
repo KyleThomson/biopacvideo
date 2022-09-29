@@ -96,7 +96,7 @@ namespace ProjectManager
 
             Redraw = false;
             //do big eeg
-
+            
             g.DrawImage(DAT.offscreen, graph.X1, graph.Y1);
             Gg.DrawImage(DAT.GOffscreen, GalGraph.X1, GalGraph.Y1);
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread));

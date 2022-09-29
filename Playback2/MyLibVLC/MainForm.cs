@@ -88,6 +88,7 @@ namespace SeizurePlayback
         public long[,] vidRanges = new long[16, 30];
         public bool wasLoaded;
         public float Speed = 1;
+        public int RTSpeed = 1;
         
 
 
@@ -154,6 +155,8 @@ namespace SeizurePlayback
             VisChecks[14] = VisChan15;
             VisChecks[15] = VisChan16;
 
+
+            
             INIload();
             TimeBox.SelectedIndex = 1; //Default Time Scale
             Step = MaxDispSize; //Setting Step to max display size makes sure the image refreshes. 
@@ -316,6 +319,7 @@ namespace SeizurePlayback
             int Delay = 0;
             // int h,m,s;
             Stopwatch st = new Stopwatch();
+            int MinorStep;
             while (true)
             {
                 if (ACQ.Loaded)
@@ -407,37 +411,103 @@ namespace SeizurePlayback
                             }
                             else
                             {
-                                st.Start();
-                                if (Step >= MaxDispSize)
+                                if (RTSpeed == 1)
                                 {
-
-                                    if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
+                                    st.Start();
+                                    if (Step >= MaxDispSize)
                                     {
-                                        Paused = true;
-                                        PercentCompletion = 100;
+
+                                        if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
+                                        {
+                                            Paused = true;
+                                            PercentCompletion = 100;
+                                        }
+                                        Redraw = true;
+                                        Step = 0;
+                                        
                                     }
-                                    Redraw = true;
-                                    Step = 0;
-                                }
-                                if (Redraw)
-                                    ACQ.drawbuffer();
-                                g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
-                                g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
-                                /*if (EOFReached)
-                                     g.DrawString("End of File Reached", new Font("Arial", 20), new SolidBrush(Color.Red), new PointF(10,10));*/
-                                ACQ.Position += 1;
-                                Step += 1;
-                                st.Stop();
-                                if ((st.ElapsedMilliseconds + Delay) > 1000)
+                                    if (Redraw)
+                                        ACQ.drawbuffer();
+                                    g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
+                                    g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
+                                    /*if (EOFReached)
+                                         g.DrawString("End of File Reached", new Font("Arial", 20), new SolidBrush(Color.Red), new PointF(10,10));*/
+                                    
+                                        ACQ.Position += 1;
+                                        Step += 1;
+                                    
+
+                                    Console.WriteLine("ACQ Pos: " + ACQ.Position + "\n");
+                                    Console.WriteLine("Vid Pos: " + (player.getpos() / 1000) + "\n");
+
+                                    st.Stop();
+                                    if ((st.ElapsedMilliseconds + Delay) > 1000)
+                                    {
+                                        Delay = (int)st.ElapsedMilliseconds - 1000;
+                                    }
+                                    else
+                                    {
+                                        Thread.Sleep(1000 - ((int)st.ElapsedMilliseconds + Delay));
+                                        Delay = 0;
+                                    }
+                                    st.Reset();
+                                } else
                                 {
-                                    Delay = (int)st.ElapsedMilliseconds - 1000;
+                                    
+                                    st.Start();
+                                    if (Step >= MaxDispSize)
+                                    {
+
+                                        if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
+                                        {
+                                            Paused = true;
+                                            PercentCompletion = 100;
+                                        }
+                                        Redraw = true;
+                                        Step = 0;
+                                        //working on minor stepping to speed up video/redline
+                                        if (player != null) SeekToCurrentPos();
+                                    }
+                                    if (Redraw)
+                                        ACQ.drawbuffer();
+                                    g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
+                                    g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
+                                    /*if (EOFReached)
+                                         g.DrawString("End of File Reached", new Font("Arial", 20), new SolidBrush(Color.Red), new PointF(10,10));*/
+                                    if (RTSpeed >= 1)
+                                    {
+                                        ACQ.Position += RTSpeed;
+                                        Step += RTSpeed;
+                                    }
+                                    else
+                                    {
+                                        if (RTSpeed == 0)
+                                        {
+                                            RTSpeed = -1;
+                                        }
+                                        else if (RTSpeed == -1)
+                                        {
+                                            ACQ.Position += 1;
+                                            Step += 1;
+                                            RTSpeed = 0;
+                                        }
+                                    }
+
+                                    Console.WriteLine("ACQ Pos: " + ACQ.Position + "\n");
+                                    Console.WriteLine("Vid Pos: " + (player.getpos() / 1000) + "\n");
+
+                                    st.Stop();
+                                    if ((st.ElapsedMilliseconds + Delay) > 1000)
+                                    {
+                                        Delay = (int)st.ElapsedMilliseconds - 1000;
+                                    }
+                                    else
+                                    {
+                                        Thread.Sleep(1000 - ((int)st.ElapsedMilliseconds + Delay));
+                                        Delay = 0;
+                                    }
+                                    st.Reset();
                                 }
-                                else
-                                {
-                                    Thread.Sleep(1000 - ((int)st.ElapsedMilliseconds + Delay));
-                                    Delay = 0;
-                                }
-                                st.Reset();
                             }
                         } //if !Paused
                         else
@@ -475,6 +545,8 @@ namespace SeizurePlayback
                                 g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
                                 Thread.Sleep(100);
                             }
+
+                            RTSpeed = 1;
                         }
 
 
@@ -531,22 +603,46 @@ namespace SeizurePlayback
                             break;
                     }
                 } else
-                {
-                    switch (e.KeyCode)
+                {   if (!RealTime || player == null || ACQ.SelectedChan == -1)
                     {
+                        switch (e.KeyCode)
+                        {
 
-                        case Keys.NumPad4:
-                            Speed = Math.Max(0.1f, Speed - 0.1f);
-                            break;
-                        case Keys.NumPad6:
-                            Speed = Math.Min(2f, Speed + 0.1f);
-                            break;
-                        case Keys.NumPad5:
-                            
-                            Pause_Click(null, null);                           
-                            break;
-                        
+                            case Keys.NumPad4:
+                                Speed = Math.Max(0.1f, Speed - 0.1f);
+                                break;
+                            case Keys.NumPad6:
+                                Speed = Math.Min(2f, Speed + 0.1f);
+                                break;
+                            case Keys.NumPad5:
+
+                                Pause_Click(null, null);
+                                break;
+                        }
                     }
+                    else
+                    {
+                        switch (e.KeyCode)
+                        {
+
+                            case Keys.NumPad4:
+                                if (RTSpeed < 1) return;
+                                CalcRTSpeed(false);
+                                ChangeVidSpeed();
+                                break;
+                            case Keys.NumPad6:
+                                if (RTSpeed > 10) return;
+                                CalcRTSpeed(true);
+                                ChangeVidSpeed();
+                                break;
+                            case Keys.NumPad5:
+
+                                Pause_Click(null, null);
+                                break;
+
+                        }
+                    }
+                        
                 }
             } else
             {
@@ -560,6 +656,80 @@ namespace SeizurePlayback
                 }
             }
             e.Handled = true;
+        }
+
+
+        public void CalcRTSpeed(bool inc)
+        {
+            if (inc)
+            {
+                switch (RTSpeed)
+                {
+                    case 0:
+                    case -1:
+                        RTSpeed = 1;
+                        break;
+                    case 1:
+                        RTSpeed = 2;
+                        break;
+                    case 2:
+                        RTSpeed = 5;
+                        break;
+                    case 5:
+                        RTSpeed = 10;
+                        break;
+                    case 10:
+                        RTSpeed = 30;
+                        break;
+                    case 30:
+
+                        break;
+                }
+            }
+            else
+            {
+                switch (RTSpeed)
+                {
+                    case 0:
+                    case -1:
+
+                        break;
+                    case 1:
+                        RTSpeed = 0;
+                        break;
+                    case 2:
+                        RTSpeed = 1;
+                        break;
+                    case 5:
+                        RTSpeed = 2;
+                        break;
+                    case 10:
+                        RTSpeed = 5;
+                        break;
+                    case 30:
+                        RTSpeed = 10;
+                        break;
+                }
+            }
+        }
+       
+
+        public void ChangeVidSpeed()
+        {
+
+            if (player == null) return;
+            if (RTSpeed < 1)
+            {
+                player.Speed(0.5f);
+                VideoSpeedLabel.Text = "0.5x";
+            } else
+            {
+                if (RTSpeed > 30) RTSpeed = 30;
+                player.Speed((float)RTSpeed);
+                VideoSpeedLabel.Text = RTSpeed + "x";
+            }
+
+
         }
 
         private void SetFeatureToAllControls(Control.ControlCollection cc)
@@ -636,6 +806,8 @@ namespace SeizurePlayback
 
         private void Play_Click(object sender, EventArgs e)
         {
+            RTSpeed = 1;
+            VideoSpeedLabel.Text = "1x";
             Paused = false;
             if (player != null & RealTime)
                 player.Play();
@@ -646,6 +818,9 @@ namespace SeizurePlayback
         private void Pause_Click(object sender, EventArgs e)
         {
             Speed = 1;
+            RTSpeed = 1;
+            VideoSpeedLabel.Text = "| |";
+            ChangeVidSpeed();
             if (Paused == true) return;
             Paused = true;
             if (player != null)
@@ -1044,6 +1219,7 @@ namespace SeizurePlayback
         }
         private void MyMouseUp(Object sender, MouseEventArgs e)
         {
+
             //if (vLoading) return;
             if (FastReviewState) return;
             if (ACQ.Loaded)
@@ -1063,11 +1239,14 @@ namespace SeizurePlayback
                             ACQ.SelectedChan = ChanPos[TempChan];
                         }
                         OffsetBox.Text = VideoOffset[ACQ.SelectedChan].ToString();
+                        RTSpeed = 1;
+                        ChangeVidSpeed();
                         ACQ.Position = ACQ.Position - Step + XStart;
                         Step = XStart;
                         SeekToCurrentPos();
                         QuitHighlight();
                         Paused = false;
+                        VideoSpeedLabel.Text = "1x";
                         RealTime = true;
                         Redraw = true;
                     }
@@ -2497,9 +2676,16 @@ namespace SeizurePlayback
 
         }
 
-
-
-
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
+                
+            
+                Console.WriteLine("RTSPeed: " + RTSpeed);
+                Console.WriteLine("VidSpeed " + RTSpeed);
+            
+            
+        }
 
         public void loadVid(int chanloop)
         {

@@ -115,6 +115,8 @@ namespace SeizurePlayback
             this.Rewind_Dec = new System.Windows.Forms.Button();
             this.Rewind_Inc = new System.Windows.Forms.Button();
             this.Rewind_ChangeBox = new System.Windows.Forms.FlowLayoutPanel();
+            this.button1 = new System.Windows.Forms.Button();
+            this.VideoSpeedLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.FRButtonGroup.SuspendLayout();
@@ -1276,6 +1278,29 @@ namespace SeizurePlayback
             this.Rewind_ChangeBox.Size = new System.Drawing.Size(51, 29);
             this.Rewind_ChangeBox.TabIndex = 78;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(1226, 594);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 79;
+            this.button1.Text = "Check VLC";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // VideoSpeedLabel
+            // 
+            this.VideoSpeedLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.VideoSpeedLabel.AutoSize = true;
+            this.VideoSpeedLabel.BackColor = System.Drawing.Color.Black;
+            this.VideoSpeedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.VideoSpeedLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.VideoSpeedLabel.Location = new System.Drawing.Point(493, 482);
+            this.VideoSpeedLabel.Name = "VideoSpeedLabel";
+            this.VideoSpeedLabel.Size = new System.Drawing.Size(16, 15);
+            this.VideoSpeedLabel.TabIndex = 80;
+            this.VideoSpeedLabel.Text = "| |";
+            // 
             // CManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1283,6 +1308,8 @@ namespace SeizurePlayback
             this.BackColor = System.Drawing.Color.Black;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(1444, 845);
+            this.Controls.Add(this.VideoSpeedLabel);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.Rewind_ChangeBox);
             this.Controls.Add(this.MoreOp);
             this.Controls.Add(this.ColorClear);
@@ -1461,6 +1488,8 @@ namespace SeizurePlayback
         private System.Windows.Forms.Button Rewind_Dec;
         private System.Windows.Forms.Button Rewind_Inc;
         private System.Windows.Forms.FlowLayoutPanel Rewind_ChangeBox;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label VideoSpeedLabel;
     }
 }
 
