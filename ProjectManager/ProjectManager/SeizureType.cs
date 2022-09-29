@@ -10,7 +10,8 @@ namespace ProjectManager
         public string Notes;
         public string file;
         public int Severity;
-        public long Offset; 
+        public long Offset;
+        public string VidString;
         public SeizureType(string a, string b, string c, string e, string f)
         {
             DateTime.TryParse(a, out d);
@@ -45,6 +46,7 @@ namespace ProjectManager
             TrimFileName();
             Notes = c;
             Offset = h;
+            
             int.TryParse(g, out Severity);
         }
         public bool Compare(SeizureType C)

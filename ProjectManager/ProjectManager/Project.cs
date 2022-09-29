@@ -322,7 +322,8 @@ namespace ProjectManager
                 foreach (SeizureType S in A.Sz)
                 {
                     answer = string.Format("{0:D2}:{1:D2}:{2:D2}", S.t.Hours, S.t.Minutes, S.t.Seconds);
-                    s = "An," + A.ID + ", sz, " + S.d.ToString() + ", " + answer + ", " + S.Notes + "," + S.length + "," + S.file + "," + S.Severity + "," + S.Offset;
+                    s = "An," + A.ID + ", sz, " + S.d.ToString() + ", " + answer + "," + S.Notes + "," + S.length + "," + S.file + "," + S.Severity + "," + S.Offset;
+                    if (S.VidString != null) s += "," + S.VidString;
                     F.WriteLine(s);
                 }
                 foreach (WeightType W in A.WeightInfo)
@@ -846,9 +847,14 @@ namespace ProjectManager
                     {
                         string vidCop = Directory.GetParent(Filename).ToString();
                         if (!Directory.Exists(vidCop + "\\Videos")) Directory.CreateDirectory(vidCop + "\\Videos");
-                        vidCop += "\\Videos\\" + TmpStr[6].Replace(" ", string.Empty) + type;
+                        
+                        vidCop += "\\Videos\\" + Animals[CurrentAnimal].ID + "-" + Animals[CurrentAnimal].Sz.Count + type;
+                        S.VidString = Animals[CurrentAnimal].ID + "-" + Animals[CurrentAnimal].Sz.Count + type;
+
                         File.Copy(tempVid, vidCop);
                     }
+                        
+                    
                     
                 }
                 //This should be part of S 
@@ -1383,11 +1389,13 @@ namespace ProjectManager
                             //Old way - no severity score
                             S = new SeizureType(data[3], data[4], data[5], data[6], data[7]);
                         }
-                        else if (data.Length == 10)
+                        else if (data.Length == 10 || data.Length == 11 )
                         {
                             //New way, has severity info
                             S = new SeizureType(data[3], data[4], data[5], data[6], data[7], data[8], long.Parse(data[9]));
-                        } else
+                            if (data.Length == 11) S.VidString = data[10];
+                        } 
+                        else
                         {
                             S = new SeizureType(data[3], data[4], data[5], data[6], data[7], data[8]);
                         }

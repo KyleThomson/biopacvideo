@@ -28,6 +28,7 @@ namespace ProjectManager
         public int numDats;
         public int pageNum;
         public LibVLC vlc;
+        public MediaPlayer player;
         public string vidDir;
         public bool vidEnable;
         public Thread ThreadDisplay;
@@ -36,8 +37,14 @@ namespace ProjectManager
         public int numPerPage;
         public bool hiRes = true;
         public Graphics g;
+        public Graphics Gg;
         public MyGraph graph;
+        public MyGraph GalGraph;
         bool pauseDisplay = false;
+        bool[] vidShow;
+        int currentSel = -1;
+        int seconds = 0;
+        bool timeBarAccess = false;
         
 
         public PMEEGView(List<AnimalType> AL, int dc, string fn)
@@ -48,7 +55,7 @@ namespace ProjectManager
             DAT = new DATR(fn);
             pageNum = 0;
             ViewMode = 0;
-            vidDir = Directory.GetParent(fn).ToString() + "\\Videos";
+            vidDir = Directory.GetParent(fn).ToString() + "\\Videos\\";
             if (Directory.Exists(vidDir)) vidEnable = true;
             TFSelect.SelectedIndex = 0;
             graph = new MyGraph();
@@ -56,6 +63,11 @@ namespace ProjectManager
             graph.X2 = this.Size.Width - 25;
             graph.Y1 = this.menuStrip1.Location.X + (this.menuStrip1.Height + 5);
             graph.Y2 = this.BottomLabel.Location.Y - 10;
+            GalGraph = new MyGraph();
+            GalGraph.X1 = this.GalGBox.Location.X + 2;
+            GalGraph.X2 = this.GalGBox.Location.X + GalGBox.Width -2;
+            GalGraph.Y1 = this.GalGBox.Location.Y + 2;
+            GalGraph.Y2 = this.GalGBox.Location.Y + GalGBox.Height - 2;
             ListCreation();
             #region FORM EVENTS
 
@@ -73,13 +85,20 @@ namespace ProjectManager
             this.Opacity = 100;
             this.Refresh();
             g = this.CreateGraphics();
-            DAT.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);
+            Gg = this.CreateGraphics();
+            DAT.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1, GalGBox.Width - 2, GalGBox.Height - 2);
             numPerPage = 8;
+            vidShow = new bool[numPerPage];
+            for (int i = 0; i < numPerPage; i++)
+            {
+                vidShow[i] = false;
+            }
 
             Redraw = false;
-
+            //do big eeg
 
             g.DrawImage(DAT.offscreen, graph.X1, graph.Y1);
+            Gg.DrawImage(DAT.GOffscreen, GalGraph.X1, GalGraph.Y1);
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
             ThreadDisplay.Start();
             Redraw = true;
@@ -157,21 +176,55 @@ namespace ProjectManager
                         {
                             DAT.SetDispLength(TimeFrame);
                             int count = pageNum * numPerPage;
+
                             DAT.cleargraph();
                             int tempIn;
-                            if (DAT.oneCol) tempIn = numPerPage / 2;
+                            tempIn = numPerPage / 2;
 
                             for (int i = 0; i < numPerPage; i++)
                             {
                                 if (count >= Offset.Count) break;
-                                DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, 0, i, Offset[count].Selected);
-                                Console.WriteLine(Animals[Offset[count].AnimalIndex].ID);
+                                DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, 0, i, Offset[count].Selected, vidShow[i]);
+
+
+
+
                                 count++;
                             }
+                            Gg.DrawImage(DAT.GOffscreen, GalGraph.X1, GalGraph.Y1);
                             g.DrawImage(DAT.offscreen, graph.X1, graph.Y1);
+                            
                             Redraw = false;
 
                         }
+
+
+                        //if (myVLC.MediaPlayer != null)
+                        //{
+                        //    //WhateverFormNamed.AttemptChange()
+                        //    //PMEEGView.ActiveForm.change
+                        //    TimeLabel.Invoke(new MethodInvoker(delegate
+                        //    {
+
+                        //        TimeLabel.Text = (Math.Ceiling((myVLC.MediaPlayer.Position * myVLC.MediaPlayer.Length) / 1000f)).ToString();
+                        //        //if (!timeBarAccess) TimeBar.Value = (int)(myVLC.MediaPlayer.Position * myVLC.MediaPlayer.Length / 1000f);
+
+                        //    }));
+
+                        //    if (TimeBar.InvokeRequired) //Once again, need to do an invoke to handle from a separate thread
+                        //    {
+                        //        TimeBar.Invoke(new MethodInvoker(delegate
+                        //        {
+
+                        //            TimeBar.Value = (int)(myVLC.MediaPlayer.Position * myVLC.MediaPlayer.Length / 1000f);
+                                    
+                        //            TimeBar.AttemptChange(//Value I want);  
+
+                        //        }));
+
+                        //    }
+                        //}
+                        Thread.Sleep(500);
                     }
                     else if (ViewMode == 2) //animal mode drawing
                     {
@@ -189,7 +242,7 @@ namespace ProjectManager
                             for (int i = 0; i < numPerPage; i++)
                             {
                                 if (count >= Offset.Count) break;
-                                DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, i % 2, i / 2, Offset[count].Selected);
+                                DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, i % 2, i / 2, Offset[count].Selected, false);
                                 Console.WriteLine(Animals[Offset[count].AnimalIndex].ID);
                                 count++;
                             }
@@ -199,19 +252,11 @@ namespace ProjectManager
                         }
 
 
-                        if (ViewMode == 1 && myVLC.MediaPlayer != null)
-                        {
-                            TimeLabel.Invoke(new MethodInvoker(delegate
-                        {
-                            TimeLabel.Text = (Math.Round((myVLC.MediaPlayer.Position * myVLC.MediaPlayer.Length) / 1000f)).ToString();
-                            TimeBar.Value = (int)(myVLC.MediaPlayer.Position * myVLC.MediaPlayer.Length / 1000f);
-
-                        }));
-                            
 
 
-                        
-                        }
+
+
+                    
                         
 
                     }
@@ -229,7 +274,7 @@ namespace ProjectManager
         {
             ThreadDisplay.Abort();
 
-            if (vlc != null)
+            if (myVLC.MediaPlayer != null)
             {
                 myVLC.MediaPlayer.Dispose();
                 myVLC.Dispose();
@@ -249,6 +294,11 @@ namespace ProjectManager
 
         private void normalListToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
+            for (int i = 0; i < vidShow.Count(); i++)
+            {
+                vidShow[i] = false;
+            }
             switch (sender.ToString())
             {
                 case "Default":
@@ -266,10 +316,15 @@ namespace ProjectManager
 
 
 
+
+
                     break;
                 case "Gallery":
                     ViewMode = 1;
                     g.Clear(Color.Black);
+
+                    Gg.Clear(Color.White);
+                    
                     DAT.cleargraph();
                     DefaultView.Checked = false;
                     animalView.Checked = false;
@@ -293,6 +348,8 @@ namespace ProjectManager
                     break;
             }
 
+            
+
 
         }
 
@@ -305,11 +362,13 @@ namespace ProjectManager
                 g.Dispose();
                 g = this.CreateGraphics();
                 DAT.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);
+
                 
             } else if (mode == 1)
             {
                 graph.X2 = this.GVGrouping.Location.X - 20;
                 graph.Y2 = this.BottomLabel.Location.Y - 10;
+
                 
                 g = this.CreateGraphics();
                 DAT.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);
@@ -373,6 +432,7 @@ namespace ProjectManager
 
         private void PlayPauseButton_Click(object sender, EventArgs e)
         {
+            if (myVLC.MediaPlayer == null) return;
             if (paused)
             {
                 paused = false;
@@ -382,6 +442,7 @@ namespace ProjectManager
                 paused = true;
                 myVLC.MediaPlayer.Pause();
             }
+            PlayPauseButton_MouseLeave(sender, e);
         }
 
         private void PlayPauseButton_MouseHover(object sender, EventArgs e)
@@ -443,35 +504,6 @@ namespace ProjectManager
             Redraw = true;
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            myVLC.Show();
-            if (myVLC.MediaPlayer != null) myVLC.MediaPlayer.Dispose();
-            vlc = new LibVLC();
-            
-            Media media = new Media(vlc, "D:\\TestData\\NewRatFR\\20220723-000024\\Seizure\\20220723-000024_00_S9.avi");
-            MediaPlayer tempmp = new MediaPlayer(media);
-            myVLC.MediaPlayer = tempmp;
-            myVLC.MediaPlayer.Play();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            myVLC.Show();
-            if (myVLC.MediaPlayer != null) myVLC.MediaPlayer.Dispose();
-            vlc = new LibVLC();
-            Media media = new Media(vlc, "D:\\TestData\\New Mouse noFR MP4\\20220725-000003\\Seizure\\20220725-000003_008_S1.mp4");
-            MediaPlayer tempmp = new MediaPlayer(media);
-            myVLC.MediaPlayer = tempmp;
-            myVLC.MediaPlayer.Play();
-            Thread.Sleep(50);
-            this.TimeBar.Maximum = (int)Math.Round(myVLC.MediaPlayer.Length / 1000f);
-            myVLC.MediaPlayer.Pause();
-            paused = true;
-            media.Dispose();
-            
-        }
-
         private void TimeBar_Scroll(object sender, EventArgs e)
         {
             myVLC.MediaPlayer.Pause();
@@ -481,6 +513,7 @@ namespace ProjectManager
             Single temp = TimeBar.Value;
             myVLC.MediaPlayer.Position = temp / 100f;
             myVLC.MediaPlayer.Pause();
+            
         }
 
         private void PMEEGView_Load(object sender, EventArgs e)
@@ -561,8 +594,8 @@ namespace ProjectManager
                         myVLC.Height = 480;
                         Point tempX = new Point(this.Size.Width - 21 - 640, 29);
                         myVLC.Location = tempX;
-
                     }));
+
                     
                     HighRes.Checked = true;
                     LowRes.Checked = false;            
@@ -634,6 +667,8 @@ namespace ProjectManager
             pageNum += 1;
             Redraw = true;
             pg.Text = (pageNum + 1) + " / " + pageCalc();
+            ResetChosenVid();
+
         }
 
         private void Previous_Click(object sender, EventArgs e)
@@ -642,55 +677,139 @@ namespace ProjectManager
             pageNum -= 1;
             Redraw = true;
             pg.Text = (pageNum + 1)+ " / " + pageCalc();
+            ResetChosenVid();
+        }
+
+        private void ResetChosenVid()
+        {
+            vidShow = new bool[numPerPage];
+            for (int i = 0; i < vidShow.Count(); i++)
+            {
+                vidShow[i] = false;
+            }
         }
 
         private void GalArea_MouseDown(object sender, MouseEventArgs e)
         {
+
+            int tX1;
+            int tX2;
+            int tY1;
+            int tY2;
+
             if (ViewMode == 1)
             {
+                tX1 = GalArea.Location.X;
+                tX2 = GalArea.Location.X + GalArea.Width;
+                tY1 = GalArea.Location.Y;
+                tY2 = GalArea.Location.Y + GalArea.Height;
+            } else
+            {
+                tX1 = graph.X1;
+                tX2 = graph.X2;
+                tY1 = graph.Y1;
+                tY2 = graph.Y2;
+            }
 
-                int galOff = GalArea.Location.Y;
-                if (e.Y >= 0 + galOff && e.Y < (GalArea.Height / 4) + galOff)
+
+            if ((e.X > tX1) && (e.X < tX2) && (e.Y > tY1) && ((e.Y < tY2)))
+            {
+
+                int X = 0;
+                int XSplit = 1;
+                if (ViewMode == 0)
                 {
-                    int temp = pageNum * numPerPage;
-                    if (Offset[temp].Selected) Offset[temp].Selected = false;
-
-                    else Offset[temp].Selected = true;
-
-                }
-                else if (e.Y >= (GalArea.Height / 4) + galOff && e.Y < (GalArea.Height / 2) + galOff)
-                {
-                    int temp = pageNum * numPerPage + 1;
-
-                    if (Offset[temp].Selected) Offset[temp].Selected = false;
-
-                    else Offset[temp].Selected = true;
-
-                }
-                else if (e.Y >= (GalArea.Height / 2) + galOff && e.Y < (GalArea.Height - (GalArea.Height / 4)) + galOff)
-                {
-                    int temp = pageNum * numPerPage + 2;
-
-                    if (Offset[temp].Selected) Offset[temp].Selected = false;
-
-                    else Offset[temp].Selected = true;
-
-                }
-                else if (e.Y >= (GalArea.Height - (GalArea.Height / 4)) + galOff && e.Y <= (GalArea.Height) + galOff)
-                {
-                    int temp = pageNum * numPerPage + 3;
-
-                    if (Offset[temp].Selected) Offset[temp].Selected = false;
-
-                    else Offset[temp].Selected = true;
-
+                    XSplit = 2;
+                    if (e.X > (((tX2 - tX1) / 2) + tX1))
+                    {
+                        X = 1;
+                    }
                 }
 
-                Redraw = true;
+
+                int Y = (e.Y - tY1);
+                Y = Y / ((tY2 - tY1) / (numPerPage / XSplit));
+                Console.WriteLine("X: " + X);
+                Console.WriteLine("Y: " + Y);
+
+                int temp = pageNum * numPerPage + (Y * 2) + X;
+
+                if (ViewMode == 1)
+                {
+                    temp = pageNum * numPerPage + Y + X;
+
+
+                    if (Offset[temp].Selected) Offset[temp].Selected = false;
+                    else Offset[temp].Selected = true;
+                    for (int i = 0; i < numPerPage; i++)
+                    {
+                        if (i == Y)
+                        {
+                            vidShow[i] = true;
+                            VideoPlay(i);
+
+                        }
+                        else
+                        {
+                            vidShow[i] = false;
+                        }
+                    }
+                }
+
 
 
             }
+            Redraw = true;
+
         }
+
+        public void VideoPlay(int index)
+        {
+            int offset = numPerPage * pageNum + index;
+
+
+
+            Console.WriteLine("Chosen: " + vidDir + Animals[Offset[offset].AnimalIndex].Sz[Offset[offset].SZNum].VidString);
+            Console.WriteLine("Hard:   D:\\PMTests\\fvt\\Videos\\JH_060221_16-1.avi");
+
+
+
+
+            myVLC.Show();
+            if (myVLC.MediaPlayer != null) myVLC.MediaPlayer.Dispose();
+            vlc = new LibVLC();
+            Media media = new Media(vlc, vidDir + Animals[Offset[offset].AnimalIndex].Sz[Offset[offset].SZNum].VidString);
+            
+            MediaPlayer player = new MediaPlayer(media);
+
+            
+
+
+            myVLC.MediaPlayer = player;
+            myVLC.MediaPlayer.Play();
+            Thread.Sleep(50);
+            this.TimeBar.Maximum = (int)Math.Round(myVLC.MediaPlayer.Length / 1000f);
+            
+            myVLC.MediaPlayer.Pause();
+            paused = true;
+            media.Dispose();
+
+
+        }
+
+        private void TimeBar_MouseDown(object sender, MouseEventArgs e)
+        {
+            timeBarAccess = true;
+        }
+
+        private void TimeBar_MouseUp(object sender, MouseEventArgs e)
+        {
+            timeBarAccess = false;
+        }
+        //}
+
+
+
     }
 
 
@@ -751,4 +870,46 @@ private void NPrev_MouseUp(object sender, MouseEventArgs e)
     NPrev.BackgroundImage.Dispose();
     NPrev.BackgroundImage = PrevIList.Images[2];
 }
+
+temp for mouse down, may use later
+ int galOff = GalArea.Location.Y;
+                if (e.Y >= 0 + galOff && e.Y < (GalArea.Height / 4) + galOff)
+                {
+                    int temp = pageNum * numPerPage;
+                    if (Offset[temp].Selected) Offset[temp].Selected = false;
+                    
+                    else Offset[temp].Selected = true;
+                    Console.WriteLine("Mine: " + temp);
+
+                }
+                else if (e.Y >= (GalArea.Height / 4) + galOff && e.Y < (GalArea.Height / 2) + galOff)
+                {
+                    int temp = pageNum * numPerPage + 1;
+
+                    if (Offset[temp].Selected) Offset[temp].Selected = false;
+
+                    else Offset[temp].Selected = true;
+                    Console.WriteLine("Mine: " + temp);
+
+                }
+                else if (e.Y >= (GalArea.Height / 2) + galOff && e.Y < (GalArea.Height - (GalArea.Height / 4)) + galOff)
+                {
+                    int temp = pageNum * numPerPage + 2;
+
+                    if (Offset[temp].Selected) Offset[temp].Selected = false;
+
+                    else Offset[temp].Selected = true;
+                    Console.WriteLine("Mine: " + temp);
+
+                }
+                else if (e.Y >= (GalArea.Height - (GalArea.Height / 4)) + galOff && e.Y <= (GalArea.Height) + galOff)
+                {
+                    int temp = pageNum * numPerPage + 3;
+
+                    if (Offset[temp].Selected) Offset[temp].Selected = false;
+
+                    else Offset[temp].Selected = true;
+                    Console.WriteLine("Mine: " + temp);
+
+                }
  */

@@ -69,16 +69,16 @@ class DATR
         public bool Loaded;
         Pen WavePen, SelectedPen;
         private int VoltageSpacing;
-        private int Xmax, Ymax, GVmax;
+        private int Xmax, Ymax, GXmax, GYmax;
         public float frepos = 60;
         private int Voltage;
         private int DataType;
         public Bitmap offscreen;
-        public Bitmap GVOffscreen;
+        public Bitmap GOffscreen;
         private List<TimeSpan> SzTime;
         private List<int> SzChannel;
         public Graphics g;
-        Graphics GVg;
+        public Graphics Gg;
         public int numPerPage;
         public int PosInSample = 0;
         public int TotalSamples;
@@ -119,7 +119,7 @@ class DATR
             FID.Close();
         }
 
-        public void DrawSZ(long offset, int length, int X, int Y, bool display)
+        public void DrawSZ(long offset, int length, int X, int Y, bool display, bool vidSelect)
         {
             PointF[] WaveC;
             int expectedSampleSize = DisplayLength * SampleRate;
@@ -193,7 +193,39 @@ class DATR
             
             if (display)
             {
-                g.DrawRectangle(BoxPen, 3 + X * (Xmax / xOff),3 + YDraw, Xmax / xOff - 6, Ymax / (numPerPage / 2) - 6);
+
+
+                if (vidSelect)
+                {
+                    BoxPen = new Pen(Color.Red, 1);
+                    Pen YBoxPen = new Pen(Color.Green, 4);
+                    g.DrawRectangle(BoxPen, 3 + X * (Xmax / xOff), 3 + YDraw, Xmax / xOff - 6, Ymax / (numPerPage / 2) - 6);
+                    g.DrawRectangle(YBoxPen, 4 + X * (Xmax / xOff), 4 + YDraw, Xmax / xOff - 10, Ymax / (numPerPage / 2) - 10);
+                    WaveC = new PointF[SampleSize];
+                    X = 0;
+                    for (int i = 0; i < SampleSize; i++)
+                    {
+
+
+                        YPoint = ScaleVoltsToPixel(Convert.ToSingle(TData[i]), (GYmax));
+                        //YPoint += yOff;
+
+
+                        if (YPoint > GYmax) YPoint = (GYmax);        //Kyle's Mistake                                                                        
+                        if (YPoint < 0) YPoint = 0;
+                        //PointF TempPoint = new PointF((float)(i + (X * SampleSize)) / xOff * PointSpacing, GYmax + YPoint);
+                        PointF TempPoint = new PointF((float)i , GYmax/2);
+                        if (TempPoint.X > offscreen.Width)
+                        {
+
+                        }
+                        WaveC[i] = TempPoint;
+
+                    }
+                    Gg.DrawLines(WavePen, WaveC);
+                }
+                else g.DrawRectangle(BoxPen, 3 + X * (Xmax / xOff), 3 + YDraw, Xmax / xOff - 6, Ymax / (numPerPage / 2) - 6);
+
             } else
             {
                 g.DrawRectangle(WavePen, X * (Xmax / xOff), YDraw, Xmax / xOff, Ymax / (numPerPage / 2));
@@ -256,19 +288,43 @@ class DATR
             if (offscreen != null) offscreen.Dispose();
             offscreen = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
             
+
             Xmax = X;
             Ymax = Y;
             
+
             g = Graphics.FromImage(offscreen);
             
-           
+            
+
+            Gg.Clear(Color.White);
+            
+        }
+
+        public void initDisplay(int X, int Y, int GX, int GY)
+        {
+
+            if (offscreen != null) offscreen.Dispose();
+            if (GOffscreen != null) GOffscreen.Dispose();
+            offscreen = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
+            GOffscreen = new Bitmap(Math.Max(GX, 1), Math.Max(1, GY));
+            
+            Xmax = X;
+            Ymax = Y;
+            GXmax = GX;
+            GYmax = GY;
+            
+            g = Graphics.FromImage(offscreen);
+            Gg = Graphics.FromImage(GOffscreen);
+
+            Gg.Clear(Color.White);
             g.Clear(Color.White);
         }
 
         public void cleargraph()
         {
             g.Clear(Color.White);
-            
+            if (Gg != null) Gg.Clear(Color.White);
         }
 
    

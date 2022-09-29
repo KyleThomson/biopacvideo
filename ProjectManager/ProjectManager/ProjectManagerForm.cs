@@ -88,10 +88,6 @@ namespace ProjectManager
             }
         }
 
-        public void ccDir(string path)
-        {
-
-        }
 
 
         private void UpdateMainList()

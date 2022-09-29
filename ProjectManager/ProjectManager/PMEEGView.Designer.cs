@@ -59,10 +59,10 @@ namespace ProjectManager
             this.ZoomLabel = new System.Windows.Forms.Label();
             this.BottomLabel = new System.Windows.Forms.Label();
             this.GVGrouping = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
             this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
             this.pg = new System.Windows.Forms.Label();
             this.GalArea = new System.Windows.Forms.Panel();
+            this.GalGBox = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.myVLC)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -128,6 +128,7 @@ namespace ProjectManager
             this.myVLC.Size = new System.Drawing.Size(640, 480);
             this.myVLC.TabIndex = 2;
             this.myVLC.Visible = false;
+            this.myVLC.Click += new System.EventHandler(this.PlayPauseButton_Click);
             // 
             // menuStrip1
             // 
@@ -304,8 +305,11 @@ namespace ProjectManager
             this.TimeBar.Size = new System.Drawing.Size(650, 25);
             this.TimeBar.TabIndex = 8;
             this.TimeBar.TickFrequency = 5;
+            this.TimeBar.TickStyle = System.Windows.Forms.TickStyle.None;
             this.TimeBar.Visible = false;
             this.TimeBar.Scroll += new System.EventHandler(this.TimeBar_Scroll);
+            this.TimeBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TimeBar_MouseDown);
+            this.TimeBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TimeBar_MouseUp);
             // 
             // Next
             // 
@@ -375,16 +379,6 @@ namespace ProjectManager
             this.GVGrouping.Text = "label2";
             this.GVGrouping.Visible = false;
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(1110, 548);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 16;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click_1);
-            // 
             // vScrollBar1
             // 
             this.vScrollBar1.Location = new System.Drawing.Point(9, 678);
@@ -418,6 +412,15 @@ namespace ProjectManager
             this.GalArea.Visible = false;
             this.GalArea.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GalArea_MouseDown);
             // 
+            // GalGBox
+            // 
+            this.GalGBox.Location = new System.Drawing.Point(539, 515);
+            this.GalGBox.Name = "GalGBox";
+            this.GalGBox.Size = new System.Drawing.Size(642, 157);
+            this.GalGBox.TabIndex = 21;
+            this.GalGBox.TabStop = false;
+            this.GalGBox.Visible = false;
+            // 
             // PMEEGView
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -427,7 +430,6 @@ namespace ProjectManager
             this.ClientSize = new System.Drawing.Size(1184, 761);
             this.Controls.Add(this.pg);
             this.Controls.Add(this.vScrollBar1);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.TimeLabel);
             this.Controls.Add(this.PlayPauseButton);
             this.Controls.Add(this.TimeBar);
@@ -439,9 +441,10 @@ namespace ProjectManager
             this.Controls.Add(this.ZoomBar);
             this.Controls.Add(this.myVLC);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.GVGrouping);
             this.Controls.Add(this.BottomLabel);
             this.Controls.Add(this.GalArea);
+            this.Controls.Add(this.GalGBox);
+            this.Controls.Add(this.GVGrouping);
             this.MinimumSize = new System.Drawing.Size(1040, 600);
             this.Name = "PMEEGView";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
@@ -489,10 +492,10 @@ namespace ProjectManager
         private System.Windows.Forms.ToolStripMenuItem HighRes;
         private System.Windows.Forms.ToolStripMenuItem LowRes;
         private System.Windows.Forms.Label GVGrouping;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ToolStripMenuItem telemetryToolStripMenuItem1;
         private System.Windows.Forms.VScrollBar vScrollBar1;
         private System.Windows.Forms.Label pg;
         private System.Windows.Forms.Panel GalArea;
+        private System.Windows.Forms.GroupBox GalGBox;
     }
 }
