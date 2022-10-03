@@ -89,6 +89,8 @@ namespace SeizurePlayback
         public bool wasLoaded;
         public float Speed = 1;
         public int RTSpeed = 1;
+        int driftTrack = 0;
+        
         
 
 
@@ -319,7 +321,7 @@ namespace SeizurePlayback
             int Delay = 0;
             // int h,m,s;
             Stopwatch st = new Stopwatch();
-            int MinorStep;
+            
             while (true)
             {
                 if (ACQ.Loaded)
@@ -426,6 +428,7 @@ namespace SeizurePlayback
                                         Step = 0;
                                         
                                     }
+                                    
                                     if (Redraw)
                                         ACQ.drawbuffer();
                                     g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
@@ -435,6 +438,7 @@ namespace SeizurePlayback
                                     
                                         ACQ.Position += 1;
                                         Step += 1;
+                                        
                                     
 
                                     Console.WriteLine("ACQ Pos: " + ACQ.Position + "\n");
@@ -451,9 +455,9 @@ namespace SeizurePlayback
                                         Delay = 0;
                                     }
                                     st.Reset();
+
                                 } else
                                 {
-                                    
                                     st.Start();
                                     if (Step >= MaxDispSize)
                                     {
@@ -464,34 +468,31 @@ namespace SeizurePlayback
                                             PercentCompletion = 100;
                                         }
                                         Redraw = true;
-                                        Step = 0;
-                                        //working on minor stepping to speed up video/redline
-                                        if (player != null) SeekToCurrentPos();
+                                        Step = Step - MaxDispSize;
+
+                                        if (player != null)
+                                        {
+                                            if (driftTrack >= 20)
+                                            {
+                                                SeekToCurrentPos();
+                                                driftTrack = 0;
+                                            }
+                                        }
+
                                     }
+
                                     if (Redraw)
                                         ACQ.drawbuffer();
                                     g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
                                     g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
                                     /*if (EOFReached)
                                          g.DrawString("End of File Reached", new Font("Arial", 20), new SolidBrush(Color.Red), new PointF(10,10));*/
-                                    if (RTSpeed >= 1)
-                                    {
-                                        ACQ.Position += RTSpeed;
-                                        Step += RTSpeed;
-                                    }
-                                    else
-                                    {
-                                        if (RTSpeed == 0)
-                                        {
-                                            RTSpeed = -1;
-                                        }
-                                        else if (RTSpeed == -1)
-                                        {
-                                            ACQ.Position += 1;
-                                            Step += 1;
-                                            RTSpeed = 0;
-                                        }
-                                    }
+
+                                    ACQ.Position += RTSpeed;
+                                    Step += RTSpeed;
+                                    driftTrack++;
+
+
 
                                     Console.WriteLine("ACQ Pos: " + ACQ.Position + "\n");
                                     Console.WriteLine("Vid Pos: " + (player.getpos() / 1000) + "\n");
@@ -507,6 +508,7 @@ namespace SeizurePlayback
                                         Delay = 0;
                                     }
                                     st.Reset();
+
                                 }
                             }
                         } //if !Paused
@@ -543,6 +545,9 @@ namespace SeizurePlayback
                                     Redraw = false;
                                 }
                                 g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
+
+                                
+                                //g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
                                 Thread.Sleep(100);
                             }
 
@@ -626,7 +631,7 @@ namespace SeizurePlayback
                         {
 
                             case Keys.NumPad4:
-                                if (RTSpeed < 1) return;
+                                if (RTSpeed <= 1) return;
                                 CalcRTSpeed(false);
                                 ChangeVidSpeed();
                                 break;
@@ -691,11 +696,9 @@ namespace SeizurePlayback
                 switch (RTSpeed)
                 {
                     case 0:
-                    case -1:
-
-                        break;
+                    case -1:                        
                     case 1:
-                        RTSpeed = 0;
+                        RTSpeed = 1;
                         break;
                     case 2:
                         RTSpeed = 1;
@@ -819,12 +822,16 @@ namespace SeizurePlayback
         {
             Speed = 1;
             RTSpeed = 1;
+            
             VideoSpeedLabel.Text = "| |";
             ChangeVidSpeed();
             if (Paused == true) return;
             Paused = true;
             if (player != null)
+            {
+               
                 player.Pause();
+            }
 
         }
 
@@ -1240,6 +1247,7 @@ namespace SeizurePlayback
                         }
                         OffsetBox.Text = VideoOffset[ACQ.SelectedChan].ToString();
                         RTSpeed = 1;
+                        
                         ChangeVidSpeed();
                         ACQ.Position = ACQ.Position - Step + XStart;
                         Step = XStart;
@@ -2380,6 +2388,10 @@ namespace SeizurePlayback
 
                     }
                     break;
+                case 9: //shortcutguide
+                    ShortGuide shortcut = new ShortGuide();
+                    shortcut.Show();
+                    break;
 
             }
         }
@@ -3060,6 +3072,7 @@ namespace SeizurePlayback
                 this.ColorClear.Enabled = false;
                 this.MoreOp.Hide();
                 this.OffsetLabel.Hide();
+                this.VideoSpeedLabel.Hide();
 
 
 
@@ -3178,6 +3191,7 @@ namespace SeizurePlayback
                 this.ColorClear.Enabled = true;
                 this.MoreOp.Show();
                 this.OffsetLabel.Show();
+                this.VideoSpeedLabel.Show();
             }
         }
 
@@ -3447,6 +3461,8 @@ namespace SeizurePlayback
         //        else DetSezLabel.Text = ".det Not Found";
         //    }
         //}
+
+
 
     }
 }

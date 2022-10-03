@@ -202,3 +202,4 @@ C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj
 C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.FRZero.resources
 C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.UserControl2.resources
 C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback_Content.g.cs
+C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.ShortGuide.resources

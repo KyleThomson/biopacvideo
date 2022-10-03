@@ -115,7 +115,6 @@ namespace SeizurePlayback
             this.Rewind_Dec = new System.Windows.Forms.Button();
             this.Rewind_Inc = new System.Windows.Forms.Button();
             this.Rewind_ChangeBox = new System.Windows.Forms.FlowLayoutPanel();
-            this.button1 = new System.Windows.Forms.Button();
             this.VideoSpeedLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
@@ -783,7 +782,7 @@ namespace SeizurePlayback
             this.PreviousFR.Name = "PreviousFR";
             this.PreviousFR.Size = new System.Drawing.Size(75, 23);
             this.PreviousFR.TabIndex = 66;
-            this.PreviousFR.Text = "Previous";
+            this.PreviousFR.Text = "(<-) Previous";
             this.PreviousFR.UseVisualStyleBackColor = false;
             this.PreviousFR.Click += new System.EventHandler(this.Previous_Click);
             // 
@@ -796,7 +795,7 @@ namespace SeizurePlayback
             this.NextFR.Name = "NextFR";
             this.NextFR.Size = new System.Drawing.Size(75, 23);
             this.NextFR.TabIndex = 67;
-            this.NextFR.Text = "Next";
+            this.NextFR.Text = "Next (->)";
             this.NextFR.UseVisualStyleBackColor = false;
             this.NextFR.Click += new System.EventHandler(this.Next_Click);
             // 
@@ -1278,16 +1277,6 @@ namespace SeizurePlayback
             this.Rewind_ChangeBox.Size = new System.Drawing.Size(51, 29);
             this.Rewind_ChangeBox.TabIndex = 78;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(1226, 594);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 79;
-            this.button1.Text = "Check VLC";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // VideoSpeedLabel
             // 
             this.VideoSpeedLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -1309,7 +1298,6 @@ namespace SeizurePlayback
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(1444, 845);
             this.Controls.Add(this.VideoSpeedLabel);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.Rewind_ChangeBox);
             this.Controls.Add(this.MoreOp);
             this.Controls.Add(this.ColorClear);
@@ -1488,7 +1476,6 @@ namespace SeizurePlayback
         private System.Windows.Forms.Button Rewind_Dec;
         private System.Windows.Forms.Button Rewind_Inc;
         private System.Windows.Forms.FlowLayoutPanel Rewind_ChangeBox;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label VideoSpeedLabel;
     }
 }
