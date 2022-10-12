@@ -693,6 +693,10 @@ namespace SeizurePlayback
                             //    //SeekToCurrentPos();
                             //    player.Pause();
                             //}
+                            if (player != null)
+                            {
+                                SeekToCurrentPos();
+                            }
                             Step = MaxDispSize;
                             break;
                         case Keys.NumPad9:
@@ -702,6 +706,10 @@ namespace SeizurePlayback
                             //    player.Pause();
 
                             //}
+                            if (player != null)
+                            {
+                                SeekToCurrentPos();
+                            }
                             Step = MaxDispSize;
                             break;
                     }
