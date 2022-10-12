@@ -29,58 +29,54 @@ namespace SeizurePlayback
         /// </summary>
         private void InitializeComponent()
         {
-            this.LoadVideoLabel = new System.Windows.Forms.Label();
             this.VideoLoadProgressBar = new System.Windows.Forms.ProgressBar();
-            this.label1 = new System.Windows.Forms.Label();
+            this.LT = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // LoadVideoLabel
-            // 
-            this.LoadVideoLabel.AutoSize = true;
-            this.LoadVideoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoadVideoLabel.ForeColor = System.Drawing.Color.Red;
-            this.LoadVideoLabel.Location = new System.Drawing.Point(149, 32);
-            this.LoadVideoLabel.Name = "LoadVideoLabel";
-            this.LoadVideoLabel.Size = new System.Drawing.Size(70, 25);
-            this.LoadVideoLabel.TabIndex = 0;
-            this.LoadVideoLabel.Text = "WAIT!";
             // 
             // VideoLoadProgressBar
             // 
+            this.VideoLoadProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.VideoLoadProgressBar.BackColor = System.Drawing.SystemColors.Control;
             this.VideoLoadProgressBar.Location = new System.Drawing.Point(100, 109);
             this.VideoLoadProgressBar.Name = "VideoLoadProgressBar";
             this.VideoLoadProgressBar.Size = new System.Drawing.Size(158, 23);
             this.VideoLoadProgressBar.TabIndex = 1;
+            this.VideoLoadProgressBar.UseWaitCursor = true;
             // 
-            // label1
+            // LT
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(55, 71);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(267, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Do Not Click Your Mouse Until This Prompt Has Closed";
+            this.LT.AutoSize = true;
+            this.LT.BackColor = System.Drawing.Color.White;
+            this.LT.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LT.Location = new System.Drawing.Point(90, 35);
+            this.LT.Name = "LT";
+            this.LT.Size = new System.Drawing.Size(184, 50);
+            this.LT.TabIndex = 2;
+            this.LT.Text = "LOADING";
+            this.LT.UseCompatibleTextRendering = true;
+            this.LT.UseWaitCursor = true;
             // 
             // VLoadWait
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(371, 178);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.LT);
             this.Controls.Add(this.VideoLoadProgressBar);
-            this.Controls.Add(this.LoadVideoLabel);
             this.Name = "VLoadWait";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Loading Video";
+            this.TopMost = true;
+            this.UseWaitCursor = true;
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label LoadVideoLabel;
         public System.Windows.Forms.ProgressBar VideoLoadProgressBar;
-        private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Label LT;
     }
 }

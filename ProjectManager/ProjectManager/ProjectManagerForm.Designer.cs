@@ -53,6 +53,8 @@
             this.test35ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.test36ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.iAKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.eEGViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SecondList = new System.Windows.Forms.ListBox();
             this.MainList = new System.Windows.Forms.ListBox();
             this.MainSelect = new System.Windows.Forms.ComboBox();
@@ -68,7 +70,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.measurementsToolStripMenuItem,
-            this.plottingToolStripMenuItem});
+            this.plottingToolStripMenuItem,
+            this.viewToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(555, 24);
@@ -109,6 +112,7 @@
             // 
             // saveToolStripMenuItem
             // 
+            this.saveToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.saveToolStripMenuItem.Text = "&Save";
@@ -116,6 +120,7 @@
             // 
             // saveAsToolStripMenuItem
             // 
+            this.saveAsToolStripMenuItem.Enabled = false;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.saveAsToolStripMenuItem.Text = "Save &As";
@@ -124,6 +129,7 @@
             // exportDataToolStripMenuItem
             // 
             this.exportDataToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.exportDataToolStripMenuItem.Enabled = false;
             this.exportDataToolStripMenuItem.Name = "exportDataToolStripMenuItem";
             this.exportDataToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.exportDataToolStripMenuItem.Text = "&Export Data";
@@ -131,6 +137,7 @@
             // 
             // mergeProjectToolStripMenuItem
             // 
+            this.mergeProjectToolStripMenuItem.Enabled = false;
             this.mergeProjectToolStripMenuItem.Name = "mergeProjectToolStripMenuItem";
             this.mergeProjectToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.mergeProjectToolStripMenuItem.Text = "Merge Project";
@@ -138,6 +145,7 @@
             // 
             // importFileToolStripMenuItem
             // 
+            this.importFileToolStripMenuItem.Enabled = false;
             this.importFileToolStripMenuItem.Name = "importFileToolStripMenuItem";
             this.importFileToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.importFileToolStripMenuItem.Text = "Add Directory";
@@ -145,6 +153,7 @@
             // 
             // addMultipleDirectoriesToolStripMenuItem
             // 
+            this.addMultipleDirectoriesToolStripMenuItem.Enabled = false;
             this.addMultipleDirectoriesToolStripMenuItem.Name = "addMultipleDirectoriesToolStripMenuItem";
             this.addMultipleDirectoriesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.addMultipleDirectoriesToolStripMenuItem.Text = "Add &Multiple Directories";
@@ -152,6 +161,7 @@
             // 
             // importSeizureToolStripMenuItem
             // 
+            this.importSeizureToolStripMenuItem.Enabled = false;
             this.importSeizureToolStripMenuItem.Name = "importSeizureToolStripMenuItem";
             this.importSeizureToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.importSeizureToolStripMenuItem.Text = "&Import Seizure File";
@@ -266,6 +276,22 @@
             this.iAKToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.iAKToolStripMenuItem.Text = "IAK";
             this.iAKToolStripMenuItem.Click += new System.EventHandler(this.iAKToolStripMenuItem_Click);
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.eEGViewToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // eEGViewToolStripMenuItem
+            // 
+            this.eEGViewToolStripMenuItem.CheckOnClick = true;
+            this.eEGViewToolStripMenuItem.Name = "eEGViewToolStripMenuItem";
+            this.eEGViewToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.eEGViewToolStripMenuItem.Text = "EEG View";
+            this.eEGViewToolStripMenuItem.Click += new System.EventHandler(this.eEGViewToolStripMenuItem_Click);
             // 
             // SecondList
             // 
@@ -383,5 +409,7 @@
         private System.Windows.Forms.ToolStripMenuItem test36ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem iAKToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rejectUnreviewedFilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem eEGViewToolStripMenuItem;
     }
 }

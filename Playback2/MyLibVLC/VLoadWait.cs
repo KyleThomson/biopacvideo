@@ -25,5 +25,10 @@ namespace SeizurePlayback
             closed = true;
             Close();
         }
+
+        private void LoadVideoLabel_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

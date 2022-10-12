@@ -28,6 +28,7 @@ namespace SeizurePlayback
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CManage));
             this.Play = new System.Windows.Forms.Button();
             this.VideoPanel = new System.Windows.Forms.Panel();
             this.Open = new System.Windows.Forms.Button();
@@ -84,12 +85,57 @@ namespace SeizurePlayback
             this.FRZoomBlock = new System.Windows.Forms.FlowLayoutPanel();
             this.label4 = new System.Windows.Forms.Label();
             this.FRPageNum = new System.Windows.Forms.Label();
-            this.LoadAll = new System.Windows.Forms.Button();
+            this.ZoomChanPanel = new System.Windows.Forms.Panel();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.ZCN1 = new System.Windows.Forms.Label();
+            this.ZoomChan12 = new System.Windows.Forms.TrackBar();
+            this.ZoomChan11 = new System.Windows.Forms.TrackBar();
+            this.ZoomChan10 = new System.Windows.Forms.TrackBar();
+            this.ZoomChan9 = new System.Windows.Forms.TrackBar();
+            this.ZoomChan8 = new System.Windows.Forms.TrackBar();
+            this.ZoomChan7 = new System.Windows.Forms.TrackBar();
+            this.ZoomChan6 = new System.Windows.Forms.TrackBar();
+            this.ZoomChan5 = new System.Windows.Forms.TrackBar();
+            this.ZoomChan4 = new System.Windows.Forms.TrackBar();
+            this.ZoomChan3 = new System.Windows.Forms.TrackBar();
+            this.ZoomChan2 = new System.Windows.Forms.TrackBar();
+            this.ZoomChan1 = new System.Windows.Forms.TrackBar();
+            this.ColorClear = new System.Windows.Forms.Label();
+            this.MoreOp = new System.Windows.Forms.Label();
+            this.Rewind_Dec = new System.Windows.Forms.Button();
+            this.Rewind_Inc = new System.Windows.Forms.Button();
+            this.Rewind_ChangeBox = new System.Windows.Forms.FlowLayoutPanel();
+            this.VideoSpeedLabel = new System.Windows.Forms.Label();
+            this.ShortcutButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.FRButtonGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FRZoomBar)).BeginInit();
             this.FRZoomBlock.SuspendLayout();
+            this.ZoomChanPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan12)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan11)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan10)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan1)).BeginInit();
+            this.Rewind_ChangeBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // Play
@@ -155,6 +201,7 @@ namespace SeizurePlayback
             // Rewind
             // 
             this.Rewind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Rewind.AutoSize = true;
             this.Rewind.BackColor = System.Drawing.Color.DarkGray;
             this.Rewind.ForeColor = System.Drawing.Color.Black;
             this.Rewind.Location = new System.Drawing.Point(913, 507);
@@ -208,7 +255,11 @@ namespace SeizurePlayback
             this.TimeBox.Name = "TimeBox";
             this.TimeBox.Size = new System.Drawing.Size(161, 21);
             this.TimeBox.TabIndex = 18;
+            this.TimeBox.TabStop = false;
             this.TimeBox.SelectedIndexChanged += new System.EventHandler(this.TimeBox_SelectedIndexChanged);
+            this.TimeBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.TimeBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.noEventKeyPress);
+            this.TimeBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.noEventKey);
             // 
             // label1
             // 
@@ -289,6 +340,7 @@ namespace SeizurePlayback
             // TimeJump
             // 
             this.TimeJump.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.TimeJump.Enabled = false;
             this.TimeJump.Location = new System.Drawing.Point(669, 652);
             this.TimeJump.Name = "TimeJump";
             this.TimeJump.Size = new System.Drawing.Size(161, 20);
@@ -507,13 +559,15 @@ namespace SeizurePlayback
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(501, 562);
+            this.label3.Location = new System.Drawing.Point(498, 566);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(104, 24);
+            this.label3.Size = new System.Drawing.Size(85, 20);
             this.label3.TabIndex = 42;
             this.label3.Text = "Zoom level";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // ZoomScale
             // 
@@ -553,14 +607,13 @@ namespace SeizurePlayback
             this.OffsetLabel.Size = new System.Drawing.Size(57, 24);
             this.OffsetLabel.TabIndex = 47;
             this.OffsetLabel.Text = "Offset";
-            this.OffsetLabel.Visible = false;
             // 
             // OffsetBox
             // 
             this.OffsetBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.OffsetBox.Location = new System.Drawing.Point(841, 652);
             this.OffsetBox.Name = "OffsetBox";
-            this.OffsetBox.Size = new System.Drawing.Size(161, 20);
+            this.OffsetBox.Size = new System.Drawing.Size(75, 20);
             this.OffsetBox.TabIndex = 48;
             this.OffsetBox.TextChanged += new System.EventHandler(this.OffsetBox_TextChanged_1);
             this.OffsetBox.LostFocus += new System.EventHandler(this.OffsetBox_TextChanged);
@@ -597,7 +650,7 @@ namespace SeizurePlayback
             this.Randomization.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Randomization.AutoSize = true;
             this.Randomization.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Randomization.Location = new System.Drawing.Point(1085, 656);
+            this.Randomization.Location = new System.Drawing.Point(994, 558);
             this.Randomization.Name = "Randomization";
             this.Randomization.Size = new System.Drawing.Size(79, 17);
             this.Randomization.TabIndex = 57;
@@ -608,7 +661,7 @@ namespace SeizurePlayback
             // AVILoadBar
             // 
             this.AVILoadBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.AVILoadBar.Location = new System.Drawing.Point(861, 789);
+            this.AVILoadBar.Location = new System.Drawing.Point(974, 789);
             this.AVILoadBar.Maximum = 30;
             this.AVILoadBar.Name = "AVILoadBar";
             this.AVILoadBar.Size = new System.Drawing.Size(445, 25);
@@ -621,7 +674,7 @@ namespace SeizurePlayback
             this.LoadText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.LoadText.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LoadText.ForeColor = System.Drawing.Color.White;
-            this.LoadText.Location = new System.Drawing.Point(867, 762);
+            this.LoadText.Location = new System.Drawing.Point(980, 762);
             this.LoadText.Name = "LoadText";
             this.LoadText.Size = new System.Drawing.Size(439, 24);
             this.LoadText.TabIndex = 59;
@@ -646,7 +699,7 @@ namespace SeizurePlayback
             this.TelemetryBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.TelemetryBox.AutoSize = true;
             this.TelemetryBox.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.TelemetryBox.Location = new System.Drawing.Point(1008, 656);
+            this.TelemetryBox.Location = new System.Drawing.Point(994, 604);
             this.TelemetryBox.Name = "TelemetryBox";
             this.TelemetryBox.Size = new System.Drawing.Size(78, 17);
             this.TelemetryBox.TabIndex = 61;
@@ -659,20 +712,21 @@ namespace SeizurePlayback
             this.VideoFix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VideoFix.AutoSize = true;
             this.VideoFix.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VideoFix.Location = new System.Drawing.Point(1170, 656);
+            this.VideoFix.Location = new System.Drawing.Point(994, 581);
             this.VideoFix.Name = "VideoFix";
             this.VideoFix.Size = new System.Drawing.Size(72, 17);
             this.VideoFix.TabIndex = 62;
             this.VideoFix.Text = "Video Fix ";
             this.VideoFix.UseVisualStyleBackColor = true;
             this.VideoFix.CheckedChanged += new System.EventHandler(this.VideoFix_CheckedChanged);
+            this.VideoFix.MouseDown += new System.Windows.Forms.MouseEventHandler(this.VideoFix_MouseDown);
             // 
             // SwitchChan
             // 
             this.SwitchChan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.SwitchChan.AutoSize = true;
             this.SwitchChan.ForeColor = System.Drawing.Color.Transparent;
-            this.SwitchChan.Location = new System.Drawing.Point(861, 743);
+            this.SwitchChan.Location = new System.Drawing.Point(832, 743);
             this.SwitchChan.Name = "SwitchChan";
             this.SwitchChan.Size = new System.Drawing.Size(131, 17);
             this.SwitchChan.TabIndex = 63;
@@ -683,6 +737,10 @@ namespace SeizurePlayback
             // comboBox1
             // 
             this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.comboBox1.BackColor = System.Drawing.Color.Silver;
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.DropDownWidth = 135;
+            this.comboBox1.Enabled = false;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "Compression Manager",
@@ -691,12 +749,18 @@ namespace SeizurePlayback
             "Fix Channel at Timepoint",
             "Download ACQ",
             "Rename Channels",
-            "Video Creator"});
-            this.comboBox1.Location = new System.Drawing.Point(994, 597);
+            "Video Creator",
+            "Index All Videos",
+            "Channel Zoom Control",
+            "Shortcut Guide"});
+            this.comboBox1.Location = new System.Drawing.Point(931, 651);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.Size = new System.Drawing.Size(150, 21);
             this.comboBox1.TabIndex = 64;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged_1);
+            this.comboBox1.SelectionChangeCommitted += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.comboBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.noEventKey);
             // 
             // FastReviewFR
             // 
@@ -720,7 +784,7 @@ namespace SeizurePlayback
             this.PreviousFR.Name = "PreviousFR";
             this.PreviousFR.Size = new System.Drawing.Size(75, 23);
             this.PreviousFR.TabIndex = 66;
-            this.PreviousFR.Text = "Previous";
+            this.PreviousFR.Text = "(<-) Previous";
             this.PreviousFR.UseVisualStyleBackColor = false;
             this.PreviousFR.Click += new System.EventHandler(this.Previous_Click);
             // 
@@ -733,7 +797,7 @@ namespace SeizurePlayback
             this.NextFR.Name = "NextFR";
             this.NextFR.Size = new System.Drawing.Size(75, 23);
             this.NextFR.TabIndex = 67;
-            this.NextFR.Text = "Next";
+            this.NextFR.Text = "Next (->)";
             this.NextFR.UseVisualStyleBackColor = false;
             this.NextFR.Click += new System.EventHandler(this.Next_Click);
             // 
@@ -749,7 +813,7 @@ namespace SeizurePlayback
             this.FRButtonGroup.Enabled = false;
             this.FRButtonGroup.Location = new System.Drawing.Point(676, 789);
             this.FRButtonGroup.Name = "FRButtonGroup";
-            this.FRButtonGroup.Size = new System.Drawing.Size(452, 29);
+            this.FRButtonGroup.Size = new System.Drawing.Size(565, 29);
             this.FRButtonGroup.TabIndex = 68;
             this.FRButtonGroup.Visible = false;
             // 
@@ -824,15 +888,421 @@ namespace SeizurePlayback
             this.FRPageNum.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.FRPageNum.Visible = false;
             // 
-            // LoadAll
+            // ZoomChanPanel
             // 
-            this.LoadAll.Location = new System.Drawing.Point(1008, 739);
-            this.LoadAll.Name = "LoadAll";
-            this.LoadAll.Size = new System.Drawing.Size(91, 23);
-            this.LoadAll.TabIndex = 72;
-            this.LoadAll.Text = "Load All Videos";
-            this.LoadAll.UseVisualStyleBackColor = true;
-            this.LoadAll.Click += new System.EventHandler(this.LoadAll_Click);
+            this.ZoomChanPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChanPanel.AutoSize = true;
+            this.ZoomChanPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ZoomChanPanel.Controls.Add(this.label15);
+            this.ZoomChanPanel.Controls.Add(this.label14);
+            this.ZoomChanPanel.Controls.Add(this.label13);
+            this.ZoomChanPanel.Controls.Add(this.label12);
+            this.ZoomChanPanel.Controls.Add(this.label11);
+            this.ZoomChanPanel.Controls.Add(this.label10);
+            this.ZoomChanPanel.Controls.Add(this.label9);
+            this.ZoomChanPanel.Controls.Add(this.label8);
+            this.ZoomChanPanel.Controls.Add(this.label7);
+            this.ZoomChanPanel.Controls.Add(this.label6);
+            this.ZoomChanPanel.Controls.Add(this.label5);
+            this.ZoomChanPanel.Controls.Add(this.ZCN1);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan12);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan11);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan10);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan9);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan8);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan7);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan6);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan5);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan4);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan3);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan2);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan1);
+            this.ZoomChanPanel.Enabled = false;
+            this.ZoomChanPanel.Location = new System.Drawing.Point(998, 731);
+            this.ZoomChanPanel.Name = "ZoomChanPanel";
+            this.ZoomChanPanel.Size = new System.Drawing.Size(416, 112);
+            this.ZoomChanPanel.TabIndex = 73;
+            this.ZoomChanPanel.Visible = false;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.ForeColor = System.Drawing.Color.White;
+            this.label15.Location = new System.Drawing.Point(279, 88);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(19, 13);
+            this.label15.TabIndex = 74;
+            this.label15.Text = "12";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.ForeColor = System.Drawing.Color.White;
+            this.label14.Location = new System.Drawing.Point(279, 60);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(19, 13);
+            this.label14.TabIndex = 74;
+            this.label14.Text = "11";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.ForeColor = System.Drawing.Color.White;
+            this.label13.Location = new System.Drawing.Point(279, 32);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(19, 13);
+            this.label13.TabIndex = 74;
+            this.label13.Text = "10";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.ForeColor = System.Drawing.Color.White;
+            this.label12.Location = new System.Drawing.Point(279, 4);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(13, 13);
+            this.label12.TabIndex = 74;
+            this.label12.Text = "9";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(142, 88);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(13, 13);
+            this.label11.TabIndex = 74;
+            this.label11.Text = "8";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.ForeColor = System.Drawing.Color.White;
+            this.label10.Location = new System.Drawing.Point(142, 60);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(13, 13);
+            this.label10.TabIndex = 74;
+            this.label10.Text = "7";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.ForeColor = System.Drawing.Color.White;
+            this.label9.Location = new System.Drawing.Point(142, 32);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(13, 13);
+            this.label9.TabIndex = 74;
+            this.label9.Text = "6";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.ForeColor = System.Drawing.Color.White;
+            this.label8.Location = new System.Drawing.Point(142, 4);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(13, 13);
+            this.label8.TabIndex = 74;
+            this.label8.Text = "5";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.ForeColor = System.Drawing.Color.White;
+            this.label7.Location = new System.Drawing.Point(3, 88);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(13, 13);
+            this.label7.TabIndex = 74;
+            this.label7.Text = "4";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.ForeColor = System.Drawing.Color.White;
+            this.label6.Location = new System.Drawing.Point(3, 60);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(13, 13);
+            this.label6.TabIndex = 74;
+            this.label6.Text = "3";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(3, 32);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(13, 13);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "2";
+            // 
+            // ZCN1
+            // 
+            this.ZCN1.AutoSize = true;
+            this.ZCN1.ForeColor = System.Drawing.Color.White;
+            this.ZCN1.Location = new System.Drawing.Point(3, 4);
+            this.ZCN1.Name = "ZCN1";
+            this.ZCN1.Size = new System.Drawing.Size(13, 13);
+            this.ZCN1.TabIndex = 12;
+            this.ZCN1.Text = "1";
+            // 
+            // ZoomChan12
+            // 
+            this.ZoomChan12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChan12.AutoSize = false;
+            this.ZoomChan12.CausesValidation = false;
+            this.ZoomChan12.Location = new System.Drawing.Point(292, 88);
+            this.ZoomChan12.Maximum = 20;
+            this.ZoomChan12.Name = "ZoomChan12";
+            this.ZoomChan12.Size = new System.Drawing.Size(119, 22);
+            this.ZoomChan12.TabIndex = 11;
+            this.ZoomChan12.TabStop = false;
+            this.ZoomChan12.Tag = "12";
+            this.ZoomChan12.Value = 10;
+            this.ZoomChan12.Scroll += new System.EventHandler(this.ZoomChan12_Scroll);
+            // 
+            // ZoomChan11
+            // 
+            this.ZoomChan11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChan11.AutoSize = false;
+            this.ZoomChan11.CausesValidation = false;
+            this.ZoomChan11.Location = new System.Drawing.Point(292, 60);
+            this.ZoomChan11.Maximum = 20;
+            this.ZoomChan11.Name = "ZoomChan11";
+            this.ZoomChan11.Size = new System.Drawing.Size(119, 22);
+            this.ZoomChan11.TabIndex = 10;
+            this.ZoomChan11.TabStop = false;
+            this.ZoomChan11.Tag = "11";
+            this.ZoomChan11.Value = 10;
+            this.ZoomChan11.Scroll += new System.EventHandler(this.ZoomChan11_Scroll);
+            // 
+            // ZoomChan10
+            // 
+            this.ZoomChan10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChan10.AutoSize = false;
+            this.ZoomChan10.CausesValidation = false;
+            this.ZoomChan10.Location = new System.Drawing.Point(292, 32);
+            this.ZoomChan10.Maximum = 20;
+            this.ZoomChan10.Name = "ZoomChan10";
+            this.ZoomChan10.Size = new System.Drawing.Size(119, 22);
+            this.ZoomChan10.TabIndex = 9;
+            this.ZoomChan10.TabStop = false;
+            this.ZoomChan10.Tag = "10";
+            this.ZoomChan10.Value = 10;
+            this.ZoomChan10.Scroll += new System.EventHandler(this.ZoomChan10_Scroll);
+            // 
+            // ZoomChan9
+            // 
+            this.ZoomChan9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChan9.AutoSize = false;
+            this.ZoomChan9.CausesValidation = false;
+            this.ZoomChan9.Location = new System.Drawing.Point(292, 4);
+            this.ZoomChan9.Maximum = 20;
+            this.ZoomChan9.Name = "ZoomChan9";
+            this.ZoomChan9.Size = new System.Drawing.Size(119, 22);
+            this.ZoomChan9.TabIndex = 8;
+            this.ZoomChan9.TabStop = false;
+            this.ZoomChan9.Tag = "9";
+            this.ZoomChan9.Value = 10;
+            this.ZoomChan9.Scroll += new System.EventHandler(this.ZoomChan9_Scroll);
+            // 
+            // ZoomChan8
+            // 
+            this.ZoomChan8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChan8.AutoSize = false;
+            this.ZoomChan8.CausesValidation = false;
+            this.ZoomChan8.Location = new System.Drawing.Point(154, 88);
+            this.ZoomChan8.Maximum = 20;
+            this.ZoomChan8.Name = "ZoomChan8";
+            this.ZoomChan8.Size = new System.Drawing.Size(119, 22);
+            this.ZoomChan8.TabIndex = 7;
+            this.ZoomChan8.TabStop = false;
+            this.ZoomChan8.Tag = "8";
+            this.ZoomChan8.Value = 10;
+            this.ZoomChan8.Scroll += new System.EventHandler(this.ZoomChan8_Scroll);
+            // 
+            // ZoomChan7
+            // 
+            this.ZoomChan7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChan7.AutoSize = false;
+            this.ZoomChan7.CausesValidation = false;
+            this.ZoomChan7.Location = new System.Drawing.Point(154, 60);
+            this.ZoomChan7.Maximum = 20;
+            this.ZoomChan7.Name = "ZoomChan7";
+            this.ZoomChan7.Size = new System.Drawing.Size(119, 22);
+            this.ZoomChan7.TabIndex = 6;
+            this.ZoomChan7.TabStop = false;
+            this.ZoomChan7.Tag = "7";
+            this.ZoomChan7.Value = 10;
+            this.ZoomChan7.Scroll += new System.EventHandler(this.ZoomChan7_Scroll);
+            // 
+            // ZoomChan6
+            // 
+            this.ZoomChan6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChan6.AutoSize = false;
+            this.ZoomChan6.CausesValidation = false;
+            this.ZoomChan6.Location = new System.Drawing.Point(154, 32);
+            this.ZoomChan6.Maximum = 20;
+            this.ZoomChan6.Name = "ZoomChan6";
+            this.ZoomChan6.Size = new System.Drawing.Size(119, 22);
+            this.ZoomChan6.TabIndex = 5;
+            this.ZoomChan6.TabStop = false;
+            this.ZoomChan6.Tag = "6";
+            this.ZoomChan6.Value = 10;
+            this.ZoomChan6.Scroll += new System.EventHandler(this.ZoomChan6_Scroll);
+            // 
+            // ZoomChan5
+            // 
+            this.ZoomChan5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChan5.AutoSize = false;
+            this.ZoomChan5.CausesValidation = false;
+            this.ZoomChan5.Location = new System.Drawing.Point(154, 4);
+            this.ZoomChan5.Maximum = 20;
+            this.ZoomChan5.Name = "ZoomChan5";
+            this.ZoomChan5.Size = new System.Drawing.Size(119, 22);
+            this.ZoomChan5.TabIndex = 4;
+            this.ZoomChan5.TabStop = false;
+            this.ZoomChan5.Tag = "5";
+            this.ZoomChan5.Value = 10;
+            this.ZoomChan5.Scroll += new System.EventHandler(this.ZoomChan5_Scroll);
+            // 
+            // ZoomChan4
+            // 
+            this.ZoomChan4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChan4.AutoSize = false;
+            this.ZoomChan4.CausesValidation = false;
+            this.ZoomChan4.Location = new System.Drawing.Point(18, 88);
+            this.ZoomChan4.Maximum = 20;
+            this.ZoomChan4.Name = "ZoomChan4";
+            this.ZoomChan4.Size = new System.Drawing.Size(119, 22);
+            this.ZoomChan4.TabIndex = 3;
+            this.ZoomChan4.TabStop = false;
+            this.ZoomChan4.Tag = "4";
+            this.ZoomChan4.Value = 10;
+            this.ZoomChan4.Scroll += new System.EventHandler(this.ZoomChan4_Scroll);
+            // 
+            // ZoomChan3
+            // 
+            this.ZoomChan3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChan3.AutoSize = false;
+            this.ZoomChan3.CausesValidation = false;
+            this.ZoomChan3.Location = new System.Drawing.Point(18, 60);
+            this.ZoomChan3.Maximum = 20;
+            this.ZoomChan3.Name = "ZoomChan3";
+            this.ZoomChan3.Size = new System.Drawing.Size(119, 22);
+            this.ZoomChan3.TabIndex = 2;
+            this.ZoomChan3.TabStop = false;
+            this.ZoomChan3.Tag = "3";
+            this.ZoomChan3.Value = 10;
+            this.ZoomChan3.Scroll += new System.EventHandler(this.ZoomChan3_Scroll);
+            // 
+            // ZoomChan2
+            // 
+            this.ZoomChan2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChan2.AutoSize = false;
+            this.ZoomChan2.CausesValidation = false;
+            this.ZoomChan2.Location = new System.Drawing.Point(18, 32);
+            this.ZoomChan2.Maximum = 20;
+            this.ZoomChan2.Name = "ZoomChan2";
+            this.ZoomChan2.Size = new System.Drawing.Size(119, 22);
+            this.ZoomChan2.TabIndex = 1;
+            this.ZoomChan2.TabStop = false;
+            this.ZoomChan2.Tag = "2";
+            this.ZoomChan2.Value = 10;
+            this.ZoomChan2.Scroll += new System.EventHandler(this.ZoomChan2_Scroll);
+            // 
+            // ZoomChan1
+            // 
+            this.ZoomChan1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChan1.AutoSize = false;
+            this.ZoomChan1.CausesValidation = false;
+            this.ZoomChan1.Location = new System.Drawing.Point(18, 4);
+            this.ZoomChan1.Maximum = 20;
+            this.ZoomChan1.Name = "ZoomChan1";
+            this.ZoomChan1.Size = new System.Drawing.Size(119, 22);
+            this.ZoomChan1.TabIndex = 0;
+            this.ZoomChan1.TabStop = false;
+            this.ZoomChan1.Tag = "1";
+            this.ZoomChan1.Value = 10;
+            this.ZoomChan1.Scroll += new System.EventHandler(this.ZoomChan1_Scroll);
+            // 
+            // ColorClear
+            // 
+            this.ColorClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ColorClear.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ColorClear.Location = new System.Drawing.Point(1399, 676);
+            this.ColorClear.Name = "ColorClear";
+            this.ColorClear.Size = new System.Drawing.Size(20, 16);
+            this.ColorClear.TabIndex = 74;
+            // 
+            // MoreOp
+            // 
+            this.MoreOp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.MoreOp.AutoSize = true;
+            this.MoreOp.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MoreOp.ForeColor = System.Drawing.Color.White;
+            this.MoreOp.Location = new System.Drawing.Point(927, 625);
+            this.MoreOp.Name = "MoreOp";
+            this.MoreOp.Size = new System.Drawing.Size(139, 24);
+            this.MoreOp.TabIndex = 75;
+            this.MoreOp.Text = "More Options...";
+            this.MoreOp.Click += new System.EventHandler(this.label16_Click);
+            // 
+            // Rewind_Dec
+            // 
+            this.Rewind_Dec.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Rewind_Dec.Location = new System.Drawing.Point(0, 3);
+            this.Rewind_Dec.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+            this.Rewind_Dec.Name = "Rewind_Dec";
+            this.Rewind_Dec.Size = new System.Drawing.Size(24, 23);
+            this.Rewind_Dec.TabIndex = 76;
+            this.Rewind_Dec.Text = "<";
+            this.Rewind_Dec.UseVisualStyleBackColor = true;
+            // 
+            // Rewind_Inc
+            // 
+            this.Rewind_Inc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Rewind_Inc.Location = new System.Drawing.Point(24, 3);
+            this.Rewind_Inc.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.Rewind_Inc.Name = "Rewind_Inc";
+            this.Rewind_Inc.Size = new System.Drawing.Size(24, 23);
+            this.Rewind_Inc.TabIndex = 77;
+            this.Rewind_Inc.Text = ">";
+            this.Rewind_Inc.UseVisualStyleBackColor = true;
+            // 
+            // Rewind_ChangeBox
+            // 
+            this.Rewind_ChangeBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Rewind_ChangeBox.AutoSize = true;
+            this.Rewind_ChangeBox.Controls.Add(this.Rewind_Dec);
+            this.Rewind_ChangeBox.Controls.Add(this.Rewind_Inc);
+            this.Rewind_ChangeBox.Location = new System.Drawing.Point(992, 504);
+            this.Rewind_ChangeBox.Name = "Rewind_ChangeBox";
+            this.Rewind_ChangeBox.Size = new System.Drawing.Size(51, 29);
+            this.Rewind_ChangeBox.TabIndex = 78;
+            // 
+            // VideoSpeedLabel
+            // 
+            this.VideoSpeedLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.VideoSpeedLabel.AutoSize = true;
+            this.VideoSpeedLabel.BackColor = System.Drawing.Color.Black;
+            this.VideoSpeedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.VideoSpeedLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.VideoSpeedLabel.Location = new System.Drawing.Point(493, 482);
+            this.VideoSpeedLabel.Name = "VideoSpeedLabel";
+            this.VideoSpeedLabel.Size = new System.Drawing.Size(16, 15);
+            this.VideoSpeedLabel.TabIndex = 80;
+            this.VideoSpeedLabel.Text = "| |";
+            // 
+            // ShortcutButton
+            // 
+            this.ShortcutButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ShortcutButton.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ShortcutButton.Location = new System.Drawing.Point(1087, 649);
+            this.ShortcutButton.Name = "ShortcutButton";
+            this.ShortcutButton.Size = new System.Drawing.Size(67, 23);
+            this.ShortcutButton.TabIndex = 81;
+            this.ShortcutButton.Text = "Shortcuts";
+            this.ShortcutButton.UseVisualStyleBackColor = true;
+            this.ShortcutButton.Click += new System.EventHandler(this.ShortcutButton_Click);
             // 
             // CManage
             // 
@@ -840,8 +1310,13 @@ namespace SeizurePlayback
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(1444, 845);
-            this.Controls.Add(this.LoadAll);
+            this.ClientSize = new System.Drawing.Size(1557, 845);
+            this.Controls.Add(this.ShortcutButton);
+            this.Controls.Add(this.VideoSpeedLabel);
+            this.Controls.Add(this.Rewind_ChangeBox);
+            this.Controls.Add(this.MoreOp);
+            this.Controls.Add(this.ColorClear);
+            this.Controls.Add(this.ZoomChanPanel);
             this.Controls.Add(this.FRPageNum);
             this.Controls.Add(this.FRZoomBlock);
             this.Controls.Add(this.FRButtonGroup);
@@ -893,6 +1368,7 @@ namespace SeizurePlayback
             this.Controls.Add(this.Play);
             this.Controls.Add(this.ZoomScale);
             this.ForeColor = System.Drawing.Color.Black;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "CManage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Seizure Video Playback";
@@ -906,6 +1382,21 @@ namespace SeizurePlayback
             ((System.ComponentModel.ISupportInitialize)(this.FRZoomBar)).EndInit();
             this.FRZoomBlock.ResumeLayout(false);
             this.FRZoomBlock.PerformLayout();
+            this.ZoomChanPanel.ResumeLayout(false);
+            this.ZoomChanPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan12)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan11)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan10)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan1)).EndInit();
+            this.Rewind_ChangeBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -959,7 +1450,6 @@ namespace SeizurePlayback
         private System.Windows.Forms.CheckBox TelemetryBox;
         private System.Windows.Forms.CheckBox VideoFix;
         private System.Windows.Forms.CheckBox SwitchChan;
-        private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Button FastReviewFR;
         private System.Windows.Forms.Button PreviousFR;
         private System.Windows.Forms.Button NextFR;
@@ -970,7 +1460,39 @@ namespace SeizurePlayback
         private System.Windows.Forms.Label FRPageNum;
         public System.Windows.Forms.ComboBox numPerBox;
         public System.Windows.Forms.Label LoadText;
-        private System.Windows.Forms.Button LoadAll;
+        private System.Windows.Forms.Panel ZoomChanPanel;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label ZCN1;
+        public System.Windows.Forms.TrackBar ZoomChan12;
+        public System.Windows.Forms.TrackBar ZoomChan11;
+        public System.Windows.Forms.TrackBar ZoomChan10;
+        public System.Windows.Forms.TrackBar ZoomChan9;
+        public System.Windows.Forms.TrackBar ZoomChan8;
+        public System.Windows.Forms.TrackBar ZoomChan7;
+        public System.Windows.Forms.TrackBar ZoomChan6;
+        public System.Windows.Forms.TrackBar ZoomChan5;
+        public System.Windows.Forms.TrackBar ZoomChan4;
+        public System.Windows.Forms.TrackBar ZoomChan3;
+        public System.Windows.Forms.TrackBar ZoomChan2;
+        public System.Windows.Forms.TrackBar ZoomChan1;
+        public System.Windows.Forms.ComboBox comboBox1;
+        public System.Windows.Forms.Label ColorClear;
+        private System.Windows.Forms.Label MoreOp;
+        private System.Windows.Forms.Button Rewind_Dec;
+        private System.Windows.Forms.Button Rewind_Inc;
+        private System.Windows.Forms.FlowLayoutPanel Rewind_ChangeBox;
+        private System.Windows.Forms.Label VideoSpeedLabel;
+        private System.Windows.Forms.Button ShortcutButton;
     }
 }
 

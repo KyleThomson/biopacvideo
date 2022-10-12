@@ -402,6 +402,8 @@ namespace BioPacVideo
         private void UpdateINI(IniFile BioIni)
         {
             BioIni.IniWriteValue("General", "RecDirectory", MP.RecordingDirectory);
+            //videofix qualifier added
+            BioIni.IniWriteValue("BioPac", "VideoFix", false);
             BioIni.IniWriteValue("BioPac","MPType",MP.MPtype);            
             BioIni.IniWriteValue("BioPac", "SelectedChannel", MP.SelectedChannel);
             BioIni.IniWriteValue("BioPac", "SampleRate", MP.SampleRate.ToString());

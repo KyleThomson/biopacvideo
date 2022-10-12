@@ -42673,13 +42673,6 @@
             </summary>
             
         </member>
-        <member name="T:Accord.Statistics.Filters.ColumnOptionCollection`2.ColumnOptionsEventHandler">
-            <summary>
-              Compatibility event args for the <see cref="E:Accord.Statistics.Filters.ColumnOptionCollection`2.AddingNew"/> event. This
-              is only required and used for the .NET 3.5 version of the framework.
-            </summary>
-            
-        </member>
         <member name="M:Accord.Statistics.Filters.ColumnOptionCollection`2.GetKeyForItem(`0)">
             <summary>
               Extracts the key from the specified column options.
@@ -45985,9 +45978,7 @@
                </list></para>
             </remarks>
             
-            <example>
             <code source="Unit Tests\Accord.Tests.Statistics\Kernels\GaussianTest.cs" region="doc_rbf" />
-            </example>
             
         </member>
         <member name="M:Accord.Statistics.Kernels.IRadialBasisKernel.Function(System.Double)">
@@ -46737,31 +46728,6 @@
               Composite Gaussian Kernel.
             </summary>
             
-            <para>
-              A composite Gaussian kernel can be used to transform any <see cref="M:Accord.Statistics.Kernels.Gaussian`2.Distance(`1,`1)">distance function</see>
-              (implementing the <see cref="T:Accord.Math.Distances.IDistance`1"/> interface) into a kernel function. Therefore, it can be
-              used to easily define kernels over structures (e.g. matrices, trees, graphs) as long as a suitable
-              distance function can be defined over them.
-            </para>
-            
-            <example>
-            <para>
-              Composite Gaussian Kernels can be created using a another kernel or a distance function
-              as a base. The first two examples below show how to create a composite Gaussian kernel
-              from another kernel function:</para>
-            <code source="Unit Tests\Accord.Tests.Statistics\Kernels\GaussianLinearTest.cs" region="doc_kernel" />
-            <code source="Unit Tests\Accord.Tests.Statistics\Kernels\GaussianLinearTest.cs" region="doc_kernel_generic" />
-            
-            <para>
-              The next two examples how how to create a composite Gaussian kernel function from a distance function:</para>
-            <code source="Unit Tests\Accord.Tests.Statistics\Kernels\GaussianEuclideanTest.cs" region="doc_distance" />
-            <code source="Unit Tests\Accord.Tests.Statistics\Kernels\GaussianEuclideanTest.cs" region="doc_distance_generic" />
-            </example>
-            
-            <seealso cref="T:Accord.Statistics.Kernels.Gaussian"/>
-            <seealso cref="T:Accord.Statistics.Kernels.IKernel"/>
-            <seealso cref="T:Accord.Math.Distances.IDistance`1"/>
-            
         </member>
         <member name="M:Accord.Statistics.Kernels.Gaussian`2.#ctor(`0)">
             <summary>
@@ -46839,31 +46805,6 @@
             <summary>
               Composite Gaussian Kernel.
             </summary>
-            
-            <para>
-              A composite Gaussian kernel can be used to transform any <see cref="T:Accord.Math.Distance">distance function</see>
-              (implementing the <see cref="T:Accord.Math.Distances.IDistance`1"/> interface) into a kernel function. Therefore, it can be
-              used to easily define kernels over structures (e.g. matrices, trees, graphs) as long as a suitable
-              distance function can be defined over them.
-            </para>
-            
-            <example>
-            <para>
-              Composite Gaussian Kernels can be created using a another kernel or a distance function
-              as a base. The first two examples below show how to create a composite Gaussian kernel
-              from another kernel function:</para>
-            <code source="Unit Tests\Accord.Tests.Statistics\Kernels\GaussianLinearTest.cs" region="doc_kernel" />
-            <code source="Unit Tests\Accord.Tests.Statistics\Kernels\GaussianLinearTest.cs" region="doc_kernel_generic" />
-            
-            <para>
-              The next two examples how how to create a composite Gaussian kernel function from a distance function:</para>
-            <code source="Unit Tests\Accord.Tests.Statistics\Kernels\GaussianEuclideanTest.cs" region="doc_distance" />
-            <code source="Unit Tests\Accord.Tests.Statistics\Kernels\GaussianEuclideanTest.cs" region="doc_distance_generic" />
-            </example>
-            
-            <seealso cref="T:Accord.Statistics.Kernels.Gaussian"/>
-            <seealso cref="T:Accord.Statistics.Kernels.IKernel"/>
-            <seealso cref="T:Accord.Math.Distances.IDistance`1"/>
             
         </member>
         <member name="M:Accord.Statistics.Kernels.Gaussian`1.#ctor(`0)">
@@ -46960,61 +46901,6 @@
             </returns>
             
         </member>
-        <member name="T:Accord.Statistics.Kernels.Normalized`2">
-            <summary>
-              Normalized Kernel.
-            </summary>
-            
-            <remarks>
-              This kernel definition can be used to provide normalized versions
-              of other kernel classes, such as the <see cref="T:Accord.Statistics.Kernels.Polynomial"/>. A
-              normalized kernel will always produce distances between -1 and 1.
-            </remarks>
-            
-        </member>
-        <member name="P:Accord.Statistics.Kernels.Normalized`2.Kernel">
-            <summary>
-              Gets or sets the inner kernel function 
-              whose results should be normalized.
-            </summary>
-            
-        </member>
-        <member name="P:Accord.Statistics.Kernels.Normalized`2.Power">
-            <summary>
-              Gets or sets the normalization power to be 
-              used. Default is 0.5 (take the square root).
-            </summary>
-            
-        </member>
-        <member name="M:Accord.Statistics.Kernels.Normalized`2.#ctor(`0,System.Double)">
-            <summary>
-              Constructs a new Cauchy Kernel.
-            </summary>
-            
-            <param name="kernel">The kernel function to be normalized.</param>
-            <param name="power">The normalization power to be used. Default is 0.5 (take the square root).</param>
-            
-        </member>
-        <member name="M:Accord.Statistics.Kernels.Normalized`2.Function(`1,`1)">
-            <summary>
-              Normalized Kernel Function
-            </summary>
-            
-            <param name="x">Vector <c>x</c> in input space.</param>
-            <param name="y">Vector <c>y</c> in input space.</param>
-            <returns>Dot product in feature (kernel) space.</returns>
-            
-        </member>
-        <member name="M:Accord.Statistics.Kernels.Normalized`2.Clone">
-            <summary>
-              Creates a new object that is a copy of the current instance.
-            </summary>
-            
-            <returns>
-              A new object that is a copy of this instance.
-            </returns>
-            
-        </member>
         <member name="T:Accord.Statistics.Kernels.Pearson">
             <summary>
               Pearson VII universal kernel (PUK).
@@ -47098,20 +46984,12 @@
             </summary>
             
         </member>
-        <member name="P:Accord.Statistics.Kernels.Normalized`1.Power">
-            <summary>
-              Gets or sets the normalization power to be 
-              used. Default is 0.5 (take the square root).
-            </summary>
-            
-        </member>
-        <member name="M:Accord.Statistics.Kernels.Normalized`1.#ctor(`0,System.Double)">
+        <member name="M:Accord.Statistics.Kernels.Normalized`1.#ctor(`0)">
             <summary>
               Constructs a new Cauchy Kernel.
             </summary>
             
             <param name="kernel">The kernel function to be normalized.</param>
-            <param name="power">The normalization power to be used. Default is 0.5 (take the square root).</param>
             
         </member>
         <member name="M:Accord.Statistics.Kernels.Normalized`1.Function(System.Double[],System.Double[])">
@@ -47243,58 +47121,6 @@
             
         </member>
         <member name="M:Accord.Statistics.Kernels.NormalizedPolynomial.Clone">
-            <summary>
-              Creates a new object that is a copy of the current instance.
-            </summary>
-            
-            <returns>
-              A new object that is a copy of this instance.
-            </returns>
-            
-        </member>
-        <member name="T:Accord.Statistics.Kernels.StringSubsequence">
-            <summary>
-              String Subsequence Kernel (SSK).
-            </summary>
-            
-            <remarks>
-            <para>
-              This class implements the simplest, recursive version of the kernel as described
-              in the original paper (see below). Contributions for improving the efficiency of
-              this class are welcome.</para>
-            
-            <para>
-              References:
-              <list type="bullet">
-                <item><description><a href="http://www.jmlr.org/papers/volume2/lodhi02a/lodhi02a.pdf">
-                  Lodhi, H., Saunders, C., Shawe-Taylor, J., Cristianini, N., and Watkins, C. (2002). 
-                  Text classification using string kernels. Journal of Machine Learning Research, 
-                  2(Feb), 419-444. Available on: http://www.jmlr.org/papers/volume2/lodhi02a/lodhi02a.pdf </a>
-                  </description></item></list></para>
-            </remarks>
-            
-            <seealso cref="T:Accord.Statistics.Kernels.Gaussian"/>
-            <seealso cref="T:Accord.Statistics.Kernels.Gaussian`1"/>
-            
-        </member>
-        <member name="M:Accord.Statistics.Kernels.StringSubsequence.#ctor(System.Int32,System.Double,System.Double)">
-            <summary>
-              Constructs a new String Kernel.
-            </summary>
-            
-        </member>
-        <member name="M:Accord.Statistics.Kernels.StringSubsequence.Function(System.String,System.String)">
-            <summary>
-              Spherical Kernel Function
-            </summary>
-            
-            <param name="x">Vector <c>x</c> in input space.</param>
-            <param name="y">Vector <c>y</c> in input space.</param>
-            
-            <returns>Dot product in feature (kernel) space.</returns>
-            
-        </member>
-        <member name="M:Accord.Statistics.Kernels.StringSubsequence.Clone">
             <summary>
               Creates a new object that is a copy of the current instance.
             </summary>
@@ -72509,45 +72335,6 @@
               Tests whether the minimum value in the data is actually an outlier.
             </summary>
             
-        </member>
-        <member name="T:Accord.Statistics.TimeSeries.TimeSeriesTools">
-            <summary>
-              Static tools for time series analysis (e.g. <see cref="M:Accord.Statistics.TimeSeries.TimeSeriesTools.AutoCorrelationFunction(System.Double[],System.Int32)">ACF</see>,
-              <see cref="M:Accord.Statistics.TimeSeries.TimeSeriesTools.Periodogram(System.Double[])">periodograms</see>, and others).
-            </summary>
-            
-        </member>
-        <member name="M:Accord.Statistics.TimeSeries.TimeSeriesTools.AutoCorrelationFunction(System.Double[],System.Int32)">
-            <summary>
-              Calculates the auto correlation function using Wiener–Khinchin theorem.
-            </summary>
-            
-            <param name="vector">
-              A vector of observations whose AutoCorrelation Function will be calculated. 
-              It is assumed that the vector is a 1-D array of type double.
-            </param>
-            <param name="nlag">
-              Number of lags to return autocorrelation for. Integer.
-            </param>
-            
-            <returns>
-              Returns a vector of type double giving the autocorrelation function upto given lags.
-            </returns>
-            
-        </member>
-        <member name="M:Accord.Statistics.TimeSeries.TimeSeriesTools.Periodogram(System.Double[])">
-            <summary>
-              Calculates Periodogram of a given vector of type double based on Welch method.
-            </summary>
-            
-            <param name="vector">
-              A vector of observations whose Periodogram will be calculated. It is assumed that
-              the vector is a 1-D array of type double
-            </param> 
-            
-            <returns>
-              Returns a vector of type double giving the periodogram of the vector.
-            </returns>
         </member>
         <member name="T:Accord.Statistics.Visualizations.ScatterplotClassValueCollection">
             <summary>

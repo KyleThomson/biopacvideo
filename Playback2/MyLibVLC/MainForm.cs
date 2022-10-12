@@ -1,14 +1,10 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Threading;
-using System.Text;
-using System.Windows.Forms;
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
+using System.Drawing;
+using System.IO;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace SeizurePlayback
 {
@@ -87,7 +83,18 @@ namespace SeizurePlayback
         int[,] ButtonLoc;
         public int numPerPage;
         bool vLoading = false;
+        TrackBar[] ChanZooms;
+        int RewindVal = 30;
+        public long[,] vidRanges = new long[16, 30];
+        public bool wasLoaded;
+        public float Speed = 1;
+        public int RTSpeed = 1;
+        int driftTrack = 0;
+        public bool Scrolling = false;
+        public bool VidFixEnable = true;
         
+
+
 
         public CManage()
         {
@@ -98,12 +105,24 @@ namespace SeizurePlayback
             FRgraph = new Mygraph();
             DSF = new DetectedSeizureFileType();
             numPerPage = 24;
-            HCL = DSF.HCL;         
+            HCL = DSF.HCL;
             FastReviewState = false;
             FastReviewChange = false;
-            ButtonLoc = new int[3, 2] { { this.FastReview.Location.X, this.FastReview.Location.Y}, { this.button3.Location.X, this.button3.Location.Y}, { this.button2.Location.X, this.button2.Location.Y} };
+            ButtonLoc = new int[3, 2] { { this.FastReview.Location.X, this.FastReview.Location.Y }, { this.button3.Location.X, this.button3.Location.Y }, { this.button2.Location.X, this.button2.Location.Y } };
+            
+            ChanZooms = new TrackBar[] { ZoomChan1, ZoomChan2, ZoomChan3, ZoomChan4, ZoomChan5, ZoomChan6, ZoomChan7, ZoomChan8, ZoomChan9, ZoomChan10, ZoomChan11, ZoomChan12 };
+
+            //foreach (Control control in this.Controls)
+            //{
+            //    control.PreviewKeyDown += new PreviewKeyDownEventHandler(control_PreviewKeyDown);
+
+            //}
+            SetFeatureToAllControls(this.Controls);
 
 
+            comboBox1.Items.RemoveAt(8);
+            comboBox1.Items.Insert(8, "Channel Zoom Control [   ]");
+            comboBox1.Text = "More Options";
 
             VideoOffset = new float[16];
             string[] args = new string[] { "" };
@@ -139,9 +158,12 @@ namespace SeizurePlayback
             VisChecks[14] = VisChan15;
             VisChecks[15] = VisChan16;
 
+
+            
             INIload();
             TimeBox.SelectedIndex = 1; //Default Time Scale
             Step = MaxDispSize; //Setting Step to max display size makes sure the image refreshes. 
+            RewindVal = MaxDispSize;
             Console.WriteLine(X264path + "\\ffmpeg.exe");
             if (!File.Exists(X264path + "\\ffmpeg.exe"))
             {
@@ -163,7 +185,9 @@ namespace SeizurePlayback
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownHandler);
             this.KeyPreview = true;
             this.KeyPress += new KeyPressEventHandler(Form1_KeyPress);
-            this.KeyDown += new KeyEventHandler(Form1_KeyDown);
+            
+            //this.PreviewKeyDown += new PreviewKeyDownEventHandler(ArrowPress);
+            KeyDown += new KeyEventHandler(Form1_KeyDown);
             ResizeBool = true;
             //Start up the display thread. 
             this.Resize += new System.EventHandler(this.MainForm_Resize);
@@ -178,8 +202,8 @@ namespace SeizurePlayback
             FRgraph.X2 = this.Size.Width - 10;
             FRgraph.Y1 = 6;
             FRgraph.Y2 = FRZoomBlock.Location.Y - 20;
-           // Console.WriteLine(this.Size.Height);
-           //Console.WriteLine(VideoPanel.Location.Y - 11);
+            // Console.WriteLine(this.Size.Height);
+            //Console.WriteLine(VideoPanel.Location.Y - 11);
             ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1, FRZoomBlock.Location.Y - 20);    //Create the graphics box to display EEG. 
             this.BackColor = Color.Black;
             this.Opacity = 100;
@@ -203,13 +227,26 @@ namespace SeizurePlayback
             this.VisChan9.CheckedChanged += delegate (object sender, System.EventArgs e) { VisChan_CheckedChanged_List(sender, e, (VisChan9.TabIndex - 25), VisChan9.Checked); };
 
             this.SwitchChan.CheckedChanged += delegate (object sender, System.EventArgs e) { SwitchChan_CheckedChanged(sender, e, this.SwitchChan.Checked); };
+            this.Rewind_Dec.Click += delegate (object sender, System.EventArgs e) { Rewind_Change(sender, e, 0); };
+            this.Rewind_Inc.Click += delegate (object sender, System.EventArgs e) { Rewind_Change(sender, e, 1); };
+
 
             this.numPerBox.SelectedItem = "24";
 
-            
+
 
 
         }
+
+        public void noEventKey(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+        public void noEventKeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
         private void INIload()
         {
             DefaultFolder = INI.IniReadValue("General", "DefaultFolder", "C:\\");
@@ -221,7 +258,7 @@ namespace SeizurePlayback
             X264path = INI.IniReadValue("General", "X264path", "C:\\X264");
             VideoCapture = INI.IniReadValue("General", "SaveVideo", true);
             ACQ.Telemetry = INI.IniReadValue("General", "Telemetry", true);
-            
+
             //ACQ.Telemetry = INI.IniReadValue("BioPac", "RecordingDevice_Channel0", true);
             TelemetryBox.Checked = ACQ.Telemetry;
         }
@@ -244,15 +281,18 @@ namespace SeizurePlayback
             {
                 CamerAssc[cloop] = F.IniReadValue("Video", "Camera" + cloop.ToString(), cloop);
             }
-            
+
             CrashWarning = F.IniReadValue("General", "Crash", false);
             Compressed = F.IniReadValue("Review", "Compressed", false);
-
             
+            VidFixEnable = F.IniReadValue("BioPac", "VideoFix", true);
+            
+           
             
 
             PercentCompletion = F.IniReadValue("Review", "Complete", (double)0);
             if (PercentCompletion == 100) finsihedReview = true;
+            if (PercentCompletion == 100) this.ColorClear.BackColor = Color.Green;
             if (PercentCompletion > 0)
             {
                 Reviewer = F.IniReadValue("Review", "Reviewer", Reviewer);
@@ -284,13 +324,14 @@ namespace SeizurePlayback
             int Delay = 0;
             // int h,m,s;
             Stopwatch st = new Stopwatch();
+            
             while (true)
             {
                 if (ACQ.Loaded)
-                {                    
+                {
                     if (FastReviewState)
                     {
-                       
+
                         if (FastReviewChange)
                         {
                             int SeizureCount;
@@ -299,7 +340,7 @@ namespace SeizurePlayback
                             DSF.SetSeizureNumber(SeizureCount);
                             DetectedSeizureType Sz;
                             ACQ.cleargraph();
-                            
+
                             for (int i = 0; i < numPerPage; i++)
                             {
                                 Sz = DSF.GetCurrentSeizure();
@@ -312,7 +353,7 @@ namespace SeizurePlayback
                             g.DrawImage(ACQ.frOffscreen, FRgraph.X1, FRgraph.Y1);
                             FastReviewChange = false;
                             Redraw = false;
-                            
+
                         }
 
                         if (Redraw) FastReviewChange = true;
@@ -370,42 +411,106 @@ namespace SeizurePlayback
                                     ACQ.drawbuffer();
                                 g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
                                 g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
-                                ACQ.Position += 10;
-                                Step += 10;
+                                ACQ.Position += (int)(10 * Speed);
+                                Step += (int)(10 * Speed);
                             }
                             else
                             {
-                                st.Start();
-                                if (Step >= MaxDispSize)
+                                if (RTSpeed == 1)
                                 {
-
-                                    if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
+                                    st.Start();
+                                    if (Step >= MaxDispSize)
                                     {
-                                        Paused = true;
-                                        PercentCompletion = 100;
+
+                                        if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
+                                        {
+                                            Paused = true;
+                                            PercentCompletion = 100;
+                                        }
+                                        Redraw = true;
+                                        Step = 0;
+                                        
                                     }
-                                    Redraw = true;
-                                    Step = 0;
-                                }
-                                if (Redraw)
-                                    ACQ.drawbuffer();
-                                g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
-                                g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
-                                /*if (EOFReached)
-                                     g.DrawString("End of File Reached", new Font("Arial", 20), new SolidBrush(Color.Red), new PointF(10,10));*/
-                                ACQ.Position += 1;
-                                Step += 1;
-                                st.Stop();
-                                if ((st.ElapsedMilliseconds + Delay) > 1000)
+                                    
+                                    if (Redraw)
+                                        ACQ.drawbuffer();
+                                    g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
+                                    g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
+                                    /*if (EOFReached)
+                                         g.DrawString("End of File Reached", new Font("Arial", 20), new SolidBrush(Color.Red), new PointF(10,10));*/
+                                    
+                                        ACQ.Position += 1;
+                                        Step += 1;
+                                        
+                                    
+
+                                    
+
+                                    st.Stop();
+                                    if ((st.ElapsedMilliseconds + Delay) > 1000)
+                                    {
+                                        Delay = (int)st.ElapsedMilliseconds - 1000;
+                                    }
+                                    else
+                                    {
+                                        Thread.Sleep(1000 - ((int)st.ElapsedMilliseconds + Delay));
+                                        Delay = 0;
+                                    }
+                                    st.Reset();
+
+                                } else
                                 {
-                                    Delay = (int)st.ElapsedMilliseconds - 1000;
+                                    st.Start();
+                                    if (Step >= MaxDispSize)
+                                    {
+
+                                        if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
+                                        {
+                                            Paused = true;
+                                            PercentCompletion = 100;
+                                        }
+                                        Redraw = true;
+                                        Step = Step - MaxDispSize;
+
+                                        if (player != null)
+                                        {
+                                            if (driftTrack >= 20)
+                                            {
+                                                SeekToCurrentPos();
+                                                driftTrack = 0;
+                                            }
+                                        }
+
+                                    }
+
+                                    if (Redraw)
+                                        ACQ.drawbuffer();
+                                    g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
+                                    g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
+                                    /*if (EOFReached)
+                                         g.DrawString("End of File Reached", new Font("Arial", 20), new SolidBrush(Color.Red), new PointF(10,10));*/
+
+                                    ACQ.Position += RTSpeed;
+                                    Step += RTSpeed;
+                                    driftTrack++;
+
+
+
+                                    
+
+                                    st.Stop();
+                                    if ((st.ElapsedMilliseconds + Delay) > 1000)
+                                    {
+                                        Delay = (int)st.ElapsedMilliseconds - 1000;
+                                    }
+                                    else
+                                    {
+                                        Thread.Sleep(1000 - ((int)st.ElapsedMilliseconds + Delay));
+                                        Delay = 0;
+                                    }
+                                    st.Reset();
+
                                 }
-                                else
-                                {
-                                    Thread.Sleep(1000 - ((int)st.ElapsedMilliseconds + Delay));
-                                    Delay = 0;
-                                }
-                                st.Reset();
                             }
                         } //if !Paused
                         else
@@ -429,27 +534,66 @@ namespace SeizurePlayback
                             {
                                 if (Step >= MaxDispSize)
                                 {
+                                                                        
+                                    if (!Scrolling)
+                                    {
+                                        if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
+                                            Paused = true;
+                                        Redraw = true;
+                                        Step = 0;
+                                    } else
+                                    {
+                                        Step = Step - MaxDispSize;
+                                        if (ACQ.Position - Step <= 0)
+                                        {
+                                            Step = ACQ.Position;
+                                        }
 
-                                    if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
+                                        if (!ACQ.ReadData(Math.Max(0, ACQ.Position - Step), MaxDispSize))
                                         Paused = true;
-                                    Redraw = true;
-                                    Step = 0;
+                                        Redraw = true;
+
+
+                                        Scrolling = false;
+                                    }
+                                   
                                 }
                                 if (Redraw)
                                 {
                                     ACQ.drawbuffer();
                                     Redraw = false;
+                                    g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
+                                    g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
                                 }
-                                g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
+
+                                if (player != null)
+                                {
+                                    
+
+                                    if (!player.IsPaused)
+                                    {
+                                        
+                                        Thread.Sleep(400);
+                                        player.Pause();
+
+                                    }
+                                }
+
+                                //g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
+                                
                                 Thread.Sleep(100);
                             }
+
+                            RTSpeed = 1;
+                            
                         }
 
-                       
+
                     }
                 } //if ACQLoaded
                 else
                 {
+
                     g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
                     Thread.Sleep(100);
                 }
@@ -458,15 +602,268 @@ namespace SeizurePlayback
         }
         void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Left)
+            
+
+            if (!FastReviewState)
             {
-                Previous_Click(null, null);
+                if (Paused)
+                {
+                    switch (e.KeyCode)
+                    {
+
+                        case Keys.NumPad4:
+                        case Keys.Left:
+                            ACQ.Position = Math.Max(0, ACQ.Position - ((int)MaxDispSize / 10));
+
+                            //if (player != null) player.seek(Math.Max(0, Math.Floor(player.getpos() - (long)(MaxDispSize / 10) * 1000l)));
+                            //if (player != null) player.seek(Math.Max(0, (long)Math.Floor(((double)player.getpos()) - ((double)(MaxDispSize / 10)) * 1000)));
+                            //if (player != null)
+                            //{
+                            //    SeekToCurrentPos();
+
+                            //    //Pause_Click(null, null);
+                            //}
+                            //Console.WriteLine(player.getpos() / 1000f);
+
+                            //if (player != null)
+                            //{
+                            //    player.Pause();
+                            //}
+
+                            if (player != null)
+                            {
+                                SeekToCurrentPos();
+
+                            }
+                            Scrolling = true;
+                            Step += MaxDispSize;
+                            break;
+                        case Keys.NumPad6:
+                        case Keys.Right:
+                            if (Scrolling) return;
+                            ACQ.Position = Math.Min(ACQ.TotFileTime, ACQ.Position + ((int)MaxDispSize / 10));
+
+                            // if (player != null) 
+
+                            //not ready
+                            //if (player != null)
+                            //{
+                            //    if (player.getpos() + ((long)(MaxDispSize / 10) * 1000) > player.GetLengthMs())
+                            //    {
+                            //        SeekToCurrentPos();
+                            //        player.Pause();
+                            //    } else
+                            //    {
+                            //        player.seek(Math.Min(player.GetLengthMs(), (long)Math.Floor(((double)player.getpos()) + ((double)(MaxDispSize / 10)) * 1000)));
+                            //        player.Pause();
+                            //    }
+                            
+
+                            if (player != null)
+                            {
+                                
+                                SeekToCurrentPos();
+                                
+                                
+                            }
+
+                            Scrolling = true;
+                            Step += MaxDispSize;
+                            
+                            
+                            //}
+                            //Console.WriteLine(player.getpos() / 1000f);
+
+                            //if (player != null)
+                            //{
+                            //    player.Pause();
+                            //}
+
+                            //Thread.Sleep(100);
+                            //Pause_Click(null, null);
+                            break;
+                        case Keys.NumPad5:
+                            Play_Click(null, null);
+                            Console.WriteLine(Paused);
+                            break;
+                        case Keys.NumPad7:
+                            ACQ.Position = Math.Max(0, ACQ.Position - ((int)MaxDispSize));
+                            //if (player != null)
+                            //{
+                            //    //SeekToCurrentPos();
+                            //    player.Pause();
+                            //}
+                            if (player != null)
+                            {
+                                SeekToCurrentPos();
+                            }
+                            Step = MaxDispSize;
+                            break;
+                        case Keys.NumPad9:
+                            ACQ.Position = Math.Min(ACQ.TotFileTime, ACQ.Position + ((int)MaxDispSize));
+                            //if (player != null)
+                            //{
+                            //    player.Pause();
+
+                            //}
+                            if (player != null)
+                            {
+                                SeekToCurrentPos();
+                            }
+                            Step = MaxDispSize;
+                            break;
+                    }
+                } else
+                {   //if (!RealTime || player == null || ACQ.SelectedChan == -1)
+                    //{
+                        switch (e.KeyCode)
+                        {
+
+                            case Keys.NumPad4:
+                                Speed = Math.Max(0.1f, Speed - 0.1f);
+                                break;
+                            case Keys.NumPad6:
+                                Speed = Math.Min(2f, Speed + 0.1f);
+                                break;
+                            case Keys.NumPad5:
+                            Console.WriteLine(Paused);
+                                Pause_Click(null, null);
+                                break;
+                        }
+                    //}
+                   // else
+                    //{
+
+                        //still need to work out bugs
+                        //switch (e.KeyCode)
+                        //{
+
+                        //    case Keys.NumPad4:
+                        //        if (RTSpeed <= 1) return;
+                        //        CalcRTSpeed(false);
+                        //        ChangeVidSpeed();
+                        //        break;
+                        //    case Keys.NumPad6:
+                        //        if (RTSpeed > 10) return;
+                        //        CalcRTSpeed(true);
+                        //        ChangeVidSpeed();
+                        //        break;
+                        //    case Keys.NumPad5:
+
+                        //        Pause_Click(null, null);
+                        //        break;
+
+                        //}
+                   // }
+                        
+                }
+            } else
+            {
+                if (e.KeyCode == Keys.Left || e.KeyCode == Keys.NumPad4)
+                {
+                    Previous_Click(null, null);
+                }
+                if (e.KeyCode == Keys.Right || e.KeyCode == Keys.NumPad6)
+                {
+                    Next_Click(null, null);
+                }
             }
-            if (e.KeyCode == Keys.Right)
+            e.Handled = true;
+        }
+
+
+        public void CalcRTSpeed(bool inc)
+        {
+            if (inc)
             {
-                Next_Click(null, null);
+                switch (RTSpeed)
+                {
+                    case 0:
+                    case -1:
+                        RTSpeed = 1;
+                        break;
+                    case 1:
+                        RTSpeed = 2;
+                        break;
+                    case 2:
+                        RTSpeed = 5;
+                        break;
+                    case 5:
+                        RTSpeed = 10;
+                        break;
+                    case 10:
+                        RTSpeed = 30;
+                        break;
+                    case 30:
+
+                        break;
+                }
+            }
+            else
+            {
+                switch (RTSpeed)
+                {
+                    case 0:
+                    case -1:                        
+                    case 1:
+                        RTSpeed = 1;
+                        break;
+                    case 2:
+                        RTSpeed = 1;
+                        break;
+                    case 5:
+                        RTSpeed = 2;
+                        break;
+                    case 10:
+                        RTSpeed = 5;
+                        break;
+                    case 30:
+                        RTSpeed = 10;
+                        break;
+                }
             }
         }
+       
+
+        public void ChangeVidSpeed()
+        {
+
+            if (player == null) return;
+            if (RTSpeed < 1)
+            {
+                player.Speed(0.5f);
+                VideoSpeedLabel.Text = "0.5x";
+            } else
+            {
+                if (RTSpeed > 30) RTSpeed = 30;
+                player.Speed((float)RTSpeed);
+                VideoSpeedLabel.Text = RTSpeed + "x";
+            }
+
+
+        }
+
+        private void SetFeatureToAllControls(Control.ControlCollection cc)
+        {
+            if (cc != null)
+            {
+                foreach (Control control in cc)
+                {
+                    control.PreviewKeyDown += new PreviewKeyDownEventHandler(control_PreviewKeyDown);
+                    SetFeatureToAllControls(control.Controls);
+                }
+            }
+        }
+
+        void control_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right || e.KeyCode == Keys.NumPad4 || e.KeyCode == Keys.NumPad5 || e.KeyCode == Keys.NumPad6 || e.KeyCode == Keys.NumPad7 || e.KeyCode == Keys.NumPad8 || e.KeyCode == Keys.NumPad9 || e.KeyCode == Keys.NumPad0 || e.KeyCode == Keys.NumPad1 || e.KeyCode == Keys.NumPad2 || e.KeyCode == Keys.NumPad3)
+            {
+                e.IsInputKey = true;
+                
+            }
+        }
+
         void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
             string s = e.KeyChar.ToString();
@@ -493,8 +890,21 @@ namespace SeizurePlayback
             {
                 Pause_Click(null, null);
             }
+            if (string.Compare(s, "c", true) == 0)
+            {
+                
+                    SzCaptureButton.PerformClick();
+                
+            }
+
+            
+            
 
 
+        }
+        void ArrowPress(object sender, PreviewKeyDownEventArgs e)
+        {
+            
         }
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -507,18 +917,47 @@ namespace SeizurePlayback
 
         private void Play_Click(object sender, EventArgs e)
         {
+            
+            
+            if (ACQ.SelectedChan != -1) VideoSpeedLabel.Text = "1x";
             Paused = false;
             if (player != null & RealTime)
+            {
+                if (RTSpeed != 1)
+                {
+                    RTSpeed = 1;
+                    ChangeVidSpeed();
+                }
+
                 player.Play();
+            }
             QuitHighlight();
 
         }
 
         private void Pause_Click(object sender, EventArgs e)
         {
-            Paused = true;
+
+            
+            Speed = 1;
+
+
             if (player != null)
+            {
+
+                if (RTSpeed != 1) { SeekToCurrentPos(); }
+                RTSpeed = 1;
+                //ChangeVidSpeed(); not ready
+                //Thread.Sleep(50);
                 player.Pause();
+            }
+            else RTSpeed = 1;
+            VideoSpeedLabel.Text = "| |";
+            
+            if (Paused == true) return;
+            Paused = true;
+            
+
 
         }
 
@@ -537,10 +976,31 @@ namespace SeizurePlayback
         }
         private void Open_Click(object sender, EventArgs e)
         {
-
-            for (int i = 0; i <16; i++)
+            //Open.Enabled = false;
+            TimeJump.Enabled = true;
+            comboBox1.Enabled = true;
+            for (int i = 0; i < 16; i++)
             {
                 VLCisLoaded[i] = false;
+
+            }
+            ACQ.SeizureHighlights.Clear();
+
+            if (ACQ.Loaded)
+            {
+
+                wasLoaded = true;
+                //DefaultFolder = INI.IniReadValue("General", "DefaultFolder", "C:\\");
+                //Paused = true;
+                //ACQ = new ACQReader();
+                //ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1, FRZoomBlock.Location.Y - 20);
+
+                //var ex = MessageBox.Show("In order to open a new EEG, you must restart the application. \n \t \t Would you like to exit?", "Restart", MessageBoxButtons.OKCancel);
+
+                //if (ex == DialogResult.OK) Application.Restart(); //for now, until I can figure out what's wrong with the load
+                //return;
+                //player = null;
+                //g.Clear(Color.Black);
             }
 
             //if (testMode)
@@ -552,9 +1012,10 @@ namespace SeizurePlayback
             fastReviewLastPage = 0;
 
             DialogResult tempRes;
+
             FBD = new FolderBrowserDialog();
             FBD.SelectedPath = DefaultFolder;
-            
+
             float hrs;
             OpenFrm frm;
             Paused = true;
@@ -566,7 +1027,7 @@ namespace SeizurePlayback
             if (FBD.SelectedPath != "")
             {
                 Path = FBD.SelectedPath;
-                
+
                 string[] FName = Directory.GetFiles(Path, "*.acq");
                 if (FName.Length == 0) return;
                 DefaultFolder = Path.Substring(0, Path.LastIndexOf("\\"));
@@ -578,7 +1039,7 @@ namespace SeizurePlayback
                 IniFiles = Directory.GetFiles(Path, "*_Settings.txt");
                 BioINI = new IniFile(IniFiles[0]);
                 ReadReviewINI(BioINI);
-                
+
                 AVIMode = "avi";
                 AVIFiles = Directory.GetFiles(Path, "*.avi");
                 LoadText.Visible = true;
@@ -658,7 +1119,7 @@ namespace SeizurePlayback
                         for (int fileloop = 1; fileloop < 10; fileloop++)
                         {
                             AVIname = Path + "\\" + BaseName + string.Format("_{0:d2}", chanloop) + string.Format("_{0:d4}.avi", fileloop);
-                            AVINameList[chanloop, fileloop] = Path + "\\" + BaseName + string.Format("_{0:d2}", chanloop) + string.Format("_{0:d4}.avi", fileloop);
+                            AVINameList[chanloop, fileloop - 1] = Path + "\\" + BaseName + string.Format("_{0:d2}", chanloop) + string.Format("_{0:d4}.avi", fileloop);
 
                             //if (File.Exists(AVIname) && chanloop == 0)
                             //{
@@ -759,7 +1220,6 @@ namespace SeizurePlayback
 
                         SzInfoIndex++;
                     }
-                    Console.WriteLine(ACQ.SeizureHighlights.Count);
                     
                     TmpTxt.Dispose();
                     SzTxt = new System.IO.StreamWriter(FPath + "\\" + BaseName + ".txt");
@@ -799,16 +1259,27 @@ namespace SeizurePlayback
 
                     DetSezLabel.Text = ".det Loaded";
                     fastReviewCounter = 0;
-                    
+
                 }
                 else DetSezLabel.Text = ".det Not Found";
 
                 if (PercentCompletion == 100)
                 {
                     DetSezLabel.Text = "Finished!";
+                    ColorClear.BackColor = Color.Green;
                 }
             }
             if (ACQ.Loaded) ACQ.drawbuffer();
+
+            if (wasLoaded)
+            {
+                Rewind.PerformClick();
+                if (player != null) player.Dispose();
+                player = null;
+            }
+            
+            HCL.Clear();
+
         }
 
 
@@ -822,7 +1293,7 @@ namespace SeizurePlayback
         {
 
             if (vLoading) return;
-            
+
             if ((e.X > graph.X1) && (e.X < graph.X2) && (e.Y > graph.Y1) && ((e.Y < graph.Y2) || (FastReviewState && e.Y < FRgraph.Y2)))
             {
                 if (FastReviewState)
@@ -833,12 +1304,12 @@ namespace SeizurePlayback
                         X = 0;
                     }
                     int Y = (e.Y - FRgraph.Y1);
-                    Y = Y / ((FRgraph.Y2 - FRgraph.Y1) / (numPerPage/2));
+                    Y = Y / ((FRgraph.Y2 - FRgraph.Y1) / (numPerPage / 2));
                     //if (DSF.ChangeDisplaySeizure((FastReviewPage * 16) + (Y * 2) + X))
-                    loadVid(DSF.GetChannelNumber((FastReviewPage * numPerPage) + (Y * 2) + X));
+                    //loadVid(DSF.GetChannelNumber((FastReviewPage * numPerPage) + (Y * 2) + X));
                     if (DSF.ChangeDisplaySeizure((FastReviewPage * numPerPage) + (Y * 2) + X))
                     {
-                        
+
                         FastReviewChange = true;
                     }
 
@@ -846,7 +1317,7 @@ namespace SeizurePlayback
                 else
                 {
                     //JOSH
-                    
+
                     Paused = true;
                     OffsetBox.Enabled = true;
                     int TempChan = (int)((float)ACQ.VisibleChans * (float)(((float)e.Y - (float)graph.Y1) / (float)(graph.Y2 - graph.Y1)));
@@ -859,7 +1330,7 @@ namespace SeizurePlayback
                     {
                         ACQ.SelectedChan = ChanPos[TempChan];
                         loadVid(ChanPos[TempChan]);
-                        
+
                     }
                     HighlightStart = (int)((float)MaxDispSize * (float)(e.X - graph.X1) / (graph.X2 - graph.X1));
                     Highlighting = true;
@@ -880,6 +1351,7 @@ namespace SeizurePlayback
         }
         private void MyMouseUp(Object sender, MouseEventArgs e)
         {
+
             //if (vLoading) return;
             if (FastReviewState) return;
             if (ACQ.Loaded)
@@ -899,11 +1371,16 @@ namespace SeizurePlayback
                             ACQ.SelectedChan = ChanPos[TempChan];
                         }
                         OffsetBox.Text = VideoOffset[ACQ.SelectedChan].ToString();
+                        RTSpeed = 1;
+                        
+                        ChangeVidSpeed();
                         ACQ.Position = ACQ.Position - Step + XStart;
                         Step = XStart;
+                        Paused = false;
                         SeekToCurrentPos();
                         QuitHighlight();
-                        Paused = false;
+                        
+                        VideoSpeedLabel.Text = "1x";
                         RealTime = true;
                         Redraw = true;
                     }
@@ -917,9 +1394,12 @@ namespace SeizurePlayback
         {
             int FNum = 1;
             string Fname;
-            Redraw = true;
+            if (!Paused) Redraw = true;
+            
             //Frame rate is actually 30.3, but listed as 30 in the avi. To seek to the proper time, need to adjust for that factor.
-            //Switch to float to do decimal math, switch back to integer for actual ms.             
+            //Switch to float to do decimal math, switch back to integer for actual ms.
+            
+            
             long TimeSeek;
             if (AVIMode == "mp4")
             {
@@ -936,10 +1416,11 @@ namespace SeizurePlayback
 
             if (AVIMode == "avi")
             {
-
+                loadVid(ACQ.SelectedChan);
                 while (TimeSeek > AVILengths[ACQ.SelectedChan, FNum - 1])
                 {
                     //Console.WriteLine(TimeSeek);
+                    
                     TimeSeek -= AVILengths[ACQ.SelectedChan, FNum - 1];
                     FNum++;
                     if (AVILengths[ACQ.SelectedChan, FNum - 1] == 0)// no avi file
@@ -948,16 +1429,18 @@ namespace SeizurePlayback
                         pass = true;
                         break;
                     }
+                    
                 }
                 Fname = Path + "\\" + BaseName + string.Format("_{0:d2}", ACQ.SelectedChan) + string.Format("_{0:d4}.avi", FNum);
             }
             else
             {
-                if (this.VideoFix.Checked)
+                if (this.VideoFix.Checked && VidFixEnable)
                 {
                     int FixedChan = 0;
+                    
                     FixedChan = CamerAssc[CamerAssc[ACQ.SelectedChan]];
-                    //loadVid(FixedChan);
+                    loadVid(FixedChan);
                     FNum = 0;
                     while (TimeSeek > AVILengths[FixedChan, FNum])
                     {
@@ -980,6 +1463,7 @@ namespace SeizurePlayback
                 }
                 else
                 {
+                    loadVid(ACQ.SelectedChan);
                     FNum = 0;
                     while (TimeSeek > AVILengths[ACQ.SelectedChan, FNum])
                     {
@@ -991,6 +1475,7 @@ namespace SeizurePlayback
                             break;
                         }
                     }
+                    
                     if (FNum == 0)
                     {
                         Fname = Path + "\\" + BaseName + string.Format("_{0:d3}", ACQ.SelectedChan) + ".mp4";
@@ -1000,6 +1485,7 @@ namespace SeizurePlayback
                         Fname = Path + "\\" + BaseName + string.Format("_{0:d3}", ACQ.SelectedChan) + "." + FNum.ToString() + ".mp4";
                     }
                 }
+                
             }
 
 
@@ -1017,10 +1503,18 @@ namespace SeizurePlayback
                     player.Drawable = VideoPanel.Handle;
                 }
                 else player.Media = media;
-                player.Play();
+
+                
+                
                 AVILoaded = true;
                 CurrentAVI = Fname;
+                
+                player.Play();
                 player.seek(TimeSeek);
+                
+                
+                
+
 
             }
         }
@@ -1029,18 +1523,28 @@ namespace SeizurePlayback
         private void SpeedUp_Click(object sender, EventArgs e)
         {
             ACQ.SelectedChan = -1;
+            RTSpeed = 1;
             OffsetBox.Enabled = false;
+            VideoSpeedLabel.Text = "| |";
             RealTime = false;
             if (player != null)
                 player.Stop();
+            Paused = false;
 
         }
 
         private void Rewind_Click(object sender, EventArgs e)
         {
-            ACQ.Position = Math.Max(0, ACQ.Position - MaxDispSize);
+
+
+            //ACQ.Position = Math.Max(0, ACQ.Position - MaxDispSize);
+            //if (player != null)
+            //    player.seek(player.getpos() - MaxDispSize * 1000);
+            //Step = MaxDispSize;
+
+            ACQ.Position = Math.Max(0, ACQ.Position - RewindVal);
             if (player != null)
-                player.seek(player.getpos() - MaxDispSize * 1000);
+                player.seek(player.getpos() - RewindVal * 1000);
             Step = MaxDispSize;
         }
 
@@ -1062,6 +1566,8 @@ namespace SeizurePlayback
         {
             int[] TimeScales = { 30, 60, 120, 300, 600, 1800, 3600 };
             MaxDispSize = TimeScales[TimeBox.SelectedIndex];
+            RewindVal = MaxDispSize;
+
             Rewind.Text = "Rewind " + MaxDispSize.ToString() + "s";
             Step = MaxDispSize;
             ACQ.SetDispLength(MaxDispSize);
@@ -1071,7 +1577,7 @@ namespace SeizurePlayback
 
         private void SzCaptureButton_Click(object sender, EventArgs e)
         {
-            
+
             infopass P;
             P = new infopass();
             if ((CurrentAVI != "") && (ACQ.SelectedChan != -1))
@@ -1099,6 +1605,8 @@ namespace SeizurePlayback
                     + answer + ", " + (HighlightEnd - HighlightStart + 1).ToString() + " , ";
                 P.CurrentAVI = CurrentAVI;
                 P.Subtractor = Subtractor;
+                //P.subVidOffset = DetermineRVT(ACQ.SelectedChan, P.StartTime * 1000);
+                              
                 P.X264path = X264path;
                 P.ACQ = ACQ;
                 P.VideoOffset = VideoOffset[ACQ.SelectedChan];
@@ -1127,6 +1635,18 @@ namespace SeizurePlayback
                 Step = MaxDispSize;
                 QuitHighlight();
             }
+        }
+
+
+        public long DetermineRVT(int chan, long ttms)
+        {
+            int FNum = 0;
+            while (ttms > AVILengths[chan, FNum])
+            {
+                ttms -= AVILengths[chan, FNum];
+                FNum++;
+            }
+            return ttms;
         }
 
         private void TimeJump_TextChanged(object sender, EventArgs e)
@@ -1182,11 +1702,13 @@ namespace SeizurePlayback
         private void VisChan_CheckedChanged_List(object sender, EventArgs e, int chanPass, bool chanClicked)
         {
 
+            if (!ACQ.Loaded) return;
 
             if (!SuppressChange)
             {
                 if (!HCL.Contains(chanPass) && !chanClicked)
                 {
+                    ChanZooms[chanPass - 1].Enabled = false;
                     HCL.Add(chanPass);
                     checkedChange = true;
                     //Console.WriteLine("Channel " + chanPass + " Hidden");
@@ -1194,14 +1716,15 @@ namespace SeizurePlayback
                 }
                 if (HCL.Contains(chanPass) && chanClicked)
                 {
-                    HCL.Remove(chanPass);                   
+                    ChanZooms[chanPass - 1].Enabled = true;
+                    HCL.Remove(chanPass);
                     checkedChange = true;
                     //Console.WriteLine("Channel " + chanPass + " Visible");
                     VLCisLoaded[chanPass] = false;
                 }
 
                 DSF.HCLSync(HCL);
-               
+
 
             }
 
@@ -1209,11 +1732,21 @@ namespace SeizurePlayback
 
         private void ZoomScale_Scroll(object sender, EventArgs e)
         {
-            ACQ.Zoom = (float)ZoomScale.Value / 10;
-            Redraw = true;
-            if (FastReviewState) FastReviewChange = true;
-           
-            
+
+            if (!FastReviewState)
+            {
+                ACQ.Zoom = (float)ZoomScale.Value / 10;
+                FRZoomBar.Value = ZoomScale.Value;
+                Redraw = true;
+            }
+            if (FastReviewState)
+            {
+                ACQ.Zoom = (float)FRZoomBar.Value / 10;
+                FastReviewChange = true;
+                ZoomScale.Value = FRZoomBar.Value;
+            }
+
+
         }
 
         private void VideoPanel_Click(object sender, EventArgs e)
@@ -1254,8 +1787,13 @@ namespace SeizurePlayback
         private void RvwSz_Click(object sender, EventArgs e)
         {
             SRF = new SzRvwFrm(this);
+            String[] TmpStr;
+            
             for (int i = 0; i < SzInfoIndex; i++)
             {
+                TmpStr = SzInfo[i].Split(',');
+                                
+                SRF.Add(TmpStr, i);
                 SRF.Add(SzInfo[i]);
             }
             SRF.Show();
@@ -1263,11 +1801,12 @@ namespace SeizurePlayback
         public void ChildSend(TimeSpan Time, int Channel)
         {
             ACQ.SelectedChan = Channel;
+            loadVid(Channel);
             Paused = false;
             RealTime = true;
             ACQ.Position = (int)Time.TotalSeconds; //doesn't draw rectangles in the right place
             Step = MaxDispSize;
-            
+
             SeekToCurrentPos();
             //ACQ.drawbuffer();
         }
@@ -1283,6 +1822,7 @@ namespace SeizurePlayback
                 SzInfo[i] = SzInfo[i + 1];
             }
             SzInfoIndex--;
+            ACQ.SeizureHighlights.RemoveAt(Index);
             SzTxt.Close();
             SzTxt = new System.IO.StreamWriter(FPath + "\\" + BaseName + ".txt");
             SzTxt.AutoFlush = true;
@@ -1433,11 +1973,11 @@ namespace SeizurePlayback
         private void Next_Click(object sender, EventArgs e)
         {
             if (!DSF.isLoaded) return;
-            
+
             if (FastReviewState)
             {
                 if ((FastReviewPage * numPerPage) + numPerPage > DSF.Count) return;
-                
+
                 FastReviewPage++;
 
                 //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16 + " of " + DSFoCount).ToString();
@@ -1447,7 +1987,7 @@ namespace SeizurePlayback
                 FRPageNum.Text = (displayPageMin + " to " + displayPageMax + " of " + (DSF.Count).ToString());
                 FastReviewChange = true;
                 fastReviewLastPage++;
-                
+
             }
             else
             {
@@ -1459,13 +1999,15 @@ namespace SeizurePlayback
                     {
                         DetSezLabel.Text = "Finished!";
                         PercentCompletion = 100;
+                        ColorClear.BackColor = Color.Green;
                         UpdateReviewINI(BioINI);
                         Paused = true;
                         RealTime = false;
                         ACQ.Position = (int)ACQ.TotFileTime;
                         Step = MaxDispSize;
                         SeekToCurrentPos(false);
-                        
+                        if (player != null) player.Pause();
+
                         return;
                     }
                     Sz = DSF.GetCurrentSeizure();
@@ -1473,14 +2015,16 @@ namespace SeizurePlayback
                         pass = true;
                 }
                 //DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
-                DetSezLabel.Text = DSF.FRIndex() + " of " + DSF.IsDisplayed().ToString();
+                DetSezLabel.Text = DSF.FRIndex() + " of " + (DSF.IsDisplayed()).ToString();
                 regularReviewReturn = (Math.Min(regularReviewReturn + 1, DSF.Count - 1));
                 ACQ.SelectedChan = Sz.Channel - 1;
                 ACQ.Position = Math.Max(0, Sz.TimeInSec - 30);
                 Step = MaxDispSize;
+                loadVid(ACQ.SelectedChan);
                 if (player != null)
                     player.Stop();
-                SeekToCurrentPos(false);
+                if (player != null) SeekToCurrentPos();
+                if (player != null) player.Play();
                 QuitHighlight();
                 Paused = false;
                 RealTime = true;
@@ -1522,13 +2066,14 @@ namespace SeizurePlayback
                     RealTime = true;
                     finsihedReview = false;
                     //DetSezLabel.Text = (0 + " of " + DSF.Count.ToString());
-                    DetSezLabel.Text = (0 + " of " + DSF.IsDisplayed().ToString());
+                    DetSezLabel.Text = (0 + " of " + (DSF.IsDisplayed()).ToString());
                     return;
                 }
                 if (!DSF.Dec())
                 {
                     ACQ.Position = 0;
                     Step = MaxDispSize;
+                    if (player == null) return;
                     if (player != null)
                         player.Stop();
                     SeekToCurrentPos(false);
@@ -1536,7 +2081,7 @@ namespace SeizurePlayback
                     Paused = false;
                     RealTime = true;
                     //DetSezLabel.Text = (0 + " of " + DSF.Count.ToString());
-                    DetSezLabel.Text = (0 + " of " + DSF.IsDisplayed().ToString());
+                    DetSezLabel.Text = (0 + " of " + (DSF.IsDisplayed()).ToString());
                     return;
                 }
                 Sz = DSF.GetCurrentSeizure();
@@ -1545,7 +2090,7 @@ namespace SeizurePlayback
 
             }
             //DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
-            DetSezLabel.Text = DSF.FRIndex() + " of " + DSF.IsDisplayed().ToString();
+            DetSezLabel.Text = DSF.FRIndex() + " of " + (DSF.IsDisplayed()).ToString();
             regularReviewReturn = (Math.Max(regularReviewReturn - 1, 0));
             ACQ.SelectedChan = Sz.Channel - 1;
             ACQ.Position = Math.Max(0, Sz.TimeInSec - 30);
@@ -1605,14 +2150,14 @@ namespace SeizurePlayback
             INISave();
         }
 
- 
+
 
         private void FastReview_Click(object sender, EventArgs e)
         {
 
 
             DSF.HCLSync(HCL);
-            
+
 
 
             if (!DSF.isLoaded) return; //Don't want to go into fastreview mode if file not loaded
@@ -1624,15 +2169,15 @@ namespace SeizurePlayback
                     player.Pause();
             }
             bool del;
-            
-            
+
+
             if (!FastReviewState)
             {
-
-                
+                TimeBox.SelectedItem = "60s";
+                //MaxDispSize = 60;
 
                 FRView(true);
-               
+
 
 
 
@@ -1679,19 +2224,19 @@ namespace SeizurePlayback
 
                 if (checkedChange)
                 {
-                    
+
                     DSF.ResetDFS();
-                    
+
                     checkedChange = false;
                     if (DSF.Count == 0)
                     {
                         Console.WriteLine("NO SEIZURES VISIBLE!");
                         return;
                     }
-                 
+
                 }
 
-               
+
 
 
                 DSF.SetSeizureNumber(0);
@@ -1734,11 +2279,37 @@ namespace SeizurePlayback
                  * Experimental autoreturn to first selected seizure
                */
                 DetectedSeizureType Sz;
-                
+
                 Sz = DSF.GetCurrentSeizure();
                 bool pass = false;
 
                 if ((!ACQ.HideChan[Sz.Channel - 1]) && Sz.Display) pass = true;
+                if (DSF.IsDisplayed() == 1)
+                {
+                    DetSezLabel.Text = "Finished!";
+                    PercentCompletion = 100;
+                    UpdateReviewINI(BioINI);
+                    ColorClear.BackColor = Color.Green;
+                }
+                if (DSF.IsDisplayed() == 0)
+                {
+                    bool MarkAs = MarkAsCompleteBox();
+                    if (MarkAs)
+                    {
+                        DetSezLabel.Text = "Finished!";
+                        PercentCompletion = 100;
+                        ColorClear.BackColor = Color.Green;
+                        UpdateReviewINI(BioINI);
+                        Paused = true;
+                        RealTime = false;
+                        ACQ.Position = (int)ACQ.TotFileTime;
+                        Step = MaxDispSize;
+
+                        if (player != null) player.Pause();
+
+                        return;
+                    }
+                }
 
                 while (!pass)
                 {
@@ -1757,19 +2328,21 @@ namespace SeizurePlayback
                         return;
                     }
                     Sz = DSF.GetCurrentSeizure();
-                    if ((!ACQ.HideChan[Sz.Channel - 1]) && Sz.Display && ((DSF.FRIndex() == regularReviewReturn) || regularReviewReturn == 0))
+                    if ((!ACQ.HideChan[Sz.Channel - 1]) && Sz.Display)
                         pass = true;
-                        loadVid(Sz.Channel);
+                    // if (regularReviewReturn != 0) loadVid(Sz.Channel);
                 }
 
                 //DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
-                DetSezLabel.Text = DSF.FRIndex().ToString() + " of " + DSF.IsDisplayed().ToString();
+                DetSezLabel.Text = DSF.FRIndex().ToString() + " of " + (DSF.IsDisplayed()).ToString();
                 ACQ.SelectedChan = Sz.Channel - 1;
                 ACQ.Position = Math.Max(0, Sz.TimeInSec - 30);
+                loadVid(ACQ.SelectedChan);
                 Step = MaxDispSize;
                 if (player != null)
                     player.Stop();
-                SeekToCurrentPos(false);
+                if (player != null) SeekToCurrentPos();
+                if (player != null) player.Play();
                 QuitHighlight();
                 Paused = false;
                 RealTime = true;
@@ -1784,7 +2357,23 @@ namespace SeizurePlayback
          
         */
 
+        private bool MarkAsCompleteBox()
+        {
 
+            string message = "\t You Have Not Selected Any Seizures \n Would You Like to Finish and Mark this File as Complete?";
+            string caption = "Seizure Review";
+            //MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            //DialogResult answer;
+            var answer = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (answer == DialogResult.Yes)
+            {
+                return true;
+            }
+            else return false;
+
+
+        }
 
         private bool DeleteMessageBox()
         {
@@ -1824,11 +2413,13 @@ namespace SeizurePlayback
         private void SwitchChan_CheckedChanged(object sender, EventArgs e, bool check)
         {
             ACQ.SwapIDs(sender, e, check);
-            
+
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+
+
             switch (comboBox1.SelectedIndex)
             {
                 case 0: //Compression Manager
@@ -1893,6 +2484,58 @@ namespace SeizurePlayback
                     VideoCreator frm2 = new VideoCreator(ACQ.GetData(ACQ.SelectedChan, Start, HighlightEnd - HighlightStart + 1), HighlightEnd - HighlightStart + 1, CurrentAVI, Seek);
                     frm2.Show();
                     break;
+                case 7:
+                    bool a = true;
+                    for (int i = 0; i < 16; i++)
+                    {
+                        if (!VLCisLoaded[i]) a = false;
+                    }
+                    if (a == false) loadVid(-1);
+                    break;
+                case 8: //Channel Zoom
+                    if (ACQ.MasterZoom)
+                    {
+                        comboBox1.Items.RemoveAt(8);
+                        comboBox1.Items.Insert(8, "Channel Zoom Control [\u2714]");
+                        comboBox1.Text = "Channel Zoom Control [\u2714]";
+
+
+                        ACQ.MasterZoom = false;
+                        ZoomChanPanel.Show();
+                        ZoomChanPanel.Enabled = true;
+
+                        //ZoomChan1.Value = ZoomScale.Value;
+                        //ZoomChan2.Value = ZoomScale.Value;
+                        //ZoomChan3.Value = ZoomScale.Value;
+                        //ZoomChan4.Value = ZoomScale.Value;
+                        //ZoomChan5.Value = ZoomScale.Value;
+                        //ZoomChan6.Value = ZoomScale.Value;
+                        //ZoomChan7.Value = ZoomScale.Value;
+                        //ZoomChan8.Value = ZoomScale.Value;
+                        //ZoomChan9.Value = ZoomScale.Value;
+                        //ZoomChan10.Value = ZoomScale.Value;
+                        //ZoomChan11.Value = ZoomScale.Value;
+                        //ZoomChan12.Value = ZoomScale.Value;
+
+                        ZoomScale.Enabled = false;
+                    }
+                    else
+                    {
+                        comboBox1.Items.RemoveAt(8);
+                        comboBox1.Items.Insert(8, "Channel Zoom Control [   ]");
+                        comboBox1.Text = "Channel Zoom Control [   ]";
+                        ACQ.MasterZoom = true;
+                        ACQ.drawbuffer();
+                        ZoomChanPanel.Hide();
+                        ZoomChanPanel.Enabled = false;
+                        ZoomScale.Enabled = true;
+
+                    }
+                    break;
+                case 9: //shortcutguide
+                    ShortGuide shortcut = new ShortGuide();
+                    shortcut.Show();
+                    break;
 
             }
         }
@@ -1928,7 +2571,7 @@ namespace SeizurePlayback
 
         }
 
- 
+
 
 
         private void numPerBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -1937,7 +2580,7 @@ namespace SeizurePlayback
 
             int FRPtemp = numPerPage * FastReviewPage;
             FastReviewPage = FRPtemp / temp;
-            
+
             numPerPage = temp;
             ACQ.numPerPage = temp;
 
@@ -1976,33 +2619,255 @@ namespace SeizurePlayback
             FRPageNum.Text = (MinMaxPage("min") + " to " + MinMaxPage("max") + " of " + (DSF.Count).ToString());
 
             FastReviewChange = true;
-            
+
         }
 
-        private void LoadAll_Click(object sender, EventArgs e)
-        {
-            bool a= true;
-            for (int i = 0; i < 16; i++)
-            {
-                if (!VLCisLoaded[i]) a = false;
-            }
-            if (a == false) loadVid(-1);
-        }
+        //private void LoadAll_Click(object sender, EventArgs e)
+        //{
+        //    bool a= true;
+        //    for (int i = 0; i < 16; i++)
+        //    {
+        //        if (!VLCisLoaded[i]) a = false;
+        //    }
+        //    if (a == false) loadVid(-1);
+        //}
 
         private void VideoFix_CheckedChanged(object sender, EventArgs e)
         {
-            bool a = true;
-            for (int i = 0; i < 16; i++)
-            {
-                if (!VLCisLoaded[i]) a = false;
-            }
-            if (a == false) loadVid(-1);
             
+            
+            //bool a = true;
+            //for (int i = 0; i < 16; i++)
+            //{
+            //    if (!VLCisLoaded[i]) a = false;
+            //}
+            //if (a == false) loadVid(-1);
+
         }
 
         private void SwitchChan_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        //private void ChanZoomCheck_CheckedChanged(object sender, EventArgs e)
+        //{
+
+        //    if (this.ChanZoomCheck.Checked)
+        //    {
+        //        ACQ.MasterZoom = false;
+        //        ZoomChanPanel.Show();
+        //        ZoomChanPanel.Enabled = true;
+
+        //        ZoomChan1.Value = ZoomScale.Value;
+        //        ZoomChan2.Value = ZoomScale.Value;
+        //        ZoomChan3.Value = ZoomScale.Value;
+        //        ZoomChan4.Value = ZoomScale.Value;
+        //        ZoomChan5.Value = ZoomScale.Value;
+        //        ZoomChan6.Value = ZoomScale.Value;
+        //        ZoomChan7.Value = ZoomScale.Value;
+        //        ZoomChan8.Value = ZoomScale.Value;
+        //        ZoomChan9.Value = ZoomScale.Value;
+        //        ZoomChan10.Value = ZoomScale.Value;
+        //        ZoomChan11.Value = ZoomScale.Value;
+        //        ZoomChan12.Value = ZoomScale.Value;
+
+        //        ZoomScale.Enabled = false;
+        //    } else
+        //    {
+        //        ACQ.MasterZoom = true;
+        //        ZoomChanPanel.Hide();
+        //        ZoomChanPanel.Enabled = false;
+        //        ZoomScale.Enabled = true;
+        //        ACQ.drawbuffer();
+        //    }
+
+        //}
+
+        private void ZoomChan1_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[0] = (float)ZoomChan1.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+
+        private void ZoomChan2_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[1] = (float)ZoomChan2.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+
+        private void ZoomChan3_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[2] = (float)ZoomChan3.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan4_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[3] = (float)ZoomChan4.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan5_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[4] = (float)ZoomChan5.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan6_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[5] = (float)ZoomChan6.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan7_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[6] = (float)ZoomChan7.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan8_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[7] = (float)ZoomChan8.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan9_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[8] = (float)ZoomChan9.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan10_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[9] = (float)ZoomChan10.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan11_Scroll(object sender, EventArgs e)
+        {
+            ACQ.CurrentChannelZoom[10] = (float)ZoomChan11.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan12_Scroll(object sender, EventArgs e)
+
+        {
+            ACQ.CurrentChannelZoom[11] = (float)ZoomChan12.Value / 10;
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+            ZoomScale.Value = 10;
+            ACQ.Zoom = 1;
+            Redraw = true;
+        }
+
+        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label16_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Console.WriteLine(sender);
+        }
+
+        public void Rewind_Change(Object sender, EventArgs e, int dir) //1 for increase, 0 for decrease
+        {
+            if (dir == 1)
+            {
+                if (RewindVal * 2 >= MaxDispSize)
+                {
+                    RewindVal = MaxDispSize;
+                    Rewind.Text = "Rewind " + MaxDispSize.ToString() + "s";
+                    return;
+                }
+                if (RewindVal == 10) RewindVal = 15;
+                RewindVal = (RewindVal - (RewindVal % 5));
+                RewindVal *= 2;
+                Rewind.Text = "Rewind " + RewindVal + "s";
+            }
+            else if (dir == 0)
+            {
+                if (RewindVal <= 5) return;
+                if (RewindVal <= 10)
+                {
+                    RewindVal = 5;
+                    Rewind.Text = "Rewind " + RewindVal + "s";
+                    return;
+                }
+                if (RewindVal <= 15)
+                {
+                    RewindVal = 10;
+                    Rewind.Text = "Rewind " + RewindVal + "s";
+                    return;
+                }
+
+                RewindVal /= 2;
+                RewindVal = RewindVal - RewindVal % 15;
+                Rewind.Text = "Rewind " + RewindVal + "s";
+
+            }
+            else return;
+
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
+                
+            
+                Console.WriteLine("RTSPeed: " + RTSpeed);
+                Console.WriteLine("VidSpeed " + RTSpeed);
+            
+            
+        }
+
+        private void ShortcutButton_Click(object sender, EventArgs e)
+        {
+            ShortGuide shrt = new ShortGuide();
+            shrt.Show();
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            player.Play();
+            player.Pause();
+        }
+
+        private void VideoFix_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (!VidFixEnable)
+            {
+                this.VideoFix.Checked = false;
+                this.VideoFix.Text = "Video Fix [Disabled]";
+                this.VideoFix.ForeColor = Color.DarkGray;
+                this.VideoFix.FlatStyle = FlatStyle.Popup;
+                MessageBox.Show("Video Fix is Disabled For this File. Channels are Correct. \n \t \t No Action Required", "Video Fix Unnecessary", MessageBoxButtons.OK);
+                
+            }
         }
 
         public void loadVid(int chanloop)
@@ -2013,39 +2878,48 @@ namespace SeizurePlayback
                 if (VLCisLoaded[chanloop]) return;
             }
             vLoading = true;
-            
-           
-            
+
+
+
+
+
             if (!ACQ.Loaded) return;
             string AVIname;
             VLoadWait vLoad = new VLoadWait();
+            vLoad.LT.Text = "LOADING";
             vLoad.Show();
 
+
+
             //AVIFiles = Directory.GetFiles(Path, "*.avi");
-            
+
             LoadText.Show();
             LoadText.BringToFront();
-            
+
             //this.Refresh();
             AVILoadBar.Value = 0;
+            AVILoadBar.Maximum = 30;
             AVILoadBar.Visible = true;
-            
+
             if (player == null) Console.WriteLine("Player does not exist yet");
 
-           
-           if (chanloop >= 0)
+
+            if (chanloop >= 0)
             {
-                
+
+                long tottemp = 0;
+
                 LoadText.Text = "Loading Video for Channel: " + ((int)chanloop + (int)1);
                 if (!isMP4)
                 {
                     vLoad.VideoLoadProgressBar.Maximum = 10;
-                    for (int fileloop = 0; fileloop < 10; fileloop++)
+
+                    for (int fileloop = 1; fileloop < 10; fileloop++)
                     {
-                        vLoad.VideoLoadProgressBar.Maximum = 10;
-                        AVILoadBar.Increment(3);
-                        vLoad.VideoLoadProgressBar.Increment(1);
-                        AVIname = AVINameList[chanloop, fileloop];
+
+                        //AVILoadBar.Increment(3);
+                        
+                        AVIname = AVINameList[chanloop, fileloop - 1];
                         if (File.Exists(AVIname))
                         {
                             //Console.WriteLine(AVIname);
@@ -2064,12 +2938,16 @@ namespace SeizurePlayback
                             { }
                             AVILengths[chanloop, fileloop - 1] = player.GetLengthMs();
                             totms += AVILengths[chanloop, fileloop - 1];
+                            tottemp += AVILengths[chanloop, fileloop - 1];
+                            vidRanges[chanloop, fileloop - 1] = tottemp;
                             //Console.WriteLine(AVIname + "  " + AVILengths[chanloop, fileloop - 1].ToString());
                             player.Stop();
                             media.Dispose();
                             // vLoad.VideoLoadProgressBar.Increment(1);
                             //AVILoadBar.Increment(3);
+                            
                         }
+                        vLoad.VideoLoadProgressBar.Increment(1);
                     }
                     for (int fileloop = 10; fileloop < 30; fileloop++)
                     {
@@ -2083,7 +2961,7 @@ namespace SeizurePlayback
                     vLoad.VideoLoadProgressBar.Maximum = 30;
                     for (int fileloop = 0; fileloop < 30; fileloop++)
                     {
-                        vLoad.VideoLoadProgressBar.Increment(1);
+                        
                         AVIname = AVINameList[chanloop, fileloop];
                         if (File.Exists(AVIname))
                         {
@@ -2100,6 +2978,8 @@ namespace SeizurePlayback
                             { }
                             AVILengths[chanloop, fileloop] = player.GetLengthMs();
                             totms += AVILengths[chanloop, fileloop];
+                            tottemp += AVILengths[chanloop, fileloop];
+                            vidRanges[chanloop, fileloop] = tottemp;
                             player.Stop();
                             media.Dispose();
 
@@ -2109,29 +2989,39 @@ namespace SeizurePlayback
                         else
                         {
                             AVILengths[chanloop, fileloop] = 0;
+
                         }
+                        vLoad.VideoLoadProgressBar.Increment(1);
                     }
-                    
+
                 }
                 VLCisLoaded[chanloop] = true;
-            } 
+            }
             else
             {
                 LoadText.Text = "Loading All Video Files";
                 if (player != null)
                 {
                     player.Dispose();
+                    player = null;
                 }
-                vLoad.VideoLoadProgressBar.Maximum = 30;
+                vLoad.VideoLoadProgressBar.Maximum = ACQ.VisibleChans;
+                Console.WriteLine(ACQ.VisibleChans);
+                vLoad.VideoLoadProgressBar.Value = 0;
+                AVILoadBar.Maximum = 30;
                 for (chanloop = 0; chanloop < 16; chanloop++)
                 {
+                    long tottemp = 0;
+                    AVILoadBar.Value = 0;
+                   
                     if (!isMP4)
                     {
-                        
+
                         for (int fileloop = 0; fileloop < 10; fileloop++)
                         {
+                            //AVILoadBar.Increment(3);
                             //vLoad.VideoLoadProgressBar.Maximum = 10;
-                            AVILoadBar.Increment(3);
+                            
                             //vLoad.VideoLoadProgressBar.Increment(1);
                             AVIname = AVINameList[chanloop, fileloop];
                             if (File.Exists(AVIname))
@@ -2139,7 +3029,7 @@ namespace SeizurePlayback
                                 //Console.WriteLine(AVIname);
                                 media = new VlcMedia(instance, AVIname);
 
-                                if (chanloop == 0)
+                                if (player == null)
                                 {
 
                                     player = new VlcMediaPlayer(media);
@@ -2150,33 +3040,40 @@ namespace SeizurePlayback
                                 player.Play();
                                 while (player.GetLengthMs() == 0)
                                 { }
-                                AVILengths[chanloop, fileloop - 1] = player.GetLengthMs();
-                                totms += AVILengths[chanloop, fileloop - 1];
+                                AVILengths[chanloop, fileloop] = player.GetLengthMs();
+                                totms += AVILengths[chanloop, fileloop];
+                                tottemp += AVILengths[chanloop, fileloop];
+                                vidRanges[chanloop, fileloop] = tottemp;
                                 //Console.WriteLine(AVIname + "  " + AVILengths[chanloop, fileloop - 1].ToString());
                                 player.Stop();
                                 media.Dispose();
                                 // vLoad.VideoLoadProgressBar.Increment(1);
                                 //AVILoadBar.Increment(3);
+                            } else
+                            {
+                                
+                                    AVILengths[chanloop, fileloop] = 0;
+                                    
+                                
                             }
+                            AVILoadBar.Increment(3);
                         }
-                        for (int fileloop = 10; fileloop < 30; fileloop++)
-                        {
-                            AVILengths[chanloop, fileloop - 1] = 0;
-                        }
-                        vLoad.VideoLoadProgressBar.Increment(3);
+                        
+                        vLoad.VideoLoadProgressBar.Increment(1);
                     }
                     else
                     {
                         //vLoad.VideoLoadProgressBar.Maximum = 30;
                         for (int fileloop = 0; fileloop < 30; fileloop++)
                         {
+                            
                             //vLoad.VideoLoadProgressBar.Increment(1);
                             AVIname = AVINameList[chanloop, fileloop];
                             if (File.Exists(AVIname))
                             {
                                 //Console.WriteLine(AVIname);
                                 media = new VlcMedia(instance, AVIname);
-                                if (chanloop == 0)
+                                if (player == null)
                                 {
                                     player = new VlcMediaPlayer(media);
                                     player.Drawable = VideoPanel.Handle;
@@ -2187,6 +3084,8 @@ namespace SeizurePlayback
                                 { }
                                 AVILengths[chanloop, fileloop] = player.GetLengthMs();
                                 totms += AVILengths[chanloop, fileloop];
+                                tottemp += AVILengths[chanloop, fileloop];
+                                vidRanges[chanloop, fileloop] = tottemp;
                                 player.Stop();
                                 media.Dispose();
 
@@ -2196,9 +3095,13 @@ namespace SeizurePlayback
                             else
                             {
                                 AVILengths[chanloop, fileloop] = 0;
+                                
+                                
                             }
-                            vLoad.VideoLoadProgressBar.Increment(1);
+                            AVILoadBar.Increment(1);
+
                         }
+                        vLoad.VideoLoadProgressBar.Increment(1);
                     }
                     VLCisLoaded[chanloop] = true;
                 }
@@ -2206,15 +3109,15 @@ namespace SeizurePlayback
 
 
             vLoad.Dispose();
-                     
+
             AVILoadBar.Visible = false;
 
             //Console.WriteLine("Loaded VLC for channel " + chanloop);
             LoadText.Visible = false;
-            
+
             vLoading = false;
 
-            
+
         }
 
 
@@ -2225,6 +3128,12 @@ namespace SeizurePlayback
         {
             if (FRMode)
             {
+
+                if (ZoomChanPanel.Visible)
+                {
+                    ZoomChanPanel.Hide();
+                    comboBox1.SelectedIndex = 8;
+                }
                 this.Play.Hide();
                 this.Play.Enabled = false;
                 this.VideoPanel.Hide();
@@ -2268,6 +3177,10 @@ namespace SeizurePlayback
                 this.comboBox1.Enabled = false;
                 this.OffsetBox.Hide();
                 this.OffsetBox.Enabled = false;
+                //this.LoadAll.Hide();
+                //this.LoadAll.Enabled = false;
+                this.Rewind_ChangeBox.Hide();
+                this.Rewind_ChangeBox.Enabled = false;
 
 
                 this.FRButtonGroup.Show();
@@ -2326,9 +3239,19 @@ namespace SeizurePlayback
                 this.TimeBox.Enabled = false;
                 this.HighlightLabel.Hide();
                 this.HighlightLabel.Enabled = false;
+                this.ColorClear.Hide();
+                this.ColorClear.Enabled = false;
+                this.MoreOp.Hide();
+                this.OffsetLabel.Hide();
+                this.VideoSpeedLabel.Hide();
 
 
-            } else
+
+
+
+
+            }
+            else
             {
                 this.Play.Show();
                 this.Play.Enabled = true;
@@ -2362,6 +3285,10 @@ namespace SeizurePlayback
                 this.button3.Enabled = true;
                 this.OffsetBox.Show();
                 this.OffsetBox.Enabled = true;
+                //this.LoadAll.Show();
+                //this.LoadAll.Enabled = true;
+                this.Rewind_ChangeBox.Show();
+                this.Rewind_ChangeBox.Enabled = true;
 
                 this.RvwSz.Show();
                 this.RvwSz.Enabled = true;
@@ -2431,11 +3358,15 @@ namespace SeizurePlayback
                 this.TimeBox.Enabled = true;
                 this.HighlightLabel.Show();
                 this.HighlightLabel.Enabled = true;
-
+                this.ColorClear.Show();
+                this.ColorClear.Enabled = true;
+                this.MoreOp.Show();
+                this.OffsetLabel.Show();
+                this.VideoSpeedLabel.Show();
             }
         }
 
-        
+
 
 
 
@@ -2701,6 +3632,8 @@ namespace SeizurePlayback
         //        else DetSezLabel.Text = ".det Not Found";
         //    }
         //}
+
+
 
     }
 }

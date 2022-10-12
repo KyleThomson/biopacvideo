@@ -69,6 +69,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <WarningLevel>2</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>wip-icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.VisualBasic.PowerPacks.Vs, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
@@ -85,6 +88,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ACQReader.cs" />
+    <Compile Include="FRZero.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FRZero.Designer.cs">
+      <DependentUpon>FRZero.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProjectManager\AddDate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -136,6 +145,12 @@
       <DependentUpon>GetACQ.cs</DependentUpon>
     </Compile>
     <Compile Include="Render.cs" />
+    <Compile Include="ShortGuide.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ShortGuide.Designer.cs">
+      <DependentUpon>ShortGuide.cs</DependentUpon>
+    </Compile>
     <Compile Include="SzDetPrompt.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -144,6 +159,18 @@
     </Compile>
     <Compile Include="UserControl1.xaml.cs">
       <DependentUpon>UserControl1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControl2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControl2.Designer.cs">
+      <DependentUpon>UserControl2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControl3.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControl3.Designer.cs">
+      <DependentUpon>UserControl3.cs</DependentUpon>
     </Compile>
     <Compile Include="VideoCreator.cs">
       <SubType>Form</SubType>
@@ -217,6 +244,9 @@
     <Compile Include="VLoadWait.Designer.cs">
       <DependentUpon>VLoadWait.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="FRZero.resx">
+      <DependentUpon>FRZero.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ProjectManager\AddDate.resx">
       <DependentUpon>AddDate.cs</DependentUpon>
     </EmbeddedResource>
@@ -241,8 +271,14 @@
     <EmbeddedResource Include="GetACQ.resx">
       <DependentUpon>GetACQ.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ShortGuide.resx">
+      <DependentUpon>ShortGuide.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SzDetPrompt.resx">
       <DependentUpon>SzDetPrompt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControl2.resx">
+      <DependentUpon>UserControl2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VideoCreator.resx">
       <DependentUpon>VideoCreator.cs</DependentUpon>
@@ -289,6 +325,7 @@
       <DependentUpon>VLoadWait.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="Properties\DataSources\CManage.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -322,6 +359,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="wip-icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

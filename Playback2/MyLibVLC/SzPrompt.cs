@@ -25,6 +25,7 @@ namespace SeizurePlayback
             InitializeComponent();
             Notes = "";
             Unknown.Checked = true;
+            OKBtn.Enabled = false;
             Ok = false;
             
             
@@ -67,25 +68,28 @@ namespace SeizurePlayback
             { 
                 if (Pass.AVIMode == "mp4")
                     {
-                        StartTime = (int)(((float)Pass.StartTime * 1000F - Pass.Subtractor) / 1000F);
+                        //StartTime = (int)(((float)Pass.StartTime * 1000F - Pass.Subtractor) / 1000F);
+                        StartTime = (int)(Pass.Subtractor/1000F);
                     }
                     else
                     {
-                        StartTime = (int)((((float)Pass.StartTime * 1000F * (1F + Pass.VideoOffset)) - Pass.Subtractor) / 1000F);
+                        //StartTime = (int)((((float)Pass.StartTime * 1000F * (1F + Pass.VideoOffset)) - Pass.Subtractor) / 1000F);
+                        StartTime = (int)((Pass.Subtractor - ((float)1000F * (1F + Pass.VideoOffset))) / 1000F);
                     }
                 Process p = new Process();
                 string CmdString = " -y -ss " + StartTime.ToString() + " -t " + Pass.length.ToString();
-                CmdString += " -i " + Pass.CurrentAVI;
+                CmdString += " -i \"" + Pass.CurrentAVI + "\"";
                 if (Pass.AVIMode == "mp4")
                 {
-                    CmdString += " -sameq " + outfile + ".mp4";
+                    CmdString += " -sameq \"" + outfile + ".mp4\"";
                 }
                 else
                 {
-                    CmdString += " -sameq " + outfile + ".avi";
+                    CmdString += " -sameq \"" + outfile + ".avi\"";
                 }
 
                 p.StartInfo.Arguments = CmdString;
+
                 p.StartInfo.FileName = Pass.X264path + "\\ffmpeg.exe";
                 p.StartInfo.CreateNoWindow = true;
                 p.StartInfo.UseShellExecute = false;
@@ -109,10 +113,16 @@ namespace SeizurePlayback
             Notes = NotesBx.Text;
         }
         private void RadioButtonChanged(object sender, EventArgs e)
-        {         
-           
+        {
+            OKBtn.Enabled = true;
 
             
+        }
+        private void RadioButtonClicked(object sender, EventArgs e)
+        {
+            OKBtn.Enabled = true;
+
+
         }
         private void SzPrompt_Load(object sender, EventArgs e)
         {
@@ -174,7 +184,8 @@ namespace SeizurePlayback
         public double duration;
         public string AVIMode;
         public string X264path;
-        public bool VideoCapture; 
+        public bool VideoCapture;
+        public long subVidOffset;
         public infopass()
         { }
     }

@@ -7,13 +7,14 @@ namespace ProjectManager
 {
     public partial class ProjectManager : Form
     {
-        Project pjt;
+        public Project pjt;
         bool _pjtOpened = false;
         public ProjectManager()
         {
             InitializeComponent();
             MainSelect.SelectedIndex = 0;
-            pjt = new Project("");
+            
+            //pjt = new Project("");
             // Handle event for form closing in case there are unsaved changes to project file.
             //FormClosing += (sender, e) => { ProjectManager_FormClosing(sender, e); };
         }
@@ -26,13 +27,40 @@ namespace ProjectManager
             if (F.ShowDialog() == DialogResult.OK)
             {
 
-                pjt = new Project(F.FileName);
+                
+                char[] splitter = new char[] { '\\', '.' };
+                string temp0 = F.FileName.Substring(0, (F.FileName.Length - 4));
+                
+                string[] temp = F.FileName.Split(splitter);
+                                
+                Directory.CreateDirectory(temp0);
+
+                string FN = temp0 + "\\" + temp[temp.Length - 2];
+                Console.WriteLine(FN);
+                
+                pjt = new Project(FN, true);
+                pjt.pjtCreate();
+                
                 pjt.Open();
                 _pjtOpened = true;
             }
+            EnableFileTools();
+            addMultipleDirectoriesToolStripMenuItem.PerformClick();
         }
         private void ProjectManagerClosed(object sender, FormClosedEventArgs e)
         {
+            
+        }
+
+        public void EnableFileTools()
+        {
+            saveAsToolStripMenuItem.Enabled = true;
+            saveToolStripMenuItem.Enabled = true;
+            exportDataToolStripMenuItem.Enabled = true;
+            mergeProjectToolStripMenuItem.Enabled = true;
+            addMultipleDirectoriesToolStripMenuItem.Enabled = true;
+            importFileToolStripMenuItem.Enabled = true;
+            importSeizureToolStripMenuItem.Enabled = true;
 
         }
         private void selectProjectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -40,11 +68,12 @@ namespace ProjectManager
             // Open file dialog to select project
             OpenFileDialog F = new OpenFileDialog();
             F.DefaultExt = ".pjt";
+            F.Filter = "Project Files (*.pjt)|*.pjt";
             F.InitialDirectory = "C:\\";
 
             if (F.ShowDialog() == DialogResult.OK)
             {
-                pjt = new Project(F.FileName);
+                pjt = new Project(F.FileName, false);
                 pjt.Open();
                 ChangeTitleText(pjt.Filename);
                 _pjtOpened = true;
@@ -52,9 +81,13 @@ namespace ProjectManager
                 pjt.CompareStageConflicts(); // Find conflicts between bubble and notes
                 pjt.analysis.DetermineTreatment(pjt.Animals);
                 pjt.analysis.ParseGroups(pjt.Animals);
+                if (pjt.BBigDAT != null) pjt.BBigDAT.Close();
+                if (pjt.BigDAT != null) pjt.BigDAT.Close();
                 UpdateMainList();
+                EnableFileTools();
             }
         }
+
 
 
         private void UpdateMainList()
@@ -170,7 +203,7 @@ namespace ProjectManager
         {
             if (pjt == null)
             {
-                pjt = new Project("");
+                pjt = new Project("", true);
             }
             //This function probably should not be used.
             if (pjt != null)
@@ -180,8 +213,15 @@ namespace ProjectManager
                 F.InitialDirectory = "C:\\";
                 if (F.ShowDialog() == DialogResult.OK)
                 {
-                    //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
-                    pjt.ImportSzFile(F.FileName);
+                    string[] SZFile = Directory.GetFiles(F.FileName + "\\Seizure", "*.txt");
+                    if (SZFile[0] != null)
+                    {
+                        //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
+                        pjt.ImportSzFile(F.FileName, F.FileName + "\\Seizure\\", false);
+                    } else
+                    {
+                        
+                    }
                 }
                 UpdateMainList();
             }
@@ -197,15 +237,15 @@ namespace ProjectManager
         {
             if (pjt == null)
             {
-                pjt = new Project("");
+                pjt = new Project("", false);
             }
             if (pjt != null)
             {
-
+                var moveVid = MessageBox.Show("You must import videos to view them, would you like to import videos?", "Video Importer", MessageBoxButtons.YesNo);
                 FolderBrowserDialog F = new FolderBrowserDialog();
                 if (F.ShowDialog(this) == DialogResult.OK)
                 {
-                    int result = pjt.ImportDirectory(F.SelectedPath, this.rejectUnreviewedFilesToolStripMenuItem.Checked);
+                    int result = pjt.ImportDirectory(F.SelectedPath, this.rejectUnreviewedFilesToolStripMenuItem.Checked, moveVid == DialogResult.Yes);
                     if (result == 2)
                     {
                         MessageBox.Show("File already imported", "ERROR");
@@ -429,7 +469,7 @@ namespace ProjectManager
             if (pjt == null)
             {
                 // passing empty string to GetPathName() returns empty string
-                pjt = new Project("");
+                pjt = new Project("", true);
                 
             }
             int DuplicateDirectoryCount = 0;
@@ -439,10 +479,12 @@ namespace ProjectManager
             Frm.ShowDialog();
             if (Frm.Pass)
             {
+                var moveVid = MessageBox.Show("You must import videos to view them, would you like to import videos?", "Video Importer", MessageBoxButtons.YesNo);
+                //BigDAT = new StreamReader
                 for (int i = 0; i < Frm.DirReturn.Length; i++)
                 {
                     //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
-                    int result = pjt.ImportDirectory(Frm.DirReturn[i], this.rejectUnreviewedFilesToolStripMenuItem.Checked);
+                    int result = pjt.ImportDirectory(Frm.DirReturn[i], this.rejectUnreviewedFilesToolStripMenuItem.Checked, moveVid == DialogResult.Yes);
                     if (result == 2)
                     {
                         // User elected to not include file during import
@@ -460,9 +502,29 @@ namespace ProjectManager
                     }
                 }
                 pjt.FileChanged();
+
+                //show total number of DATS in BigDAT
+
+                pjt.BBigDAT.Close();
+                pjt.BigDAT.Close();
+
+                FileStream tempF = new FileStream(pjt.CDatName, FileMode.Open, FileAccess.ReadWrite);
+                BinaryWriter tempB = new BinaryWriter(tempF);
+
+                tempF.Position = 0;
+                
+                Int32 tDat = pjt.DatCount;
+                tempB.Write(tDat);
+                tempB.Close();
+                tempF.Close();
+                pjt.Save(pjt.Filename);
+
+
                 ChangeTitleText(pjt.Filename);
             }
             UpdateMainList();
+
+            //MessageBox newDir = new MessageBox;
 
             // inform user of import results
             Info.Text = SuccessfullyImportedDirectory.ToString() + " directories imported. " + 
@@ -546,6 +608,7 @@ namespace ProjectManager
         private void ProjectManager_FormClosing_1(object sender, FormClosingEventArgs e)
         {
             SaveReminderDialog saveReminderDialog = new SaveReminderDialog();
+            if (!_pjtOpened) return;
             // first check for default value
             if (pjt._fileChanged != default)
             {
@@ -653,5 +716,19 @@ namespace ProjectManager
         {
 
         }
+
+        private void eEGViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_pjtOpened)
+            {
+                if (pjt.DatCount <= 0) return;
+                PMEEGView EEGFrm = new PMEEGView(pjt.Animals, pjt.DatCount, pjt.CDatName);
+                EEGFrm.Show();
+               
+                
+            }
+        }
+
+       
     }
 }

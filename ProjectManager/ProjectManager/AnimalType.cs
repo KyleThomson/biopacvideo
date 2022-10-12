@@ -18,6 +18,7 @@ namespace ProjectManager
         public List<InjectionType> Injections;
         // align
         public double alignBy7Days;
+        //public List<string> SZF;
         public AnimalType()
         {
             Sz = new List<SeizureType>();
@@ -28,6 +29,7 @@ namespace ProjectManager
             BloodDraws = new List<BloodDrawType>();
             Removals = new List<RemovalType>();
             Injections = new List<InjectionType>();
+            //SZF = new List<string>();
         }
 
         public List<double> GetInjectionTimes(string group, DateTime Earliest, double align)
