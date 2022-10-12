@@ -116,6 +116,7 @@ namespace SeizurePlayback
             this.Rewind_Inc = new System.Windows.Forms.Button();
             this.Rewind_ChangeBox = new System.Windows.Forms.FlowLayoutPanel();
             this.VideoSpeedLabel = new System.Windows.Forms.Label();
+            this.ShortcutButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.FRButtonGroup.SuspendLayout();
@@ -612,7 +613,7 @@ namespace SeizurePlayback
             this.OffsetBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.OffsetBox.Location = new System.Drawing.Point(841, 652);
             this.OffsetBox.Name = "OffsetBox";
-            this.OffsetBox.Size = new System.Drawing.Size(161, 20);
+            this.OffsetBox.Size = new System.Drawing.Size(75, 20);
             this.OffsetBox.TabIndex = 48;
             this.OffsetBox.TextChanged += new System.EventHandler(this.OffsetBox_TextChanged_1);
             this.OffsetBox.LostFocus += new System.EventHandler(this.OffsetBox_TextChanged);
@@ -660,7 +661,7 @@ namespace SeizurePlayback
             // AVILoadBar
             // 
             this.AVILoadBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.AVILoadBar.Location = new System.Drawing.Point(861, 789);
+            this.AVILoadBar.Location = new System.Drawing.Point(974, 789);
             this.AVILoadBar.Maximum = 30;
             this.AVILoadBar.Name = "AVILoadBar";
             this.AVILoadBar.Size = new System.Drawing.Size(445, 25);
@@ -673,7 +674,7 @@ namespace SeizurePlayback
             this.LoadText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.LoadText.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LoadText.ForeColor = System.Drawing.Color.White;
-            this.LoadText.Location = new System.Drawing.Point(867, 762);
+            this.LoadText.Location = new System.Drawing.Point(980, 762);
             this.LoadText.Name = "LoadText";
             this.LoadText.Size = new System.Drawing.Size(439, 24);
             this.LoadText.TabIndex = 59;
@@ -718,6 +719,7 @@ namespace SeizurePlayback
             this.VideoFix.Text = "Video Fix ";
             this.VideoFix.UseVisualStyleBackColor = true;
             this.VideoFix.CheckedChanged += new System.EventHandler(this.VideoFix_CheckedChanged);
+            this.VideoFix.MouseDown += new System.Windows.Forms.MouseEventHandler(this.VideoFix_MouseDown);
             // 
             // SwitchChan
             // 
@@ -751,7 +753,7 @@ namespace SeizurePlayback
             "Index All Videos",
             "Channel Zoom Control",
             "Shortcut Guide"});
-            this.comboBox1.Location = new System.Drawing.Point(1017, 651);
+            this.comboBox1.Location = new System.Drawing.Point(931, 651);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(150, 21);
             this.comboBox1.TabIndex = 64;
@@ -811,7 +813,7 @@ namespace SeizurePlayback
             this.FRButtonGroup.Enabled = false;
             this.FRButtonGroup.Location = new System.Drawing.Point(676, 789);
             this.FRButtonGroup.Name = "FRButtonGroup";
-            this.FRButtonGroup.Size = new System.Drawing.Size(452, 29);
+            this.FRButtonGroup.Size = new System.Drawing.Size(565, 29);
             this.FRButtonGroup.TabIndex = 68;
             this.FRButtonGroup.Visible = false;
             // 
@@ -1226,7 +1228,7 @@ namespace SeizurePlayback
             // 
             this.ColorClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ColorClear.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ColorClear.Location = new System.Drawing.Point(968, 621);
+            this.ColorClear.Location = new System.Drawing.Point(1399, 676);
             this.ColorClear.Name = "ColorClear";
             this.ColorClear.Size = new System.Drawing.Size(20, 16);
             this.ColorClear.TabIndex = 74;
@@ -1237,7 +1239,7 @@ namespace SeizurePlayback
             this.MoreOp.AutoSize = true;
             this.MoreOp.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MoreOp.ForeColor = System.Drawing.Color.White;
-            this.MoreOp.Location = new System.Drawing.Point(1016, 624);
+            this.MoreOp.Location = new System.Drawing.Point(927, 625);
             this.MoreOp.Name = "MoreOp";
             this.MoreOp.Size = new System.Drawing.Size(139, 24);
             this.MoreOp.TabIndex = 75;
@@ -1290,13 +1292,26 @@ namespace SeizurePlayback
             this.VideoSpeedLabel.TabIndex = 80;
             this.VideoSpeedLabel.Text = "| |";
             // 
+            // ShortcutButton
+            // 
+            this.ShortcutButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ShortcutButton.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ShortcutButton.Location = new System.Drawing.Point(1087, 649);
+            this.ShortcutButton.Name = "ShortcutButton";
+            this.ShortcutButton.Size = new System.Drawing.Size(67, 23);
+            this.ShortcutButton.TabIndex = 81;
+            this.ShortcutButton.Text = "Shortcuts";
+            this.ShortcutButton.UseVisualStyleBackColor = true;
+            this.ShortcutButton.Click += new System.EventHandler(this.ShortcutButton_Click);
+            // 
             // CManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(1444, 845);
+            this.ClientSize = new System.Drawing.Size(1557, 845);
+            this.Controls.Add(this.ShortcutButton);
             this.Controls.Add(this.VideoSpeedLabel);
             this.Controls.Add(this.Rewind_ChangeBox);
             this.Controls.Add(this.MoreOp);
@@ -1477,6 +1492,7 @@ namespace SeizurePlayback
         private System.Windows.Forms.Button Rewind_Inc;
         private System.Windows.Forms.FlowLayoutPanel Rewind_ChangeBox;
         private System.Windows.Forms.Label VideoSpeedLabel;
+        private System.Windows.Forms.Button ShortcutButton;
     }
 }
 

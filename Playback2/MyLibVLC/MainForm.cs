@@ -90,7 +90,8 @@ namespace SeizurePlayback
         public float Speed = 1;
         public int RTSpeed = 1;
         int driftTrack = 0;
-        
+        public bool Scrolling = false;
+        public bool VidFixEnable = true;
         
 
 
@@ -283,9 +284,11 @@ namespace SeizurePlayback
 
             CrashWarning = F.IniReadValue("General", "Crash", false);
             Compressed = F.IniReadValue("Review", "Compressed", false);
-
-
-
+            
+            VidFixEnable = F.IniReadValue("BioPac", "VideoFix", true);
+            
+           
+            
 
             PercentCompletion = F.IniReadValue("Review", "Complete", (double)0);
             if (PercentCompletion == 100) finsihedReview = true;
@@ -441,8 +444,7 @@ namespace SeizurePlayback
                                         
                                     
 
-                                    Console.WriteLine("ACQ Pos: " + ACQ.Position + "\n");
-                                    Console.WriteLine("Vid Pos: " + (player.getpos() / 1000) + "\n");
+                                    
 
                                     st.Stop();
                                     if ((st.ElapsedMilliseconds + Delay) > 1000)
@@ -494,8 +496,7 @@ namespace SeizurePlayback
 
 
 
-                                    Console.WriteLine("ACQ Pos: " + ACQ.Position + "\n");
-                                    Console.WriteLine("Vid Pos: " + (player.getpos() / 1000) + "\n");
+                                    
 
                                     st.Stop();
                                     if ((st.ElapsedMilliseconds + Delay) > 1000)
@@ -533,25 +534,58 @@ namespace SeizurePlayback
                             {
                                 if (Step >= MaxDispSize)
                                 {
+                                                                        
+                                    if (!Scrolling)
+                                    {
+                                        if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
+                                            Paused = true;
+                                        Redraw = true;
+                                        Step = 0;
+                                    } else
+                                    {
+                                        Step = Step - MaxDispSize;
+                                        if (ACQ.Position - Step <= 0)
+                                        {
+                                            Step = ACQ.Position;
+                                        }
 
-                                    if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
+                                        if (!ACQ.ReadData(Math.Max(0, ACQ.Position - Step), MaxDispSize))
                                         Paused = true;
-                                    Redraw = true;
-                                    Step = 0;
+                                        Redraw = true;
+
+
+                                        Scrolling = false;
+                                    }
+                                   
                                 }
                                 if (Redraw)
                                 {
                                     ACQ.drawbuffer();
                                     Redraw = false;
+                                    g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
+                                    g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
                                 }
-                                g.DrawImage(ACQ.offscreen, graph.X1, graph.Y1);
 
-                                
+                                if (player != null)
+                                {
+                                    
+
+                                    if (!player.IsPaused)
+                                    {
+                                        
+                                        Thread.Sleep(400);
+                                        player.Pause();
+
+                                    }
+                                }
+
                                 //g.DrawLine(new Pen(Color.Red, 3), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y1), new Point(graph.X1 + (graph.X2 * Step) / MaxDispSize, graph.Y2));
+                                
                                 Thread.Sleep(100);
                             }
 
                             RTSpeed = 1;
+                            
                         }
 
 
@@ -580,36 +614,100 @@ namespace SeizurePlayback
                         case Keys.NumPad4:
                         case Keys.Left:
                             ACQ.Position = Math.Max(0, ACQ.Position - ((int)MaxDispSize / 10));
+
+                            //if (player != null) player.seek(Math.Max(0, Math.Floor(player.getpos() - (long)(MaxDispSize / 10) * 1000l)));
+                            //if (player != null) player.seek(Math.Max(0, (long)Math.Floor(((double)player.getpos()) - ((double)(MaxDispSize / 10)) * 1000)));
+                            //if (player != null)
+                            //{
+                            //    SeekToCurrentPos();
+
+                            //    //Pause_Click(null, null);
+                            //}
+                            //Console.WriteLine(player.getpos() / 1000f);
+
+                            //if (player != null)
+                            //{
+                            //    player.Pause();
+                            //}
+
                             if (player != null)
-                                player.seek(player.getpos() - ((int)MaxDispSize / 10) * 1000);
-                            Step = MaxDispSize;
+                            {
+                                SeekToCurrentPos();
+
+                            }
+                            Scrolling = true;
+                            Step += MaxDispSize;
                             break;
                         case Keys.NumPad6:
                         case Keys.Right:
+                            if (Scrolling) return;
                             ACQ.Position = Math.Min(ACQ.TotFileTime, ACQ.Position + ((int)MaxDispSize / 10));
+
+                            // if (player != null) 
+
+                            //not ready
+                            //if (player != null)
+                            //{
+                            //    if (player.getpos() + ((long)(MaxDispSize / 10) * 1000) > player.GetLengthMs())
+                            //    {
+                            //        SeekToCurrentPos();
+                            //        player.Pause();
+                            //    } else
+                            //    {
+                            //        player.seek(Math.Min(player.GetLengthMs(), (long)Math.Floor(((double)player.getpos()) + ((double)(MaxDispSize / 10)) * 1000)));
+                            //        player.Pause();
+                            //    }
+                            
+
                             if (player != null)
-                                player.seek(Math.Min(player.GetLengthMs(), (player.getpos() + ((int)MaxDispSize / 10) * 1000)));
-                            Step = MaxDispSize;
+                            {
+                                
+                                SeekToCurrentPos();
+                                
+                                
+                            }
+
+                            Scrolling = true;
+                            Step += MaxDispSize;
+                            
+                            
+                            //}
+                            //Console.WriteLine(player.getpos() / 1000f);
+
+                            //if (player != null)
+                            //{
+                            //    player.Pause();
+                            //}
+
+                            //Thread.Sleep(100);
+                            //Pause_Click(null, null);
                             break;
                         case Keys.NumPad5:
-                            Play_Click(null, null);                           
+                            Play_Click(null, null);
+                            Console.WriteLine(Paused);
                             break;
                         case Keys.NumPad7:
                             ACQ.Position = Math.Max(0, ACQ.Position - ((int)MaxDispSize));
-                            if (player != null)
-                                player.seek(player.getpos() - ((int)MaxDispSize) * 1000);
+                            //if (player != null)
+                            //{
+                            //    //SeekToCurrentPos();
+                            //    player.Pause();
+                            //}
                             Step = MaxDispSize;
                             break;
                         case Keys.NumPad9:
                             ACQ.Position = Math.Min(ACQ.TotFileTime, ACQ.Position + ((int)MaxDispSize));
-                            if (player != null)
-                                player.seek(Math.Min(player.GetLengthMs(), (player.getpos() + ((int)MaxDispSize) * 1000)));
+                            //if (player != null)
+                            //{
+                            //    player.Pause();
+
+                            //}
                             Step = MaxDispSize;
                             break;
                     }
                 } else
-                {   if (!RealTime || player == null || ACQ.SelectedChan == -1)
-                    {
+                {   //if (!RealTime || player == null || ACQ.SelectedChan == -1)
+                    //{
                         switch (e.KeyCode)
                         {
 
@@ -620,42 +718,44 @@ namespace SeizurePlayback
                                 Speed = Math.Min(2f, Speed + 0.1f);
                                 break;
                             case Keys.NumPad5:
-
+                            Console.WriteLine(Paused);
                                 Pause_Click(null, null);
                                 break;
                         }
-                    }
-                    else
-                    {
-                        switch (e.KeyCode)
-                        {
+                    //}
+                   // else
+                    //{
 
-                            case Keys.NumPad4:
-                                if (RTSpeed <= 1) return;
-                                CalcRTSpeed(false);
-                                ChangeVidSpeed();
-                                break;
-                            case Keys.NumPad6:
-                                if (RTSpeed > 10) return;
-                                CalcRTSpeed(true);
-                                ChangeVidSpeed();
-                                break;
-                            case Keys.NumPad5:
+                        //still need to work out bugs
+                        //switch (e.KeyCode)
+                        //{
 
-                                Pause_Click(null, null);
-                                break;
+                        //    case Keys.NumPad4:
+                        //        if (RTSpeed <= 1) return;
+                        //        CalcRTSpeed(false);
+                        //        ChangeVidSpeed();
+                        //        break;
+                        //    case Keys.NumPad6:
+                        //        if (RTSpeed > 10) return;
+                        //        CalcRTSpeed(true);
+                        //        ChangeVidSpeed();
+                        //        break;
+                        //    case Keys.NumPad5:
 
-                        }
-                    }
+                        //        Pause_Click(null, null);
+                        //        break;
+
+                        //}
+                   // }
                         
                 }
             } else
             {
-                if (e.KeyCode == Keys.Left)
+                if (e.KeyCode == Keys.Left || e.KeyCode == Keys.NumPad4)
                 {
                     Previous_Click(null, null);
                 }
-                if (e.KeyCode == Keys.Right)
+                if (e.KeyCode == Keys.Right || e.KeyCode == Keys.NumPad6)
                 {
                     Next_Click(null, null);
                 }
@@ -796,7 +896,7 @@ namespace SeizurePlayback
         }
         void ArrowPress(object sender, PreviewKeyDownEventArgs e)
         {
-            Console.WriteLine(sender.ToString() + " | " + e.KeyCode);
+            
         }
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -809,29 +909,47 @@ namespace SeizurePlayback
 
         private void Play_Click(object sender, EventArgs e)
         {
-            RTSpeed = 1;
-            VideoSpeedLabel.Text = "1x";
+            
+            
+            if (ACQ.SelectedChan != -1) VideoSpeedLabel.Text = "1x";
             Paused = false;
             if (player != null & RealTime)
+            {
+                if (RTSpeed != 1)
+                {
+                    RTSpeed = 1;
+                    ChangeVidSpeed();
+                }
+
                 player.Play();
+            }
             QuitHighlight();
 
         }
 
         private void Pause_Click(object sender, EventArgs e)
         {
-            Speed = 1;
-            RTSpeed = 1;
+
             
-            VideoSpeedLabel.Text = "| |";
-            ChangeVidSpeed();
-            if (Paused == true) return;
-            Paused = true;
+            Speed = 1;
+
+
             if (player != null)
             {
-               
+
+                if (RTSpeed != 1) { SeekToCurrentPos(); }
+                RTSpeed = 1;
+                //ChangeVidSpeed(); not ready
+                //Thread.Sleep(50);
                 player.Pause();
             }
+            else RTSpeed = 1;
+            VideoSpeedLabel.Text = "| |";
+            
+            if (Paused == true) return;
+            Paused = true;
+            
+
 
         }
 
@@ -1094,8 +1212,7 @@ namespace SeizurePlayback
 
                         SzInfoIndex++;
                     }
-                    Console.WriteLine(ACQ.SeizureHighlights.Count);
-
+                    
                     TmpTxt.Dispose();
                     SzTxt = new System.IO.StreamWriter(FPath + "\\" + BaseName + ".txt");
                     for (int k = 0; k < SzInfoIndex; k++)
@@ -1149,7 +1266,7 @@ namespace SeizurePlayback
             if (wasLoaded)
             {
                 Rewind.PerformClick();
-                player.Dispose();
+                if (player != null) player.Dispose();
                 player = null;
             }
             
@@ -1251,9 +1368,10 @@ namespace SeizurePlayback
                         ChangeVidSpeed();
                         ACQ.Position = ACQ.Position - Step + XStart;
                         Step = XStart;
+                        Paused = false;
                         SeekToCurrentPos();
                         QuitHighlight();
-                        Paused = false;
+                        
                         VideoSpeedLabel.Text = "1x";
                         RealTime = true;
                         Redraw = true;
@@ -1268,9 +1386,12 @@ namespace SeizurePlayback
         {
             int FNum = 1;
             string Fname;
-            Redraw = true;
+            if (!Paused) Redraw = true;
+            
             //Frame rate is actually 30.3, but listed as 30 in the avi. To seek to the proper time, need to adjust for that factor.
-            //Switch to float to do decimal math, switch back to integer for actual ms.             
+            //Switch to float to do decimal math, switch back to integer for actual ms.
+            
+            
             long TimeSeek;
             if (AVIMode == "mp4")
             {
@@ -1287,10 +1408,11 @@ namespace SeizurePlayback
 
             if (AVIMode == "avi")
             {
-
+                loadVid(ACQ.SelectedChan);
                 while (TimeSeek > AVILengths[ACQ.SelectedChan, FNum - 1])
                 {
                     //Console.WriteLine(TimeSeek);
+                    
                     TimeSeek -= AVILengths[ACQ.SelectedChan, FNum - 1];
                     FNum++;
                     if (AVILengths[ACQ.SelectedChan, FNum - 1] == 0)// no avi file
@@ -1299,14 +1421,16 @@ namespace SeizurePlayback
                         pass = true;
                         break;
                     }
+                    
                 }
                 Fname = Path + "\\" + BaseName + string.Format("_{0:d2}", ACQ.SelectedChan) + string.Format("_{0:d4}.avi", FNum);
             }
             else
             {
-                if (this.VideoFix.Checked)
+                if (this.VideoFix.Checked && VidFixEnable)
                 {
                     int FixedChan = 0;
+                    
                     FixedChan = CamerAssc[CamerAssc[ACQ.SelectedChan]];
                     loadVid(FixedChan);
                     FNum = 0;
@@ -1353,6 +1477,7 @@ namespace SeizurePlayback
                         Fname = Path + "\\" + BaseName + string.Format("_{0:d3}", ACQ.SelectedChan) + "." + FNum.ToString() + ".mp4";
                     }
                 }
+                
             }
 
 
@@ -1370,10 +1495,18 @@ namespace SeizurePlayback
                     player.Drawable = VideoPanel.Handle;
                 }
                 else player.Media = media;
-                player.Play();
+
+                
+                
                 AVILoaded = true;
                 CurrentAVI = Fname;
+                
+                player.Play();
                 player.seek(TimeSeek);
+                
+                
+                
+
 
             }
         }
@@ -1382,10 +1515,13 @@ namespace SeizurePlayback
         private void SpeedUp_Click(object sender, EventArgs e)
         {
             ACQ.SelectedChan = -1;
+            RTSpeed = 1;
             OffsetBox.Enabled = false;
+            VideoSpeedLabel.Text = "| |";
             RealTime = false;
             if (player != null)
                 player.Stop();
+            Paused = false;
 
         }
 
@@ -2490,6 +2626,8 @@ namespace SeizurePlayback
 
         private void VideoFix_CheckedChanged(object sender, EventArgs e)
         {
+            
+            
             //bool a = true;
             //for (int i = 0; i < 16; i++)
             //{
@@ -2697,6 +2835,31 @@ namespace SeizurePlayback
                 Console.WriteLine("VidSpeed " + RTSpeed);
             
             
+        }
+
+        private void ShortcutButton_Click(object sender, EventArgs e)
+        {
+            ShortGuide shrt = new ShortGuide();
+            shrt.Show();
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            player.Play();
+            player.Pause();
+        }
+
+        private void VideoFix_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (!VidFixEnable)
+            {
+                this.VideoFix.Checked = false;
+                this.VideoFix.Text = "Video Fix [Disabled]";
+                this.VideoFix.ForeColor = Color.DarkGray;
+                this.VideoFix.FlatStyle = FlatStyle.Popup;
+                MessageBox.Show("Video Fix is Disabled For this File. Channels are Correct. \n \t \t No Action Required", "Video Fix Unnecessary", MessageBoxButtons.OK);
+                
+            }
         }
 
         public void loadVid(int chanloop)
