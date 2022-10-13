@@ -3244,6 +3244,8 @@ namespace SeizurePlayback
                 this.MoreOp.Hide();
                 this.OffsetLabel.Hide();
                 this.VideoSpeedLabel.Hide();
+                this.ShortcutButton.Hide();
+                this.ShortcutButton.Enabled = false;
 
 
 
@@ -3300,6 +3302,8 @@ namespace SeizurePlayback
                 this.VideoFix.Enabled = true;
                 this.comboBox1.Show();
                 this.comboBox1.Enabled = true;
+                this.ShortcutButton.Show();
+                this.ShortcutButton.Enabled = true;
 
 
                 this.FRButtonGroup.Hide();
