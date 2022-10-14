@@ -361,10 +361,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SPIcon_F5_32.ico" />
-    <Content Include="SPIcon_F5_64.ico" />
-    <Content Include="SPIcon_F6_NN32p.ico" />
-    <Content Include="SPIcon_F6_SharpBicubic48p.ico" />
     <Content Include="Test.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
