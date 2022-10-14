@@ -70,7 +70,7 @@
     <WarningLevel>2</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>wip-icon.ico</ApplicationIcon>
+    <ApplicationIcon>SPIcon_F6_NN32p.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
@@ -361,7 +361,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="wip-icon.ico" />
+    <Content Include="SPIcon_F5_32.ico" />
+    <Content Include="SPIcon_F5_64.ico" />
+    <Content Include="SPIcon_F6_NN32p.ico" />
+    <Content Include="SPIcon_F6_SharpBicubic48p.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

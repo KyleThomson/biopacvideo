@@ -93,6 +93,8 @@ namespace SeizurePlayback
         public bool Scrolling = false;
         public bool VidFixEnable = true;
         
+        
+        
 
 
 
@@ -2775,6 +2777,25 @@ namespace SeizurePlayback
         {
             ZoomScale.Value = 10;
             ACQ.Zoom = 1;
+            string s;
+            for (int i = 0; i < ACQ.CurrentChannelZoom.Length; i++)
+            {
+                ACQ.CurrentChannelZoom[i] = 1;
+            }
+            ZoomChan1.Value = 10;
+            ZoomChan2.Value = 10;
+            ZoomChan3.Value = 10;
+            ZoomChan4.Value = 10;
+            ZoomChan5.Value = 10;
+            ZoomChan6.Value = 10;
+            ZoomChan7.Value = 10;
+            ZoomChan8.Value = 10;
+            ZoomChan9.Value = 10;
+            ZoomChan10.Value = 10;
+            ZoomChan11.Value = 10;
+            ZoomChan12.Value = 10;
+
+
             Redraw = true;
         }
 

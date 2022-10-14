@@ -8,6 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("wip-icon.ico")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("spicon_f5_32.ico")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("spicon_f5_64.ico")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("spicon_f6_nn32p.ico")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("spicon_f6_sharpbicubic48p.ico")]
 
 
