@@ -12,5 +12,6 @@
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("spicon_f5_64.ico")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("spicon_f6_nn32p.ico")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("spicon_f6_sharpbicubic48p.ico")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("test.ico")]
 
 
