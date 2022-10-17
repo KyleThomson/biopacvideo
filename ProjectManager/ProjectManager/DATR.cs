@@ -197,9 +197,12 @@ class DATR
 
                 if (vidSelect)
                 {
+                    float VSPointSpacing;
+                    VSPointSpacing = (float)GXmax / (SampleSize);
+
                     BoxPen = new Pen(Color.Red, 1);
                     Pen YBoxPen = new Pen(Color.Green, 4);
-                    g.DrawRectangle(BoxPen, 3 + X * (Xmax / xOff), 3 + YDraw, Xmax / xOff - 6, Ymax / (numPerPage / 2) - 6);
+                    //g.DrawRectangle(BoxPen, 3 + X * (Xmax / xOff), 3 + YDraw, Xmax / xOff - 6, Ymax / (numPerPage / 2) - 6);
                     g.DrawRectangle(YBoxPen, 4 + X * (Xmax / xOff), 4 + YDraw, Xmax / xOff - 10, Ymax / (numPerPage / 2) - 10);
                     WaveC = new PointF[SampleSize];
                     X = 0;
@@ -208,13 +211,14 @@ class DATR
 
 
                         YPoint = ScaleVoltsToPixel(Convert.ToSingle(TData[i]), (GYmax));
-                        //YPoint += yOff;
+
+                        YPoint += yOff;
 
 
                         if (YPoint > GYmax) YPoint = (GYmax);        //Kyle's Mistake                                                                        
                         if (YPoint < 0) YPoint = 0;
                         //PointF TempPoint = new PointF((float)(i + (X * SampleSize)) / xOff * PointSpacing, GYmax + YPoint);
-                        PointF TempPoint = new PointF((float)i , GYmax/2);
+                        PointF TempPoint = new PointF((float)(i) * VSPointSpacing, YPoint);
                         if (TempPoint.X > offscreen.Width)
                         {
 
@@ -224,7 +228,7 @@ class DATR
                     }
                     Gg.DrawLines(WavePen, WaveC);
                 }
-                else g.DrawRectangle(BoxPen, 3 + X * (Xmax / xOff), 3 + YDraw, Xmax / xOff - 6, Ymax / (numPerPage / 2) - 6);
+                //else g.DrawRectangle(BoxPen, 3 + X * (Xmax / xOff), 3 + YDraw, Xmax / xOff - 6, Ymax / (numPerPage / 2) - 6);
 
             } else
             {

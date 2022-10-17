@@ -202,3 +202,4 @@ C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj
 C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.csproj.CoreCompileInputs.cache
 C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.exe
 C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.pdb
+C:\Users\Josh Wooley\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.csproj.AssemblyReference.cache

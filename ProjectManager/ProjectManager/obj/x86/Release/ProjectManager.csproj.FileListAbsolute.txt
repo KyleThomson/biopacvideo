@@ -646,3 +646,8 @@ C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\ProjectManager\Project
 C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\ProjectManager\ProjectManager\obj\x86\Release\ProjectManager.csproj.CopyComplete
 C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\ProjectManager\ProjectManager\obj\x86\Release\ProjectManager.exe
 C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\ProjectManager\ProjectManager\obj\x86\Release\ProjectManager.pdb
+C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\ProjectManager\ProjectManager\obj\x86\Release\ProjectManager.TrustInfo.xml
+C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\ProjectManager\ProjectManager\bin\x86\Release\ProjectManager.exe.manifest
+C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\ProjectManager\ProjectManager\bin\x86\Release\ProjectManager.application
+C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\ProjectManager\ProjectManager\obj\x86\Release\ProjectManager.exe.manifest
+C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\ProjectManager\ProjectManager\obj\x86\Release\ProjectManager.application

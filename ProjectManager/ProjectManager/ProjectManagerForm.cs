@@ -723,7 +723,8 @@ namespace ProjectManager
             {
                 if (pjt.DatCount <= 0) return;
                 PMEEGView EEGFrm = new PMEEGView(pjt.Animals, pjt.DatCount, pjt.CDatName);
-                EEGFrm.Show();
+                //EEGFrm.Show();
+                //EEGFrm.UpdateDisplay();
                
                 
             }

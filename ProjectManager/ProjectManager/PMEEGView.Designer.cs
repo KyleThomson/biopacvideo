@@ -52,7 +52,6 @@ namespace ProjectManager
             this.PausePlayList = new System.Windows.Forms.ImageList(this.components);
             this.PlayPauseButton = new System.Windows.Forms.Button();
             this.TimeLabel = new System.Windows.Forms.Label();
-            this.TimeBar = new System.Windows.Forms.TrackBar();
             this.Next = new System.Windows.Forms.Button();
             this.Previous = new System.Windows.Forms.Button();
             this.TimeFrameLabel = new System.Windows.Forms.Label();
@@ -63,10 +62,15 @@ namespace ProjectManager
             this.pg = new System.Windows.Forms.Label();
             this.GalArea = new System.Windows.Forms.Panel();
             this.GalGBox = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.ShowNotes = new System.Windows.Forms.CheckBox();
+            this.NotesShow = new System.Windows.Forms.ListView();
+            this.Name_Notes = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Stage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Notes = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.ZoomBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.myVLC)).BeginInit();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             this.SuspendLayout();
             // 
             // ZoomBar
@@ -120,7 +124,7 @@ namespace ProjectManager
             // myVLC
             // 
             this.myVLC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.myVLC.BackColor = System.Drawing.Color.BlanchedAlmond;
+            this.myVLC.BackColor = System.Drawing.Color.Black;
             this.myVLC.Enabled = false;
             this.myVLC.Location = new System.Drawing.Point(539, 29);
             this.myVLC.MediaPlayer = null;
@@ -267,7 +271,7 @@ namespace ProjectManager
             this.PlayPauseButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.PlayPauseButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.PlayPauseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.PlayPauseButton.Location = new System.Drawing.Point(536, 712);
+            this.PlayPauseButton.Location = new System.Drawing.Point(539, 678);
             this.PlayPauseButton.Margin = new System.Windows.Forms.Padding(0);
             this.PlayPauseButton.Name = "PlayPauseButton";
             this.PlayPauseButton.Size = new System.Drawing.Size(40, 40);
@@ -287,29 +291,12 @@ namespace ProjectManager
             this.TimeLabel.Enabled = false;
             this.TimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TimeLabel.ForeColor = System.Drawing.Color.Cornsilk;
-            this.TimeLabel.Location = new System.Drawing.Point(579, 721);
+            this.TimeLabel.Location = new System.Drawing.Point(535, 724);
             this.TimeLabel.Name = "TimeLabel";
             this.TimeLabel.Size = new System.Drawing.Size(54, 20);
             this.TimeLabel.TabIndex = 7;
             this.TimeLabel.Text = "00:00";
             this.TimeLabel.Visible = false;
-            // 
-            // TimeBar
-            // 
-            this.TimeBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.TimeBar.AutoSize = false;
-            this.TimeBar.Enabled = false;
-            this.TimeBar.Location = new System.Drawing.Point(533, 678);
-            this.TimeBar.Maximum = 200;
-            this.TimeBar.Name = "TimeBar";
-            this.TimeBar.Size = new System.Drawing.Size(650, 25);
-            this.TimeBar.TabIndex = 8;
-            this.TimeBar.TickFrequency = 5;
-            this.TimeBar.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.TimeBar.Visible = false;
-            this.TimeBar.Scroll += new System.EventHandler(this.TimeBar_Scroll);
-            this.TimeBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TimeBar_MouseDown);
-            this.TimeBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TimeBar_MouseUp);
             // 
             // Next
             // 
@@ -372,6 +359,7 @@ namespace ProjectManager
             this.GVGrouping.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GVGrouping.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.GVGrouping.Enabled = false;
             this.GVGrouping.Location = new System.Drawing.Point(531, 24);
             this.GVGrouping.Name = "GVGrouping";
             this.GVGrouping.Size = new System.Drawing.Size(653, 755);
@@ -414,12 +402,72 @@ namespace ProjectManager
             // 
             // GalGBox
             // 
+            this.GalGBox.Enabled = false;
             this.GalGBox.Location = new System.Drawing.Point(539, 515);
             this.GalGBox.Name = "GalGBox";
             this.GalGBox.Size = new System.Drawing.Size(642, 157);
             this.GalGBox.TabIndex = 21;
             this.GalGBox.TabStop = false;
-            this.GalGBox.Visible = false;
+            this.GalGBox.Enter += new System.EventHandler(this.GalGBox_Enter);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(672, 465);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 22;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // ShowNotes
+            // 
+            this.ShowNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ShowNotes.AutoSize = true;
+            this.ShowNotes.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.ShowNotes.Location = new System.Drawing.Point(373, 737);
+            this.ShowNotes.Name = "ShowNotes";
+            this.ShowNotes.Size = new System.Drawing.Size(84, 17);
+            this.ShowNotes.TabIndex = 23;
+            this.ShowNotes.Text = "Show Notes";
+            this.ShowNotes.UseVisualStyleBackColor = true;
+            this.ShowNotes.CheckedChanged += new System.EventHandler(this.ShowNotes_CheckedChanged);
+            // 
+            // NotesShow
+            // 
+            this.NotesShow.Alignment = System.Windows.Forms.ListViewAlignment.Default;
+            this.NotesShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.NotesShow.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.Name_Notes,
+            this.Stage,
+            this.Notes});
+            this.NotesShow.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NotesShow.GridLines = true;
+            this.NotesShow.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.NotesShow.HideSelection = false;
+            this.NotesShow.Location = new System.Drawing.Point(605, 678);
+            this.NotesShow.MultiSelect = false;
+            this.NotesShow.Name = "NotesShow";
+            this.NotesShow.Size = new System.Drawing.Size(567, 71);
+            this.NotesShow.TabIndex = 24;
+            this.NotesShow.UseCompatibleStateImageBehavior = false;
+            this.NotesShow.View = System.Windows.Forms.View.Details;
+            this.NotesShow.Visible = false;
+            // 
+            // Name_Notes
+            // 
+            this.Name_Notes.Text = "Name";
+            this.Name_Notes.Width = 78;
+            // 
+            // Stage
+            // 
+            this.Stage.Text = "Racine";
+            this.Stage.Width = 65;
+            // 
+            // Notes
+            // 
+            this.Notes.Text = "Notes";
+            this.Notes.Width = 389;
             // 
             // PMEEGView
             // 
@@ -428,11 +476,13 @@ namespace ProjectManager
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(1184, 761);
-            this.Controls.Add(this.pg);
-            this.Controls.Add(this.vScrollBar1);
+            this.Controls.Add(this.NotesShow);
+            this.Controls.Add(this.ShowNotes);
             this.Controls.Add(this.TimeLabel);
             this.Controls.Add(this.PlayPauseButton);
-            this.Controls.Add(this.TimeBar);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.pg);
+            this.Controls.Add(this.vScrollBar1);
             this.Controls.Add(this.ZoomLabel);
             this.Controls.Add(this.TimeFrameLabel);
             this.Controls.Add(this.Previous);
@@ -441,10 +491,10 @@ namespace ProjectManager
             this.Controls.Add(this.ZoomBar);
             this.Controls.Add(this.myVLC);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.BottomLabel);
             this.Controls.Add(this.GalArea);
             this.Controls.Add(this.GalGBox);
             this.Controls.Add(this.GVGrouping);
+            this.Controls.Add(this.BottomLabel);
             this.MinimumSize = new System.Drawing.Size(1040, 600);
             this.Name = "PMEEGView";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
@@ -454,11 +504,11 @@ namespace ProjectManager
             this.Load += new System.EventHandler(this.PMEEGView_Load);
             this.ResizeBegin += new System.EventHandler(this.PMEEGView_ResizeBegin);
             this.ResizeEnd += new System.EventHandler(this.PMEEGView_ResizeEnd);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PMEEGView_MouseUp);
             ((System.ComponentModel.ISupportInitialize)(this.ZoomBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.myVLC)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -487,7 +537,6 @@ namespace ProjectManager
         private System.Windows.Forms.Label TimeFrameLabel;
         private System.Windows.Forms.Label ZoomLabel;
         private System.Windows.Forms.Label BottomLabel;
-        public System.Windows.Forms.TrackBar TimeBar;
         private System.Windows.Forms.ToolStripMenuItem videoSizeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem HighRes;
         private System.Windows.Forms.ToolStripMenuItem LowRes;
@@ -497,5 +546,11 @@ namespace ProjectManager
         private System.Windows.Forms.Label pg;
         private System.Windows.Forms.Panel GalArea;
         private System.Windows.Forms.GroupBox GalGBox;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.CheckBox ShowNotes;
+        private System.Windows.Forms.ListView NotesShow;
+        public System.Windows.Forms.ColumnHeader Name_Notes;
+        public System.Windows.Forms.ColumnHeader Stage;
+        public System.Windows.Forms.ColumnHeader Notes;
     }
 }
