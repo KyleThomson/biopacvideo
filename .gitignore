@@ -27,6 +27,7 @@ ProjectManager/.vs/ProjectManager/v16/.suo
 ProjectManager/.vs/ProjectManager/v16/.suo
 #NuGet Packages
 *.nupkg
+*/ProjectManager/bin/*
 # The packages folder can be ignored because of Package Restore
 **/packages/*
 # except build/, which is used as an MSBuild target.
