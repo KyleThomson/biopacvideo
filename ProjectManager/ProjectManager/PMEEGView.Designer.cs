@@ -291,11 +291,11 @@ namespace ProjectManager
             this.TimeLabel.Enabled = false;
             this.TimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TimeLabel.ForeColor = System.Drawing.Color.Cornsilk;
-            this.TimeLabel.Location = new System.Drawing.Point(535, 724);
+            this.TimeLabel.Location = new System.Drawing.Point(535, 729);
             this.TimeLabel.Name = "TimeLabel";
-            this.TimeLabel.Size = new System.Drawing.Size(54, 20);
+            this.TimeLabel.Size = new System.Drawing.Size(44, 20);
             this.TimeLabel.TabIndex = 7;
-            this.TimeLabel.Text = "00:00";
+            this.TimeLabel.Text = "0:00";
             this.TimeLabel.Visible = false;
             // 
             // Next

@@ -45,8 +45,14 @@ namespace ProjectManager
         int selected = -1;
         public int seconds = 0;
         bool timeBarAccess = false;
-        float position = 0;
+        float position = 0; //position in this program is equal to 500ms, rather than 1s
         Pen redPen;
+        bool needsMainDraw = false; // this is to draw the initially selected seizure in gallery mode
+        bool endOfClip = false;
+        bool threadLock = true; //for locking the ThreadDisplay
+        bool TDDone = false; //for waiting for threaddisplay to end
+        int SelectedTotal = -1;
+        
         
         
 
@@ -75,11 +81,11 @@ namespace ProjectManager
             ListCreation();
             redPen = new Pen(Color.Red, 3);
             #region FORM EVENTS
-
+            
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GalArea_MouseDown);
 
-
+            
 
 
             #endregion
@@ -116,6 +122,8 @@ namespace ProjectManager
             UpdateDisplay();
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
             ThreadDisplay.Start();
+            threadLock = false;
+            
 
         }
 
@@ -167,24 +175,77 @@ namespace ProjectManager
 
         public void DisplayThread()
         {
+            int tempMin = 0;
+            int tempSec = 0;
+            
+
             while (true)
             {
-                if (selected != -1)
+                
+                if (!threadLock)
                 {
-                    if (!paused)
+                    TDDone = false;
+                    if (selected != -1)
                     {
-                        PointF top = new PointF((position/(float)seconds) *  (GalGBox.Size.Width), 0);
-                        PointF bottom = new PointF((position / (float)seconds) * (GalGBox.Size.Width), GalGBox.Height);
-                        Gg.Clear(Color.White);
-                        Gg.DrawImage(DAT.GOffscreen, 0, 0);
-                        Gg.DrawLine(redPen, top, bottom);
-                        position++;
-                        Thread.Sleep(1000);
+                        if (needsMainDraw)
+                        {
+                            Gg.DrawImage(DAT.GOffscreen, 0, 0);
+                            
+                            PointF top = new PointF(0, 0);
+                            PointF bottom = new PointF(0, GalGBox.Height);
+                            Gg.DrawLine(redPen, top, bottom);
+                            needsMainDraw = false;
+                        }
+                        if (!paused)
+                        {
+                            if (position >= seconds)
+                            {
+                                paused = true;
+                                if (myVLC != null)
+                                {
+                                    myVLC.MediaPlayer.Pause();
+                                }
+                                endOfClip = true;
+                                PlayPauseButton_MouseLeave(null, null);
+
+
+                            }
+                            PointF top = new PointF((position / (float)seconds) * (GalGBox.Size.Width), 0);
+                            PointF bottom = new PointF((position / (float)seconds) * (GalGBox.Size.Width), GalGBox.Height);
+                            Gg.Clear(Color.White);
+                            Gg.DrawImage(DAT.GOffscreen, 0, 0);
+                            Gg.DrawLine(redPen, top, bottom);
+
+                            if (position / 60 >= 1)
+                            {
+                                tempMin = (int)position / 60;
+                                tempSec = (int)position % 60;
+                            }
+                            else
+                            {
+                                tempMin = 0;
+                                tempSec = (int)position;
+                            }
+
+                            TimeLabel.Invoke((MethodInvoker)delegate
+                            {
+                                TimeLabel.Text = tempMin.ToString() + string.Format(":{0:00}", tempSec);
+                            });
+
+
+
+                            position += 0.5f;
+                            Thread.Sleep(400);
+
+                        }
+
+
                     }
-
-
+                    
+                    
                 }
                 Thread.Sleep(100);
+                TDDone = true;
             }
         }
 
@@ -234,7 +295,7 @@ namespace ProjectManager
                             Gg.Clear(Color.White);
 
                             g.DrawImage(DAT.offscreen, graph.X1, graph.Y1);
-                            Gg.DrawImage(DAT.GOffscreen, 0, 0);
+                        needsMainDraw = true;
 
                             Redraw = false;
 
@@ -477,6 +538,14 @@ namespace ProjectManager
             if (myVLC.MediaPlayer == null) return;
             if (paused)
             {
+
+                if (endOfClip)
+                {
+                    myVLC.MediaPlayer.Position = 0;
+                    position = 0;
+                    endOfClip = false;
+                }
+
                 paused = false;
                 myVLC.MediaPlayer.Play();
             } else
@@ -674,17 +743,22 @@ namespace ProjectManager
 
         private void PMEEGView_ResizeBegin(object sender, EventArgs e)
         {
-            
-            ThreadDisplay.Suspend();
+
+            threadLock = true;
+            while (!TDDone)
+            {
+
+            }
         }
 
         private void PMEEGView_ResizeEnd(object sender, EventArgs e)
         {
           
             GraphResize(ViewMode);
-            ThreadDisplay.Resume();
+            
             Redraw = true;
             UpdateDisplay();
+            threadLock = false;
         }
 
         private void telemetryToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -711,17 +785,20 @@ namespace ProjectManager
         private void Next_Click(object sender, EventArgs e)
         {
             if (pageNum * numPerPage + numPerPage > numDats) return;
+            ResetChosenVid();
             pageNum += 1;
             Redraw = true;
             UpdateDisplay();
             pg.Text = (pageNum + 1) + " / " + pageCalc();
-            ResetChosenVid();
+            
 
         }
 
         private void Previous_Click(object sender, EventArgs e)
         {
+            
             if (pageNum == 0) return;
+            ResetChosenVid();
             pageNum -= 1;
             Redraw = true;
             UpdateDisplay();
@@ -746,7 +823,16 @@ namespace ProjectManager
             int tY1;
             int tY2;
             NotesShow.Items.Clear();
+
+            paused = true;
+            threadLock = true;
+            while (!TDDone)
+            {
+                Thread.Sleep(10);
+            }
             position = 0;
+            
+            PlayPauseButton_MouseLeave(null, null);
             if (ViewMode == 1)
             {
                 tX1 = GalArea.Location.X;
@@ -762,7 +848,7 @@ namespace ProjectManager
             }
 
 
-            if ((e.X > tX1) && (e.X < tX2) && (e.Y > tY1) && ((e.Y < tY2)))
+            if ((e.X >= tX1) && (e.X < tX2) && (e.Y >= tY1) && ((e.Y < tY2)))
             {
 
                 int X = 0;
@@ -796,6 +882,8 @@ namespace ProjectManager
                     }
                     else
                     {
+                        if (SelectedTotal != -1) Offset[SelectedTotal].Selected = false;
+                        SelectedTotal = temp;
                         Offset[temp].Selected = true;
                         ListViewItem tempL = new ListViewItem();
                         tempL.Text = (Animals[Offset[temp].AnimalIndex].ID);
@@ -803,22 +891,26 @@ namespace ProjectManager
                         tempL.SubItems.Add(Animals[Offset[temp].AnimalIndex].Sz[Offset[temp].SZNum].Notes);
                         NotesShow.Items.Add(tempL);
                         seconds = (Animals[Offset[temp].AnimalIndex].Sz[Offset[temp].SZNum].length);
-                        PointF top = new PointF(0, 0);
-                        PointF bottom = new PointF(0, GalGBox.Height);
-                        Gg.DrawLine(redPen, top, bottom);
+                        selected = Y;
+                        
+                          
                     }
+                    if (myVLC.MediaPlayer != null) myVLC.MediaPlayer.Stop();
                     for (int i = 0; i < numPerPage; i++)
                     {
-                        if (i == Y)
+                        if (i == Y && selected != -1)
                         {
                             vidShow[i] = true;
                             VideoPlay(i);
-                            selected = i;
+                            
                         }
                         else
                         {
                             vidShow[i] = false;
                         }
+
+
+
                     }
                 }
 
@@ -827,6 +919,7 @@ namespace ProjectManager
             }
             Redraw = true;
             UpdateDisplay();
+            threadLock = false;
 
         }
 
@@ -840,10 +933,13 @@ namespace ProjectManager
 
 
 
-            myVLC.Show();
-            if (myVLC.MediaPlayer != null) myVLC.MediaPlayer.Dispose();
+            
+            //if (myVLC.MediaPlayer != null) myVLC.MediaPlayer.Dispose();
             vlc = new LibVLC();
+            //params String[] options = new string[] { "--start-paused", "--no-playlist-autostart" };
             Media media = new Media(vlc, vidDir + Animals[Offset[offset].AnimalIndex].Sz[Offset[offset].SZNum].VidString);
+            media.AddOption("--start-paused");
+            media.AddOption("--no-playlist-autostart");
             
             MediaPlayer player = new MediaPlayer(media);
 
@@ -851,14 +947,15 @@ namespace ProjectManager
 
 
             myVLC.MediaPlayer = player;
-            myVLC.MediaPlayer.Play();
+            //myVLC.MediaPlayer.Play();
             Thread.Sleep(50);
             
             
-            myVLC.MediaPlayer.Pause();
+            //myVLC.MediaPlayer.Pause();
+            
             paused = true;
             media.Dispose();
-
+            myVLC.Show();
 
         }
 

@@ -163,14 +163,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ProjectManager.exe" size="2423808">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ProjectManager.exe" size="2424320">
       <assemblyIdentity name="ProjectManager" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>iucl5kzOxNa8pNBGQgjg5K5O3gA/dP4JnANOlRgGTLc=</dsig:DigestValue>
+        <dsig:DigestValue>Q/TJ05DqiFZ0eyD7iaP11nVJtCVBv0hxVJ0iiNOvbs4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
