@@ -145,6 +145,7 @@ namespace ProjectManager
             this.menuStrip1.Size = new System.Drawing.Size(1184, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "PMEEGMenu";
+            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // infoToolStripMenuItem
             // 
@@ -158,7 +159,7 @@ namespace ProjectManager
             // 
             this.telemetryToolStripMenuItem1.CheckOnClick = true;
             this.telemetryToolStripMenuItem1.Name = "telemetryToolStripMenuItem1";
-            this.telemetryToolStripMenuItem1.Size = new System.Drawing.Size(125, 22);
+            this.telemetryToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.telemetryToolStripMenuItem1.Text = "Telemetry";
             this.telemetryToolStripMenuItem1.Click += new System.EventHandler(this.telemetryToolStripMenuItem1_Click);
             // 
@@ -178,7 +179,7 @@ namespace ProjectManager
             this.DefaultView.Checked = true;
             this.DefaultView.CheckState = System.Windows.Forms.CheckState.Checked;
             this.DefaultView.Name = "DefaultView";
-            this.DefaultView.Size = new System.Drawing.Size(112, 22);
+            this.DefaultView.Size = new System.Drawing.Size(180, 22);
             this.DefaultView.Text = "Default";
             this.DefaultView.Click += new System.EventHandler(this.normalListToolStripMenuItem_Click);
             // 
@@ -186,7 +187,7 @@ namespace ProjectManager
             // 
             this.galleryView.CheckOnClick = true;
             this.galleryView.Name = "galleryView";
-            this.galleryView.Size = new System.Drawing.Size(112, 22);
+            this.galleryView.Size = new System.Drawing.Size(180, 22);
             this.galleryView.Text = "Gallery";
             this.galleryView.Click += new System.EventHandler(this.normalListToolStripMenuItem_Click);
             // 
@@ -194,7 +195,7 @@ namespace ProjectManager
             // 
             this.animalView.CheckOnClick = true;
             this.animalView.Name = "animalView";
-            this.animalView.Size = new System.Drawing.Size(112, 22);
+            this.animalView.Size = new System.Drawing.Size(180, 22);
             this.animalView.Text = "Animal";
             this.animalView.Click += new System.EventHandler(this.normalListToolStripMenuItem_Click);
             // 
@@ -212,14 +213,14 @@ namespace ProjectManager
             // randomizedToolStripMenuItem
             // 
             this.randomizedToolStripMenuItem.Name = "randomizedToolStripMenuItem";
-            this.randomizedToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.randomizedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.randomizedToolStripMenuItem.Text = "Randomized";
             // 
             // telemetryToolStripMenuItem
             // 
             this.telemetryToolStripMenuItem.CheckOnClick = true;
             this.telemetryToolStripMenuItem.Name = "telemetryToolStripMenuItem";
-            this.telemetryToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.telemetryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.telemetryToolStripMenuItem.Text = "Telemetry";
             // 
             // videoSizeToolStripMenuItem
@@ -229,7 +230,7 @@ namespace ProjectManager
             this.LowRes});
             this.videoSizeToolStripMenuItem.Enabled = false;
             this.videoSizeToolStripMenuItem.Name = "videoSizeToolStripMenuItem";
-            this.videoSizeToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.videoSizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.videoSizeToolStripMenuItem.Text = "Video Size";
             // 
             // HighRes
@@ -289,11 +290,11 @@ namespace ProjectManager
             this.TimeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.TimeLabel.AutoSize = true;
             this.TimeLabel.Enabled = false;
-            this.TimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TimeLabel.ForeColor = System.Drawing.Color.Cornsilk;
-            this.TimeLabel.Location = new System.Drawing.Point(535, 729);
+            this.TimeLabel.Location = new System.Drawing.Point(533, 727);
             this.TimeLabel.Name = "TimeLabel";
-            this.TimeLabel.Size = new System.Drawing.Size(44, 20);
+            this.TimeLabel.Size = new System.Drawing.Size(40, 18);
             this.TimeLabel.TabIndex = 7;
             this.TimeLabel.Text = "0:00";
             this.TimeLabel.Visible = false;
@@ -445,10 +446,10 @@ namespace ProjectManager
             this.NotesShow.GridLines = true;
             this.NotesShow.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.NotesShow.HideSelection = false;
-            this.NotesShow.Location = new System.Drawing.Point(605, 678);
+            this.NotesShow.Location = new System.Drawing.Point(618, 678);
             this.NotesShow.MultiSelect = false;
             this.NotesShow.Name = "NotesShow";
-            this.NotesShow.Size = new System.Drawing.Size(567, 71);
+            this.NotesShow.Size = new System.Drawing.Size(554, 71);
             this.NotesShow.TabIndex = 24;
             this.NotesShow.UseCompatibleStateImageBehavior = false;
             this.NotesShow.View = System.Windows.Forms.View.Details;
@@ -467,7 +468,7 @@ namespace ProjectManager
             // Notes
             // 
             this.Notes.Text = "Notes";
-            this.Notes.Width = 389;
+            this.Notes.Width = 1101;
             // 
             // PMEEGView
             // 
@@ -502,9 +503,7 @@ namespace ProjectManager
             this.Text = "EEG View";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PMEEGView_Close);
             this.Load += new System.EventHandler(this.PMEEGView_Load);
-            this.ResizeBegin += new System.EventHandler(this.PMEEGView_ResizeBegin);
-            this.ResizeEnd += new System.EventHandler(this.PMEEGView_ResizeEnd);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PMEEGView_MouseUp);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PMEEGView_MouseDown);
             ((System.ComponentModel.ISupportInitialize)(this.ZoomBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.myVLC)).EndInit();
             this.menuStrip1.ResumeLayout(false);

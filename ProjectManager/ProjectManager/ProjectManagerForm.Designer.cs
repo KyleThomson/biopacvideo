@@ -288,9 +288,8 @@
             // 
             // eEGViewToolStripMenuItem
             // 
-            this.eEGViewToolStripMenuItem.CheckOnClick = true;
             this.eEGViewToolStripMenuItem.Name = "eEGViewToolStripMenuItem";
-            this.eEGViewToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.eEGViewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.eEGViewToolStripMenuItem.Text = "EEG View";
             this.eEGViewToolStripMenuItem.Click += new System.EventHandler(this.eEGViewToolStripMenuItem_Click);
             // 

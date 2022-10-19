@@ -203,7 +203,9 @@ class DATR
                     BoxPen = new Pen(Color.Red, 1);
                     Pen YBoxPen = new Pen(Color.Green, 4);
                     //g.DrawRectangle(BoxPen, 3 + X * (Xmax / xOff), 3 + YDraw, Xmax / xOff - 6, Ymax / (numPerPage / 2) - 6);
-                    g.DrawRectangle(YBoxPen, 4 + X * (Xmax / xOff), 4 + YDraw, Xmax / xOff - 10, Ymax / (numPerPage / 2) - 10);
+                    g.FillRectangle(empty.Brush, 2 + X * (Xmax / xOff), 2 + YDraw, Xmax / xOff - 2, Ymax / (numPerPage / 2) - 2);
+                    g.DrawLines(WavePen, WaveC);
+                    g.DrawRectangle(YBoxPen, 2 + X * (Xmax / xOff), 2 + YDraw, Xmax / xOff - 2, Ymax / (numPerPage / 2) - 2);
                     WaveC = new PointF[SampleSize];
                     X = 0;
                     for (int i = 0; i < SampleSize; i++)
