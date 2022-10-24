@@ -63,9 +63,11 @@ namespace ProjectManager
             this.Notes = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.PauseButton = new System.Windows.Forms.Button();
             this.PlayButton = new System.Windows.Forms.Button();
+            this.TimeFrameBar = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.myVLC)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TimeFrameBar)).BeginInit();
             this.SuspendLayout();
             // 
             // ZoomBar
@@ -289,7 +291,7 @@ namespace ProjectManager
             this.BottomLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.BottomLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.BottomLabel.Location = new System.Drawing.Point(-3, 772);
+            this.BottomLabel.Location = new System.Drawing.Point(12, 772);
             this.BottomLabel.Name = "BottomLabel";
             this.BottomLabel.Size = new System.Drawing.Size(1595, 107);
             this.BottomLabel.TabIndex = 13;
@@ -438,6 +440,19 @@ namespace ProjectManager
             this.PlayButton.Visible = false;
             this.PlayButton.Click += new System.EventHandler(this.Play_Click);
             // 
+            // TimeFrameBar
+            // 
+            this.TimeFrameBar.LargeChange = 15;
+            this.TimeFrameBar.Location = new System.Drawing.Point(483, 790);
+            this.TimeFrameBar.Maximum = 120;
+            this.TimeFrameBar.Minimum = 1;
+            this.TimeFrameBar.Name = "TimeFrameBar";
+            this.TimeFrameBar.Size = new System.Drawing.Size(245, 45);
+            this.TimeFrameBar.TabIndex = 27;
+            this.TimeFrameBar.TickFrequency = 15;
+            this.TimeFrameBar.Value = 15;
+            this.TimeFrameBar.Scroll += new System.EventHandler(this.TimeFrameBar_Scroll);
+            // 
             // PMEEGView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -446,6 +461,7 @@ namespace ProjectManager
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(1584, 861);
+            this.Controls.Add(this.TimeFrameBar);
             this.Controls.Add(this.PlayButton);
             this.Controls.Add(this.PauseButton);
             this.Controls.Add(this.NotesShow);
@@ -480,6 +496,7 @@ namespace ProjectManager
             ((System.ComponentModel.ISupportInitialize)(this.myVLC)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TimeFrameBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -520,5 +537,6 @@ namespace ProjectManager
         public System.Windows.Forms.ColumnHeader Notes;
         private System.Windows.Forms.Button PauseButton;
         private System.Windows.Forms.Button PlayButton;
+        private System.Windows.Forms.TrackBar TimeFrameBar;
     }
 }

@@ -1316,6 +1316,17 @@ namespace ProjectManager
 
         }
 
+        private void TimeFrameBar_Scroll(object sender, EventArgs e)
+        {
+            TimeFrame = TimeFrameBar.Value;
+
+            DAT.SetDispLength(TimeFrame);
+            if (TimeFrame > 30) DAT.oneCol = true;
+            else DAT.oneCol = false;
+            Redraw = true;
+            UpdateDisplay();
+        }
+
 
         //}
 
