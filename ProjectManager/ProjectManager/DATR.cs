@@ -1,45 +1,39 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 using System.Drawing;
-using System.Drawing.Drawing2D;
+using System.IO;
 
 
 
 namespace ProjectManager
 {
-    
+
     public class OffsetName
     {
         public int AnimalIndex;
         public int SZNum;
         public bool Selected;
-        public OffsetName(int Animal, int Num, bool sel) 
+        public OffsetName(int Animal, int Num, bool sel)
         {
             AnimalIndex = Animal;
             Selected = sel;
             SZNum = Num;
         }
 
-        
-
-}
 
 
-class DATR
+    }
+
+
+    public class DATR
     {
         public string FullName;
-        public Int32[][] data;
-        
-        public bool[] HideChan;
+       
         public string[] ID;
-        public string[] ID2; //holds the alternative ID for the channels
+        //holds the alternative ID for the channels
         public bool ChanID = false;
-        public int VisibleChans;
-        public int Chans;
+        
         public int SelectedChan;
         public int SampleRate;
         public bool Randomized;
@@ -47,25 +41,21 @@ class DATR
         public int[] RandomOrder;
         private BinaryReader FID;
         private FileStream FILES;
-        private BinaryReader FID2;
-        private FileStream FILE2;
-        private bool MultiFile;
-        private int ExtLenHeader;
-        private int ChanLenHeader;
+        
+        
         long EOF;
         public float Zoom;
-        private int ForeignHeader;
+        
         public int FileTime;
         public int TotFileTime;
-        public int ExtFileTime;
+        
         public int Position;
         private int DataStart;
         private int MaxDrawSize;
         private float PointSpacing;
         private int DisplayLength;
         private int SampleSize;
-        private bool HL;
-        private int HLS, HLE;
+        
         public bool Loaded;
         Pen WavePen, SelectedPen;
         private int VoltageSpacing;
@@ -75,14 +65,12 @@ class DATR
         private int DataType;
         public Bitmap offscreen;
         public Bitmap GOffscreen;
-        private List<TimeSpan> SzTime;
-        private List<int> SzChannel;
+        
         public Graphics g;
         public Graphics Gg;
         public int numPerPage;
         public int PosInSample = 0;
-        public int TotalSamples;
-        public int ChanPass;
+        
         Int32[] TData;
         public int yOff = 50;
         public bool MasterZoom = true;
@@ -90,10 +78,8 @@ class DATR
         public int totalFiles;
         public int drawMode = 0;
         public bool oneCol = false;
-
         
         
-
 
         public DATR(string Fname)
         {
@@ -106,23 +92,33 @@ class DATR
             RandomOrder = new int[16];
             Randomized = false;
             Position = 0;
-            
-            
-            
-          
-            openACQ(Fname);
+
+
+
+
+            openDAT(Fname);
 
         }
-        public void closeACQ()
+        public void closeDAT()
         {
             FILES.Close();
             FID.Close();
+            if (GOffscreen != null)
+            {
+                Gg.Dispose();
+                GOffscreen.Dispose();
+            }
+            offscreen.Dispose();
+            g.Dispose();
+            TData = null;
+
         }
 
         public void DrawSZ(long offset, int length, int X, int Y, bool display, bool vidSelect)
         {
             PointF[] WaveC;
             int expectedSampleSize = DisplayLength * SampleRate;
+            int YBoxMax = (Ymax / (numPerPage / 2));
             float YPoint;
             Pen BoxPen = new Pen(Color.Red, 3);
             Pen empty = new Pen(Color.LightGray, 1);
@@ -137,18 +133,21 @@ class DATR
             if (SampleSize < expectedSampleSize)
             {
                 int diff = (expectedSampleSize - SampleSize);
-                int DiffF = diff/2;
+                int DiffF = diff / 2;
                 int j = 0;
                 for (int i = 0; i < expectedSampleSize; i++)
                 {
-                    
+
+                   
+
                     if (i < DiffF)
                     {
-                        YPoint = Ymax / numPerPage / 2 + yOff - 10;
-                        
-                    } else if (i >= SampleSize + DiffF)
+                        YPoint = Ymax / numPerPage / 2 + yOff - 40;
+
+                    }
+                    else if (i >= SampleSize + DiffF)
                     {
-                        YPoint = Ymax/numPerPage/2 + yOff - 10;
+                        YPoint = Ymax / numPerPage / 2 + yOff - 40;
                     }
                     else
                     {
@@ -157,25 +156,28 @@ class DATR
                         j++;
                     }
 
-                    if (YPoint > Ymax / (numPerPage / 2) ) YPoint = (Ymax / (numPerPage / 2) );        //Kyle's Mistake                                                                        
+                    
+                    if (YPoint > (Ymax / (numPerPage / 2))) YPoint = ((float)Ymax / ((float)numPerPage / 2f) - YDraw);         //Kyle's Mistake                                                                        
                     if (YPoint < 0) YPoint = 0;
+                    
                     PointF TempPoint = new PointF((float)(i + (X * expectedSampleSize)) / xOff * PointSpacing, YDraw + YPoint);
                     WaveC[i] = TempPoint;
                 }
-            } else
+            }
+            else
             {
                 int diff = (SampleSize - expectedSampleSize);
                 int DiffF = diff / 2;
-                
+
                 for (int i = 0; i < expectedSampleSize; i++)
                 {
 
-                    
-                        YPoint = ScaleVoltsToPixel(Convert.ToSingle(TData[i + DiffF]), (Ymax / (float)(numPerPage / 2)));
-                    YPoint += yOff;
-                    
 
-                    if (YPoint > Ymax / (numPerPage / 2) ) YPoint = (Ymax / (numPerPage / 2));        //Kyle's Mistake                                                                        
+                    YPoint = ScaleVoltsToPixel(Convert.ToSingle(TData[i + DiffF]), (Ymax / (float)(numPerPage / 2)));
+                    YPoint += yOff;
+
+
+                    if (YPoint > Ymax / (numPerPage / 2)) YPoint = ((float)Ymax / ((float)numPerPage / 2f) - YDraw);       //Kyle's Mistake                                                                        
                     if (YPoint < 0) YPoint = 0;
                     PointF TempPoint = new PointF((float)(i + (X * expectedSampleSize)) / xOff * PointSpacing, YDraw + YPoint);
                     if (TempPoint.X > offscreen.Width)
@@ -185,12 +187,12 @@ class DATR
                     WaveC[i] = TempPoint;
                 }
             }
-            
+
 
             g.DrawLines(WavePen, WaveC);
-       
-            
-            
+
+
+
             if (display)
             {
 
@@ -232,11 +234,13 @@ class DATR
                 }
                 //else g.DrawRectangle(BoxPen, 3 + X * (Xmax / xOff), 3 + YDraw, Xmax / xOff - 6, Ymax / (numPerPage / 2) - 6);
 
-            } else
+            }
+            else
             {
                 g.DrawRectangle(WavePen, X * (Xmax / xOff), YDraw, Xmax / xOff, Ymax / (numPerPage / 2));
             }
 
+            TData = null;
 
         }
 
@@ -248,15 +252,15 @@ class DATR
             {
                 if (i + pos > EOF) return false;
                 TData[i] = FID.ReadInt32();
-                
+
             }
             return true;
         }
 
 
-        public void openACQ(string FName)
+        public void openDAT(string FName)
         { //open File for reading
-            
+
             FullName = FName;
             FILES = new FileStream(FName, FileMode.Open, FileAccess.Read);
             FID = new BinaryReader(FILES);
@@ -265,12 +269,12 @@ class DATR
             //Get header info            
             FILES.Seek(0, SeekOrigin.Begin);
             totalFiles = FID.ReadInt32();
-            
+
             FILES.Seek(4, SeekOrigin.Begin);
             SampleRate = 500;
 
             numPerPage = 8;
-         
+
             DataType = 4;
             DataStart = 4;
             FileTime = (int)((FILES.Length - (long)DataStart) / (DataType * SampleRate));
@@ -293,34 +297,40 @@ class DATR
 
             if (offscreen != null) offscreen.Dispose();
             offscreen = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
-            
+
 
             Xmax = X;
             Ymax = Y;
-            
+
 
             g = Graphics.FromImage(offscreen);
-            
-            
 
-            Gg.Clear(Color.White);
-            
+
+            g.Clear(Color.White);
+
         }
 
         public void initDisplay(int X, int Y, int GX, int GY)
         {
 
-            if (offscreen != null) offscreen.Dispose();
-            if (GOffscreen != null) GOffscreen.Dispose();
+            if (offscreen != null)
+            {
+                offscreen.Dispose();
+                g.Dispose();
+            }
+            if (GOffscreen != null)
+            {
+                GOffscreen.Dispose();
+            }
             offscreen = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
             GOffscreen = new Bitmap(Math.Max(GX, 1), Math.Max(1, GY));
-            
+
             Xmax = X;
             Ymax = Y;
             GXmax = GX;
             GYmax = GY;
-            
-            g = Graphics.FromImage(offscreen);
+
+            g =  Graphics.FromImage(offscreen);
             Gg = Graphics.FromImage(GOffscreen);
 
             Gg.Clear(Color.White);
@@ -333,12 +343,9 @@ class DATR
             if (Gg != null) Gg.Clear(Color.White);
         }
 
-   
 
-        public void ResetScale()
-        {
-            VoltageSpacing = (int)(Ymax / (Math.Max(VisibleChans, 1)));
-        }
+
+       
 
         public int RandomizeList(object x, object y)
         {
@@ -352,11 +359,11 @@ class DATR
         }
 
 
-        
+
         private float ScaleVoltsToPixel(float volt, float pixelHeight)
         {
-            
-            
+
+
             float maxPixel = (pixelHeight * .15F);
             float minPixel = (pixelHeight * .95F);
             float m;
@@ -379,7 +386,6 @@ class DATR
             return (result);
         }
 
-        
 
     }
 }

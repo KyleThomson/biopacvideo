@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Media;
 using System.Windows.Forms;
 
 namespace ProjectManager
@@ -8,12 +7,13 @@ namespace ProjectManager
     public partial class ProjectManager : Form
     {
         public Project pjt;
+        public PMEEGView EEGFrm;
         bool _pjtOpened = false;
         public ProjectManager()
         {
             InitializeComponent();
             MainSelect.SelectedIndex = 0;
-            
+
             //pjt = new Project("");
             // Handle event for form closing in case there are unsaved changes to project file.
             //FormClosing += (sender, e) => { ProjectManager_FormClosing(sender, e); };
@@ -27,20 +27,20 @@ namespace ProjectManager
             if (F.ShowDialog() == DialogResult.OK)
             {
 
-                
+
                 char[] splitter = new char[] { '\\', '.' };
                 string temp0 = F.FileName.Substring(0, (F.FileName.Length - 4));
-                
+
                 string[] temp = F.FileName.Split(splitter);
-                                
+
                 Directory.CreateDirectory(temp0);
 
                 string FN = temp0 + "\\" + temp[temp.Length - 2];
                 Console.WriteLine(FN);
-                
+
                 pjt = new Project(FN, true);
                 pjt.pjtCreate();
-                
+
                 pjt.Open();
                 _pjtOpened = true;
             }
@@ -49,7 +49,7 @@ namespace ProjectManager
         }
         private void ProjectManagerClosed(object sender, FormClosedEventArgs e)
         {
-            
+
         }
 
         public void EnableFileTools()
@@ -218,9 +218,10 @@ namespace ProjectManager
                     {
                         //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
                         pjt.ImportSzFile(F.FileName, F.FileName + "\\Seizure\\", false);
-                    } else
+                    }
+                    else
                     {
-                        
+
                     }
                 }
                 UpdateMainList();
@@ -317,7 +318,7 @@ namespace ProjectManager
             if (SecondSelect.SelectedIndex == 0)
             {
                 // create seizureedits dialog
-                SeizureType currentSeizure = 
+                SeizureType currentSeizure =
                     pjt.Animals[MainList.SelectedIndex].Sz[SecondList.SelectedIndex];
                 SeizureEdits szEditWindow = new SeizureEdits(currentSeizure);
                 szEditWindow.ShowDialog();
@@ -327,7 +328,7 @@ namespace ProjectManager
                     pjt.FileChanged();
                     ChangeTitleText(pjt.Filename);
                 }
-                
+
             }
             // Weights
             else if (SecondSelect.SelectedIndex == 1)
@@ -464,13 +465,13 @@ namespace ProjectManager
             Frm.Dispose();
         }
 
-        private void addMultipleDirectoriesToolStripMenuItem_Click(object sender, EventArgs e) 
+        private void addMultipleDirectoriesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (pjt == null)
             {
                 // passing empty string to GetPathName() returns empty string
                 pjt = new Project("", true);
-                
+
             }
             int DuplicateDirectoryCount = 0;
             int SuccessfullyImportedDirectory = 0;
@@ -512,7 +513,7 @@ namespace ProjectManager
                 BinaryWriter tempB = new BinaryWriter(tempF);
 
                 tempF.Position = 0;
-                
+
                 Int32 tDat = pjt.DatCount;
                 tempB.Write(tDat);
                 tempB.Close();
@@ -527,7 +528,7 @@ namespace ProjectManager
             //MessageBox newDir = new MessageBox;
 
             // inform user of import results
-            Info.Text = SuccessfullyImportedDirectory.ToString() + " directories imported. " + 
+            Info.Text = SuccessfullyImportedDirectory.ToString() + " directories imported. " +
                 DuplicateDirectoryCount.ToString() + " duplicate directories skipped. " +
                 NotImported.ToString() + " directories not imported."; ;
         }
@@ -653,7 +654,7 @@ namespace ProjectManager
 
             // check if file has been changed
             if (pjt._fileChanged)
-            // add asterik to indicate that file has unsaved changes
+                // add asterik to indicate that file has unsaved changes
                 title += "*";
 
             // set new title
@@ -689,7 +690,7 @@ namespace ProjectManager
         private void GenerateTest()
         {
             SzGraph Test = new SzGraph(pjt);
-            Test.DrawGraph();                                                                                                                                                                                                                                                                                                                                                                                                  
+            Test.DrawGraph();
         }
 
         private void rejectUnreviewedFilesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -722,14 +723,24 @@ namespace ProjectManager
             if (_pjtOpened)
             {
                 if (pjt.DatCount <= 0) return;
-                PMEEGView EEGFrm = new PMEEGView(pjt.Animals, pjt.DatCount, pjt.CDatName);
+                EEGFrm = new PMEEGView(this);
                 //EEGFrm.Show();
                 //EEGFrm.UpdateDisplay();
-               
-                
+
+
             }
         }
 
-       
+        public void eEGViewDispose()
+        {
+
+            if (EEGFrm == null) return;
+
+            EEGFrm.Dispose();
+            
+
+        }
+
+
     }
 }
