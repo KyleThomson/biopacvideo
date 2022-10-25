@@ -45,7 +45,7 @@ namespace ProjectManager
                 _pjtOpened = true;
             }
             EnableFileTools();
-            addMultipleDirectoriesToolStripMenuItem.PerformClick();
+            
         }
         private void ProjectManagerClosed(object sender, FormClosedEventArgs e)
         {

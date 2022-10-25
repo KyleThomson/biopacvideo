@@ -153,6 +153,12 @@
     <Compile Include="CompiledDAT.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="DamerauLevenshtein.cs" />
+    <Compile Include="EditNotesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditNotesForm.Designer.cs">
+      <DependentUpon>EditNotesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EEGOrganizer.cs" />
     <Compile Include="Exporter.cs">
       <SubType>Form</SubType>
@@ -247,6 +253,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AddtoProject.resx">
       <DependentUpon>AddtoProject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditNotesForm.resx">
+      <DependentUpon>EditNotesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Exporter.resx">
       <DependentUpon>Exporter.cs</DependentUpon>

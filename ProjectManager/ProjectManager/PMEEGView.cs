@@ -48,6 +48,8 @@ namespace ProjectManager
         bool mouseBusy = false; //used for both mouse clicks and key presses, in order to reject stacking clicks (causes thread issues)
         bool ButtonBusy = false; //used for button clicks, again for thread safety
         ProjectManager Prnt;
+        int CurrentAnimal;
+        EditNotesForm ENF;
 
 
 
@@ -57,7 +59,7 @@ namespace ProjectManager
 
             InitializeComponent();
             Prnt = sent;
-
+            TimeFrame = 30;
             GalGBox.Visible = false;
             Animals = Prnt.pjt.Animals;
             numDats = Prnt.pjt.DatCount;
@@ -68,7 +70,7 @@ namespace ProjectManager
             ViewMode = 0;
             vidDir = Directory.GetParent(sent.pjt.Filename).ToString() + "\\Videos\\";
             if (Directory.Exists(vidDir)) vidEnable = true;
-            TFSelect.SelectedIndex = 0;
+            //TFSelect.SelectedIndex = 0;
             graph = new MyGraph();
             graph.X1 = 5;
             graph.X2 = this.Size.Width - 25;
@@ -130,6 +132,7 @@ namespace ProjectManager
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
             ThreadDisplay.Start();
             threadLock = false;
+            
 
 
         }
@@ -235,7 +238,10 @@ namespace ProjectManager
             int tX2;
             int tY1;
             int tY2;
-            NotesShow.Items.Clear();
+            
+            NotesSection.ResetText();
+            ANLabel.ResetText();
+            RacineLabel.ResetText();
 
             paused = true;
             threadLock = true;
@@ -293,6 +299,8 @@ namespace ProjectManager
                         Offset[temp].Selected = false;
                         selected = -1;
                         seconds = -1;
+                        EditNotesButton.Enabled = false;
+                        CurrentAnimal = -1;
                     }
                     else
                     {
@@ -300,10 +308,11 @@ namespace ProjectManager
                         SelectedTotal = temp;
                         Offset[temp].Selected = true;
                         ListViewItem tempL = new ListViewItem();
-                        tempL.Text = (Animals[Offset[temp].AnimalIndex].ID);
-                        tempL.SubItems.Add(Animals[Offset[temp].AnimalIndex].Sz[Offset[temp].SZNum].Severity.ToString());
-                        tempL.SubItems.Add(Animals[Offset[temp].AnimalIndex].Sz[Offset[temp].SZNum].Notes);
-                        NotesShow.Items.Add(tempL);
+                        ANLabel.Text = (Animals[Offset[temp].AnimalIndex].ID);
+                        RacineLabel.Text = (Animals[Offset[temp].AnimalIndex].Sz[Offset[temp].SZNum].Severity.ToString());
+                        NotesSection.Text = Animals[Offset[temp].AnimalIndex].Sz[Offset[temp].SZNum].Notes;
+                        EditNotesButton.Enabled = true;
+                        CurrentAnimal = temp;
                         seconds = (Animals[Offset[temp].AnimalIndex].Sz[Offset[temp].SZNum].length);
                         selected = Y;
                     }
@@ -1000,17 +1009,17 @@ namespace ProjectManager
 
 
 
-        private void TFSelect_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int[] TimeScales = { 10, 15, 30, 60, 120, 300, 600 };
-            TimeFrame = TimeScales[TFSelect.SelectedIndex];
+        //private void TFSelect_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    int[] TimeScales = { 10, 15, 30, 60, 120, 300, 600 };
+        //    TimeFrame = TimeScales[TFSelect.SelectedIndex];
 
-            DAT.SetDispLength(TimeFrame);
-            if (TimeFrame > 30) DAT.oneCol = true;
-            else DAT.oneCol = false;
-            Redraw = true;
-            UpdateDisplay();
-        }
+        //    DAT.SetDispLength(TimeFrame);
+        //    if (TimeFrame > 30) DAT.oneCol = true;
+        //    else DAT.oneCol = false;
+        //    Redraw = true;
+        //    UpdateDisplay();
+        //}
 
         private void TimeBar_Scroll(object sender, EventArgs e)
         {
@@ -1244,17 +1253,6 @@ namespace ProjectManager
 
         }
 
-        private void ShowNotes_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ShowNotes.Checked)
-            {
-                NotesShow.Visible = true;
-            }
-            else
-            {
-                NotesShow.Visible = false;
-            }
-        }
 
         private void GalGBox_Enter(object sender, EventArgs e)
         {
@@ -1318,6 +1316,11 @@ namespace ProjectManager
 
         private void TimeFrameBar_Scroll(object sender, EventArgs e)
         {
+            if (TimeFrameBar.Value < 1)
+            {
+                TimeFrameBar.Value = 1;
+            }
+            TFLabel.Text = TimeFrameBar.Value.ToString();
             TimeFrame = TimeFrameBar.Value;
 
             DAT.SetDispLength(TimeFrame);
@@ -1325,6 +1328,59 @@ namespace ProjectManager
             else DAT.oneCol = false;
             Redraw = true;
             UpdateDisplay();
+        }
+
+        private void GalArea_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void TFs_Click(object sender, EventArgs e)
+        {
+
+            string[] s = sender.ToString().Split(':');
+            int i;
+            int.TryParse(s[1], out i);
+
+            TimeFrameBar.Value = i;
+            TimeFrameBar_Scroll(null, null);
+            
+
+
+        }
+
+        private void GVGrouping_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void EditNotesButton_Click(object sender, EventArgs e)
+        {
+            int temp;
+            ;
+            if (!int.TryParse(RacineLabel.Text, out temp)) temp = 0;
+
+            ENF = new EditNotesForm(this, temp, ANLabel.Text, NotesSection.Text);
+            ENF.Show();
+        }
+
+        public void EditNotes(int r, string n)
+        {
+            if (CurrentAnimal < 0) return;
+
+            Animals[Offset[CurrentAnimal].AnimalIndex].Sz[Offset[CurrentAnimal].SZNum].Severity = r;
+            Animals[Offset[CurrentAnimal].AnimalIndex].Sz[Offset[CurrentAnimal].SZNum].Notes = n;
+            ANLabel.Text = (Animals[Offset[CurrentAnimal].AnimalIndex].ID);
+            RacineLabel.Text = (Animals[Offset[CurrentAnimal].AnimalIndex].Sz[Offset[CurrentAnimal].SZNum].Severity.ToString());
+            NotesSection.Text = Animals[Offset[CurrentAnimal].AnimalIndex].Sz[Offset[CurrentAnimal].SZNum].Notes;
+
+            Prnt.pjt.Animals = Animals;
+            Prnt.pjt.Save(Prnt.pjt.Filename);
+
+            if (ENF != null) ENF.Dispose();
+           
+
+
         }
 
 

@@ -73,8 +73,7 @@ namespace ProjectManager
                     OpenCDat(CDatName);
                 } else
                 {
-                    CDatExists = true;
-                    createCDat(CDatName);
+                    CDatExists = false;
                 }
             }
             
@@ -376,12 +375,51 @@ namespace ProjectManager
             {
                 if (saveAsDialog.FileName != "")
                 {
-                    Save(saveAsDialog.FileName);
+
+                    char[] splitter = new char[] { '\\', '.' };
+                    string temp0 = saveAsDialog.FileName.Substring(0, (saveAsDialog.FileName.Length - 4)); //new directory path
+
+                    string[] temp = saveAsDialog.FileName.Split(splitter); // all of the directories and types on path
+
+                    Directory.CreateDirectory(temp0);
+
+                    string FN = temp0 + "\\" + temp[temp.Length - 2];
+                    
+                    
+                    if (File.Exists(CDatName))
+                    {
+                        File.Copy(CDatName, FN + ".dat");
+                    }
+                    if (Directory.Exists(Directory.GetParent(Filename) + "\\Videos"))
+                    {
+                        Directory.CreateDirectory(temp0 + "\\Videos\\");
+                        CopyVideos(Directory.GetParent(Filename) + "\\Videos\\", temp0 + "\\Videos\\");
+                    }
+
+                 
+
+                    Console.WriteLine(FN + ".pjt");
+
+                    Save(FN + ".pjt");
                     // Set new filename for project
-                    Filename = saveAsDialog.FileName;
+                    Filename = FN + ".pjt";
                 }
             }
         }
+
+        public void CopyVideos(string input, string output)
+        {
+
+            foreach (String v in Directory.EnumerateFiles(input))
+            {
+                string[] s = v.Split('\\');
+                File.Copy(v, output + s[s.Length - 1]);
+            }
+
+
+
+        }
+
         public void FileChanged()
         {
             // set flag to true to indicate that the current project file has been modified
