@@ -100,14 +100,14 @@
             // newProjectToolStripMenuItem
             // 
             this.newProjectToolStripMenuItem.Name = "newProjectToolStripMenuItem";
-            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.newProjectToolStripMenuItem.Text = "&New Project";
             this.newProjectToolStripMenuItem.Click += new System.EventHandler(this.newProjectToolStripMenuItem_Click);
             // 
             // selectProjectToolStripMenuItem
             // 
             this.selectProjectToolStripMenuItem.Name = "selectProjectToolStripMenuItem";
-            this.selectProjectToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.selectProjectToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.selectProjectToolStripMenuItem.Text = "&Open Project";
             this.selectProjectToolStripMenuItem.Click += new System.EventHandler(this.selectProjectToolStripMenuItem_Click);
             // 
@@ -115,7 +115,7 @@
             // 
             this.saveToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -123,7 +123,7 @@
             // 
             this.saveAsToolStripMenuItem.Enabled = false;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.saveAsToolStripMenuItem.Text = "Save &As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
@@ -132,7 +132,7 @@
             this.exportDataToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.exportDataToolStripMenuItem.Enabled = false;
             this.exportDataToolStripMenuItem.Name = "exportDataToolStripMenuItem";
-            this.exportDataToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.exportDataToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.exportDataToolStripMenuItem.Text = "&Export Data";
             this.exportDataToolStripMenuItem.Click += new System.EventHandler(this.exportDataToolStripMenuItem_Click);
             // 
@@ -140,7 +140,7 @@
             // 
             this.mergeProjectToolStripMenuItem.Enabled = false;
             this.mergeProjectToolStripMenuItem.Name = "mergeProjectToolStripMenuItem";
-            this.mergeProjectToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.mergeProjectToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.mergeProjectToolStripMenuItem.Text = "Merge Project";
             this.mergeProjectToolStripMenuItem.Click += new System.EventHandler(this.mergeProjectToolStripMenuItem_Click);
             // 
@@ -148,7 +148,7 @@
             // 
             this.importFileToolStripMenuItem.Enabled = false;
             this.importFileToolStripMenuItem.Name = "importFileToolStripMenuItem";
-            this.importFileToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.importFileToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.importFileToolStripMenuItem.Text = "Add Directory";
             this.importFileToolStripMenuItem.Click += new System.EventHandler(this.importFileToolStripMenuItem_Click);
             // 
@@ -156,15 +156,15 @@
             // 
             this.addMultipleDirectoriesToolStripMenuItem.Enabled = false;
             this.addMultipleDirectoriesToolStripMenuItem.Name = "addMultipleDirectoriesToolStripMenuItem";
-            this.addMultipleDirectoriesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.addMultipleDirectoriesToolStripMenuItem.Text = "Add &Multiple Directories";
+            this.addMultipleDirectoriesToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.addMultipleDirectoriesToolStripMenuItem.Text = "Add &Directories";
             this.addMultipleDirectoriesToolStripMenuItem.Click += new System.EventHandler(this.addMultipleDirectoriesToolStripMenuItem_Click);
             // 
             // importSeizureToolStripMenuItem
             // 
             this.importSeizureToolStripMenuItem.Enabled = false;
             this.importSeizureToolStripMenuItem.Name = "importSeizureToolStripMenuItem";
-            this.importSeizureToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.importSeizureToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.importSeizureToolStripMenuItem.Text = "&Import Seizure File";
             // 
             // rejectUnreviewedFilesToolStripMenuItem
@@ -173,7 +173,7 @@
             this.rejectUnreviewedFilesToolStripMenuItem.CheckOnClick = true;
             this.rejectUnreviewedFilesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.rejectUnreviewedFilesToolStripMenuItem.Name = "rejectUnreviewedFilesToolStripMenuItem";
-            this.rejectUnreviewedFilesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.rejectUnreviewedFilesToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.rejectUnreviewedFilesToolStripMenuItem.Text = "Reject Unreviewed Files";
             this.rejectUnreviewedFilesToolStripMenuItem.Click += new System.EventHandler(this.rejectUnreviewedFilesToolStripMenuItem_Click);
             // 
@@ -288,6 +288,7 @@
             // 
             // eEGViewToolStripMenuItem
             // 
+            this.eEGViewToolStripMenuItem.Enabled = false;
             this.eEGViewToolStripMenuItem.Name = "eEGViewToolStripMenuItem";
             this.eEGViewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.eEGViewToolStripMenuItem.Text = "EEG View";

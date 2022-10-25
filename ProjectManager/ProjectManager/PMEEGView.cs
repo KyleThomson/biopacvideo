@@ -1356,6 +1356,8 @@ namespace ProjectManager
 
         private void EditNotesButton_Click(object sender, EventArgs e)
         {
+
+            
             int temp;
             ;
             if (!int.TryParse(RacineLabel.Text, out temp)) temp = 0;

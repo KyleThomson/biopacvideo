@@ -13,6 +13,11 @@ namespace ProjectManager
         {
             InitializeComponent();
             MainSelect.SelectedIndex = 0;
+            Console.WriteLine(Properties.Settings.Default.DefaultDir);
+            if (!Directory.Exists(Properties.Settings.Default.DefaultDir))
+            {
+                Properties.Settings.Default.DefaultDir = "C:\\";
+            }
 
             //pjt = new Project("");
             // Handle event for form closing in case there are unsaved changes to project file.
@@ -23,7 +28,7 @@ namespace ProjectManager
             SaveFileDialog F = new SaveFileDialog();
             F.DefaultExt = ".pjt";
             F.Filter = "Text files (*.pjt)|*.pjt|All files (*.*)|*.*";
-            F.InitialDirectory = "C:\\";
+            F.InitialDirectory = Properties.Settings.Default.DefaultDir;
             if (F.ShowDialog() == DialogResult.OK)
             {
 
@@ -33,6 +38,8 @@ namespace ProjectManager
 
                 string[] temp = F.FileName.Split(splitter);
 
+                Properties.Settings.Default.DefaultDir = temp[0] + "\\";
+                Console.WriteLine(Properties.Settings.Default.DefaultDir);
                 Directory.CreateDirectory(temp0);
 
                 string FN = temp0 + "\\" + temp[temp.Length - 2];
@@ -43,6 +50,7 @@ namespace ProjectManager
 
                 pjt.Open();
                 _pjtOpened = true;
+                if (pjt.CDatExists) eEGViewToolStripMenuItem.Enabled = true;
             }
             EnableFileTools();
             
@@ -59,7 +67,7 @@ namespace ProjectManager
             exportDataToolStripMenuItem.Enabled = true;
             mergeProjectToolStripMenuItem.Enabled = true;
             addMultipleDirectoriesToolStripMenuItem.Enabled = true;
-            importFileToolStripMenuItem.Enabled = true;
+            //importFileToolStripMenuItem.Enabled = true;
             importSeizureToolStripMenuItem.Enabled = true;
 
         }
@@ -69,7 +77,7 @@ namespace ProjectManager
             OpenFileDialog F = new OpenFileDialog();
             F.DefaultExt = ".pjt";
             F.Filter = "Project Files (*.pjt)|*.pjt";
-            F.InitialDirectory = "C:\\";
+            F.InitialDirectory = Properties.Settings.Default.DefaultDir;
 
             if (F.ShowDialog() == DialogResult.OK)
             {
@@ -85,6 +93,7 @@ namespace ProjectManager
                 if (pjt.BigDAT != null) pjt.BigDAT.Close();
                 UpdateMainList();
                 EnableFileTools();
+                if (pjt.CDatExists) eEGViewToolStripMenuItem.Enabled = true;
             }
         }
 
@@ -531,6 +540,7 @@ namespace ProjectManager
             Info.Text = SuccessfullyImportedDirectory.ToString() + " directories imported. " +
                 DuplicateDirectoryCount.ToString() + " duplicate directories skipped. " +
                 NotImported.ToString() + " directories not imported."; ;
+            if (pjt.CDatExists) eEGViewToolStripMenuItem.Enabled = true;
         }
 
         private void mergeProjectToolStripMenuItem_Click(object sender, EventArgs e)

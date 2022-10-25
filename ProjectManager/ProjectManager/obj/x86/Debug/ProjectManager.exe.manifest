@@ -163,14 +163,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ProjectManager.exe" size="186880">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ProjectManager.exe" size="187392">
       <assemblyIdentity name="ProjectManager" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>Wc5mEcFGF71GceIkCMB3XwTpVU9Zn983KdZ6+NqQUic=</dsig:DigestValue>
+        <dsig:DigestValue>Vw4LECHX6aC+w6cWziY53b2SdaCsYFKBbBl0kZaLul0=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -5298,13 +5298,13 @@
       <dsig:DigestValue>KoBoejLbbNbgzazcVoewndE5k6e4DQKQ+Hi9BQNnEiw=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="ProjectManager.exe.config" size="161">
+  <file name="ProjectManager.exe.config" size="887">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>1hvekB5xicyX1FodTEqjnUxN4raEGXc+x3QzhQbWWa0=</dsig:DigestValue>
+      <dsig:DigestValue>9KlxJEbIsSFMPAn+wmvLs8fvG+ofAxHBW12TjcLtK00=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">

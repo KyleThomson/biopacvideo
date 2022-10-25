@@ -216,8 +216,11 @@
             this.MaximumSize = new System.Drawing.Size(620, 320);
             this.MinimumSize = new System.Drawing.Size(620, 320);
             this.Name = "EditNotesForm";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "EditNotesForm";
+            this.TopMost = true;
             this.RadioPanel.ResumeLayout(false);
             this.RadioPanel.PerformLayout();
             this.ResumeLayout(false);
