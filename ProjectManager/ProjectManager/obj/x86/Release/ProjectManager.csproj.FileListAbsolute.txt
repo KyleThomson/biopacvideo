@@ -652,3 +652,4 @@ C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\ProjectManager\Project
 C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\ProjectManager\ProjectManager\obj\x86\Release\ProjectManager.exe.manifest
 C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\ProjectManager\ProjectManager\obj\x86\Release\ProjectManager.application
 C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\ProjectManager\ProjectManager\obj\x86\Release\ProjectManager.csproj.SuggestedBindingRedirects.cache
+C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\ProjectManager\ProjectManager\obj\x86\Release\ProjectManager.EditNotesForm.resources

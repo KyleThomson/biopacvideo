@@ -9,6 +9,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Threading;
 
+
 namespace SeizurePlayback
 {
     public partial class VideoCreator : Form
@@ -48,7 +49,7 @@ namespace SeizurePlayback
             instance = new VlcInstance(args);     
             f = Graphics.FromImage(EEG);
             PanelGraph = CapPanel.CreateGraphics();            
-            drawCapture(Data, f, 950, 221, 1);                                    
+            drawCapture(Data, f, 950, 221, 1);
             LiS = LengthinSeconds;
             TempEEG = new Bitmap(EEG);
             EEGPanel.BackgroundImage = TempEEG;
@@ -109,11 +110,11 @@ namespace SeizurePlayback
                 f = Graphics.FromImage(TempEEG);
                 f.DrawLine(LinePen, new Point((int)((float)i * Step), 0), new Point((int)((float)i * Step), 221));
                 EEGPanel.BackgroundImage = TempEEG;
-                VideoPanel.BackgroundImage = new Bitmap(string.Format("D:\\test\\a{0:D5}.png", i));
+                VideoPanel.BackgroundImage = new Bitmap(string.Format("D:\\VideoCreatorTest\\a{0:D5}.png", i));
                 //CapPanel.DrawToBitmap(CaptureBMP, rect);
                 //CaptureBMP.Save(string.Format("C:\\TEST\\Img{0:D5}.png", i), System.Drawing.Imaging.ImageFormat.Png);
                 CapPanel.Invoke((MethodInvoker)delegate {CapPanel.DrawToBitmap(CaptureBMP, rect);});
-                CapPanel.Invoke((MethodInvoker)delegate { CaptureBMP.Save(string.Format("D:\\TEST\\Img{0:D5}.png", i), System.Drawing.Imaging.ImageFormat.Png); });
+                CapPanel.Invoke((MethodInvoker)delegate { CaptureBMP.Save(string.Format("D:\\VideoCreatorTest\\Img{0:D5}.png", i), System.Drawing.Imaging.ImageFormat.Png); });
                 Thread.Sleep(50);
                 try {            
                     
@@ -145,7 +146,7 @@ namespace SeizurePlayback
             }
             ProgText.Invoke((MethodInvoker)delegate { ProgText.Text = "Creating Video..."; });
             Process p = new Process();
-            string CmdString =" -i D:\\TEST\\Img%05d.png C:\\OUTPUT.avi -y";            
+            string CmdString = " -i D:\\VideoCreatorTest\\Img%05d.png C:\\OUTPUT.avi -y";           
             p.StartInfo.FileName = "C:\\x264\\ffmpeg.exe";
             p.StartInfo.Arguments = CmdString;
             p.StartInfo.CreateNoWindow = true;
@@ -153,7 +154,8 @@ namespace SeizurePlayback
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.RedirectStandardError = true;            
             p.Start();
-            p.WaitForExit();        
+            p.WaitForExit();
+
         }
         private void StartCap_Click(object sender, EventArgs e)
         {

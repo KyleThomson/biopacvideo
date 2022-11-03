@@ -72,22 +72,45 @@ namespace ProjectManager
             this.RacineLabel = new System.Windows.Forms.Label();
             this.RSL = new System.Windows.Forms.Label();
             this.ANLabel = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.AnimalViewPanel = new System.Windows.Forms.Panel();
+            this.aLComboBox = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.TotalSLabel = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.S1Label = new System.Windows.Forms.Label();
+            this.S0Label = new System.Windows.Forms.Label();
+            this.S2Label = new System.Windows.Forms.Label();
+            this.S3Label = new System.Windows.Forms.Label();
+            this.S4Label = new System.Windows.Forms.Label();
+            this.S5Label = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.myVLC)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TimeFrameBar)).BeginInit();
             this.TimeFramePanel.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.AnimalViewPanel.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ZoomBar
             // 
             this.ZoomBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomBar.AutoSize = false;
-            this.ZoomBar.Location = new System.Drawing.Point(45, 811);
+            this.ZoomBar.Location = new System.Drawing.Point(47, 835);
             this.ZoomBar.Maximum = 20;
             this.ZoomBar.Name = "ZoomBar";
-            this.ZoomBar.Size = new System.Drawing.Size(128, 21);
+            this.ZoomBar.Size = new System.Drawing.Size(173, 21);
             this.ZoomBar.TabIndex = 4;
             this.ZoomBar.TabStop = false;
             this.ZoomBar.TickFrequency = 2;
@@ -151,7 +174,7 @@ namespace ProjectManager
             this.DefaultView.Checked = true;
             this.DefaultView.CheckState = System.Windows.Forms.CheckState.Checked;
             this.DefaultView.Name = "DefaultView";
-            this.DefaultView.Size = new System.Drawing.Size(112, 22);
+            this.DefaultView.Size = new System.Drawing.Size(180, 22);
             this.DefaultView.Text = "Default";
             this.DefaultView.Click += new System.EventHandler(this.normalListToolStripMenuItem_Click);
             // 
@@ -159,16 +182,15 @@ namespace ProjectManager
             // 
             this.galleryView.CheckOnClick = true;
             this.galleryView.Name = "galleryView";
-            this.galleryView.Size = new System.Drawing.Size(112, 22);
+            this.galleryView.Size = new System.Drawing.Size(180, 22);
             this.galleryView.Text = "Gallery";
             this.galleryView.Click += new System.EventHandler(this.normalListToolStripMenuItem_Click);
             // 
             // animalView
             // 
             this.animalView.CheckOnClick = true;
-            this.animalView.Enabled = false;
             this.animalView.Name = "animalView";
-            this.animalView.Size = new System.Drawing.Size(112, 22);
+            this.animalView.Size = new System.Drawing.Size(180, 22);
             this.animalView.Text = "Animal";
             this.animalView.Click += new System.EventHandler(this.normalListToolStripMenuItem_Click);
             // 
@@ -185,7 +207,7 @@ namespace ProjectManager
             // randomizedToolStripMenuItem
             // 
             this.randomizedToolStripMenuItem.Name = "randomizedToolStripMenuItem";
-            this.randomizedToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.randomizedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.randomizedToolStripMenuItem.Text = "Randomized";
             // 
             // videoSizeToolStripMenuItem
@@ -195,7 +217,7 @@ namespace ProjectManager
             this.LowRes});
             this.videoSizeToolStripMenuItem.Enabled = false;
             this.videoSizeToolStripMenuItem.Name = "videoSizeToolStripMenuItem";
-            this.videoSizeToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.videoSizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.videoSizeToolStripMenuItem.Text = "Video Size";
             // 
             // HighRes
@@ -221,7 +243,7 @@ namespace ProjectManager
             this.TimeLabel.Enabled = false;
             this.TimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TimeLabel.ForeColor = System.Drawing.Color.Cornsilk;
-            this.TimeLabel.Location = new System.Drawing.Point(1435, 748);
+            this.TimeLabel.Location = new System.Drawing.Point(1065, 747);
             this.TimeLabel.Name = "TimeLabel";
             this.TimeLabel.Size = new System.Drawing.Size(87, 18);
             this.TimeLabel.TabIndex = 7;
@@ -231,7 +253,7 @@ namespace ProjectManager
             // Next
             // 
             this.Next.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Next.Location = new System.Drawing.Point(261, 790);
+            this.Next.Location = new System.Drawing.Point(132, 743);
             this.Next.Name = "Next";
             this.Next.Size = new System.Drawing.Size(75, 23);
             this.Next.TabIndex = 9;
@@ -243,7 +265,7 @@ namespace ProjectManager
             // Previous
             // 
             this.Previous.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Previous.Location = new System.Drawing.Point(180, 790);
+            this.Previous.Location = new System.Drawing.Point(51, 743);
             this.Previous.Name = "Previous";
             this.Previous.Size = new System.Drawing.Size(75, 23);
             this.Previous.TabIndex = 10;
@@ -270,7 +292,7 @@ namespace ProjectManager
             this.ZoomLabel.AutoSize = true;
             this.ZoomLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ZoomLabel.ForeColor = System.Drawing.Color.Cornsilk;
-            this.ZoomLabel.Location = new System.Drawing.Point(86, 790);
+            this.ZoomLabel.Location = new System.Drawing.Point(106, 815);
             this.ZoomLabel.Name = "ZoomLabel";
             this.ZoomLabel.Size = new System.Drawing.Size(48, 18);
             this.ZoomLabel.TabIndex = 12;
@@ -303,10 +325,10 @@ namespace ProjectManager
             // vScrollBar1
             // 
             this.vScrollBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.vScrollBar1.Location = new System.Drawing.Point(25, 778);
+            this.vScrollBar1.Location = new System.Drawing.Point(21, 724);
             this.vScrollBar1.Minimum = 4;
             this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(17, 80);
+            this.vScrollBar1.Size = new System.Drawing.Size(13, 128);
             this.vScrollBar1.TabIndex = 17;
             this.vScrollBar1.Value = 50;
             this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
@@ -317,7 +339,7 @@ namespace ProjectManager
             this.pg.AutoSize = true;
             this.pg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pg.ForeColor = System.Drawing.Color.Cornsilk;
-            this.pg.Location = new System.Drawing.Point(242, 816);
+            this.pg.Location = new System.Drawing.Point(132, 777);
             this.pg.Name = "pg";
             this.pg.Size = new System.Drawing.Size(31, 16);
             this.pg.TabIndex = 18;
@@ -361,7 +383,7 @@ namespace ProjectManager
             // PauseButton
             // 
             this.PauseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.PauseButton.Location = new System.Drawing.Point(1480, 719);
+            this.PauseButton.Location = new System.Drawing.Point(1109, 719);
             this.PauseButton.Name = "PauseButton";
             this.PauseButton.Size = new System.Drawing.Size(46, 23);
             this.PauseButton.TabIndex = 25;
@@ -373,7 +395,7 @@ namespace ProjectManager
             // PlayButton
             // 
             this.PlayButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.PlayButton.Location = new System.Drawing.Point(1428, 720);
+            this.PlayButton.Location = new System.Drawing.Point(1061, 719);
             this.PlayButton.Name = "PlayButton";
             this.PlayButton.Size = new System.Drawing.Size(46, 23);
             this.PlayButton.TabIndex = 26;
@@ -418,7 +440,7 @@ namespace ProjectManager
             this.TimeFramePanel.Controls.Add(this.TimeFrameLabel);
             this.TimeFramePanel.Controls.Add(this.TF1s);
             this.TimeFramePanel.Controls.Add(this.TimeFrameBar);
-            this.TimeFramePanel.Location = new System.Drawing.Point(342, 780);
+            this.TimeFramePanel.Location = new System.Drawing.Point(226, 762);
             this.TimeFramePanel.Name = "TimeFramePanel";
             this.TimeFramePanel.Size = new System.Drawing.Size(240, 72);
             this.TimeFramePanel.TabIndex = 29;
@@ -516,7 +538,7 @@ namespace ProjectManager
             this.panel1.Controls.Add(this.NotesSection);
             this.panel1.Controls.Add(this.ANLabel);
             this.panel1.Controls.Add(this.ANL);
-            this.panel1.Location = new System.Drawing.Point(691, 717);
+            this.panel1.Location = new System.Drawing.Point(472, 717);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(583, 153);
             this.panel1.TabIndex = 32;
@@ -566,6 +588,264 @@ namespace ProjectManager
             this.ANLabel.Size = new System.Drawing.Size(66, 18);
             this.ANLabel.TabIndex = 32;
             // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Cornsilk;
+            this.label1.Location = new System.Drawing.Point(83, 777);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(43, 16);
+            this.label1.TabIndex = 33;
+            this.label1.Text = "Page:";
+            // 
+            // AnimalViewPanel
+            // 
+            this.AnimalViewPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.AnimalViewPanel.Controls.Add(this.label6);
+            this.AnimalViewPanel.Controls.Add(this.label3);
+            this.AnimalViewPanel.Controls.Add(this.tableLayoutPanel1);
+            this.AnimalViewPanel.Controls.Add(this.label2);
+            this.AnimalViewPanel.Controls.Add(this.aLComboBox);
+            this.AnimalViewPanel.Location = new System.Drawing.Point(1161, 719);
+            this.AnimalViewPanel.Name = "AnimalViewPanel";
+            this.AnimalViewPanel.Size = new System.Drawing.Size(417, 137);
+            this.AnimalViewPanel.TabIndex = 34;
+            this.AnimalViewPanel.Visible = false;
+            // 
+            // aLComboBox
+            // 
+            this.aLComboBox.FormattingEnabled = true;
+            this.aLComboBox.Location = new System.Drawing.Point(0, 26);
+            this.aLComboBox.Name = "aLComboBox";
+            this.aLComboBox.Size = new System.Drawing.Size(121, 21);
+            this.aLComboBox.TabIndex = 0;
+            this.aLComboBox.SelectedIndexChanged += new System.EventHandler(this.aLComboBox_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.SystemColors.Control;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(32, 5);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(56, 18);
+            this.label2.TabIndex = 32;
+            this.label2.Text = "Animal:";
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
+            this.tableLayoutPanel1.ColumnCount = 7;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.96637F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.96637F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.96637F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.96637F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.96637F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.96637F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.20176F));
+            this.tableLayoutPanel1.Controls.Add(this.S1Label, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label5, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label4, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label11, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label7, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label8, 4, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label9, 5, 0);
+            this.tableLayoutPanel1.Controls.Add(this.TotalSLabel, 6, 0);
+            this.tableLayoutPanel1.Controls.Add(this.S0Label, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.S2Label, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.S3Label, 3, 1);
+            this.tableLayoutPanel1.Controls.Add(this.S4Label, 4, 1);
+            this.tableLayoutPanel1.Controls.Add(this.S5Label, 5, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label18, 6, 1);
+            this.tableLayoutPanel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(185, 7);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(232, 40);
+            this.tableLayoutPanel1.TabIndex = 33;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.SystemColors.Control;
+            this.label3.Location = new System.Drawing.Point(126, 27);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(59, 16);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Seizures";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.SystemColors.Control;
+            this.label4.Location = new System.Drawing.Point(36, 1);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(14, 16);
+            this.label4.TabIndex = 34;
+            this.label4.Text = "1";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.SystemColors.Control;
+            this.label5.Location = new System.Drawing.Point(68, 1);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(14, 16);
+            this.label5.TabIndex = 35;
+            this.label5.Text = "2";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.SystemColors.Control;
+            this.label6.Location = new System.Drawing.Point(136, 5);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(43, 16);
+            this.label6.TabIndex = 34;
+            this.label6.Text = "Stage";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.SystemColors.Control;
+            this.label7.Location = new System.Drawing.Point(100, 1);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(14, 16);
+            this.label7.TabIndex = 36;
+            this.label7.Text = "3";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.SystemColors.Control;
+            this.label8.Location = new System.Drawing.Point(132, 1);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(14, 16);
+            this.label8.TabIndex = 37;
+            this.label8.Text = "4";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.ForeColor = System.Drawing.SystemColors.Control;
+            this.label9.Location = new System.Drawing.Point(164, 1);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(14, 16);
+            this.label9.TabIndex = 38;
+            this.label9.Text = "5";
+            // 
+            // TotalSLabel
+            // 
+            this.TotalSLabel.AutoSize = true;
+            this.TotalSLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TotalSLabel.ForeColor = System.Drawing.SystemColors.Control;
+            this.TotalSLabel.Location = new System.Drawing.Point(196, 1);
+            this.TotalSLabel.Name = "TotalSLabel";
+            this.TotalSLabel.Size = new System.Drawing.Size(31, 13);
+            this.TotalSLabel.TabIndex = 39;
+            this.TotalSLabel.Text = "Total";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.ForeColor = System.Drawing.SystemColors.Control;
+            this.label11.Location = new System.Drawing.Point(4, 1);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(24, 15);
+            this.label11.TabIndex = 40;
+            this.label11.Text = "NC";
+            // 
+            // S1Label
+            // 
+            this.S1Label.AutoSize = true;
+            this.S1Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.S1Label.ForeColor = System.Drawing.SystemColors.Control;
+            this.S1Label.Location = new System.Drawing.Point(36, 20);
+            this.S1Label.Name = "S1Label";
+            this.S1Label.Size = new System.Drawing.Size(14, 16);
+            this.S1Label.TabIndex = 41;
+            this.S1Label.Text = "0";
+            // 
+            // S0Label
+            // 
+            this.S0Label.AutoSize = true;
+            this.S0Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.S0Label.ForeColor = System.Drawing.SystemColors.Control;
+            this.S0Label.Location = new System.Drawing.Point(4, 20);
+            this.S0Label.Name = "S0Label";
+            this.S0Label.Size = new System.Drawing.Size(14, 16);
+            this.S0Label.TabIndex = 42;
+            this.S0Label.Text = "0";
+            // 
+            // S2Label
+            // 
+            this.S2Label.AutoSize = true;
+            this.S2Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.S2Label.ForeColor = System.Drawing.SystemColors.Control;
+            this.S2Label.Location = new System.Drawing.Point(68, 20);
+            this.S2Label.Name = "S2Label";
+            this.S2Label.Size = new System.Drawing.Size(14, 16);
+            this.S2Label.TabIndex = 43;
+            this.S2Label.Text = "0";
+            // 
+            // S3Label
+            // 
+            this.S3Label.AutoSize = true;
+            this.S3Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.S3Label.ForeColor = System.Drawing.SystemColors.Control;
+            this.S3Label.Location = new System.Drawing.Point(100, 20);
+            this.S3Label.Name = "S3Label";
+            this.S3Label.Size = new System.Drawing.Size(14, 16);
+            this.S3Label.TabIndex = 44;
+            this.S3Label.Text = "0";
+            // 
+            // S4Label
+            // 
+            this.S4Label.AutoSize = true;
+            this.S4Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.S4Label.ForeColor = System.Drawing.SystemColors.Control;
+            this.S4Label.Location = new System.Drawing.Point(132, 20);
+            this.S4Label.Name = "S4Label";
+            this.S4Label.Size = new System.Drawing.Size(14, 16);
+            this.S4Label.TabIndex = 45;
+            this.S4Label.Text = "0";
+            // 
+            // S5Label
+            // 
+            this.S5Label.AutoSize = true;
+            this.S5Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.S5Label.ForeColor = System.Drawing.SystemColors.Control;
+            this.S5Label.Location = new System.Drawing.Point(164, 20);
+            this.S5Label.Name = "S5Label";
+            this.S5Label.Size = new System.Drawing.Size(14, 16);
+            this.S5Label.TabIndex = 46;
+            this.S5Label.Text = "0";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.ForeColor = System.Drawing.SystemColors.Control;
+            this.label18.Location = new System.Drawing.Point(196, 20);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(14, 16);
+            this.label18.TabIndex = 47;
+            this.label18.Text = "0";
+            // 
             // PMEEGView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -574,7 +854,9 @@ namespace ProjectManager
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(1584, 861);
+            this.Controls.Add(this.AnimalViewPanel);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.TimeFramePanel);
             this.Controls.Add(this.PlayButton);
             this.Controls.Add(this.PauseButton);
@@ -611,6 +893,10 @@ namespace ProjectManager
             this.TimeFramePanel.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.AnimalViewPanel.ResumeLayout(false);
+            this.AnimalViewPanel.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -660,5 +946,26 @@ namespace ProjectManager
         private System.Windows.Forms.Label RacineLabel;
         private System.Windows.Forms.Label RSL;
         private System.Windows.Forms.Button EditNotesButton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel AnimalViewPanel;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label S4Label;
+        private System.Windows.Forms.Label S3Label;
+        private System.Windows.Forms.Label S2Label;
+        private System.Windows.Forms.Label S0Label;
+        private System.Windows.Forms.Label S1Label;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label TotalSLabel;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox aLComboBox;
+        private System.Windows.Forms.Label S5Label;
+        private System.Windows.Forms.Label label18;
     }
 }

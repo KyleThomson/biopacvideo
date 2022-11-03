@@ -143,7 +143,7 @@ namespace SeizurePlayback
             this.Play.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Play.BackColor = System.Drawing.Color.DarkGray;
             this.Play.ForeColor = System.Drawing.Color.Black;
-            this.Play.Location = new System.Drawing.Point(832, 536);
+            this.Play.Location = new System.Drawing.Point(832, 515);
             this.Play.Name = "Play";
             this.Play.Size = new System.Drawing.Size(75, 23);
             this.Play.TabIndex = 0;
@@ -166,7 +166,7 @@ namespace SeizurePlayback
             this.Open.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Open.BackColor = System.Drawing.Color.DarkGray;
             this.Open.ForeColor = System.Drawing.Color.Black;
-            this.Open.Location = new System.Drawing.Point(670, 507);
+            this.Open.Location = new System.Drawing.Point(669, 483);
             this.Open.Name = "Open";
             this.Open.Size = new System.Drawing.Size(156, 23);
             this.Open.TabIndex = 3;
@@ -179,7 +179,7 @@ namespace SeizurePlayback
             this.Pause.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pause.BackColor = System.Drawing.Color.DarkGray;
             this.Pause.ForeColor = System.Drawing.Color.Black;
-            this.Pause.Location = new System.Drawing.Point(832, 507);
+            this.Pause.Location = new System.Drawing.Point(832, 483);
             this.Pause.Name = "Pause";
             this.Pause.Size = new System.Drawing.Size(75, 23);
             this.Pause.TabIndex = 0;
@@ -204,7 +204,7 @@ namespace SeizurePlayback
             this.Rewind.AutoSize = true;
             this.Rewind.BackColor = System.Drawing.Color.DarkGray;
             this.Rewind.ForeColor = System.Drawing.Color.Black;
-            this.Rewind.Location = new System.Drawing.Point(913, 507);
+            this.Rewind.Location = new System.Drawing.Point(913, 483);
             this.Rewind.Name = "Rewind";
             this.Rewind.Size = new System.Drawing.Size(75, 23);
             this.Rewind.TabIndex = 15;
@@ -217,7 +217,7 @@ namespace SeizurePlayback
             this.SpeedUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.SpeedUp.BackColor = System.Drawing.Color.DarkGray;
             this.SpeedUp.ForeColor = System.Drawing.Color.Black;
-            this.SpeedUp.Location = new System.Drawing.Point(913, 536);
+            this.SpeedUp.Location = new System.Drawing.Point(913, 515);
             this.SpeedUp.Name = "SpeedUp";
             this.SpeedUp.Size = new System.Drawing.Size(75, 23);
             this.SpeedUp.TabIndex = 16;
@@ -230,7 +230,7 @@ namespace SeizurePlayback
             this.TimeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.TimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TimeLabel.ForeColor = System.Drawing.Color.White;
-            this.TimeLabel.Location = new System.Drawing.Point(532, 476);
+            this.TimeLabel.Location = new System.Drawing.Point(532, 483);
             this.TimeLabel.Name = "TimeLabel";
             this.TimeLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.TimeLabel.Size = new System.Drawing.Size(127, 24);
@@ -278,7 +278,7 @@ namespace SeizurePlayback
             this.SzCaptureButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.SzCaptureButton.BackColor = System.Drawing.Color.DarkGray;
             this.SzCaptureButton.ForeColor = System.Drawing.Color.Black;
-            this.SzCaptureButton.Location = new System.Drawing.Point(669, 566);
+            this.SzCaptureButton.Location = new System.Drawing.Point(669, 543);
             this.SzCaptureButton.Name = "SzCaptureButton";
             this.SzCaptureButton.Size = new System.Drawing.Size(156, 23);
             this.SzCaptureButton.TabIndex = 20;
@@ -291,7 +291,7 @@ namespace SeizurePlayback
             this.DetectionLoadButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.DetectionLoadButton.BackColor = System.Drawing.Color.DarkGray;
             this.DetectionLoadButton.ForeColor = System.Drawing.Color.Black;
-            this.DetectionLoadButton.Location = new System.Drawing.Point(669, 536);
+            this.DetectionLoadButton.Location = new System.Drawing.Point(669, 513);
             this.DetectionLoadButton.Name = "DetectionLoadButton";
             this.DetectionLoadButton.Size = new System.Drawing.Size(156, 23);
             this.DetectionLoadButton.TabIndex = 21;
@@ -304,7 +304,7 @@ namespace SeizurePlayback
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button2.BackColor = System.Drawing.Color.DarkGray;
             this.button2.ForeColor = System.Drawing.Color.Black;
-            this.button2.Location = new System.Drawing.Point(913, 595);
+            this.button2.Location = new System.Drawing.Point(913, 574);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 22;
@@ -317,7 +317,7 @@ namespace SeizurePlayback
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button3.BackColor = System.Drawing.Color.DarkGray;
             this.button3.ForeColor = System.Drawing.Color.Black;
-            this.button3.Location = new System.Drawing.Point(832, 595);
+            this.button3.Location = new System.Drawing.Point(832, 574);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 23;
@@ -588,7 +588,7 @@ namespace SeizurePlayback
             this.RvwSz.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.RvwSz.BackColor = System.Drawing.Color.DarkGray;
             this.RvwSz.ForeColor = System.Drawing.Color.Black;
-            this.RvwSz.Location = new System.Drawing.Point(669, 595);
+            this.RvwSz.Location = new System.Drawing.Point(669, 573);
             this.RvwSz.Name = "RvwSz";
             this.RvwSz.Size = new System.Drawing.Size(156, 23);
             this.RvwSz.TabIndex = 45;
@@ -650,7 +650,7 @@ namespace SeizurePlayback
             this.Randomization.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Randomization.AutoSize = true;
             this.Randomization.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Randomization.Location = new System.Drawing.Point(994, 558);
+            this.Randomization.Location = new System.Drawing.Point(994, 537);
             this.Randomization.Name = "Randomization";
             this.Randomization.Size = new System.Drawing.Size(79, 17);
             this.Randomization.TabIndex = 57;
@@ -686,7 +686,7 @@ namespace SeizurePlayback
             this.FastReview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.FastReview.BackColor = System.Drawing.Color.DarkGray;
             this.FastReview.ForeColor = System.Drawing.Color.Black;
-            this.FastReview.Location = new System.Drawing.Point(832, 566);
+            this.FastReview.Location = new System.Drawing.Point(832, 545);
             this.FastReview.Name = "FastReview";
             this.FastReview.Size = new System.Drawing.Size(156, 23);
             this.FastReview.TabIndex = 60;
@@ -699,7 +699,7 @@ namespace SeizurePlayback
             this.TelemetryBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.TelemetryBox.AutoSize = true;
             this.TelemetryBox.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.TelemetryBox.Location = new System.Drawing.Point(994, 604);
+            this.TelemetryBox.Location = new System.Drawing.Point(994, 583);
             this.TelemetryBox.Name = "TelemetryBox";
             this.TelemetryBox.Size = new System.Drawing.Size(78, 17);
             this.TelemetryBox.TabIndex = 61;
@@ -712,7 +712,7 @@ namespace SeizurePlayback
             this.VideoFix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VideoFix.AutoSize = true;
             this.VideoFix.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VideoFix.Location = new System.Drawing.Point(994, 581);
+            this.VideoFix.Location = new System.Drawing.Point(994, 560);
             this.VideoFix.Name = "VideoFix";
             this.VideoFix.Size = new System.Drawing.Size(72, 17);
             this.VideoFix.TabIndex = 62;
@@ -757,8 +757,7 @@ namespace SeizurePlayback
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(150, 21);
             this.comboBox1.TabIndex = 64;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged_1);
-            this.comboBox1.SelectionChangeCommitted += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.comboBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.comboBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.noEventKey);
             // 
@@ -1051,6 +1050,7 @@ namespace SeizurePlayback
             this.ZoomChan12.CausesValidation = false;
             this.ZoomChan12.Location = new System.Drawing.Point(292, 88);
             this.ZoomChan12.Maximum = 20;
+            this.ZoomChan12.Minimum = 1;
             this.ZoomChan12.Name = "ZoomChan12";
             this.ZoomChan12.Size = new System.Drawing.Size(119, 22);
             this.ZoomChan12.TabIndex = 11;
@@ -1066,6 +1066,7 @@ namespace SeizurePlayback
             this.ZoomChan11.CausesValidation = false;
             this.ZoomChan11.Location = new System.Drawing.Point(292, 60);
             this.ZoomChan11.Maximum = 20;
+            this.ZoomChan11.Minimum = 1;
             this.ZoomChan11.Name = "ZoomChan11";
             this.ZoomChan11.Size = new System.Drawing.Size(119, 22);
             this.ZoomChan11.TabIndex = 10;
@@ -1081,6 +1082,7 @@ namespace SeizurePlayback
             this.ZoomChan10.CausesValidation = false;
             this.ZoomChan10.Location = new System.Drawing.Point(292, 32);
             this.ZoomChan10.Maximum = 20;
+            this.ZoomChan10.Minimum = 1;
             this.ZoomChan10.Name = "ZoomChan10";
             this.ZoomChan10.Size = new System.Drawing.Size(119, 22);
             this.ZoomChan10.TabIndex = 9;
@@ -1096,6 +1098,7 @@ namespace SeizurePlayback
             this.ZoomChan9.CausesValidation = false;
             this.ZoomChan9.Location = new System.Drawing.Point(292, 4);
             this.ZoomChan9.Maximum = 20;
+            this.ZoomChan9.Minimum = 1;
             this.ZoomChan9.Name = "ZoomChan9";
             this.ZoomChan9.Size = new System.Drawing.Size(119, 22);
             this.ZoomChan9.TabIndex = 8;
@@ -1111,6 +1114,7 @@ namespace SeizurePlayback
             this.ZoomChan8.CausesValidation = false;
             this.ZoomChan8.Location = new System.Drawing.Point(154, 88);
             this.ZoomChan8.Maximum = 20;
+            this.ZoomChan8.Minimum = 1;
             this.ZoomChan8.Name = "ZoomChan8";
             this.ZoomChan8.Size = new System.Drawing.Size(119, 22);
             this.ZoomChan8.TabIndex = 7;
@@ -1126,6 +1130,7 @@ namespace SeizurePlayback
             this.ZoomChan7.CausesValidation = false;
             this.ZoomChan7.Location = new System.Drawing.Point(154, 60);
             this.ZoomChan7.Maximum = 20;
+            this.ZoomChan7.Minimum = 1;
             this.ZoomChan7.Name = "ZoomChan7";
             this.ZoomChan7.Size = new System.Drawing.Size(119, 22);
             this.ZoomChan7.TabIndex = 6;
@@ -1141,6 +1146,7 @@ namespace SeizurePlayback
             this.ZoomChan6.CausesValidation = false;
             this.ZoomChan6.Location = new System.Drawing.Point(154, 32);
             this.ZoomChan6.Maximum = 20;
+            this.ZoomChan6.Minimum = 1;
             this.ZoomChan6.Name = "ZoomChan6";
             this.ZoomChan6.Size = new System.Drawing.Size(119, 22);
             this.ZoomChan6.TabIndex = 5;
@@ -1156,6 +1162,7 @@ namespace SeizurePlayback
             this.ZoomChan5.CausesValidation = false;
             this.ZoomChan5.Location = new System.Drawing.Point(154, 4);
             this.ZoomChan5.Maximum = 20;
+            this.ZoomChan5.Minimum = 1;
             this.ZoomChan5.Name = "ZoomChan5";
             this.ZoomChan5.Size = new System.Drawing.Size(119, 22);
             this.ZoomChan5.TabIndex = 4;
@@ -1171,6 +1178,7 @@ namespace SeizurePlayback
             this.ZoomChan4.CausesValidation = false;
             this.ZoomChan4.Location = new System.Drawing.Point(18, 88);
             this.ZoomChan4.Maximum = 20;
+            this.ZoomChan4.Minimum = 1;
             this.ZoomChan4.Name = "ZoomChan4";
             this.ZoomChan4.Size = new System.Drawing.Size(119, 22);
             this.ZoomChan4.TabIndex = 3;
@@ -1186,6 +1194,7 @@ namespace SeizurePlayback
             this.ZoomChan3.CausesValidation = false;
             this.ZoomChan3.Location = new System.Drawing.Point(18, 60);
             this.ZoomChan3.Maximum = 20;
+            this.ZoomChan3.Minimum = 1;
             this.ZoomChan3.Name = "ZoomChan3";
             this.ZoomChan3.Size = new System.Drawing.Size(119, 22);
             this.ZoomChan3.TabIndex = 2;
@@ -1201,6 +1210,7 @@ namespace SeizurePlayback
             this.ZoomChan2.CausesValidation = false;
             this.ZoomChan2.Location = new System.Drawing.Point(18, 32);
             this.ZoomChan2.Maximum = 20;
+            this.ZoomChan2.Minimum = 1;
             this.ZoomChan2.Name = "ZoomChan2";
             this.ZoomChan2.Size = new System.Drawing.Size(119, 22);
             this.ZoomChan2.TabIndex = 1;
@@ -1216,6 +1226,7 @@ namespace SeizurePlayback
             this.ZoomChan1.CausesValidation = false;
             this.ZoomChan1.Location = new System.Drawing.Point(18, 4);
             this.ZoomChan1.Maximum = 20;
+            this.ZoomChan1.Minimum = 1;
             this.ZoomChan1.Name = "ZoomChan1";
             this.ZoomChan1.Size = new System.Drawing.Size(119, 22);
             this.ZoomChan1.TabIndex = 0;
@@ -1274,7 +1285,7 @@ namespace SeizurePlayback
             this.Rewind_ChangeBox.AutoSize = true;
             this.Rewind_ChangeBox.Controls.Add(this.Rewind_Dec);
             this.Rewind_ChangeBox.Controls.Add(this.Rewind_Inc);
-            this.Rewind_ChangeBox.Location = new System.Drawing.Point(992, 504);
+            this.Rewind_ChangeBox.Location = new System.Drawing.Point(992, 483);
             this.Rewind_ChangeBox.Name = "Rewind_ChangeBox";
             this.Rewind_ChangeBox.Size = new System.Drawing.Size(51, 29);
             this.Rewind_ChangeBox.TabIndex = 78;

@@ -49,6 +49,7 @@ namespace ProjectManager
         bool ButtonBusy = false; //used for button clicks, again for thread safety
         ProjectManager Prnt;
         int CurrentAnimal;
+        
         EditNotesForm ENF;
 
 
@@ -911,6 +912,7 @@ namespace ProjectManager
                     DefaultView.Checked = false;
                     animalView.Checked = false;
                     galleryView.Checked = true;
+                   
 
                     VideoMode(true);
                     GraphResize(1);
@@ -921,6 +923,7 @@ namespace ProjectManager
                     UpdateDisplay();
                     videoSizeToolStripMenuItem.Enabled = true;
                     pg.Text = (pageNum + 1) + " / " + pageCalc();
+                    AnimalViewPanel.Hide();
                     break;
                 case "Animal":
                     ViewMode = 2;
@@ -930,6 +933,15 @@ namespace ProjectManager
                     GraphResize(2);
                     DAT.drawMode = 2;
                     pg.Text = (pageNum + 1) + " / " + pageCalc();
+                    AnimalViewPanel.Show();
+                    aLComboBox.Items.Clear();
+
+                    foreach (AnimalType A in Animals)
+                    {
+                        aLComboBox.Items.Add(A.ID);
+                    }
+                    aLComboBox.SelectedIndex = 0;
+
                     break;
             }
 
@@ -1381,6 +1393,63 @@ namespace ProjectManager
 
             if (ENF != null) ENF.Dispose();
            
+
+
+        }
+
+        private void aLComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int s0 = 0;
+            int s1 = 0;
+            int s2 = 0;
+            int s3 = 0;
+            int s4 = 0;
+            int s5 = 0;
+            int tot = 0;
+
+
+            foreach (SeizureType s in Animals[aLComboBox.SelectedIndex].Sz)
+            {
+                switch (s.Severity)
+                {
+                    case 0:
+                        s0++;
+                        tot++;
+                        break;
+                    case 1:
+                        s1++;
+                        tot++;
+                        break;
+                    case 2:
+                        s2++;
+                        tot++;
+                        break;
+                    case 3:
+                        s3++;
+                        tot++;
+                        break;
+                    case 4:
+                        s4++;
+                        tot++;
+                        break;
+                    case 5:
+                        s5++;
+                        tot++;
+                        break;
+
+                }
+            }
+
+            S0Label.Text = s0.ToString();
+            S1Label.Text = s1.ToString();
+            S2Label.Text = s2.ToString();
+            S3Label.Text = s3.ToString();
+            S4Label.Text = s4.ToString();
+            S5Label.Text = s5.ToString();
+            TotalSLabel.Text = tot.ToString();
+
+            UpdateDisplay();
+
 
 
         }

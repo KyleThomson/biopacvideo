@@ -195,23 +195,27 @@ namespace ProjectManager
         public long AppendCDat(string FileN)
         {
 
-            if (BigDAT == null)
-            {
-                BigDAT = new FileStream(CDatName, FileMode.Append, FileAccess.Write);
+            //if (BigDAT == null)
+            //{
+            if (BigDAT != null) BigDAT.Close();
+            if (BBigDAT != null) BBigDAT.Close();
+
+                BigDAT = new FileStream(CDatName, FileMode.Open, FileAccess.ReadWrite);
                 BBigDAT = new BinaryWriter(BigDAT);
-            }
+                BigDAT.Seek(BigDAT.Length, SeekOrigin.Begin);
+            //}
             if (!File.Exists(FileN)) return -1;
 
-
+            long r = BigDAT.Position;
             //if (DatCount < 2)
             //{
             //    Console.WriteLine("Number: " + DatCount);
             //    Console.WriteLine("For: " + FileN);
             //    Console.WriteLine("Pos Start: " + BigDAT.Position);
             //}
-            
-            long r = BigDAT.Position;
-            
+
+
+
 
             FileStream InFile = new FileStream(FileN, FileMode.Open, FileAccess.Read);
             BinaryReader BInFile = new BinaryReader(InFile);
@@ -229,6 +233,9 @@ namespace ProjectManager
             InFile.Close();
             BInFile.Close();
             DatCount++;
+
+            BigDAT.Close();
+            BBigDAT.Close();
 
             return r;
             //for (int i = 0; i < data.Length; i ++)

@@ -155,7 +155,7 @@ namespace SeizurePlayback
             MultiFile = true;
         }
         public void RefreshDisplay()
-        {
+        { 
             VoltageSpacing = (int)(Ymax / (Chans));
             PointSpacing = (float)Xmax / MaxDrawSize;
         }
@@ -356,7 +356,7 @@ namespace SeizurePlayback
         {
             float tempZoom;
             if (MasterZoom) tempZoom = Zoom;
-            else tempZoom = Zoom * CurrentChannelZoom[ChanPass];
+            else tempZoom = CurrentChannelZoom[ChanPass];
             float maxPixel = (pixelHeight * .15F);
             float minPixel = (pixelHeight * .95F);
             float m;

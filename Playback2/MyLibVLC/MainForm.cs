@@ -1740,13 +1740,80 @@ namespace SeizurePlayback
                 ACQ.Zoom = (float)ZoomScale.Value / 10;
                 FRZoomBar.Value = ZoomScale.Value;
                 Redraw = true;
+
+
+                if (!ACQ.MasterZoom)
+                {
+
+
+
+                    if (ZoomScale.Value == ZoomChan1.Value)
+                    {
+                        ZoomChan1.Value = ZoomScale.Value;
+                    }
+                    if (ZoomScale.Value == ZoomChan2.Value)
+                    {
+                        ZoomChan2.Value = ZoomScale.Value;
+                    }
+                    if (ZoomScale.Value == ZoomChan3.Value)
+                    {
+                        ZoomChan3.Value = ZoomScale.Value;
+                    }
+                    if (ZoomScale.Value == ZoomChan4.Value)
+                    {
+                        ZoomChan4.Value = ZoomScale.Value;
+                    }
+                    if (ZoomScale.Value == ZoomChan5.Value)
+                    {
+                        ZoomChan5.Value = ZoomScale.Value;
+                    }
+                    if (ZoomScale.Value == ZoomChan6.Value)
+                    {
+                        ZoomChan6.Value = ZoomScale.Value;
+                    }
+                    if (ZoomScale.Value == ZoomChan7.Value)
+                    {
+                        ZoomChan7.Value = ZoomScale.Value;
+                    }
+                    if (ZoomScale.Value == ZoomChan8.Value)
+                    {
+                        ZoomChan8.Value = ZoomScale.Value;
+                    }
+                    if (ZoomScale.Value == ZoomChan9.Value)
+                    {
+                        ZoomChan9.Value = ZoomScale.Value;
+                    }
+                    if (ZoomScale.Value == ZoomChan10.Value)
+                    {
+                        ZoomChan10.Value = ZoomScale.Value;
+                    }
+                    if (ZoomScale.Value == ZoomChan11.Value)
+                    {
+                        ZoomChan11.Value = ZoomScale.Value;
+                    }
+                    if (ZoomScale.Value == ZoomChan12.Value)
+                    {
+                        ZoomChan12.Value = ZoomScale.Value;
+                    }
+
+                }
+
+
             }
             if (FastReviewState)
             {
                 ACQ.Zoom = (float)FRZoomBar.Value / 10;
+
+  
+
                 FastReviewChange = true;
                 ZoomScale.Value = FRZoomBar.Value;
+
+
+
             }
+
+            
 
 
         }
@@ -2482,11 +2549,12 @@ namespace SeizurePlayback
                         return;
                     int Start = (ACQ.Position - Step + HighlightStart);
                     long Seek;
-                    Seek = (long)((float)Start * 1000F * (1F + VideoOffset[ACQ.SelectedChan]) - Subtractor);
+                    //Seek = (long)((float)Start * 1000F * (1F + VideoOffset[ACQ.SelectedChan]) - Subtractor);
+                    Seek = (long)((float)(Start * 1000F) - Subtractor);
                     VideoCreator frm2 = new VideoCreator(ACQ.GetData(ACQ.SelectedChan, Start, HighlightEnd - HighlightStart + 1), HighlightEnd - HighlightStart + 1, CurrentAVI, Seek);
                     frm2.Show();
                     break;
-                case 7:
+                case 7:  //load all vids
                     bool a = true;
                     for (int i = 0; i < 16; i++)
                     {
@@ -2499,12 +2567,37 @@ namespace SeizurePlayback
                     {
                         comboBox1.Items.RemoveAt(8);
                         comboBox1.Items.Insert(8, "Channel Zoom Control [\u2714]");
-                        comboBox1.Text = "Channel Zoom Control [\u2714]";
+                        //comboBox1.Text = "Channel Zoom Control [\u2714]";
 
+
+
+
+
+                        //for (int i = 0; i < 12; i++)
+                        //{
+                        //    ACQ.CurrentChannelZoom[i] = ACQ.Zoom;
+                        //}
 
                         ACQ.MasterZoom = false;
+                        ZoomChan1.Value = ZoomScale.Value;
+                        ZoomChan2.Value = ZoomScale.Value;
+                        ZoomChan3.Value = ZoomScale.Value;
+                        ZoomChan4.Value = ZoomScale.Value;
+                        ZoomChan5.Value = ZoomScale.Value;
+                        ZoomChan6.Value = ZoomScale.Value;
+                        ZoomChan7.Value = ZoomScale.Value;
+                        ZoomChan8.Value = ZoomScale.Value;
+                        ZoomChan9.Value = ZoomScale.Value;
+                        ZoomChan10.Value = ZoomScale.Value;
+                        ZoomChan11.Value = ZoomScale.Value;
+                        ZoomChan12.Value = ZoomScale.Value;
+
                         ZoomChanPanel.Show();
                         ZoomChanPanel.Enabled = true;
+
+
+
+
 
                         //ZoomChan1.Value = ZoomScale.Value;
                         //ZoomChan2.Value = ZoomScale.Value;
@@ -2519,13 +2612,15 @@ namespace SeizurePlayback
                         //ZoomChan11.Value = ZoomScale.Value;
                         //ZoomChan12.Value = ZoomScale.Value;
 
-                        ZoomScale.Enabled = false;
+                        //ZoomScale.Enabled = false;
+
+
                     }
                     else
                     {
                         comboBox1.Items.RemoveAt(8);
                         comboBox1.Items.Insert(8, "Channel Zoom Control [   ]");
-                        comboBox1.Text = "Channel Zoom Control [   ]";
+                        //comboBox1.Text = "Channel Zoom Control [   ]";
                         ACQ.MasterZoom = true;
                         ACQ.drawbuffer();
                         ZoomChanPanel.Hide();
@@ -2688,7 +2783,9 @@ namespace SeizurePlayback
 
         private void ZoomChan1_Scroll(object sender, EventArgs e)
         {
+            
             ACQ.CurrentChannelZoom[0] = (float)ZoomChan1.Value / 10;
+            
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
         }
@@ -2696,7 +2793,9 @@ namespace SeizurePlayback
 
         private void ZoomChan2_Scroll(object sender, EventArgs e)
         {
+            
             ACQ.CurrentChannelZoom[1] = (float)ZoomChan2.Value / 10;
+            
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
         }
@@ -2705,62 +2804,79 @@ namespace SeizurePlayback
         private void ZoomChan3_Scroll(object sender, EventArgs e)
         {
             ACQ.CurrentChannelZoom[2] = (float)ZoomChan3.Value / 10;
+            
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
         }
 
         private void ZoomChan4_Scroll(object sender, EventArgs e)
         {
+            
             ACQ.CurrentChannelZoom[3] = (float)ZoomChan4.Value / 10;
+            
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
         }
 
         private void ZoomChan5_Scroll(object sender, EventArgs e)
         {
+            
             ACQ.CurrentChannelZoom[4] = (float)ZoomChan5.Value / 10;
+            
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
         }
 
         private void ZoomChan6_Scroll(object sender, EventArgs e)
         {
+            
             ACQ.CurrentChannelZoom[5] = (float)ZoomChan6.Value / 10;
+            
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
         }
 
         private void ZoomChan7_Scroll(object sender, EventArgs e)
         {
+            
             ACQ.CurrentChannelZoom[6] = (float)ZoomChan7.Value / 10;
+            
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
         }
 
         private void ZoomChan8_Scroll(object sender, EventArgs e)
         {
+           
             ACQ.CurrentChannelZoom[7] = (float)ZoomChan8.Value / 10;
+           
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
         }
 
         private void ZoomChan9_Scroll(object sender, EventArgs e)
         {
+          
             ACQ.CurrentChannelZoom[8] = (float)ZoomChan9.Value / 10;
+           
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
         }
 
         private void ZoomChan10_Scroll(object sender, EventArgs e)
         {
+          
             ACQ.CurrentChannelZoom[9] = (float)ZoomChan10.Value / 10;
+           
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
         }
 
         private void ZoomChan11_Scroll(object sender, EventArgs e)
         {
+          
             ACQ.CurrentChannelZoom[10] = (float)ZoomChan11.Value / 10;
+    
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
         }
@@ -2768,7 +2884,9 @@ namespace SeizurePlayback
         private void ZoomChan12_Scroll(object sender, EventArgs e)
 
         {
+      
             ACQ.CurrentChannelZoom[11] = (float)ZoomChan12.Value / 10;
+           
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
         }
@@ -2797,11 +2915,6 @@ namespace SeizurePlayback
 
 
             Redraw = true;
-        }
-
-        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-
         }
 
         private void label16_Click(object sender, EventArgs e)

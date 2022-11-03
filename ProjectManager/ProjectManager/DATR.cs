@@ -126,8 +126,9 @@ namespace ProjectManager
             TData = new Int32[SampleSize];
             int xOff = 2;
             if (drawMode == 1) xOff = 1;
-            ReadData(offset);
+            long averageLine = ReadData(offset, 0) / expectedSampleSize;
             float YDraw;
+            
             WaveC = new PointF[expectedSampleSize];
             YDraw = (Ymax / (numPerPage / 2)) * Y;
             if (SampleSize < expectedSampleSize)
@@ -142,12 +143,16 @@ namespace ProjectManager
 
                     if (i < DiffF)
                     {
-                        YPoint = Ymax / numPerPage / 2 + yOff - 40;
+                        //YPoint = Ymax / numPerPage / 2 + yOff - 40;
+                        YPoint = ScaleVoltsToPixel(Convert.ToSingle(averageLine), (Ymax / (float)(numPerPage / 2)));
+                        YPoint += yOff;
 
                     }
                     else if (i >= SampleSize + DiffF)
                     {
-                        YPoint = Ymax / numPerPage / 2 + yOff - 40;
+                        //YPoint = Ymax / numPerPage / 2 + yOff - 40;
+                        YPoint = ScaleVoltsToPixel(Convert.ToSingle(averageLine), (Ymax / (float)(numPerPage / 2)));
+                        YPoint += yOff;
                     }
                     else
                     {
@@ -244,17 +249,17 @@ namespace ProjectManager
 
         }
 
-        public bool ReadData(long pos)
+        public long ReadData(long pos, long average)
         {
             FILES.Seek(pos, 0);
 
             for (int i = 0; i < SampleSize; i++)
             {
-                if (i + pos > EOF) return false;
+                if (i + pos > EOF) return average;
                 TData[i] = FID.ReadInt32();
-
+                average += TData[i];
             }
-            return true;
+            return average;
         }
 
 
