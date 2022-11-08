@@ -615,6 +615,7 @@ namespace SeizurePlayback
 
                         case Keys.NumPad4:
                         case Keys.Left:
+                            Scrolling = true;
                             ACQ.Position = Math.Max(0, ACQ.Position - ((int)MaxDispSize / 10));
 
                             //if (player != null) player.seek(Math.Max(0, Math.Floor(player.getpos() - (long)(MaxDispSize / 10) * 1000l)));
@@ -637,12 +638,13 @@ namespace SeizurePlayback
                                 SeekToCurrentPos();
 
                             }
-                            Scrolling = true;
+                            
                             Step += MaxDispSize;
                             break;
                         case Keys.NumPad6:
                         case Keys.Right:
                             if (Scrolling) return;
+                            Scrolling = true;
                             ACQ.Position = Math.Min(ACQ.TotFileTime, ACQ.Position + ((int)MaxDispSize / 10));
 
                             // if (player != null) 
@@ -669,7 +671,7 @@ namespace SeizurePlayback
                                 
                             }
 
-                            Scrolling = true;
+                            
                             Step += MaxDispSize;
                             
                             
@@ -721,10 +723,12 @@ namespace SeizurePlayback
                         switch (e.KeyCode)
                         {
 
-                            case Keys.NumPad4:
+                            case Keys.NumPad2:
+                            case Keys.Down:
                                 Speed = Math.Max(0.1f, Speed - 0.1f);
                                 break;
-                            case Keys.NumPad6:
+                            case Keys.NumPad8:
+                            case Keys.Up:
                                 Speed = Math.Min(2f, Speed + 0.1f);
                                 break;
                             case Keys.NumPad5:
@@ -733,30 +737,32 @@ namespace SeizurePlayback
                                 break;
                         }
                     //}
-                   // else
+                    // else
                     //{
 
-                        //still need to work out bugs
-                        //switch (e.KeyCode)
-                        //{
+                    //still need to work out bugs
+                    //switch (e.KeyCode)
+                    //{
 
-                        //    case Keys.NumPad4:
-                        //        if (RTSpeed <= 1) return;
-                        //        CalcRTSpeed(false);
-                        //        ChangeVidSpeed();
-                        //        break;
-                        //    case Keys.NumPad6:
-                        //        if (RTSpeed > 10) return;
-                        //        CalcRTSpeed(true);
-                        //        ChangeVidSpeed();
-                        //        break;
-                        //    case Keys.NumPad5:
+                    //    case Keys.NumPad4:
+                    //        if (RTSpeed <= 1) return;
+                    //        CalcRTSpeed(false);
+                    //        ChangeVidSpeed();
+                    //        break;
+                    //    case Keys.NumPad6:
+                    //        if (RTSpeed > 10) return;
+                    //        CalcRTSpeed(true);
+                    //        ChangeVidSpeed();
+                    //        break;
+                    //    case Keys.NumPad5:
 
-                        //        Pause_Click(null, null);
-                        //        break;
+                    //        Pause_Click(null, null);
+                    //        break;
 
-                        //}
-                   // }
+                    //}
+                    // }
+
+                    
                         
                 }
             } else
@@ -1529,8 +1535,8 @@ namespace SeizurePlayback
             OffsetBox.Enabled = false;
             VideoSpeedLabel.Text = "| |";
             RealTime = false;
-            if (player != null)
-                player.Stop();
+            if (player != null) player.Dispose();
+            player = null;
             Paused = false;
 
         }
@@ -3001,6 +3007,26 @@ namespace SeizurePlayback
                 this.VideoFix.FlatStyle = FlatStyle.Popup;
                 MessageBox.Show("Video Fix is Disabled For this File. Channels are Correct. \n \t \t No Action Required", "Video Fix Unnecessary", MessageBoxButtons.OK);
                 
+            }
+        }
+
+        private void SwitchChan_MouseHover(object sender, EventArgs e)
+        {
+            if (!SwitchChan.Checked)
+            {
+                if (ACQ.TextBackBrush.Color == Color.Black) return;
+                ACQ.TextBackBrush.Color = Color.Black;
+                Redraw = true;
+            }
+        }
+
+        private void SwitchChan_MouseLeave(object sender, EventArgs e)
+        {
+            if (!SwitchChan.Checked)
+            {
+               
+                ACQ.TextBackBrush.Color = Color.Transparent;
+                Redraw = true;
             }
         }
 

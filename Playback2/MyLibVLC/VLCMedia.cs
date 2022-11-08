@@ -82,7 +82,7 @@ namespace SeizurePlayback
             LibVlc.libvlc_media_player_pause(Handle);
 
             if (playing)
-                paused ^= true;
+                paused = true;
         }
 
         public void Stop()

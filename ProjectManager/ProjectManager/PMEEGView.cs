@@ -240,9 +240,7 @@ namespace ProjectManager
             int tY1;
             int tY2;
             
-            NotesSection.ResetText();
-            ANLabel.ResetText();
-            RacineLabel.ResetText();
+            
 
             paused = true;
             threadLock = true;
@@ -253,7 +251,7 @@ namespace ProjectManager
 
 
 
-            if (ViewMode == 1)
+            if (ViewMode == 1 || ViewMode == 2)
             {
                 tX1 = GalArea.Location.X;
                 tX2 = GalArea.Location.X + GalArea.Width;
@@ -267,11 +265,12 @@ namespace ProjectManager
                 tY1 = graph.Y1;
                 tY2 = graph.Y2;
             }
-
+            
 
             if ((e.X >= tX1) && (e.X < tX2) && (e.Y >= tY1) && ((e.Y < tY2)))
             {
-
+                int Y = (e.Y - tY1);
+                int temp;
                 int X = 0;
                 int XSplit = 1;
                 if (ViewMode == 0)
@@ -284,14 +283,12 @@ namespace ProjectManager
                 }
 
 
-                int Y = (e.Y - tY1);
-                Y = Y / ((tY2 - tY1) / (numPerPage / XSplit));
+                
+                
 
-
-                int temp = pageNum * numPerPage + (Y * 2) + X;
-
-                if (ViewMode == 1)
+                else if (ViewMode == 1)
                 {
+                    Y = Y / ((tY2 - tY1) / (numPerPage / XSplit));
                     temp = pageNum * numPerPage + Y + X;
                     position = 0;
 
@@ -301,6 +298,9 @@ namespace ProjectManager
                         selected = -1;
                         seconds = -1;
                         EditNotesButton.Enabled = false;
+                        NotesSection.ResetText();
+                        ANLabel.ResetText();
+                        RacineLabel.ResetText();
                         CurrentAnimal = -1;
                     }
                     else
@@ -310,6 +310,9 @@ namespace ProjectManager
                         Offset[temp].Selected = true;
                         ListViewItem tempL = new ListViewItem();
                         ANLabel.Text = (Animals[Offset[temp].AnimalIndex].ID);
+                        NotesSection.ResetText();
+                        ANLabel.ResetText();
+                        RacineLabel.ResetText();
                         RacineLabel.Text = (Animals[Offset[temp].AnimalIndex].Sz[Offset[temp].SZNum].Severity.ToString());
                         NotesSection.Text = Animals[Offset[temp].AnimalIndex].Sz[Offset[temp].SZNum].Notes;
                         EditNotesButton.Enabled = true;
@@ -394,7 +397,7 @@ namespace ProjectManager
 
                         if (myVLC.MediaPlayer.IsPlaying)
                         {
-                            Thread.Sleep(50);
+                            Thread.Sleep(100);
                             myVLC.MediaPlayer.Pause();
                             Console.WriteLine("Needs Pause");
                         }
@@ -613,6 +616,7 @@ namespace ProjectManager
 
             while (true)
             {
+
 
                 if (!threadLock)
                 {
@@ -964,12 +968,15 @@ namespace ProjectManager
             }
             else if (mode == 1)
             {
-                graph.X2 = this.GVGrouping.Location.X - 20;
-                graph.Y2 = this.BottomLabel.Location.Y - 10;
+                graph.X2 = this.GalArea.Width;
+                graph.Y2 = this.GalArea.Height;
 
+                if (g != null) g.Dispose();
+                if (Gg != null) Gg.Dispose();
 
                 g = this.CreateGraphics();
-                DAT.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);
+                Gg = GalGBox.CreateGraphics();
+                DAT.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1, GalGBox.Size.Width, GalGBox.Size.Height);
 
 
             }
@@ -1448,10 +1455,18 @@ namespace ProjectManager
             S5Label.Text = s5.ToString();
             TotalSLabel.Text = tot.ToString();
 
+            Redraw = true;
             UpdateDisplay();
 
 
 
+        }
+
+        private void PMEEGView_ResizeEnd_2(object sender, EventArgs e)
+        {
+            GraphResize(ViewMode);
+            Redraw = true;
+            UpdateDisplay();
         }
 
 

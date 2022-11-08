@@ -733,6 +733,8 @@ namespace SeizurePlayback
             this.SwitchChan.Text = "Channel Name Switch";
             this.SwitchChan.UseVisualStyleBackColor = true;
             this.SwitchChan.CheckedChanged += new System.EventHandler(this.SwitchChan_CheckedChanged);
+            this.SwitchChan.MouseLeave += new System.EventHandler(this.SwitchChan_MouseLeave);
+            this.SwitchChan.MouseHover += new System.EventHandler(this.SwitchChan_MouseHover);
             // 
             // comboBox1
             // 

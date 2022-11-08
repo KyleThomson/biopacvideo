@@ -79,9 +79,10 @@ namespace SeizurePlayback
         public float[] CurrentChannelZoom;
         public bool MasterZoom = true;
         public int TelemHLOffset = 0;
-        
+        public SolidBrush TextBackBrush = new SolidBrush(Color.Transparent);
 
-        
+
+
         public ACQReader()
         {
             Zoom = 1; 
@@ -478,7 +479,7 @@ namespace SeizurePlayback
             PointF[][] WaveC;
             Font F = new Font("Arial", 10);
             SolidBrush B = new SolidBrush(Color.Red);
-            SolidBrush C = new SolidBrush(Color.Black);
+            
             try
             {
              g.Clear(Color.White);
@@ -570,12 +571,12 @@ namespace SeizurePlayback
                         PointF temp = new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans));
                         if (ChanID)
                         {
-                            g.FillRectangle(C, new Rectangle((int)temp.X, (int)temp.Y, 70, 20));
+                            g.FillRectangle(TextBackBrush, new Rectangle((int)temp.X, (int)temp.Y, 70, 20));
                             g.DrawString(ID2[j], F, B, new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans)));
                         }
                         else
                         {
-                            //g.FillRectangle(C, new Rectangle((int)temp.X, (int)temp.Y, 65, 20));
+                            g.FillRectangle(TextBackBrush, new Rectangle((int)temp.X, (int)temp.Y, 70, 20));
                             g.DrawString(ID[j], F, B, new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans)));
                         }
 
@@ -633,6 +634,7 @@ namespace SeizurePlayback
 
             if (check)
             {
+                TextBackBrush.Color = Color.Black;
                 ChanID = true;
             }
             if (!check)
