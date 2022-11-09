@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Threading;
-
+using Accord;
 
 namespace ProjectManager
 {
@@ -896,7 +896,12 @@ namespace ProjectManager
                         vidCop += "\\Videos\\" + Animals[CurrentAnimal].ID + "-" + Animals[CurrentAnimal].Sz.Count + type;
                         S.VidString = Animals[CurrentAnimal].ID + "-" + Animals[CurrentAnimal].Sz.Count + type;
 
+                    
+                        
                         File.Copy(tempVid, vidCop);
+                        Console.WriteLine(ThreadPool.QueueUserWorkItem(MoveVidThread, new object[] {tempVid, vidCop}));
+                        
+                        
                     }
                         
                     
@@ -912,6 +917,14 @@ namespace ProjectManager
 
             }
             TmpTxt.Close();
+        }
+
+        public static void MoveVidThread(object obj)
+        {
+
+            Console.WriteLine(obj.GetType());
+
+
         }
 
         public long loadDats(string Path)

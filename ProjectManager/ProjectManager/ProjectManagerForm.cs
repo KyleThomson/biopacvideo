@@ -489,10 +489,19 @@ namespace ProjectManager
             Frm.ShowDialog();
             if (Frm.Pass)
             {
+                DirectoryLoadBar.Visible = true;
+                DirectoryLoadBar.Value = 0;
+                DirectoryLoadBar.Maximum = Frm.DirReturn.Length * 2;
+                DirectoryLoadText.Visible = true;
+                DirectoryLoadText.Text = $"Loading: 1 / {Frm.DirReturn.Length} (Please Wait!)";
+                
                 var moveVid = MessageBox.Show("You must import videos to view them, would you like to import videos?", "Video Importer", MessageBoxButtons.YesNo);
                 //BigDAT = new StreamReader
                 for (int i = 0; i < Frm.DirReturn.Length; i++)
                 {
+                    DirectoryLoadText.Text = $"Loading: {i + 1} / {Frm.DirReturn.Length} (Please Wait!)";
+                    if (DirectoryLoadBar.Value == DirectoryLoadBar.Maximum) DirectoryLoadBar.Value -= 2;
+                    DirectoryLoadBar.Value++;
                     //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
                     int result = pjt.ImportDirectory(Frm.DirReturn[i], this.rejectUnreviewedFilesToolStripMenuItem.Checked, moveVid == DialogResult.Yes);
                     if (result == 2)
@@ -510,7 +519,12 @@ namespace ProjectManager
                         // The file was imported into the current .pjt file
                         SuccessfullyImportedDirectory++;
                     }
+                    DirectoryLoadBar.Value++;
                 }
+                DirectoryLoadBar.Visible = false;
+                DirectoryLoadText.Visible = false;
+                DirectoryLoadBar.Value = 0;
+                DirectoryLoadText.Text = "";
                 pjt.FileChanged();
 
                 //show total number of DATS in BigDAT

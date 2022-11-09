@@ -62,6 +62,8 @@
             this.SecondSelect = new System.Windows.Forms.ComboBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.Info = new System.Windows.Forms.ToolStripStatusLabel();
+            this.DirectoryLoadBar = new System.Windows.Forms.ProgressBar();
+            this.DirectoryLoadText = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -290,7 +292,7 @@
             // 
             this.eEGViewToolStripMenuItem.Enabled = false;
             this.eEGViewToolStripMenuItem.Name = "eEGViewToolStripMenuItem";
-            this.eEGViewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.eEGViewToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.eEGViewToolStripMenuItem.Text = "EEG View";
             this.eEGViewToolStripMenuItem.Click += new System.EventHandler(this.eEGViewToolStripMenuItem_Click);
             // 
@@ -352,11 +354,31 @@
             this.Info.Size = new System.Drawing.Size(163, 17);
             this.Info.Text = "                                                    ";
             // 
+            // DirectoryLoadBar
+            // 
+            this.DirectoryLoadBar.Location = new System.Drawing.Point(12, 350);
+            this.DirectoryLoadBar.Name = "DirectoryLoadBar";
+            this.DirectoryLoadBar.Size = new System.Drawing.Size(213, 18);
+            this.DirectoryLoadBar.TabIndex = 11;
+            this.DirectoryLoadBar.Visible = false;
+            // 
+            // DirectoryLoadText
+            // 
+            this.DirectoryLoadText.AutoSize = true;
+            this.DirectoryLoadText.Location = new System.Drawing.Point(229, 353);
+            this.DirectoryLoadText.Name = "DirectoryLoadText";
+            this.DirectoryLoadText.Size = new System.Drawing.Size(134, 13);
+            this.DirectoryLoadText.TabIndex = 12;
+            this.DirectoryLoadText.Text = "Loading: 0/0 (Please Wait)";
+            this.DirectoryLoadText.Visible = false;
+            // 
             // ProjectManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(555, 393);
+            this.Controls.Add(this.DirectoryLoadText);
+            this.Controls.Add(this.DirectoryLoadBar);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.SecondSelect);
             this.Controls.Add(this.MainSelect);
@@ -413,5 +435,7 @@
         private System.Windows.Forms.ToolStripMenuItem rejectUnreviewedFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem eEGViewToolStripMenuItem;
+        public System.Windows.Forms.ProgressBar DirectoryLoadBar;
+        public System.Windows.Forms.Label DirectoryLoadText;
     }
 }
