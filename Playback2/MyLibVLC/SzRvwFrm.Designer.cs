@@ -108,7 +108,7 @@
             // Length
             // 
             this.Length.Text = "(s)";
-            this.Length.Width = 35;
+            this.Length.Width = 73;
             // 
             // Notes
             // 

@@ -91,7 +91,10 @@ namespace SeizurePlayback
         public int RTSpeed = 1;
         int driftTrack = 0;
         public bool Scrolling = false;
-        public bool VidFixEnable = true;
+        public bool VidFixDisabled = false;
+        bool[] ZoomDif = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
+        
+         
         
         
         
@@ -112,7 +115,7 @@ namespace SeizurePlayback
             FastReviewChange = false;
             ButtonLoc = new int[3, 2] { { this.FastReview.Location.X, this.FastReview.Location.Y }, { this.button3.Location.X, this.button3.Location.Y }, { this.button2.Location.X, this.button2.Location.Y } };
             
-            ChanZooms = new TrackBar[] { ZoomChan1, ZoomChan2, ZoomChan3, ZoomChan4, ZoomChan5, ZoomChan6, ZoomChan7, ZoomChan8, ZoomChan9, ZoomChan10, ZoomChan11, ZoomChan12 };
+            ChanZooms = new TrackBar[] { ZoomChan1, ZoomChan2, ZoomChan3, ZoomChan4, ZoomChan5, ZoomChan6, ZoomChan7, ZoomChan8, ZoomChan9, ZoomChan10, ZoomChan11, ZoomChan12, ZoomChan13, ZoomChan14, ZoomChan15, ZoomChan16};
 
             //foreach (Control control in this.Controls)
             //{
@@ -287,7 +290,8 @@ namespace SeizurePlayback
             CrashWarning = F.IniReadValue("General", "Crash", false);
             Compressed = F.IniReadValue("Review", "Compressed", false);
             
-            VidFixEnable = F.IniReadValue("BioPac", "VideoFix", true);
+            VidFixDisabled = F.IniReadValue("BioPac", "VideoFixDisabled", false);
+            
             
            
             
@@ -1003,10 +1007,10 @@ namespace SeizurePlayback
                 //ACQ = new ACQReader();
                 //ACQ.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1, FRZoomBlock.Location.Y - 20);
 
-                //var ex = MessageBox.Show("In order to open a new EEG, you must restart the application. \n \t \t Would you like to exit?", "Restart", MessageBoxButtons.OKCancel);
+                var ex = MessageBox.Show("In order to open a new EEG, you must restart the application. \n \t \t Would you like to exit?", "Restart", MessageBoxButtons.OKCancel);
 
-                //if (ex == DialogResult.OK) Application.Restart(); //for now, until I can figure out what's wrong with the load
-                //return;
+                if (ex == DialogResult.OK) Application.Restart(); //for now, until I can figure out what's wrong with the load
+                else return;
                 //player = null;
                 //g.Clear(Color.Black);
             }
@@ -1242,6 +1246,7 @@ namespace SeizurePlayback
                 }
                 SzTxt.AutoFlush = true;
                 SuppressChange = true;
+                Console.WriteLine("ACQ Chans: " + ACQ.Chans.ToString());
                 for (int i = 0; i < ACQ.Chans; i++)
                 {
                     VisChecks[i].Checked = true;
@@ -1250,6 +1255,13 @@ namespace SeizurePlayback
                 for (int i = ACQ.Chans; i < 16; i++)
                 {
                     VisChecks[i].Visible = false;
+                    ChanZooms[i].Visible = false;
+
+                    if (i == 12) ZoomChan13Label.Visible = false;
+                    if (i == 13) ZoomChan14Label.Visible = false;
+                    if (i == 14) ZoomChan15Label.Visible = false;
+                    if (i == 15) ZoomChan16Label.Visible = false;
+
                 }
                 SuppressChange = false;
                 INISave();
@@ -1278,6 +1290,8 @@ namespace SeizurePlayback
                 }
             }
             if (ACQ.Loaded) ACQ.drawbuffer();
+
+            
 
             if (wasLoaded)
             {
@@ -1443,7 +1457,7 @@ namespace SeizurePlayback
             }
             else
             {
-                if (this.VideoFix.Checked && VidFixEnable)
+                if (this.VideoFix.Checked && !VidFixDisabled)
                 {
                     int FixedChan = 0;
                     
@@ -1743,72 +1757,106 @@ namespace SeizurePlayback
 
             if (!FastReviewState)
             {
-                ACQ.Zoom = (float)ZoomScale.Value / 10;
-                FRZoomBar.Value = ZoomScale.Value;
-                Redraw = true;
+                
 
 
                 if (!ACQ.MasterZoom)
                 {
 
+                    ACQ.Zoom = (float)ZoomScale.Value / 10f;
 
-
-                    if (ZoomScale.Value == ZoomChan1.Value)
+                    if (!ZoomDif[0])
                     {
                         ZoomChan1.Value = ZoomScale.Value;
+                        ACQ.CurrentChannelZoom[0] = ACQ.Zoom;
                     }
-                    if (ZoomScale.Value == ZoomChan2.Value)
+                    if (!ZoomDif[1])
                     {
                         ZoomChan2.Value = ZoomScale.Value;
+                        ACQ.CurrentChannelZoom[1] = ACQ.Zoom;
                     }
-                    if (ZoomScale.Value == ZoomChan3.Value)
+                    if (!ZoomDif[2])
                     {
                         ZoomChan3.Value = ZoomScale.Value;
+                        ACQ.CurrentChannelZoom[2] = ACQ.Zoom;
                     }
-                    if (ZoomScale.Value == ZoomChan4.Value)
+                    if (!ZoomDif[3])
                     {
                         ZoomChan4.Value = ZoomScale.Value;
+                        ACQ.CurrentChannelZoom[3] = ACQ.Zoom;
                     }
-                    if (ZoomScale.Value == ZoomChan5.Value)
+                    if (!ZoomDif[4])
                     {
                         ZoomChan5.Value = ZoomScale.Value;
+                        ACQ.CurrentChannelZoom[4] = ACQ.Zoom;
                     }
-                    if (ZoomScale.Value == ZoomChan6.Value)
+                    if (!ZoomDif[5])
                     {
                         ZoomChan6.Value = ZoomScale.Value;
+                        ACQ.CurrentChannelZoom[5] = ACQ.Zoom;
                     }
-                    if (ZoomScale.Value == ZoomChan7.Value)
+                    if (!ZoomDif[6])
                     {
                         ZoomChan7.Value = ZoomScale.Value;
+                        ACQ.CurrentChannelZoom[6] = ACQ.Zoom;
                     }
-                    if (ZoomScale.Value == ZoomChan8.Value)
+                    if (!ZoomDif[7])
                     {
                         ZoomChan8.Value = ZoomScale.Value;
+                        ACQ.CurrentChannelZoom[7] = ACQ.Zoom;
                     }
-                    if (ZoomScale.Value == ZoomChan9.Value)
+                    if (!ZoomDif[8])
                     {
                         ZoomChan9.Value = ZoomScale.Value;
+                        ACQ.CurrentChannelZoom[8] = ACQ.Zoom;
                     }
-                    if (ZoomScale.Value == ZoomChan10.Value)
+                    if (!ZoomDif[9])
                     {
                         ZoomChan10.Value = ZoomScale.Value;
+                        ACQ.CurrentChannelZoom[9] = ACQ.Zoom;
                     }
-                    if (ZoomScale.Value == ZoomChan11.Value)
+                    if (!ZoomDif[10])
                     {
                         ZoomChan11.Value = ZoomScale.Value;
+                        ACQ.CurrentChannelZoom[10] = ACQ.Zoom;
                     }
-                    if (ZoomScale.Value == ZoomChan12.Value)
+                    if (!ZoomDif[11])
                     {
                         ZoomChan12.Value = ZoomScale.Value;
+                        ACQ.CurrentChannelZoom[11] = ACQ.Zoom;
+                    }
+                    if (!ZoomDif[12])
+                    {
+                        ZoomChan13.Value = ZoomScale.Value;
+                        ACQ.CurrentChannelZoom[12] = ACQ.Zoom;
+                    }
+                    if (!ZoomDif[13])
+                    {
+                        ZoomChan14.Value = ZoomScale.Value;
+                        ACQ.CurrentChannelZoom[13] = ACQ.Zoom;
+                    }
+                    if (!ZoomDif[14])
+                    {
+                        ZoomChan15.Value = ZoomScale.Value;
+                        ACQ.CurrentChannelZoom[14] = ACQ.Zoom;
+                    }
+                    if (!ZoomDif[15])
+                    {
+                        ZoomChan16.Value = ZoomScale.Value;
+                        ACQ.CurrentChannelZoom[15] = ACQ.Zoom;
                     }
 
                 }
+
+                ACQ.Zoom = (float)FRZoomBar.Value / 10f;
+                FRZoomBar.Value = ZoomScale.Value;
+                Redraw = true;
 
 
             }
             if (FastReviewState)
             {
-                ACQ.Zoom = (float)FRZoomBar.Value / 10;
+                ACQ.Zoom = (float)FRZoomBar.Value / 10f;
 
   
 
@@ -2223,6 +2271,7 @@ namespace SeizurePlayback
         {
             ACQ.Telemetry = TelemetryBox.Checked;
             INISave();
+            Redraw = true;
         }
 
 
@@ -2584,7 +2633,11 @@ namespace SeizurePlayback
                         //    ACQ.CurrentChannelZoom[i] = ACQ.Zoom;
                         //}
 
-                        ACQ.MasterZoom = false;
+                        for (int i = 0; i < 12; i++)
+                        {
+                            ZoomDif[i] = false;
+                        }
+
                         ZoomChan1.Value = ZoomScale.Value;
                         ZoomChan2.Value = ZoomScale.Value;
                         ZoomChan3.Value = ZoomScale.Value;
@@ -2597,6 +2650,14 @@ namespace SeizurePlayback
                         ZoomChan10.Value = ZoomScale.Value;
                         ZoomChan11.Value = ZoomScale.Value;
                         ZoomChan12.Value = ZoomScale.Value;
+                        ZoomChan13.Value = ZoomScale.Value;
+                        ZoomChan14.Value = ZoomScale.Value;
+                        ZoomChan15.Value = ZoomScale.Value;
+                        ZoomChan16.Value = ZoomScale.Value;
+                        
+                        
+
+                        ACQ.MasterZoom = false;
 
                         ZoomChanPanel.Show();
                         ZoomChanPanel.Enabled = true;
@@ -2628,6 +2689,7 @@ namespace SeizurePlayback
                         comboBox1.Items.Insert(8, "Channel Zoom Control [   ]");
                         //comboBox1.Text = "Channel Zoom Control [   ]";
                         ACQ.MasterZoom = true;
+
                         ACQ.drawbuffer();
                         ZoomChanPanel.Hide();
                         ZoomChanPanel.Enabled = false;
@@ -2750,7 +2812,7 @@ namespace SeizurePlayback
 
         private void SwitchChan_CheckedChanged(object sender, EventArgs e)
         {
-
+            Redraw = true;
         }
 
         //private void ChanZoomCheck_CheckedChanged(object sender, EventArgs e)
@@ -2789,18 +2851,21 @@ namespace SeizurePlayback
 
         private void ZoomChan1_Scroll(object sender, EventArgs e)
         {
-            
-            ACQ.CurrentChannelZoom[0] = (float)ZoomChan1.Value / 10;
+
+            ZoomDif[0] = true;
+            ACQ.CurrentChannelZoom[0] = (float)ZoomChan1.Value / 10f;
             
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
+
+
         }
 
 
         private void ZoomChan2_Scroll(object sender, EventArgs e)
         {
-            
-            ACQ.CurrentChannelZoom[1] = (float)ZoomChan2.Value / 10;
+            ZoomDif[1] = true;
+            ACQ.CurrentChannelZoom[1] = (float)ZoomChan2.Value / 10f;
             
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
@@ -2809,7 +2874,8 @@ namespace SeizurePlayback
 
         private void ZoomChan3_Scroll(object sender, EventArgs e)
         {
-            ACQ.CurrentChannelZoom[2] = (float)ZoomChan3.Value / 10;
+            ZoomDif[2] = true;
+            ACQ.CurrentChannelZoom[2] = (float)ZoomChan3.Value / 10f;
             
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
@@ -2817,8 +2883,8 @@ namespace SeizurePlayback
 
         private void ZoomChan4_Scroll(object sender, EventArgs e)
         {
-            
-            ACQ.CurrentChannelZoom[3] = (float)ZoomChan4.Value / 10;
+            ZoomDif[3] = true;
+            ACQ.CurrentChannelZoom[3] = (float)ZoomChan4.Value / 10f;
             
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
@@ -2826,8 +2892,8 @@ namespace SeizurePlayback
 
         private void ZoomChan5_Scroll(object sender, EventArgs e)
         {
-            
-            ACQ.CurrentChannelZoom[4] = (float)ZoomChan5.Value / 10;
+            ZoomDif[4] = true;
+            ACQ.CurrentChannelZoom[4] = (float)ZoomChan5.Value / 10f;
             
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
@@ -2835,8 +2901,8 @@ namespace SeizurePlayback
 
         private void ZoomChan6_Scroll(object sender, EventArgs e)
         {
-            
-            ACQ.CurrentChannelZoom[5] = (float)ZoomChan6.Value / 10;
+            ZoomDif[5] = true;
+            ACQ.CurrentChannelZoom[5] = (float)ZoomChan6.Value / 10f;
             
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
@@ -2844,8 +2910,8 @@ namespace SeizurePlayback
 
         private void ZoomChan7_Scroll(object sender, EventArgs e)
         {
-            
-            ACQ.CurrentChannelZoom[6] = (float)ZoomChan7.Value / 10;
+            ZoomDif[6] = true;
+            ACQ.CurrentChannelZoom[6] = (float)ZoomChan7.Value / 10f;
             
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
@@ -2853,8 +2919,8 @@ namespace SeizurePlayback
 
         private void ZoomChan8_Scroll(object sender, EventArgs e)
         {
-           
-            ACQ.CurrentChannelZoom[7] = (float)ZoomChan8.Value / 10;
+            ZoomDif[7] = true;
+            ACQ.CurrentChannelZoom[7] = (float)ZoomChan8.Value / 10f;
            
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
@@ -2862,8 +2928,8 @@ namespace SeizurePlayback
 
         private void ZoomChan9_Scroll(object sender, EventArgs e)
         {
-          
-            ACQ.CurrentChannelZoom[8] = (float)ZoomChan9.Value / 10;
+            ZoomDif[8] = true;
+            ACQ.CurrentChannelZoom[8] = (float)ZoomChan9.Value / 10f;
            
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
@@ -2871,8 +2937,8 @@ namespace SeizurePlayback
 
         private void ZoomChan10_Scroll(object sender, EventArgs e)
         {
-          
-            ACQ.CurrentChannelZoom[9] = (float)ZoomChan10.Value / 10;
+            ZoomDif[9] = true;
+            ACQ.CurrentChannelZoom[9] = (float)ZoomChan10.Value / 10f;
            
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
@@ -2880,8 +2946,8 @@ namespace SeizurePlayback
 
         private void ZoomChan11_Scroll(object sender, EventArgs e)
         {
-          
-            ACQ.CurrentChannelZoom[10] = (float)ZoomChan11.Value / 10;
+            ZoomDif[10] = true;
+            ACQ.CurrentChannelZoom[10] = (float)ZoomChan11.Value / 10f;
     
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
@@ -2890,9 +2956,45 @@ namespace SeizurePlayback
         private void ZoomChan12_Scroll(object sender, EventArgs e)
 
         {
-      
-            ACQ.CurrentChannelZoom[11] = (float)ZoomChan12.Value / 10;
+            ZoomDif[11] = true;
+            ACQ.CurrentChannelZoom[11] = (float)ZoomChan12.Value / 10f;
            
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan13_Scroll(object sender, EventArgs e)
+        {
+            ZoomDif[12] = true;
+            ACQ.CurrentChannelZoom[12] = (float)ZoomChan13.Value / 10f;
+
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan14_Scroll(object sender, EventArgs e)
+        {
+            ZoomDif[13] = true;
+            ACQ.CurrentChannelZoom[13] = (float)ZoomChan14.Value / 10f;
+
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan15_Scroll(object sender, EventArgs e)
+        {
+            ZoomDif[14] = true;
+            ACQ.CurrentChannelZoom[14] = (float)ZoomChan15.Value / 10f;
+
+            Redraw = true;
+            if (FastReviewState) FastReviewChange = true;
+        }
+
+        private void ZoomChan16_Scroll(object sender, EventArgs e)
+        {
+            ZoomDif[15] = true;
+            ACQ.CurrentChannelZoom[15] = (float)ZoomChan16.Value / 10f;
+
             Redraw = true;
             if (FastReviewState) FastReviewChange = true;
         }
@@ -2905,6 +3007,7 @@ namespace SeizurePlayback
             for (int i = 0; i < ACQ.CurrentChannelZoom.Length; i++)
             {
                 ACQ.CurrentChannelZoom[i] = 1;
+                ZoomDif[i] = false;
             }
             ZoomChan1.Value = 10;
             ZoomChan2.Value = 10;
@@ -2918,6 +3021,10 @@ namespace SeizurePlayback
             ZoomChan10.Value = 10;
             ZoomChan11.Value = 10;
             ZoomChan12.Value = 10;
+            ZoomChan13.Value = 10;
+            ZoomChan14.Value = 10;
+            ZoomChan15.Value = 10;
+            ZoomChan16.Value = 10;
 
 
             Redraw = true;
@@ -2999,7 +3106,7 @@ namespace SeizurePlayback
 
         private void VideoFix_MouseDown(object sender, MouseEventArgs e)
         {
-            if (!VidFixEnable)
+            if (VidFixDisabled)
             {
                 this.VideoFix.Checked = false;
                 this.VideoFix.Text = "Video Fix [Disabled]";
@@ -3029,6 +3136,8 @@ namespace SeizurePlayback
                 Redraw = true;
             }
         }
+
+
 
         public void loadVid(int chanloop)
         {
@@ -3387,8 +3496,7 @@ namespace SeizurePlayback
                 this.VisChan10.Enabled = false;
                 this.VisChan9.Hide();
                 this.VisChan9.Enabled = false;
-                this.label3.Hide();
-                this.label3.Enabled = false;
+
                 this.SwitchChan.Hide();
                 this.SwitchChan.Enabled = false;
                 this.ZoomScale.Hide();
@@ -3494,24 +3602,28 @@ namespace SeizurePlayback
                 this.VisChan7.Enabled = true;
                 this.VisChan8.Show();
                 this.VisChan8.Enabled = true;
-                this.VisChan16.Show();
-                this.VisChan16.Enabled = true;
-                this.VisChan15.Show();
-                this.VisChan15.Enabled = true;
-                this.VisChan14.Show();
-                this.VisChan14.Enabled = true;
-                this.VisChan13.Show();
-                this.VisChan13.Enabled = true;
-                this.VisChan12.Show();
-                this.VisChan12.Enabled = true;
-                this.VisChan11.Show();
-                this.VisChan11.Enabled = true;
-                this.VisChan10.Show();
-                this.VisChan10.Enabled = true;
                 this.VisChan9.Show();
                 this.VisChan9.Enabled = true;
-                this.label3.Show();
-                this.label3.Enabled = true;
+                this.VisChan10.Show();
+                this.VisChan10.Enabled = true;
+                this.VisChan11.Show();
+                this.VisChan11.Enabled = true;
+                this.VisChan12.Show();
+                this.VisChan12.Enabled = true;
+
+                if (ACQ.Chans > 12)
+                {
+                    this.VisChan16.Show();
+                    this.VisChan16.Enabled = true;
+                    this.VisChan15.Show();
+                    this.VisChan15.Enabled = true;
+                    this.VisChan14.Show();
+                    this.VisChan14.Enabled = true;
+                    this.VisChan13.Show();
+                    this.VisChan13.Enabled = true;
+                }
+
+
                 this.SwitchChan.Show();
                 this.SwitchChan.Enabled = true;
                 this.ZoomScale.Show();

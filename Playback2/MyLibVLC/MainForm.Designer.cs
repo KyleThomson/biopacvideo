@@ -86,6 +86,14 @@ namespace SeizurePlayback
             this.label4 = new System.Windows.Forms.Label();
             this.FRPageNum = new System.Windows.Forms.Label();
             this.ZoomChanPanel = new System.Windows.Forms.Panel();
+            this.ZoomChan16Label = new System.Windows.Forms.Label();
+            this.ZoomChan15Label = new System.Windows.Forms.Label();
+            this.ZoomChan14Label = new System.Windows.Forms.Label();
+            this.ZoomChan13Label = new System.Windows.Forms.Label();
+            this.ZoomChan16 = new System.Windows.Forms.TrackBar();
+            this.ZoomChan15 = new System.Windows.Forms.TrackBar();
+            this.ZoomChan14 = new System.Windows.Forms.TrackBar();
+            this.ZoomChan13 = new System.Windows.Forms.TrackBar();
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -123,6 +131,10 @@ namespace SeizurePlayback
             ((System.ComponentModel.ISupportInitialize)(this.FRZoomBar)).BeginInit();
             this.FRZoomBlock.SuspendLayout();
             this.ZoomChanPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan16)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan15)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan14)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan13)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomChan12)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomChan11)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomChan10)).BeginInit();
@@ -893,7 +905,16 @@ namespace SeizurePlayback
             // 
             this.ZoomChanPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomChanPanel.AutoSize = true;
+            this.ZoomChanPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ZoomChanPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan16Label);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan15Label);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan14Label);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan13Label);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan16);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan15);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan14);
+            this.ZoomChanPanel.Controls.Add(this.ZoomChan13);
             this.ZoomChanPanel.Controls.Add(this.label15);
             this.ZoomChanPanel.Controls.Add(this.label14);
             this.ZoomChanPanel.Controls.Add(this.label13);
@@ -921,9 +942,113 @@ namespace SeizurePlayback
             this.ZoomChanPanel.Enabled = false;
             this.ZoomChanPanel.Location = new System.Drawing.Point(998, 731);
             this.ZoomChanPanel.Name = "ZoomChanPanel";
-            this.ZoomChanPanel.Size = new System.Drawing.Size(416, 112);
+            this.ZoomChanPanel.Size = new System.Drawing.Size(548, 112);
             this.ZoomChanPanel.TabIndex = 73;
             this.ZoomChanPanel.Visible = false;
+            // 
+            // ZoomChan16Label
+            // 
+            this.ZoomChan16Label.AutoSize = true;
+            this.ZoomChan16Label.ForeColor = System.Drawing.Color.White;
+            this.ZoomChan16Label.Location = new System.Drawing.Point(411, 87);
+            this.ZoomChan16Label.Name = "ZoomChan16Label";
+            this.ZoomChan16Label.Size = new System.Drawing.Size(19, 13);
+            this.ZoomChan16Label.TabIndex = 79;
+            this.ZoomChan16Label.Text = "16";
+            // 
+            // ZoomChan15Label
+            // 
+            this.ZoomChan15Label.AutoSize = true;
+            this.ZoomChan15Label.ForeColor = System.Drawing.Color.White;
+            this.ZoomChan15Label.Location = new System.Drawing.Point(411, 59);
+            this.ZoomChan15Label.Name = "ZoomChan15Label";
+            this.ZoomChan15Label.Size = new System.Drawing.Size(19, 13);
+            this.ZoomChan15Label.TabIndex = 80;
+            this.ZoomChan15Label.Text = "15";
+            // 
+            // ZoomChan14Label
+            // 
+            this.ZoomChan14Label.AutoSize = true;
+            this.ZoomChan14Label.ForeColor = System.Drawing.Color.White;
+            this.ZoomChan14Label.Location = new System.Drawing.Point(411, 31);
+            this.ZoomChan14Label.Name = "ZoomChan14Label";
+            this.ZoomChan14Label.Size = new System.Drawing.Size(19, 13);
+            this.ZoomChan14Label.TabIndex = 81;
+            this.ZoomChan14Label.Text = "14";
+            // 
+            // ZoomChan13Label
+            // 
+            this.ZoomChan13Label.AutoSize = true;
+            this.ZoomChan13Label.ForeColor = System.Drawing.Color.White;
+            this.ZoomChan13Label.Location = new System.Drawing.Point(411, 3);
+            this.ZoomChan13Label.Name = "ZoomChan13Label";
+            this.ZoomChan13Label.Size = new System.Drawing.Size(19, 13);
+            this.ZoomChan13Label.TabIndex = 82;
+            this.ZoomChan13Label.Text = "13";
+            // 
+            // ZoomChan16
+            // 
+            this.ZoomChan16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChan16.AutoSize = false;
+            this.ZoomChan16.CausesValidation = false;
+            this.ZoomChan16.Location = new System.Drawing.Point(424, 87);
+            this.ZoomChan16.Maximum = 20;
+            this.ZoomChan16.Minimum = 1;
+            this.ZoomChan16.Name = "ZoomChan16";
+            this.ZoomChan16.Size = new System.Drawing.Size(119, 22);
+            this.ZoomChan16.TabIndex = 78;
+            this.ZoomChan16.TabStop = false;
+            this.ZoomChan16.Tag = "12";
+            this.ZoomChan16.Value = 10;
+            this.ZoomChan16.Scroll += new System.EventHandler(this.ZoomChan16_Scroll);
+            // 
+            // ZoomChan15
+            // 
+            this.ZoomChan15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChan15.AutoSize = false;
+            this.ZoomChan15.CausesValidation = false;
+            this.ZoomChan15.Location = new System.Drawing.Point(424, 59);
+            this.ZoomChan15.Maximum = 20;
+            this.ZoomChan15.Minimum = 1;
+            this.ZoomChan15.Name = "ZoomChan15";
+            this.ZoomChan15.Size = new System.Drawing.Size(119, 22);
+            this.ZoomChan15.TabIndex = 77;
+            this.ZoomChan15.TabStop = false;
+            this.ZoomChan15.Tag = "11";
+            this.ZoomChan15.Value = 10;
+            this.ZoomChan15.Scroll += new System.EventHandler(this.ZoomChan15_Scroll);
+            // 
+            // ZoomChan14
+            // 
+            this.ZoomChan14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChan14.AutoSize = false;
+            this.ZoomChan14.CausesValidation = false;
+            this.ZoomChan14.Location = new System.Drawing.Point(424, 31);
+            this.ZoomChan14.Maximum = 20;
+            this.ZoomChan14.Minimum = 1;
+            this.ZoomChan14.Name = "ZoomChan14";
+            this.ZoomChan14.Size = new System.Drawing.Size(119, 22);
+            this.ZoomChan14.TabIndex = 76;
+            this.ZoomChan14.TabStop = false;
+            this.ZoomChan14.Tag = "10";
+            this.ZoomChan14.Value = 10;
+            this.ZoomChan14.Scroll += new System.EventHandler(this.ZoomChan14_Scroll);
+            // 
+            // ZoomChan13
+            // 
+            this.ZoomChan13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ZoomChan13.AutoSize = false;
+            this.ZoomChan13.CausesValidation = false;
+            this.ZoomChan13.Location = new System.Drawing.Point(424, 3);
+            this.ZoomChan13.Maximum = 20;
+            this.ZoomChan13.Minimum = 1;
+            this.ZoomChan13.Name = "ZoomChan13";
+            this.ZoomChan13.Size = new System.Drawing.Size(119, 22);
+            this.ZoomChan13.TabIndex = 75;
+            this.ZoomChan13.TabStop = false;
+            this.ZoomChan13.Tag = "9";
+            this.ZoomChan13.Value = 10;
+            this.ZoomChan13.Scroll += new System.EventHandler(this.ZoomChan13_Scroll);
             // 
             // label15
             // 
@@ -1384,7 +1509,7 @@ namespace SeizurePlayback
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "CManage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Seizure Video Playback";
+            this.Text = " ";
             this.TransparencyKey = System.Drawing.Color.Purple;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
@@ -1397,6 +1522,10 @@ namespace SeizurePlayback
             this.FRZoomBlock.PerformLayout();
             this.ZoomChanPanel.ResumeLayout(false);
             this.ZoomChanPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan16)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan15)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan14)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomChan13)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomChan12)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomChan11)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomChan10)).EndInit();
@@ -1506,6 +1635,14 @@ namespace SeizurePlayback
         private System.Windows.Forms.FlowLayoutPanel Rewind_ChangeBox;
         private System.Windows.Forms.Label VideoSpeedLabel;
         private System.Windows.Forms.Button ShortcutButton;
+        private System.Windows.Forms.Label ZoomChan16Label;
+        private System.Windows.Forms.Label ZoomChan15Label;
+        private System.Windows.Forms.Label ZoomChan14Label;
+        private System.Windows.Forms.Label ZoomChan13Label;
+        public System.Windows.Forms.TrackBar ZoomChan16;
+        public System.Windows.Forms.TrackBar ZoomChan15;
+        public System.Windows.Forms.TrackBar ZoomChan14;
+        public System.Windows.Forms.TrackBar ZoomChan13;
     }
 }
 

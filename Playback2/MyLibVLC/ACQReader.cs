@@ -193,7 +193,7 @@ namespace SeizurePlayback
                 {
                     YPoint = ScaleVoltsToPixel(Convert.ToSingle(data[Channel - 1][i]), (FRYmax / (float)(numPerPage / 2))); // -(Ymax / (float)16) 
                     YPoint += (float)FRYmax / (float)frepos;
-                    if (YPoint > FRYmax / (numPerPage/2)) YPoint = (FRYmax / (numPerPage / 2));        //Kyle's Mistake                                                                        
+                    if (YPoint > FRYmax / (numPerPage/2)) YPoint = (FRYmax / (numPerPage / 2));                                                                               
                     if (YPoint < 0) YPoint = 0;
                     PointF TempPoint = new PointF((float)(i + (X*SampleSize)) * PointSpacing, YDraw + YPoint);
                     WaveC[i] = TempPoint;
