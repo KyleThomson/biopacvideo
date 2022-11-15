@@ -16,44 +16,15 @@ namespace SeizurePlayback
             InitializeComponent();
         }
 
-        private void eEGManualReviewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (eEGManualReviewToolStripMenuItem.Checked) return;
-            
-            eEGManualReviewToolStripMenuItem.Checked = false;
-            eEGFastReviewToolStripMenuItem.Checked = true;
-            MRSC.Show();
-            FRSC.Hide();
-            
-
-
-
-        }
 
         public void switchGuide()
         {
 
         }
 
-        private void ShortGuide_Load(object sender, EventArgs e)
+        private void label19_Click(object sender, EventArgs e)
         {
 
         }
-
-        private void eEGFastReviewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-            if (eEGFastReviewToolStripMenuItem.Checked) return;
-            
-                
-                eEGFastReviewToolStripMenuItem.Checked = false;
-                eEGManualReviewToolStripMenuItem.Checked = true;
-            FRSC.Show();
-            MRSC.Hide();
-            
-            
-                
-            
-}
     }
 }

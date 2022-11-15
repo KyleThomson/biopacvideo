@@ -120,11 +120,11 @@ namespace SeizurePlayback
             this.ZoomChan1 = new System.Windows.Forms.TrackBar();
             this.ColorClear = new System.Windows.Forms.Label();
             this.MoreOp = new System.Windows.Forms.Label();
-            this.Rewind_Dec = new System.Windows.Forms.Button();
-            this.Rewind_Inc = new System.Windows.Forms.Button();
-            this.Rewind_ChangeBox = new System.Windows.Forms.FlowLayoutPanel();
             this.VideoSpeedLabel = new System.Windows.Forms.Label();
             this.ShortcutButton = new System.Windows.Forms.Button();
+            this.Rewind_ChangeBox = new System.Windows.Forms.FlowLayoutPanel();
+            this.Rewind_Dec = new System.Windows.Forms.Button();
+            this.Rewind_Inc = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.FRButtonGroup.SuspendLayout();
@@ -1384,39 +1384,6 @@ namespace SeizurePlayback
             this.MoreOp.Text = "More Options...";
             this.MoreOp.Click += new System.EventHandler(this.label16_Click);
             // 
-            // Rewind_Dec
-            // 
-            this.Rewind_Dec.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Rewind_Dec.Location = new System.Drawing.Point(0, 3);
-            this.Rewind_Dec.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-            this.Rewind_Dec.Name = "Rewind_Dec";
-            this.Rewind_Dec.Size = new System.Drawing.Size(24, 23);
-            this.Rewind_Dec.TabIndex = 76;
-            this.Rewind_Dec.Text = "<";
-            this.Rewind_Dec.UseVisualStyleBackColor = true;
-            // 
-            // Rewind_Inc
-            // 
-            this.Rewind_Inc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Rewind_Inc.Location = new System.Drawing.Point(24, 3);
-            this.Rewind_Inc.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
-            this.Rewind_Inc.Name = "Rewind_Inc";
-            this.Rewind_Inc.Size = new System.Drawing.Size(24, 23);
-            this.Rewind_Inc.TabIndex = 77;
-            this.Rewind_Inc.Text = ">";
-            this.Rewind_Inc.UseVisualStyleBackColor = true;
-            // 
-            // Rewind_ChangeBox
-            // 
-            this.Rewind_ChangeBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Rewind_ChangeBox.AutoSize = true;
-            this.Rewind_ChangeBox.Controls.Add(this.Rewind_Dec);
-            this.Rewind_ChangeBox.Controls.Add(this.Rewind_Inc);
-            this.Rewind_ChangeBox.Location = new System.Drawing.Point(992, 483);
-            this.Rewind_ChangeBox.Name = "Rewind_ChangeBox";
-            this.Rewind_ChangeBox.Size = new System.Drawing.Size(51, 29);
-            this.Rewind_ChangeBox.TabIndex = 78;
-            // 
             // VideoSpeedLabel
             // 
             this.VideoSpeedLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -1441,6 +1408,41 @@ namespace SeizurePlayback
             this.ShortcutButton.Text = "Shortcuts";
             this.ShortcutButton.UseVisualStyleBackColor = true;
             this.ShortcutButton.Click += new System.EventHandler(this.ShortcutButton_Click);
+            // 
+            // Rewind_ChangeBox
+            // 
+            this.Rewind_ChangeBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Rewind_ChangeBox.AutoSize = true;
+            this.Rewind_ChangeBox.Controls.Add(this.Rewind_Dec);
+            this.Rewind_ChangeBox.Controls.Add(this.Rewind_Inc);
+            this.Rewind_ChangeBox.Location = new System.Drawing.Point(992, 483);
+            this.Rewind_ChangeBox.Name = "Rewind_ChangeBox";
+            this.Rewind_ChangeBox.Size = new System.Drawing.Size(51, 29);
+            this.Rewind_ChangeBox.TabIndex = 78;
+            // 
+            // Rewind_Dec
+            // 
+            this.Rewind_Dec.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Rewind_Dec.Location = new System.Drawing.Point(0, 3);
+            this.Rewind_Dec.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+            this.Rewind_Dec.Name = "Rewind_Dec";
+            this.Rewind_Dec.Size = new System.Drawing.Size(24, 23);
+            this.Rewind_Dec.TabIndex = 76;
+            this.Rewind_Dec.Text = "<";
+            this.Rewind_Dec.UseVisualStyleBackColor = true;
+            this.Rewind_Dec.Click += new System.EventHandler(this.Rewind_Dec_Click);
+            // 
+            // Rewind_Inc
+            // 
+            this.Rewind_Inc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Rewind_Inc.Location = new System.Drawing.Point(24, 3);
+            this.Rewind_Inc.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.Rewind_Inc.Name = "Rewind_Inc";
+            this.Rewind_Inc.Size = new System.Drawing.Size(24, 23);
+            this.Rewind_Inc.TabIndex = 77;
+            this.Rewind_Inc.Text = ">";
+            this.Rewind_Inc.UseVisualStyleBackColor = true;
+            this.Rewind_Inc.Click += new System.EventHandler(this.Rewind_Inc_Click);
             // 
             // CManage
             // 
@@ -1630,9 +1632,6 @@ namespace SeizurePlayback
         public System.Windows.Forms.ComboBox comboBox1;
         public System.Windows.Forms.Label ColorClear;
         private System.Windows.Forms.Label MoreOp;
-        private System.Windows.Forms.Button Rewind_Dec;
-        private System.Windows.Forms.Button Rewind_Inc;
-        private System.Windows.Forms.FlowLayoutPanel Rewind_ChangeBox;
         private System.Windows.Forms.Label VideoSpeedLabel;
         private System.Windows.Forms.Button ShortcutButton;
         private System.Windows.Forms.Label ZoomChan16Label;
@@ -1643,6 +1642,9 @@ namespace SeizurePlayback
         public System.Windows.Forms.TrackBar ZoomChan15;
         public System.Windows.Forms.TrackBar ZoomChan14;
         public System.Windows.Forms.TrackBar ZoomChan13;
+        private System.Windows.Forms.FlowLayoutPanel Rewind_ChangeBox;
+        private System.Windows.Forms.Button Rewind_Dec;
+        private System.Windows.Forms.Button Rewind_Inc;
     }
 }
 

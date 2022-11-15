@@ -91,6 +91,7 @@ namespace SeizurePlayback
         public int RTSpeed = 1;
         int driftTrack = 0;
         public bool Scrolling = false;
+        public bool KeyMouseBusy = false;
         public bool VidFixDisabled = false;
         bool[] ZoomDif = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
         
@@ -232,8 +233,7 @@ namespace SeizurePlayback
             this.VisChan9.CheckedChanged += delegate (object sender, System.EventArgs e) { VisChan_CheckedChanged_List(sender, e, (VisChan9.TabIndex - 25), VisChan9.Checked); };
 
             this.SwitchChan.CheckedChanged += delegate (object sender, System.EventArgs e) { SwitchChan_CheckedChanged(sender, e, this.SwitchChan.Checked); };
-            this.Rewind_Dec.Click += delegate (object sender, System.EventArgs e) { Rewind_Change(sender, e, 0); };
-            this.Rewind_Inc.Click += delegate (object sender, System.EventArgs e) { Rewind_Change(sender, e, 1); };
+
 
 
             this.numPerBox.SelectedItem = "24";
@@ -608,8 +608,9 @@ namespace SeizurePlayback
         }
         void Form1_KeyDown(object sender, KeyEventArgs e)
         {
+            if (KeyMouseBusy) return;
+            KeyMouseBusy = true;
             
-
             if (!FastReviewState)
             {
                 if (Paused)
@@ -619,6 +620,11 @@ namespace SeizurePlayback
 
                         case Keys.NumPad4:
                         case Keys.Left:
+                            if (Scrolling)
+                            {
+                                KeyMouseBusy = false;
+                                return;
+                            }
                             Scrolling = true;
                             ACQ.Position = Math.Max(0, ACQ.Position - ((int)MaxDispSize / 10));
 
@@ -647,7 +653,11 @@ namespace SeizurePlayback
                             break;
                         case Keys.NumPad6:
                         case Keys.Right:
-                            if (Scrolling) return;
+                            if (Scrolling)
+                            {
+                                KeyMouseBusy = false;
+                                return;
+                            }
                             Scrolling = true;
                             ACQ.Position = Math.Min(ACQ.TotFileTime, ACQ.Position + ((int)MaxDispSize / 10));
 
@@ -695,6 +705,7 @@ namespace SeizurePlayback
                             Console.WriteLine(Paused);
                             break;
                         case Keys.NumPad7:
+                        case Keys.PageDown:
                             ACQ.Position = Math.Max(0, ACQ.Position - ((int)MaxDispSize));
                             //if (player != null)
                             //{
@@ -708,6 +719,7 @@ namespace SeizurePlayback
                             Step = MaxDispSize;
                             break;
                         case Keys.NumPad9:
+                        case Keys.PageUp:
                             ACQ.Position = Math.Min(ACQ.TotFileTime, ACQ.Position + ((int)MaxDispSize));
                             //if (player != null)
                             //{
@@ -781,6 +793,7 @@ namespace SeizurePlayback
                 }
             }
             e.Handled = true;
+            KeyMouseBusy = false;
         }
 
 
@@ -3137,7 +3150,15 @@ namespace SeizurePlayback
             }
         }
 
+        private void Rewind_Dec_Click(object sender, EventArgs e)
+        {
 
+        }
+
+        private void Rewind_Inc_Click(object sender, EventArgs e)
+        {
+
+        }
 
         public void loadVid(int chanloop)
         {
@@ -3448,8 +3469,7 @@ namespace SeizurePlayback
                 this.OffsetBox.Enabled = false;
                 //this.LoadAll.Hide();
                 //this.LoadAll.Enabled = false;
-                this.Rewind_ChangeBox.Hide();
-                this.Rewind_ChangeBox.Enabled = false;
+
 
 
                 this.FRButtonGroup.Show();
@@ -3557,8 +3577,7 @@ namespace SeizurePlayback
                 this.OffsetBox.Enabled = true;
                 //this.LoadAll.Show();
                 //this.LoadAll.Enabled = true;
-                this.Rewind_ChangeBox.Show();
-                this.Rewind_ChangeBox.Enabled = true;
+
 
                 this.RvwSz.Show();
                 this.RvwSz.Enabled = true;
