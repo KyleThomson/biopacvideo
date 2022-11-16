@@ -3489,7 +3489,7 @@ namespace SeizurePlayback
                 this.SzCaptureButton.Enabled = false;
                 this.DetectionLoadButton.Hide();
                 this.DetectionLoadButton.Enabled = false;
-
+                this.label3.Hide();
                 this.FastReview.Hide();
                 this.FastReview.Enabled = false;
                 this.button2.Hide();
@@ -3508,6 +3508,7 @@ namespace SeizurePlayback
                 this.comboBox1.Enabled = false;
                 this.OffsetBox.Hide();
                 this.OffsetBox.Enabled = false;
+                this.Rewind_ChangeBox.Hide();
                 //this.LoadAll.Hide();
                 //this.LoadAll.Enabled = false;
 
@@ -3596,6 +3597,7 @@ namespace SeizurePlayback
                 this.TimeBar.Enabled = true;
                 this.Rewind.Show();
                 this.Rewind.Enabled = true;
+                this.Rewind_ChangeBox.Show();
                 this.SpeedUp.Show();
                 this.SpeedUp.Enabled = true;
                 this.TimeLabel.Show();
@@ -3616,6 +3618,7 @@ namespace SeizurePlayback
                 this.button3.Enabled = true;
                 this.OffsetBox.Show();
                 this.OffsetBox.Enabled = true;
+                this.label3.Show();
                 //this.LoadAll.Show();
                 //this.LoadAll.Enabled = true;
 
