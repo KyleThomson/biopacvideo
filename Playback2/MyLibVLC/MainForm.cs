@@ -1747,7 +1747,7 @@ namespace SeizurePlayback
                     HCL.Add(chanPass);
                     checkedChange = true;
                     //Console.WriteLine("Channel " + chanPass + " Hidden");
-                    VLCisLoaded[chanPass] = true;
+                    VLCisLoaded[chanPass - 1] = true;
                 }
                 if (HCL.Contains(chanPass) && chanClicked)
                 {
@@ -1755,7 +1755,7 @@ namespace SeizurePlayback
                     HCL.Remove(chanPass);
                     checkedChange = true;
                     //Console.WriteLine("Channel " + chanPass + " Visible");
-                    VLCisLoaded[chanPass] = false;
+                    VLCisLoaded[chanPass - 1] = false;
                 }
 
                 DSF.HCLSync(HCL);
@@ -3152,12 +3152,53 @@ namespace SeizurePlayback
 
         private void Rewind_Dec_Click(object sender, EventArgs e)
         {
+            if (!FastReviewState)
+            {
+                if (Paused)
+                {
 
+                    if (Scrolling)
+                    {
+                        return;
+                    }
+                    Scrolling = true;
+                    ACQ.Position = Math.Max(0, ACQ.Position - ((int)MaxDispSize / 10));
+
+
+                    if (player != null)
+                    {
+                        SeekToCurrentPos();
+                    }
+
+                    Step += MaxDispSize;
+                }
+            }
         }
 
         private void Rewind_Inc_Click(object sender, EventArgs e)
         {
 
+            if (!FastReviewState)
+            {
+                if (Paused)
+                {
+
+                    if (Scrolling)
+                    {
+                        return;
+                    }
+                    Scrolling = true;
+                    ACQ.Position = Math.Min(ACQ.TotFileTime, ACQ.Position + ((int)MaxDispSize / 10));
+
+
+                    if (player != null)
+                    {
+                        SeekToCurrentPos();
+                    }
+
+                    Step += MaxDispSize;
+                }
+            }
         }
 
         public void loadVid(int chanloop)
