@@ -409,13 +409,29 @@ namespace SeizurePlayback
             FileStream FOUT = new FileStream(Fname, FileMode.Create);
             BinaryWriter FOUT_ID = new BinaryWriter(FOUT);            
             data = new Int32[Chans][];
+            //This is where it gets hard
+            //Length += 60;
+            //int StBuff = St;
+            SeekPoint = DataType * St * Chans * SampleRate + DataStart;
+            //if (SeekPoint < DataStart)
+            //{
+            //    int SizeDiff = DataStart - SeekPoint;
+            //    SizeDiff = SizeDiff * SampleRate;
+            //    Length = Length - SizeDiff;
+            //    SeekPoint = DataStart;
+            //}
+            //if (StBuff + Length > FileTime)
+            //{
+            //    int SizeDiff = (StBuff + Length) - FileTime;
+            //    Length = Length - SizeDiff;
+            //}
+
             SampleSize = SampleRate * Length;
             for (int i = 0; i < Chans; i++)
             {
                 data[i] = new Int32[SampleSize];
-            }            
-            //This is where it gets hard
-            SeekPoint = DataType * St * Chans * SampleRate + DataStart;
+                //fix
+            }
             FILE.Seek(SeekPoint, SeekOrigin.Begin);
             //Pull Data from file
             if (DataType == 4)

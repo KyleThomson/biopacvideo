@@ -196,7 +196,7 @@ namespace SeizurePlayback
             KeyDown += new KeyEventHandler(Form1_KeyDown);
             ResizeBool = true;
             //Start up the display thread. 
-            this.Resize += new System.EventHandler(this.MainForm_Resize);
+            //this.Resize += new System.EventHandler(this.MainForm_Resize);
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
             ThreadDisplay.Start();
             OffsetBox.Enabled = false;
@@ -1470,11 +1470,22 @@ namespace SeizurePlayback
             }
             else
             {
-                if (this.VideoFix.Checked && !VidFixDisabled)
+                if (this.VideoFix.Checked)
                 {
                     int FixedChan = 0;
                     
                     FixedChan = CamerAssc[CamerAssc[ACQ.SelectedChan]];
+                    Console.WriteLine("-----------");
+                    Console.WriteLine("Channel Clicked: " + ACQ.SelectedChan);
+                    Console.WriteLine("Fixed Chan to Load: " + FixedChan);
+                    Console.WriteLine("The Single Association Value: " + CamerAssc[ACQ.SelectedChan]);
+                    for (int i = 0; i < CamerAssc.Length; i++)
+                    {
+                        Console.WriteLine("CamAssc at " + i + ": " + CamerAssc[i]);
+                        Console.WriteLine("CamAssc[CamAssc] at " + i + ": " + CamerAssc[CamerAssc[i]]);
+                    }
+
+                    
                     loadVid(FixedChan);
                     FNum = 0;
                     while (TimeSeek > AVILengths[FixedChan, FNum])
@@ -1747,7 +1758,7 @@ namespace SeizurePlayback
                     HCL.Add(chanPass);
                     checkedChange = true;
                     //Console.WriteLine("Channel " + chanPass + " Hidden");
-                    VLCisLoaded[chanPass - 1] = true;
+                    //VLCisLoaded[chanPass - 1] = true;
                 }
                 if (HCL.Contains(chanPass) && chanClicked)
                 {
@@ -1755,7 +1766,7 @@ namespace SeizurePlayback
                     HCL.Remove(chanPass);
                     checkedChange = true;
                     //Console.WriteLine("Channel " + chanPass + " Visible");
-                    VLCisLoaded[chanPass - 1] = false;
+                    //VLCisLoaded[chanPass - 1] = false;
                 }
 
                 DSF.HCLSync(HCL);

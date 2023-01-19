@@ -393,7 +393,8 @@ namespace BioPacVideo
             {
                 if ((MP.RecordAC[i]) && (CameraAssociation[i] < maxdevices))
                 {
-                    FN = Filename + "_" + i.ToString("D3") + ".mp4";
+                    FN = Filename + "_" + i.ToString("D3") + ".mp4"; //JOSH  
+                    //FN = Filename + "_" + CameraAssociation[i].ToString("D3") + ".mp4"; I think this makes it makes sense for FixedChan = CamerAssc[CamerAssc[ACQ.SelectedChan]];
                     EXPORTS.QCAP_SET_VIDEO_RECORD_PROPERTY(m_hCapDev[CameraAssociation[i]], 0, (uint)EXPORTS.EncoderTypeEnum.QCAP_ENCODER_TYPE_HARDWARE, (uint)EXPORTS.VideoEncoderFormatEnum.QCAP_ENCODER_FORMAT_H264, (uint)EXPORTS.RecordModeEnum.QCAP_RECORD_MODE_VBR, (uint)Quality, (uint)Bitrate*1024*1024, 30, 4, 3, (uint)EXPORTS.DownScaleModeEnum.QCAP_DOWNSCALE_MODE_OFF);
                     EXPORTS.QCAP_START_RECORD(m_hCapDev[CameraAssociation[i]], 0, ref FN, (uint)EXPORTS.RecordFlagEnum.QCAP_RECORD_FLAG_FULL, 0.0, 0.0, 0.0, 256000, ref pszNULL);
                 }

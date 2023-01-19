@@ -62,26 +62,48 @@ namespace SeizurePlayback
             Ok = true;
             Result = Pass.Sz + Notes + "," + Pass.outfile;
             string outfile = Pass.FPath + "\\" + Pass.outfile;
-            Pass.ACQ.DumpData(outfile + ".dat", Pass.ACQ.SelectedChan, Pass.StartTime, Pass.HighlightEnd - Pass.HighlightStart + 1);
             int StartTime;
+            int LengthBuff = Pass.length + 60;
+            int StartTimeBuff = Pass.StartTime - 30;
+            if (StartTimeBuff < 0)
+            {
+                LengthBuff = LengthBuff - (Math.Abs(StartTimeBuff));
+                StartTimeBuff = 0;
+            }
+            if (StartTimeBuff + LengthBuff > Pass.ACQ.FileTime)
+            {
+                int SizeDiff = (StartTimeBuff + LengthBuff) - Pass.ACQ.FileTime;
+                LengthBuff = LengthBuff - SizeDiff;
+            }
+            //Pass.ACQ.DumpData(outfile + ".dat", Pass.ACQ.SelectedChan, Pass.StartTime, Pass.HighlightEnd - Pass.HighlightStart + 1);
+            Pass.ACQ.DumpData(outfile + ".dat", Pass.ACQ.SelectedChan, StartTimeBuff, LengthBuff);
+            //work on fixing video capture
             if (Pass.VideoCapture)
             { 
                 if (Pass.AVIMode == "mp4")
                     {
                         //StartTime = (int)(((float)Pass.StartTime * 1000F - Pass.Subtractor) / 1000F);
                         StartTime = (int)(Pass.Subtractor/1000F);
+                        
                     }
                     else
                     {
                         //StartTime = (int)((((float)Pass.StartTime * 1000F * (1F + Pass.VideoOffset)) - Pass.Subtractor) / 1000F);
                         StartTime = (int)((Pass.Subtractor - ((float)1000F * (1F + Pass.VideoOffset))) / 1000F);
                     }
-                Process p = new Process();
-                string CmdString = " -y -ss " + StartTime.ToString() + " -t " + Pass.length.ToString();
+                if (StartTime - 30 < 0)
+                {
+                    StartTime = 0;
+                }
+                else StartTime -= 30;
+
+            Process p = new Process();
+                //string CmdString = " -y -ss " + StartTime.ToString() + " -t " + Pass.length.ToString();
+                string CmdString = " -y -ss " + StartTime.ToString() + " -t " + LengthBuff.ToString();
                 CmdString += " -i \"" + Pass.CurrentAVI + "\"";
                 if (Pass.AVIMode == "mp4")
                 {
-                    CmdString += " -sameq \"" + outfile + ".mp4\"";
+                    CmdString += " -sameq \"" + outfile + ".mp4\""; 
                 }
                 else
                 {
