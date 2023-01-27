@@ -114,7 +114,7 @@ namespace ProjectManager
 
         }
 
-        public void DrawSZ(long offset, int length, int X, int Y, bool display, bool vidSelect)
+        public void DrawSZ(long offset, int length, int X, int Y, bool display, bool vidSelect, int BufferStart, bool ShowBuff)
         {
             PointF[] WaveC;
             int expectedSampleSize = DisplayLength * SampleRate;
@@ -123,10 +123,16 @@ namespace ProjectManager
             Pen BoxPen = new Pen(Color.Red, 3);
             Pen empty = new Pen(Color.LightGray, 1);
             SampleSize = length * SampleRate;
+
+            //if (FILES.Length > SampleSize)
+            //{
+
+            //}
+
             TData = new Int32[SampleSize];
             int xOff = 2;
             if (drawMode == 1) xOff = 1;
-            long averageLine = ReadData(offset, 0) / expectedSampleSize;
+            long averageLine = ReadData(offset, 0, SampleSize, BufferStart, ShowBuff) / expectedSampleSize;
             float YDraw;
             
             WaveC = new PointF[expectedSampleSize];
@@ -249,15 +255,45 @@ namespace ProjectManager
 
         }
 
-        public long ReadData(long pos, long average)
+        public long ReadData(long pos, long average, int SampSize, int BufferStart, bool ShowBuff)
         {
             FILES.Seek(pos, 0);
+            Int32 BufferCheck = FID.ReadInt32();
 
-            for (int i = 0; i < SampleSize; i++)
+            if (BufferCheck > SampleSize)
             {
-                if (i + pos > EOF) return average;
-                TData[i] = FID.ReadInt32();
-                average += TData[i];
+                if (ShowBuff)
+                {
+                    SampleSize = BufferCheck;
+                    TData = new Int32[BufferCheck];
+                    for (int i = 0; i < BufferCheck; i++)
+                    {
+                        if (i + pos > EOF) return average;
+                        TData[i] = FID.ReadInt32();
+                        average += TData[i];
+                    }
+                } else
+                {
+                    FILES.Seek(pos + (BufferStart * 500 * 4), 0);
+                    for (int i = 0; i < SampleSize; i++)
+                        {
+                            if (i + pos > EOF) return average;
+                            TData[i] = FID.ReadInt32();
+                            average += TData[i];
+                        }
+                }
+
+                
+            }
+            else
+            {
+
+                for (int i = 0; i < SampleSize; i++)
+                {
+                    if (i + pos > EOF) return average;
+                    TData[i] = FID.ReadInt32();
+                    average += TData[i];
+                }
             }
             return average;
         }

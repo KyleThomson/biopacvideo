@@ -219,7 +219,8 @@ namespace ProjectManager
 
             FileStream InFile = new FileStream(FileN, FileMode.Open, FileAccess.Read);
             BinaryReader BInFile = new BinaryReader(InFile);
-            
+
+            BBigDAT.Write((Int32)InFile.Length/4); //gives length, to determine if offset exists or not
 
             for (int i = 0; i < InFile.Length / 4; i++)
             {
@@ -328,7 +329,7 @@ namespace ProjectManager
                 foreach (SeizureType S in A.Sz)
                 {
                     answer = string.Format("{0:D2}:{1:D2}:{2:D2}", S.t.Hours, S.t.Minutes, S.t.Seconds);
-                    s = "An," + A.ID + ", sz, " + S.d.ToString() + ", " + answer + "," + S.Notes + "," + S.length + "," + S.file + "," + S.Severity + "," + S.Offset;
+                    s = "An," + A.ID + ", sz, " + S.d.ToString() + ", " + answer + "," + S.Notes + "," + S.length + "," + S.file + "," + S.Severity + "," + S.Offset + ", " + S.BufferStart;
                     if (S.VidString != null) s += "," + S.VidString;
                     F.WriteLine(s);
                 }
@@ -867,9 +868,12 @@ namespace ProjectManager
                 {
                     S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6], TmpStr[7]);
                 }
-                else
+                else if (TmpStr.Length < 9)
                 {
-                    S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6], TmpStr[7], offset); //
+                    S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6], TmpStr[7], offset, 0); //
+                } else
+                {
+                    S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6], TmpStr[7], offset, int.Parse(TmpStr[8]));
                 }
 
                 Animals[CurrentAnimal].Sz.Add(S);
@@ -1447,11 +1451,13 @@ namespace ProjectManager
                             //Old way - no severity score
                             S = new SeizureType(data[3], data[4], data[5], data[6], data[7]);
                         }
-                        else if (data.Length == 10 || data.Length == 11 )
+                        else if (data.Length == 11 || data.Length == 12)
                         {
                             //New way, has severity info
-                            S = new SeizureType(data[3], data[4], data[5], data[6], data[7], data[8], long.Parse(data[9]));
-                            if (data.Length == 11) S.VidString = data[10];
+                            S = new SeizureType(data[3], data[4], data[5], data[6], data[7], data[8], long.Parse(data[9]), int.Parse(data[10]));
+                            
+                            if (data.Length == 12) S.VidString = data[11];
+                            
                         } 
                         else
                         {

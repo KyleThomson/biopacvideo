@@ -92,6 +92,7 @@ namespace ProjectManager
             this.label18 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.aLComboBox = new System.Windows.Forms.ComboBox();
+            this.ShowBuffer = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.myVLC)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -341,7 +342,7 @@ namespace ProjectManager
             this.pg.ForeColor = System.Drawing.Color.Cornsilk;
             this.pg.Location = new System.Drawing.Point(132, 777);
             this.pg.Name = "pg";
-            this.pg.Size = new System.Drawing.Size(31, 16);
+            this.pg.Size = new System.Drawing.Size(32, 16);
             this.pg.TabIndex = 18;
             this.pg.Text = "0 / 0";
             // 
@@ -467,7 +468,7 @@ namespace ProjectManager
             this.TFLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TFLabel.Location = new System.Drawing.Point(199, 26);
             this.TFLabel.Name = "TFLabel";
-            this.TFLabel.Size = new System.Drawing.Size(21, 16);
+            this.TFLabel.Size = new System.Drawing.Size(22, 16);
             this.TFLabel.TabIndex = 31;
             this.TFLabel.Text = "30";
             // 
@@ -592,7 +593,7 @@ namespace ProjectManager
             this.label1.ForeColor = System.Drawing.Color.Cornsilk;
             this.label1.Location = new System.Drawing.Point(83, 777);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 16);
+            this.label1.Size = new System.Drawing.Size(44, 16);
             this.label1.TabIndex = 33;
             this.label1.Text = "Page:";
             // 
@@ -622,7 +623,7 @@ namespace ProjectManager
             this.label6.ForeColor = System.Drawing.SystemColors.Control;
             this.label6.Location = new System.Drawing.Point(15, 64);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(43, 16);
+            this.label6.Size = new System.Drawing.Size(44, 16);
             this.label6.TabIndex = 34;
             this.label6.Text = "Stage";
             // 
@@ -636,7 +637,7 @@ namespace ProjectManager
             this.label3.ForeColor = System.Drawing.SystemColors.Control;
             this.label3.Location = new System.Drawing.Point(5, 86);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(59, 16);
+            this.label3.Size = new System.Drawing.Size(60, 16);
             this.label3.TabIndex = 0;
             this.label3.Text = "Seizures";
             // 
@@ -684,7 +685,7 @@ namespace ProjectManager
             this.S1Label.ForeColor = System.Drawing.SystemColors.Control;
             this.S1Label.Location = new System.Drawing.Point(67, 20);
             this.S1Label.Name = "S1Label";
-            this.S1Label.Size = new System.Drawing.Size(14, 16);
+            this.S1Label.Size = new System.Drawing.Size(15, 16);
             this.S1Label.TabIndex = 41;
             this.S1Label.Text = "0";
             // 
@@ -695,7 +696,7 @@ namespace ProjectManager
             this.label5.ForeColor = System.Drawing.SystemColors.Control;
             this.label5.Location = new System.Drawing.Point(130, 1);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(14, 16);
+            this.label5.Size = new System.Drawing.Size(15, 16);
             this.label5.TabIndex = 35;
             this.label5.Text = "2";
             // 
@@ -706,7 +707,7 @@ namespace ProjectManager
             this.label4.ForeColor = System.Drawing.SystemColors.Control;
             this.label4.Location = new System.Drawing.Point(67, 1);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(14, 16);
+            this.label4.Size = new System.Drawing.Size(15, 16);
             this.label4.TabIndex = 34;
             this.label4.Text = "1";
             // 
@@ -731,7 +732,7 @@ namespace ProjectManager
             this.label7.ForeColor = System.Drawing.SystemColors.Control;
             this.label7.Location = new System.Drawing.Point(193, 1);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(14, 16);
+            this.label7.Size = new System.Drawing.Size(15, 16);
             this.label7.TabIndex = 36;
             this.label7.Text = "3";
             // 
@@ -742,7 +743,7 @@ namespace ProjectManager
             this.label8.ForeColor = System.Drawing.SystemColors.Control;
             this.label8.Location = new System.Drawing.Point(256, 1);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(14, 16);
+            this.label8.Size = new System.Drawing.Size(15, 16);
             this.label8.TabIndex = 37;
             this.label8.Text = "4";
             // 
@@ -753,7 +754,7 @@ namespace ProjectManager
             this.label9.ForeColor = System.Drawing.SystemColors.Control;
             this.label9.Location = new System.Drawing.Point(319, 1);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(14, 16);
+            this.label9.Size = new System.Drawing.Size(15, 16);
             this.label9.TabIndex = 38;
             this.label9.Text = "5";
             // 
@@ -775,7 +776,7 @@ namespace ProjectManager
             this.S0Label.ForeColor = System.Drawing.SystemColors.Control;
             this.S0Label.Location = new System.Drawing.Point(4, 20);
             this.S0Label.Name = "S0Label";
-            this.S0Label.Size = new System.Drawing.Size(14, 16);
+            this.S0Label.Size = new System.Drawing.Size(15, 16);
             this.S0Label.TabIndex = 42;
             this.S0Label.Text = "0";
             // 
@@ -786,7 +787,7 @@ namespace ProjectManager
             this.S2Label.ForeColor = System.Drawing.SystemColors.Control;
             this.S2Label.Location = new System.Drawing.Point(130, 20);
             this.S2Label.Name = "S2Label";
-            this.S2Label.Size = new System.Drawing.Size(14, 16);
+            this.S2Label.Size = new System.Drawing.Size(15, 16);
             this.S2Label.TabIndex = 43;
             this.S2Label.Text = "0";
             // 
@@ -797,7 +798,7 @@ namespace ProjectManager
             this.S3Label.ForeColor = System.Drawing.SystemColors.Control;
             this.S3Label.Location = new System.Drawing.Point(193, 20);
             this.S3Label.Name = "S3Label";
-            this.S3Label.Size = new System.Drawing.Size(14, 16);
+            this.S3Label.Size = new System.Drawing.Size(15, 16);
             this.S3Label.TabIndex = 44;
             this.S3Label.Text = "0";
             // 
@@ -808,7 +809,7 @@ namespace ProjectManager
             this.S4Label.ForeColor = System.Drawing.SystemColors.Control;
             this.S4Label.Location = new System.Drawing.Point(256, 20);
             this.S4Label.Name = "S4Label";
-            this.S4Label.Size = new System.Drawing.Size(14, 16);
+            this.S4Label.Size = new System.Drawing.Size(15, 16);
             this.S4Label.TabIndex = 45;
             this.S4Label.Text = "0";
             // 
@@ -819,7 +820,7 @@ namespace ProjectManager
             this.S5Label.ForeColor = System.Drawing.SystemColors.Control;
             this.S5Label.Location = new System.Drawing.Point(319, 20);
             this.S5Label.Name = "S5Label";
-            this.S5Label.Size = new System.Drawing.Size(14, 16);
+            this.S5Label.Size = new System.Drawing.Size(15, 16);
             this.S5Label.TabIndex = 46;
             this.S5Label.Text = "0";
             // 
@@ -830,7 +831,7 @@ namespace ProjectManager
             this.label18.ForeColor = System.Drawing.SystemColors.Control;
             this.label18.Location = new System.Drawing.Point(382, 20);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(14, 16);
+            this.label18.Size = new System.Drawing.Size(15, 16);
             this.label18.TabIndex = 47;
             this.label18.Text = "0";
             // 
@@ -858,6 +859,20 @@ namespace ProjectManager
             this.aLComboBox.TabIndex = 0;
             this.aLComboBox.SelectedIndexChanged += new System.EventHandler(this.aLComboBox_SelectedIndexChanged);
             // 
+            // ShowBuffer
+            // 
+            this.ShowBuffer.AutoSize = true;
+            this.ShowBuffer.Checked = true;
+            this.ShowBuffer.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ShowBuffer.ForeColor = System.Drawing.SystemColors.Control;
+            this.ShowBuffer.Location = new System.Drawing.Point(241, 837);
+            this.ShowBuffer.Name = "ShowBuffer";
+            this.ShowBuffer.Size = new System.Drawing.Size(84, 17);
+            this.ShowBuffer.TabIndex = 35;
+            this.ShowBuffer.Text = "Show Buffer";
+            this.ShowBuffer.UseVisualStyleBackColor = true;
+            this.ShowBuffer.CheckedChanged += new System.EventHandler(this.ShowBuffer_CheckedChanged);
+            // 
             // PMEEGView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -866,6 +881,7 @@ namespace ProjectManager
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(1584, 861);
+            this.Controls.Add(this.ShowBuffer);
             this.Controls.Add(this.AnimalViewPanel);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label1);
@@ -891,7 +907,6 @@ namespace ProjectManager
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "EEG View";
-            this.TopMost = true;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PMEEGView_Close);
             this.Load += new System.EventHandler(this.PMEEGView_Load);
             this.ResizeEnd += new System.EventHandler(this.PMEEGView_ResizeEnd_2);
@@ -978,5 +993,6 @@ namespace ProjectManager
         private System.Windows.Forms.ComboBox aLComboBox;
         private System.Windows.Forms.Label S5Label;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.CheckBox ShowBuffer;
     }
 }

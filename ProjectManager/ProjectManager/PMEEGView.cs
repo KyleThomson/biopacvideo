@@ -762,7 +762,7 @@ namespace ProjectManager
                         for (int i = 0; i < numPerPage; i++)
                         {
                             if (count >= Offset.Count) break;
-                            DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, 0, i, Offset[count].Selected, vidShow[i]);
+                            DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, 0, i, Offset[count].Selected, vidShow[i], Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].BufferStart, ShowBuffer.Checked);
 
 
 
@@ -822,7 +822,7 @@ namespace ProjectManager
                         for (int i = 0; i < numPerPage; i++)
                         {
                             if (count >= Offset.Count) break;
-                            DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, i % 2, i / 2, Offset[count].Selected, false);
+                            DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, i % 2, i / 2, Offset[count].Selected, false, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].BufferStart, ShowBuffer.Checked);
 
                             count++;
                         }
@@ -1465,6 +1465,12 @@ namespace ProjectManager
         private void PMEEGView_ResizeEnd_2(object sender, EventArgs e)
         {
             GraphResize(ViewMode);
+            Redraw = true;
+            UpdateDisplay();
+        }
+
+        private void ShowBuffer_CheckedChanged(object sender, EventArgs e)
+        {
             Redraw = true;
             UpdateDisplay();
         }

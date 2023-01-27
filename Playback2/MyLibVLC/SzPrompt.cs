@@ -60,6 +60,7 @@ namespace SeizurePlayback
         private void ExtractThread()
         {
             Ok = true;
+            int BuffStart = 30;
             Result = Pass.Sz + Notes + "," + Pass.outfile;
             string outfile = Pass.FPath + "\\" + Pass.outfile;
             int StartTime;
@@ -68,6 +69,7 @@ namespace SeizurePlayback
             if (StartTimeBuff < 0)
             {
                 LengthBuff = LengthBuff - (Math.Abs(StartTimeBuff));
+                BuffStart = 30 - Math.Abs(StartTimeBuff);
                 StartTimeBuff = 0;
             }
             if (StartTimeBuff + LengthBuff > Pass.ACQ.FileTime)
@@ -124,7 +126,7 @@ namespace SeizurePlayback
                 { };
             }
             Notes = Notes.Replace(",", string.Empty);                      
-            Result = Pass.Sz + Notes + ", " + Pass.outfile + ", " + Pass.Stage.ToString();
+            Result = Pass.Sz + Notes + ", " + Pass.outfile + ", " + Pass.Stage.ToString() + ", " + BuffStart;
             PleaseWait.Invoke((MethodInvoker)delegate { PleaseWait.Text = "Finished!"; });
             Thread.Sleep(300);
             this.Invoke((MethodInvoker)delegate { this.Close(); });
