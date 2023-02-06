@@ -55,3 +55,23 @@ C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Re
 C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.csproj.CoreCompileInputs.cache
 C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.csproj.CopyComplete
 C:\Users\Josh Wooley\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.exe
+D:\source\KyleThomson\biopacvideo\BioPacVideo\bin\x64\Release\BioPacVideo.exe
+D:\source\KyleThomson\biopacvideo\BioPacVideo\bin\x64\Release\QCAP.NET.X64.DLL
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.csproj.AssemblyReference.cache
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.CameraAssc.resources
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.FeederAddress.resources
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.FeederForm.resources
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.FeederTester.resources
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.FeederErrorBox.resources
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.RecordSettings.resources
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.VideoSettings.resources
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.InjectionManager.resources
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.MainForm.resources
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.RecordSelect.resources
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.MyChannelControl.resources
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.PelletCounts.resources
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.Properties.Resources.resources
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.csproj.GenerateResource.cache
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.csproj.CoreCompileInputs.cache
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.csproj.CopyComplete
+D:\source\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.exe

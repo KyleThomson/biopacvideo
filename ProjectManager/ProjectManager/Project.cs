@@ -329,7 +329,7 @@ namespace ProjectManager
                 foreach (SeizureType S in A.Sz)
                 {
                     answer = string.Format("{0:D2}:{1:D2}:{2:D2}", S.t.Hours, S.t.Minutes, S.t.Seconds);
-                    s = "An," + A.ID + ", sz, " + S.d.ToString() + ", " + answer + "," + S.Notes + "," + S.length + "," + S.file + "," + S.Severity + "," + S.Offset + ", " + S.BufferStart;
+                    s = "An," + A.ID + ", sz, " + S.d.ToString() + ", " + answer + "," + S.Notes + "," + S.length + "," + S.file + "," + S.Severity + "," + S.Offset;
                     if (S.VidString != null) s += "," + S.VidString;
                     F.WriteLine(s);
                 }

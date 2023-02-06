@@ -60,7 +60,7 @@ namespace SeizurePlayback
         private void ExtractThread()
         {
             Ok = true;
-            int BuffStart = 30;
+            int BuffDiff = 0;
             Result = Pass.Sz + Notes + "," + Pass.outfile;
             string outfile = Pass.FPath + "\\" + Pass.outfile;
             int StartTime;
@@ -68,17 +68,18 @@ namespace SeizurePlayback
             int StartTimeBuff = Pass.StartTime - 30;
             if (StartTimeBuff < 0)
             {
-                LengthBuff = LengthBuff - (Math.Abs(StartTimeBuff));
-                BuffStart = 30 - Math.Abs(StartTimeBuff);
+                //LengthBuff = LengthBuff - (Math.Abs(StartTimeBuff));
+                BuffDiff = -(30 - Math.Abs(StartTimeBuff));
                 StartTimeBuff = 0;
             }
             if (StartTimeBuff + LengthBuff > Pass.ACQ.FileTime)
             {
-                int SizeDiff = (StartTimeBuff + LengthBuff) - Pass.ACQ.FileTime;
-                LengthBuff = LengthBuff - SizeDiff;
+                BuffDiff = (StartTimeBuff + LengthBuff) - Pass.ACQ.FileTime;
+                //LengthBuff = LengthBuff - SizeDiff;
             }
             //Pass.ACQ.DumpData(outfile + ".dat", Pass.ACQ.SelectedChan, Pass.StartTime, Pass.HighlightEnd - Pass.HighlightStart + 1);
-            Pass.ACQ.DumpData(outfile + ".dat", Pass.ACQ.SelectedChan, StartTimeBuff, LengthBuff);
+            Pass.ACQ.DumpData(outfile + ".dat", Pass.ACQ.SelectedChan, StartTimeBuff, LengthBuff, BuffDiff); //BuffDiff Serves the edge case of a seizure buffer that extends before or after the seizure. If 
+                                                                                                 // it is negative, it indicates the extension is at the start, positive is at the end. 0 is no difference
             //work on fixing video capture
             if (Pass.VideoCapture)
             { 
@@ -126,7 +127,7 @@ namespace SeizurePlayback
                 { };
             }
             Notes = Notes.Replace(",", string.Empty);                      
-            Result = Pass.Sz + Notes + ", " + Pass.outfile + ", " + Pass.Stage.ToString() + ", " + BuffStart;
+            Result = Pass.Sz + Notes + ", " + Pass.outfile + ", " + Pass.Stage.ToString();
             PleaseWait.Invoke((MethodInvoker)delegate { PleaseWait.Text = "Finished!"; });
             Thread.Sleep(300);
             this.Invoke((MethodInvoker)delegate { this.Close(); });

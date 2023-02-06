@@ -403,7 +403,7 @@ namespace SeizurePlayback
                return InternalData[Chan];
             }
 
-        public void DumpData(string Fname, int Chan, int St, int Length)
+        public void DumpData(string Fname, int Chan, int St, int Length, int BuffDiff)
         {
             int SeekPoint;
             FileStream FOUT = new FileStream(Fname, FileMode.Create);
@@ -425,6 +425,7 @@ namespace SeizurePlayback
             //    int SizeDiff = (StBuff + Length) - FileTime;
             //    Length = Length - SizeDiff;
             //}
+            
 
             SampleSize = SampleRate * Length;
             for (int i = 0; i < Chans; i++)
@@ -433,12 +434,24 @@ namespace SeizurePlayback
                 //fix
             }
             FILE.Seek(SeekPoint, SeekOrigin.Begin);
-            //Pull Data from file
-            if (DataType == 4)
+
+            
+                //Pull Data from file
+                if (DataType == 4)
             {
                 for (int i = 0; i < Length * Chans * SampleRate; i++)
                 {
-                    data[i % Chans][i / Chans] = FID.ReadInt32();
+                    if (BuffDiff < 0 && i < -(BuffDiff * Chans * SampleRate))
+                    {
+                        data[i % Chans][i / Chans] = (Int32)0;
+                    }
+                    else if (BuffDiff > 0 && i > ((Length * Chans * SampleRate) - (BuffDiff * Chans * SampleRate)))
+                    {
+                        data[i % Chans][i / Chans] = (Int32)0;
+                    }
+                    else {
+                        data[i % Chans][i / Chans] = FID.ReadInt32();
+                    }
                 }
                 for (int j = 0; j < SampleSize; j++)
                 {
@@ -449,7 +462,18 @@ namespace SeizurePlayback
             {
                 for (int i = 0; i < Length * Chans * SampleRate; i++)
                 {
-                    data[i % Chans][i / Chans] = (Int32)FID.ReadInt16();
+                    if (BuffDiff < 0 && i < -(BuffDiff * Chans * SampleRate))
+                    {
+                        data[i % Chans][i / Chans] = (Int16)0;
+                    }
+                    else if (BuffDiff > 0 && i > ((Length * Chans * SampleRate) - (BuffDiff * Chans * SampleRate)))
+                    {
+                        data[i % Chans][i / Chans] = (Int16)0;
+                    }
+                    else
+                    {
+                        data[i % Chans][i / Chans] = FID.ReadInt16();
+                    }
                 }
                 for (int j = 0; j < SampleSize; j++)
                 {
