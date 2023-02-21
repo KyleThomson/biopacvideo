@@ -114,7 +114,7 @@ namespace ProjectManager
 
         }
 
-        public void DrawSZ(long offset, int length, int X, int Y, bool display, bool vidSelect, int BufferStart, bool ShowBuff)
+        public void DrawSZ(long offset, int length, int X, int Y, bool display, bool vidSelect, bool ShowBuff)
         {
             PointF[] WaveC;
             int expectedSampleSize = DisplayLength * SampleRate;
@@ -132,7 +132,7 @@ namespace ProjectManager
             TData = new Int32[SampleSize];
             int xOff = 2;
             if (drawMode == 1) xOff = 1;
-            long averageLine = ReadData(offset, 0, SampleSize, BufferStart, ShowBuff) / expectedSampleSize;
+            long averageLine = ReadData(offset, 0, SampleSize, ShowBuff) / expectedSampleSize;
             float YDraw;
             
             WaveC = new PointF[expectedSampleSize];
@@ -255,7 +255,7 @@ namespace ProjectManager
 
         }
 
-        public long ReadData(long pos, long average, int SampSize, int BufferStart, bool ShowBuff)
+        public long ReadData(long pos, long average, int SampSize, bool ShowBuff)
         {
             FILES.Seek(pos, 0);
             Int32 BufferCheck = FID.ReadInt32();
@@ -274,7 +274,7 @@ namespace ProjectManager
                     }
                 } else
                 {
-                    FILES.Seek(pos + (BufferStart * 500 * 4), 0);
+                    FILES.Seek(pos + (30 * 500 * 4), 0);
                     for (int i = 0; i < SampleSize; i++)
                         {
                             if (i + pos > EOF) return average;

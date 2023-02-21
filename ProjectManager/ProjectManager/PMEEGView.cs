@@ -318,6 +318,8 @@ namespace ProjectManager
                         EditNotesButton.Enabled = true;
                         CurrentAnimal = temp;
                         seconds = (Animals[Offset[temp].AnimalIndex].Sz[Offset[temp].SZNum].length);
+                        
+                        //if (ShowBuffer.Checked) seconds += 60;
                         selected = Y;
                     }
 
@@ -762,7 +764,7 @@ namespace ProjectManager
                         for (int i = 0; i < numPerPage; i++)
                         {
                             if (count >= Offset.Count) break;
-                            DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, 0, i, Offset[count].Selected, vidShow[i], Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].BufferStart, ShowBuffer.Checked);
+                            DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, 0, i, Offset[count].Selected, vidShow[i], ShowBuffer.Checked);
 
 
 
@@ -822,7 +824,7 @@ namespace ProjectManager
                         for (int i = 0; i < numPerPage; i++)
                         {
                             if (count >= Offset.Count) break;
-                            DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, i % 2, i / 2, Offset[count].Selected, false, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].BufferStart, ShowBuffer.Checked);
+                            DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, i % 2, i / 2, Offset[count].Selected, false, ShowBuffer.Checked);
 
                             count++;
                         }
@@ -1246,12 +1248,15 @@ namespace ProjectManager
 
             MediaPlayer player = new MediaPlayer(media);
 
+            
 
 
 
             myVLC.MediaPlayer = player;
             myVLC.MediaPlayer.Play();
             Thread.Sleep(100);
+
+            if (myVLC.MediaPlayer.Length / 1000 > seconds) seconds += 60;
 
 
             myVLC.MediaPlayer.Pause();
@@ -1260,6 +1265,8 @@ namespace ProjectManager
             media.Dispose();
             myVLC.Show();
 
+            Redraw = true;
+            UpdateDisplay();
         }
 
 

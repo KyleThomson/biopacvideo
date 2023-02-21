@@ -12,7 +12,7 @@ namespace ProjectManager
         public int Severity;
         public long Offset;
         public string VidString;
-        public int BufferStart;
+        public int BufferLen;
         public SeizureType(string a, string b, string c, string e, string f)
         {
             DateTime.TryParse(a, out d);
@@ -24,7 +24,7 @@ namespace ProjectManager
             Notes = c;
             Severity = -1;
             Offset = -1;
-            BufferStart = 0;
+            BufferLen = 0;
         }
         public SeizureType(string a, string b, string c, string e, string f, string g)
         {
@@ -36,7 +36,7 @@ namespace ProjectManager
             TrimFileName();
             Notes = c;
             Offset = -1;
-            BufferStart = 0;
+            BufferLen = 0;
             int.TryParse(g, out Severity);
         }
         public SeizureType(string a, string b, string c, string e, string f, string g, long h)
@@ -49,7 +49,7 @@ namespace ProjectManager
             TrimFileName();
             Notes = c;
             Offset = h;
-            BufferStart = 0;
+            BufferLen = 0;
             int.TryParse(g, out Severity);
         }
         public SeizureType(string a, string b, string c, string e, string f, string g, long h, int l)
@@ -62,7 +62,7 @@ namespace ProjectManager
             TrimFileName();
             Notes = c;
             Offset = h;
-            BufferStart = l;
+            BufferLen = l;
             int.TryParse(g, out Severity);
         }
         public bool Compare(SeizureType C)

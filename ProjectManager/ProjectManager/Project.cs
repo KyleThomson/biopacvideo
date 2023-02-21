@@ -47,11 +47,11 @@ namespace ProjectManager
         public BinaryWriter BBigDAT;
         public long Offset;
         public string CDatName;
-        
+
         public int DatCount;
         public bool CDatExists;
-        
-       
+
+
         public Project(string Inpt, bool newP)
         {
             _fileChanged = false; // initialize file as not changed
@@ -62,7 +62,8 @@ namespace ProjectManager
                 CDatName = Inpt + ".dat";
                 CDatExists = true;
                 createCDat(CDatName);
-            } else
+            }
+            else
             {
                 Filename = Inpt;
                 string tempDir = Inpt.Substring(0, Inpt.Length - 4);
@@ -71,12 +72,13 @@ namespace ProjectManager
                     CDatName = tempDir + ".dat";
                     CDatExists = true;
                     OpenCDat(CDatName);
-                } else
+                }
+                else
                 {
                     CDatExists = false;
                 }
             }
-            
+
 
             Animals = new List<AnimalType>();
             Files = new List<FileType>();
@@ -84,8 +86,8 @@ namespace ProjectManager
             analysis = new SeizureAnalysis(test);
             //SList = new List<EEGOrganizer>();
             Offset = 0;
-            
-            
+
+
         }
         public void GetPath()
         {
@@ -94,10 +96,10 @@ namespace ProjectManager
             {
                 Directory.CreateDirectory(P + "\\Data");
                 //Directory.Move(Filename, P + "\\Data");
-                
-            } 
-                //Directory.Move(Filename, P + "\\Data");
-            
+
+            }
+            //Directory.Move(Filename, P + "\\Data");
+
         }
 
         //public void checkCD(bool exists)
@@ -110,7 +112,7 @@ namespace ProjectManager
         //        splitter[0] = '\\';
         //        splitter[1] = '.';
         //        string[] pathA = P.ToString().Split(splitter);
-                
+
         //        string[] fileA = Filename.Split(splitter);
         //        if (!fileA[fileA.Length-1].Equals(".pjt"))
         //        {
@@ -126,7 +128,7 @@ namespace ProjectManager
         //        //if (!pathA[pathA.Length - 1].Equals(fileA[fileA.Length - 2]))
         //        if (!pathA[pathA.Length-1].Equals("PM_" + fileA[fileA.Length-2]))
         //        {
-                    
+
         //        Console.WriteLine("File Before: " + Filename);
         //        Directory.CreateDirectory(P + "\\PM_" + fileA[fileA.Length - 2]);
         //        P = P + "\\PM_" + fileA[fileA.Length - 2];
@@ -140,7 +142,7 @@ namespace ProjectManager
         //            Console.WriteLine("File After: " + Filename);
         //        }
 
-                
+
 
 
 
@@ -154,14 +156,14 @@ namespace ProjectManager
         public void createCDat(string name) //IMPORTANT! First 4 Bytes of the CDat are reserved for DATCount
         {
             //File.Create(name);
-            
+
             Offset = 0;
             DatCount = 0;
             BigDAT = new FileStream(name, FileMode.Create, FileAccess.ReadWrite);
             BBigDAT = new BinaryWriter(BigDAT);
             Int32 TotCount = 0;
             BBigDAT.Write(TotCount);
-            
+
         }
 
         public void closeCDat()
@@ -184,15 +186,16 @@ namespace ProjectManager
                 //BigDAT = new FileStream(name, FileMode.Append, FileAccess.Write);
                 BigDAT = new FileStream(name, FileMode.Append, FileAccess.Write);
                 BBigDAT = new BinaryWriter(BigDAT);
-                
-                
-            } else
+
+
+            }
+            else
             {
                 createCDat(name);
             }
         }
 
-        public long AppendCDat(string FileN)
+        public long[] AppendCDat(string FileN)
         {
 
             //if (BigDAT == null)
@@ -200,11 +203,16 @@ namespace ProjectManager
             if (BigDAT != null) BigDAT.Close();
             if (BBigDAT != null) BBigDAT.Close();
 
-                BigDAT = new FileStream(CDatName, FileMode.Open, FileAccess.ReadWrite);
-                BBigDAT = new BinaryWriter(BigDAT);
-                BigDAT.Seek(BigDAT.Length, SeekOrigin.Begin);
+            BigDAT = new FileStream(CDatName, FileMode.Open, FileAccess.ReadWrite);
+            BBigDAT = new BinaryWriter(BigDAT);
+            BigDAT.Seek(BigDAT.Length, SeekOrigin.Begin);
             //}
-            if (!File.Exists(FileN)) return -1;
+
+            if (!File.Exists(FileN))
+            {
+                long[] retu = new long[] { -1, 0 };
+                return retu;
+            }
 
             long r = BigDAT.Position;
             //if (DatCount < 2)
@@ -220,7 +228,8 @@ namespace ProjectManager
             FileStream InFile = new FileStream(FileN, FileMode.Open, FileAccess.Read);
             BinaryReader BInFile = new BinaryReader(InFile);
 
-            BBigDAT.Write((Int32)InFile.Length/4); //gives length, to determine if offset exists or not
+            long Buff = InFile.Length;
+            //BBigDAT.Write((Int32)InFile.Length / 4); //gives length, to determine if offset exists or not
 
             for (int i = 0; i < InFile.Length / 4; i++)
             {
@@ -238,15 +247,17 @@ namespace ProjectManager
             BigDAT.Close();
             BBigDAT.Close();
 
-            return r;
+
+            long[] ret = new long[] { r, Buff };
+            return ret;
             //for (int i = 0; i < data.Length; i ++)
             //{
             //    BBigDAT.Write(data[i]);
             //}
 
-            
 
-            
+
+
 
 
         }
@@ -276,7 +287,7 @@ namespace ProjectManager
                     _ignoreNumber = true;
             }
             return _ignoreNumber;
-                
+
         }
         public void Open()
         {
@@ -287,7 +298,7 @@ namespace ProjectManager
                 {
                     ParseLine(F.ReadLine());
                 }
-                
+
                 F.Dispose();
                 //checkCD(true);
             }
@@ -329,7 +340,7 @@ namespace ProjectManager
                 foreach (SeizureType S in A.Sz)
                 {
                     answer = string.Format("{0:D2}:{1:D2}:{2:D2}", S.t.Hours, S.t.Minutes, S.t.Seconds);
-                    s = "An," + A.ID + ", sz, " + S.d.ToString() + ", " + answer + "," + S.Notes + "," + S.length + "," + S.file + "," + S.Severity + "," + S.Offset;
+                    s = "An," + A.ID + ", sz, " + S.d.ToString() + ", " + answer + "," + S.Notes + "," + S.length + "," + S.file + "," + S.Severity + "," + S.Offset + ", " + S.BufferLen;
                     if (S.VidString != null) s += "," + S.VidString;
                     F.WriteLine(s);
                 }
@@ -365,7 +376,7 @@ namespace ProjectManager
                 }
 
             }
-            
+
             F.Close();
             F.Dispose();
             _fileChanged = false; // after file has saved, we can reset flag
@@ -392,8 +403,8 @@ namespace ProjectManager
                     Directory.CreateDirectory(temp0);
 
                     string FN = temp0 + "\\" + temp[temp.Length - 2];
-                    
-                    
+
+
                     if (File.Exists(CDatName))
                     {
                         File.Copy(CDatName, FN + ".dat");
@@ -404,7 +415,7 @@ namespace ProjectManager
                         CopyVideos(Directory.GetParent(Filename) + "\\Videos\\", temp0 + "\\Videos\\");
                     }
 
-                 
+
 
                     Console.WriteLine(FN + ".pjt");
 
@@ -678,7 +689,7 @@ namespace ProjectManager
                     if (Math.Ceiling(PercentCompletion) < 100)
                     {
                         DialogResult dialogResult = MessageBox.Show(
-                            FName[0] + " at %" + Math.Round(PercentCompletion,2).ToString() + " - Import Anyway?",
+                            FName[0] + " at %" + Math.Round(PercentCompletion, 2).ToString() + " - Import Anyway?",
                             "Review Not Complete",
                              MessageBoxButtons.YesNo);
                         if (dialogResult == DialogResult.No)
@@ -701,8 +712,10 @@ namespace ProjectManager
                 F.Duration = TimeSpan.FromSeconds(TempACQ.FileTime);
 
                 TempACQ.closeACQ();
-                FileType Fs = Files.Find(delegate (FileType Ft) { return ((DateTime.Compare(Ft.Start, F.Start) == 0) &&
-                    (string.Compare(F.AnimalIDs[0], Ft.AnimalIDs[0]) == 0)); });
+                FileType Fs = Files.Find(delegate (FileType Ft) {
+                    return ((DateTime.Compare(Ft.Start, F.Start) == 0) &&
+(string.Compare(F.AnimalIDs[0], Ft.AnimalIDs[0]) == 0));
+                });
                 //Determine if duplicate file - compare animal name and file start
                 if (Fs != null)
                 {
@@ -837,7 +850,7 @@ namespace ProjectManager
             string str;
             TimeSpan t;
             SeizureType S;
-            
+
             string F = Fname.Substring(Fname.LastIndexOf('\\') + 1);
             dt = ConvertFileToDT(F);
             StreamReader TmpTxt = new StreamReader(Fname);
@@ -846,12 +859,16 @@ namespace ProjectManager
             {
                 str = TmpTxt.ReadLine();
                 long offset;
+                int BuffLen;
                 TmpStr = str.Split(',');
                 if (TmpStr.Length == 0) return;
                 string tempDAT = Dir + TmpStr[6].Replace(" ", string.Empty) + ".dat";
-                offset = AppendCDat(tempDAT);
-                
-                
+                long[] OffAndBuff = AppendCDat(tempDAT);
+
+                offset = OffAndBuff[0];
+                BuffLen = (int)OffAndBuff[1];
+
+
 
                 CurrentAnimal = FindAnimal(TmpStr[1]);
                 TimeSpan.TryParse(TmpStr[3], out t);
@@ -868,12 +885,14 @@ namespace ProjectManager
                 {
                     S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6], TmpStr[7]);
                 }
-                else if (TmpStr.Length < 9)
+                else if (TmpStr.Length < 8)
                 {
-                    S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6], TmpStr[7], offset, 0); //
-                } else
+                    //S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6], TmpStr[7], offset, 0); //
+                    S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6], TmpStr[7], offset, BuffLen);
+                }
+                else
                 {
-                    S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6], TmpStr[7], offset, int.Parse(TmpStr[8]));
+                    S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6], TmpStr[7], offset, BuffLen);
                 }
 
                 Animals[CurrentAnimal].Sz.Add(S);
@@ -896,23 +915,23 @@ namespace ProjectManager
                     {
                         string vidCop = Directory.GetParent(Filename).ToString();
                         if (!Directory.Exists(vidCop + "\\Videos")) Directory.CreateDirectory(vidCop + "\\Videos");
-                        
+
                         vidCop += "\\Videos\\" + Animals[CurrentAnimal].ID + "-" + Animals[CurrentAnimal].Sz.Count + type;
                         S.VidString = Animals[CurrentAnimal].ID + "-" + Animals[CurrentAnimal].Sz.Count + type;
 
-                    
-                        
+
+
                         File.Copy(tempVid, vidCop);
-                        Console.WriteLine(ThreadPool.QueueUserWorkItem(MoveVidThread, new object[] {tempVid, vidCop}));
-                        
-                        
+                        Console.WriteLine(ThreadPool.QueueUserWorkItem(MoveVidThread, new object[] { tempVid, vidCop }));
+
+
                     }
-                        
-                    
-                    
+
+
+
                 }
                 //This should be part of S 
-                
+
                 //Animals[CurrentAnimal].SZF.Add(Dir +  TmpStr[6].Replace(" ", string.Empty));
                 //Console.WriteLine("Clear: " + Dir + TmpStr[6].Replace(" ", string.Empty)); //you're working on adding file names!
                 //EEGOrganizer tempEO = new EEGOrganizer(TmpStr[1], Dir + TmpStr[6], CurrentAnimal);
@@ -933,7 +952,7 @@ namespace ProjectManager
 
         public long loadDats(string Path)
         {
-            
+
             return 1;
         }
         public void AddImportantDate(string AnimalName, string d, string Text)
@@ -992,10 +1011,10 @@ namespace ProjectManager
             foreach (FileType file in Files)
             {
                 if (file.AnimalIDs.Contains(animal.ID) && !_appeared && _firstAppearance && i > 0)
-                    // Track earliest time that animal ID appears 
+                // Track earliest time that animal ID appears 
                 {
-                    earliest = Files[i - 1].Start; 
-                    _appeared = true; 
+                    earliest = Files[i - 1].Start;
+                    _appeared = true;
                     _firstAppearance = false;
                 }
 
@@ -1135,7 +1154,7 @@ namespace ProjectManager
             DateTime Latest = Files[Files.Count - 1].Start.Date;
             st = Earliest.ToShortDateString() + "," + Earliest.ToShortTimeString();
             F.WriteLine(st);
-            
+
             if (E.DetailList)
             {
 
@@ -1341,24 +1360,24 @@ namespace ProjectManager
             var counts = new int[dates.Count];
 
             // get seizure datetimes
-            List<DateTime> seizureDates = new List<DateTime>();             
+            List<DateTime> seizureDates = new List<DateTime>();
             foreach (SeizureType S in seizures)
             {
                 // solution to exclude seizures marked with "-1" stage from output
-                if (S.Severity>-1)
+                if (S.Severity > -1)
                 {
-                    seizureDates.Add(S.d.Date.AddDays(S.t.TotalDays - alignBy)); 
+                    seizureDates.Add(S.d.Date.AddDays(S.t.TotalDays - alignBy));
                 }
             }
-            
+
             int i = 0; // counter for dates/bins
             foreach (var date in dates)
             {
                 // add aligned days
                 DateTime shiftedDate = date.AddDays(-alignBy);
-                
+
                 // bin by date, need to add upper limit by 1 day to bin by entire day
-                var binnedDates = seizureDates.Where(dt => dt  >= shiftedDate && dt < shiftedDate.AddDays(1)).ToList();
+                var binnedDates = seizureDates.Where(dt => dt >= shiftedDate && dt < shiftedDate.AddDays(1)).ToList();
                 // insert into array
                 counts[i] = binnedDates.Count;
                 i++; // next bin
@@ -1455,10 +1474,11 @@ namespace ProjectManager
                         {
                             //New way, has severity info
                             S = new SeizureType(data[3], data[4], data[5], data[6], data[7], data[8], long.Parse(data[9]), int.Parse(data[10]));
-                            
+                            //S = new SeizureType(data[3], data[4], data[5], data[6], data[7], data[8], long.Parse(data[9]));
+
                             if (data.Length == 12) S.VidString = data[11];
-                            
-                        } 
+
+                        }
                         else
                         {
                             S = new SeizureType(data[3], data[4], data[5], data[6], data[7], data[8]);
