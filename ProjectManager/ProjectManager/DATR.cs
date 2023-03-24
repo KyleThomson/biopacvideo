@@ -78,6 +78,7 @@ namespace ProjectManager
         public int totalFiles;
         public int drawMode = 0;
         public bool oneCol = false;
+        public bool bufferExists = true;
         
         
 
@@ -114,9 +115,20 @@ namespace ProjectManager
 
         }
 
-        public void DrawSZ(long offset, int length, int X, int Y, bool display, bool vidSelect, bool ShowBuff)
+        public void DrawSZ(SeizureType sZ, int X, int Y, bool display, bool vidSelect, bool ShowBuff)
         {
+
+            long offset = sZ.Offset;
+            long buffLen = sZ.BufferLen;
+            int length = sZ.length;
             PointF[] WaveC;
+            if ((length * 500 * 4) < buffLen)
+            {
+                bufferExists = true;
+                if (ShowBuff) length += 60;
+            }
+            else bufferExists = false;
+            
             int expectedSampleSize = DisplayLength * SampleRate;
             int YBoxMax = (Ymax / (numPerPage / 2));
             float YPoint;
@@ -168,14 +180,14 @@ namespace ProjectManager
                     }
 
                     
-                    if (YPoint > (Ymax / (numPerPage / 2))) YPoint = ((float)Ymax / ((float)numPerPage / 2f) - YDraw);         //Kyle's Mistake                                                                        
+                    if (YPoint > (Ymax / (numPerPage / 2))) YPoint = ((float)Ymax / ((float)numPerPage / 2f) - YDraw);                                                                              
                     if (YPoint < 0) YPoint = 0;
                     
                     PointF TempPoint = new PointF((float)(i + (X * expectedSampleSize)) / xOff * PointSpacing, YDraw + YPoint);
                     WaveC[i] = TempPoint;
                 }
             }
-            else
+            else  
             {
                 int diff = (SampleSize - expectedSampleSize);
                 int DiffF = diff / 2;
@@ -188,7 +200,7 @@ namespace ProjectManager
                     YPoint += yOff;
 
 
-                    if (YPoint > Ymax / (numPerPage / 2)) YPoint = ((float)Ymax / ((float)numPerPage / 2f) - YDraw);       //Kyle's Mistake                                                                        
+                    if (YPoint > Ymax / (numPerPage / 2)) YPoint = ((float)Ymax / ((float)numPerPage / 2f) - YDraw);                                                                          
                     if (YPoint < 0) YPoint = 0;
                     PointF TempPoint = new PointF((float)(i + (X * expectedSampleSize)) / xOff * PointSpacing, YDraw + YPoint);
                     if (TempPoint.X > offscreen.Width)
@@ -258,43 +270,61 @@ namespace ProjectManager
         public long ReadData(long pos, long average, int SampSize, bool ShowBuff)
         {
             FILES.Seek(pos, 0);
-            Int32 BufferCheck = FID.ReadInt32();
+            //Int32 BufferCheck = FID.ReadInt32();
 
-            if (BufferCheck > SampleSize)
+            //if (BufferCheck > SampleSize)
+            //{
+            if (ShowBuff)
             {
-                if (ShowBuff)
+                //SampleSize = BufferCheck;
+                //TData = new Int32[SampleSize];
+                for (int i = 0; i < SampleSize; i++)
                 {
-                    SampleSize = BufferCheck;
-                    TData = new Int32[BufferCheck];
-                    for (int i = 0; i < BufferCheck; i++)
+                    if (i + pos >= EOF)
                     {
-                        if (i + pos > EOF) return average;
+                        TData[i] = (int)average / SampleSize;
+                    }
+                    else
+                    {
                         TData[i] = FID.ReadInt32();
                         average += TData[i];
                     }
-                } else
-                {
-                    FILES.Seek(pos + (30 * 500 * 4), 0);
-                    for (int i = 0; i < SampleSize; i++)
-                        {
-                            if (i + pos > EOF) return average;
-                            TData[i] = FID.ReadInt32();
-                            average += TData[i];
-                        }
-                }
 
-                
+                }
             }
             else
             {
 
+
+                if (bufferExists) FILES.Seek(pos + (30 * 500 * 4), 0);
+
                 for (int i = 0; i < SampleSize; i++)
                 {
-                    if (i + pos > EOF) return average;
-                    TData[i] = FID.ReadInt32();
-                    average += TData[i];
+                    if (i + pos >= EOF)
+                    {
+                        TData[i] = (int)average / SampleSize;
+                    }
+                    else
+                    {
+                        TData[i] = FID.ReadInt32();
+                        average += TData[i];
+                    }
+
                 }
             }
+
+
+            //  }
+            //else
+            //{
+
+            //    for (int i = 0; i < SampleSize; i++)
+            //    {
+            //        if (i + pos > EOF) return average;
+            //        TData[i] = FID.ReadInt32();
+            //        average += TData[i];
+            //    }
+            //}
             return average;
         }
 
