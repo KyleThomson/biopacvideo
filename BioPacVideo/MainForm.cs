@@ -359,8 +359,14 @@ namespace BioPacVideo
             }
             for (int i = 0; i < 16; i++)
             {
-                MP.RecordingDevice[i] = BioIni.IniReadValue("BioPac", string.Format("RecordingDevice_Channel{0}",i), false);
+                if (BioIni.IniReadValue("BioPac", string.Format("RecordingDevice_Channel{0}", i), false)== true)
+                {
+                    MP.RecordingDevice = Enumerable.Repeat(true, 16).ToArray();
+                    break; 
+                }
+                MP.RecordingDevice[i] = false; 
             }
+
             MP.UpdateOffsets();
             for (int i = 0; i < 16; i++)
             {
@@ -757,10 +763,6 @@ namespace BioPacVideo
             C.Dispose();
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-
-        }
 
         private void VoltScale_SelectedIndexChanged(object sender, EventArgs e)
         {

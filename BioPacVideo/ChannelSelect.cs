@@ -31,8 +31,8 @@ namespace BioPacVideo
             ChannelAcq14.Checked = RecordAC[13];
             ChannelAcq15.Checked = RecordAC[14];
             ChannelAcq16.Checked = RecordAC[15];
-            TelemetryCh1.Checked = RecordingDevice[0];
-            TelemetryCh2.Checked = RecordingDevice[1];
+            Telemetry.Checked = RecordingDevice[0];
+            /*TelemetryCh2.Checked = RecordingDevice[1];
             TelemetryCh3.Checked = RecordingDevice[2];
             TelemetryCh4.Checked = RecordingDevice[3];
             TelemetryCh5.Checked = RecordingDevice[4];
@@ -46,7 +46,7 @@ namespace BioPacVideo
             TelemetryCh13.Checked = RecordingDevice[12];
             TelemetryCh14.Checked = RecordingDevice[13];
             TelemetryCh15.Checked = RecordingDevice[14];
-            TelemetryCh16.Checked = RecordingDevice[15];
+            TelemetryCh16.Checked = RecordingDevice[15];*/
         }
         public bool[] AC()
         {
@@ -59,9 +59,16 @@ namespace BioPacVideo
         }
         public bool[] RC()
         {
-            bool[] allchan = new bool[] {TelemetryCh1.Checked, TelemetryCh2.Checked, TelemetryCh3.Checked, TelemetryCh4.Checked, TelemetryCh5.Checked, 
+            bool[] allchan = new bool[16]; 
+            for (int i=0; i<16; i++)
+            {
+                allchan[i] = Telemetry.Checked; 
+                
+                /*TelemetryCh2.Checked, TelemetryCh3.Checked, TelemetryCh4.Checked, TelemetryCh5.Checked, 
                 TelemetryCh6.Checked, TelemetryCh7.Checked, TelemetryCh8.Checked, TelemetryCh9.Checked, TelemetryCh10.Checked, TelemetryCh11.Checked, 
-                TelemetryCh12.Checked, TelemetryCh13.Checked, TelemetryCh14.Checked, TelemetryCh15.Checked, TelemetryCh16.Checked};
+                TelemetryCh12.Checked, TelemetryCh13.Checked, TelemetryCh14.Checked, TelemetryCh15.Checked, TelemetryCh16.Checked};*/
+            }
+
             return allchan;
         }
         private void ID_OK_Click(object sender, EventArgs e)
