@@ -107,7 +107,6 @@
             this.MinimizeBox = false;
             this.Name = "FeederTester";
             this.Text = "Feeder Test";
-            this.Load += new System.EventHandler(this.FeederTester_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

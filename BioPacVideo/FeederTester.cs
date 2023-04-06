@@ -41,7 +41,7 @@ namespace BioPacVideo
             // If there is an image and it has a location,  
             // paint it when the Form is repainted. 
             base.OnPaint(e);
-            g.DrawImage(RoomImage,180,10);           
+            e.Graphics.DrawImage(RoomImage,180,10);           
         }
         private void MouseDownHandler(object sender, MouseEventArgs e)
         {
@@ -130,7 +130,7 @@ namespace BioPacVideo
             }
             if ((FeederPos != -1) && (CagePos != -1))
             {
-                FeederNum.Text = "Feeder: " + (FeederPos + CagePos * 4).ToString();
+                FeederNum.Text = "Feeder: " + ((FeederPos + CagePos * 4)+1).ToString();
                 return;
             }
 
@@ -151,26 +151,12 @@ namespace BioPacVideo
                 Feeder.AddCommand((byte)F, (byte)P);
                 Feeder.ExecuteAck();
             }
-            /*Feeder.AddCommand((byte)3, (byte)3);
-            Feeder.AddCommand((byte)2, (byte)3);
-            Feeder.AddCommand((byte)1, (byte)3);
-            Feeder.AddCommand((byte)0, (byte)3);           
-            Feeder.Execute();
-            /* while (Feeder.State != 2) 
-             {
-             }
-             Elapsed = DateTime.Now - Start;
-             Start = DateTime.Now;
-             StatusBox.Text += Environment.NewLine + "Command Pass took " + Elapsed.TotalMilliseconds + " ms";
-             while (Feeder.State != 3)
-             {
-             }
-             Elapsed = DateTime.Now - Start;
-             StatusBox.Text += Environment.NewLine + "Execution took " + Elapsed.TotalSeconds + " s";            */
-        }
+            else
+            {
+                MessageBox.Show("Please Input Number of Pellets");
+                return;
+            }
 
-        private void FeederTester_Load(object sender, EventArgs e)
-        {            
         }
 
         private void TestAll_Click(object sender, EventArgs e)
