@@ -142,7 +142,7 @@ namespace BioPacVideo
             for (int i=0; i<halfChan; i++)
             {
                 TempPanel = Panels[i] as Panel;
-                TempPanel.Location =new Point ((i * 149) + 127,37);
+                TempPanel.Location = new Point ((i * 149) + 127,37);
                 TempPanel = Panels[i+halfChan] as Panel;
                 TempPanel.Location = new Point((i * 149) + 127, 158);
             }
@@ -669,7 +669,7 @@ namespace BioPacVideo
             RecordSettings frm = new RecordSettings();
             frm.ShowDialog(this);         
             frm.Dispose();
-            UpdateINI(BioIni);
+            UpdateINI(BioIni); // this must be what is crashing the program 
             MessageBox.Show("Please restart the software \nbefore continuing.");
             IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
         }
@@ -697,46 +697,12 @@ namespace BioPacVideo
             UpdateINI(BioIni);           
         }
 
-    
-        private void testFeedersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            
-        }
-    
-        
-
         private void videoSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             VideoSettings frm = new VideoSettings();         
             frm.ShowDialog(this);
             if (frm.DialogResult == DialogResult.OK) UpdateINI(BioIni); 
             frm.Dispose();
-        }
-
-        private void sensorControlToolStripMenuItem_Click(object sender, EventArgs e)
-        {            
-         /*   SensorControl frm = new SensorControl();
-            frm.ShowDialog(this);
-            UpdateINI(BioIni);
-            frm.Dispose();*/
-        }
-
-
-        private void initializeVideoCardToolStripMenuItem_Click(object sender, EventArgs e)
-        {   
-           /*  if (!Video.CapSDKStatus)
-            {
-                Video.initVideo();
-                IDT_DEVICECOUNT.Text = string.Format("Device Count ({0})", Video.Device_Count);
-                IDT_VIDEOSTATUS.Text = Video.GetResText();
-                Console.WriteLine(Video.GetResText());
-                if (Video.Res == (AdvantechCodes.tagRes.SUCCEEDED))
-                {
-                    Video.CapSDKStatus = true;
-                }                         
-            }
-            */
-            
         }
 
         private void bioPacEnabledToolStripMenuItem_Click(object sender, EventArgs e)
@@ -773,17 +739,6 @@ namespace BioPacVideo
         {
             MP.DisplayLength = DisplayLengthSize[TimeScale.SelectedIndex];
             MP.ResetDisplaySize();
-        }
-
-        private void StatusBar_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
-        }
-
-        private void zoomToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //ZoomWindow X = new ZoomWindow();
-            //X.ShowDialog(this);
         }
 
         private void AddPelletCountMenuItem_Click(object sender, EventArgs e)
@@ -830,9 +785,16 @@ namespace BioPacVideo
             MP.ShowFeederStatus();
         }
 
-        private void feederTestToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ratRoomToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FeederTester frm = new FeederTester();
+            frm.ShowDialog(this);
+            frm.Dispose();
+        }
+
+        private void mouseRoomToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FeederTester_Mouse frm = new FeederTester_Mouse();
             frm.ShowDialog(this);
             frm.Dispose();
         }

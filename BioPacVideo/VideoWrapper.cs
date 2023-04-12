@@ -267,10 +267,6 @@ namespace BioPacVideo
             HwUnInitialize();
         }
 
-        private void SetupControlClosed(object sender, FormClosedEventArgs e)
-        {
-           
-        }
         public void UpdateCameraAssoc()
         {
             for (int i = 0; i < maxdevices; i++)
@@ -431,7 +427,6 @@ namespace BioPacVideo
                     }
                 }
             }
-                
         }
         public void TempCloneVideo(int channel, Int32 panelhandlet)
         {
@@ -444,6 +439,7 @@ namespace BioPacVideo
 
             }
         }
+
         public void DestroyTempCloneVideo()
         {
             EXPORTS.QCAP_STOP(m_hCloneCapDev_temp);

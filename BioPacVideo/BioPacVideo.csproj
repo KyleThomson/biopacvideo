@@ -86,6 +86,12 @@
     <Compile Include="CameraAssc.Designer.cs">
       <DependentUpon>CameraAssc.cs</DependentUpon>
     </Compile>
+    <Compile Include="CameraAssosciationTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CameraAssosciationTest.Designer.cs">
+      <DependentUpon>CameraAssosciationTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="FeederForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +116,12 @@
     </Compile>
     <Compile Include="FeederAddress.Designer.cs">
       <DependentUpon>FeederAddress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FeederTester_Mouse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FeederTester_Mouse.Designer.cs">
+      <DependentUpon>FeederTester_Mouse.cs</DependentUpon>
     </Compile>
     <Compile Include="RecordSettings.cs">
       <SubType>Form</SubType>
@@ -162,6 +174,9 @@
       <DependentUpon>CameraAssc.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="CameraAssosciationTest.resx">
+      <DependentUpon>CameraAssosciationTest.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FeederAddress.resx">
       <DependentUpon>FeederAddress.cs</DependentUpon>
     </EmbeddedResource>
@@ -175,6 +190,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FeederErrorBox.resx">
       <DependentUpon>FeederErrorBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FeederTester_Mouse.resx">
+      <DependentUpon>FeederTester_Mouse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RecordSettings.resx">
       <DependentUpon>RecordSettings.cs</DependentUpon>

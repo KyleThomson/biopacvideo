@@ -32,7 +32,6 @@ namespace BioPacVideo
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bioPacToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,7 +44,6 @@ namespace BioPacVideo
             this.videoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cameraAssociationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.videoSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sensorControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.automaticFeederToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setFeedingProtocolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,6 +51,8 @@ namespace BioPacVideo
             this.AddPelletCountMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.feedersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.feederTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ratRoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mouseRoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.feederAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.feederStatusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusBar = new System.Windows.Forms.StatusStrip();
@@ -118,7 +118,6 @@ namespace BioPacVideo
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectDirectoryToolStripMenuItem,
-            this.openSettingsToolStripMenuItem,
             this.toolStripSeparator1,
             this.quitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -131,12 +130,6 @@ namespace BioPacVideo
             this.selectDirectoryToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
             this.selectDirectoryToolStripMenuItem.Text = "Select &Recording Directory";
             this.selectDirectoryToolStripMenuItem.Click += new System.EventHandler(this.selectDirectoryToolStripMenuItem_Click);
-            // 
-            // openSettingsToolStripMenuItem
-            // 
-            this.openSettingsToolStripMenuItem.Name = "openSettingsToolStripMenuItem";
-            this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
-            this.openSettingsToolStripMenuItem.Text = "&Open Settings";
             // 
             // toolStripSeparator1
             // 
@@ -208,7 +201,6 @@ namespace BioPacVideo
             this.videoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cameraAssociationsToolStripMenuItem,
             this.videoSettingsToolStripMenuItem,
-            this.sensorControlToolStripMenuItem,
             this.toolStripSeparator3});
             this.videoToolStripMenuItem.Name = "videoToolStripMenuItem";
             this.videoToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
@@ -229,13 +221,6 @@ namespace BioPacVideo
             this.videoSettingsToolStripMenuItem.Text = "Video Settings";
             this.videoSettingsToolStripMenuItem.Click += new System.EventHandler(this.videoSettingsToolStripMenuItem_Click);
             // 
-            // sensorControlToolStripMenuItem
-            // 
-            this.sensorControlToolStripMenuItem.Name = "sensorControlToolStripMenuItem";
-            this.sensorControlToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.sensorControlToolStripMenuItem.Text = "Sensor Control";
-            this.sensorControlToolStripMenuItem.Click += new System.EventHandler(this.sensorControlToolStripMenuItem_Click);
-            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
@@ -254,21 +239,21 @@ namespace BioPacVideo
             // setFeedingProtocolToolStripMenuItem
             // 
             this.setFeedingProtocolToolStripMenuItem.Name = "setFeedingProtocolToolStripMenuItem";
-            this.setFeedingProtocolToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.setFeedingProtocolToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.setFeedingProtocolToolStripMenuItem.Text = "Animal Settings";
             this.setFeedingProtocolToolStripMenuItem.Click += new System.EventHandler(this.setFeedingProtocolToolStripMenuItem_Click);
             // 
             // injectionManagerToolStripMenuItem
             // 
             this.injectionManagerToolStripMenuItem.Name = "injectionManagerToolStripMenuItem";
-            this.injectionManagerToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.injectionManagerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.injectionManagerToolStripMenuItem.Text = "Injection Manager";
             this.injectionManagerToolStripMenuItem.Click += new System.EventHandler(this.injectionManagerToolStripMenuItem_Click);
             // 
             // AddPelletCountMenuItem
             // 
             this.AddPelletCountMenuItem.Name = "AddPelletCountMenuItem";
-            this.AddPelletCountMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.AddPelletCountMenuItem.Size = new System.Drawing.Size(180, 22);
             this.AddPelletCountMenuItem.Text = "Add Pellet Count";
             this.AddPelletCountMenuItem.Click += new System.EventHandler(this.AddPelletCountMenuItem_Click);
             // 
@@ -284,22 +269,38 @@ namespace BioPacVideo
             // 
             // feederTestToolStripMenuItem
             // 
+            this.feederTestToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ratRoomToolStripMenuItem,
+            this.mouseRoomToolStripMenuItem});
             this.feederTestToolStripMenuItem.Name = "feederTestToolStripMenuItem";
-            this.feederTestToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.feederTestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.feederTestToolStripMenuItem.Text = "Feeder Test";
-            this.feederTestToolStripMenuItem.Click += new System.EventHandler(this.feederTestToolStripMenuItem_Click);
+            // 
+            // ratRoomToolStripMenuItem
+            // 
+            this.ratRoomToolStripMenuItem.Name = "ratRoomToolStripMenuItem";
+            this.ratRoomToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ratRoomToolStripMenuItem.Text = "Rat Room";
+            this.ratRoomToolStripMenuItem.Click += new System.EventHandler(this.ratRoomToolStripMenuItem_Click);
+            // 
+            // mouseRoomToolStripMenuItem
+            // 
+            this.mouseRoomToolStripMenuItem.Name = "mouseRoomToolStripMenuItem";
+            this.mouseRoomToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.mouseRoomToolStripMenuItem.Text = "Mouse Room";
+            this.mouseRoomToolStripMenuItem.Click += new System.EventHandler(this.mouseRoomToolStripMenuItem_Click);
             // 
             // feederAddressToolStripMenuItem
             // 
             this.feederAddressToolStripMenuItem.Name = "feederAddressToolStripMenuItem";
-            this.feederAddressToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.feederAddressToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.feederAddressToolStripMenuItem.Text = "Feeder Address";
             this.feederAddressToolStripMenuItem.Click += new System.EventHandler(this.feederAddressToolStripMenuItem_Click);
             // 
             // feederStatusToolStripMenuItem
             // 
             this.feederStatusToolStripMenuItem.Name = "feederStatusToolStripMenuItem";
-            this.feederStatusToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.feederStatusToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.feederStatusToolStripMenuItem.Text = "Feeder Status";
             this.feederStatusToolStripMenuItem.Click += new System.EventHandler(this.feederStatusToolStripMenuItem_Click);
             // 
@@ -320,7 +321,6 @@ namespace BioPacVideo
             this.StatusBar.Size = new System.Drawing.Size(1286, 28);
             this.StatusBar.TabIndex = 3;
             this.StatusBar.Text = "statusStrip1";
-            this.StatusBar.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.StatusBar_ItemClicked);
             // 
             // SpaceLeft
             // 
@@ -641,7 +641,6 @@ namespace BioPacVideo
         private System.Windows.Forms.ToolStripMenuItem bioPacToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem automaticFeederToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem selectDirectoryToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem initializeBioPacToolStripMenuItem;
@@ -655,7 +654,6 @@ namespace BioPacVideo
         private System.Windows.Forms.ToolStripStatusLabel IDT_VIDEOSTATUS;
         private System.Windows.Forms.ToolStripStatusLabel IDT_DEVICECOUNT;
         private System.Windows.Forms.ToolStripMenuItem videoSettingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sensorControlToolStripMenuItem;
         internal System.Windows.Forms.ToolStripStatusLabel IDT_FEEDST;
         internal System.Windows.Forms.ToolStripStatusLabel IDT_ENCODERSTATUS;
         private System.Windows.Forms.ToolStripStatusLabel IDT_VIDEORESULT;
@@ -691,6 +689,8 @@ namespace BioPacVideo
         private System.Windows.Forms.ToolStripMenuItem feederTestToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem feederAddressToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem feederStatusToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ratRoomToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mouseRoomToolStripMenuItem;
     }
 }
 

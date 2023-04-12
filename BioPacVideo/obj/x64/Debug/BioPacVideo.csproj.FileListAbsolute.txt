@@ -20,4 +20,5 @@ C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\D
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.csproj.CopyComplete
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.exe
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.pdb
-C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.FeederTester_TestForm.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.CameraAssosciationTest.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.FeederTester_Mouse.resources

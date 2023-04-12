@@ -95,3 +95,5 @@ C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\R
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.csproj.CoreCompileInputs.cache
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.csproj.CopyComplete
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.exe
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.CameraAssosciationTest.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.FeederTester_Mouse.resources
