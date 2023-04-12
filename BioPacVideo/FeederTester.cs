@@ -31,7 +31,7 @@ namespace BioPacVideo
         
             Feeder = FeederTemplate.Instance;
             p = new Pen(Color.Red, 2);
-            RoomImage = new Bitmap(Path.GetDirectoryName(Application.ExecutablePath) + "\\FeederTester.png");         
+            RoomImage = new Bitmap(Path.GetDirectoryName(Application.ExecutablePath) + "\\FeederTester_Rat.png");         
             g = this.CreateGraphics();            
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownHandler);
             
@@ -41,103 +41,195 @@ namespace BioPacVideo
             // If there is an image and it has a location,  
             // paint it when the Form is repainted. 
             base.OnPaint(e);
-            e.Graphics.DrawImage(RoomImage,180,10);           
+            e.Graphics.DrawImage(RoomImage,15,25);           
         }
         private void MouseDownHandler(object sender, MouseEventArgs e)
         {
 
-            if (e.Y < 150)
+            g.DrawImage(RoomImage, 15, 25);
+            // feeders on the left side of the shelves 
+            if (e.X < 465)
             {
-                if ((e.X > 180) && (e.X < 233))
+                if (e.X < 220)
                 {
-                    FeederPos = 1;
-                }
-                if ((e.X > 233) && (e.X < 300))
-                {
-                    FeederPos = 0;
-                }
-                if ((e.X > 660) && (e.X < 733))
-                {
-                    FeederPos = 2;
-                }
-                if ((e.X > 733) && (e.X < 790))
-                {
-                    FeederPos = 3;
-                }
-            }
-            else if (e.Y > 165) 
-            {
-                if (e.X < 480)
-                {
-                    if (e.Y < 237)
-                        CagePos = 0;
-                    else if (e.Y > 320)
-                        CagePos = 4;
+                    if ((e.Y > 55) && (e.Y < 145) && (e.X < 83))
+                    {
+                        g.DrawRectangle(p, 28, 50, 55, 95);
+                        FeederPos = 1;
+                    }
+                    else if ((e.Y > 85) && (e.Y < 185) && (e.X < 120))
+                    {
+                        g.DrawRectangle(p, 70, 90, 50, 95);
+                        FeederPos = 2;
+                    }
+                    else if ((e.Y > 235) && (e.Y < 330) && (e.X < 83))
+                    {
+                        g.DrawRectangle(p, 28, 235, 50, 95);
+                        FeederPos = 9;
+                    }
+                    else if ((e.Y > 270) && (e.Y < 370) && (e.X < 112))
+                    {
+                        g.DrawRectangle(p, 65, 274, 50, 95);
+                        FeederPos = 10;
+                    }
+                    else if ((e.Y > 400) && (e.Y < 501) && (e.X < 80))
+                    {
+                        g.DrawRectangle(p, 32, 407, 50, 95);
+                        FeederPos = 17;
+                    }
+                    else if ((e.Y > 440) && (e.Y < 541) && (e.X < 112))
+                    {
+                        g.DrawRectangle(p, 70, 445, 50, 95);
+                        FeederPos = 18;
+                    }
                     else
-                        CagePos = 2;
+                    {
+                        FeederPos = -1;
+                    }
+                }
+                else if (e.X > 220)
+                {
+                    if ((e.Y > 55) && (e.Y < 145) && (e.X < 275))
+                    {
+                        g.DrawRectangle(p, 227, 50, 50, 95);
+                        FeederPos = 3;
+                    }
+                    else if ((e.Y > 85) && (e.Y < 185) && (e.X < 310))
+                    {
+                        g.DrawRectangle(p, 265, 90, 50, 95);
+                        FeederPos = 4;
+                    }
+                    else if ((e.Y > 235) && (e.Y < 330) && (e.X < 278))
+                    {
+                        g.DrawRectangle(p, 225, 235, 50, 95);
+                        FeederPos = 11;
+                    }
+                    else if ((e.Y > 270) && (e.Y < 370) && (e.X < 315))
+                    {
+                        g.DrawRectangle(p, 265, 272, 50, 95);
+                        FeederPos = 12;
+                    }
+                    else if ((e.Y > 400) && (e.Y < 501) && (e.X < 270))
+                    {
+                        g.DrawRectangle(p, 224, 408, 50, 95);
+                        FeederPos = 19;
+                    }
+                    else if ((e.Y > 440) && (e.Y < 541) && (e.X < 305))
+                    {
+                        g.DrawRectangle(p, 260, 450, 50, 95);
+                        FeederPos = 20;
+                    }
+                    else
+                    {
+                        FeederPos = -1;
+                    }
                 }
                 else
                 {
-                    if (e.Y < 237)
-                        CagePos = 1;
-                    else if (e.Y > 320)
-                        CagePos = 5;
-                    else
-                        CagePos = 3;
+                    FeederPos = -1; 
                 }
-                
             }
-            g.DrawImage(RoomImage,180,10);
-            switch (FeederPos)
+            // these are the feeders on the right side of the wall 
+            else if (e.X > 465)
             {
-                case -1:
-                    break;
-                case 0:
-                    g.DrawRectangle(p, 242, 25, 60, 120);
-                    break;
-                case 1:                    
-                    g.DrawRectangle(p, 185, 11, 60, 120);
-                    break;
-                case 2:
-                    g.DrawRectangle(p, 669, 25, 60, 120);
-                    break;
-                case 3:
-                    g.DrawRectangle(p, 723, 11, 60, 120);
-                    break;
+                if (e.X < 675)
+                {
+                    if ((e.Y > 50) && (e.Y < 145) && (e.X < 535))
+                    {
+                        g.DrawRectangle(p, 487, 50, 50, 95);
+                        FeederPos = 5;
+                    }
+                    else if ((e.Y > 90) && (e.Y < 185) && (e.X < 575))
+                    {
+                        g.DrawRectangle(p, 525, 90, 50, 95);
+                        FeederPos = 6;
+                    }
+                    else if ((e.Y > 235) && (e.Y < 331) && (e.X < 530))
+                    {
+                        g.DrawRectangle(p, 480, 235, 50, 95);
+                        FeederPos = 13;
+                    }
+                    else if ((e.Y > 275) && (e.Y < 371) && (e.X < 565))
+                    {
+                        g.DrawRectangle(p, 519, 273, 50, 95);
+                        FeederPos = 14;
+                    }
+                    else if ((e.Y > 405) && (e.Y < 500) && (e.X < 535))
+                    {
+                        g.DrawRectangle(p, 486, 405, 50, 95);
+                        FeederPos = 21;
+                    }
+                    else if ((e.Y > 445) && (e.Y < 535) && (e.X < 572))
+                    {
+                        g.DrawRectangle(p, 525, 445, 50, 95);
+                        FeederPos = 22;
+                    }
+                    else
+                    {
+                        FeederPos = -1;
+                    }
+                }
+                else if (e.X > 675)
+                {
+                    if ((e.Y > 50) && (e.Y < 144) && (e.X < 730))
+                    {
+                        g.DrawRectangle(p, 680, 50, 50, 95);
+                        FeederPos = 7;
+                    }
+                    else if ((e.Y > 90) && (e.Y < 181) && (e.X < 765))
+                    {
+                        g.DrawRectangle(p, 720, 90, 50, 95);
+                        FeederPos = 8;
+                    }
+                    else if ((e.Y > 238) && (e.Y < 330) && (e.X < 730))
+                    {
+                        g.DrawRectangle(p, 680, 235, 50, 95);
+                        FeederPos = 15;
+                    }
+                    else if ((e.Y > 277) && (e.Y < 365) && (e.X < 765))
+                    {
+                        g.DrawRectangle(p, 718, 275, 50, 95);
+                        FeederPos = 16;
+                    }
+                    else if ((e.Y > 408) && (e.Y < 502) && (e.X < 725))
+                    {
+                        g.DrawRectangle(p, 677, 408, 50, 95);
+                        FeederPos = 23;
+                    }
+                    else if ((e.Y > 450) && (e.Y < 540) && (e.X < 760))
+                    {
+                        g.DrawRectangle(p, 715, 450, 50, 95);
+                        FeederPos = 24;
+                    }
+                    else
+                    {
+                        FeederPos = -1;
+                    }
+                }
+                else
+                {
+                    FeederPos = -1; 
+                }
             }
-            switch (CagePos)
+            else
             {
-                case -1:
-                    break;
-                case 0:
-                    g.DrawRectangle(p, 193, 163, 270, 70);
-                    break;
-                case 1: 
-                    g.DrawRectangle(p, 506, 163, 270, 70);
-                    break;
-                case 2: 
-                    g.DrawRectangle(p, 193, 246, 270, 70);
-                    break;
-                case 3:
-                    g.DrawRectangle(p, 508, 246, 270, 70);
-                    break;
-                case 4:
-                    g.DrawRectangle(p, 193, 338, 270, 70);
-                    break;
-                case 5:
-                    g.DrawRectangle(p, 508, 338, 270, 70);
-                    break;
+                FeederPos = -1; 
             }
-            if ((FeederPos != -1) && (CagePos != -1))
+            
+            if ((FeederPos != -1))
             {
-                FeederNum.Text = "Feeder: " + ((FeederPos + CagePos * 4)+1).ToString();
+                FeederNum.Text = "Feeder " + (FeederPos).ToString() + " Selected";
                 return;
+            }
+            else
+            {
+                FeederNum.Text = ("No Feeder Selected");
             }
 
         }
         private void IDC_RUNTEST_Click(object sender, EventArgs e)
         {
-            if ((FeederPos == -1) || (CagePos == -1))
+            if ((FeederPos == -1))
             {
                 MessageBox.Show("No Feeder Selected");
                 return;
@@ -145,7 +237,7 @@ namespace BioPacVideo
             int F, P;
             DateTime Start;
             Start = DateTime.Now;
-            F = FeederPos + CagePos * 4; 
+            F = FeederPos - 1; 
             if  (int.TryParse(PelletsNum.Text, out P))
             {
                 Feeder.AddCommand((byte)F, (byte)P);
