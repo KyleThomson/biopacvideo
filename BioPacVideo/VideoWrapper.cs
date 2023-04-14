@@ -17,6 +17,7 @@ namespace BioPacVideo
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         public static extern void OutputDebugString(string message);
         public Int32[] PanelHandles;
+        public Int32[] panelhandlesnew; 
         static readonly VideoWrapper instance = new VideoWrapper();
         public uint maxdevices = 16;
         public uint i = 0;
@@ -428,6 +429,28 @@ namespace BioPacVideo
                 }
             }
         }
+        
+        public void NewCloneVideo(bool show)
+        {
+            int i;
+            if (show)
+            {
+                for (i = 0; i < maxdevices; i++)
+                {
+                    EXPORTS.QCAP_CREATE_CLONE(m_hCapDev[i], (uint)panelhandlesnew[i], ref m_hCloneCapDev_temp, 1);
+                    // this should be saying camera one goes to panel one, etc, all the way to the max devices 
+
+                    if (m_hCloneCapDev_temp != 0)
+                    {
+                        EXPORTS.QCAP_RUN(m_hCloneCapDev_temp);
+                        //this should be telling the video marker to run the video 
+                    }
+                }
+            }
+            
+
+        }
+        
         public void TempCloneVideo(int channel, Int32 panelhandlet)
         {
             

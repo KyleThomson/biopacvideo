@@ -22,7 +22,6 @@ namespace BioPacVideo
         Graphics g;
         Pen p; 
         int FeederPos = -1;
-        int CagePos = -1;
         Bitmap RoomImage;
         public FeederTester()
         {

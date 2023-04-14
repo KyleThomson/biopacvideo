@@ -798,5 +798,14 @@ namespace BioPacVideo
             frm.ShowDialog(this);
             frm.Dispose();
         }
+
+        private void cameraAssosciationTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CameraAssosciationTest frm = new CameraAssosciationTest();
+            frm.ShowDialog(this);
+            UpdateINI(BioIni);
+            Video.UpdateCameraAssoc();
+            frm.Dispose(); 
+        }
     }
 }

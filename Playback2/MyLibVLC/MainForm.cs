@@ -105,6 +105,7 @@ namespace SeizurePlayback
         public CManage()
         {
             InitializeComponent();
+            Console.WriteLine("Hi!");
             this.WindowState = FormWindowState.Maximized;
             ACQ = new ACQReader(); //Class to read from ACQ file
             graph = new Mygraph(); //Small Class for containing EEG area. 

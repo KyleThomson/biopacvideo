@@ -47,7 +47,6 @@ namespace BioPacVideo
             this.panel14 = new System.Windows.Forms.Panel();
             this.panel15 = new System.Windows.Forms.Panel();
             this.panel16 = new System.Windows.Forms.Panel();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
@@ -80,6 +79,7 @@ namespace BioPacVideo
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // setButton
@@ -90,6 +90,7 @@ namespace BioPacVideo
             this.setButton.TabIndex = 0;
             this.setButton.Text = "Set Channels";
             this.setButton.UseVisualStyleBackColor = true;
+            this.setButton.Click += new System.EventHandler(this.setButton_Click);
             // 
             // finishButton
             // 
@@ -99,6 +100,7 @@ namespace BioPacVideo
             this.finishButton.TabIndex = 1;
             this.finishButton.Text = "Finish";
             this.finishButton.UseVisualStyleBackColor = true;
+            this.finishButton.Click += new System.EventHandler(this.finishButton_Click);
             // 
             // panel1
             // 
@@ -135,7 +137,7 @@ namespace BioPacVideo
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.panel5.Location = new System.Drawing.Point(27, 190);
+            this.panel5.Location = new System.Drawing.Point(27, 213);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(136, 115);
             this.panel5.TabIndex = 5;
@@ -143,7 +145,7 @@ namespace BioPacVideo
             // panel6
             // 
             this.panel6.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.panel6.Location = new System.Drawing.Point(191, 190);
+            this.panel6.Location = new System.Drawing.Point(191, 213);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(136, 115);
             this.panel6.TabIndex = 4;
@@ -151,7 +153,7 @@ namespace BioPacVideo
             // panel7
             // 
             this.panel7.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.panel7.Location = new System.Drawing.Point(356, 190);
+            this.panel7.Location = new System.Drawing.Point(356, 213);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(136, 115);
             this.panel7.TabIndex = 4;
@@ -159,7 +161,7 @@ namespace BioPacVideo
             // panel8
             // 
             this.panel8.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.panel8.Location = new System.Drawing.Point(520, 190);
+            this.panel8.Location = new System.Drawing.Point(520, 213);
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(136, 115);
             this.panel8.TabIndex = 4;
@@ -167,7 +169,7 @@ namespace BioPacVideo
             // panel9
             // 
             this.panel9.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.panel9.Location = new System.Drawing.Point(27, 351);
+            this.panel9.Location = new System.Drawing.Point(27, 406);
             this.panel9.Name = "panel9";
             this.panel9.Size = new System.Drawing.Size(136, 115);
             this.panel9.TabIndex = 4;
@@ -175,7 +177,7 @@ namespace BioPacVideo
             // panel10
             // 
             this.panel10.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.panel10.Location = new System.Drawing.Point(191, 351);
+            this.panel10.Location = new System.Drawing.Point(191, 406);
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(136, 115);
             this.panel10.TabIndex = 4;
@@ -183,7 +185,7 @@ namespace BioPacVideo
             // panel11
             // 
             this.panel11.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.panel11.Location = new System.Drawing.Point(356, 351);
+            this.panel11.Location = new System.Drawing.Point(356, 406);
             this.panel11.Name = "panel11";
             this.panel11.Size = new System.Drawing.Size(136, 115);
             this.panel11.TabIndex = 4;
@@ -191,7 +193,7 @@ namespace BioPacVideo
             // panel12
             // 
             this.panel12.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.panel12.Location = new System.Drawing.Point(520, 351);
+            this.panel12.Location = new System.Drawing.Point(520, 406);
             this.panel12.Name = "panel12";
             this.panel12.Size = new System.Drawing.Size(136, 115);
             this.panel12.TabIndex = 4;
@@ -199,7 +201,7 @@ namespace BioPacVideo
             // panel13
             // 
             this.panel13.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.panel13.Location = new System.Drawing.Point(27, 514);
+            this.panel13.Location = new System.Drawing.Point(27, 601);
             this.panel13.Name = "panel13";
             this.panel13.Size = new System.Drawing.Size(136, 115);
             this.panel13.TabIndex = 6;
@@ -207,7 +209,7 @@ namespace BioPacVideo
             // panel14
             // 
             this.panel14.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.panel14.Location = new System.Drawing.Point(191, 514);
+            this.panel14.Location = new System.Drawing.Point(191, 601);
             this.panel14.Name = "panel14";
             this.panel14.Size = new System.Drawing.Size(136, 115);
             this.panel14.TabIndex = 4;
@@ -215,7 +217,7 @@ namespace BioPacVideo
             // panel15
             // 
             this.panel15.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.panel15.Location = new System.Drawing.Point(356, 514);
+            this.panel15.Location = new System.Drawing.Point(356, 601);
             this.panel15.Name = "panel15";
             this.panel15.Size = new System.Drawing.Size(136, 115);
             this.panel15.TabIndex = 4;
@@ -223,18 +225,10 @@ namespace BioPacVideo
             // panel16
             // 
             this.panel16.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.panel16.Location = new System.Drawing.Point(520, 514);
+            this.panel16.Location = new System.Drawing.Point(520, 601);
             this.panel16.Name = "panel16";
             this.panel16.Size = new System.Drawing.Size(136, 115);
             this.panel16.TabIndex = 4;
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(27, 142);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(136, 21);
-            this.comboBox1.TabIndex = 7;
             // 
             // comboBox2
             // 
@@ -263,7 +257,7 @@ namespace BioPacVideo
             // comboBox5
             // 
             this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Location = new System.Drawing.Point(27, 311);
+            this.comboBox5.Location = new System.Drawing.Point(27, 334);
             this.comboBox5.Name = "comboBox5";
             this.comboBox5.Size = new System.Drawing.Size(136, 21);
             this.comboBox5.TabIndex = 11;
@@ -271,7 +265,7 @@ namespace BioPacVideo
             // comboBox6
             // 
             this.comboBox6.FormattingEnabled = true;
-            this.comboBox6.Location = new System.Drawing.Point(191, 311);
+            this.comboBox6.Location = new System.Drawing.Point(191, 334);
             this.comboBox6.Name = "comboBox6";
             this.comboBox6.Size = new System.Drawing.Size(136, 21);
             this.comboBox6.TabIndex = 12;
@@ -279,7 +273,7 @@ namespace BioPacVideo
             // comboBox7
             // 
             this.comboBox7.FormattingEnabled = true;
-            this.comboBox7.Location = new System.Drawing.Point(356, 311);
+            this.comboBox7.Location = new System.Drawing.Point(356, 334);
             this.comboBox7.Name = "comboBox7";
             this.comboBox7.Size = new System.Drawing.Size(136, 21);
             this.comboBox7.TabIndex = 13;
@@ -287,7 +281,7 @@ namespace BioPacVideo
             // comboBox8
             // 
             this.comboBox8.FormattingEnabled = true;
-            this.comboBox8.Location = new System.Drawing.Point(520, 311);
+            this.comboBox8.Location = new System.Drawing.Point(520, 334);
             this.comboBox8.Name = "comboBox8";
             this.comboBox8.Size = new System.Drawing.Size(136, 21);
             this.comboBox8.TabIndex = 14;
@@ -295,7 +289,7 @@ namespace BioPacVideo
             // comboBox9
             // 
             this.comboBox9.FormattingEnabled = true;
-            this.comboBox9.Location = new System.Drawing.Point(27, 474);
+            this.comboBox9.Location = new System.Drawing.Point(27, 527);
             this.comboBox9.Name = "comboBox9";
             this.comboBox9.Size = new System.Drawing.Size(136, 21);
             this.comboBox9.TabIndex = 15;
@@ -303,7 +297,7 @@ namespace BioPacVideo
             // comboBox10
             // 
             this.comboBox10.FormattingEnabled = true;
-            this.comboBox10.Location = new System.Drawing.Point(191, 474);
+            this.comboBox10.Location = new System.Drawing.Point(191, 527);
             this.comboBox10.Name = "comboBox10";
             this.comboBox10.Size = new System.Drawing.Size(136, 21);
             this.comboBox10.TabIndex = 16;
@@ -311,7 +305,7 @@ namespace BioPacVideo
             // comboBox11
             // 
             this.comboBox11.FormattingEnabled = true;
-            this.comboBox11.Location = new System.Drawing.Point(356, 474);
+            this.comboBox11.Location = new System.Drawing.Point(356, 527);
             this.comboBox11.Name = "comboBox11";
             this.comboBox11.Size = new System.Drawing.Size(136, 21);
             this.comboBox11.TabIndex = 17;
@@ -319,7 +313,7 @@ namespace BioPacVideo
             // comboBox12
             // 
             this.comboBox12.FormattingEnabled = true;
-            this.comboBox12.Location = new System.Drawing.Point(520, 474);
+            this.comboBox12.Location = new System.Drawing.Point(520, 527);
             this.comboBox12.Name = "comboBox12";
             this.comboBox12.Size = new System.Drawing.Size(136, 21);
             this.comboBox12.TabIndex = 18;
@@ -328,7 +322,7 @@ namespace BioPacVideo
             // 
             this.comboBox13.BackColor = System.Drawing.SystemColors.Window;
             this.comboBox13.FormattingEnabled = true;
-            this.comboBox13.Location = new System.Drawing.Point(27, 635);
+            this.comboBox13.Location = new System.Drawing.Point(27, 722);
             this.comboBox13.Name = "comboBox13";
             this.comboBox13.Size = new System.Drawing.Size(136, 21);
             this.comboBox13.TabIndex = 19;
@@ -336,7 +330,7 @@ namespace BioPacVideo
             // comboBox14
             // 
             this.comboBox14.FormattingEnabled = true;
-            this.comboBox14.Location = new System.Drawing.Point(191, 635);
+            this.comboBox14.Location = new System.Drawing.Point(191, 722);
             this.comboBox14.Name = "comboBox14";
             this.comboBox14.Size = new System.Drawing.Size(136, 21);
             this.comboBox14.TabIndex = 20;
@@ -344,7 +338,7 @@ namespace BioPacVideo
             // comboBox15
             // 
             this.comboBox15.FormattingEnabled = true;
-            this.comboBox15.Location = new System.Drawing.Point(356, 635);
+            this.comboBox15.Location = new System.Drawing.Point(356, 722);
             this.comboBox15.Name = "comboBox15";
             this.comboBox15.Size = new System.Drawing.Size(136, 21);
             this.comboBox15.TabIndex = 21;
@@ -352,7 +346,7 @@ namespace BioPacVideo
             // comboBox16
             // 
             this.comboBox16.FormattingEnabled = true;
-            this.comboBox16.Location = new System.Drawing.Point(520, 635);
+            this.comboBox16.Location = new System.Drawing.Point(520, 722);
             this.comboBox16.Name = "comboBox16";
             this.comboBox16.Size = new System.Drawing.Size(136, 21);
             this.comboBox16.TabIndex = 22;
@@ -396,7 +390,7 @@ namespace BioPacVideo
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(24, 174);
+            this.label5.Location = new System.Drawing.Point(24, 197);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(52, 13);
             this.label5.TabIndex = 27;
@@ -405,7 +399,7 @@ namespace BioPacVideo
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(195, 174);
+            this.label6.Location = new System.Drawing.Point(195, 197);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(52, 13);
             this.label6.TabIndex = 28;
@@ -414,7 +408,7 @@ namespace BioPacVideo
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(353, 174);
+            this.label7.Location = new System.Drawing.Point(353, 197);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(52, 13);
             this.label7.TabIndex = 29;
@@ -423,7 +417,7 @@ namespace BioPacVideo
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(517, 174);
+            this.label8.Location = new System.Drawing.Point(517, 197);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(52, 13);
             this.label8.TabIndex = 30;
@@ -432,7 +426,7 @@ namespace BioPacVideo
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(24, 335);
+            this.label9.Location = new System.Drawing.Point(24, 390);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(52, 13);
             this.label9.TabIndex = 31;
@@ -441,7 +435,7 @@ namespace BioPacVideo
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(189, 335);
+            this.label10.Location = new System.Drawing.Point(188, 390);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(58, 13);
             this.label10.TabIndex = 32;
@@ -450,7 +444,7 @@ namespace BioPacVideo
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(353, 335);
+            this.label11.Location = new System.Drawing.Point(353, 390);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(58, 13);
             this.label11.TabIndex = 33;
@@ -459,7 +453,7 @@ namespace BioPacVideo
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(517, 335);
+            this.label12.Location = new System.Drawing.Point(517, 390);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(58, 13);
             this.label12.TabIndex = 34;
@@ -468,7 +462,7 @@ namespace BioPacVideo
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(24, 498);
+            this.label13.Location = new System.Drawing.Point(24, 585);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(58, 13);
             this.label13.TabIndex = 35;
@@ -477,7 +471,7 @@ namespace BioPacVideo
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(188, 498);
+            this.label14.Location = new System.Drawing.Point(188, 585);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(58, 13);
             this.label14.TabIndex = 36;
@@ -486,7 +480,7 @@ namespace BioPacVideo
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(353, 498);
+            this.label15.Location = new System.Drawing.Point(353, 585);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(58, 13);
             this.label15.TabIndex = 37;
@@ -495,7 +489,7 @@ namespace BioPacVideo
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(517, 498);
+            this.label16.Location = new System.Drawing.Point(517, 585);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(58, 13);
             this.label16.TabIndex = 38;
@@ -504,17 +498,27 @@ namespace BioPacVideo
             // textBox1
             // 
             this.textBox1.BackColor = System.Drawing.SystemColors.Window;
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.Location = new System.Drawing.Point(675, 116);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(174, 540);
+            this.textBox1.Size = new System.Drawing.Size(174, 627);
             this.textBox1.TabIndex = 39;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(27, 142);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(136, 21);
+            this.comboBox1.TabIndex = 7;
             // 
             // CameraAssosciationTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(870, 673);
+            this.ClientSize = new System.Drawing.Size(862, 755);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);
@@ -547,7 +551,6 @@ namespace BioPacVideo
             this.Controls.Add(this.comboBox4);
             this.Controls.Add(this.comboBox3);
             this.Controls.Add(this.comboBox2);
-            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.panel16);
             this.Controls.Add(this.panel15);
             this.Controls.Add(this.panel14);
@@ -593,7 +596,6 @@ namespace BioPacVideo
         private System.Windows.Forms.Panel panel14;
         private System.Windows.Forms.Panel panel15;
         private System.Windows.Forms.Panel panel16;
-        private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.ComboBox comboBox4;
@@ -626,5 +628,6 @@ namespace BioPacVideo
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
