@@ -16,6 +16,7 @@ namespace BioPacVideo
         private VideoWrapper Video;
         public List<ComboBox> comboList;
         int[] comboTracker;
+        bool trigger = false; 
         
         public CameraAssosciationTest()
         {
@@ -74,7 +75,13 @@ namespace BioPacVideo
             comboBox15.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 14);
             comboBox16.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 15);
 
-            comboTracker = Video.CameraAssociation; // For tracking the values of the combo boxes before they're changed 
+            comboTracker = new int[16]; 
+
+            for(int i = 0; i<16; i++)
+            {
+               comboTracker[i] = Array.IndexOf(Video.CameraAssociation, i); // For tracking the values of the combo boxes before they're changed
+            }
+             
 
             // making the array of panel addresses for the video
             Video.panelhandlesnew = new Int32[16];
@@ -124,7 +131,7 @@ namespace BioPacVideo
             // Populate the text box to show the assosciations of Channels to Cameraas 
             // This may be confusing to the end user as it is flipped and now you are seeing channels in order and cameras out of order 
             for (int i = 0; i < 16; i++)
-                textBox1.Text += "Channel " + (i + 1).ToString() + " = Camera " + ((Array.IndexOf(Video.CameraAssociation, i))+1).ToString() + Environment.NewLine;
+                textBox1.Text += "Channel " + (i + 1).ToString() + " = Camera " + (Video.CameraAssociation[i]+1).ToString() + Environment.NewLine;
         }
 
         private void setButton_Click(object sender, EventArgs e)
@@ -141,7 +148,7 @@ namespace BioPacVideo
             Video.CameraAssociation[comboBox8.SelectedIndex] = 7;
             Video.CameraAssociation[comboBox9.SelectedIndex] = 8;
             Video.CameraAssociation[comboBox10.SelectedIndex] = 9;
-            Video.CameraAssociation[comboBox11.SelectedIndex] = 10; Video.CameraAssociation[comboBox1.SelectedIndex] = 0;
+            Video.CameraAssociation[comboBox11.SelectedIndex] = 10; 
             Video.CameraAssociation[comboBox12.SelectedIndex] = 11;
             Video.CameraAssociation[comboBox13.SelectedIndex] = 12;
             Video.CameraAssociation[comboBox14.SelectedIndex] = 13;
@@ -151,7 +158,7 @@ namespace BioPacVideo
             // Clear the text boxes and repopulate with the new channel to camera assosciations 
             textBox1.Clear(); 
                 for (int i = 0; i < 16; i++)
-                    textBox1.Text += "Channel " + (i + 1).ToString() + " = Camera " + ((Array.IndexOf(Video.CameraAssociation, i)) + 1).ToString() + Environment.NewLine;
+                    textBox1.Text += "Channel " + (i + 1).ToString() + " = Camera " + (Video.CameraAssociation[i] + 1).ToString() + Environment.NewLine;
         }
 
         public void TestEvent(object sender, EventArgs e, ComboBox cb)
@@ -159,7 +166,11 @@ namespace BioPacVideo
             //It checks to see what other combo box has that value that isn't itself
             //And it changes that combo box to have the value that it previously had by calling upon an array, comboTracker
             //i.e. if combo box 3 changes its value from 3 to 4, then combo box 4 will change its value from 4 to 3, etc. 
-
+            if (trigger)
+            {
+                return;
+            }
+            trigger = true; 
             foreach (ComboBox c in comboList)
             {
 
@@ -172,6 +183,7 @@ namespace BioPacVideo
 
                     if (c.SelectedItem.ToString() == cb.SelectedItem.ToString())
                     {
+                        
                         //if the checked combo box has the same value as the triggering combo box, change the checked combo box
                         int temp = comboList.IndexOf(cb);
                         int temp2 = comboList.IndexOf(c);
@@ -179,14 +191,15 @@ namespace BioPacVideo
                         int valuec = comboTracker[temp2];
                         int valuecb = comboTracker[temp];
                         comboTracker[temp] = valuec;
-                        comboTracker[temp2] = valuecb; 
+                        comboTracker[temp2] = valuecb;
                         // update combo tracker with the new values 
+                        Console.WriteLine("Event Triggered");
                         break; 
                     }
                 }
 
             }
-
+            trigger = false; 
         }
 
         private void finishButton_Click(object sender, EventArgs e)
