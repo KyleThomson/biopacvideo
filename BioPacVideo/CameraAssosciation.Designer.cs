@@ -1,7 +1,7 @@
 ﻿
 namespace BioPacVideo
 {
-    partial class CameraAssosciationTest
+    partial class CameraAssosciation
     {
         /// <summary>
         /// Required designer variable.
@@ -499,7 +499,7 @@ namespace BioPacVideo
             // 
             this.textBox1.BackColor = System.Drawing.SystemColors.Window;
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(675, 116);
+            this.textBox1.Location = new System.Drawing.Point(676, 116);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(174, 627);

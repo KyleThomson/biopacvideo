@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace BioPacVideo
 {
-    public partial class CameraAssosciationTest : Form
+    public partial class CameraAssosciation : Form
     {
         Graphics g;
         private VideoWrapper Video;
@@ -18,7 +18,7 @@ namespace BioPacVideo
         int[] comboTracker;
         bool trigger = false; 
         
-        public CameraAssosciationTest()
+        public CameraAssosciation()
         {
             InitializeComponent();
             

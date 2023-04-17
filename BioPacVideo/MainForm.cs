@@ -722,11 +722,11 @@ namespace BioPacVideo
 
         private void cameraAssociationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CameraAssc C = new CameraAssc();
-            C.ShowDialog(this);
+            CameraAssosciation frm = new CameraAssosciation();
+            frm.ShowDialog(this);
             UpdateINI(BioIni);
             Video.UpdateCameraAssoc();
-            C.Dispose();
+            frm.Dispose();
         }
 
 
@@ -797,15 +797,6 @@ namespace BioPacVideo
             FeederTester_Mouse frm = new FeederTester_Mouse();
             frm.ShowDialog(this);
             frm.Dispose();
-        }
-
-        private void cameraAssosciationTestToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CameraAssosciationTest frm = new CameraAssosciationTest();
-            frm.ShowDialog(this);
-            UpdateINI(BioIni);
-            Video.UpdateCameraAssoc();
-            frm.Dispose(); 
         }
     }
 }
