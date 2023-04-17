@@ -393,7 +393,7 @@ namespace BioPacVideo
             Video.Bitrate = BioIni.IniReadValue("Video", "Bitrate", 2);
             Video.KeyFrames = BioIni.IniReadValue("Video", "KeyFrames", 100);
             for (int i = 0; i < 16; i++)
-                Video.CameraAssociation[i] = BioIni.IniReadValue("Video", string.Format("Camera{0}", i), i);
+                Video.CameraAssociation[i] = BioIni.IniReadValue("Video", string.Format("Channel{0}", i), i);
             for (int i = 0; i < 32; i++)
             {
                 Video.Brightness[i] = BioIni.IniReadValue("Video", string.Format("Bright{0}", i), 50);
@@ -471,7 +471,7 @@ namespace BioPacVideo
             BioIni.IniWriteValue("Video", "Bitrate", Video.Bitrate);
             BioIni.IniWriteValue("Video", "KeyFrames", Video.KeyFrames);
             for (int i = 0; i < 16; i++)
-                BioIni.IniWriteValue("Video", string.Format("Camera{0}", i), Video.CameraAssociation[i]);
+                BioIni.IniWriteValue("Video", string.Format("Channel{0}", i), Video.CameraAssociation[i]);
             for (int i = 0; i < 32; i++)
             {
 

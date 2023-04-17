@@ -11,7 +11,7 @@ namespace Ini
     class IniFile
     {
         public string path;
-        //test for github comment
+       
         [DllImport("kernel32")]
         private static extern long WritePrivateProfileString(string section,
             string key, string val, string filePath);

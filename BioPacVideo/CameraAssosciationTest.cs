@@ -57,22 +57,22 @@ namespace BioPacVideo
             for (int i = 0; i < 16; i++)
                 comboBox16.Items.Add("Channel " + (i + 1).ToString());
             // Set selected indexes for each combo box to whatever channel is assosciated with each camera
-            comboBox1.SelectedIndex = Video.CameraAssociation[0];
-            comboBox2.SelectedIndex = Video.CameraAssociation[1];
-            comboBox3.SelectedIndex = Video.CameraAssociation[2];
-            comboBox4.SelectedIndex = Video.CameraAssociation[3];
-            comboBox5.SelectedIndex = Video.CameraAssociation[4];
-            comboBox6.SelectedIndex = Video.CameraAssociation[5];
-            comboBox7.SelectedIndex = Video.CameraAssociation[6];
-            comboBox8.SelectedIndex = Video.CameraAssociation[7];
-            comboBox9.SelectedIndex = Video.CameraAssociation[8];
-            comboBox10.SelectedIndex = Video.CameraAssociation[9];
-            comboBox11.SelectedIndex = Video.CameraAssociation[10];
-            comboBox12.SelectedIndex = Video.CameraAssociation[11];
-            comboBox13.SelectedIndex = Video.CameraAssociation[12];
-            comboBox14.SelectedIndex = Video.CameraAssociation[13];
-            comboBox15.SelectedIndex = Video.CameraAssociation[14];
-            comboBox16.SelectedIndex = Video.CameraAssociation[15];
+            comboBox1.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 0); 
+            comboBox2.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 1);
+            comboBox3.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 2);
+            comboBox4.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 3);
+            comboBox5.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 4);
+            comboBox6.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 5);
+            comboBox7.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 6);
+            comboBox8.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 7);
+            comboBox9.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 8);
+            comboBox10.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 9);
+            comboBox11.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 10);
+            comboBox12.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 11);
+            comboBox13.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 12);
+            comboBox14.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 13);
+            comboBox15.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 14);
+            comboBox16.SelectedIndex = Array.IndexOf(Video.CameraAssociation, 15);
 
             comboTracker = Video.CameraAssociation; // For tracking the values of the combo boxes before they're changed 
 
@@ -131,24 +131,25 @@ namespace BioPacVideo
         {
                 //change camera assosciation to match what has been selected in the combo boxes
                 //This will update to the ini file when the window is closed. 
-                Video.CameraAssociation[0] = comboBox1.SelectedIndex;
-                Video.CameraAssociation[1] = comboBox2.SelectedIndex;
-                Video.CameraAssociation[2] = comboBox3.SelectedIndex;
-                Video.CameraAssociation[3] = comboBox4.SelectedIndex;
-                Video.CameraAssociation[4] = comboBox5.SelectedIndex;
-                Video.CameraAssociation[5] = comboBox6.SelectedIndex;
-                Video.CameraAssociation[6] = comboBox7.SelectedIndex;
-                Video.CameraAssociation[7] = comboBox8.SelectedIndex;
-                Video.CameraAssociation[8] = comboBox9.SelectedIndex;
-                Video.CameraAssociation[9] = comboBox10.SelectedIndex;
-                Video.CameraAssociation[10] = comboBox11.SelectedIndex;
-                Video.CameraAssociation[11] = comboBox12.SelectedIndex;
-                Video.CameraAssociation[12] = comboBox13.SelectedIndex;
-                Video.CameraAssociation[13] = comboBox14.SelectedIndex;
-                Video.CameraAssociation[14] = comboBox15.SelectedIndex;
-                Video.CameraAssociation[15] = comboBox16.SelectedIndex;
-                // Clear the text boxes and repopulate with the new channel to camera assosciations 
-                textBox1.Clear(); 
+            Video.CameraAssociation[comboBox1.SelectedIndex] = 0;
+            Video.CameraAssociation[comboBox2.SelectedIndex] = 1;
+            Video.CameraAssociation[comboBox3.SelectedIndex] = 2;
+            Video.CameraAssociation[comboBox4.SelectedIndex] = 3;
+            Video.CameraAssociation[comboBox5.SelectedIndex] = 4;
+            Video.CameraAssociation[comboBox6.SelectedIndex] = 5;
+            Video.CameraAssociation[comboBox7.SelectedIndex] = 6;
+            Video.CameraAssociation[comboBox8.SelectedIndex] = 7;
+            Video.CameraAssociation[comboBox9.SelectedIndex] = 8;
+            Video.CameraAssociation[comboBox10.SelectedIndex] = 9;
+            Video.CameraAssociation[comboBox11.SelectedIndex] = 10; Video.CameraAssociation[comboBox1.SelectedIndex] = 0;
+            Video.CameraAssociation[comboBox12.SelectedIndex] = 11;
+            Video.CameraAssociation[comboBox13.SelectedIndex] = 12;
+            Video.CameraAssociation[comboBox14.SelectedIndex] = 13;
+            Video.CameraAssociation[comboBox15.SelectedIndex] = 14;
+            Video.CameraAssociation[comboBox16.SelectedIndex] = 15;
+
+            // Clear the text boxes and repopulate with the new channel to camera assosciations 
+            textBox1.Clear(); 
                 for (int i = 0; i < 16; i++)
                     textBox1.Text += "Channel " + (i + 1).ToString() + " = Camera " + ((Array.IndexOf(Video.CameraAssociation, i)) + 1).ToString() + Environment.NewLine;
         }

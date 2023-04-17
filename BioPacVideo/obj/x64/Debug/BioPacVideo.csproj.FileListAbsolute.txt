@@ -25,7 +25,6 @@ C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\D
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\bin\x64\Debug\BioPacVideo.exe
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\bin\x64\Debug\BioPacVideo.pdb
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\bin\x64\Debug\QCAP.NET.X64.DLL
-C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.csproj.AssemblyReference.cache
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.CameraAssc.resources
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.CameraAssosciationTest.resources
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.FeederAddress.resources
@@ -46,3 +45,4 @@ C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\B
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.csproj.CopyComplete
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.exe
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.pdb
+C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.csproj.AssemblyReference.cache

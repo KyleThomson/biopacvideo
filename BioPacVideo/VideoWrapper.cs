@@ -270,9 +270,11 @@ namespace BioPacVideo
 
         public void UpdateCameraAssoc()
         {
+            //Console.WriteLine("Updating Camera Assosciations"); 
             for (int i = 0; i < maxdevices; i++)
             {
                 if (m_hCloneCapDev[i] != 0) { EXPORTS.QCAP_STOP(m_hCloneCapDev[i]); EXPORTS.QCAP_DESTROY(m_hCloneCapDev[i]); }
+                //Console.WriteLine((i+1).ToString() + " m_hCloneCapDev" + m_hCloneCapDev[i]); 
             }
             ShowCloneVideo(true);
           }
@@ -413,12 +415,14 @@ namespace BioPacVideo
             int i;
             if (bShow)
             {
+                //Console.WriteLine(Environment.NewLine + "Showing Clone Video"); 
                 m_bShowClone = true;
                 for (i = 0; i < maxdevices; i++)
                 {
                     if (m_hCapDev[CameraAssociation[i]] != 0)
                     {
                         EXPORTS.QCAP_CREATE_CLONE(m_hCapDev[CameraAssociation[i]], (uint)PanelHandles[i], ref m_hCloneCapDev[CameraAssociation[i]], 1);
+                        //Console.WriteLine("Camera Assoscations" + (i + 1).ToString() + "=" + (CameraAssociation[i] + 1).ToString()); 
 
                         if (m_hCloneCapDev[CameraAssociation[i]] != 0)
                         {                            
