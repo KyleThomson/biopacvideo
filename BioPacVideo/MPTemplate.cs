@@ -349,12 +349,6 @@ namespace BioPacVideo
             //result = (result < minPixel) ? minPixel: result;
             return (result);
         }
-
-        private void GenerateXML()
-        {
-        }
-
-
   
         private void drawbuffer()
         {

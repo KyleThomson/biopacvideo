@@ -33,9 +33,11 @@
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.BreakBox = new System.Windows.Forms.GroupBox();
-            this.MidnightNoon = new System.Windows.Forms.RadioButton();
             this.Midnight = new System.Windows.Forms.RadioButton();
+            this.MidnightNoon = new System.Windows.Forms.RadioButton();
+            this.sampleRateTrack = new System.Windows.Forms.TrackBar();
             this.BreakBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sampleRateTrack)).BeginInit();
             this.SuspendLayout();
             // 
             // MPTypeBox
@@ -73,7 +75,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(26, 64);
+            this.label2.Location = new System.Drawing.Point(26, 108);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(68, 13);
             this.label2.TabIndex = 3;
@@ -90,17 +92,6 @@
             this.BreakBox.TabStop = false;
             this.BreakBox.Text = "Break File? ";
             // 
-            // MidnightNoon
-            // 
-            this.MidnightNoon.AutoSize = true;
-            this.MidnightNoon.Location = new System.Drawing.Point(6, 20);
-            this.MidnightNoon.Name = "MidnightNoon";
-            this.MidnightNoon.Size = new System.Drawing.Size(115, 17);
-            this.MidnightNoon.TabIndex = 5;
-            this.MidnightNoon.TabStop = true;
-            this.MidnightNoon.Text = "Midnight and Noon";
-            this.MidnightNoon.UseVisualStyleBackColor = true;
-            // 
             // Midnight
             // 
             this.Midnight.AutoSize = true;
@@ -112,11 +103,33 @@
             this.Midnight.Text = "Midnight only";
             this.Midnight.UseVisualStyleBackColor = true;
             // 
+            // MidnightNoon
+            // 
+            this.MidnightNoon.AutoSize = true;
+            this.MidnightNoon.Location = new System.Drawing.Point(6, 20);
+            this.MidnightNoon.Name = "MidnightNoon";
+            this.MidnightNoon.Size = new System.Drawing.Size(115, 17);
+            this.MidnightNoon.TabIndex = 5;
+            this.MidnightNoon.TabStop = true;
+            this.MidnightNoon.Text = "Midnight and Noon";
+            this.MidnightNoon.UseVisualStyleBackColor = true;
+            // 
+            // sampleRateTrack
+            // 
+            this.sampleRateTrack.LargeChange = 10000;
+            this.sampleRateTrack.Location = new System.Drawing.Point(29, 124);
+            this.sampleRateTrack.Maximum = 400000;
+            this.sampleRateTrack.Name = "sampleRateTrack";
+            this.sampleRateTrack.Size = new System.Drawing.Size(286, 45);
+            this.sampleRateTrack.SmallChange = 100;
+            this.sampleRateTrack.TabIndex = 5;
+            // 
             // RecordSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(616, 272);
+            this.Controls.Add(this.sampleRateTrack);
             this.Controls.Add(this.BreakBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button1);
@@ -126,6 +139,7 @@
             this.Text = "Record Settings";
             this.BreakBox.ResumeLayout(false);
             this.BreakBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sampleRateTrack)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -140,5 +154,6 @@
         private System.Windows.Forms.GroupBox BreakBox;
         private System.Windows.Forms.RadioButton Midnight;
         private System.Windows.Forms.RadioButton MidnightNoon;
+        private System.Windows.Forms.TrackBar sampleRateTrack;
     }
 }

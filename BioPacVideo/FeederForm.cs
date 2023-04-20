@@ -55,7 +55,7 @@ namespace BioPacVideo
                 TempCheck = MedicatedBoxes[i] as TextBox;
                 TempID = IDBoxes[i] as TextBox;
                 TempID.Text = AllRats[i].ID;
-                IDC_RATLIST.Items.Add(String.Format("Rat{0}", i + 1));
+                //IDC_RATLIST.Items.Add(String.Format("Rat{0}", i + 1));
                 if (AllRats[i].Weight > 0)
                 {
                     TempBox.Text = string.Format("{0:0.0}", AllRats[i].Weight);
@@ -70,7 +70,7 @@ namespace BioPacVideo
             }
             Startup = false;
             updateBoxes();
-            IDC_RATLIST.SelectedIndex = 0;
+            //IDC_RATLIST.SelectedIndex = 0;
         }
 
 
@@ -129,7 +129,7 @@ namespace BioPacVideo
             return Feeder;
         }
 
-        private void IDC_SURGERY_TextChanged(object sender, EventArgs e)
+        /*private void IDC_SURGERY_TextChanged(object sender, EventArgs e)
         {
             DateTime TestTime;
             if (DateTime.TryParse(IDC_SURGERY.Text, out TestTime))
@@ -178,7 +178,7 @@ namespace BioPacVideo
                 IDC_INJECTION.Text = AllRats[IDC_RATLIST.SelectedIndex].Injection.ToShortDateString();
             else
                 IDC_INJECTION.Text = "";
-        }
+        }*/
         private void IDC_Meal1_TextChanged(object sender, EventArgs e)
         {
             TimeSpan TestTime;
@@ -340,11 +340,6 @@ namespace BioPacVideo
             }
             else
                 IDC_Meal6.Text = Feeder.Meal6.ToString();
-        }
-
-        private void FeederForm_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void label4_Click(object sender, EventArgs e)

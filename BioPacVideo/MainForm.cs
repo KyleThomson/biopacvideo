@@ -798,5 +798,29 @@ namespace BioPacVideo
             frm.ShowDialog(this);
             frm.Dispose();
         }
+
+        private void feederMenuToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FeederMenu frm = new FeederMenu(Feeder);
+            frm.ShowDialog(this);
+            Feeder = frm.ReturnFeeder();
+            int M = 0;
+            if (!((Feeder.Meal1.Hours == 0) && (Feeder.Meal1.Minutes == 0)))
+                M++;
+            if (!((Feeder.Meal2.Hours == 0) && (Feeder.Meal2.Minutes == 0)))
+                M++;
+            if (!((Feeder.Meal3.Hours == 0) && (Feeder.Meal3.Minutes == 0)))
+                M++;
+            if (!((Feeder.Meal4.Hours == 0) && (Feeder.Meal4.Minutes == 0)))
+                M++;
+            if (!((Feeder.Meal5.Hours == 0) && (Feeder.Meal5.Minutes == 0)))
+                M++;
+            if (!((Feeder.Meal6.Hours == 0) && (Feeder.Meal6.Minutes == 0)))
+                M++;
+            Feeder.DailyMealCount = M;
+            frm.Dispose();
+            UpdateINI(BioIni);
+            frm.Dispose();
+        }
     }
 }

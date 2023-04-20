@@ -52,18 +52,9 @@
             this.IDC_RAT13 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label20 = new System.Windows.Forms.Label();
-            this.IDC_RATLIST = new System.Windows.Forms.ComboBox();
-            this.IDC_SURGERY = new System.Windows.Forms.TextBox();
-            this.label21 = new System.Windows.Forms.Label();
-            this.IDC_INJECTION = new System.Windows.Forms.TextBox();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
-            this.label24 = new System.Windows.Forms.Label();
-            this.IDC_SEIZURE = new System.Windows.Forms.TextBox();
             this.IDX_FEEDERENABLE = new System.Windows.Forms.CheckBox();
             this.label25 = new System.Windows.Forms.Label();
             this.IDC_PPG = new System.Windows.Forms.TextBox();
-            this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.IDX_RAT1 = new System.Windows.Forms.TextBox();
             this.IDX_RAT2 = new System.Windows.Forms.TextBox();
@@ -338,7 +329,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(793, 436);
+            this.button1.Location = new System.Drawing.Point(793, 374);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(81, 23);
             this.button1.TabIndex = 54;
@@ -355,76 +346,6 @@
             this.label20.Size = new System.Drawing.Size(151, 20);
             this.label20.TabIndex = 55;
             this.label20.Text = "Animal Weight (g)";
-            // 
-            // IDC_RATLIST
-            // 
-            this.IDC_RATLIST.FormattingEnabled = true;
-            this.IDC_RATLIST.Location = new System.Drawing.Point(6, 440);
-            this.IDC_RATLIST.Name = "IDC_RATLIST";
-            this.IDC_RATLIST.Size = new System.Drawing.Size(121, 21);
-            this.IDC_RATLIST.TabIndex = 56;
-            this.IDC_RATLIST.SelectedIndexChanged += new System.EventHandler(this.IDC_RATLIST_SelectedIndexChanged);
-            // 
-            // IDC_SURGERY
-            // 
-            this.IDC_SURGERY.Location = new System.Drawing.Point(138, 440);
-            this.IDC_SURGERY.Name = "IDC_SURGERY";
-            this.IDC_SURGERY.Size = new System.Drawing.Size(100, 20);
-            this.IDC_SURGERY.TabIndex = 57;
-            this.IDC_SURGERY.LostFocus += new System.EventHandler(this.IDC_SURGERY_TextChanged);
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.Location = new System.Drawing.Point(6, 391);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(140, 20);
-            this.label21.TabIndex = 58;
-            this.label21.Text = "Important Dates";
-            // 
-            // IDC_INJECTION
-            // 
-            this.IDC_INJECTION.Location = new System.Drawing.Point(244, 440);
-            this.IDC_INJECTION.Name = "IDC_INJECTION";
-            this.IDC_INJECTION.Size = new System.Drawing.Size(100, 20);
-            this.IDC_INJECTION.TabIndex = 59;
-            this.IDC_INJECTION.LostFocus += new System.EventHandler(this.IDC_INJECTION_TextChanged);
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(139, 424);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(69, 13);
-            this.label22.TabIndex = 60;
-            this.label22.Text = "Surgery Date";
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(241, 424);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(73, 13);
-            this.label23.TabIndex = 61;
-            this.label23.Text = "Injection Date";
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(347, 424);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(90, 13);
-            this.label24.TabIndex = 63;
-            this.label24.Text = "First Seizure Date";
-            // 
-            // IDC_SEIZURE
-            // 
-            this.IDC_SEIZURE.Location = new System.Drawing.Point(350, 440);
-            this.IDC_SEIZURE.Name = "IDC_SEIZURE";
-            this.IDC_SEIZURE.Size = new System.Drawing.Size(100, 20);
-            this.IDC_SEIZURE.TabIndex = 62;
-            this.IDC_SEIZURE.LostFocus += new System.EventHandler(this.IDC_SEIZURE_TextChanged);
             // 
             // IDX_FEEDERENABLE
             // 
@@ -453,15 +374,6 @@
             this.IDC_PPG.Size = new System.Drawing.Size(100, 20);
             this.IDC_PPG.TabIndex = 66;
             this.IDC_PPG.LostFocus += new System.EventHandler(this.IDC_PPG_TextChanged);
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(6, 424);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(71, 13);
-            this.label26.TabIndex = 67;
-            this.label26.Text = "Select Animal";
             // 
             // label27
             // 
@@ -1229,7 +1141,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(886, 471);
+            this.ClientSize = new System.Drawing.Size(886, 403);
             this.Controls.Add(this.label59);
             this.Controls.Add(this.label60);
             this.Controls.Add(this.label61);
@@ -1317,18 +1229,9 @@
             this.Controls.Add(this.IDX_RAT2);
             this.Controls.Add(this.IDX_RAT1);
             this.Controls.Add(this.label27);
-            this.Controls.Add(this.label26);
             this.Controls.Add(this.IDC_PPG);
             this.Controls.Add(this.label25);
             this.Controls.Add(this.IDX_FEEDERENABLE);
-            this.Controls.Add(this.label24);
-            this.Controls.Add(this.IDC_SEIZURE);
-            this.Controls.Add(this.label23);
-            this.Controls.Add(this.label22);
-            this.Controls.Add(this.IDC_INJECTION);
-            this.Controls.Add(this.label21);
-            this.Controls.Add(this.IDC_SURGERY);
-            this.Controls.Add(this.IDC_RATLIST);
             this.Controls.Add(this.label20);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.IDC_RAT16);
@@ -1355,7 +1258,6 @@
             this.Controls.Add(this.IDC_Meal1);
             this.Name = "FeederForm";
             this.Text = "Feeder Control Form";
-            this.Load += new System.EventHandler(this.FeederForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1387,18 +1289,9 @@
         private System.Windows.Forms.TextBox IDC_RAT13;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.ComboBox IDC_RATLIST;
-        private System.Windows.Forms.TextBox IDC_SURGERY;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.TextBox IDC_INJECTION;
-        private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.TextBox IDC_SEIZURE;
         private System.Windows.Forms.CheckBox IDX_FEEDERENABLE;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.TextBox IDC_PPG;
-        private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.TextBox IDX_RAT1;
         private System.Windows.Forms.TextBox IDX_RAT2;

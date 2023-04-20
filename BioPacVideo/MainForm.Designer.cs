@@ -85,6 +85,7 @@ namespace BioPacVideo
             this.CloneChannelPanel5 = new System.Windows.Forms.Panel();
             this.CloneChannelPanel9 = new System.Windows.Forms.Panel();
             this.CloneChannelPanel16 = new System.Windows.Forms.Panel();
+            this.feederMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -262,7 +263,8 @@ namespace BioPacVideo
             this.feedersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.feederTestToolStripMenuItem,
             this.feederAddressToolStripMenuItem,
-            this.feederStatusToolStripMenuItem});
+            this.feederStatusToolStripMenuItem,
+            this.feederMenuToolStripMenuItem});
             this.feedersToolStripMenuItem.Name = "feedersToolStripMenuItem";
             this.feedersToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.feedersToolStripMenuItem.Text = "Feeders";
@@ -273,7 +275,7 @@ namespace BioPacVideo
             this.ratRoomToolStripMenuItem,
             this.mouseRoomToolStripMenuItem});
             this.feederTestToolStripMenuItem.Name = "feederTestToolStripMenuItem";
-            this.feederTestToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.feederTestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.feederTestToolStripMenuItem.Text = "Feeder Test";
             // 
             // ratRoomToolStripMenuItem
@@ -293,14 +295,14 @@ namespace BioPacVideo
             // feederAddressToolStripMenuItem
             // 
             this.feederAddressToolStripMenuItem.Name = "feederAddressToolStripMenuItem";
-            this.feederAddressToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.feederAddressToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.feederAddressToolStripMenuItem.Text = "Feeder Address";
             this.feederAddressToolStripMenuItem.Click += new System.EventHandler(this.feederAddressToolStripMenuItem_Click);
             // 
             // feederStatusToolStripMenuItem
             // 
             this.feederStatusToolStripMenuItem.Name = "feederStatusToolStripMenuItem";
-            this.feederStatusToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.feederStatusToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.feederStatusToolStripMenuItem.Text = "Feeder Status";
             this.feederStatusToolStripMenuItem.Click += new System.EventHandler(this.feederStatusToolStripMenuItem_Click);
             // 
@@ -588,6 +590,13 @@ namespace BioPacVideo
             this.CloneChannelPanel16.Size = new System.Drawing.Size(136, 115);
             this.CloneChannelPanel16.TabIndex = 12;
             // 
+            // feederMenuToolStripMenuItem
+            // 
+            this.feederMenuToolStripMenuItem.Name = "feederMenuToolStripMenuItem";
+            this.feederMenuToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.feederMenuToolStripMenuItem.Text = "Feeder Settings";
+            this.feederMenuToolStripMenuItem.Click += new System.EventHandler(this.feederMenuToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -691,6 +700,7 @@ namespace BioPacVideo
         private System.Windows.Forms.ToolStripMenuItem feederStatusToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ratRoomToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mouseRoomToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem feederMenuToolStripMenuItem;
     }
 }
 

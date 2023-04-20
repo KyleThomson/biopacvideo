@@ -20,7 +20,6 @@ C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\D
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.csproj.CopyComplete
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.exe
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.pdb
-C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.CameraAssosciationTest.resources
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.FeederTester_Mouse.resources
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\bin\x64\Debug\BioPacVideo.exe
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\bin\x64\Debug\BioPacVideo.pdb
@@ -46,3 +45,5 @@ C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\B
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.exe
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.pdb
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.csproj.AssemblyReference.cache
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.CameraAssosciation.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.FeederMenu.resources
