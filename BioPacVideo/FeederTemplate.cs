@@ -42,6 +42,8 @@ namespace BioPacVideo
         public RatTemplate[] Rats;
         public StreamWriter log;
         private string LogFileName;
+        public int Cages_X;
+        public int Cages_Y;
         public int GetDay()
         {
             DateTime X = DateTime.Now;

@@ -95,7 +95,6 @@ C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\R
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.csproj.CopyComplete
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.exe
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.FeederTester_Mouse.resources
-C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.csproj.AssemblyReference.cache
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\bin\x64\Release\BioPacVideo.exe
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\bin\x64\Release\QCAP.NET.X64.DLL
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.csproj.AssemblyReference.cache
@@ -120,3 +119,6 @@ C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.exe
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.CameraAssosciation.resources
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.FeederMenu.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.csproj.AssemblyReference.cache
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.AnimalSettings.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.LayoutForm.resources

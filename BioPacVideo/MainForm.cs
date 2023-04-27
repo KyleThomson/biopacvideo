@@ -51,7 +51,7 @@ namespace BioPacVideo
             InitializeComponent(); //Default code
             Video = VideoWrapper.Instance; //Same for Video                        
             MP = MPTemplate.Instance; //Pull Instance from MP Template - So we only have a single instance in all code            
-            Feeder = FeederTemplate.Instance; //Same for Feeders
+            Feeder = FeederTemplate.Instance; //Same for Feeders 
             BoxPen = new Pen(Brushes.Black, 4);            
             BioIni = new IniFile(Directory.GetCurrentDirectory() + "\\BioPacVideo.ini"); //Standard Ini Settings
             Panel TempPanel; 
@@ -94,6 +94,9 @@ namespace BioPacVideo
             //***************** LOAD SETTINGS *****************
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             ReadINI(BioIni); //Read Presets from INI file                        
+
+            cages_x_text.Text = Feeder.Cages_X.ToString();
+            cages_y_text.Text = Feeder.Cages_Y.ToString(); 
 
             //Start EEG and Video functions
             MP.InitializeDisplay(this.Width, this.Height);
@@ -383,7 +386,8 @@ namespace BioPacVideo
                 }
                 
             }
-            
+            Feeder.Cages_X = BioIni.IniReadValue("Rats", "CagesX", 4);
+            Feeder.Cages_Y = BioIni.IniReadValue("Rats", "CagesY", 4); 
             
             Video.Enabled = BioIni.IniReadValue("Video", "Enabled", true);
             Video.XRes = BioIni.IniReadValue("Video", "XRes", 320);
@@ -463,6 +467,8 @@ namespace BioPacVideo
                     BioIni.IniWriteValue("Rats", "Rat" + i + "Meal" + j, Feeder.Rats[i].Meals[j]);
                 }
             }
+            BioIni.IniWriteValue("Rats", "CagesX", Feeder.Cages_X);
+            BioIni.IniWriteValue("Rats", "CagesY", Feeder.Cages_Y);
             BioIni.IniWriteValue("Video", "Enabled", Video.Enabled);
             BioIni.IniWriteValue("Video", "LengthWise", Video.LengthWise);
             BioIni.IniWriteValue("Video", "XRes", Video.XRes);
@@ -673,7 +679,7 @@ namespace BioPacVideo
             MessageBox.Show("Please restart the software \nbefore continuing.");
             IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
         }
-        private void setFeedingProtocolToolStripMenuItem_Click(object sender, EventArgs e)
+        /*private void setFeedingProtocolToolStripMenuItem_Click(object sender, EventArgs e)
         {           
             FeederForm frm = new FeederForm(Feeder.Rats, Feeder);
             frm.ShowDialog(this);
@@ -695,7 +701,7 @@ namespace BioPacVideo
             Feeder.DailyMealCount = M;
             frm.Dispose();
             UpdateINI(BioIni);           
-        }
+        }*/
 
         private void videoSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -821,6 +827,31 @@ namespace BioPacVideo
             frm.Dispose();
             UpdateINI(BioIni);
             frm.Dispose();
+        }
+
+        private void animalSettingsTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int temp;
+            int temp2;
+            if (int.TryParse(cages_x_text.Text, out temp))
+            {
+                Feeder.Cages_X = temp;
+            }
+            if (int.TryParse(cages_y_text.Text, out temp2))
+            {
+                Feeder.Cages_Y = temp2;
+            }
+            if (Feeder.Cages_X*Feeder.Cages_Y > 16)
+            {
+                MessageBox.Show("Program does not allow for more than 16 cages at a time", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; 
+            }
+            AnimalSettings frm = new AnimalSettings(Feeder);
+            frm.Height = (Feeder.Cages_Y * 216) + 138;
+            frm.Width = (Feeder.Cages_X * 150) + 50;
+            frm.ShowDialog(this);
+            UpdateINI(BioIni); 
+            frm.Dispose(); 
         }
     }
 }

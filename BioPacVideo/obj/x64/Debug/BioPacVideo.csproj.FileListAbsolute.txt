@@ -47,3 +47,5 @@ C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\B
 C:\Users\ADDLab\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.csproj.AssemblyReference.cache
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.CameraAssosciation.resources
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.FeederMenu.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.AnimalSettings.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.LayoutForm.resources
