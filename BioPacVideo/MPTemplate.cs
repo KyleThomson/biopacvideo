@@ -552,7 +552,15 @@ namespace BioPacVideo
                 {
                     MessageBox.Show(MPReturn.ToString() + "   " + MPCLASS.getMPDaemonLastError().ToString());
                     MPReturn = MPCLASS.stopAcquisition(); //Have to restart the aquisition. 
-                    return;
+                    //Thinking that we should get the thread to sleep before restarting the process - Sarah 
+                    Thread.Sleep(1000); // this is an arbitrary number - Sarah
+                    MPReturn = MPCLASS.startAcquisition(); // need to restart the acquisition here since we just stopped it? - Sarah 
+                    while (MPReturn != MPCODE.MPSUCCESS) // keep trying to restart acquisition until there is a success - Sarah 
+                    {
+                        Thread.Sleep(1000);
+                        MPReturn = MPCLASS.startAcquisition(); 
+                    }
+                    continue; // this should return to the start of the while loop and try again to run the thread - Sarah 
                 }
                 last_received = received; //For the draw buffer
                 if (last_received % AcqChan > 0) 
