@@ -158,16 +158,15 @@ namespace ProjectManager
             this.DefaultView.Checked = true;
             this.DefaultView.CheckState = System.Windows.Forms.CheckState.Checked;
             this.DefaultView.Name = "DefaultView";
-            this.DefaultView.Size = new System.Drawing.Size(112, 22);
+            this.DefaultView.Size = new System.Drawing.Size(180, 22);
             this.DefaultView.Text = "Default";
             this.DefaultView.Click += new System.EventHandler(this.normalListToolStripMenuItem_Click);
             // 
             // galleryView
             // 
             this.galleryView.CheckOnClick = true;
-            this.galleryView.Enabled = false;
             this.galleryView.Name = "galleryView";
-            this.galleryView.Size = new System.Drawing.Size(112, 22);
+            this.galleryView.Size = new System.Drawing.Size(180, 22);
             this.galleryView.Text = "Gallery";
             this.galleryView.Click += new System.EventHandler(this.normalListToolStripMenuItem_Click);
             // 
@@ -176,7 +175,7 @@ namespace ProjectManager
             this.animalView.CheckOnClick = true;
             this.animalView.Enabled = false;
             this.animalView.Name = "animalView";
-            this.animalView.Size = new System.Drawing.Size(112, 22);
+            this.animalView.Size = new System.Drawing.Size(180, 22);
             this.animalView.Text = "Animal";
             this.animalView.Click += new System.EventHandler(this.normalListToolStripMenuItem_Click);
             // 
@@ -193,7 +192,7 @@ namespace ProjectManager
             // randomizedToolStripMenuItem
             // 
             this.randomizedToolStripMenuItem.Name = "randomizedToolStripMenuItem";
-            this.randomizedToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.randomizedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.randomizedToolStripMenuItem.Text = "Randomized";
             // 
             // videoSizeToolStripMenuItem
@@ -203,7 +202,7 @@ namespace ProjectManager
             this.LowRes});
             this.videoSizeToolStripMenuItem.Enabled = false;
             this.videoSizeToolStripMenuItem.Name = "videoSizeToolStripMenuItem";
-            this.videoSizeToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.videoSizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.videoSizeToolStripMenuItem.Text = "Video Size";
             // 
             // HighRes

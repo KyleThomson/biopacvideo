@@ -199,10 +199,13 @@ namespace ProjectManager
 
         }
         
-        public int CompareSeizures(SeizureType seizure, string animalID)
+        public int[] CompareSeizures(SeizureType seizure, string animalID)
         {
             // Compare seizure stages from bubble and the stage written in the note.
             // Give user the end decision through a dialog box.
+
+            //this function returns an array. The 0 index is either 0 or 1, 0 being a fail and 1 being a success in determining the correct rating
+            //the 1 index will be the actual value of the rating if the rating is successful, it will contain the notes rating if not.
 
             // dictionary to replace parsed integers with string
             Dictionary<int, string> numbers = new Dictionary<int, string>();
@@ -214,7 +217,7 @@ namespace ProjectManager
 
             // assign bubble severity as the checked severity value
             int bubbleSeverity = seizure.Severity;
-
+            int[] r = new int[2];
             // initialize noteSeverity
             int noteSeverity;
             if (seizure.Notes.Length > 0)
@@ -222,41 +225,59 @@ namespace ProjectManager
                 noteSeverity = ParseSeizure(seizure.Notes);
             }
             else
+            {
                 // if notes are empty just take bubble severity
-                return bubbleSeverity;
+                r[0] = 1;
+                r[1] = bubbleSeverity;
+                return r;
+
+            }
+               
 
             // if severities already match then get out of this function
             if (bubbleSeverity == noteSeverity)
-                return bubbleSeverity;
+            {
+                r[0] = 1;
+                r[1] = bubbleSeverity;
+                return r;
+            } else
+            {
+                r[0] = 0; //fail!
+                r[1] = noteSeverity;
+                return r;
+            }
 
-            // Open dialog for user to select correct seizure
-            string ID = animalID + " had seizure at " + seizure.d.ToString();
-            SeizureStageDialog stageDialog = new SeizureStageDialog();
-            stageDialog.ShowDialog(bubbleSeverity, noteSeverity, ID, seizure.Notes);
 
-            // set function return value to the severity that the user selected
-            int finalStage = stageDialog.returnSeverity;
+                
 
-            // Only change notes if bubble severity was selected from dialog.
-            if (finalStage == bubbleSeverity)
-                {
-                    // change seizure note so that there are no more numbers
-                    for (int i = seizure.Notes.Length - 1; i >= 0; i--)
-                    {
-                        // step backward thru seizure notes and insert word corresponding to number in notes
-                        // solution to save conflict results between bubble and notes
-                        if (int.TryParse(seizure.Notes[i].ToString(), out _))
-                        {
-                            // find string to replace number with
-                            // this is a crude solution to not have the dialog repeatedly show up when re-opening a project file
-                            string numberToInsert = numbers[bubbleSeverity];
-                            seizure.Notes = seizure.Notes.Insert(i, numberToInsert);
-                            seizure.Notes = seizure.Notes.Remove(i + numberToInsert.Length, 1);
-                        }
-                    }
-                }
-            // return final stage if code makes it all the way to this return pathway
-            return finalStage;
+            //// Open dialog for user to select correct seizure
+            //string ID = animalID + " had seizure at " + seizure.d.ToString();
+            //SeizureStageDialog stageDialog = new SeizureStageDialog();
+            //stageDialog.ShowDialog(bubbleSeverity, noteSeverity, ID, seizure.Notes);
+
+            //// set function return value to the severity that the user selected
+            //int finalStage = stageDialog.returnSeverity;
+
+            //// Only change notes if bubble severity was selected from dialog.
+            //if (finalStage == bubbleSeverity)
+            //    {
+            //        // change seizure note so that there are no more numbers
+            //        for (int i = seizure.Notes.Length - 1; i >= 0; i--)
+            //        {
+            //            // step backward thru seizure notes and insert word corresponding to number in notes
+            //            // solution to save conflict results between bubble and notes
+            //            if (int.TryParse(seizure.Notes[i].ToString(), out _))
+            //            {
+            //                // find string to replace number with
+            //                // this is a crude solution to not have the dialog repeatedly show up when re-opening a project file
+            //                string numberToInsert = numbers[bubbleSeverity];
+            //                seizure.Notes = seizure.Notes.Insert(i, numberToInsert);
+            //                seizure.Notes = seizure.Notes.Remove(i + numberToInsert.Length, 1);
+            //            }
+            //        }
+            //    }
+            //// return final stage if code makes it all the way to this return pathway
+            //return finalStage;
         }
         public int ParseSeizure(string note)
         {
