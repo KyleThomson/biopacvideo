@@ -545,16 +545,25 @@ namespace BioPacVideo
                     StartRecording();                                                                   
                 }
                 else
-                {                                        
-                    //End Recording
-                    StopRecording();
-                    IDM_SELECTCHANNELS.Enabled = true;
-                    IDM_SETTINGS.Enabled = true;
-                    IDM_DISCONNECTBIOPAC.Enabled = true;
-                    //IDT_ENCODERSTATUS.Text = Video.EncoderStatus();
-                   // IDT_FEEDST.Text = Video.EncoderResult();
-                    RecordingButton.Text = "Start Recording";                    
-                    RecordingButton.BackColor = Color.Green;
+                {
+                    DialogResult dr = MessageBox.Show("Are you sure you wish to stop recording?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2); 
+                    if (dr == DialogResult.Yes)
+                    {
+                        //End Recording
+                        StopRecording();
+                        IDM_SELECTCHANNELS.Enabled = true;
+                        IDM_SETTINGS.Enabled = true;
+                        IDM_DISCONNECTBIOPAC.Enabled = true;
+                        //IDT_ENCODERSTATUS.Text = Video.EncoderStatus();
+                        // IDT_FEEDST.Text = Video.EncoderResult();
+                        RecordingButton.Text = "Start Recording";
+                        RecordingButton.BackColor = Color.Green;
+                    }
+                    else
+                    {
+                        return; 
+                    }
+                    
                 }
             }
             else
