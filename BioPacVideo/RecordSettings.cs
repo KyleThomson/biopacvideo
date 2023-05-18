@@ -12,6 +12,7 @@ namespace BioPacVideo
     public partial class RecordSettings : Form
     {
         MPTemplate MP;
+
         public RecordSettings()
         {
             InitializeComponent();

@@ -89,7 +89,8 @@ namespace BioPacVideo
             Panels.Add(CloneChannelPanel14);
             Panels.Add(CloneChannelPanel15);
             Panels.Add(CloneChannelPanel16);
-            g = this.CreateGraphics();  //Plot window          
+            g = this.CreateGraphics();  //Plot window
+            MP.recordingWanted = false; // flags to tell us whether or not recording is working 
             
             //***************** LOAD SETTINGS *****************
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -128,7 +129,7 @@ namespace BioPacVideo
                 }
                 else
                 {
-                    MP.StartRecording();
+                    MP.CommunicateBioPac();
                     IDT_BIOPACSTAT.Text = "BioPac Connected";
                 }
                 IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
@@ -195,7 +196,7 @@ namespace BioPacVideo
                     }
                     else
                     {
-                        MP.Disconnect();                        
+                        MP.Disconnect();
                         Thread.Sleep(1000);
                         MP.Connect();
                     }
@@ -259,6 +260,14 @@ namespace BioPacVideo
                         //Hobbits 2nd Lunch
                         //PO - TA - TOES
                     }
+                }
+                else if ((DateTime.Now.TimeOfDay.Minutes > 9) && ((DateTime.Now.TimeOfDay.Minutes % 10) == 0))
+                {
+                    Update_FreeSpace();
+                }
+                else if (MP.IsFileWriting == false && MP.recordingWanted == true)
+                {
+                    MP.RestartRecording(); 
                 }
                 Thread.Sleep(10000);
                 
@@ -511,7 +520,8 @@ namespace BioPacVideo
             Video.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;            
             //Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString, Video.FileStart);
             Video.StartRecording();
-            MP.isstreaming = MP.StartWriting();                                
+            MP.isstreaming = MP.StartWriting();
+            //if (MP.isstreaming) MP.IsFileWriting = true;
         }
 
         private void StopRecording()
@@ -524,8 +534,9 @@ namespace BioPacVideo
             SyncFile.Close();
             Thread.Sleep(1000);
             MP.Connect();
-            MP.StartRecording();
+            MP.CommunicateBioPac();
         }
+
 
         private void RecordingButton_Click(object sender, EventArgs e)
         {
@@ -761,6 +772,7 @@ namespace BioPacVideo
             PelletCounts Frm = new PelletCounts();
             Frm.ShowDialog(this);
             Frm.Dispose();
+            
         }
         private void Update_FreeSpace()
         {
@@ -768,12 +780,14 @@ namespace BioPacVideo
             long DriveSpace = Drive.TotalSize;
             long FreeSpace = Drive.TotalFreeSpace;
             double GBFree = (double)(FreeSpace / 1073741824);
-            this.Invoke(new MethodInvoker(delegate { SpaceLeft.Text = GBFree.ToString() + "GB Free"; }));
-            if (GBFree < 40)
-                this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.Red; }));
-            else if (GBFree < 100)
-                this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.Yellow; }));
-            else this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.LightGreen; }));
+            double CalcPercent = ((FreeSpace / DriveSpace) * 100);
+            int PercFull = (int)(CalcPercent); 
+            this.Invoke(new MethodInvoker(delegate { SpaceLeft.Text = GBFree.ToString() + "GB Free"; PercentFull.Text = PercFull.ToString() + "% Full"; }));
+            if (GBFree < 60)
+                this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.Red; PercentFull.BackColor = Color.Red; }));
+            else if (GBFree < 120)
+                this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.Yellow; PercentFull.BackColor = Color.Yellow; }));
+            else this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.LightGreen; PercentFull.BackColor = Color.LightGreen; }));
 
         }
 

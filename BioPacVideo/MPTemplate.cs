@@ -34,6 +34,7 @@ namespace BioPacVideo
         private int MaxDrawSize;         
         Thread AcqThread = null;
         FeederTemplate Feeder;
+        VideoWrapper Video;
         public bool FileSplit;
         public String Filename;
         public String MPtype; 
@@ -44,7 +45,8 @@ namespace BioPacVideo
         public int Gain;
         public bool Enabled;
         //Booleans are used to communicate across threads. This way, all writing is done by blocks, defined by BuffSize. Keeps things thread-safe.
-        public bool IsFileWriting; 
+        public bool IsFileWriting;
+        public bool recordingWanted;
         bool FileStop;
         public bool isstreaming = false;
         public bool isconnected = false;
@@ -57,7 +59,10 @@ namespace BioPacVideo
         public int Voltage;
         private long CurrentWriteLoc;
         uint BuffSize;
-        private FeederErrorBox FEB; 
+        private FeederErrorBox FEB;
+        
+        string SyncName;
+        StreamWriter SyncFile;
 
 
 
@@ -471,7 +476,7 @@ namespace BioPacVideo
                 return false;
         }
       
-        public bool StartRecording() //Start Data Acquisition
+        public bool CommunicateBioPac() //Start Data Acquisition
         {
             AcqThread = new Thread(new ThreadStart(RecordingThread)); //Initialize recording thread
             AcqThread.Priority = ThreadPriority.Highest; //Need to make sure that the computer makes this most important    
@@ -551,16 +556,9 @@ namespace BioPacVideo
                 if (MPReturn != MPCODE.MPSUCCESS) //Make sure we were successful in getting the buffer. 
                 {
                     MessageBox.Show(MPReturn.ToString() + "   " + MPCLASS.getMPDaemonLastError().ToString());
-                    MPReturn = MPCLASS.stopAcquisition(); //Have to restart the aquisition. 
-                    //Thinking that we should get the thread to sleep before restarting the process - Sarah 
-                    Thread.Sleep(1000); // this is an arbitrary number - Sarah
-                    MPReturn = MPCLASS.startAcquisition(); // need to restart the acquisition here since we just stopped it? - Sarah 
-                    while (MPReturn != MPCODE.MPSUCCESS) // keep trying to restart acquisition until there is a success - Sarah 
-                    {
-                        Thread.Sleep(1000);
-                        MPReturn = MPCLASS.startAcquisition(); 
-                    }
-                    continue; // this should return to the start of the while loop and try again to run the thread - Sarah 
+                    MPReturn = MPCLASS.stopAcquisition(); //Have to restart the aquisition.
+                    IsFileWriting = false; 
+
                 }
                 last_received = received; //For the draw buffer
                 if (last_received % AcqChan > 0) 
@@ -603,7 +601,8 @@ namespace BioPacVideo
                         BinaryFile.Close(); //Close 
                         FileCount = 0; 
                         IsFileWriting = false;
-                        FileStop = false;                        
+                        FileStop = false; 
+                        
                     }
                     else if (BinaryFile.Position > (1980 * MBYTE)) //Need to stop file, and restart it
                     {
@@ -701,17 +700,47 @@ namespace BioPacVideo
             }
             BuffDraw.Abort();            
             MPReturn = MPCLASS.stopAcquisition();  //We won't get here unless the thread stops. 
+            IsFileWriting = false; 
             return;
         }
         public void StopRecording()
             {
                 isstreaming = false; //next recording block, streaming will stop
+                
             while (AcqThread.IsAlive)
             {
+                recordingWanted = false; 
                 //Pause to wait for thread to close
             }                     
                        
         }
+
+        public void RestartRecording()
+        {
+            uint received; 
+            MPReturn = MPCLASS.receiveMPData(rec_buffer, BuffSize, out received);
+            while (MPReturn != MPCODE.MPSUCCESS)
+            {
+                MPReturn = MPCLASS.receiveMPData(rec_buffer, BuffSize, out received);
+            }
+            string DateString, RecordingDir;
+            DateString = string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", DateTime.Now);
+            RecordingDir = RecordingDirectory + "\\" + DateString;
+            Directory.CreateDirectory(RecordingDir);
+
+            Filename = RecordingDirectory + "\\" + DateString + "\\" + DateString;
+            Feeder.SetLogName(RecordingDirectory + "\\" + DateString + "\\" + DateString + "_Feeder.log");
+            SyncName = (RecordingDirectory + "\\" + DateString + "\\" + DateString + "_Sync.log");
+            SyncFile = new StreamWriter(SyncName);
+            SyncFile.AutoFlush = true;                 
+            //Video Stuff                          
+            Video.Filename = RecordingDirectory + "\\" + DateString + "\\" + DateString;
+            //Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString, Video.FileStart);
+            Video.StartRecording();
+            isstreaming = StartWriting();
+            //if (isstreaming) IsFileWriting = true; 
+        }
+
     
     }
 }  

@@ -46,9 +46,9 @@ namespace BioPacVideo
             this.videoSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.automaticFeederToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.animalSettingsTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.injectionManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AddPelletCountMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.animalSettingsTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.feedersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.feederTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ratRoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,6 +90,7 @@ namespace BioPacVideo
             this.cages_x_text = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.PercentFull = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -241,26 +242,26 @@ namespace BioPacVideo
             this.automaticFeederToolStripMenuItem.Size = new System.Drawing.Size(102, 20);
             this.automaticFeederToolStripMenuItem.Text = "Animal Settings";
             // 
+            // animalSettingsTestToolStripMenuItem
+            // 
+            this.animalSettingsTestToolStripMenuItem.Name = "animalSettingsTestToolStripMenuItem";
+            this.animalSettingsTestToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.animalSettingsTestToolStripMenuItem.Text = "Animal Settings";
+            this.animalSettingsTestToolStripMenuItem.Click += new System.EventHandler(this.animalSettingsTestToolStripMenuItem_Click);
+            // 
             // injectionManagerToolStripMenuItem
             // 
             this.injectionManagerToolStripMenuItem.Name = "injectionManagerToolStripMenuItem";
-            this.injectionManagerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.injectionManagerToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.injectionManagerToolStripMenuItem.Text = "Injection Manager";
             this.injectionManagerToolStripMenuItem.Click += new System.EventHandler(this.injectionManagerToolStripMenuItem_Click);
             // 
             // AddPelletCountMenuItem
             // 
             this.AddPelletCountMenuItem.Name = "AddPelletCountMenuItem";
-            this.AddPelletCountMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.AddPelletCountMenuItem.Size = new System.Drawing.Size(170, 22);
             this.AddPelletCountMenuItem.Text = "Add Pellet Count";
             this.AddPelletCountMenuItem.Click += new System.EventHandler(this.AddPelletCountMenuItem_Click);
-            // 
-            // animalSettingsTestToolStripMenuItem
-            // 
-            this.animalSettingsTestToolStripMenuItem.Name = "animalSettingsTestToolStripMenuItem";
-            this.animalSettingsTestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.animalSettingsTestToolStripMenuItem.Text = "Animal Settings";
-            this.animalSettingsTestToolStripMenuItem.Click += new System.EventHandler(this.animalSettingsTestToolStripMenuItem_Click);
             // 
             // feedersToolStripMenuItem
             // 
@@ -320,6 +321,7 @@ namespace BioPacVideo
             // StatusBar
             // 
             this.StatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.PercentFull,
             this.SpaceLeft,
             this.IDT_BIOPACSTAT,
             this.IDT_MPLASTMESSAGE,
@@ -633,6 +635,18 @@ namespace BioPacVideo
             this.label4.TabIndex = 16;
             this.label4.Text = "Columns of Cages";
             // 
+            // PercentFull
+            // 
+            this.PercentFull.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.PercentFull.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.PercentFull.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PercentFull.Name = "PercentFull";
+            this.PercentFull.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
+            this.PercentFull.Size = new System.Drawing.Size(92, 23);
+            this.PercentFull.Text = "% Full";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -745,6 +759,7 @@ namespace BioPacVideo
         private System.Windows.Forms.TextBox cages_x_text;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ToolStripStatusLabel PercentFull;
     }
 }
 
