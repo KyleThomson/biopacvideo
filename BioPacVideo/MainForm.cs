@@ -54,7 +54,7 @@ namespace BioPacVideo
             Feeder = FeederTemplate.Instance; //Same for Feeders 
             BoxPen = new Pen(Brushes.Black, 4);            
             BioIni = new IniFile(Directory.GetCurrentDirectory() + "\\BioPacVideo.ini"); //Standard Ini Settings
-            Panel TempPanel; 
+            
             Video.PanelHandles = new Int32[16];
             Video.PanelHandles[0] = CloneChannelPanel1.Handle.ToInt32();
             Video.PanelHandles[1] = CloneChannelPanel2.Handle.ToInt32();
@@ -138,40 +138,9 @@ namespace BioPacVideo
             //Still = new Bitmap("NoSignal.Bmp");
             MP.FileCount = 0;
             RecordingButton.BackColor = Color.Green;
-            
-            Video.HwInitialize();
-            Video.ShowCloneVideo(true);
-            int halfChan = MP.TotChan() / 2;
-            for (int i=0; i<halfChan; i++)
-            {
-                TempPanel = Panels[i] as Panel;
-                TempPanel.Location = new Point ((i * 149) + 127,37);
-                TempPanel = Panels[i+halfChan] as Panel;
-                TempPanel.Location = new Point((i * 149) + 127, 158);
-            }
-            for (int i = MP.TotChan(); i < 16; i++)
-            {
-                TempPanel = Panels[i] as Panel;
-                TempPanel.Visible = false; 
-            }
-
-            //Video.FileStart = 0;
-            /* IDT_DEVICECOUNT.Text = string.Format("Device Count ({0})", Video.Device_Count);
-              IDT_VIDEOSTATUS.Text = Video.GetResText();
-              Console.WriteLine(Video.GetResText());
-              if (Video.Enabled & (Video.Res == (AdvantechCodes.tagRes.SUCCEEDED)))
-              {
-                  Video.CapSDKStatus = true;
-              }
-              else
-              {                
-                  Video.Enabled = false;
-              }
-              videoCaptureEnabledToolStripMenuItem.Checked = Video.Enabled;*/
-
+            UpdateGUI(); 
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
             TimerThread = new Thread(new ThreadStart(TimerCheckThread));
-            Video.UpdateCameraAssoc();
             RunDisplayThread = true;
             VoltScale.SelectedIndex = Array.IndexOf(VoltageSettings, MP.Voltage);
             TimeScale.SelectedIndex = Array.IndexOf(DisplayLengthSize, MP.DisplayLength); 
@@ -179,7 +148,18 @@ namespace BioPacVideo
             TimerThread.Start();            
            
         }
-     
+        ~MainForm()
+        {
+            ThreadDisplay.Abort();
+            this.Dispose(true);
+        }
+
+/****************************************************************************************
+* 
+*                              TIMER CHECK THREAD
+*                  
+* **************************************************************************************/
+
         private void TimerCheckThread()
         {
                        
@@ -264,7 +244,12 @@ namespace BioPacVideo
                 
             }
       }
-        
+/****************************************************************************************
+* 
+*                              DISPLAY THREAD
+*                  
+* **************************************************************************************/
+
         private void DisplayThread()
         {
             int Cm; //To hold current camera. 
@@ -282,44 +267,14 @@ namespace BioPacVideo
                 //if (Still != null)                    
                     g.DrawImage(MP.offscreen, 30, 280);
                 Cm = 0;
-               /* for (int i = 0; i < MP.TotChan(); i++)
-                {
-                    while (MP.RecordAC[Cm] == false)
-                        Cm++;
-                    Video.pDF = VideoWrapper.GetCurrentBuffer(Video.CameraAssociation[Cm]);
-                    Cm++;
-                    if (Video.pDF != null)
-                    {
-                        Still = new Bitmap(Video.XRes, Video.YRes, Video.XRes * 3, PixelFormat.Format24bppRgb, Video.pDF);
-                        try
-                        {
-                            Still.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                        }
-                        catch { }; 
-                     
-                    }
-                    else
-                    {
-                       Still = new Bitmap("NoSignal.Bmp");
-                    }
-                    try
-                    {
-                        g.DrawImage(Still, 132 + (i % Video.LengthWise) * 162, 32 + (float)Math.Floor((decimal)(i / Video.LengthWise)) * 122, 160, 120);
-                    }
-                    catch { };
-                    Still.Dispose();
-                }
-                if (MP.IsFileWriting)
-                {
-                    int VS = Video.GetSampleCount();
-                    if (VS != -1)
-                    {
-                        string Output = VS.ToString() + " " + Video.GetSyncInfo();
-                        SyncFile.WriteLine(Output);                        
-                    }
-                }*/
            } 
         }
+
+/****************************************************************************************
+* 
+*                              INI FILE
+*                  
+* **************************************************************************************/
 
         //Read presets from INI file
         private void ReadINI(IniFile BioIni)
@@ -487,6 +442,13 @@ namespace BioPacVideo
                 BioIni.IniWriteValue("Video", string.Format("Satur{0}", i), Video.Saturation[i]);
             }
         }
+
+/****************************************************************************************
+* 
+*                              RECORDING FUNCTIONS
+*                  
+* **************************************************************************************/
+
         private void StartRecording()
         {
             IniFile WriteOnce;
@@ -527,6 +489,72 @@ namespace BioPacVideo
             MP.StartRecording();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                TimerThread.Abort();
+                ThreadDisplay.Abort();
+                if (MP.isstreaming)
+                {
+                    MP.StopRecording();
+                }
+                if (MP.isconnected)
+                {
+                    MP.Disconnect();
+                }
+                UpdateINI(BioIni);
+                if (disposing && (components != null))
+                {
+                    components.Dispose();
+                }
+                base.Dispose(disposing);
+            }
+        }
+
+        private void Update_FreeSpace()
+        {
+            DriveInfo Drive = new DriveInfo(Path.GetPathRoot(MP.RecordingDirectory));
+            long DriveSpace = Drive.TotalSize;
+            long FreeSpace = Drive.TotalFreeSpace;
+            double GBFree = (double)(FreeSpace / 1073741824);
+            this.Invoke(new MethodInvoker(delegate { SpaceLeft.Text = GBFree.ToString() + "GB Free"; }));
+            if (GBFree < 40)
+                this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.Red; }));
+            else if (GBFree < 100)
+                this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.Yellow; }));
+            else this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.LightGreen; }));
+        }
+
+        /****************************************************************************************
+        * 
+        *                              GUI FUNCTIONS
+        *                  
+        * **************************************************************************************/
+
+        public void UpdateGUI()
+        {
+            Panel TempPanel;
+            Video.HwInitialize();
+            Video.ShowCloneVideo(true);
+            int halfChan = MP.TotChan() / 2;
+            for (int i = 0; i < halfChan; i++)
+            {
+                TempPanel = Panels[i] as Panel;
+                TempPanel.Location = new Point((i * 149) + 127, 37);
+                TempPanel = Panels[i + halfChan] as Panel;
+                TempPanel.Visible = true; 
+                TempPanel.Location = new Point((i * 149) + 127, 158);
+                TempPanel.Visible = true;
+            }
+            for (int i = MP.TotChan(); i < 16; i++)
+            {
+                TempPanel = Panels[i] as Panel;
+                TempPanel.Visible = false;
+            }
+            Video.UpdateCameraAssoc();
+        }
+        
         private void RecordingButton_Click(object sender, EventArgs e)
         {
                
@@ -592,6 +620,7 @@ namespace BioPacVideo
                 MP.RecordingDirectory = FBD.SelectedPath;
             }
             UpdateINI(BioIni);
+            Update_FreeSpace(); 
         }
         
         private void initializeBioPacToolStripMenuItem_Click(object sender, EventArgs e)
@@ -623,6 +652,7 @@ namespace BioPacVideo
             frm.Dispose();
             UpdateINI(BioIni);
             IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
+            UpdateGUI(); 
         }
 
 
@@ -644,36 +674,6 @@ namespace BioPacVideo
             IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
         }
 
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {                
-                TimerThread.Abort();
-                ThreadDisplay.Abort();      
-                if (MP.isstreaming)
-                {
-                    MP.StopRecording();
-                }
-                if (MP.isconnected)
-                {
-                    MP.Disconnect();
-                }
-                UpdateINI(BioIni);              
-                if (disposing && (components != null))
-                {
-                    components.Dispose();
-                }
-                base.Dispose(disposing);
-            }            
-        }    
-        
-        ~MainForm()
-        {
-            ThreadDisplay.Abort();
-            this.Dispose(true);
-        }
-
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {                   
             this.Dispose(true);
@@ -688,29 +688,6 @@ namespace BioPacVideo
             MessageBox.Show("Please restart the software \nbefore continuing.");
             IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
         }
-        /*private void setFeedingProtocolToolStripMenuItem_Click(object sender, EventArgs e)
-        {           
-            FeederForm frm = new FeederForm(Feeder.Rats, Feeder);
-            frm.ShowDialog(this);
-            Feeder.Rats = frm.ReturnRats();
-            Feeder = frm.ReturnFeeder();
-            int M = 0;
-            if (!((Feeder.Meal1.Hours == 0) && (Feeder.Meal1.Minutes == 0))) 
-                M++;
-            if (!((Feeder.Meal2.Hours == 0) && (Feeder.Meal2.Minutes == 0)))
-                M++;
-            if (!((Feeder.Meal3.Hours == 0) && (Feeder.Meal3.Minutes == 0)))
-                M++;
-            if (!((Feeder.Meal4.Hours == 0) && (Feeder.Meal4.Minutes == 0)))
-                M++;
-            if (!((Feeder.Meal5.Hours == 0) && (Feeder.Meal5.Minutes == 0)))
-                M++;
-            if (!((Feeder.Meal6.Hours == 0) && (Feeder.Meal6.Minutes == 0)))
-                M++;
-            Feeder.DailyMealCount = M;
-            frm.Dispose();
-            UpdateINI(BioIni);           
-        }*/
 
         private void videoSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -733,8 +710,6 @@ namespace BioPacVideo
             }
         }
 
-      
-
         private void cameraAssociationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CameraAssosciation frm = new CameraAssosciation();
@@ -742,8 +717,8 @@ namespace BioPacVideo
             UpdateINI(BioIni);
             Video.UpdateCameraAssoc();
             frm.Dispose();
+            
         }
-
 
         private void VoltScale_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -762,22 +737,6 @@ namespace BioPacVideo
             Frm.ShowDialog(this);
             Frm.Dispose();
         }
-        private void Update_FreeSpace()
-        {
-            DriveInfo Drive = new DriveInfo(Path.GetPathRoot(MP.RecordingDirectory));
-            long DriveSpace = Drive.TotalSize;
-            long FreeSpace = Drive.TotalFreeSpace;
-            double GBFree = (double)(FreeSpace / 1073741824);
-            this.Invoke(new MethodInvoker(delegate { SpaceLeft.Text = GBFree.ToString() + "GB Free"; }));
-            if (GBFree < 40)
-                this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.Red; }));
-            else if (GBFree < 100)
-                this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.Yellow; }));
-            else this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.LightGreen; }));
-
-        }
-
-      
 
         private void injectionManagerToolStripMenuItem_Click(object sender, EventArgs e)
         {
