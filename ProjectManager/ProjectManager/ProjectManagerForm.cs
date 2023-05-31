@@ -577,7 +577,8 @@ namespace ProjectManager
                         var temp = DiscForm.ShowDialog();
                         if (temp == DialogResult.OK)
                         {
-                            Console.WriteLine(DiscForm.RetTest1);
+                            pjt.Animals = DiscForm.animals;
+                            pjt.Save(pjt.Filename);
                         }
                     }
 

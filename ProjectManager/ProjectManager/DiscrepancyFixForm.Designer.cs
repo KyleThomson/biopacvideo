@@ -62,7 +62,6 @@ namespace ProjectManager
             this.panel3 = new System.Windows.Forms.Panel();
             this.telem = new System.Windows.Forms.CheckBox();
             this.showBuffer = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.myVLC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
@@ -139,7 +138,6 @@ namespace ProjectManager
             this.myVLC.Name = "myVLC";
             this.myVLC.Size = new System.Drawing.Size(422, 284);
             this.myVLC.TabIndex = 37;
-            this.myVLC.Visible = false;
             this.myVLC.Click += new System.EventHandler(this.myVLC_Click);
             // 
             // GalGBox
@@ -176,7 +174,6 @@ namespace ProjectManager
             this.TimeLabel.Size = new System.Drawing.Size(87, 18);
             this.TimeLabel.TabIndex = 40;
             this.TimeLabel.Text = "0:00 / 0:00";
-            this.TimeLabel.Visible = false;
             // 
             // PlayButton
             // 
@@ -186,7 +183,7 @@ namespace ProjectManager
             this.PlayButton.TabIndex = 41;
             this.PlayButton.Text = "Play";
             this.PlayButton.UseVisualStyleBackColor = true;
-            this.PlayButton.Visible = false;
+            this.PlayButton.Click += new System.EventHandler(this.PlayButton_Click);
             // 
             // PauseButton
             // 
@@ -196,7 +193,7 @@ namespace ProjectManager
             this.PauseButton.TabIndex = 42;
             this.PauseButton.Text = "Pause";
             this.PauseButton.UseVisualStyleBackColor = true;
-            this.PauseButton.Visible = false;
+            this.PauseButton.Click += new System.EventHandler(this.PauseButton_Click);
             // 
             // ZoomLabel
             // 
@@ -232,6 +229,7 @@ namespace ProjectManager
             this.scoreGroupBox.Controls.Add(this.radioButton1);
             this.scoreGroupBox.Controls.Add(this.label3);
             this.scoreGroupBox.Controls.Add(this.panel1);
+            this.scoreGroupBox.Enabled = false;
             this.scoreGroupBox.ForeColor = System.Drawing.SystemColors.Control;
             this.scoreGroupBox.Location = new System.Drawing.Point(12, 439);
             this.scoreGroupBox.Name = "scoreGroupBox";
@@ -250,6 +248,7 @@ namespace ProjectManager
             this.submitChangeButton.TabIndex = 12;
             this.submitChangeButton.Text = "Submit Change";
             this.submitChangeButton.UseVisualStyleBackColor = true;
+            this.submitChangeButton.Click += new System.EventHandler(this.submitChangeButton_Click);
             // 
             // label4
             // 
@@ -428,22 +427,12 @@ namespace ProjectManager
             this.showBuffer.UseVisualStyleBackColor = true;
             this.showBuffer.CheckedChanged += new System.EventHandler(this.showBuffer_CheckedChanged);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(947, 13);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(12, 15);
-            this.button1.TabIndex = 47;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // DiscrepancyFixForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.ClientSize = new System.Drawing.Size(1479, 561);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(944, 561);
             this.Controls.Add(this.GalGBox);
             this.Controls.Add(this.scoreGroupBox);
             this.Controls.Add(this.editNotesButton);
@@ -509,6 +498,5 @@ namespace ProjectManager
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.CheckBox showBuffer;
         private System.Windows.Forms.CheckBox telem;
-        private System.Windows.Forms.Button button1;
     }
 }

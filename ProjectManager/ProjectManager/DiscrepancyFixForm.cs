@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 using LibVLCSharp.Shared;
 
 
@@ -31,8 +32,8 @@ namespace ProjectManager
         public string vidDir;
         public MediaPlayer player;
         public LibVLC vlc;
-        public SeizureType currentSZ;
-        
+        public DiscrepancyItem currentSZ;
+        public bool buttonBusy = false;
         public bool vidExists;
         
         
@@ -80,7 +81,7 @@ namespace ProjectManager
 
         private void DiscrepancyFixForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            this.RetTest1 = "It Works!";
+            
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
@@ -92,16 +93,18 @@ namespace ProjectManager
 
         private void ConflictingList_SelectedIndexChanged(object sender, EventArgs e)
         {
+            this.scoreGroupBox.Enabled = true;
 
             if (ConflictingList.SelectedIndices.Count < 1)
             {
                 return;
             }
 
-            currentSZ = discList[ConflictingList.SelectedIndices[0]].sz;
+            currentSZ = discList[ConflictingList.SelectedIndices[0]];
 
+            notesLabel.Text = currentSZ.sz.Notes;
 
-            if (currentSZ.VidString == null)
+            if (currentSZ.sz.VidString == null)
             {
                 DialogResult errorBox = MessageBox.Show("NO VIDEO DATA FOUND \n \n \t To view video, you must use Seizure Playback to view this seizure", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 vidExists = false;
@@ -109,6 +112,9 @@ namespace ProjectManager
             else
             {
                 vidExists = true;
+
+                
+
             }
 
             UpdateDisplay();
@@ -128,14 +134,14 @@ namespace ProjectManager
             if (DAT.Loaded)
             {
 
-                DAT.SetDispLength(currentSZ.length);
+                DAT.SetDispLength(currentSZ.sz.length);
                 DAT.cleargraph();
 
-                DAT.DrawOneSZ(currentSZ, 0, 0, showBuffer.Checked);
+                DAT.DrawOneSZ(currentSZ.sz, 0, 0, showBuffer.Checked);
 
                 g.Clear(Color.White);
                 g.DrawImage(DAT.offscreen, 0, 0);
-                gg.DrawImage(DAT.offscreen, button1.Location);
+                
 
             }
 
@@ -166,6 +172,139 @@ namespace ProjectManager
         private void showBuffer_CheckedChanged(object sender, EventArgs e)
         {
             UpdateDisplay();
+        }
+
+        private void submitChangeButton_Click(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked || radioButton2.Checked || radioButton3.Checked || radioButton4.Checked || radioButton5.Checked || radioButton6.Checked || radioButton7.Checked)
+            {
+
+                if (radioButton1.Checked)
+                {
+                    currentSZ.sz.Severity = 1;
+                } else if (radioButton2.Checked)
+                {
+                    currentSZ.sz.Severity = 2;
+                }
+                else if (radioButton3.Checked)
+                {
+                    currentSZ.sz.Severity = 3;
+                }
+                else if (radioButton4.Checked)
+                {
+                    currentSZ.sz.Severity = 4;
+                }
+                else if (radioButton5.Checked)
+                {
+                    currentSZ.sz.Severity = 5;
+                }
+                else if (radioButton6.Checked)
+                {
+                    currentSZ.sz.Severity = 0;
+                }
+                else if (radioButton7.Checked)
+                {
+                    currentSZ.sz.Severity = -1;
+                }
+
+                currentSZ.sz.Notes = notesLabel.Text;
+
+                animals[currentSZ.anIndex].Sz[currentSZ.szIndex] = currentSZ.sz;
+
+
+
+            } else
+            {
+                DialogResult errorBox = MessageBox.Show("Please Select New Rating", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                
+            }
+        }
+
+
+        //Video Handling Code
+
+
+        public void VideoPlay(int index)
+        {
+            if (!vidExists)
+            {
+                return;
+            }
+
+            //if (myVLC.MediaPlayer != null) myVLC.MediaPlayer.Dispose();
+            if (myVLC.MediaPlayer != null) myVLC.MediaPlayer.Dispose();
+            vlc = new LibVLC();
+            //params String[] options = new string[] { "--start-paused", "--no-playlist-autostart" };
+            Media media = new Media(vlc, vidDir + currentSZ.sz.VidString);
+            //media.AddOption("--start-paused");
+            //media.AddOption("--no-playlist-autostart");
+
+            MediaPlayer player = new MediaPlayer(media);
+
+
+
+
+
+            myVLC.MediaPlayer = player;
+            myVLC.MediaPlayer.Play();
+            Thread.Sleep(100);
+
+            if (myVLC.MediaPlayer.Length / 1000 > seconds) seconds += 60;
+
+
+            myVLC.MediaPlayer.Pause();
+            myVLC.MediaPlayer.Position = 0;
+            paused = true;
+            media.Dispose();
+            myVLC.Show();
+            UpdateDisplay();
+        }
+
+        private void PlayButton_Click(object sender, EventArgs e)
+        {
+            if (myVLC.MediaPlayer == null) return;
+            if (buttonBusy) return;
+
+            buttonBusy = true;
+
+            if (paused)
+            {
+
+                if (endOfClip)
+                {
+                    myVLC.MediaPlayer.Position = 0;
+                    pos = 0;
+                    endOfClip = false;
+                }
+
+                paused = false;
+                myVLC.MediaPlayer.Play();
+            }
+
+           
+
+            buttonBusy = false;
+        
+        }
+
+        private void PauseButton_Click(object sender, EventArgs e)
+        {
+            if (myVLC.MediaPlayer == null) return;
+
+            if (buttonBusy) return;
+
+            buttonBusy = true;
+
+            if (myVLC.MediaPlayer == null) return;
+
+            if (!paused)
+            {
+                paused = true;
+                myVLC.MediaPlayer.Pause();
+
+            }
+
+            buttonBusy = false;
         }
     }
 }
