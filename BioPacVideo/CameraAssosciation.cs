@@ -204,6 +204,7 @@ namespace BioPacVideo
 
         private void finishButton_Click(object sender, EventArgs e)
         {
+            Video.DestroyTempCloneVideo();
             this.Close(); //Close the program. Which will update the ini file with the new camera assosciations 
         }
     }
