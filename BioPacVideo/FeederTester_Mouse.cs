@@ -157,7 +157,7 @@ namespace BioPacVideo
             {
                 F = FeederLabel.IndexOf(FeederPos);
                 Feeder.AddCommand((byte)F, (byte)P);
-                Feeder.ExecuteAck();
+                Feeder.ExecuteAction();
             }
             else
             {
@@ -167,14 +167,9 @@ namespace BioPacVideo
 
         }
 
-        private void TestAll_Click(object sender, EventArgs e)
-        {
-            Feeder.ExecuteTest();
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            Feeder.ExecuteAck();
+            Feeder.ExecuteAction();
         }
     }
 }

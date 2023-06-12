@@ -48,7 +48,8 @@ namespace BioPacVideo
         bool FileStop;
         public bool isstreaming = false;
         public bool isconnected = false;
-        
+        private bool Sending = true;
+         
         public int samplesize;
         public bool ClearDisplay;
         private float Xmax;
@@ -630,17 +631,24 @@ namespace BioPacVideo
                             {
                                 Feeder.State = 1;
                                 Feeder.StateText = "EXECUTING";
+                                Sending = false; //We are now executing, the acknwoledge flag is no longer necessary
                             }
-                            if (a && !b)
+                            if (a && !b && Sending)
+                            {
+                                Feeder.ArduinoAck = true; 
+                                // this will say that the arduino has responded positively to the acknowledge function
+                            }
+                            if (a && !b && !Sending)
                             {
                                 if (Feeder.State != 2)
                                 {
                                     string Result = "SUCCESS - " + Feeder.GetLastCommandText() + " - ";
                                     FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Status(Result); }));
-                                    Feeder.ExecuteAck();
+                                    Feeder.ExecuteAction();
                                 }
                                 Feeder.State = 2;
                                 Feeder.StateText = "SUCCESS";
+                                Sending = true; 
                             }
                             if (!a && !b)
                             {
@@ -652,7 +660,7 @@ namespace BioPacVideo
                                 {
                                     string Result = "FAIL - " + Feeder.GetLastCommandText() + " - ";
                                     FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error(Result); }));
-                                    Feeder.ExecuteAck();
+                                    Feeder.ExecuteAction();
                                 }
                                 Feeder.State = 0;
                                 Feeder.StateText = "ERROR";
@@ -662,7 +670,7 @@ namespace BioPacVideo
                                 }
                             }
                         }
-                        if ((Feeder.CommandSize > 0) && Feeder.CommandReady)
+                        if ((Feeder.CommandSize > 0) && Feeder.CommandReady && Feeder.ArduinoAck)
                         {
                             byte v;
                             v = Feeder.GetTopCommand();

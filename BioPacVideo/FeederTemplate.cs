@@ -22,6 +22,7 @@ namespace BioPacVideo
         public bool Enabled;
         public bool Activated; 
         public int State;
+        public int RecievingState; 
         public string StateText;
         public string ADDC1;
         public string ADDC2;
@@ -41,6 +42,7 @@ namespace BioPacVideo
         private Random Randomizer;
         public RatTemplate[] Rats;
         public StreamWriter log;
+        public bool ArduinoAck = true;
         private string LogFileName;
         public int Cages_X;
         public int Cages_Y;
@@ -191,18 +193,20 @@ namespace BioPacVideo
             CommandSize = Commands.Count;
             Activated = true;
         }
-        public void ExecuteAck()
+        public void ExecuteAction()
         {           
             Commands.Enqueue((byte)31);
             CommandSize = Commands.Count;
             CommandReady = true;
             
         }
-        public void ExecuteTest()
+        public void ArduinoAckowledge()
         {
-            Commands.Enqueue((byte)30);
+            //The software asks the arduino to acknowledge that it recieved the pellet and the feeder 
+            Commands.Enqueue((byte)30); //gotta figure out the numbering system here
             CommandSize = Commands.Count;
-            CommandReady = true; 
+            CommandReady = true;
+            ArduinoAck = false; 
         }
         public void GoMeal(int MealNum)
         {
@@ -252,7 +256,7 @@ namespace BioPacVideo
                 }
 
             }
-            ExecuteAck();            
+            ExecuteAction();            
         }
 
     }

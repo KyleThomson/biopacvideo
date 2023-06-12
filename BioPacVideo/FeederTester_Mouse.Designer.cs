@@ -30,7 +30,6 @@ namespace BioPacVideo
         private void InitializeComponent()
         {
             this.runTestButton = new System.Windows.Forms.Button();
-            this.testAllButton = new System.Windows.Forms.Button();
             this.executeAckButton = new System.Windows.Forms.Button();
             this.pelletLabel = new System.Windows.Forms.Label();
             this.PelletsNum = new System.Windows.Forms.TextBox();
@@ -48,19 +47,9 @@ namespace BioPacVideo
             this.runTestButton.UseVisualStyleBackColor = true;
             this.runTestButton.Click += new System.EventHandler(this.IDC_RUNTEST_Click);
             // 
-            // testAllButton
-            // 
-            this.testAllButton.Location = new System.Drawing.Point(457, 388);
-            this.testAllButton.Name = "testAllButton";
-            this.testAllButton.Size = new System.Drawing.Size(125, 39);
-            this.testAllButton.TabIndex = 1;
-            this.testAllButton.Text = "Test All (No Pellets)";
-            this.testAllButton.UseVisualStyleBackColor = true;
-            this.testAllButton.Click += new System.EventHandler(this.TestAll_Click);
-            // 
             // executeAckButton
             // 
-            this.executeAckButton.Location = new System.Drawing.Point(634, 388);
+            this.executeAckButton.Location = new System.Drawing.Point(463, 388);
             this.executeAckButton.Name = "executeAckButton";
             this.executeAckButton.Size = new System.Drawing.Size(115, 39);
             this.executeAckButton.TabIndex = 2;
@@ -112,7 +101,6 @@ namespace BioPacVideo
             this.Controls.Add(this.PelletsNum);
             this.Controls.Add(this.pelletLabel);
             this.Controls.Add(this.executeAckButton);
-            this.Controls.Add(this.testAllButton);
             this.Controls.Add(this.runTestButton);
             this.Name = "FeederTester_Mouse";
             this.Text = "FeederTester_Mouse";
@@ -124,7 +112,6 @@ namespace BioPacVideo
         #endregion
 
         private System.Windows.Forms.Button runTestButton;
-        private System.Windows.Forms.Button testAllButton;
         private System.Windows.Forms.Button executeAckButton;
         private System.Windows.Forms.Label pelletLabel;
         private System.Windows.Forms.TextBox PelletsNum;
