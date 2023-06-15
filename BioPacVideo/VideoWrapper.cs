@@ -368,8 +368,9 @@ namespace BioPacVideo
             }
             for (i = 0; i < maxdevices; i++)
             {
-                EXPORTS.QCAP_SET_AUDIO_RECORD_PROPERTY(m_hCapDev[i], 0, (uint)EXPORTS.EncoderTypeEnum.QCAP_ENCODER_TYPE_SOFTWARE, (uint)EXPORTS.AudioEncoderFormatEnum.QCAP_ENCODER_FORMAT_AAC);
-                EXPORTS.QCAP_SET_VIDEO_HARDWARE_ENCODER_PROPERTY(m_hCapDev[i], 0, (uint)EXPORTS.VideoEncoderFormatEnum.QCAP_ENCODER_FORMAT_H264, (uint)EXPORTS.RecordModeEnum.QCAP_RECORD_MODE_VBR, (uint)Quality,  (uint)Bitrate * 1024 * 1024, 30, 4, 3, (uint)EXPORTS.DownScaleModeEnum.QCAP_DOWNSCALE_MODE_OFF, 0, 0);
+                //EXPORTS.QCAP_SET_AUDIO_RECORD_PROPERTY(m_hCapDev[i], 0, (uint)EXPORTS.EncoderTypeEnum.QCAP_ENCODER_TYPE_SOFTWARE, (uint)EXPORTS.AudioEncoderFormatEnum.QCAP_ENCODER_FORMAT_AAC);
+                EXPORTS.QCAP_SET_AUDIO_RECORD_PROPERTY_EX(m_hCapDev[i], 0, (uint)EXPORTS.EncoderTypeEnum.QCAP_ENCODER_TYPE_SOFTWARE, (uint)EXPORTS.AudioEncoderFormatEnum.QCAP_ENCODER_FORMAT_AAC, 2);
+                EXPORTS.QCAP_SET_VIDEO_HARDWARE_ENCODER_PROPERTY(m_hCapDev[i], 0, (uint)EXPORTS.VideoEncoderFormatEnum.QCAP_ENCODER_FORMAT_H264, (uint)EXPORTS.RecordModeEnum.QCAP_RECORD_MODE_VBR, (uint)Quality,  (uint)Bitrate * 1024 * 1024, 99, 4, 3, (uint)EXPORTS.DownScaleModeEnum.QCAP_DOWNSCALE_MODE_OFF, 0, 0);
             }
 
             for (i = 0; i < maxdevices; i++)
