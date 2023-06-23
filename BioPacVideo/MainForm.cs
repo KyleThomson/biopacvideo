@@ -29,7 +29,6 @@ namespace BioPacVideo
         VideoWrapper Video; 
         FeederTemplate Feeder;
         string SyncName;
-        StreamWriter SyncFile;
         Pen BoxPen;
         FolderBrowserDialog FBD;        
         Bitmap Still;                
@@ -502,8 +501,6 @@ namespace BioPacVideo
             MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
             Feeder.SetLogName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString + "_Feeder.log");
             SyncName = (MP.RecordingDirectory + "\\" + DateString + "\\" + DateString + "_Sync.log"); 
-            SyncFile = new StreamWriter(SyncName);
-            SyncFile.AutoFlush = true;
             //Write INI file once, so we save all the settings                    
             WriteOnce = new IniFile(RecordingDir + "\\" + DateString + "_Settings.txt");
             UpdateINI(WriteOnce);
@@ -521,7 +518,6 @@ namespace BioPacVideo
             while (MP.IsFileWriting) { };
             MP.StopRecording();
             MP.Disconnect();
-            SyncFile.Close();
             Thread.Sleep(1000);
             MP.Connect();
             MP.CommunicateBioPac();
