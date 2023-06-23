@@ -133,6 +133,7 @@ namespace BioPacVideo
 
         public void ResetDisplaySize()
         {
+            ClearDisplay = true; 
             MaxDrawSize = SampleRate * DisplayLength;
             WaveCords = new PointF[MaxDrawSize];
             PointSpacing = Convert.ToSingle(Xmax / MaxDrawSize);                     

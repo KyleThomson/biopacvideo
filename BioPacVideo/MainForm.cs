@@ -41,12 +41,6 @@ namespace BioPacVideo
         public static int[] VoltageSettings = new int[] { 1, 10, 50, 100, 250, 500, 1000, 2000, 3000, 4000, 5000};
         public static int[] DisplayLengthSize = new int[] { 1, 5, 10, 30, 60 };
         private static ManualResetEvent mre = new ManualResetEvent(false);
-        public delegate void GreyOutDelegate();
-        public GreyOutDelegate GreyOut; 
-        void GreyOutFunction()
-        {
-            RecordingButton.Enabled = false;
-        }
 
 
         public MainForm() //Form Constructior
@@ -58,7 +52,6 @@ namespace BioPacVideo
             Feeder = FeederTemplate.Instance; //Same for Feeders 
             BoxPen = new Pen(Brushes.Black, 4);            
             BioIni = new IniFile(Directory.GetCurrentDirectory() + "\\BioPacVideo.ini"); //Standard Ini Settings
-            GreyOut = new GreyOutDelegate(GreyOutFunction); 
             
             Video.PanelHandles = new Int32[16];
             Video.PanelHandles[0] = CloneChannelPanel1.Handle.ToInt32();
