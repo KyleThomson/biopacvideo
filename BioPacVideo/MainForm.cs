@@ -455,7 +455,7 @@ namespace BioPacVideo
         {
             int Cm; //To hold current camera. 
             int InnerSync = 0;
-            int ChanSync = 0; 
+            int ChanSync = 0;
             DI = new DriveInfo(MP.RecordingDirectory.Substring(0, 3));
             while (RunDisplayThread)
             {
@@ -493,7 +493,6 @@ namespace BioPacVideo
 
             MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
             Feeder.SetLogName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString + "_Feeder.log");
-            SyncName = (MP.RecordingDirectory + "\\" + DateString + "\\" + DateString + "_Sync.log"); 
             //Write INI file once, so we save all the settings                    
             WriteOnce = new IniFile(RecordingDir + "\\" + DateString + "_Settings.txt");
             UpdateINI(WriteOnce);
@@ -541,9 +540,22 @@ namespace BioPacVideo
 
         private void Update_FreeSpace()
         {
-            DriveInfo Drive = new DriveInfo(Path.GetPathRoot(MP.RecordingDirectory));
-            long DriveSpace = Drive.TotalSize;
-            long FreeSpace = Drive.TotalFreeSpace;
+            long DriveSpace;
+            long FreeSpace;
+            if (Directory.Exists(MP.RecordingDirectory))
+            {
+                DriveInfo Drive = new DriveInfo(Path.GetPathRoot(MP.RecordingDirectory));
+                DriveSpace = Drive.TotalSize;
+                FreeSpace = Drive.TotalFreeSpace;
+            }
+            else
+            {
+                MessageBox.Show("The Following Directory is Unavailable: " + Environment.NewLine + MP.RecordingDirectory.ToString() + Environment.NewLine + "Please Select New Directory", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MP.RecordingDirectory = String.Format("C:\\");
+                DriveInfo Drive = new DriveInfo(Path.GetPathRoot(MP.RecordingDirectory));
+                DriveSpace = Drive.TotalSize;
+                FreeSpace = Drive.TotalFreeSpace;
+            }
             double GBFree = (double)(FreeSpace / 1073741824);
             this.Invoke(new MethodInvoker(delegate { SpaceLeft.Text = GBFree.ToString() + "GB Free"; }));
             if (GBFree < 40)
@@ -591,15 +603,22 @@ namespace BioPacVideo
                 {            
                     //IDT_VIDEOSTATUS.Text = Video.GetResText();                      
                     //Visual Stuff, so we know we are recording. 
-                    RecordingButton.Text = "Stop Recording";                   
-                    IDM_SELECTCHANNELS.Enabled = false;
-                    IDM_SETTINGS.Enabled = false;
-                    IDM_DISCONNECTBIOPAC.Enabled = false;
-                    RecordingButton.BackColor = Color.Red;
-                    //Start the actual recording
-                    MP.RecordingWanted = true; //open the eyes to observe data transfer between Biopac and software
-                    //Console.WriteLine("RecordingWanted = " + MP.RecordingWanted);
-                    StartRecording();                                                                   
+                    if(MP.RecordingDirectory == "C:\\")
+                    {
+                        MessageBox.Show("Please Select a Recording Directory", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                    }
+                    else
+                    {
+                        RecordingButton.Text = "Stop Recording";
+                        IDM_SELECTCHANNELS.Enabled = false;
+                        IDM_SETTINGS.Enabled = false;
+                        IDM_DISCONNECTBIOPAC.Enabled = false;
+                        RecordingButton.BackColor = Color.Red;
+                        //Start the actual recording
+                        MP.RecordingWanted = true; //open the eyes to observe data transfer between Biopac and software
+                                                   //Console.WriteLine("RecordingWanted = " + MP.RecordingWanted);
+                        StartRecording();
+                    }
                 }
                 else
                 {
