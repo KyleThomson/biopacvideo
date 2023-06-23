@@ -75,3 +75,4 @@ C:\Users\Sarah\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\Bi
 C:\Users\Sarah\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.csproj.CopyComplete
 C:\Users\Sarah\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.exe
 C:\Users\Sarah\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.pdb
+C:\Users\Sarah\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.csproj.AssemblyReference.cache

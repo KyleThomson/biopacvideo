@@ -41,8 +41,13 @@ namespace BioPacVideo
         private ArrayList Panels; 
         public static int[] VoltageSettings = new int[] { 1, 10, 50, 100, 250, 500, 1000, 2000, 3000, 4000, 5000};
         public static int[] DisplayLengthSize = new int[] { 1, 5, 10, 30, 60 };
-      
-       
+        private static ManualResetEvent mre = new ManualResetEvent(false);
+        public delegate void GreyOutDelegate();
+        public GreyOutDelegate GreyOut; 
+        void GreyOutFunction()
+        {
+            RecordingButton.Enabled = false;
+        }
 
 
         public MainForm() //Form Constructior
@@ -54,6 +59,7 @@ namespace BioPacVideo
             Feeder = FeederTemplate.Instance; //Same for Feeders 
             BoxPen = new Pen(Brushes.Black, 4);            
             BioIni = new IniFile(Directory.GetCurrentDirectory() + "\\BioPacVideo.ini"); //Standard Ini Settings
+            GreyOut = new GreyOutDelegate(GreyOutFunction); 
             
             Video.PanelHandles = new Int32[16];
             Video.PanelHandles[0] = CloneChannelPanel1.Handle.ToInt32();
@@ -128,7 +134,7 @@ namespace BioPacVideo
                 }
                 else
                 {
-                    MP.StartRecording();
+                    MP.CommunicateBioPac();
                     IDT_BIOPACSTAT.Text = "BioPac Connected";
                 }
                 IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
@@ -145,7 +151,8 @@ namespace BioPacVideo
             VoltScale.SelectedIndex = Array.IndexOf(VoltageSettings, MP.Voltage);
             TimeScale.SelectedIndex = Array.IndexOf(DisplayLengthSize, MP.DisplayLength); 
             ThreadDisplay.Start();
-            TimerThread.Start();            
+            TimerThread.Start();
+
            
         }
         ~MainForm()
@@ -153,20 +160,221 @@ namespace BioPacVideo
             ThreadDisplay.Abort();
             this.Dispose(true);
         }
+        /****************************************************************************************
+        * 
+        *                              INI FILE
+        *                  
+        * **************************************************************************************/
 
-/****************************************************************************************
-* 
-*                              TIMER CHECK THREAD
-*                  
-* **************************************************************************************/
+        //Read presets from INI file
+        private void ReadINI(IniFile BioIni)
+        {
+            MP.RecordingDirectory = BioIni.IniReadValue("General", "RecDirectory", Directory.GetCurrentDirectory());
+            MP.MPtype = BioIni.IniReadValue("BioPac", "MPType", "MP160");
+            MP.SampleRate = BioIni.IniReadValue("BioPac", "SampleRate", 1000);
+            MP.SelectedChannel = BioIni.IniReadValue("BioPac", "Selected Channel", 1);
+            MP.DisplayLength = BioIni.IniReadValue("BioPac", "DisplayLength", 10);
+            MP.Voltage = BioIni.IniReadValue("BioPac", "Voltage(mV)", 500);
+            MP.Gain = BioIni.IniReadValue("BioPac", "Gain", 20000);
+            MP.Enabled = BioIni.IniReadValue("BioPac", "Enabled", true);
+            MP.Offset = BioIni.IniReadValue("BioPac", "Offset", 0.0);
+            MP.FileSplit = BioIni.IniReadValue("BioPac", "FileSplit", true);
+            BioIni.IniReadValue("Feeder", "Meal1", out Feeder.Meal1);
+            BioIni.IniReadValue("Feeder", "Meal2", out Feeder.Meal2);
+            BioIni.IniReadValue("Feeder", "Meal3", out Feeder.Meal3);
+            BioIni.IniReadValue("Feeder", "Meal4", out Feeder.Meal4);
+            BioIni.IniReadValue("Feeder", "Meal5", out Feeder.Meal5);
+            BioIni.IniReadValue("Feeder", "Meal6", out Feeder.Meal6);
+            Feeder.PelletsPerGram = BioIni.IniReadValue("Feeder", "PelletsPerGram", 0.02);
+            Feeder.Enabled = BioIni.IniReadValue("Feeder", "Enabled", true);
+            Feeder.DailyMealCount = BioIni.IniReadValue("Feeder", "DailyMealCount", 4);
+            Feeder.ADDC1 = BioIni.IniReadValue("Feeder", "ADDCompound1", "");
+            Feeder.Dose1 = BioIni.IniReadValue("Feeder", "ADDDose1", "");
+            Feeder.Route1 = BioIni.IniReadValue("Feeder", "ADDRoute1", 1);
+            Feeder.Solve1 = BioIni.IniReadValue("Feeder", "ADDSolve1", 1);
+            Feeder.ADDC2 = BioIni.IniReadValue("Feeder", "ADDCompound2", "");
+            Feeder.Dose2 = BioIni.IniReadValue("Feeder", "ADDDose2", "");
+            Feeder.Route2 = BioIni.IniReadValue("Feeder", "ADDRoute2", 1);
+            Feeder.Solve2 = BioIni.IniReadValue("Feeder", "ADDSolve2", 1);
+            Feeder.AlternateAddress = BioIni.IniReadValue("Feeder", "AltEnabled", false);
+            for (int i = 0; i < 31; i++)
+            {
+                Feeder.AddressTable[i] = BioIni.IniReadValue("Feeder", "Address" + i, i);
+            }
+            for (int i = 0; i < 16; i++)
+            {
+                MP.RecordAC[i] = BioIni.IniReadValue("BioPac", string.Format("Channel{0}", i), true);
+            }
+            for (int i = 0; i < 16; i++)
+            {
+                if (BioIni.IniReadValue("BioPac", string.Format("RecordingDevice_Channel{0}", i), false) == true)
+                {
+                    MP.RecordingDevice = Enumerable.Repeat(true, 16).ToArray();
+                    break;
+                }
+                MP.RecordingDevice[i] = false;
+            }
+
+            MP.UpdateOffsets();
+            for (int i = 0; i < 16; i++)
+            {
+                Feeder.Rats[i].ID = BioIni.IniReadValue("Rats", string.Format("Rat{0} ID", i), string.Format("Rat{0}", i));
+                Feeder.Rats[i].Weight = BioIni.IniReadValue("Rats", string.Format("Rat{0} (g)", i), (double)0);
+                Feeder.Rats[i].Medication = BioIni.IniReadValue("Rats", string.Format("Rat{0}Medicate", i), 100);
+                Feeder.Rats[i].Surgery = BioIni.IniReadValue("Rats", string.Format("Rat{0} Surgery", i));
+                Feeder.Rats[i].Injection = BioIni.IniReadValue("Rats", string.Format("Rat{0} Injection", i));
+                Feeder.Rats[i].FirstSeizure = BioIni.IniReadValue("Rats", string.Format("Rat{0} FirstSeizure", i));
+                Feeder.Rats[i].DoseID = BioIni.IniReadValue("Rats", string.Format("Rat{0} DoseID", i), 1);
+                for (int j = 0; j < (7 * 6); j++)
+                {
+                    Feeder.Rats[i].Meals[j] = BioIni.IniReadValue("Rats", "Rat" + i + "Meal" + j, false);
+                }
+
+            }
+            Feeder.Cages_X = BioIni.IniReadValue("Rats", "CagesX", 4);
+            Feeder.Cages_Y = BioIni.IniReadValue("Rats", "CagesY", 4);
+
+            Video.Enabled = BioIni.IniReadValue("Video", "Enabled", true);
+            Video.XRes = BioIni.IniReadValue("Video", "XRes", 320);
+            Video.LengthWise = BioIni.IniReadValue("Video", "LengthWise", 8);
+            Video.YRes = BioIni.IniReadValue("Video", "YRes", 240);
+            Video.Quality = BioIni.IniReadValue("Video", "Quality", 4000);
+            Video.Bitrate = BioIni.IniReadValue("Video", "Bitrate", 2);
+            Video.KeyFrames = BioIni.IniReadValue("Video", "KeyFrames", 100);
+            for (int i = 0; i < 16; i++)
+                Video.CameraAssociation[i] = BioIni.IniReadValue("Video", string.Format("Channel{0}", i), i);
+            for (int i = 0; i < 32; i++)
+            {
+                Video.Brightness[i] = BioIni.IniReadValue("Video", string.Format("Bright{0}", i), 50);
+                Video.Contrast[i] = BioIni.IniReadValue("Video", string.Format("Contrast{0}", i), 50);
+                Video.Hue[i] = BioIni.IniReadValue("Video", string.Format("Hue{0}", i), 50);
+                Video.Saturation[i] = BioIni.IniReadValue("Video", string.Format("Satur{0}", i), 50);
+            }
+
+        }
+
+        //Write INI file - used for settings and saving recording settings in recording directory
+        private void UpdateINI(IniFile BioIni)
+        {
+            BioIni.IniWriteValue("General", "RecDirectory", MP.RecordingDirectory);
+            //videofix qualifier added
+            BioIni.IniWriteValue("BioPac", "VideoFixDisabled", true);
+            BioIni.IniWriteValue("BioPac", "MPType", MP.MPtype);
+            BioIni.IniWriteValue("BioPac", "SelectedChannel", MP.SelectedChannel);
+            BioIni.IniWriteValue("BioPac", "SampleRate", MP.SampleRate.ToString());
+            BioIni.IniWriteValue("BioPac", "DisplayLength", MP.DisplayLength.ToString());
+            BioIni.IniWriteValue("BioPac", "Voltage(mV)", MP.Voltage.ToString());
+            BioIni.IniWriteValue("BioPac", "Gain", MP.Gain.ToString());
+            BioIni.IniWriteValue("BioPac", "Enabled", MP.Enabled);
+            BioIni.IniWriteValue("BioPac", "Offset", MP.Offset.ToString());
+            BioIni.IniWriteValue("BioPac", "FileSplit", MP.FileSplit);
+            BioIni.IniWriteValue("Feeder", "Meal1", Feeder.Meal1.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal2", Feeder.Meal2.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal3", Feeder.Meal3.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal4", Feeder.Meal4.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal5", Feeder.Meal5.ToString());
+            BioIni.IniWriteValue("Feeder", "Meal6", Feeder.Meal6.ToString());
+            BioIni.IniWriteValue("Feeder", "PelletsPerGram", Feeder.PelletsPerGram.ToString());
+            BioIni.IniWriteValue("Feeder", "Enabled", Feeder.Enabled);
+            BioIni.IniWriteValue("Feeder", "DailyMealCount", Feeder.DailyMealCount);
+            BioIni.IniWriteValue("Feeder", "ADDCompound1", Feeder.ADDC1);
+            BioIni.IniWriteValue("Feeder", "ADDDose1", Feeder.Dose1);
+            BioIni.IniWriteValue("Feeder", "ADDRoute1", Feeder.Route1);
+            BioIni.IniWriteValue("Feeder", "ADDSolve1", Feeder.Solve1);
+            BioIni.IniWriteValue("Feeder", "ADDCompound2", Feeder.ADDC2);
+            BioIni.IniWriteValue("Feeder", "ADDDose2", Feeder.Dose2);
+            BioIni.IniWriteValue("Feeder", "ADDRoute2", Feeder.Route2);
+            BioIni.IniWriteValue("Feeder", "ADDSolve2", Feeder.Solve2);
+            BioIni.IniWriteValue("Feeder", "AltEnabled", Feeder.AlternateAddress);
+            for (int i = 0; i < 31; i++)
+            {
+                BioIni.IniWriteValue("Feeder", "Address" + i, Feeder.AddressTable[i]);
+            }
+            for (int i = 0; i < 16; i++)
+            {
+                BioIni.IniWriteValue("BioPac", string.Format("RecordingDevice_Channel{0}", i), MP.RecordingDevice[i]);
+            }
+            for (int i = 0; i < 16; i++)
+            {
+                BioIni.IniWriteValue("BioPac", string.Format("Channel{0}", i), MP.RecordAC[i]);
+            }
+            for (int i = 0; i < 16; i++)
+            {
+                BioIni.IniWriteValue("Rats", string.Format("Rat{0} ID", i), Feeder.Rats[i].ID);
+                BioIni.IniWriteValue("Rats", string.Format("Rat{0} (g)", i), Feeder.Rats[i].Weight.ToString());
+                BioIni.IniWriteValue("Rats", string.Format("Rat{0}Medicate", i), Feeder.Rats[i].Medication);
+                BioIni.IniWriteValue("Rats", string.Format("Rat{0} Surgery", i), Feeder.Rats[i].Surgery.ToShortDateString());
+                BioIni.IniWriteValue("Rats", string.Format("Rat{0} Injection", i), Feeder.Rats[i].Injection.ToShortDateString());
+                BioIni.IniWriteValue("Rats", string.Format("Rat{0} FirstSeizure", i), Feeder.Rats[i].FirstSeizure.ToShortDateString());
+                BioIni.IniWriteValue("Rats", string.Format("Rat{0} DoseID", i), Feeder.Rats[i].DoseID.ToString());
+                for (int j = 0; j < (7 * 6); j++)
+                {
+                    BioIni.IniWriteValue("Rats", "Rat" + i + "Meal" + j, Feeder.Rats[i].Meals[j]);
+                }
+            }
+            BioIni.IniWriteValue("Rats", "CagesX", Feeder.Cages_X);
+            BioIni.IniWriteValue("Rats", "CagesY", Feeder.Cages_Y);
+            BioIni.IniWriteValue("Video", "Enabled", Video.Enabled);
+            BioIni.IniWriteValue("Video", "LengthWise", Video.LengthWise);
+            BioIni.IniWriteValue("Video", "XRes", Video.XRes);
+            BioIni.IniWriteValue("Video", "YRes", Video.YRes);
+            BioIni.IniWriteValue("Video", "Quality", Video.Quality);
+            BioIni.IniWriteValue("Video", "Bitrate", Video.Bitrate);
+            BioIni.IniWriteValue("Video", "KeyFrames", Video.KeyFrames);
+            for (int i = 0; i < 16; i++)
+                BioIni.IniWriteValue("Video", string.Format("Channel{0}", i), Video.CameraAssociation[i]);
+            for (int i = 0; i < 32; i++)
+            {
+
+                BioIni.IniWriteValue("Video", string.Format("Bright{0}", i), Video.Brightness[i]);
+                BioIni.IniWriteValue("Video", string.Format("Contrast{0}", i), Video.Contrast[i]);
+                BioIni.IniWriteValue("Video", string.Format("Hue{0}", i), Video.Hue[i]);
+                BioIni.IniWriteValue("Video", string.Format("Satur{0}", i), Video.Saturation[i]);
+            }
+        }
+
+
+        /****************************************************************************************
+        * 
+        *                              TIMER CHECK THREAD
+        *                  
+        * **************************************************************************************/
 
         private void TimerCheckThread()
         {
                        
             while (true)
             {
+                if (MP.RecordingWanted && !MP.RecordingSuccess) // we want to be recording but the recording was unsuccessful
+                {
+                    if (MP.VideoOff)
+                    {
+                        Video.StopRecording();
+                        this.RecordingButton.Invoke((MethodInvoker)delegate 
+                        { 
+                            RecordingButton.Enabled = false; RecordingButton.BackColor = Color.Gray; RecordingButton.Text = "Recording Error";
+                        });
+                        MP.VideoOff = false; 
+                    }
+                    //Console.WriteLine("Start Reconnect Test: " + DateTime.Now.ToString());
+                    if (MP.Connect())
+                    {
+                        MP.RecordingSuccess = true;
+                        if (MP.CommunicateBioPac())
+                        {
+                            StartRecording();
+                            //Console.WriteLine("Starting Recording");
+                            MP.VideoOff = false;
+                            this.RecordingButton.Invoke((MethodInvoker)delegate
+                            {
+                                RecordingButton.Enabled = true; RecordingButton.BackColor = Color.Red; RecordingButton.Text = "Stop Recording";
+                            });
+                        }
+                    }
+                    //Console.WriteLine("End Reconnect Test: " + DateTime.Now.ToString());
+                }
                 //If 12AM, restart recording. 
-                if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0))
+                else if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0))
                 {
                     if (MP.IsFileWriting)
                     {
@@ -200,6 +408,7 @@ namespace BioPacVideo
                     Update_FreeSpace();
                     Thread.Sleep(120000); //Always Skip the Meal;
                 }
+                
                 else if (Feeder.Enabled)
                 {
                     if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal1.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal1.Minutes))
@@ -270,185 +479,14 @@ namespace BioPacVideo
            } 
         }
 
-/****************************************************************************************
-* 
-*                              INI FILE
-*                  
-* **************************************************************************************/
 
-        //Read presets from INI file
-        private void ReadINI(IniFile BioIni)
-        {
-            MP.RecordingDirectory = BioIni.IniReadValue("General", "RecDirectory", Directory.GetCurrentDirectory());
-            MP.MPtype = BioIni.IniReadValue("BioPac", "MPType", "MP160");
-            MP.SampleRate = BioIni.IniReadValue("BioPac", "SampleRate", 1000);
-            MP.SelectedChannel = BioIni.IniReadValue("BioPac", "Selected Channel", 1);
-            MP.DisplayLength = BioIni.IniReadValue("BioPac", "DisplayLength", 10);
-            MP.Voltage = BioIni.IniReadValue("BioPac", "Voltage(mV)", 500);
-            MP.Gain = BioIni.IniReadValue("BioPac", "Gain", 20000);
-            MP.Enabled = BioIni.IniReadValue("BioPac", "Enabled", true);
-            MP.Offset = BioIni.IniReadValue("BioPac", "Offset",0.0);
-            MP.FileSplit = BioIni.IniReadValue("BioPac", "FileSplit", true);
-            BioIni.IniReadValue("Feeder", "Meal1", out Feeder.Meal1);
-            BioIni.IniReadValue("Feeder", "Meal2", out Feeder.Meal2);
-            BioIni.IniReadValue("Feeder", "Meal3", out Feeder.Meal3);
-            BioIni.IniReadValue("Feeder", "Meal4", out Feeder.Meal4);
-            BioIni.IniReadValue("Feeder", "Meal5", out Feeder.Meal5);
-            BioIni.IniReadValue("Feeder", "Meal6", out Feeder.Meal6);
-            Feeder.PelletsPerGram = BioIni.IniReadValue("Feeder", "PelletsPerGram", 0.02);
-            Feeder.Enabled = BioIni.IniReadValue("Feeder", "Enabled", true);
-            Feeder.DailyMealCount = BioIni.IniReadValue("Feeder", "DailyMealCount", 4);
-            Feeder.ADDC1 = BioIni.IniReadValue("Feeder", "ADDCompound1", "");
-            Feeder.Dose1 = BioIni.IniReadValue("Feeder", "ADDDose1", "");
-            Feeder.Route1 = BioIni.IniReadValue("Feeder", "ADDRoute1", 1);
-            Feeder.Solve1 = BioIni.IniReadValue("Feeder", "ADDSolve1", 1);
-            Feeder.ADDC2 = BioIni.IniReadValue("Feeder", "ADDCompound2", "");
-            Feeder.Dose2 = BioIni.IniReadValue("Feeder", "ADDDose2", "");
-            Feeder.Route2 = BioIni.IniReadValue("Feeder", "ADDRoute2", 1);
-            Feeder.Solve2 = BioIni.IniReadValue("Feeder", "ADDSolve2", 1);
-            Feeder.AlternateAddress = BioIni.IniReadValue("Feeder", "AltEnabled", false);
-            for (int i = 0; i < 31; i++)
-            {
-                Feeder.AddressTable[i] = BioIni.IniReadValue("Feeder", "Address" + i, i);
-            }
-            for (int i = 0; i < 16; i++)
-            {
-                MP.RecordAC[i] = BioIni.IniReadValue("BioPac", string.Format("Channel{0}", i), true);
-            }
-            for (int i = 0; i < 16; i++)
-            {
-                if (BioIni.IniReadValue("BioPac", string.Format("RecordingDevice_Channel{0}", i), false)== true)
-                {
-                    MP.RecordingDevice = Enumerable.Repeat(true, 16).ToArray();
-                    break; 
-                }
-                MP.RecordingDevice[i] = false; 
-            }
 
-            MP.UpdateOffsets();
-            for (int i = 0; i < 16; i++)
-            {
-                Feeder.Rats[i].ID = BioIni.IniReadValue("Rats", string.Format("Rat{0} ID", i), string.Format("Rat{0}", i));
-                Feeder.Rats[i].Weight = BioIni.IniReadValue("Rats", string.Format("Rat{0} (g)", i), (double)0);
-                Feeder.Rats[i].Medication = BioIni.IniReadValue("Rats", string.Format("Rat{0}Medicate", i), 100);
-                Feeder.Rats[i].Surgery = BioIni.IniReadValue("Rats", string.Format("Rat{0} Surgery", i));
-                Feeder.Rats[i].Injection = BioIni.IniReadValue("Rats", string.Format("Rat{0} Injection", i));
-                Feeder.Rats[i].FirstSeizure = BioIni.IniReadValue("Rats", string.Format("Rat{0} FirstSeizure", i));
-                Feeder.Rats[i].DoseID = BioIni.IniReadValue("Rats", string.Format("Rat{0} DoseID", i), 1);
-                for (int j = 0; j < (7 * 6); j++)
-                {
-                    Feeder.Rats[i].Meals[j] = BioIni.IniReadValue("Rats", "Rat" + i + "Meal" + j, false);
-                }
-                
-            }
-            Feeder.Cages_X = BioIni.IniReadValue("Rats", "CagesX", 4);
-            Feeder.Cages_Y = BioIni.IniReadValue("Rats", "CagesY", 4); 
-            
-            Video.Enabled = BioIni.IniReadValue("Video", "Enabled", true);
-            Video.XRes = BioIni.IniReadValue("Video", "XRes", 320);
-            Video.LengthWise = BioIni.IniReadValue("Video", "LengthWise", 8);
-            Video.YRes = BioIni.IniReadValue("Video", "YRes", 240);
-            Video.Quality = BioIni.IniReadValue("Video", "Quality", 4000);
-            Video.Bitrate = BioIni.IniReadValue("Video", "Bitrate", 2);
-            Video.KeyFrames = BioIni.IniReadValue("Video", "KeyFrames", 100);
-            for (int i = 0; i < 16; i++)
-                Video.CameraAssociation[i] = BioIni.IniReadValue("Video", string.Format("Channel{0}", i), i);
-            for (int i = 0; i < 32; i++)
-            {
-                Video.Brightness[i] = BioIni.IniReadValue("Video", string.Format("Bright{0}", i), 50);
-                Video.Contrast[i] = BioIni.IniReadValue("Video", string.Format("Contrast{0}", i), 50);
-                Video.Hue[i] = BioIni.IniReadValue("Video", string.Format("Hue{0}", i), 50);
-                Video.Saturation[i] = BioIni.IniReadValue("Video", string.Format("Satur{0}", i), 50);
-            }
-
-        }
-
-        //Write INI file - used for settings and saving recording settings in recording directory
-        private void UpdateINI(IniFile BioIni)
-        {
-            BioIni.IniWriteValue("General", "RecDirectory", MP.RecordingDirectory);
-            //videofix qualifier added
-            BioIni.IniWriteValue("BioPac", "VideoFixDisabled", true);
-            BioIni.IniWriteValue("BioPac","MPType",MP.MPtype);            
-            BioIni.IniWriteValue("BioPac", "SelectedChannel", MP.SelectedChannel);
-            BioIni.IniWriteValue("BioPac", "SampleRate", MP.SampleRate.ToString());
-            BioIni.IniWriteValue("BioPac", "DisplayLength", MP.DisplayLength.ToString());
-            BioIni.IniWriteValue("BioPac", "Voltage(mV)", MP.Voltage.ToString());
-            BioIni.IniWriteValue("BioPac", "Gain", MP.Gain.ToString());
-            BioIni.IniWriteValue("BioPac", "Enabled", MP.Enabled);
-            BioIni.IniWriteValue("BioPac", "Offset", MP.Offset.ToString());
-            BioIni.IniWriteValue("BioPac", "FileSplit", MP.FileSplit);
-            BioIni.IniWriteValue("Feeder", "Meal1", Feeder.Meal1.ToString());
-            BioIni.IniWriteValue("Feeder", "Meal2", Feeder.Meal2.ToString());
-            BioIni.IniWriteValue("Feeder", "Meal3", Feeder.Meal3.ToString());
-            BioIni.IniWriteValue("Feeder", "Meal4", Feeder.Meal4.ToString());
-            BioIni.IniWriteValue("Feeder", "Meal5", Feeder.Meal5.ToString());
-            BioIni.IniWriteValue("Feeder", "Meal6", Feeder.Meal6.ToString());            
-            BioIni.IniWriteValue("Feeder", "PelletsPerGram", Feeder.PelletsPerGram.ToString());
-            BioIni.IniWriteValue("Feeder", "Enabled", Feeder.Enabled);
-            BioIni.IniWriteValue("Feeder", "DailyMealCount", Feeder.DailyMealCount);
-            BioIni.IniWriteValue("Feeder", "ADDCompound1", Feeder.ADDC1);
-            BioIni.IniWriteValue("Feeder", "ADDDose1", Feeder.Dose1);
-            BioIni.IniWriteValue("Feeder", "ADDRoute1", Feeder.Route1);
-            BioIni.IniWriteValue("Feeder", "ADDSolve1", Feeder.Solve1);
-            BioIni.IniWriteValue("Feeder", "ADDCompound2", Feeder.ADDC2);
-            BioIni.IniWriteValue("Feeder", "ADDDose2", Feeder.Dose2);
-            BioIni.IniWriteValue("Feeder", "ADDRoute2", Feeder.Route2);
-            BioIni.IniWriteValue("Feeder", "ADDSolve2", Feeder.Solve2);
-            BioIni.IniWriteValue("Feeder", "AltEnabled", Feeder.AlternateAddress);
-            for (int i = 0; i < 31; i++)
-            {
-                BioIni.IniWriteValue("Feeder", "Address" + i, Feeder.AddressTable[i]);
-            }
-            for (int i = 0; i < 16; i++)
-            {
-               BioIni.IniWriteValue("BioPac", string.Format("RecordingDevice_Channel{0}", i),  MP.RecordingDevice[i]);
-            }
-            for (int i = 0; i < 16; i++)
-            {
-                BioIni.IniWriteValue("BioPac", string.Format("Channel{0}", i), MP.RecordAC[i]);
-            }
-            for (int i = 0; i < 16; i++)
-            {
-                BioIni.IniWriteValue("Rats", string.Format("Rat{0} ID", i), Feeder.Rats[i].ID);
-                BioIni.IniWriteValue("Rats", string.Format("Rat{0} (g)", i), Feeder.Rats[i].Weight.ToString());
-                BioIni.IniWriteValue("Rats", string.Format("Rat{0}Medicate", i), Feeder.Rats[i].Medication);
-                BioIni.IniWriteValue("Rats", string.Format("Rat{0} Surgery", i), Feeder.Rats[i].Surgery.ToShortDateString());
-                BioIni.IniWriteValue("Rats", string.Format("Rat{0} Injection", i), Feeder.Rats[i].Injection.ToShortDateString());
-                BioIni.IniWriteValue("Rats", string.Format("Rat{0} FirstSeizure", i), Feeder.Rats[i].FirstSeizure.ToShortDateString());
-                BioIni.IniWriteValue("Rats", string.Format("Rat{0} DoseID", i), Feeder.Rats[i].DoseID.ToString());
-                for (int j = 0; j < (7 * 6); j++)
-                {
-                    BioIni.IniWriteValue("Rats", "Rat" + i + "Meal" + j, Feeder.Rats[i].Meals[j]);
-                }
-            }
-            BioIni.IniWriteValue("Rats", "CagesX", Feeder.Cages_X);
-            BioIni.IniWriteValue("Rats", "CagesY", Feeder.Cages_Y);
-            BioIni.IniWriteValue("Video", "Enabled", Video.Enabled);
-            BioIni.IniWriteValue("Video", "LengthWise", Video.LengthWise);
-            BioIni.IniWriteValue("Video", "XRes", Video.XRes);
-            BioIni.IniWriteValue("Video", "YRes", Video.YRes);
-            BioIni.IniWriteValue("Video", "Quality", Video.Quality);
-            BioIni.IniWriteValue("Video", "Bitrate", Video.Bitrate);
-            BioIni.IniWriteValue("Video", "KeyFrames", Video.KeyFrames);
-            for (int i = 0; i < 16; i++)
-                BioIni.IniWriteValue("Video", string.Format("Channel{0}", i), Video.CameraAssociation[i]);
-            for (int i = 0; i < 32; i++)
-            {
-
-                BioIni.IniWriteValue("Video", string.Format("Bright{0}", i), Video.Brightness[i]);
-                BioIni.IniWriteValue("Video", string.Format("Contrast{0}", i), Video.Contrast[i]);
-                BioIni.IniWriteValue("Video", string.Format("Hue{0}", i), Video.Hue[i]);
-                BioIni.IniWriteValue("Video", string.Format("Satur{0}", i), Video.Saturation[i]);
-            }
-        }
-
-/****************************************************************************************
-* 
-*                              RECORDING FUNCTIONS
-*                  
-* **************************************************************************************/
-
+        /****************************************************************************************
+        * 
+        *                              RECORDING FUNCTIONS
+        *                  
+        * **************************************************************************************/
+        
         private void StartRecording()
         {
             IniFile WriteOnce;
@@ -473,7 +511,7 @@ namespace BioPacVideo
             Video.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;            
             //Video.SetFileName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString, Video.FileStart);
             Video.StartRecording();
-            MP.isstreaming = MP.StartWriting();                                
+            MP.isstreaming = MP.StartWriting();
         }
 
         private void StopRecording()
@@ -486,7 +524,7 @@ namespace BioPacVideo
             SyncFile.Close();
             Thread.Sleep(1000);
             MP.Connect();
-            MP.StartRecording();
+            MP.CommunicateBioPac();
         }
 
         protected override void Dispose(bool disposing)
@@ -569,7 +607,9 @@ namespace BioPacVideo
                     IDM_SETTINGS.Enabled = false;
                     IDM_DISCONNECTBIOPAC.Enabled = false;
                     RecordingButton.BackColor = Color.Red;
-                    //Start the actual recording                    
+                    //Start the actual recording
+                    MP.RecordingWanted = true; //open the eyes to observe data transfer between Biopac and software
+                    //Console.WriteLine("RecordingWanted = " + MP.RecordingWanted);
                     StartRecording();                                                                   
                 }
                 else
@@ -578,6 +618,8 @@ namespace BioPacVideo
                     if (dr == DialogResult.Yes)
                     {
                         //End Recording
+                        MP.RecordingWanted = false; // close the eyes and no longer observe data transfer between Biopac and software
+                        //Console.WriteLine("RecordingWanted = " + MP.RecordingWanted);
                         StopRecording();
                         IDM_SELECTCHANNELS.Enabled = true;
                         IDM_SETTINGS.Enabled = true;
@@ -598,7 +640,7 @@ namespace BioPacVideo
             {
                 if (!MP.isconnected)
                 {
-                    MessageBox.Show("Please Connect BioPac MP150.", "BioPac Not Connected",
+                    MessageBox.Show("Please Connect BioPac " + MP.MPtype, "BioPac Not Connected",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                /* if (!Video.CapSDKStatus)

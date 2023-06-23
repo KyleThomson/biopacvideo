@@ -58,8 +58,11 @@ namespace BioPacVideo
         public int Voltage;
         private long CurrentWriteLoc;
         uint BuffSize;
-        private FeederErrorBox FEB; 
+        private FeederErrorBox FEB;
 
+        public bool RecordingWanted;
+        public bool RecordingSuccess;
+        public bool VideoOff; 
 
 
         //GRAPHICS VARIABLES
@@ -83,7 +86,7 @@ namespace BioPacVideo
         private int AcqChan;
         private int VoltageSpacing;
         private double[] DispOffset;
-
+        //VideoWrapper Video; 
 
 
         public MPTemplate() //Constructor
@@ -105,6 +108,7 @@ namespace BioPacVideo
             FEB = new FeederErrorBox();
             FEB.Show();
             FEB.Hide();
+            //VideoWrapper Video = VideoWrapper.Instance;
         }
 
         public static MPTemplate Instance
@@ -472,7 +476,7 @@ namespace BioPacVideo
                 return false;
         }
       
-        public bool StartRecording() //Start Data Acquisition
+        public bool CommunicateBioPac() //Start Data Acquisition
         {
             AcqThread = new Thread(new ThreadStart(RecordingThread)); //Initialize recording thread
             AcqThread.Priority = ThreadPriority.Highest; //Need to make sure that the computer makes this most important    
@@ -503,6 +507,7 @@ namespace BioPacVideo
             return true;
         }
 
+
         public bool StartWriting() //Not much is needed to start a file - open it and write. 
         {            
             open_ACQ_file(); //Open a new file
@@ -517,13 +522,22 @@ namespace BioPacVideo
             isstreaming = true;         
         }
 
+        public void StopRecording()
+        {
+            isstreaming = false; //next recording block, streaming will stop
+            while (AcqThread.IsAlive)
+            {
+                //Pause to wait for thread to close
+            }
+
+        }
 
 
-/******************************************************************************
- * 
- *                  RECORDING THREAD!
- *                  
- * ****************************************************************************/
+        /******************************************************************************
+         * 
+         *                  RECORDING THREAD!
+         *                  
+         * ****************************************************************************/
 
         private void RecordingThread()
         {
@@ -542,7 +556,9 @@ namespace BioPacVideo
             Int32 transbuffer = new Int32();  //Translational buffer to write bytes instead of doubles.             
             MPReturn = MPCLASS.startAcquisition();  //Start actual acquisition        
             if (MPReturn != MPCODE.MPSUCCESS) //If acquisition fails, error out. 
-            { 
+            {
+                RecordingSuccess = false;
+                Console.WriteLine("RecordingSuccess = " + RecordingSuccess + Environment.NewLine + "startAcquisition failed");
             }
             while (isstreaming) //Thread stopping variable - set to false to end the recording thread. 
             {                                                                
@@ -551,11 +567,24 @@ namespace BioPacVideo
                 //If this fails, the recieved will be smaller than the buffsize, but you have bigger issues.                 
                 if (MPReturn != MPCODE.MPSUCCESS) //Make sure we were successful in getting the buffer. 
                 {
-                    MessageBox.Show(MPReturn.ToString() + "   " + MPCLASS.getMPDaemonLastError().ToString());
-                    MPReturn = MPCLASS.stopAcquisition(); //Have to restart the aquisition. 
-                    return;
+                    //MessageBox.Show(MPReturn.ToString() + "   " + MPCLASS.getMPDaemonLastError().ToString());
+                    MPReturn = MPCLASS.stopAcquisition(); //Have to restart the aquisition.
+                    updateheader(); //Write sample total
+                    BinaryFile.Close(); //Close 
+                    FileCount = 0;
+                    IsFileWriting = false;
+                    FileStop = false;
+                    BuffDraw.Abort();
+                    VideoOff = true; 
+                    isstreaming = false;
+                    Disconnect();
+                    Thread.Sleep(10000);
+                    RecordingSuccess = false;
+                    //Console.WriteLine("RecordingSuccess = " + RecordingSuccess + Environment.NewLine + "Recording Wanted = " + RecordingWanted);
+                    return; 
                 }
                 last_received = received; //For the draw buffer
+                RecordingSuccess = true; // we have recieved the data successfully 
                 if (last_received % AcqChan > 0) 
                 {
                     Console.WriteLine("Buffer Mismatch: " + (last_received % AcqChan).ToString()); 
@@ -703,15 +732,7 @@ namespace BioPacVideo
             MPReturn = MPCLASS.stopAcquisition();  //We won't get here unless the thread stops. 
             return;
         }
-        public void StopRecording()
-            {
-                isstreaming = false; //next recording block, streaming will stop
-            while (AcqThread.IsAlive)
-            {
-                //Pause to wait for thread to close
-            }                     
-                       
-        }
+        
     
     }
 }  
