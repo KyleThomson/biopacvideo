@@ -41,7 +41,7 @@ namespace BioPacVideo
         public static int[] VoltageSettings = new int[] { 1, 10, 50, 100, 250, 500, 1000, 2000, 3000, 4000, 5000};
         public static int[] DisplayLengthSize = new int[] { 1, 5, 10, 30, 60 };
         private static ManualResetEvent mre = new ManualResetEvent(false);
-
+        public string UnitLabel;
 
         public MainForm() //Form Constructior
         {
@@ -88,7 +88,7 @@ namespace BioPacVideo
             Panels.Add(CloneChannelPanel15);
             Panels.Add(CloneChannelPanel16);
             g = this.CreateGraphics();  //Plot window          
-            
+            UnitLabel = Environment.MachineName.ToString(); // can't be more than 15 characters because microsoft is a dumb company 
             //***************** LOAD SETTINGS *****************
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             ReadINI(BioIni); //Read Presets from INI file                        
@@ -129,6 +129,7 @@ namespace BioPacVideo
                 IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
             }
             Update_FreeSpace();
+            UnitNameStrip.Text = UnitLabel; 
             bioPacEnabledToolStripMenuItem.Checked = MP.Enabled;
             //Still = new Bitmap("NoSignal.Bmp");
             MP.FileCount = 0;
@@ -246,6 +247,7 @@ namespace BioPacVideo
         private void UpdateINI(IniFile BioIni)
         {
             BioIni.IniWriteValue("General", "RecDirectory", MP.RecordingDirectory);
+            BioIni.IniWriteValue("General", "Unit Name", UnitLabel);
             //videofix qualifier added
             BioIni.IniWriteValue("BioPac", "VideoFixDisabled", true);
             BioIni.IniWriteValue("BioPac", "MPType", MP.MPtype);
@@ -854,5 +856,6 @@ namespace BioPacVideo
             UpdateINI(BioIni); 
             frm.Dispose(); 
         }
+
     }
 }
