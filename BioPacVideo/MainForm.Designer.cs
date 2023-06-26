@@ -46,9 +46,9 @@ namespace BioPacVideo
             this.videoSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.automaticFeederToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.animalSettingsTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.injectionManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AddPelletCountMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.animalSettingsTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.feedersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.feederTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ratRoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,10 +86,6 @@ namespace BioPacVideo
             this.CloneChannelPanel5 = new System.Windows.Forms.Panel();
             this.CloneChannelPanel9 = new System.Windows.Forms.Panel();
             this.CloneChannelPanel16 = new System.Windows.Forms.Panel();
-            this.cages_y_text = new System.Windows.Forms.TextBox();
-            this.cages_x_text = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -241,26 +237,26 @@ namespace BioPacVideo
             this.automaticFeederToolStripMenuItem.Size = new System.Drawing.Size(102, 20);
             this.automaticFeederToolStripMenuItem.Text = "Animal Settings";
             // 
+            // animalSettingsTestToolStripMenuItem
+            // 
+            this.animalSettingsTestToolStripMenuItem.Name = "animalSettingsTestToolStripMenuItem";
+            this.animalSettingsTestToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.animalSettingsTestToolStripMenuItem.Text = "Animal Settings";
+            this.animalSettingsTestToolStripMenuItem.Click += new System.EventHandler(this.animalSettingsTestToolStripMenuItem_Click);
+            // 
             // injectionManagerToolStripMenuItem
             // 
             this.injectionManagerToolStripMenuItem.Name = "injectionManagerToolStripMenuItem";
-            this.injectionManagerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.injectionManagerToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.injectionManagerToolStripMenuItem.Text = "Injection Manager";
             this.injectionManagerToolStripMenuItem.Click += new System.EventHandler(this.injectionManagerToolStripMenuItem_Click);
             // 
             // AddPelletCountMenuItem
             // 
             this.AddPelletCountMenuItem.Name = "AddPelletCountMenuItem";
-            this.AddPelletCountMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.AddPelletCountMenuItem.Size = new System.Drawing.Size(170, 22);
             this.AddPelletCountMenuItem.Text = "Add Pellet Count";
             this.AddPelletCountMenuItem.Click += new System.EventHandler(this.AddPelletCountMenuItem_Click);
-            // 
-            // animalSettingsTestToolStripMenuItem
-            // 
-            this.animalSettingsTestToolStripMenuItem.Name = "animalSettingsTestToolStripMenuItem";
-            this.animalSettingsTestToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.animalSettingsTestToolStripMenuItem.Text = "Animal Settings";
-            this.animalSettingsTestToolStripMenuItem.Click += new System.EventHandler(this.animalSettingsTestToolStripMenuItem_Click);
             // 
             // feedersToolStripMenuItem
             // 
@@ -601,48 +597,12 @@ namespace BioPacVideo
             this.CloneChannelPanel16.Size = new System.Drawing.Size(136, 115);
             this.CloneChannelPanel16.TabIndex = 12;
             // 
-            // cages_y_text
-            // 
-            this.cages_y_text.Location = new System.Drawing.Point(460, 4);
-            this.cages_y_text.Name = "cages_y_text";
-            this.cages_y_text.Size = new System.Drawing.Size(39, 20);
-            this.cages_y_text.TabIndex = 13;
-            // 
-            // cages_x_text
-            // 
-            this.cages_x_text.Location = new System.Drawing.Point(623, 4);
-            this.cages_x_text.Name = "cages_x_text";
-            this.cages_x_text.Size = new System.Drawing.Size(39, 20);
-            this.cages_x_text.TabIndex = 14;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(375, 6);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 13);
-            this.label1.TabIndex = 15;
-            this.label1.Text = "Rows of Cages";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(525, 7);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(92, 13);
-            this.label4.TabIndex = 16;
-            this.label4.Text = "Columns of Cages";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1286, 887);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.cages_x_text);
-            this.Controls.Add(this.cages_y_text);
             this.Controls.Add(this.CloneChannelPanel16);
             this.Controls.Add(this.CloneChannelPanel9);
             this.Controls.Add(this.CloneChannelPanel5);
@@ -741,10 +701,6 @@ namespace BioPacVideo
         private System.Windows.Forms.ToolStripMenuItem mouseRoomToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem feederMenuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem animalSettingsTestToolStripMenuItem;
-        private System.Windows.Forms.TextBox cages_y_text;
-        private System.Windows.Forms.TextBox cages_x_text;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label4;
     }
 }
 

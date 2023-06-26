@@ -30,6 +30,7 @@ namespace BioPacVideo
             Feeder = passFeeder;
             x = 0;
             y = 0;
+            
             //List of all the group boxes, one per animal
             groupList = new List<GroupBox> { groupBox1, groupBox2, groupBox3, groupBox4, groupBox5, groupBox6, groupBox7, groupBox8,
             groupBox9, groupBox10, groupBox11, groupBox12, groupBox13, groupBox14, groupBox15, groupBox16};
@@ -52,7 +53,10 @@ namespace BioPacVideo
 
             totalCages = (Feeder.Cages_X) * (Feeder.Cages_Y);
             access = Enumerable.Repeat(false, 16).ToArray();
-
+            cages_x_text.Text = Feeder.Cages_X.ToString();
+            cages_y_text.Text = Feeder.Cages_Y.ToString();
+            this.Height = (Feeder.Cages_Y * 216) + 138;
+            this.Width = (Feeder.Cages_X * 150) + 88;
 
             //groupBox1.MouseHover += delegate (object sender, System.EventArgs e) { groupBox_MouseHover(sender, e, groupBox1); };
             animalID1.LostFocus += delegate (object sender, System.EventArgs e) { weightBox_FocusLeave(sender, e, animalID1); };
@@ -116,7 +120,7 @@ namespace BioPacVideo
                         x = 0;
                         y++;
                     }
-                    location = new Point((150 * x) + 33, (216 * y) + 38);
+                    location = new Point((150 * x) + 33, (216 * y) + 88);
                     groupList[k].Location = location;
                     groupList[k].Show();
                     x++;
@@ -127,8 +131,15 @@ namespace BioPacVideo
 
             }
 
-            submitButton.Location = new Point((150*(Feeder.Cages_X-1)+33), (216*(Feeder.Cages_Y)+22));
-            instructLabel.Location = new Point(33, 8); 
+            groupBox17.Location = new Point(33, 8);
+            submitButton.Location = new Point((150 * (Feeder.Cages_X - 1) + 70), (216 * (Feeder.Cages_Y) + 88));
+            instructText.Location = new Point(33, (216 * (Feeder.Cages_Y) + 88));
+            instructText.Text = "Please input animal ID and weight. Specify unmedicated or medicated. If both, specify the percent medicated";
+            instructText.Width = ((150 * (Feeder.Cages_X - 1) + 70) - 40);
+            instructText.Height = Feeder.Cages_Y * 15;
+            instructText.Multiline = true;
+            instructText.Enabled = false;
+            //refreshButton.Location = new Point(130, 45); 
         }
 
         private void submitButton_Click(object sender, EventArgs e)
@@ -262,6 +273,70 @@ namespace BioPacVideo
             }
         }
 
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            int temp;
+            int temp2;
+            if (int.TryParse(cages_x_text.Text, out temp))
+            {
+                Feeder.Cages_X = temp;
+            }
+            else
+            {
+                MessageBox.Show("Please input cage layout", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            if (int.TryParse(cages_y_text.Text, out temp2))
+            {
+                Feeder.Cages_Y = temp2;
+            }
+            else
+            {
+                MessageBox.Show("Please input cage layout", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            if (Feeder.Cages_X * Feeder.Cages_Y > 16)
+            {
+                MessageBox.Show("Program does not allow for more than 16 cages at a time", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            RefreshForm(); 
+            
+        }
+
+        private void RefreshForm()
+        {
+            x = 0; y = 0; int i = 0; 
+            totalCages = (Feeder.Cages_X) * (Feeder.Cages_Y);
+            this.Height = (Feeder.Cages_Y * 216) + 138;
+            this.Width = (Feeder.Cages_X * 150) + 88;
+            submitButton.Location = new Point((150 * (Feeder.Cages_X - 1) + 70), (216 * (Feeder.Cages_Y) + 88));
+            instructText.Location = new Point(33, (216 * (Feeder.Cages_Y) + 88));
+            instructText.Text = "Please input animal ID and weight. Specify unmedicated or medicated. If both, specify the percent medicated";
+            instructText.Width = ((150 * (Feeder.Cages_X - 1) + 70) - 40);
+            instructText.Height = Feeder.Cages_Y * 15;
+            instructText.Multiline = true;
+            instructText.Enabled = false;
+            for (int k = 0; k < totalCages; k++)
+            {
+                if (x == Feeder.Cages_X)
+                {
+                    x = 0;
+                    y++;
+                }
+                location = new Point((150 * x) + 33, (216 * y) + 88);
+                groupList[k].Location = location;
+                groupList[k].Show();
+                x++;
+                i++; 
+            }
+            for (int p = i; p < 16; p++)
+            {
+                groupList[p].Hide(); 
+            }
+            this.Height = (Feeder.Cages_Y * 216) + 138;
+            this.Width = (Feeder.Cages_X * 150) + 88;
+            this.Invalidate();
+            this.Refresh();
+        }
 
 
         /*private void groupBox_MouseHover(object sender, EventArgs e, GroupBox gb)
@@ -280,6 +355,6 @@ namespace BioPacVideo
                 }
             }
         }*/
-        
+
     }
 }

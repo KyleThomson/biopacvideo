@@ -174,7 +174,13 @@ namespace BioPacVideo
             this.animalID8 = new System.Windows.Forms.TextBox();
             this.label48 = new System.Windows.Forms.Label();
             this.submitButton = new System.Windows.Forms.Button();
-            this.instructLabel = new System.Windows.Forms.Label();
+            this.refreshButton = new System.Windows.Forms.Button();
+            this.instructText = new System.Windows.Forms.TextBox();
+            this.label49 = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
+            this.cages_x_text = new System.Windows.Forms.TextBox();
+            this.cages_y_text = new System.Windows.Forms.TextBox();
+            this.groupBox17 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.groupBox11.SuspendLayout();
             this.groupBox12.SuspendLayout();
@@ -191,6 +197,7 @@ namespace BioPacVideo
             this.groupBox9.SuspendLayout();
             this.groupBox16.SuspendLayout();
             this.groupBox8.SuspendLayout();
+            this.groupBox17.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -1611,22 +1618,81 @@ namespace BioPacVideo
             this.submitButton.UseVisualStyleBackColor = true;
             this.submitButton.Click += new System.EventHandler(this.submitButton_Click);
             // 
-            // instructLabel
+            // refreshButton
             // 
-            this.instructLabel.AutoSize = true;
-            this.instructLabel.Location = new System.Drawing.Point(125, 450);
-            this.instructLabel.Name = "instructLabel";
-            this.instructLabel.Size = new System.Drawing.Size(520, 13);
-            this.instructLabel.TabIndex = 10;
-            this.instructLabel.Text = "Please input animal ID and weight. Specify unmedicated or medicated. If both, spe" +
-    "cify the percent medicated";
+            this.refreshButton.Location = new System.Drawing.Point(98, 39);
+            this.refreshButton.Name = "refreshButton";
+            this.refreshButton.Size = new System.Drawing.Size(105, 23);
+            this.refreshButton.TabIndex = 11;
+            this.refreshButton.Text = "Refresh Layout";
+            this.refreshButton.UseVisualStyleBackColor = true;
+            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
+            // 
+            // instructText
+            // 
+            this.instructText.BackColor = System.Drawing.SystemColors.Menu;
+            this.instructText.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.instructText.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.instructText.ForeColor = System.Drawing.SystemColors.InfoText;
+            this.instructText.Location = new System.Drawing.Point(277, 445);
+            this.instructText.Multiline = true;
+            this.instructText.Name = "instructText";
+            this.instructText.Size = new System.Drawing.Size(100, 20);
+            this.instructText.TabIndex = 12;
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Location = new System.Drawing.Point(154, 16);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(92, 13);
+            this.label49.TabIndex = 20;
+            this.label49.Text = "Columns of Cages";
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(4, 15);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(79, 13);
+            this.label50.TabIndex = 19;
+            this.label50.Text = "Rows of Cages";
+            // 
+            // cages_x_text
+            // 
+            this.cages_x_text.Location = new System.Drawing.Point(252, 13);
+            this.cages_x_text.Name = "cages_x_text";
+            this.cages_x_text.Size = new System.Drawing.Size(39, 20);
+            this.cages_x_text.TabIndex = 18;
+            // 
+            // cages_y_text
+            // 
+            this.cages_y_text.Location = new System.Drawing.Point(89, 13);
+            this.cages_y_text.Name = "cages_y_text";
+            this.cages_y_text.Size = new System.Drawing.Size(39, 20);
+            this.cages_y_text.TabIndex = 17;
+            // 
+            // groupBox17
+            // 
+            this.groupBox17.Controls.Add(this.label49);
+            this.groupBox17.Controls.Add(this.cages_y_text);
+            this.groupBox17.Controls.Add(this.refreshButton);
+            this.groupBox17.Controls.Add(this.label50);
+            this.groupBox17.Controls.Add(this.cages_x_text);
+            this.groupBox17.Location = new System.Drawing.Point(60, 429);
+            this.groupBox17.Name = "groupBox17";
+            this.groupBox17.Size = new System.Drawing.Size(301, 68);
+            this.groupBox17.TabIndex = 21;
+            this.groupBox17.TabStop = false;
             // 
             // AnimalSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1449, 589);
-            this.Controls.Add(this.instructLabel);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(1230, 523);
+            this.Controls.Add(this.groupBox17);
+            this.Controls.Add(this.instructText);
             this.Controls.Add(this.submitButton);
             this.Controls.Add(this.groupBox16);
             this.Controls.Add(this.groupBox8);
@@ -1645,7 +1711,7 @@ namespace BioPacVideo
             this.Controls.Add(this.groupBox11);
             this.Controls.Add(this.groupBox1);
             this.Name = "AnimalSettings";
-            this.Text = "AnimalSettings";
+            this.Text = "0";
             this.TextChanged += new System.EventHandler(this.percentBox_TextChanged);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -1679,6 +1745,8 @@ namespace BioPacVideo
             this.groupBox16.PerformLayout();
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
+            this.groupBox17.ResumeLayout(false);
+            this.groupBox17.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1831,6 +1899,12 @@ namespace BioPacVideo
         private System.Windows.Forms.TextBox animalID8;
         private System.Windows.Forms.Label label48;
         private System.Windows.Forms.Button submitButton;
-        private System.Windows.Forms.Label instructLabel;
+        private System.Windows.Forms.Button refreshButton;
+        private System.Windows.Forms.TextBox instructText;
+        private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.TextBox cages_x_text;
+        private System.Windows.Forms.TextBox cages_y_text;
+        private System.Windows.Forms.GroupBox groupBox17;
     }
 }

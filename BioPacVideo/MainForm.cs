@@ -93,9 +93,6 @@ namespace BioPacVideo
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             ReadINI(BioIni); //Read Presets from INI file                        
 
-            cages_x_text.Text = Feeder.Cages_X.ToString();
-            cages_y_text.Text = Feeder.Cages_Y.ToString(); 
-
             //Start EEG and Video functions
             MP.InitializeDisplay(this.Width, this.Height);
             for (int i = 0; i < VoltageSettings.Length; i++)
@@ -849,24 +846,10 @@ namespace BioPacVideo
 
         private void animalSettingsTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int temp;
-            int temp2;
-            if (int.TryParse(cages_x_text.Text, out temp))
-            {
-                Feeder.Cages_X = temp;
-            }
-            if (int.TryParse(cages_y_text.Text, out temp2))
-            {
-                Feeder.Cages_Y = temp2;
-            }
-            if (Feeder.Cages_X*Feeder.Cages_Y > 16)
-            {
-                MessageBox.Show("Program does not allow for more than 16 cages at a time", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return; 
-            }
+            
             AnimalSettings frm = new AnimalSettings(Feeder);
-            frm.Height = (Feeder.Cages_Y * 216) + 138;
-            frm.Width = (Feeder.Cages_X * 150) + 50;
+            frm.Height = 90;
+            frm.Width = 300;
             frm.ShowDialog(this);
             UpdateINI(BioIni); 
             frm.Dispose(); 
