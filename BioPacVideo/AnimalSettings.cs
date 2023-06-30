@@ -317,6 +317,33 @@ namespace BioPacVideo
             instructText.Enabled = false;
             for (int k = 0; k < totalCages; k++)
             {
+                animalID[k].Text = Feeder.Rats[k].ID.ToString();
+                weightBox[k].Text = Feeder.Rats[k].Weight.ToString();
+                percentBox[k].Text = Feeder.Rats[k].Medication.ToString();
+                if (weightBox[k].Text == "" || weightBox[k].Text == "0")
+                {
+
+                }
+                else
+                {
+                    medCheck[k].Enabled = true;
+                    unmedCheck[k].Enabled = true;
+                }
+                if (Feeder.Rats[k].Medication == 100)
+                {
+                    medCheck[k].Checked = true;
+                    unmedCheck[k].Checked = false;
+                }
+                else if (Feeder.Rats[k].Medication == 0)
+                {
+                    medCheck[k].Checked = false;
+                    unmedCheck[k].Checked = true;
+                }
+                else
+                {
+                    medCheck[k].Checked = true;
+                    unmedCheck[k].Checked = true;
+                }
                 if (x == Feeder.Cages_X)
                 {
                     x = 0;
