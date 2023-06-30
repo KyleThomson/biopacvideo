@@ -15,8 +15,10 @@ namespace BioPacVideo
         public RecordSettings()
         {
             InitializeComponent();
-            this.ControlBox = false; 
+            this.ControlBox = false;
             MP = MPTemplate.Instance;
+            sampleRateBar.Value = MP.SampleRate;
+            sampleRateLabel.Text = sampleRateBar.Value.ToString();
             if (String.Equals(MP.MPtype, "MP160"))
             {
                 MPTypeBox.SelectedIndex = 1; 
@@ -51,7 +53,19 @@ namespace BioPacVideo
         private void button1_Click(object sender, EventArgs e)
         {
             MP.FileSplit = MidnightNoon.Checked;
+            MP.SampleRate = sampleRateBar.Value; 
             this.Close();
+        }
+
+        private void sampleRateBar_ValueChanged(object sender, EventArgs e)
+        {
+            sampleRateLabel.Text = sampleRateBar.Value.ToString();
+        }
+
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+            sampleRateBar.Value = 500;
+            sampleRateLabel.Text = "500"; 
         }
     }
 }
