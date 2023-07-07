@@ -128,7 +128,7 @@ namespace BioPacVideo
             TextBox BDB;
             TextBox CMB;
             TextBox MDB;
-            int PelletCount;
+            double PelletCount;
             TimeSpan TestTime;
             string LogText; 
             ArrayList LogList = new ArrayList(); 
@@ -141,7 +141,7 @@ namespace BioPacVideo
                 MDB = MedBoxes[i] as TextBox; 
                 if (!string.IsNullOrEmpty(PCB.Text))
                 {
-                    if (int.TryParse(PCB.Text, out PelletCount))
+                    if (double.TryParse(PCB.Text, out PelletCount))
                     {
                         LogList.Add("Removal: " + (i + 1).ToString() + " " +  " TotP: " + PelletCount.ToString("D3"));
                     }
@@ -153,7 +153,7 @@ namespace BioPacVideo
                 }
                 if (!string.IsNullOrEmpty(MDB.Text))
                 {
-                    if (int.TryParse(MDB.Text, out PelletCount))
+                    if (double.TryParse(MDB.Text, out PelletCount))
                     {
                         LogList.Add("Removal: " + (i + 1).ToString() +  " MedP: " + PelletCount.ToString("D3"));                        
                     }
