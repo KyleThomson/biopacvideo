@@ -33,15 +33,18 @@ namespace BioPacVideo
         FolderBrowserDialog FBD;        
         Bitmap Still;                
         Thread ThreadDisplay;
+        private Thread ThreadClock; 
         private Thread TimerThread;
         Graphics g;
         DriveInfo DI;
         bool RunDisplayThread;
+        bool RunClockThread; 
         private ArrayList Panels; 
         public static int[] VoltageSettings = new int[] { 1, 10, 50, 100, 250, 500, 1000, 2000, 3000, 4000, 5000};
         public static int[] DisplayLengthSize = new int[] { 1, 5, 10, 30, 60 };
         private static ManualResetEvent mre = new ManualResetEvent(false);
         public string UnitLabel;
+        
 
         public MainForm() //Form Constructior
         {
@@ -137,10 +140,13 @@ namespace BioPacVideo
             UpdateGUI(); 
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
             TimerThread = new Thread(new ThreadStart(TimerCheckThread));
+            ThreadClock = new Thread(new ThreadStart(ClockThread)); 
             RunDisplayThread = true;
+            RunClockThread = true; 
             VoltScale.SelectedIndex = Array.IndexOf(VoltageSettings, MP.Voltage);
             TimeScale.SelectedIndex = Array.IndexOf(DisplayLengthSize, MP.DisplayLength); 
             ThreadDisplay.Start();
+            ThreadClock.Start(); 
             TimerThread.Start();
 
            
@@ -445,7 +451,22 @@ namespace BioPacVideo
                 
             }
       }
-/****************************************************************************************
+
+        /****************************************************************************************
+        * 
+        *                              TIMER CHECK THREAD
+        *                  
+        * **************************************************************************************/
+
+        private void ClockThread()
+        {
+            while (RunClockThread)
+            {
+                TimeLabel.Text = DateAndTime.Now.ToString(); 
+            }
+        }
+
+ /****************************************************************************************
 * 
 *                              DISPLAY THREAD
 *                  
@@ -521,6 +542,7 @@ namespace BioPacVideo
             {
                 TimerThread.Abort();
                 ThreadDisplay.Abort();
+                ThreadClock.Abort(); 
                 if (MP.isstreaming)
                 {
                     MP.StopRecording();

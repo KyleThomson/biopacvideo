@@ -66,6 +66,7 @@ namespace BioPacVideo
             this.IDT_ENCODERSTATUS = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_ENCSTAT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_FEEDST = new System.Windows.Forms.ToolStripStatusLabel();
+            this.UnitNameStrip = new System.Windows.Forms.ToolStripStatusLabel();
             this.VoltScale = new System.Windows.Forms.ComboBox();
             this.TimeScale = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -86,7 +87,7 @@ namespace BioPacVideo
             this.CloneChannelPanel5 = new System.Windows.Forms.Panel();
             this.CloneChannelPanel9 = new System.Windows.Forms.Panel();
             this.CloneChannelPanel16 = new System.Windows.Forms.Panel();
-            this.UnitNameStrip = new System.Windows.Forms.ToolStripStatusLabel();
+            this.TimeLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -326,7 +327,8 @@ namespace BioPacVideo
             this.IDT_ENCODERSTATUS,
             this.IDT_ENCSTAT,
             this.IDT_FEEDST,
-            this.UnitNameStrip});
+            this.UnitNameStrip,
+            this.TimeLabel});
             this.StatusBar.Location = new System.Drawing.Point(0, 859);
             this.StatusBar.Name = "StatusBar";
             this.StatusBar.Size = new System.Drawing.Size(1286, 28);
@@ -434,6 +436,16 @@ namespace BioPacVideo
             this.IDT_FEEDST.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
             this.IDT_FEEDST.Size = new System.Drawing.Size(106, 23);
             this.IDT_FEEDST.Text = "FEEDER";
+            // 
+            // UnitNameStrip
+            // 
+            this.UnitNameStrip.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.UnitNameStrip.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.UnitNameStrip.Name = "UnitNameStrip";
+            this.UnitNameStrip.Size = new System.Drawing.Size(73, 23);
+            this.UnitNameStrip.Text = "UNIT LABEL";
             // 
             // VoltScale
             // 
@@ -599,15 +611,15 @@ namespace BioPacVideo
             this.CloneChannelPanel16.Size = new System.Drawing.Size(136, 115);
             this.CloneChannelPanel16.TabIndex = 12;
             // 
-            // UnitNameStrip
+            // TimeLabel
             // 
-            this.UnitNameStrip.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            this.TimeLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.UnitNameStrip.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-            this.UnitNameStrip.Name = "UnitNameStrip";
-            this.UnitNameStrip.Size = new System.Drawing.Size(73, 23);
-            this.UnitNameStrip.Text = "UNIT LABEL";
+            this.TimeLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.TimeLabel.Name = "TimeLabel";
+            this.TimeLabel.Size = new System.Drawing.Size(37, 23);
+            this.TimeLabel.Text = "TIME";
             // 
             // MainForm
             // 
@@ -714,6 +726,7 @@ namespace BioPacVideo
         private System.Windows.Forms.ToolStripMenuItem feederMenuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem animalSettingsTestToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel UnitNameStrip;
+        private System.Windows.Forms.ToolStripStatusLabel TimeLabel;
     }
 }
 
