@@ -67,6 +67,7 @@ namespace BioPacVideo
             this.IDT_ENCSTAT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_FEEDST = new System.Windows.Forms.ToolStripStatusLabel();
             this.UnitNameStrip = new System.Windows.Forms.ToolStripStatusLabel();
+            this.TimeLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.VoltScale = new System.Windows.Forms.ComboBox();
             this.TimeScale = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -87,7 +88,6 @@ namespace BioPacVideo
             this.CloneChannelPanel5 = new System.Windows.Forms.Panel();
             this.CloneChannelPanel9 = new System.Windows.Forms.Panel();
             this.CloneChannelPanel16 = new System.Windows.Forms.Panel();
-            this.TimeLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -447,6 +447,16 @@ namespace BioPacVideo
             this.UnitNameStrip.Size = new System.Drawing.Size(73, 23);
             this.UnitNameStrip.Text = "UNIT LABEL";
             // 
+            // TimeLabel
+            // 
+            this.TimeLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.TimeLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.TimeLabel.Name = "TimeLabel";
+            this.TimeLabel.Size = new System.Drawing.Size(37, 23);
+            this.TimeLabel.Text = "TIME";
+            // 
             // VoltScale
             // 
             this.VoltScale.FormattingEnabled = true;
@@ -611,16 +621,6 @@ namespace BioPacVideo
             this.CloneChannelPanel16.Size = new System.Drawing.Size(136, 115);
             this.CloneChannelPanel16.TabIndex = 12;
             // 
-            // TimeLabel
-            // 
-            this.TimeLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.TimeLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-            this.TimeLabel.Name = "TimeLabel";
-            this.TimeLabel.Size = new System.Drawing.Size(37, 23);
-            this.TimeLabel.Text = "TIME";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -656,6 +656,8 @@ namespace BioPacVideo
             this.Name = "MainForm";
             this.Text = "BioPacVideo";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.ResizeBegin += new System.EventHandler(this.OnResizeStart);
+            this.ResizeEnd += new System.EventHandler(this.OnResize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.StatusBar.ResumeLayout(false);
