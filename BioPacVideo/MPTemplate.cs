@@ -48,7 +48,7 @@ namespace BioPacVideo
         bool FileStop;
         public bool isstreaming = false;
         public bool isconnected = false;
-        private bool Sending = true;
+        //private bool Sending = true;
          
         public int samplesize;
         public bool ClearDisplay;
@@ -86,7 +86,6 @@ namespace BioPacVideo
         private int AcqChan;
         private int VoltageSpacing;
         private double[] DispOffset;
-        //VideoWrapper Video; 
 
 
         public MPTemplate() //Constructor
@@ -108,7 +107,6 @@ namespace BioPacVideo
             FEB = new FeederErrorBox();
             FEB.Show();
             FEB.Hide();
-            //VideoWrapper Video = VideoWrapper.Instance;
         }
 
         public static MPTemplate Instance
@@ -585,7 +583,7 @@ namespace BioPacVideo
                     return; 
                 }
                 last_received = received; //For the draw buffer
-                RecordingSuccess = true; // we have recieved the data successfully 
+                //RecordingSuccess = true; // we have recieved the data successfully 
                 if (last_received % AcqChan > 0) 
                 {
                     Console.WriteLine("Buffer Mismatch: " + (last_received % AcqChan).ToString()); 
@@ -661,14 +659,8 @@ namespace BioPacVideo
                             {
                                 Feeder.State = 1;
                                 Feeder.StateText = "EXECUTING";
-                                Sending = false; //We are now executing, the acknwoledge flag is no longer necessary
                             }
-                            if (a && !b && Sending)
-                            {
-                                Feeder.ArduinoAck = true; 
-                                // this will say that the arduino has responded positively to the acknowledge function
-                            }
-                            if (a && !b && !Sending)
+                            if (a && !b)
                             {
                                 if (Feeder.State != 2)
                                 {
@@ -678,7 +670,6 @@ namespace BioPacVideo
                                 }
                                 Feeder.State = 2;
                                 Feeder.StateText = "SUCCESS";
-                                Sending = true; 
                             }
                             if (!a && !b)
                             {
@@ -700,7 +691,7 @@ namespace BioPacVideo
                                 }
                             }
                         }
-                        if ((Feeder.CommandSize > 0) && Feeder.CommandReady && Feeder.ArduinoAck)
+                        if ((Feeder.CommandSize > 0) && Feeder.CommandReady)
                         {
                             byte v;
                             v = Feeder.GetTopCommand();

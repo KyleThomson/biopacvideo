@@ -22,7 +22,7 @@ namespace BioPacVideo
         public bool Enabled;
         public bool Activated; 
         public int State;
-        public int RecievingState; 
+        //public int RecievingState; 
         public string StateText;
         public string ADDC1;
         public string ADDC2;
@@ -42,7 +42,7 @@ namespace BioPacVideo
         private Random Randomizer;
         public RatTemplate[] Rats;
         public StreamWriter log;
-        public bool ArduinoAck = true;
+        //public bool ArduinoAck = true;
         private string LogFileName;
         public int Cages_X;
         public int Cages_Y;
@@ -206,7 +206,7 @@ namespace BioPacVideo
             Commands.Enqueue((byte)30); //gotta figure out the numbering system here
             CommandSize = Commands.Count;
             CommandReady = true;
-            ArduinoAck = false; 
+            //ArduinoAck = false; 
         }
         public void GoMeal(int MealNum)
         {
