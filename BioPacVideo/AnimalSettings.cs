@@ -76,6 +76,40 @@ namespace BioPacVideo
             animalID15.LostFocus += delegate (object sender, System.EventArgs e) { weightBox_FocusLeave(sender, e, animalID15); };
             animalID16.LostFocus += delegate (object sender, System.EventArgs e) { weightBox_FocusLeave(sender, e, animalID16); };
 
+            /*
+            medCheck1.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck1); };
+            medCheck2.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck2); };
+            medCheck3.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck3); };
+            medCheck4.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck4); };
+            medCheck5.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck5); };
+            medCheck6.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck6); };
+            medCheck7.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck7); };
+            medCheck8.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck8); };
+            medCheck9.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck9); };
+            medCheck10.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck10); };
+            medCheck11.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck11); };
+            medCheck12.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck12); };
+            medCheck13.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck13); };
+            medCheck14.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck14); };
+            medCheck15.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck15); };
+            medCheck16.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck16); };
+            unmedCheck1.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck1); };
+            unmedCheck2.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck2); };
+            unmedCheck3.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck3); };
+            unmedCheck4.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck4); };
+            unmedCheck5.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck5); };
+            unmedCheck6.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck6); };
+            unmedCheck7.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck7); };
+            unmedCheck8.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck8); };
+            unmedCheck9.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck9); };
+            unmedCheck10.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck10); };
+            unmedCheck11.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck11); };
+            unmedCheck12.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck12); };
+            unmedCheck13.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck13); };
+            unmedCheck14.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck14); };
+            unmedCheck15.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck15); };
+            unmedCheck16.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck16); };*/
+
             for (int i = 0; i<16; i++)
             {
                 
@@ -167,13 +201,21 @@ namespace BioPacVideo
         }
         private void weightBox_TextChange(object sender, EventArgs e)
         {
-            for (int i = 0; i<totalCages; i++)
+            for (int i = 0; i < totalCages; i++)
             {
-                if(weightBox[i].Text == "" || weightBox[i].Text == "0")
+                if (weightBox[i].Text.Contains(" "))
+                {
+                    weightBox[i].Text = weightBox[i].Text.Replace(" ", ""); 
+                }
+                if (weightBox[i].Text == "" || weightBox[i].Text == "0")
                 {
                     medCheck[i].Enabled = false;
                     unmedCheck[i].Enabled = false;
                     percentBox[i].Enabled = false; 
+                }
+                else if (animalID[i].Text == "E" || animalID[i].Text == "e" || animalID[i].Text == "")
+                {
+                    //if no animal ID, or animal ID empty, do nothing because the medication stuff is already inactivated
                 }
                 else
                 {
@@ -205,27 +247,61 @@ namespace BioPacVideo
                 
             }
         }
-        private void weightBox_FocusLeave(object sender, EventArgs e, TextBox tb)
+        private void weightBox_FocusLeave(object sender, EventArgs e, TextBox tb) // this actually refers to focus leave on animal ID box, no idea why its called this 
         {
             if (focusBusy) return;
-            focusBusy = true; 
+            focusBusy = true;
+            int i = animalID.IndexOf(tb);
+            //Console.WriteLine("i = " + i.ToString()); 
+            if (tb.Text.Contains(" "))
+            {
+                tb.Text = tb.Text.Replace(" ", "");
+            }
+            if (tb.Text == "e" || tb.Text == "E")
+            {
+                medCheck[i].Enabled = false;
+                unmedCheck[i].Enabled = false;
+                percentBox[i].Enabled = false;
+                weightBox[i].Text = "0"; 
+                focusBusy = false; 
+                return;
+            }
+            else
+            {
+                medCheck[i].Enabled = true;
+                unmedCheck[i].Enabled = true;
+                percentBox[i].Enabled = true;
+            }
             foreach (TextBox t in animalID)
             {
-                
-                if(t.Equals(tb))
+                if (t.Equals(tb))
                 {
-
+                    
                 }
                 else
                 {
-                    if(t.Text == tb.Text)
+                    if (t.Text == tb.Text)
                     {
-                        MessageBox.Show("Two animals cannot have the same ID", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        tb.Text = ""; 
+                        MessageBox.Show("Two animals have the same ID", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        focusBusy = false; 
+                        return;
                     }
                 }
             }
             focusBusy = false; 
+        }
+        private void checkBox_FocusLeave(object sender, EventArgs e, CheckBox cb) // the idea was there, but its glitchy and not worth it 
+        {
+            int i = medCheck.IndexOf(cb);
+            if (i == -1)
+            {
+                i = unmedCheck.IndexOf(cb); 
+            }
+            if (!medCheck[i].Checked && !unmedCheck[i].Checked)
+            {
+                unmedCheck[i].Checked = true;
+                percentBox[i].Text = "0";
+            }
         }
 
         private void checkBox_Change (object sender, EventArgs e)
