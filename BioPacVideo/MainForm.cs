@@ -42,8 +42,7 @@ namespace BioPacVideo
         private ArrayList Panels; 
         public static int[] VoltageSettings = new int[] { 1, 10, 50, 100, 250, 500, 1000, 2000, 3000, 4000, 5000};
         public static int[] DisplayLengthSize = new int[] { 1, 5, 10, 30, 60 };
-        private static ManualResetEvent Clockmre = new ManualResetEvent(true);
-        private static ManualResetEvent Displaymre = new ManualResetEvent(true);
+        private static ManualResetEvent mre = new ManualResetEvent(false);
         public string UnitLabel;
         
 
@@ -152,7 +151,6 @@ namespace BioPacVideo
 
            
         }
-
         ~MainForm()
         {
             ThreadDisplay.Abort();
@@ -456,16 +454,14 @@ namespace BioPacVideo
 
         /****************************************************************************************
         * 
-        *                              CLOCK THREAD
+        *                              TIMER CHECK THREAD
         *                  
         * **************************************************************************************/
 
         private void ClockThread()
         {
-            //this controls and updates the date and time clock on the bottom of the screen 
             while (RunClockThread)
             {
-                Clockmre.WaitOne(); 
                 TimeLabel.Text = DateAndTime.Now.ToString(); 
             }
         }
@@ -484,7 +480,6 @@ namespace BioPacVideo
             DI = new DriveInfo(MP.RecordingDirectory.Substring(0, 3));
             while (RunDisplayThread)
             {
-                Displaymre.WaitOne(); // wait for the MRE to be flagged 
                 this.Invoke(new MethodInvoker(delegate { IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn]; }));
                 //this.Invoke(new MethodInvoker(delegate { IDT_VIDEOSTATUS.Text = Video.GetResText(); }));
                // this.Invoke(new MethodInvoker(delegate { IDT_ENCSTAT.Text = Video.EncoderStatus(); }));
@@ -885,22 +880,5 @@ namespace BioPacVideo
             frm.Dispose(); 
         }
 
-        private void OnResize(object sender, EventArgs e)
-        {
-            MP.InitializeDisplay(this.Width, this.Height);
-            //move everything around 
-            //resume the display thread and the clock thread
-            Clockmre.Set();
-            Displaymre.Set();
-            Console.WriteLine("Resize Event Over");
-        }
-
-        private void OnResizeStart(object sender, EventArgs e) 
-        {
-            //pause the display thread and the clock thread
-            Clockmre.Reset();
-            Displaymre.Reset();
-            Console.WriteLine("Resize Event Begins");
-        }
     }
 }

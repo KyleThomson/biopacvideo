@@ -123,7 +123,7 @@ namespace BioPacVideo
             if (!FEB.Visible)
                 FEB.Show();
         }
-        
+
         public void InitializeDisplay(int X, int Y)
         {
             offscreen = new Bitmap((int)(X - 60), Y-350);
