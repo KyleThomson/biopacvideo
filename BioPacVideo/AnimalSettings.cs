@@ -76,39 +76,22 @@ namespace BioPacVideo
             animalID15.LostFocus += delegate (object sender, System.EventArgs e) { weightBox_FocusLeave(sender, e, animalID15); };
             animalID16.LostFocus += delegate (object sender, System.EventArgs e) { weightBox_FocusLeave(sender, e, animalID16); };
 
-            /*
-            medCheck1.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck1); };
-            medCheck2.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck2); };
-            medCheck3.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck3); };
-            medCheck4.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck4); };
-            medCheck5.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck5); };
-            medCheck6.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck6); };
-            medCheck7.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck7); };
-            medCheck8.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck8); };
-            medCheck9.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck9); };
-            medCheck10.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck10); };
-            medCheck11.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck11); };
-            medCheck12.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck12); };
-            medCheck13.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck13); };
-            medCheck14.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck14); };
-            medCheck15.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck15); };
-            medCheck16.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, medCheck16); };
-            unmedCheck1.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck1); };
-            unmedCheck2.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck2); };
-            unmedCheck3.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck3); };
-            unmedCheck4.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck4); };
-            unmedCheck5.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck5); };
-            unmedCheck6.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck6); };
-            unmedCheck7.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck7); };
-            unmedCheck8.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck8); };
-            unmedCheck9.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck9); };
-            unmedCheck10.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck10); };
-            unmedCheck11.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck11); };
-            unmedCheck12.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck12); };
-            unmedCheck13.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck13); };
-            unmedCheck14.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck14); };
-            unmedCheck15.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck15); };
-            unmedCheck16.LostFocus += delegate (object sender, System.EventArgs e) { checkBox_FocusLeave(sender, e, unmedCheck16); };*/
+            animalID1.TextChanged += delegate (object sender, System.EventArgs e) { animalID_TextChanged(sender, e, animalID1); };
+            animalID2.TextChanged += delegate (object sender, System.EventArgs e) { animalID_TextChanged(sender, e, animalID2); };
+            animalID3.TextChanged += delegate (object sender, System.EventArgs e) { animalID_TextChanged(sender, e, animalID3); };
+            animalID4.TextChanged += delegate (object sender, System.EventArgs e) { animalID_TextChanged(sender, e, animalID4); };
+            animalID5.TextChanged += delegate (object sender, System.EventArgs e) { animalID_TextChanged(sender, e, animalID5); };
+            animalID6.TextChanged += delegate (object sender, System.EventArgs e) { animalID_TextChanged(sender, e, animalID6); };
+            animalID7.TextChanged += delegate (object sender, System.EventArgs e) { animalID_TextChanged(sender, e, animalID7); };
+            animalID8.TextChanged += delegate (object sender, System.EventArgs e) { animalID_TextChanged(sender, e, animalID8); };
+            animalID9.TextChanged += delegate (object sender, System.EventArgs e) { animalID_TextChanged(sender, e, animalID9); };
+            animalID10.TextChanged += delegate (object sender, System.EventArgs e) { animalID_TextChanged(sender, e, animalID10); };
+            animalID11.TextChanged += delegate (object sender, System.EventArgs e) { animalID_TextChanged(sender, e, animalID11); };
+            animalID12.TextChanged += delegate (object sender, System.EventArgs e) { animalID_TextChanged(sender, e, animalID12); };
+            animalID13.TextChanged += delegate (object sender, System.EventArgs e) { animalID_TextChanged(sender, e, animalID13); };
+            animalID14.TextChanged += delegate (object sender, System.EventArgs e) { animalID_TextChanged(sender, e, animalID14); };
+            animalID15.TextChanged += delegate (object sender, System.EventArgs e) { animalID_TextChanged(sender, e, animalID15); };
+            animalID16.TextChanged += delegate (object sender, System.EventArgs e) { animalID_TextChanged(sender, e, animalID16); };
 
             for (int i = 0; i<16; i++)
             {
@@ -126,6 +109,14 @@ namespace BioPacVideo
                     animalID[k].Text = Feeder.Rats[k].ID.ToString();
                     weightBox[k].Text = Feeder.Rats[k].Weight.ToString();
                     percentBox[k].Text = Feeder.Rats[k].Medication.ToString();
+                    if (animalID[k].Text == "e" || animalID[k].Text == "E" || animalID[k].Text == "")
+                    {
+                        medCheck[k].Enabled = false;
+                        unmedCheck[k].Enabled = false;
+                        percentBox[k].Enabled = false;
+                        weightBox[k].Text = "0";
+                        weightBox[k].Enabled = false; 
+                    }
                     if (weightBox[k].Text == "" || weightBox[k].Text == "0")
                     {
 
@@ -257,20 +248,25 @@ namespace BioPacVideo
             {
                 tb.Text = tb.Text.Replace(" ", "");
             }
-            if (tb.Text == "e" || tb.Text == "E")
+            if (tb.Text == "e" || tb.Text == "E" || tb.Text == "")
             {
                 medCheck[i].Enabled = false;
                 unmedCheck[i].Enabled = false;
                 percentBox[i].Enabled = false;
-                weightBox[i].Text = "0"; 
+                weightBox[i].Text = "0";
+                weightBox[i].Enabled = false;
                 focusBusy = false; 
                 return;
             }
             else
             {
-                medCheck[i].Enabled = true;
-                unmedCheck[i].Enabled = true;
-                percentBox[i].Enabled = true;
+                weightBox[i].Enabled = true;
+                if (weightBox[i].Text != "" && weightBox[i].Text != "0")
+                {
+                    medCheck[i].Enabled = true;
+                    unmedCheck[i].Enabled = true;
+                    percentBox[i].Enabled = true;
+                }
             }
             foreach (TextBox t in animalID)
             {
@@ -308,23 +304,25 @@ namespace BioPacVideo
         {
             for (int i = 0; i<totalCages; i++)
             {
-                if (medCheck[i].Checked && unmedCheck[i].Checked)
+                if (animalID[i].Text != "")
                 {
-                    percentBox[i].Enabled = true;
-                    percentBox[i].Text = Feeder.Rats[i].Medication.ToString();
-                }
-                else
-                {
-                    percentBox[i].Enabled = false;
-                    if (medCheck[i].Checked && !unmedCheck[i].Checked)
+                    if (medCheck[i].Checked && unmedCheck[i].Checked)
                     {
-                        percentBox[i].Text = "100";
+                        percentBox[i].Enabled = true;
+                        percentBox[i].Text = Feeder.Rats[i].Medication.ToString();
                     }
-                    else if (unmedCheck[i].Checked && !medCheck[i].Checked)
+                    else
                     {
-                        percentBox[i].Text = "0"; 
+                        percentBox[i].Enabled = false;
+                        if (medCheck[i].Checked && !unmedCheck[i].Checked)
+                        {
+                            percentBox[i].Text = "100";
+                        }
+                        else if (unmedCheck[i].Checked && !medCheck[i].Checked)
+                        {
+                            percentBox[i].Text = "0";
+                        }
                     }
-                    
                 }
             }
         }
@@ -441,23 +439,10 @@ namespace BioPacVideo
             this.Refresh();
         }
 
-
-        /*private void groupBox_MouseHover(object sender, EventArgs e, GroupBox gb)
+        private void animalID_TextChanged(object sender, EventArgs e, TextBox tb)
         {
-            foreach (GroupBox g in groupList)
-            {
-                if (g.Equals(gb))
-                {
-                    int index = groupList.IndexOf(g);
-                    if (weightBox[index].Text == "" || weightBox[index].Text == "0")
-                    {
-                        tooltip1 = new ToolTip();
-                        tooltip1.SetToolTip(groupList[index], "please input weight before \nspecifying medication");
-                        Console.WriteLine("Activating tooltip event");
-                    }
-                }
-            }
-        }*/
-
+            int i = animalID.IndexOf(tb);
+            weightBox[i].Enabled = true; 
+        }
     }
 }
