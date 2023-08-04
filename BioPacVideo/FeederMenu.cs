@@ -17,6 +17,8 @@ namespace BioPacVideo
         private TimeSpan mid_ten;
         private TimeSpan noon;
         private TimeSpan noon_ten;
+        List<TextBox> MealTime;
+        List<TimeSpan> FeederTime; 
 
         public FeederMenu(FeederTemplate Pass_feeder)
         {
@@ -40,37 +42,52 @@ namespace BioPacVideo
                 IDC_Meal6.Text = Feeder.Meal6.ToString();
             IDX_FEEDERENABLE.Checked = Feeder.Enabled;
             IDC_PPG.Text = string.Format("{0:0.000}", Feeder.PelletsPerGram);
+            FeederTime = new List<TimeSpan> { Feeder.Meal1, Feeder.Meal2, Feeder.Meal3, Feeder.Meal4, Feeder.Meal5, Feeder.Meal6 }; 
+            MealTime = new List<TextBox> { IDC_Meal1, IDC_Meal2, IDC_Meal3, IDC_Meal4, IDC_Meal5, IDC_Meal6 }; 
+            IDC_Meal1.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal1); };
+            IDC_Meal2.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal2); };
+            IDC_Meal3.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal3); };
+            IDC_Meal4.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal4); };
+            IDC_Meal5.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal5); };
+            IDC_Meal6.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal6); };
+
         }
         public FeederTemplate ReturnFeeder()
         {
             return Feeder;
         }
-        private void IDC_Meal1_TextChanged(object sender, EventArgs e)
+        private void IDC_Meal_TextChanged(object sender, EventArgs e, TextBox tb)
         {
             TimeSpan TestTime;
-            if (TimeSpan.TryParse(IDC_Meal1.Text, out TestTime))
+            int i = MealTime.IndexOf(tb); 
+            if (TimeSpan.TryParse(MealTime[i].Text, out TestTime))
             {
                 if(TestTime >= noon && TestTime <= noon_ten)
                 {
                     MessageBox.Show("Feeders Cannot be Set to the Following Times:\n12:00-12:10\n0:00-0:10", "Feeder Time Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    IDC_Meal1.Text = Feeder.Meal1.ToString();
+                    MealTime[i].Text = FeederTime[i].ToString(); 
                 }
-                else if (TestTime >= midnight && TestTime <= mid_ten)
+                else if (TestTime > midnight && TestTime <= mid_ten)
                 {
                     MessageBox.Show("Feeders Cannot be Set to the Following Times:\n12:00-12:10\n0:00-0:10", "Feeder Time Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    IDC_Meal1.Text = Feeder.Meal1.ToString();
+                    MealTime[i].Text = FeederTime[i].ToString(); 
                 }
                 else
                 {
-                    IDC_Meal1.Text = TestTime.ToString();
-                    Feeder.Meal1 = TestTime;
+                    MealTime[i].Text = TestTime.ToString();
+                    FeederTime[i] = TestTime; 
                 }    
                 
             }
+            else if (MealTime[i].Text == "" || MealTime[i].Text == " " || MealTime[i].Text == "0")
+            {
+                MealTime[i].Text = "No Meal";
+                FeederTime[i] = midnight; 
+            }
             else
-                IDC_Meal1.Text = Feeder.Meal1.ToString();
+                MealTime[i].Text = FeederTime[i].ToString();
         }
-        private void IDC_Meal2_TextChanged(object sender, EventArgs e)
+        /*private void IDC_Meal2_TextChanged(object sender, EventArgs e)
         {
             TimeSpan TestTime;
             if (TimeSpan.TryParse(IDC_Meal2.Text, out TestTime))
@@ -120,7 +137,7 @@ namespace BioPacVideo
             }
             else
                 IDC_Meal3.Text = Feeder.Meal3.ToString();
-        }
+        }*/
 
         private void IDX_FEEDERENABLE_CheckedChanged(object sender, EventArgs e)
         {
@@ -140,7 +157,7 @@ namespace BioPacVideo
                 IDC_PPG.Text = string.Format("{0:0.00}", Feeder.PelletsPerGram);
             }
         }
-        private void IDC_Meal4_TextChanged(object sender, EventArgs e)
+        /*private void IDC_Meal4_TextChanged(object sender, EventArgs e)
         {
             TimeSpan TestTime;
             if (TimeSpan.TryParse(IDC_Meal4.Text, out TestTime))
@@ -216,7 +233,7 @@ namespace BioPacVideo
             }
             else
                 IDC_Meal6.Text = Feeder.Meal6.ToString();
-        }
+        }*/
 
         private void okayButton_Click(object sender, EventArgs e)
         {

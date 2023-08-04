@@ -66,7 +66,6 @@ namespace BioPacVideo
             this.IDC_Meal1.Name = "IDC_Meal1";
             this.IDC_Meal1.Size = new System.Drawing.Size(134, 20);
             this.IDC_Meal1.TabIndex = 70;
-            this.IDC_Meal1.LostFocus += new System.EventHandler(this.IDC_Meal1_TextChanged);
             // 
             // label1
             // 
@@ -92,7 +91,6 @@ namespace BioPacVideo
             this.IDC_Meal2.Name = "IDC_Meal2";
             this.IDC_Meal2.Size = new System.Drawing.Size(134, 20);
             this.IDC_Meal2.TabIndex = 73;
-            this.IDC_Meal2.LostFocus += new System.EventHandler(this.IDC_Meal2_TextChanged);
             // 
             // label3
             // 
@@ -109,7 +107,6 @@ namespace BioPacVideo
             this.IDC_Meal3.Name = "IDC_Meal3";
             this.IDC_Meal3.Size = new System.Drawing.Size(134, 20);
             this.IDC_Meal3.TabIndex = 75;
-            this.IDC_Meal3.LostFocus += new System.EventHandler(this.IDC_Meal3_TextChanged);
             // 
             // label44
             // 
@@ -126,7 +123,6 @@ namespace BioPacVideo
             this.IDC_Meal4.Name = "IDC_Meal4";
             this.IDC_Meal4.Size = new System.Drawing.Size(134, 20);
             this.IDC_Meal4.TabIndex = 105;
-            this.IDC_Meal4.LostFocus += new System.EventHandler(this.IDC_Meal4_TextChanged);
             // 
             // label45
             // 
@@ -143,7 +139,6 @@ namespace BioPacVideo
             this.IDC_Meal5.Name = "IDC_Meal5";
             this.IDC_Meal5.Size = new System.Drawing.Size(134, 20);
             this.IDC_Meal5.TabIndex = 107;
-            this.IDC_Meal5.LostFocus += new System.EventHandler(this.IDC_Meal5_TextChanged);
             // 
             // label46
             // 
@@ -160,7 +155,6 @@ namespace BioPacVideo
             this.IDC_Meal6.Name = "IDC_Meal6";
             this.IDC_Meal6.Size = new System.Drawing.Size(134, 20);
             this.IDC_Meal6.TabIndex = 109;
-            this.IDC_Meal6.LostFocus += new System.EventHandler(this.IDC_Meal6_TextChanged);
             // 
             // label25
             // 

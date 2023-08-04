@@ -210,35 +210,40 @@ namespace BioPacVideo
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.animalID1);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(109, 27);
+            this.groupBox1.Location = new System.Drawing.Point(145, 33);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(117, 178);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Size = new System.Drawing.Size(156, 219);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(62, 155);
+            this.label3.Location = new System.Drawing.Point(83, 191);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(44, 13);
+            this.label3.Size = new System.Drawing.Size(58, 17);
             this.label3.TabIndex = 1;
             this.label3.Text = "% Meds";
             // 
             // percentBox1
             // 
-            this.percentBox1.Location = new System.Drawing.Point(9, 152);
+            this.percentBox1.Location = new System.Drawing.Point(12, 187);
+            this.percentBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.percentBox1.Name = "percentBox1";
-            this.percentBox1.Size = new System.Drawing.Size(53, 20);
+            this.percentBox1.Size = new System.Drawing.Size(69, 22);
             this.percentBox1.TabIndex = 6;
             this.percentBox1.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck1
             // 
             this.unmedCheck1.AutoSize = true;
-            this.unmedCheck1.Location = new System.Drawing.Point(9, 129);
+            this.unmedCheck1.Location = new System.Drawing.Point(12, 159);
+            this.unmedCheck1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.unmedCheck1.Name = "unmedCheck1";
-            this.unmedCheck1.Size = new System.Drawing.Size(89, 17);
+            this.unmedCheck1.Size = new System.Drawing.Size(113, 21);
             this.unmedCheck1.TabIndex = 5;
             this.unmedCheck1.Text = "Unmedicated";
             this.unmedCheck1.UseVisualStyleBackColor = true;
@@ -247,9 +252,10 @@ namespace BioPacVideo
             // medCheck1
             // 
             this.medCheck1.AutoSize = true;
-            this.medCheck1.Location = new System.Drawing.Point(9, 106);
+            this.medCheck1.Location = new System.Drawing.Point(12, 130);
+            this.medCheck1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.medCheck1.Name = "medCheck1";
-            this.medCheck1.Size = new System.Drawing.Size(76, 17);
+            this.medCheck1.Size = new System.Drawing.Size(95, 21);
             this.medCheck1.TabIndex = 4;
             this.medCheck1.Text = "Medicated";
             this.medCheck1.UseVisualStyleBackColor = true;
@@ -257,34 +263,38 @@ namespace BioPacVideo
             // 
             // weightBox1
             // 
-            this.weightBox1.Location = new System.Drawing.Point(6, 80);
+            this.weightBox1.Location = new System.Drawing.Point(8, 98);
+            this.weightBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.weightBox1.Name = "weightBox1";
-            this.weightBox1.Size = new System.Drawing.Size(100, 20);
+            this.weightBox1.Size = new System.Drawing.Size(132, 22);
             this.weightBox1.TabIndex = 3;
             this.weightBox1.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 64);
+            this.label2.Location = new System.Drawing.Point(8, 79);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(56, 13);
+            this.label2.Size = new System.Drawing.Size(74, 17);
             this.label2.TabIndex = 2;
             this.label2.Text = "Weight (g)";
             // 
             // animalID1
             // 
-            this.animalID1.Location = new System.Drawing.Point(6, 32);
+            this.animalID1.Location = new System.Drawing.Point(8, 39);
+            this.animalID1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.animalID1.Name = "animalID1";
-            this.animalID1.Size = new System.Drawing.Size(100, 20);
+            this.animalID1.Size = new System.Drawing.Size(132, 22);
             this.animalID1.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 16);
+            this.label1.Location = new System.Drawing.Point(8, 20);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(52, 13);
+            this.label1.Size = new System.Drawing.Size(67, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "Animal ID";
             // 
@@ -298,35 +308,40 @@ namespace BioPacVideo
             this.groupBox11.Controls.Add(this.label5);
             this.groupBox11.Controls.Add(this.animalID11);
             this.groupBox11.Controls.Add(this.label6);
-            this.groupBox11.Location = new System.Drawing.Point(382, 212);
+            this.groupBox11.Location = new System.Drawing.Point(509, 261);
+            this.groupBox11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(117, 178);
-            this.groupBox11.TabIndex = 1;
+            this.groupBox11.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox11.Size = new System.Drawing.Size(156, 219);
+            this.groupBox11.TabIndex = 10;
             this.groupBox11.TabStop = false;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(62, 155);
+            this.label4.Location = new System.Drawing.Point(83, 191);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(44, 13);
+            this.label4.Size = new System.Drawing.Size(58, 17);
             this.label4.TabIndex = 1;
             this.label4.Text = "% Meds";
             // 
             // percentBox11
             // 
-            this.percentBox11.Location = new System.Drawing.Point(9, 152);
+            this.percentBox11.Location = new System.Drawing.Point(12, 187);
+            this.percentBox11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.percentBox11.Name = "percentBox11";
-            this.percentBox11.Size = new System.Drawing.Size(53, 20);
+            this.percentBox11.Size = new System.Drawing.Size(69, 22);
             this.percentBox11.TabIndex = 6;
             this.percentBox11.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck11
             // 
             this.unmedCheck11.AutoSize = true;
-            this.unmedCheck11.Location = new System.Drawing.Point(9, 129);
+            this.unmedCheck11.Location = new System.Drawing.Point(12, 159);
+            this.unmedCheck11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.unmedCheck11.Name = "unmedCheck11";
-            this.unmedCheck11.Size = new System.Drawing.Size(89, 17);
+            this.unmedCheck11.Size = new System.Drawing.Size(113, 21);
             this.unmedCheck11.TabIndex = 5;
             this.unmedCheck11.Text = "Unmedicated";
             this.unmedCheck11.UseVisualStyleBackColor = true;
@@ -335,9 +350,10 @@ namespace BioPacVideo
             // medCheck11
             // 
             this.medCheck11.AutoSize = true;
-            this.medCheck11.Location = new System.Drawing.Point(9, 106);
+            this.medCheck11.Location = new System.Drawing.Point(12, 130);
+            this.medCheck11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.medCheck11.Name = "medCheck11";
-            this.medCheck11.Size = new System.Drawing.Size(76, 17);
+            this.medCheck11.Size = new System.Drawing.Size(95, 21);
             this.medCheck11.TabIndex = 4;
             this.medCheck11.Text = "Medicated";
             this.medCheck11.UseVisualStyleBackColor = true;
@@ -345,34 +361,38 @@ namespace BioPacVideo
             // 
             // weightBox11
             // 
-            this.weightBox11.Location = new System.Drawing.Point(6, 80);
+            this.weightBox11.Location = new System.Drawing.Point(8, 98);
+            this.weightBox11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.weightBox11.Name = "weightBox11";
-            this.weightBox11.Size = new System.Drawing.Size(100, 20);
+            this.weightBox11.Size = new System.Drawing.Size(132, 22);
             this.weightBox11.TabIndex = 3;
             this.weightBox11.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 64);
+            this.label5.Location = new System.Drawing.Point(8, 79);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(56, 13);
+            this.label5.Size = new System.Drawing.Size(74, 17);
             this.label5.TabIndex = 2;
             this.label5.Text = "Weight (g)";
             // 
             // animalID11
             // 
-            this.animalID11.Location = new System.Drawing.Point(6, 32);
+            this.animalID11.Location = new System.Drawing.Point(8, 39);
+            this.animalID11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.animalID11.Name = "animalID11";
-            this.animalID11.Size = new System.Drawing.Size(100, 20);
+            this.animalID11.Size = new System.Drawing.Size(132, 22);
             this.animalID11.TabIndex = 1;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 16);
+            this.label6.Location = new System.Drawing.Point(8, 20);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(52, 13);
+            this.label6.Size = new System.Drawing.Size(67, 17);
             this.label6.TabIndex = 0;
             this.label6.Text = "Animal ID";
             // 
@@ -386,35 +406,40 @@ namespace BioPacVideo
             this.groupBox12.Controls.Add(this.label8);
             this.groupBox12.Controls.Add(this.animalID12);
             this.groupBox12.Controls.Add(this.label9);
-            this.groupBox12.Location = new System.Drawing.Point(516, 212);
+            this.groupBox12.Location = new System.Drawing.Point(688, 261);
+            this.groupBox12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(117, 178);
-            this.groupBox12.TabIndex = 7;
+            this.groupBox12.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox12.Size = new System.Drawing.Size(156, 219);
+            this.groupBox12.TabIndex = 11;
             this.groupBox12.TabStop = false;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(62, 155);
+            this.label7.Location = new System.Drawing.Point(83, 191);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(44, 13);
+            this.label7.Size = new System.Drawing.Size(58, 17);
             this.label7.TabIndex = 1;
             this.label7.Text = "% Meds";
             // 
             // percentBox12
             // 
-            this.percentBox12.Location = new System.Drawing.Point(9, 152);
+            this.percentBox12.Location = new System.Drawing.Point(12, 187);
+            this.percentBox12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.percentBox12.Name = "percentBox12";
-            this.percentBox12.Size = new System.Drawing.Size(53, 20);
+            this.percentBox12.Size = new System.Drawing.Size(69, 22);
             this.percentBox12.TabIndex = 6;
             this.percentBox12.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck12
             // 
             this.unmedCheck12.AutoSize = true;
-            this.unmedCheck12.Location = new System.Drawing.Point(9, 129);
+            this.unmedCheck12.Location = new System.Drawing.Point(12, 159);
+            this.unmedCheck12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.unmedCheck12.Name = "unmedCheck12";
-            this.unmedCheck12.Size = new System.Drawing.Size(89, 17);
+            this.unmedCheck12.Size = new System.Drawing.Size(113, 21);
             this.unmedCheck12.TabIndex = 5;
             this.unmedCheck12.Text = "Unmedicated";
             this.unmedCheck12.UseVisualStyleBackColor = true;
@@ -423,9 +448,10 @@ namespace BioPacVideo
             // medCheck12
             // 
             this.medCheck12.AutoSize = true;
-            this.medCheck12.Location = new System.Drawing.Point(9, 106);
+            this.medCheck12.Location = new System.Drawing.Point(12, 130);
+            this.medCheck12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.medCheck12.Name = "medCheck12";
-            this.medCheck12.Size = new System.Drawing.Size(76, 17);
+            this.medCheck12.Size = new System.Drawing.Size(95, 21);
             this.medCheck12.TabIndex = 4;
             this.medCheck12.Text = "Medicated";
             this.medCheck12.UseVisualStyleBackColor = true;
@@ -433,34 +459,38 @@ namespace BioPacVideo
             // 
             // weightBox12
             // 
-            this.weightBox12.Location = new System.Drawing.Point(6, 80);
+            this.weightBox12.Location = new System.Drawing.Point(8, 98);
+            this.weightBox12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.weightBox12.Name = "weightBox12";
-            this.weightBox12.Size = new System.Drawing.Size(100, 20);
+            this.weightBox12.Size = new System.Drawing.Size(132, 22);
             this.weightBox12.TabIndex = 3;
             this.weightBox12.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 64);
+            this.label8.Location = new System.Drawing.Point(8, 79);
+            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(56, 13);
+            this.label8.Size = new System.Drawing.Size(74, 17);
             this.label8.TabIndex = 2;
             this.label8.Text = "Weight (g)";
             // 
             // animalID12
             // 
-            this.animalID12.Location = new System.Drawing.Point(6, 32);
+            this.animalID12.Location = new System.Drawing.Point(8, 39);
+            this.animalID12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.animalID12.Name = "animalID12";
-            this.animalID12.Size = new System.Drawing.Size(100, 20);
+            this.animalID12.Size = new System.Drawing.Size(132, 22);
             this.animalID12.TabIndex = 1;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 16);
+            this.label9.Location = new System.Drawing.Point(8, 20);
+            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(52, 13);
+            this.label9.Size = new System.Drawing.Size(67, 17);
             this.label9.TabIndex = 0;
             this.label9.Text = "Animal ID";
             // 
@@ -474,35 +504,40 @@ namespace BioPacVideo
             this.groupBox13.Controls.Add(this.label11);
             this.groupBox13.Controls.Add(this.animalID13);
             this.groupBox13.Controls.Add(this.label12);
-            this.groupBox13.Location = new System.Drawing.Point(655, 212);
+            this.groupBox13.Location = new System.Drawing.Point(873, 261);
+            this.groupBox13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox13.Name = "groupBox13";
-            this.groupBox13.Size = new System.Drawing.Size(117, 178);
-            this.groupBox13.TabIndex = 7;
+            this.groupBox13.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox13.Size = new System.Drawing.Size(156, 219);
+            this.groupBox13.TabIndex = 12;
             this.groupBox13.TabStop = false;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(62, 155);
+            this.label10.Location = new System.Drawing.Point(83, 191);
+            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(44, 13);
+            this.label10.Size = new System.Drawing.Size(58, 17);
             this.label10.TabIndex = 1;
             this.label10.Text = "% Meds";
             // 
             // percentBox13
             // 
-            this.percentBox13.Location = new System.Drawing.Point(9, 152);
+            this.percentBox13.Location = new System.Drawing.Point(12, 187);
+            this.percentBox13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.percentBox13.Name = "percentBox13";
-            this.percentBox13.Size = new System.Drawing.Size(53, 20);
+            this.percentBox13.Size = new System.Drawing.Size(69, 22);
             this.percentBox13.TabIndex = 6;
             this.percentBox13.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck13
             // 
             this.unmedCheck13.AutoSize = true;
-            this.unmedCheck13.Location = new System.Drawing.Point(9, 129);
+            this.unmedCheck13.Location = new System.Drawing.Point(12, 159);
+            this.unmedCheck13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.unmedCheck13.Name = "unmedCheck13";
-            this.unmedCheck13.Size = new System.Drawing.Size(89, 17);
+            this.unmedCheck13.Size = new System.Drawing.Size(113, 21);
             this.unmedCheck13.TabIndex = 5;
             this.unmedCheck13.Text = "Unmedicated";
             this.unmedCheck13.UseVisualStyleBackColor = true;
@@ -511,9 +546,10 @@ namespace BioPacVideo
             // medCheck13
             // 
             this.medCheck13.AutoSize = true;
-            this.medCheck13.Location = new System.Drawing.Point(9, 106);
+            this.medCheck13.Location = new System.Drawing.Point(12, 130);
+            this.medCheck13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.medCheck13.Name = "medCheck13";
-            this.medCheck13.Size = new System.Drawing.Size(76, 17);
+            this.medCheck13.Size = new System.Drawing.Size(95, 21);
             this.medCheck13.TabIndex = 4;
             this.medCheck13.Text = "Medicated";
             this.medCheck13.UseVisualStyleBackColor = true;
@@ -521,34 +557,38 @@ namespace BioPacVideo
             // 
             // weightBox13
             // 
-            this.weightBox13.Location = new System.Drawing.Point(6, 80);
+            this.weightBox13.Location = new System.Drawing.Point(8, 98);
+            this.weightBox13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.weightBox13.Name = "weightBox13";
-            this.weightBox13.Size = new System.Drawing.Size(100, 20);
+            this.weightBox13.Size = new System.Drawing.Size(132, 22);
             this.weightBox13.TabIndex = 3;
             this.weightBox13.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 64);
+            this.label11.Location = new System.Drawing.Point(8, 79);
+            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(56, 13);
+            this.label11.Size = new System.Drawing.Size(74, 17);
             this.label11.TabIndex = 2;
             this.label11.Text = "Weight (g)";
             // 
             // animalID13
             // 
-            this.animalID13.Location = new System.Drawing.Point(6, 32);
+            this.animalID13.Location = new System.Drawing.Point(8, 39);
+            this.animalID13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.animalID13.Name = "animalID13";
-            this.animalID13.Size = new System.Drawing.Size(100, 20);
+            this.animalID13.Size = new System.Drawing.Size(132, 22);
             this.animalID13.TabIndex = 1;
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(6, 16);
+            this.label12.Location = new System.Drawing.Point(8, 20);
+            this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(52, 13);
+            this.label12.Size = new System.Drawing.Size(67, 17);
             this.label12.TabIndex = 0;
             this.label12.Text = "Animal ID";
             // 
@@ -562,35 +602,40 @@ namespace BioPacVideo
             this.groupBox14.Controls.Add(this.label14);
             this.groupBox14.Controls.Add(this.animalID14);
             this.groupBox14.Controls.Add(this.label15);
-            this.groupBox14.Location = new System.Drawing.Point(798, 212);
+            this.groupBox14.Location = new System.Drawing.Point(1064, 261);
+            this.groupBox14.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox14.Name = "groupBox14";
-            this.groupBox14.Size = new System.Drawing.Size(117, 178);
-            this.groupBox14.TabIndex = 7;
+            this.groupBox14.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox14.Size = new System.Drawing.Size(156, 219);
+            this.groupBox14.TabIndex = 13;
             this.groupBox14.TabStop = false;
             // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(62, 155);
+            this.label13.Location = new System.Drawing.Point(83, 191);
+            this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(44, 13);
+            this.label13.Size = new System.Drawing.Size(58, 17);
             this.label13.TabIndex = 1;
             this.label13.Text = "% Meds";
             // 
             // percentBox14
             // 
-            this.percentBox14.Location = new System.Drawing.Point(9, 152);
+            this.percentBox14.Location = new System.Drawing.Point(12, 187);
+            this.percentBox14.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.percentBox14.Name = "percentBox14";
-            this.percentBox14.Size = new System.Drawing.Size(53, 20);
+            this.percentBox14.Size = new System.Drawing.Size(69, 22);
             this.percentBox14.TabIndex = 6;
             this.percentBox14.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck14
             // 
             this.unmedCheck14.AutoSize = true;
-            this.unmedCheck14.Location = new System.Drawing.Point(9, 129);
+            this.unmedCheck14.Location = new System.Drawing.Point(12, 159);
+            this.unmedCheck14.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.unmedCheck14.Name = "unmedCheck14";
-            this.unmedCheck14.Size = new System.Drawing.Size(89, 17);
+            this.unmedCheck14.Size = new System.Drawing.Size(113, 21);
             this.unmedCheck14.TabIndex = 5;
             this.unmedCheck14.Text = "Unmedicated";
             this.unmedCheck14.UseVisualStyleBackColor = true;
@@ -599,9 +644,10 @@ namespace BioPacVideo
             // medCheck14
             // 
             this.medCheck14.AutoSize = true;
-            this.medCheck14.Location = new System.Drawing.Point(9, 106);
+            this.medCheck14.Location = new System.Drawing.Point(12, 130);
+            this.medCheck14.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.medCheck14.Name = "medCheck14";
-            this.medCheck14.Size = new System.Drawing.Size(76, 17);
+            this.medCheck14.Size = new System.Drawing.Size(95, 21);
             this.medCheck14.TabIndex = 4;
             this.medCheck14.Text = "Medicated";
             this.medCheck14.UseVisualStyleBackColor = true;
@@ -609,34 +655,38 @@ namespace BioPacVideo
             // 
             // weightBox14
             // 
-            this.weightBox14.Location = new System.Drawing.Point(6, 80);
+            this.weightBox14.Location = new System.Drawing.Point(8, 98);
+            this.weightBox14.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.weightBox14.Name = "weightBox14";
-            this.weightBox14.Size = new System.Drawing.Size(100, 20);
+            this.weightBox14.Size = new System.Drawing.Size(132, 22);
             this.weightBox14.TabIndex = 3;
             this.weightBox14.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 64);
+            this.label14.Location = new System.Drawing.Point(8, 79);
+            this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(56, 13);
+            this.label14.Size = new System.Drawing.Size(74, 17);
             this.label14.TabIndex = 2;
             this.label14.Text = "Weight (g)";
             // 
             // animalID14
             // 
-            this.animalID14.Location = new System.Drawing.Point(6, 32);
+            this.animalID14.Location = new System.Drawing.Point(8, 39);
+            this.animalID14.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.animalID14.Name = "animalID14";
-            this.animalID14.Size = new System.Drawing.Size(100, 20);
+            this.animalID14.Size = new System.Drawing.Size(132, 22);
             this.animalID14.TabIndex = 1;
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(6, 16);
+            this.label15.Location = new System.Drawing.Point(8, 20);
+            this.label15.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(52, 13);
+            this.label15.Size = new System.Drawing.Size(67, 17);
             this.label15.TabIndex = 0;
             this.label15.Text = "Animal ID";
             // 
@@ -650,35 +700,40 @@ namespace BioPacVideo
             this.groupBox15.Controls.Add(this.label17);
             this.groupBox15.Controls.Add(this.animalID15);
             this.groupBox15.Controls.Add(this.label18);
-            this.groupBox15.Location = new System.Drawing.Point(937, 212);
+            this.groupBox15.Location = new System.Drawing.Point(1249, 261);
+            this.groupBox15.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(117, 178);
-            this.groupBox15.TabIndex = 7;
+            this.groupBox15.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox15.Size = new System.Drawing.Size(156, 219);
+            this.groupBox15.TabIndex = 14;
             this.groupBox15.TabStop = false;
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(62, 155);
+            this.label16.Location = new System.Drawing.Point(83, 191);
+            this.label16.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(44, 13);
+            this.label16.Size = new System.Drawing.Size(58, 17);
             this.label16.TabIndex = 1;
             this.label16.Text = "% Meds";
             // 
             // percentBox15
             // 
-            this.percentBox15.Location = new System.Drawing.Point(9, 152);
+            this.percentBox15.Location = new System.Drawing.Point(12, 187);
+            this.percentBox15.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.percentBox15.Name = "percentBox15";
-            this.percentBox15.Size = new System.Drawing.Size(53, 20);
+            this.percentBox15.Size = new System.Drawing.Size(69, 22);
             this.percentBox15.TabIndex = 6;
             this.percentBox15.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck15
             // 
             this.unmedCheck15.AutoSize = true;
-            this.unmedCheck15.Location = new System.Drawing.Point(9, 129);
+            this.unmedCheck15.Location = new System.Drawing.Point(12, 159);
+            this.unmedCheck15.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.unmedCheck15.Name = "unmedCheck15";
-            this.unmedCheck15.Size = new System.Drawing.Size(89, 17);
+            this.unmedCheck15.Size = new System.Drawing.Size(113, 21);
             this.unmedCheck15.TabIndex = 5;
             this.unmedCheck15.Text = "Unmedicated";
             this.unmedCheck15.UseVisualStyleBackColor = true;
@@ -687,9 +742,10 @@ namespace BioPacVideo
             // medCheck15
             // 
             this.medCheck15.AutoSize = true;
-            this.medCheck15.Location = new System.Drawing.Point(9, 106);
+            this.medCheck15.Location = new System.Drawing.Point(12, 130);
+            this.medCheck15.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.medCheck15.Name = "medCheck15";
-            this.medCheck15.Size = new System.Drawing.Size(76, 17);
+            this.medCheck15.Size = new System.Drawing.Size(95, 21);
             this.medCheck15.TabIndex = 4;
             this.medCheck15.Text = "Medicated";
             this.medCheck15.UseVisualStyleBackColor = true;
@@ -697,34 +753,38 @@ namespace BioPacVideo
             // 
             // weightBox15
             // 
-            this.weightBox15.Location = new System.Drawing.Point(6, 80);
+            this.weightBox15.Location = new System.Drawing.Point(8, 98);
+            this.weightBox15.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.weightBox15.Name = "weightBox15";
-            this.weightBox15.Size = new System.Drawing.Size(100, 20);
+            this.weightBox15.Size = new System.Drawing.Size(132, 22);
             this.weightBox15.TabIndex = 3;
             this.weightBox15.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(6, 64);
+            this.label17.Location = new System.Drawing.Point(8, 79);
+            this.label17.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(56, 13);
+            this.label17.Size = new System.Drawing.Size(74, 17);
             this.label17.TabIndex = 2;
             this.label17.Text = "Weight (g)";
             // 
             // animalID15
             // 
-            this.animalID15.Location = new System.Drawing.Point(6, 32);
+            this.animalID15.Location = new System.Drawing.Point(8, 39);
+            this.animalID15.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.animalID15.Name = "animalID15";
-            this.animalID15.Size = new System.Drawing.Size(100, 20);
+            this.animalID15.Size = new System.Drawing.Size(132, 22);
             this.animalID15.TabIndex = 1;
             // 
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(6, 16);
+            this.label18.Location = new System.Drawing.Point(8, 20);
+            this.label18.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(52, 13);
+            this.label18.Size = new System.Drawing.Size(67, 17);
             this.label18.TabIndex = 0;
             this.label18.Text = "Animal ID";
             // 
@@ -738,35 +798,40 @@ namespace BioPacVideo
             this.groupBox3.Controls.Add(this.label20);
             this.groupBox3.Controls.Add(this.animalID3);
             this.groupBox3.Controls.Add(this.label21);
-            this.groupBox3.Location = new System.Drawing.Point(382, 27);
+            this.groupBox3.Location = new System.Drawing.Point(509, 33);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(117, 178);
-            this.groupBox3.TabIndex = 7;
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox3.Size = new System.Drawing.Size(156, 219);
+            this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             // 
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(63, 155);
+            this.label19.Location = new System.Drawing.Point(84, 191);
+            this.label19.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(44, 13);
+            this.label19.Size = new System.Drawing.Size(58, 17);
             this.label19.TabIndex = 1;
             this.label19.Text = "% Meds";
             // 
             // percentBox3
             // 
-            this.percentBox3.Location = new System.Drawing.Point(9, 152);
+            this.percentBox3.Location = new System.Drawing.Point(12, 187);
+            this.percentBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.percentBox3.Name = "percentBox3";
-            this.percentBox3.Size = new System.Drawing.Size(53, 20);
+            this.percentBox3.Size = new System.Drawing.Size(69, 22);
             this.percentBox3.TabIndex = 6;
             this.percentBox3.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck3
             // 
             this.unmedCheck3.AutoSize = true;
-            this.unmedCheck3.Location = new System.Drawing.Point(9, 129);
+            this.unmedCheck3.Location = new System.Drawing.Point(12, 159);
+            this.unmedCheck3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.unmedCheck3.Name = "unmedCheck3";
-            this.unmedCheck3.Size = new System.Drawing.Size(89, 17);
+            this.unmedCheck3.Size = new System.Drawing.Size(113, 21);
             this.unmedCheck3.TabIndex = 5;
             this.unmedCheck3.Text = "Unmedicated";
             this.unmedCheck3.UseVisualStyleBackColor = true;
@@ -775,9 +840,10 @@ namespace BioPacVideo
             // medCheck3
             // 
             this.medCheck3.AutoSize = true;
-            this.medCheck3.Location = new System.Drawing.Point(9, 106);
+            this.medCheck3.Location = new System.Drawing.Point(12, 130);
+            this.medCheck3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.medCheck3.Name = "medCheck3";
-            this.medCheck3.Size = new System.Drawing.Size(76, 17);
+            this.medCheck3.Size = new System.Drawing.Size(95, 21);
             this.medCheck3.TabIndex = 4;
             this.medCheck3.Text = "Medicated";
             this.medCheck3.UseVisualStyleBackColor = true;
@@ -785,34 +851,38 @@ namespace BioPacVideo
             // 
             // weightBox3
             // 
-            this.weightBox3.Location = new System.Drawing.Point(6, 80);
+            this.weightBox3.Location = new System.Drawing.Point(8, 98);
+            this.weightBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.weightBox3.Name = "weightBox3";
-            this.weightBox3.Size = new System.Drawing.Size(100, 20);
+            this.weightBox3.Size = new System.Drawing.Size(132, 22);
             this.weightBox3.TabIndex = 3;
             this.weightBox3.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(6, 64);
+            this.label20.Location = new System.Drawing.Point(8, 79);
+            this.label20.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(56, 13);
+            this.label20.Size = new System.Drawing.Size(74, 17);
             this.label20.TabIndex = 2;
             this.label20.Text = "Weight (g)";
             // 
             // animalID3
             // 
-            this.animalID3.Location = new System.Drawing.Point(6, 32);
+            this.animalID3.Location = new System.Drawing.Point(8, 39);
+            this.animalID3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.animalID3.Name = "animalID3";
-            this.animalID3.Size = new System.Drawing.Size(100, 20);
+            this.animalID3.Size = new System.Drawing.Size(132, 22);
             this.animalID3.TabIndex = 1;
             // 
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(6, 16);
+            this.label21.Location = new System.Drawing.Point(8, 20);
+            this.label21.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(52, 13);
+            this.label21.Size = new System.Drawing.Size(67, 17);
             this.label21.TabIndex = 0;
             this.label21.Text = "Animal ID";
             // 
@@ -826,35 +896,40 @@ namespace BioPacVideo
             this.groupBox4.Controls.Add(this.label23);
             this.groupBox4.Controls.Add(this.animalID4);
             this.groupBox4.Controls.Add(this.label24);
-            this.groupBox4.Location = new System.Drawing.Point(516, 27);
+            this.groupBox4.Location = new System.Drawing.Point(688, 33);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(117, 178);
-            this.groupBox4.TabIndex = 7;
+            this.groupBox4.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox4.Size = new System.Drawing.Size(156, 219);
+            this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
             // 
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(62, 155);
+            this.label22.Location = new System.Drawing.Point(83, 191);
+            this.label22.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(44, 13);
+            this.label22.Size = new System.Drawing.Size(58, 17);
             this.label22.TabIndex = 1;
             this.label22.Text = "% Meds";
             // 
             // percentBox4
             // 
-            this.percentBox4.Location = new System.Drawing.Point(9, 152);
+            this.percentBox4.Location = new System.Drawing.Point(12, 187);
+            this.percentBox4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.percentBox4.Name = "percentBox4";
-            this.percentBox4.Size = new System.Drawing.Size(53, 20);
+            this.percentBox4.Size = new System.Drawing.Size(69, 22);
             this.percentBox4.TabIndex = 6;
             this.percentBox4.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck4
             // 
             this.unmedCheck4.AutoSize = true;
-            this.unmedCheck4.Location = new System.Drawing.Point(9, 129);
+            this.unmedCheck4.Location = new System.Drawing.Point(12, 159);
+            this.unmedCheck4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.unmedCheck4.Name = "unmedCheck4";
-            this.unmedCheck4.Size = new System.Drawing.Size(89, 17);
+            this.unmedCheck4.Size = new System.Drawing.Size(113, 21);
             this.unmedCheck4.TabIndex = 5;
             this.unmedCheck4.Text = "Unmedicated";
             this.unmedCheck4.UseVisualStyleBackColor = true;
@@ -863,9 +938,10 @@ namespace BioPacVideo
             // medCheck4
             // 
             this.medCheck4.AutoSize = true;
-            this.medCheck4.Location = new System.Drawing.Point(9, 106);
+            this.medCheck4.Location = new System.Drawing.Point(12, 130);
+            this.medCheck4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.medCheck4.Name = "medCheck4";
-            this.medCheck4.Size = new System.Drawing.Size(76, 17);
+            this.medCheck4.Size = new System.Drawing.Size(95, 21);
             this.medCheck4.TabIndex = 4;
             this.medCheck4.Text = "Medicated";
             this.medCheck4.UseVisualStyleBackColor = true;
@@ -873,34 +949,38 @@ namespace BioPacVideo
             // 
             // weightBox4
             // 
-            this.weightBox4.Location = new System.Drawing.Point(6, 80);
+            this.weightBox4.Location = new System.Drawing.Point(8, 98);
+            this.weightBox4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.weightBox4.Name = "weightBox4";
-            this.weightBox4.Size = new System.Drawing.Size(100, 20);
+            this.weightBox4.Size = new System.Drawing.Size(132, 22);
             this.weightBox4.TabIndex = 3;
             this.weightBox4.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(6, 64);
+            this.label23.Location = new System.Drawing.Point(8, 79);
+            this.label23.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(56, 13);
+            this.label23.Size = new System.Drawing.Size(74, 17);
             this.label23.TabIndex = 2;
             this.label23.Text = "Weight (g)";
             // 
             // animalID4
             // 
-            this.animalID4.Location = new System.Drawing.Point(6, 32);
+            this.animalID4.Location = new System.Drawing.Point(8, 39);
+            this.animalID4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.animalID4.Name = "animalID4";
-            this.animalID4.Size = new System.Drawing.Size(100, 20);
+            this.animalID4.Size = new System.Drawing.Size(132, 22);
             this.animalID4.TabIndex = 1;
             // 
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(6, 16);
+            this.label24.Location = new System.Drawing.Point(8, 20);
+            this.label24.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(52, 13);
+            this.label24.Size = new System.Drawing.Size(67, 17);
             this.label24.TabIndex = 0;
             this.label24.Text = "Animal ID";
             // 
@@ -914,35 +994,40 @@ namespace BioPacVideo
             this.groupBox5.Controls.Add(this.label26);
             this.groupBox5.Controls.Add(this.animalID5);
             this.groupBox5.Controls.Add(this.label27);
-            this.groupBox5.Location = new System.Drawing.Point(655, 23);
+            this.groupBox5.Location = new System.Drawing.Point(873, 28);
+            this.groupBox5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(117, 178);
-            this.groupBox5.TabIndex = 7;
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox5.Size = new System.Drawing.Size(156, 219);
+            this.groupBox5.TabIndex = 4;
             this.groupBox5.TabStop = false;
             // 
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(62, 155);
+            this.label25.Location = new System.Drawing.Point(83, 191);
+            this.label25.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(44, 13);
+            this.label25.Size = new System.Drawing.Size(58, 17);
             this.label25.TabIndex = 1;
             this.label25.Text = "% Meds";
             // 
             // percentBox5
             // 
-            this.percentBox5.Location = new System.Drawing.Point(9, 152);
+            this.percentBox5.Location = new System.Drawing.Point(12, 187);
+            this.percentBox5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.percentBox5.Name = "percentBox5";
-            this.percentBox5.Size = new System.Drawing.Size(53, 20);
+            this.percentBox5.Size = new System.Drawing.Size(69, 22);
             this.percentBox5.TabIndex = 6;
             this.percentBox5.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck5
             // 
             this.unmedCheck5.AutoSize = true;
-            this.unmedCheck5.Location = new System.Drawing.Point(9, 129);
+            this.unmedCheck5.Location = new System.Drawing.Point(12, 159);
+            this.unmedCheck5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.unmedCheck5.Name = "unmedCheck5";
-            this.unmedCheck5.Size = new System.Drawing.Size(89, 17);
+            this.unmedCheck5.Size = new System.Drawing.Size(113, 21);
             this.unmedCheck5.TabIndex = 5;
             this.unmedCheck5.Text = "Unmedicated";
             this.unmedCheck5.UseVisualStyleBackColor = true;
@@ -951,9 +1036,10 @@ namespace BioPacVideo
             // medCheck5
             // 
             this.medCheck5.AutoSize = true;
-            this.medCheck5.Location = new System.Drawing.Point(9, 106);
+            this.medCheck5.Location = new System.Drawing.Point(12, 130);
+            this.medCheck5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.medCheck5.Name = "medCheck5";
-            this.medCheck5.Size = new System.Drawing.Size(76, 17);
+            this.medCheck5.Size = new System.Drawing.Size(95, 21);
             this.medCheck5.TabIndex = 4;
             this.medCheck5.Text = "Medicated";
             this.medCheck5.UseVisualStyleBackColor = true;
@@ -961,34 +1047,38 @@ namespace BioPacVideo
             // 
             // weightBox5
             // 
-            this.weightBox5.Location = new System.Drawing.Point(6, 80);
+            this.weightBox5.Location = new System.Drawing.Point(8, 98);
+            this.weightBox5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.weightBox5.Name = "weightBox5";
-            this.weightBox5.Size = new System.Drawing.Size(100, 20);
+            this.weightBox5.Size = new System.Drawing.Size(132, 22);
             this.weightBox5.TabIndex = 3;
             this.weightBox5.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(6, 64);
+            this.label26.Location = new System.Drawing.Point(8, 79);
+            this.label26.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(56, 13);
+            this.label26.Size = new System.Drawing.Size(74, 17);
             this.label26.TabIndex = 2;
             this.label26.Text = "Weight (g)";
             // 
             // animalID5
             // 
-            this.animalID5.Location = new System.Drawing.Point(6, 32);
+            this.animalID5.Location = new System.Drawing.Point(8, 39);
+            this.animalID5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.animalID5.Name = "animalID5";
-            this.animalID5.Size = new System.Drawing.Size(100, 20);
+            this.animalID5.Size = new System.Drawing.Size(132, 22);
             this.animalID5.TabIndex = 1;
             // 
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(6, 16);
+            this.label27.Location = new System.Drawing.Point(8, 20);
+            this.label27.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(52, 13);
+            this.label27.Size = new System.Drawing.Size(67, 17);
             this.label27.TabIndex = 0;
             this.label27.Text = "Animal ID";
             // 
@@ -1002,35 +1092,40 @@ namespace BioPacVideo
             this.groupBox7.Controls.Add(this.label29);
             this.groupBox7.Controls.Add(this.animalID7);
             this.groupBox7.Controls.Add(this.label30);
-            this.groupBox7.Location = new System.Drawing.Point(937, 23);
+            this.groupBox7.Location = new System.Drawing.Point(1249, 28);
+            this.groupBox7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(117, 178);
-            this.groupBox7.TabIndex = 7;
+            this.groupBox7.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox7.Size = new System.Drawing.Size(156, 219);
+            this.groupBox7.TabIndex = 6;
             this.groupBox7.TabStop = false;
             // 
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(62, 156);
+            this.label28.Location = new System.Drawing.Point(83, 192);
+            this.label28.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(44, 13);
+            this.label28.Size = new System.Drawing.Size(58, 17);
             this.label28.TabIndex = 1;
             this.label28.Text = "% Meds";
             // 
             // percentBox7
             // 
-            this.percentBox7.Location = new System.Drawing.Point(9, 152);
+            this.percentBox7.Location = new System.Drawing.Point(12, 187);
+            this.percentBox7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.percentBox7.Name = "percentBox7";
-            this.percentBox7.Size = new System.Drawing.Size(53, 20);
+            this.percentBox7.Size = new System.Drawing.Size(69, 22);
             this.percentBox7.TabIndex = 6;
             this.percentBox7.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck7
             // 
             this.unmedCheck7.AutoSize = true;
-            this.unmedCheck7.Location = new System.Drawing.Point(9, 129);
+            this.unmedCheck7.Location = new System.Drawing.Point(12, 159);
+            this.unmedCheck7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.unmedCheck7.Name = "unmedCheck7";
-            this.unmedCheck7.Size = new System.Drawing.Size(89, 17);
+            this.unmedCheck7.Size = new System.Drawing.Size(113, 21);
             this.unmedCheck7.TabIndex = 5;
             this.unmedCheck7.Text = "Unmedicated";
             this.unmedCheck7.UseVisualStyleBackColor = true;
@@ -1039,9 +1134,10 @@ namespace BioPacVideo
             // medCheck7
             // 
             this.medCheck7.AutoSize = true;
-            this.medCheck7.Location = new System.Drawing.Point(9, 106);
+            this.medCheck7.Location = new System.Drawing.Point(12, 130);
+            this.medCheck7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.medCheck7.Name = "medCheck7";
-            this.medCheck7.Size = new System.Drawing.Size(76, 17);
+            this.medCheck7.Size = new System.Drawing.Size(95, 21);
             this.medCheck7.TabIndex = 4;
             this.medCheck7.Text = "Medicated";
             this.medCheck7.UseVisualStyleBackColor = true;
@@ -1049,34 +1145,38 @@ namespace BioPacVideo
             // 
             // weightBox7
             // 
-            this.weightBox7.Location = new System.Drawing.Point(6, 80);
+            this.weightBox7.Location = new System.Drawing.Point(8, 98);
+            this.weightBox7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.weightBox7.Name = "weightBox7";
-            this.weightBox7.Size = new System.Drawing.Size(100, 20);
+            this.weightBox7.Size = new System.Drawing.Size(132, 22);
             this.weightBox7.TabIndex = 3;
             this.weightBox7.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label29
             // 
             this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(6, 64);
+            this.label29.Location = new System.Drawing.Point(8, 79);
+            this.label29.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(56, 13);
+            this.label29.Size = new System.Drawing.Size(74, 17);
             this.label29.TabIndex = 2;
             this.label29.Text = "Weight (g)";
             // 
             // animalID7
             // 
-            this.animalID7.Location = new System.Drawing.Point(6, 32);
+            this.animalID7.Location = new System.Drawing.Point(8, 39);
+            this.animalID7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.animalID7.Name = "animalID7";
-            this.animalID7.Size = new System.Drawing.Size(100, 20);
+            this.animalID7.Size = new System.Drawing.Size(132, 22);
             this.animalID7.TabIndex = 1;
             // 
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(6, 16);
+            this.label30.Location = new System.Drawing.Point(8, 20);
+            this.label30.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(52, 13);
+            this.label30.Size = new System.Drawing.Size(67, 17);
             this.label30.TabIndex = 0;
             this.label30.Text = "Animal ID";
             // 
@@ -1090,35 +1190,40 @@ namespace BioPacVideo
             this.groupBox6.Controls.Add(this.label32);
             this.groupBox6.Controls.Add(this.animalID6);
             this.groupBox6.Controls.Add(this.label33);
-            this.groupBox6.Location = new System.Drawing.Point(798, 23);
+            this.groupBox6.Location = new System.Drawing.Point(1064, 28);
+            this.groupBox6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(117, 178);
-            this.groupBox6.TabIndex = 7;
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox6.Size = new System.Drawing.Size(156, 219);
+            this.groupBox6.TabIndex = 5;
             this.groupBox6.TabStop = false;
             // 
             // label31
             // 
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(62, 155);
+            this.label31.Location = new System.Drawing.Point(83, 191);
+            this.label31.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(44, 13);
+            this.label31.Size = new System.Drawing.Size(58, 17);
             this.label31.TabIndex = 1;
             this.label31.Text = "% Meds";
             // 
             // percentBox6
             // 
-            this.percentBox6.Location = new System.Drawing.Point(9, 152);
+            this.percentBox6.Location = new System.Drawing.Point(12, 187);
+            this.percentBox6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.percentBox6.Name = "percentBox6";
-            this.percentBox6.Size = new System.Drawing.Size(53, 20);
+            this.percentBox6.Size = new System.Drawing.Size(69, 22);
             this.percentBox6.TabIndex = 6;
             this.percentBox6.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck6
             // 
             this.unmedCheck6.AutoSize = true;
-            this.unmedCheck6.Location = new System.Drawing.Point(9, 129);
+            this.unmedCheck6.Location = new System.Drawing.Point(12, 159);
+            this.unmedCheck6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.unmedCheck6.Name = "unmedCheck6";
-            this.unmedCheck6.Size = new System.Drawing.Size(89, 17);
+            this.unmedCheck6.Size = new System.Drawing.Size(113, 21);
             this.unmedCheck6.TabIndex = 5;
             this.unmedCheck6.Text = "Unmedicated";
             this.unmedCheck6.UseVisualStyleBackColor = true;
@@ -1127,9 +1232,10 @@ namespace BioPacVideo
             // medCheck6
             // 
             this.medCheck6.AutoSize = true;
-            this.medCheck6.Location = new System.Drawing.Point(9, 106);
+            this.medCheck6.Location = new System.Drawing.Point(12, 130);
+            this.medCheck6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.medCheck6.Name = "medCheck6";
-            this.medCheck6.Size = new System.Drawing.Size(76, 17);
+            this.medCheck6.Size = new System.Drawing.Size(95, 21);
             this.medCheck6.TabIndex = 4;
             this.medCheck6.Text = "Medicated";
             this.medCheck6.UseVisualStyleBackColor = true;
@@ -1137,34 +1243,38 @@ namespace BioPacVideo
             // 
             // weightBox6
             // 
-            this.weightBox6.Location = new System.Drawing.Point(6, 80);
+            this.weightBox6.Location = new System.Drawing.Point(8, 98);
+            this.weightBox6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.weightBox6.Name = "weightBox6";
-            this.weightBox6.Size = new System.Drawing.Size(100, 20);
+            this.weightBox6.Size = new System.Drawing.Size(132, 22);
             this.weightBox6.TabIndex = 3;
             this.weightBox6.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(6, 64);
+            this.label32.Location = new System.Drawing.Point(8, 79);
+            this.label32.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(56, 13);
+            this.label32.Size = new System.Drawing.Size(74, 17);
             this.label32.TabIndex = 2;
             this.label32.Text = "Weight (g)";
             // 
             // animalID6
             // 
-            this.animalID6.Location = new System.Drawing.Point(6, 32);
+            this.animalID6.Location = new System.Drawing.Point(8, 39);
+            this.animalID6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.animalID6.Name = "animalID6";
-            this.animalID6.Size = new System.Drawing.Size(100, 20);
+            this.animalID6.Size = new System.Drawing.Size(132, 22);
             this.animalID6.TabIndex = 1;
             // 
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(6, 16);
+            this.label33.Location = new System.Drawing.Point(8, 20);
+            this.label33.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(52, 13);
+            this.label33.Size = new System.Drawing.Size(67, 17);
             this.label33.TabIndex = 0;
             this.label33.Text = "Animal ID";
             // 
@@ -1178,35 +1288,40 @@ namespace BioPacVideo
             this.groupBox2.Controls.Add(this.label35);
             this.groupBox2.Controls.Add(this.animalID2);
             this.groupBox2.Controls.Add(this.label36);
-            this.groupBox2.Location = new System.Drawing.Point(244, 27);
+            this.groupBox2.Location = new System.Drawing.Point(325, 33);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(117, 178);
-            this.groupBox2.TabIndex = 8;
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Size = new System.Drawing.Size(156, 219);
+            this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             // 
             // label34
             // 
             this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(62, 155);
+            this.label34.Location = new System.Drawing.Point(83, 191);
+            this.label34.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(44, 13);
+            this.label34.Size = new System.Drawing.Size(58, 17);
             this.label34.TabIndex = 1;
             this.label34.Text = "% Meds";
             // 
             // percentBox2
             // 
-            this.percentBox2.Location = new System.Drawing.Point(9, 152);
+            this.percentBox2.Location = new System.Drawing.Point(12, 187);
+            this.percentBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.percentBox2.Name = "percentBox2";
-            this.percentBox2.Size = new System.Drawing.Size(53, 20);
+            this.percentBox2.Size = new System.Drawing.Size(69, 22);
             this.percentBox2.TabIndex = 6;
             this.percentBox2.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck2
             // 
             this.unmedCheck2.AutoSize = true;
-            this.unmedCheck2.Location = new System.Drawing.Point(9, 129);
+            this.unmedCheck2.Location = new System.Drawing.Point(12, 159);
+            this.unmedCheck2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.unmedCheck2.Name = "unmedCheck2";
-            this.unmedCheck2.Size = new System.Drawing.Size(89, 17);
+            this.unmedCheck2.Size = new System.Drawing.Size(113, 21);
             this.unmedCheck2.TabIndex = 5;
             this.unmedCheck2.Text = "Unmedicated";
             this.unmedCheck2.UseVisualStyleBackColor = true;
@@ -1215,9 +1330,10 @@ namespace BioPacVideo
             // medCheck2
             // 
             this.medCheck2.AutoSize = true;
-            this.medCheck2.Location = new System.Drawing.Point(9, 106);
+            this.medCheck2.Location = new System.Drawing.Point(12, 130);
+            this.medCheck2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.medCheck2.Name = "medCheck2";
-            this.medCheck2.Size = new System.Drawing.Size(76, 17);
+            this.medCheck2.Size = new System.Drawing.Size(95, 21);
             this.medCheck2.TabIndex = 4;
             this.medCheck2.Text = "Medicated";
             this.medCheck2.UseVisualStyleBackColor = true;
@@ -1225,34 +1341,38 @@ namespace BioPacVideo
             // 
             // weightBox2
             // 
-            this.weightBox2.Location = new System.Drawing.Point(6, 80);
+            this.weightBox2.Location = new System.Drawing.Point(8, 98);
+            this.weightBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.weightBox2.Name = "weightBox2";
-            this.weightBox2.Size = new System.Drawing.Size(100, 20);
+            this.weightBox2.Size = new System.Drawing.Size(132, 22);
             this.weightBox2.TabIndex = 3;
             this.weightBox2.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label35
             // 
             this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(6, 64);
+            this.label35.Location = new System.Drawing.Point(8, 79);
+            this.label35.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(56, 13);
+            this.label35.Size = new System.Drawing.Size(74, 17);
             this.label35.TabIndex = 2;
             this.label35.Text = "Weight (g)";
             // 
             // animalID2
             // 
-            this.animalID2.Location = new System.Drawing.Point(6, 32);
+            this.animalID2.Location = new System.Drawing.Point(8, 39);
+            this.animalID2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.animalID2.Name = "animalID2";
-            this.animalID2.Size = new System.Drawing.Size(100, 20);
+            this.animalID2.Size = new System.Drawing.Size(132, 22);
             this.animalID2.TabIndex = 1;
             // 
             // label36
             // 
             this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(6, 16);
+            this.label36.Location = new System.Drawing.Point(8, 20);
+            this.label36.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(52, 13);
+            this.label36.Size = new System.Drawing.Size(67, 17);
             this.label36.TabIndex = 0;
             this.label36.Text = "Animal ID";
             // 
@@ -1266,35 +1386,40 @@ namespace BioPacVideo
             this.groupBox10.Controls.Add(this.label38);
             this.groupBox10.Controls.Add(this.animalID10);
             this.groupBox10.Controls.Add(this.label39);
-            this.groupBox10.Location = new System.Drawing.Point(244, 212);
+            this.groupBox10.Location = new System.Drawing.Point(325, 261);
+            this.groupBox10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(117, 178);
-            this.groupBox10.TabIndex = 7;
+            this.groupBox10.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox10.Size = new System.Drawing.Size(156, 219);
+            this.groupBox10.TabIndex = 9;
             this.groupBox10.TabStop = false;
             // 
             // label37
             // 
             this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(62, 155);
+            this.label37.Location = new System.Drawing.Point(83, 191);
+            this.label37.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(44, 13);
+            this.label37.Size = new System.Drawing.Size(58, 17);
             this.label37.TabIndex = 1;
             this.label37.Text = "% Meds";
             // 
             // percentBox10
             // 
-            this.percentBox10.Location = new System.Drawing.Point(9, 152);
+            this.percentBox10.Location = new System.Drawing.Point(12, 187);
+            this.percentBox10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.percentBox10.Name = "percentBox10";
-            this.percentBox10.Size = new System.Drawing.Size(53, 20);
+            this.percentBox10.Size = new System.Drawing.Size(69, 22);
             this.percentBox10.TabIndex = 6;
             this.percentBox10.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck10
             // 
             this.unmedCheck10.AutoSize = true;
-            this.unmedCheck10.Location = new System.Drawing.Point(9, 129);
+            this.unmedCheck10.Location = new System.Drawing.Point(12, 159);
+            this.unmedCheck10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.unmedCheck10.Name = "unmedCheck10";
-            this.unmedCheck10.Size = new System.Drawing.Size(89, 17);
+            this.unmedCheck10.Size = new System.Drawing.Size(113, 21);
             this.unmedCheck10.TabIndex = 5;
             this.unmedCheck10.Text = "Unmedicated";
             this.unmedCheck10.UseVisualStyleBackColor = true;
@@ -1303,9 +1428,10 @@ namespace BioPacVideo
             // medCheck10
             // 
             this.medCheck10.AutoSize = true;
-            this.medCheck10.Location = new System.Drawing.Point(9, 106);
+            this.medCheck10.Location = new System.Drawing.Point(12, 130);
+            this.medCheck10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.medCheck10.Name = "medCheck10";
-            this.medCheck10.Size = new System.Drawing.Size(76, 17);
+            this.medCheck10.Size = new System.Drawing.Size(95, 21);
             this.medCheck10.TabIndex = 4;
             this.medCheck10.Text = "Medicated";
             this.medCheck10.UseVisualStyleBackColor = true;
@@ -1313,34 +1439,38 @@ namespace BioPacVideo
             // 
             // weightBox10
             // 
-            this.weightBox10.Location = new System.Drawing.Point(6, 80);
+            this.weightBox10.Location = new System.Drawing.Point(8, 98);
+            this.weightBox10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.weightBox10.Name = "weightBox10";
-            this.weightBox10.Size = new System.Drawing.Size(100, 20);
+            this.weightBox10.Size = new System.Drawing.Size(132, 22);
             this.weightBox10.TabIndex = 3;
             this.weightBox10.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label38
             // 
             this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(6, 64);
+            this.label38.Location = new System.Drawing.Point(8, 79);
+            this.label38.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(56, 13);
+            this.label38.Size = new System.Drawing.Size(74, 17);
             this.label38.TabIndex = 2;
             this.label38.Text = "Weight (g)";
             // 
             // animalID10
             // 
-            this.animalID10.Location = new System.Drawing.Point(6, 32);
+            this.animalID10.Location = new System.Drawing.Point(8, 39);
+            this.animalID10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.animalID10.Name = "animalID10";
-            this.animalID10.Size = new System.Drawing.Size(100, 20);
+            this.animalID10.Size = new System.Drawing.Size(132, 22);
             this.animalID10.TabIndex = 1;
             // 
             // label39
             // 
             this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(6, 16);
+            this.label39.Location = new System.Drawing.Point(8, 20);
+            this.label39.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(52, 13);
+            this.label39.Size = new System.Drawing.Size(67, 17);
             this.label39.TabIndex = 0;
             this.label39.Text = "Animal ID";
             // 
@@ -1354,35 +1484,40 @@ namespace BioPacVideo
             this.groupBox9.Controls.Add(this.label41);
             this.groupBox9.Controls.Add(this.animalID9);
             this.groupBox9.Controls.Add(this.label42);
-            this.groupBox9.Location = new System.Drawing.Point(109, 212);
+            this.groupBox9.Location = new System.Drawing.Point(145, 261);
+            this.groupBox9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(117, 178);
-            this.groupBox9.TabIndex = 7;
+            this.groupBox9.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox9.Size = new System.Drawing.Size(156, 219);
+            this.groupBox9.TabIndex = 8;
             this.groupBox9.TabStop = false;
             // 
             // label40
             // 
             this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(63, 155);
+            this.label40.Location = new System.Drawing.Point(84, 191);
+            this.label40.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(44, 13);
+            this.label40.Size = new System.Drawing.Size(58, 17);
             this.label40.TabIndex = 1;
             this.label40.Text = "% Meds";
             // 
             // percentBox9
             // 
-            this.percentBox9.Location = new System.Drawing.Point(9, 152);
+            this.percentBox9.Location = new System.Drawing.Point(12, 187);
+            this.percentBox9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.percentBox9.Name = "percentBox9";
-            this.percentBox9.Size = new System.Drawing.Size(53, 20);
+            this.percentBox9.Size = new System.Drawing.Size(69, 22);
             this.percentBox9.TabIndex = 6;
             this.percentBox9.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck9
             // 
             this.unmedCheck9.AutoSize = true;
-            this.unmedCheck9.Location = new System.Drawing.Point(9, 129);
+            this.unmedCheck9.Location = new System.Drawing.Point(12, 159);
+            this.unmedCheck9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.unmedCheck9.Name = "unmedCheck9";
-            this.unmedCheck9.Size = new System.Drawing.Size(89, 17);
+            this.unmedCheck9.Size = new System.Drawing.Size(113, 21);
             this.unmedCheck9.TabIndex = 5;
             this.unmedCheck9.Text = "Unmedicated";
             this.unmedCheck9.UseVisualStyleBackColor = true;
@@ -1391,9 +1526,10 @@ namespace BioPacVideo
             // medCheck9
             // 
             this.medCheck9.AutoSize = true;
-            this.medCheck9.Location = new System.Drawing.Point(9, 106);
+            this.medCheck9.Location = new System.Drawing.Point(12, 130);
+            this.medCheck9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.medCheck9.Name = "medCheck9";
-            this.medCheck9.Size = new System.Drawing.Size(76, 17);
+            this.medCheck9.Size = new System.Drawing.Size(95, 21);
             this.medCheck9.TabIndex = 4;
             this.medCheck9.Text = "Medicated";
             this.medCheck9.UseVisualStyleBackColor = true;
@@ -1401,34 +1537,38 @@ namespace BioPacVideo
             // 
             // weightBox9
             // 
-            this.weightBox9.Location = new System.Drawing.Point(6, 80);
+            this.weightBox9.Location = new System.Drawing.Point(8, 98);
+            this.weightBox9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.weightBox9.Name = "weightBox9";
-            this.weightBox9.Size = new System.Drawing.Size(100, 20);
+            this.weightBox9.Size = new System.Drawing.Size(132, 22);
             this.weightBox9.TabIndex = 3;
             this.weightBox9.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label41
             // 
             this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(6, 64);
+            this.label41.Location = new System.Drawing.Point(8, 79);
+            this.label41.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(56, 13);
+            this.label41.Size = new System.Drawing.Size(74, 17);
             this.label41.TabIndex = 2;
             this.label41.Text = "Weight (g)";
             // 
             // animalID9
             // 
-            this.animalID9.Location = new System.Drawing.Point(6, 32);
+            this.animalID9.Location = new System.Drawing.Point(8, 39);
+            this.animalID9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.animalID9.Name = "animalID9";
-            this.animalID9.Size = new System.Drawing.Size(100, 20);
+            this.animalID9.Size = new System.Drawing.Size(132, 22);
             this.animalID9.TabIndex = 1;
             // 
             // label42
             // 
             this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(6, 16);
+            this.label42.Location = new System.Drawing.Point(8, 20);
+            this.label42.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(52, 13);
+            this.label42.Size = new System.Drawing.Size(67, 17);
             this.label42.TabIndex = 0;
             this.label42.Text = "Animal ID";
             // 
@@ -1442,35 +1582,40 @@ namespace BioPacVideo
             this.groupBox16.Controls.Add(this.label44);
             this.groupBox16.Controls.Add(this.animalID16);
             this.groupBox16.Controls.Add(this.label45);
-            this.groupBox16.Location = new System.Drawing.Point(1076, 212);
+            this.groupBox16.Location = new System.Drawing.Point(1435, 261);
+            this.groupBox16.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox16.Name = "groupBox16";
-            this.groupBox16.Size = new System.Drawing.Size(117, 178);
-            this.groupBox16.TabIndex = 7;
+            this.groupBox16.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox16.Size = new System.Drawing.Size(156, 219);
+            this.groupBox16.TabIndex = 15;
             this.groupBox16.TabStop = false;
             // 
             // label43
             // 
             this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(62, 155);
+            this.label43.Location = new System.Drawing.Point(83, 191);
+            this.label43.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(44, 13);
+            this.label43.Size = new System.Drawing.Size(58, 17);
             this.label43.TabIndex = 1;
             this.label43.Text = "% Meds";
             // 
             // percentBox16
             // 
-            this.percentBox16.Location = new System.Drawing.Point(9, 152);
+            this.percentBox16.Location = new System.Drawing.Point(12, 187);
+            this.percentBox16.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.percentBox16.Name = "percentBox16";
-            this.percentBox16.Size = new System.Drawing.Size(53, 20);
+            this.percentBox16.Size = new System.Drawing.Size(69, 22);
             this.percentBox16.TabIndex = 6;
             this.percentBox16.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck16
             // 
             this.unmedCheck16.AutoSize = true;
-            this.unmedCheck16.Location = new System.Drawing.Point(9, 129);
+            this.unmedCheck16.Location = new System.Drawing.Point(12, 159);
+            this.unmedCheck16.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.unmedCheck16.Name = "unmedCheck16";
-            this.unmedCheck16.Size = new System.Drawing.Size(89, 17);
+            this.unmedCheck16.Size = new System.Drawing.Size(113, 21);
             this.unmedCheck16.TabIndex = 5;
             this.unmedCheck16.Text = "Unmedicated";
             this.unmedCheck16.UseVisualStyleBackColor = true;
@@ -1479,9 +1624,10 @@ namespace BioPacVideo
             // medCheck16
             // 
             this.medCheck16.AutoSize = true;
-            this.medCheck16.Location = new System.Drawing.Point(9, 106);
+            this.medCheck16.Location = new System.Drawing.Point(12, 130);
+            this.medCheck16.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.medCheck16.Name = "medCheck16";
-            this.medCheck16.Size = new System.Drawing.Size(76, 17);
+            this.medCheck16.Size = new System.Drawing.Size(95, 21);
             this.medCheck16.TabIndex = 4;
             this.medCheck16.Text = "Medicated";
             this.medCheck16.UseVisualStyleBackColor = true;
@@ -1489,34 +1635,38 @@ namespace BioPacVideo
             // 
             // weightBox16
             // 
-            this.weightBox16.Location = new System.Drawing.Point(6, 80);
+            this.weightBox16.Location = new System.Drawing.Point(8, 98);
+            this.weightBox16.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.weightBox16.Name = "weightBox16";
-            this.weightBox16.Size = new System.Drawing.Size(100, 20);
+            this.weightBox16.Size = new System.Drawing.Size(132, 22);
             this.weightBox16.TabIndex = 3;
             this.weightBox16.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label44
             // 
             this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(6, 64);
+            this.label44.Location = new System.Drawing.Point(8, 79);
+            this.label44.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(56, 13);
+            this.label44.Size = new System.Drawing.Size(74, 17);
             this.label44.TabIndex = 2;
             this.label44.Text = "Weight (g)";
             // 
             // animalID16
             // 
-            this.animalID16.Location = new System.Drawing.Point(6, 32);
+            this.animalID16.Location = new System.Drawing.Point(8, 39);
+            this.animalID16.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.animalID16.Name = "animalID16";
-            this.animalID16.Size = new System.Drawing.Size(100, 20);
+            this.animalID16.Size = new System.Drawing.Size(132, 22);
             this.animalID16.TabIndex = 1;
             // 
             // label45
             // 
             this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(6, 16);
+            this.label45.Location = new System.Drawing.Point(8, 20);
+            this.label45.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(52, 13);
+            this.label45.Size = new System.Drawing.Size(67, 17);
             this.label45.TabIndex = 0;
             this.label45.Text = "Animal ID";
             // 
@@ -1530,35 +1680,40 @@ namespace BioPacVideo
             this.groupBox8.Controls.Add(this.label47);
             this.groupBox8.Controls.Add(this.animalID8);
             this.groupBox8.Controls.Add(this.label48);
-            this.groupBox8.Location = new System.Drawing.Point(1076, 27);
+            this.groupBox8.Location = new System.Drawing.Point(1435, 33);
+            this.groupBox8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(117, 178);
+            this.groupBox8.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox8.Size = new System.Drawing.Size(156, 219);
             this.groupBox8.TabIndex = 7;
             this.groupBox8.TabStop = false;
             // 
             // label46
             // 
             this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(62, 155);
+            this.label46.Location = new System.Drawing.Point(83, 191);
+            this.label46.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(44, 13);
+            this.label46.Size = new System.Drawing.Size(58, 17);
             this.label46.TabIndex = 1;
             this.label46.Text = "% Meds";
             // 
             // percentBox8
             // 
-            this.percentBox8.Location = new System.Drawing.Point(9, 152);
+            this.percentBox8.Location = new System.Drawing.Point(12, 187);
+            this.percentBox8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.percentBox8.Name = "percentBox8";
-            this.percentBox8.Size = new System.Drawing.Size(53, 20);
+            this.percentBox8.Size = new System.Drawing.Size(69, 22);
             this.percentBox8.TabIndex = 6;
             this.percentBox8.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck8
             // 
             this.unmedCheck8.AutoSize = true;
-            this.unmedCheck8.Location = new System.Drawing.Point(9, 129);
+            this.unmedCheck8.Location = new System.Drawing.Point(12, 159);
+            this.unmedCheck8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.unmedCheck8.Name = "unmedCheck8";
-            this.unmedCheck8.Size = new System.Drawing.Size(89, 17);
+            this.unmedCheck8.Size = new System.Drawing.Size(113, 21);
             this.unmedCheck8.TabIndex = 5;
             this.unmedCheck8.Text = "Unmedicated";
             this.unmedCheck8.UseVisualStyleBackColor = true;
@@ -1567,9 +1722,10 @@ namespace BioPacVideo
             // medCheck8
             // 
             this.medCheck8.AutoSize = true;
-            this.medCheck8.Location = new System.Drawing.Point(9, 106);
+            this.medCheck8.Location = new System.Drawing.Point(12, 130);
+            this.medCheck8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.medCheck8.Name = "medCheck8";
-            this.medCheck8.Size = new System.Drawing.Size(76, 17);
+            this.medCheck8.Size = new System.Drawing.Size(95, 21);
             this.medCheck8.TabIndex = 4;
             this.medCheck8.Text = "Medicated";
             this.medCheck8.UseVisualStyleBackColor = true;
@@ -1577,42 +1733,47 @@ namespace BioPacVideo
             // 
             // weightBox8
             // 
-            this.weightBox8.Location = new System.Drawing.Point(6, 80);
+            this.weightBox8.Location = new System.Drawing.Point(8, 98);
+            this.weightBox8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.weightBox8.Name = "weightBox8";
-            this.weightBox8.Size = new System.Drawing.Size(100, 20);
+            this.weightBox8.Size = new System.Drawing.Size(132, 22);
             this.weightBox8.TabIndex = 3;
             this.weightBox8.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label47
             // 
             this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(6, 64);
+            this.label47.Location = new System.Drawing.Point(8, 79);
+            this.label47.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(56, 13);
+            this.label47.Size = new System.Drawing.Size(74, 17);
             this.label47.TabIndex = 2;
             this.label47.Text = "Weight (g)";
             // 
             // animalID8
             // 
-            this.animalID8.Location = new System.Drawing.Point(6, 32);
+            this.animalID8.Location = new System.Drawing.Point(8, 39);
+            this.animalID8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.animalID8.Name = "animalID8";
-            this.animalID8.Size = new System.Drawing.Size(100, 20);
+            this.animalID8.Size = new System.Drawing.Size(132, 22);
             this.animalID8.TabIndex = 1;
             // 
             // label48
             // 
             this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(6, 16);
+            this.label48.Location = new System.Drawing.Point(8, 20);
+            this.label48.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(52, 13);
+            this.label48.Size = new System.Drawing.Size(67, 17);
             this.label48.TabIndex = 0;
             this.label48.Text = "Animal ID";
             // 
             // submitButton
             // 
-            this.submitButton.Location = new System.Drawing.Point(1118, 405);
+            this.submitButton.Location = new System.Drawing.Point(1491, 498);
+            this.submitButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.submitButton.Name = "submitButton";
-            this.submitButton.Size = new System.Drawing.Size(75, 23);
+            this.submitButton.Size = new System.Drawing.Size(100, 28);
             this.submitButton.TabIndex = 9;
             this.submitButton.Text = "Submit";
             this.submitButton.UseVisualStyleBackColor = true;
@@ -1620,9 +1781,10 @@ namespace BioPacVideo
             // 
             // refreshButton
             // 
-            this.refreshButton.Location = new System.Drawing.Point(98, 39);
+            this.refreshButton.Location = new System.Drawing.Point(131, 48);
+            this.refreshButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.refreshButton.Name = "refreshButton";
-            this.refreshButton.Size = new System.Drawing.Size(105, 23);
+            this.refreshButton.Size = new System.Drawing.Size(140, 28);
             this.refreshButton.TabIndex = 11;
             this.refreshButton.Text = "Refresh Layout";
             this.refreshButton.UseVisualStyleBackColor = true;
@@ -1634,42 +1796,47 @@ namespace BioPacVideo
             this.instructText.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.instructText.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.instructText.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.instructText.Location = new System.Drawing.Point(277, 445);
+            this.instructText.Location = new System.Drawing.Point(369, 548);
+            this.instructText.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.instructText.Multiline = true;
             this.instructText.Name = "instructText";
-            this.instructText.Size = new System.Drawing.Size(100, 20);
+            this.instructText.Size = new System.Drawing.Size(133, 25);
             this.instructText.TabIndex = 12;
             // 
             // label49
             // 
             this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(154, 16);
+            this.label49.Location = new System.Drawing.Point(205, 20);
+            this.label49.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(92, 13);
+            this.label49.Size = new System.Drawing.Size(122, 17);
             this.label49.TabIndex = 20;
             this.label49.Text = "Columns of Cages";
             // 
             // label50
             // 
             this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(4, 15);
+            this.label50.Location = new System.Drawing.Point(5, 18);
+            this.label50.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(79, 13);
+            this.label50.Size = new System.Drawing.Size(102, 17);
             this.label50.TabIndex = 19;
             this.label50.Text = "Rows of Cages";
             // 
             // cages_x_text
             // 
-            this.cages_x_text.Location = new System.Drawing.Point(252, 13);
+            this.cages_x_text.Location = new System.Drawing.Point(336, 16);
+            this.cages_x_text.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cages_x_text.Name = "cages_x_text";
-            this.cages_x_text.Size = new System.Drawing.Size(39, 20);
+            this.cages_x_text.Size = new System.Drawing.Size(51, 22);
             this.cages_x_text.TabIndex = 18;
             // 
             // cages_y_text
             // 
-            this.cages_y_text.Location = new System.Drawing.Point(89, 13);
+            this.cages_y_text.Location = new System.Drawing.Point(119, 16);
+            this.cages_y_text.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cages_y_text.Name = "cages_y_text";
-            this.cages_y_text.Size = new System.Drawing.Size(39, 20);
+            this.cages_y_text.Size = new System.Drawing.Size(51, 22);
             this.cages_y_text.TabIndex = 17;
             // 
             // groupBox17
@@ -1679,18 +1846,20 @@ namespace BioPacVideo
             this.groupBox17.Controls.Add(this.refreshButton);
             this.groupBox17.Controls.Add(this.label50);
             this.groupBox17.Controls.Add(this.cages_x_text);
-            this.groupBox17.Location = new System.Drawing.Point(60, 429);
+            this.groupBox17.Location = new System.Drawing.Point(80, 528);
+            this.groupBox17.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox17.Name = "groupBox17";
-            this.groupBox17.Size = new System.Drawing.Size(301, 68);
+            this.groupBox17.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox17.Size = new System.Drawing.Size(401, 84);
             this.groupBox17.TabIndex = 21;
             this.groupBox17.TabStop = false;
             // 
             // AnimalSettings
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1230, 523);
+            this.ClientSize = new System.Drawing.Size(1640, 644);
             this.Controls.Add(this.groupBox17);
             this.Controls.Add(this.instructText);
             this.Controls.Add(this.submitButton);
@@ -1710,6 +1879,7 @@ namespace BioPacVideo
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox11);
             this.Controls.Add(this.groupBox1);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "AnimalSettings";
             this.Text = "0";
             this.TextChanged += new System.EventHandler(this.percentBox_TextChanged);

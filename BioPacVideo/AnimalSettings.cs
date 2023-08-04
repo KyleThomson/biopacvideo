@@ -178,7 +178,10 @@ namespace BioPacVideo
                 {
                     Feeder.Rats[i].Weight = temp;
                 }
-                
+                else
+                {
+                    Feeder.Rats[i].Weight = 0; //this might help the feeder code nonsense
+                }
             }
             if (error)
             {
@@ -329,7 +332,6 @@ namespace BioPacVideo
 
         private void percentBox_TextChanged(object sender, EventArgs e)
         {
-            Console.WriteLine(" "); 
             for (int i = 0; i < totalCages; i++)
             {
 
@@ -342,7 +344,6 @@ namespace BioPacVideo
                     }
                     Feeder.Rats[i].Medication = temp2;
                 }
-                Console.WriteLine(Feeder.Rats[i].Medication.ToString()); 
 
             }
         }
@@ -394,6 +395,14 @@ namespace BioPacVideo
                 animalID[k].Text = Feeder.Rats[k].ID.ToString();
                 weightBox[k].Text = Feeder.Rats[k].Weight.ToString();
                 percentBox[k].Text = Feeder.Rats[k].Medication.ToString();
+                if (animalID[k].Text == "e" || animalID[k].Text == "E" || animalID[k].Text == "")
+                {
+                    medCheck[k].Enabled = false;
+                    unmedCheck[k].Enabled = false;
+                    percentBox[k].Enabled = false;
+                    weightBox[k].Text = "0";
+                    weightBox[k].Enabled = false;
+                }
                 if (weightBox[k].Text == "" || weightBox[k].Text == "0")
                 {
 

@@ -345,6 +345,7 @@ namespace BioPacVideo
             {
                 if (MP.RecordingWanted && !MP.RecordingSuccess) // we want to be recording but the recording was unsuccessful
                 {
+                    //Console.WriteLine("We're in first if statement");
                     if (MP.VideoOff)
                     {
                         Video.StopRecording();
@@ -372,7 +373,7 @@ namespace BioPacVideo
                     //Console.WriteLine("End Reconnect Test: " + DateTime.Now.ToString());
                 }
                 //If 12AM, restart recording. 
-                else if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0))
+                if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0))
                 {
                     if (MP.IsFileWriting)
                     {
@@ -409,9 +410,10 @@ namespace BioPacVideo
                 
                 else if (Feeder.Enabled)
                 {
+                    //Console.WriteLine("we're in feeder if statement");
                     if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal1.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal1.Minutes))
                     {
-
+                        Console.WriteLine("First feeder time ackowledged");
                         Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount);
                         Thread.Sleep(120000);
                     }
