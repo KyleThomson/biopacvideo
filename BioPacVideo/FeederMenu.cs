@@ -29,20 +29,38 @@ namespace BioPacVideo
             noon = new TimeSpan(12, 00, 0);
             noon_ten = new TimeSpan(12, 10, 0);
             if (Feeder.Meal1 != TimeSpan.MaxValue)
-                IDC_Meal1.Text = Feeder.Meal1.ToString();
+            {
+                if (Feeder.Meal1 == midnight) { IDC_Meal1.Text = "No Meal"; }
+                else { IDC_Meal1.Text = Feeder.Meal1.ToString(); }
+            }
             if (Feeder.Meal2 != TimeSpan.MaxValue)
-                IDC_Meal2.Text = Feeder.Meal2.ToString();
+            {
+                if (Feeder.Meal2 == midnight) { IDC_Meal2.Text = "No Meal"; }
+                else { IDC_Meal2.Text = Feeder.Meal2.ToString(); }
+            }
             if (Feeder.Meal3 != TimeSpan.MaxValue)
-                IDC_Meal3.Text = Feeder.Meal3.ToString();
+            {
+                if (Feeder.Meal3 == midnight) { IDC_Meal3.Text = "No Meal"; }
+                else { IDC_Meal3.Text = Feeder.Meal3.ToString(); }
+            }
             if (Feeder.Meal4 != TimeSpan.MaxValue)
-                IDC_Meal4.Text = Feeder.Meal4.ToString();
+            {
+                if (Feeder.Meal4 == midnight) { IDC_Meal4.Text = "No Meal"; }
+                else { IDC_Meal4.Text = Feeder.Meal4.ToString(); }
+            }
             if (Feeder.Meal5 != TimeSpan.MaxValue)
-                IDC_Meal5.Text = Feeder.Meal5.ToString();
+            {
+                if (Feeder.Meal5 == midnight) { IDC_Meal5.Text = "No Meal"; }
+                else { IDC_Meal5.Text = Feeder.Meal5.ToString(); }
+            }
             if (Feeder.Meal6 != TimeSpan.MaxValue)
-                IDC_Meal6.Text = Feeder.Meal6.ToString();
+            {
+                if (Feeder.Meal6 == midnight) { IDC_Meal6.Text = "No Meal"; }
+                else { IDC_Meal6.Text = Feeder.Meal6.ToString(); }
+            }
             IDX_FEEDERENABLE.Checked = Feeder.Enabled;
             IDC_PPG.Text = string.Format("{0:0.000}", Feeder.PelletsPerGram);
-            FeederTime = new List<TimeSpan> { Feeder.Meal1, Feeder.Meal2, Feeder.Meal3, Feeder.Meal4, Feeder.Meal5, Feeder.Meal6 }; 
+            FeederTime = new List<TimeSpan> { Feeder.Meal1, Feeder.Meal2, Feeder.Meal3, Feeder.Meal4, Feeder.Meal5, Feeder.Meal6 }; //I ended up doing case switches instead of this 
             MealTime = new List<TextBox> { IDC_Meal1, IDC_Meal2, IDC_Meal3, IDC_Meal4, IDC_Meal5, IDC_Meal6 }; 
             IDC_Meal1.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal1); };
             IDC_Meal2.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal2); };
@@ -75,70 +93,36 @@ namespace BioPacVideo
                 else
                 {
                     MealTime[i].Text = TestTime.ToString();
-                    FeederTime[i] = TestTime; 
+                    switch (i)
+                    {
+                        case 0: Feeder.Meal1 = TestTime; break;
+                        case 1: Feeder.Meal2 = TestTime; break;
+                        case 2: Feeder.Meal3 = TestTime; break;
+                        case 3: Feeder.Meal4 = TestTime; break;
+                        case 4: Feeder.Meal5 = TestTime; break;
+                        case 5: Feeder.Meal6 = TestTime; break;
+                    }
                 }    
                 
             }
             else if (MealTime[i].Text == "" || MealTime[i].Text == " " || MealTime[i].Text == "0")
             {
                 MealTime[i].Text = "No Meal";
-                FeederTime[i] = midnight; 
+                FeederTime[i] = midnight;
+                switch (i)
+                {
+                    case 0: Feeder.Meal1 = midnight; break; 
+                    case 1: Feeder.Meal2 = midnight; break; 
+                    case 2: Feeder.Meal3 = midnight; break;
+                    case 3: Feeder.Meal4 = midnight; break;
+                    case 4: Feeder.Meal5 = midnight; break;
+                    case 5: Feeder.Meal6 = midnight; break;
+                }
             }
             else
                 MealTime[i].Text = FeederTime[i].ToString();
         }
-        /*private void IDC_Meal2_TextChanged(object sender, EventArgs e)
-        {
-            TimeSpan TestTime;
-            if (TimeSpan.TryParse(IDC_Meal2.Text, out TestTime))
-            {
-                if (TestTime >= noon && TestTime <= noon_ten)
-                {
-                    MessageBox.Show("Feeders Cannot be Set to the Following Times:\n12:00-12:10\n0:00-0:10", "Feeder Time Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    IDC_Meal2.Text = Feeder.Meal2.ToString();
-                }
-                else if (TestTime >= midnight && TestTime <= mid_ten)
-                {
-                    MessageBox.Show("Feeders Cannot be Set to the Following Times:\n12:00-12:10\n0:00-0:10", "Feeder Time Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    IDC_Meal2.Text = Feeder.Meal2.ToString();
-                }
-                else
-                {
-                    IDC_Meal2.Text = TestTime.ToString();
-                    Feeder.Meal2 = TestTime;
-                }
-                
-            }
-            else
-                IDC_Meal2.Text = Feeder.Meal2.ToString();
-        }
-
-        private void IDC_Meal3_TextChanged(object sender, EventArgs e)
-        {
-            TimeSpan TestTime;
-            if (TimeSpan.TryParse(IDC_Meal3.Text, out TestTime))
-            {
-                if (TestTime >= noon && TestTime <= noon_ten)
-                {
-                    MessageBox.Show("Feeders Cannot be Set to the Following Times:\n12:00-12:10\n0:00-0:10", "Feeder Time Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    IDC_Meal3.Text = Feeder.Meal3.ToString();
-                }
-                else if (TestTime >= midnight && TestTime <= mid_ten)
-                {
-                    MessageBox.Show("Feeders Cannot be Set to the Following Times:\n12:00-12:10\n0:00-0:10", "Feeder Time Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    IDC_Meal3.Text = Feeder.Meal3.ToString();
-                }
-                else
-                {
-                    IDC_Meal3.Text = TestTime.ToString();
-                    Feeder.Meal3 = TestTime;
-                }
-                
-            }
-            else
-                IDC_Meal3.Text = Feeder.Meal3.ToString();
-        }*/
-
+        
         private void IDX_FEEDERENABLE_CheckedChanged(object sender, EventArgs e)
         {
             Feeder.Enabled = IDX_FEEDERENABLE.Checked;
@@ -157,87 +141,27 @@ namespace BioPacVideo
                 IDC_PPG.Text = string.Format("{0:0.00}", Feeder.PelletsPerGram);
             }
         }
-        /*private void IDC_Meal4_TextChanged(object sender, EventArgs e)
-        {
-            TimeSpan TestTime;
-            if (TimeSpan.TryParse(IDC_Meal4.Text, out TestTime))
-            {
-                if (TestTime >= noon && TestTime <= noon_ten)
-                {
-                    MessageBox.Show("Feeders Cannot be Set to the Following Times:\n12:00-12:10\n0:00-0:10", "Feeder Time Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    IDC_Meal4.Text = Feeder.Meal4.ToString();
-                }
-                else if (TestTime >= midnight && TestTime <= mid_ten)
-                {
-                    MessageBox.Show("Feeders Cannot be Set to the Following Times:\n12:00-12:10\n0:00-0:10", "Feeder Time Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    IDC_Meal4.Text = Feeder.Meal4.ToString();
-                }
-                else
-                {
-                    IDC_Meal4.Text = TestTime.ToString();
-                    Feeder.Meal4 = TestTime;
-                }
-                
-            }
-            else
-                IDC_Meal4.Text = Feeder.Meal4.ToString();
-        }
-
-        private void IDC_Meal5_TextChanged(object sender, EventArgs e)
-        {
-            TimeSpan TestTime;
-            if (TimeSpan.TryParse(IDC_Meal5.Text, out TestTime))
-            {
-                if (TestTime >= noon && TestTime <= noon_ten)
-                {
-                    MessageBox.Show("Feeders Cannot be Set to the Following Times:\n12:00-12:10\n0:00-0:10", "Feeder Time Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    IDC_Meal5.Text = Feeder.Meal5.ToString();
-                }
-                else if (TestTime >= midnight && TestTime <= mid_ten)
-                {
-                    MessageBox.Show("Feeders Cannot be Set to the Following Times:\n12:00-12:10\n0:00-0:10", "Feeder Time Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    IDC_Meal5.Text = Feeder.Meal5.ToString();
-                }
-                else
-                {
-                    IDC_Meal5.Text = TestTime.ToString();
-                    Feeder.Meal5 = TestTime;
-                }
-                
-            }
-            else
-                IDC_Meal5.Text = Feeder.Meal5.ToString();
-        }
-
-        private void IDC_Meal6_TextChanged(object sender, EventArgs e)
-        {
-            TimeSpan TestTime;
-            if (TimeSpan.TryParse(IDC_Meal6.Text, out TestTime))
-            {
-                if (TestTime >= noon && TestTime <= noon_ten)
-                {
-                    MessageBox.Show("Feeders Cannot be Set to the Following Times:\n12:00-12:10\n0:00-0:10", "Feeder Time Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    IDC_Meal6.Text = Feeder.Meal6.ToString();
-                }
-                else if (TestTime >= midnight && TestTime <= mid_ten)
-                {
-                    MessageBox.Show("Feeders Cannot be Set to the Following Times:\n12:00-12:10\n0:00-0:10", "Feeder Time Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    IDC_Meal6.Text = Feeder.Meal6.ToString();
-                }
-                else
-                {
-                    IDC_Meal6.Text = TestTime.ToString();
-                    Feeder.Meal6 = TestTime;
-                }
-                
-            }
-            else
-                IDC_Meal6.Text = Feeder.Meal6.ToString();
-        }*/
-
+       
         private void okayButton_Click(object sender, EventArgs e)
         {
 
+            for (int i = 0; i<6; i++)
+            {
+                if (MealTime[i].Text == "")
+                {
+                    FeederTime[i] = midnight;
+                    MealTime[i].Text = "No Meal";
+                    switch (i)
+                    {
+                        case 0: Feeder.Meal1 = midnight; break;
+                        case 1: Feeder.Meal2 = midnight; break;
+                        case 2: Feeder.Meal3 = midnight; break;
+                        case 3: Feeder.Meal4 = midnight; break;
+                        case 4: Feeder.Meal5 = midnight; break;
+                        case 5: Feeder.Meal6 = midnight; break;
+                    }
+                }
+            }
             DialogResult dr = MessageBox.Show("Are all meal times input correctly?", "Check", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (dr == DialogResult.Yes)
             {
