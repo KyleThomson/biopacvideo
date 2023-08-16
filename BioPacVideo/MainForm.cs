@@ -410,10 +410,8 @@ namespace BioPacVideo
                 
                 else if (Feeder.Enabled)
                 {
-                    //Console.WriteLine("we're in feeder if statement");
                     if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal1.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal1.Minutes))
                     {
-                        Console.WriteLine("First feeder time ackowledged");
                         Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount);
                         Thread.Sleep(120000);
                     }
