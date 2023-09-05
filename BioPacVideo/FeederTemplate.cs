@@ -236,7 +236,6 @@ namespace BioPacVideo
                     if (AlternateAddress)
                     {
                         ActualFeeder = AddressTable[Feeder]; //Translate new address from the table
-                        Console.WriteLine("Actual Feeder " + RC.ToString() + "Address " + ActualFeeder.ToString());
                     }
                     else
                     {
@@ -249,7 +248,6 @@ namespace BioPacVideo
                         MealSize -= 30;
                     }
                     AddCommand(ActualFeeder, MealSize);
-                    Console.WriteLine("Feeder # " + ActualFeeder.ToString() + " Meal Size " + MealSize.ToString()); 
                     Log("Feeder: " + Feeder.ToString() + "  Pellets: " + MealSize.ToString() + " " + Medi);
                     if (MealNum + 1 == DailyMealCount * 7)
                     {

@@ -557,7 +557,7 @@ namespace BioPacVideo
             if (MPReturn != MPCODE.MPSUCCESS) //If acquisition fails, error out. 
             {
                 RecordingSuccess = false;
-                Console.WriteLine("RecordingSuccess = " + RecordingSuccess + Environment.NewLine + "startAcquisition failed");
+                Console.WriteLine("startAcquisition failed");
             }
             while (isstreaming) //Thread stopping variable - set to false to end the recording thread. 
             {                                                                

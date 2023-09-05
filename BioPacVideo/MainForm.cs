@@ -345,7 +345,6 @@ namespace BioPacVideo
             {
                 if (MP.RecordingWanted && !MP.RecordingSuccess) // we want to be recording but the recording was unsuccessful
                 {
-                    //Console.WriteLine("We're in first if statement");
                     if (MP.VideoOff)
                     {
                         Video.StopRecording();
@@ -355,14 +354,12 @@ namespace BioPacVideo
                         });
                         MP.VideoOff = false; 
                     }
-                    //Console.WriteLine("Start Reconnect Test: " + DateTime.Now.ToString());
                     if (MP.Connect())
                     {
                         MP.RecordingSuccess = true;
                         if (MP.CommunicateBioPac())
                         {
                             StartRecording();
-                            //Console.WriteLine("Starting Recording");
                             MP.VideoOff = false;
                             this.RecordingButton.Invoke((MethodInvoker)delegate
                             {
@@ -370,7 +367,6 @@ namespace BioPacVideo
                             });
                         }
                     }
-                    //Console.WriteLine("End Reconnect Test: " + DateTime.Now.ToString());
                 }
                 //If 12AM, restart recording. 
                 if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0))
