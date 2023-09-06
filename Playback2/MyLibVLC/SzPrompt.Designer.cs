@@ -41,8 +41,10 @@
             this.S4 = new System.Windows.Forms.RadioButton();
             this.S5 = new System.Windows.Forms.RadioButton();
             this.RadioBox = new System.Windows.Forms.GroupBox();
+            this.Status = new System.Windows.Forms.RadioButton();
+            this.Dravet = new System.Windows.Forms.RadioButton();
+            this.S5Pop = new System.Windows.Forms.RadioButton();
             this.Unknown = new System.Windows.Forms.RadioButton();
-            this.label2 = new System.Windows.Forms.Label();
             this.VideoSave = new System.Windows.Forms.CheckBox();
             this.CaptureLen = new System.Windows.Forms.Label();
             this.ShortCapWarning = new System.Windows.Forms.Label();
@@ -176,6 +178,9 @@
             // 
             // RadioBox
             // 
+            this.RadioBox.Controls.Add(this.Status);
+            this.RadioBox.Controls.Add(this.Dravet);
+            this.RadioBox.Controls.Add(this.S5Pop);
             this.RadioBox.Controls.Add(this.Unknown);
             this.RadioBox.Controls.Add(this.S5);
             this.RadioBox.Controls.Add(this.NonConv);
@@ -185,10 +190,43 @@
             this.RadioBox.Controls.Add(this.S2);
             this.RadioBox.Location = new System.Drawing.Point(416, 4);
             this.RadioBox.Name = "RadioBox";
-            this.RadioBox.Size = new System.Drawing.Size(197, 113);
+            this.RadioBox.Size = new System.Drawing.Size(233, 134);
             this.RadioBox.TabIndex = 12;
             this.RadioBox.TabStop = false;
             this.RadioBox.Text = "Please Mark Seizure Stage";
+            // 
+            // Status
+            // 
+            this.Status.AutoSize = true;
+            this.Status.Location = new System.Drawing.Point(108, 112);
+            this.Status.Name = "Status";
+            this.Status.Size = new System.Drawing.Size(109, 17);
+            this.Status.TabIndex = 15;
+            this.Status.TabStop = true;
+            this.Status.Text = "Status Epilepticus";
+            this.Status.UseVisualStyleBackColor = true;
+            // 
+            // Dravet
+            // 
+            this.Dravet.AutoSize = true;
+            this.Dravet.Location = new System.Drawing.Point(6, 112);
+            this.Dravet.Name = "Dravet";
+            this.Dravet.Size = new System.Drawing.Size(57, 17);
+            this.Dravet.TabIndex = 14;
+            this.Dravet.TabStop = true;
+            this.Dravet.Text = "Dravet";
+            this.Dravet.UseVisualStyleBackColor = true;
+            // 
+            // S5Pop
+            // 
+            this.S5Pop.AutoSize = true;
+            this.S5Pop.Location = new System.Drawing.Point(108, 90);
+            this.S5Pop.Name = "S5Pop";
+            this.S5Pop.Size = new System.Drawing.Size(120, 17);
+            this.S5Pop.TabIndex = 13;
+            this.S5Pop.TabStop = true;
+            this.S5Pop.Text = "Stage 5 w\\ popcorn";
+            this.S5Pop.UseVisualStyleBackColor = true;
             // 
             // Unknown
             // 
@@ -203,19 +241,10 @@
             this.Unknown.CheckedChanged += new System.EventHandler(this.RadioButtonChanged);
             this.Unknown.Click += new System.EventHandler(this.RadioButtonClicked);
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 87);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(63, 13);
-            this.label2.TabIndex = 13;
-            this.label2.Text = "Enter Notes";
-            // 
             // VideoSave
             // 
             this.VideoSave.AutoSize = true;
-            this.VideoSave.Location = new System.Drawing.Point(416, 123);
+            this.VideoSave.Location = new System.Drawing.Point(416, 158);
             this.VideoSave.Name = "VideoSave";
             this.VideoSave.Size = new System.Drawing.Size(93, 17);
             this.VideoSave.TabIndex = 14;
@@ -256,7 +285,6 @@
             this.Controls.Add(this.ShortCapWarning);
             this.Controls.Add(this.CaptureLen);
             this.Controls.Add(this.VideoSave);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PleaseWait);
             this.Controls.Add(this.CurFileProg);
@@ -290,9 +318,11 @@
         private System.Windows.Forms.RadioButton S5;
         private System.Windows.Forms.GroupBox RadioBox;
         private System.Windows.Forms.RadioButton Unknown;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox VideoSave;
         public System.Windows.Forms.Label CaptureLen;
         public System.Windows.Forms.Label ShortCapWarning;
+        private System.Windows.Forms.RadioButton S5Pop;
+        private System.Windows.Forms.RadioButton Status;
+        private System.Windows.Forms.RadioButton Dravet;
     }
 }

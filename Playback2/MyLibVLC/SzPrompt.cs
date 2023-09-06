@@ -54,6 +54,12 @@ namespace SeizurePlayback
                 Pass.Stage = 0;
             else if (Unknown.Checked)
                 Pass.Stage = -1;
+            else if (S5Pop.Checked)
+                Pass.Stage = 6;
+            else if (Dravet.Checked)
+                Pass.Stage = 7;
+            else if (Status.Checked)
+                Pass.Stage = 8; 
             CT = new Thread(new ThreadStart(ExtractThread));
             CT.Start();
         }
@@ -205,6 +211,7 @@ namespace SeizurePlayback
         public float VideoOffset;
         public int length;
         public int StartTime;
+        public int EndTime; 
         public int Stage;
         public double duration;
         public string AVIMode;

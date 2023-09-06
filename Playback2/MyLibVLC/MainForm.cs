@@ -73,6 +73,7 @@ namespace SeizurePlayback
         int regularReviewReturn = 0;
         bool checkedChange = false;
         List<int> HCL;
+        List<int> SzEndTimes; 
         bool testMode = true;
         bool finsihedReview = false;
         bool isMP4 = false;
@@ -112,6 +113,7 @@ namespace SeizurePlayback
             DSF = new DetectedSeizureFileType();
             numPerPage = 24;
             HCL = DSF.HCL;
+            SzEndTimes = new List<int>(); // create an initial value to compare the first seizure to that won't count even if the first seizure is at time = 0 
             FastReviewState = false;
             FastReviewChange = false;
             ButtonLoc = new int[3, 2] { { this.FastReview.Location.X, this.FastReview.Location.Y }, { this.button3.Location.X, this.button3.Location.Y }, { this.button2.Location.X, this.button2.Location.Y } };
@@ -1234,6 +1236,7 @@ namespace SeizurePlayback
                         int sT;
                         int tL;
                         int C;
+                        int et; 
                         TimeSpan.TryParse(TmpStr[3], out t);
                         sT = (int)t.TotalSeconds;
                         //Console.WriteLine(t);
@@ -1241,7 +1244,8 @@ namespace SeizurePlayback
                         int.TryParse(TmpStr[4], out tL);
                         int.TryParse(TmpStr[0], out C);
                         C = C - 1;
-                        SeizureHighlight tempSH = new SeizureHighlight(C, sT, tL);
+                        et = tL + sT; 
+                        SeizureHighlight tempSH = new SeizureHighlight(C, sT, tL, et);
                         ACQ.SeizureHighlights.Add(tempSH);
 
                         SzInfoIndex++;
@@ -1634,6 +1638,7 @@ namespace SeizurePlayback
                 P.HighlightStart = HighlightStart;
                 P.AVIMode = AVIMode;
                 P.VideoCapture = VideoCapture;
+                P.EndTime = P.StartTime + P.length; 
                 if (AVIMode == "mp4")
                 {
                     P.outfile = CurrentAVI.Substring(CurrentAVI.LastIndexOf("\\") + 1, 19);
@@ -1659,9 +1664,39 @@ namespace SeizurePlayback
                 P.VideoOffset = VideoOffset[ACQ.SelectedChan];
                 SzPrompt Frm = new SzPrompt();
                 Frm.Pass = P;
+                 
                 Frm.CaptureLen.Text = "Capture Length: " + P.length + " Seconds";
-                if (P.length < 10) Frm.ShortCapWarning.Show();
+                //things I am adding - SH
+                foreach (SeizureHighlight sz in ACQ.SeizureHighlights)
+                {
+                    if (P.length < 10)
+                    {
+                        Frm.ShortCapWarning.Text = "WARNING: Your Selected Seizure is Under 10 Seconds Long";
+                        Frm.ShortCapWarning.Show();
+                        break;
+                    }
+                    if (ACQ.SelectedChan == sz.Channel)
+                    {
+                        if((P.StartTime - sz.EndTime > 0 && P.StartTime - sz.EndTime < 60) || (sz.tS - P.EndTime > 0 && sz.tS - P.EndTime < 60)) // should check both sides of seizure for another seizure - SH
+                        {
+                            Frm.ShortCapWarning.Text = "WARNING: Seizure is Less Than 1 Minute Away From Another Seizure";
+                            Frm.ShortCapWarning.Show();
+                            break;
+                        }
+                        if ((P.StartTime - sz.EndTime >=60 && P.StartTime - sz.EndTime <= 300) || (sz.tS - P.EndTime >= 60 && sz.tS - P.EndTime <= 300))
+                        {
+                            Frm.ShortCapWarning.Text = "WARNING: Seizure is Less Than 5 Minutes Away From Another Seizure - Consider Status Epilepticus";
+                            Frm.ShortCapWarning.Show();
+                            break; 
+                        }
+
+                    }
+
+                }
+                
+
                 Frm.ShowDialog(this);
+
                 if (Frm.Ok)
                 {
                     string Result = Frm.Result;
@@ -1674,7 +1709,7 @@ namespace SeizurePlayback
                         VideoCapture = Frm.VideoCapture;
                         INISave();
                     }
-                    SeizureHighlight tempSH = new SeizureHighlight(ACQ.SelectedChan, P.StartTime, P.length);
+                    SeizureHighlight tempSH = new SeizureHighlight(ACQ.SelectedChan, P.StartTime, P.length, P.EndTime); // added an overflow for end time, only needs to be used within this statement - SH
                     ACQ.SeizureHighlights.Add(tempSH);
                     //ACQ.AddSz(HighlightStart, HilightEnd); 
                 }

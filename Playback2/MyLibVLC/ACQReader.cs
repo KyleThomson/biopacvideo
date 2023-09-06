@@ -12,11 +12,13 @@ namespace SeizurePlayback
         public int Channel;
         public int tS;
         public int tE;
-        public SeizureHighlight(int c, int s, int e)
+        public int EndTime;
+        public SeizureHighlight(int c, int s, int e, int et)
         {
             Channel = c;
             tS = s;
             tE = e;
+            EndTime = et; 
         }
     }
 
