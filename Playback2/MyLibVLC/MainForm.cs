@@ -298,7 +298,7 @@ namespace SeizurePlayback
             
            
             
-
+            // need to change this so that it actually finishes at the end of the file - SH
             PercentCompletion = F.IniReadValue("Review", "Complete", (double)0);
             if (PercentCompletion == 100) finsihedReview = true;
             if (PercentCompletion == 100) this.ColorClear.BackColor = Color.Green;
@@ -530,7 +530,7 @@ namespace SeizurePlayback
                                 HighlightEnd = (int)((float)MaxDispSize * (float)(X - graph.X1) / (graph.X2 - graph.X1));
                                 ACQ.sethighlight(HighlightStart, HighlightEnd);
                                 string s = ((int)((HighlightEnd - HighlightStart) / 60)).ToString() + ":" + string.Format("{0:00}", ((HighlightEnd - HighlightStart) % 60));
-                                HighlightLabel.Invoke(new MethodInvoker(delegate { HighlightLabel.Text = s; }));
+                                HighlightLabel.Invoke(new MethodInvoker(delegate { HighlightLabel.Text = s+1; })); // added a +1 here so that it actually lines up to the recorded length of the seizure highlighted - SH
                                 if (HighlightEnd - HighlightStart < 5)
                                 {
 
@@ -1301,7 +1301,7 @@ namespace SeizurePlayback
                 }
                 else DetSezLabel.Text = ".det Not Found";
 
-                if (PercentCompletion == 100)
+                if (PercentCompletion == 100) // maybe here? - SH
                 {
                     DetSezLabel.Text = "Finished!";
                     ColorClear.BackColor = Color.Green;
@@ -1683,7 +1683,7 @@ namespace SeizurePlayback
                             Frm.ShortCapWarning.Show();
                             break;
                         }
-                        if ((P.StartTime - sz.EndTime >=60 && P.StartTime - sz.EndTime <= 300) || (sz.tS - P.EndTime >= 60 && sz.tS - P.EndTime <= 300))
+                        if ((P.StartTime - sz.EndTime >=60 && P.StartTime - sz.EndTime <= 300) || (sz.tS - P.EndTime >= 60 && sz.tS - P.EndTime <= 300)) // can be changed if the definition of status changes - SH
                         {
                             Frm.ShortCapWarning.Text = "WARNING: Seizure is Less Than 5 Minutes Away From Another Seizure - Consider Status Epilepticus";
                             Frm.ShortCapWarning.Show();

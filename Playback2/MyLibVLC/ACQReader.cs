@@ -597,13 +597,6 @@ namespace SeizurePlayback
                         
                             
                          }
-
-
-                      
-
-
-
-
                                 if (j == SelectedChan)
                              g.DrawLines(SelectedPen, WaveC[j]);
                          else
@@ -621,8 +614,6 @@ namespace SeizurePlayback
                             g.FillRectangle(TextBackBrush, new Rectangle((int)temp.X, (int)temp.Y, 70, 20));
                             g.DrawString(ID[j], F, B, new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans)));
                         }
-
-
 
                     }
                      else
