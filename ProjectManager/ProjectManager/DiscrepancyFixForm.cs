@@ -112,9 +112,6 @@ namespace ProjectManager
             else
             {
                 vidExists = true;
-
-                
-
             }
 
             UpdateDisplay();
@@ -176,36 +173,51 @@ namespace ProjectManager
 
         private void submitChangeButton_Click(object sender, EventArgs e)
         {
-            if (radioButton1.Checked || radioButton2.Checked || radioButton3.Checked || radioButton4.Checked || radioButton5.Checked || radioButton6.Checked || radioButton7.Checked)
+            if (scaleButton1.Checked || scaleButton2.Checked || scaleButton3.Checked || scaleButton4.Checked || scaleButton5.Checked || scaleButton0.Checked || scaleButtonNA.Checked
+                || scaleButtonDravet.Checked || scaleButtonStatus.Checked || scaleButton5pop.Checked) // if any of the radio button on the Update Score panel are checked -SH
             {
 
-                if (radioButton1.Checked)
+                if (scaleButton1.Checked)
                 {
-                    currentSZ.sz.Severity = 1;
-                } else if (radioButton2.Checked)
+                    currentSZ.sz.Severity = 1; // Racine scale 1 -SH
+                } 
+                else if (scaleButton2.Checked)
                 {
-                    currentSZ.sz.Severity = 2;
+                    currentSZ.sz.Severity = 2; // Racine scale 2 -SH
                 }
-                else if (radioButton3.Checked)
+                else if (scaleButton3.Checked)
                 {
-                    currentSZ.sz.Severity = 3;
+                    currentSZ.sz.Severity = 3; // Racine scale 3 -SH
                 }
-                else if (radioButton4.Checked)
+                else if (scaleButton4.Checked)
                 {
-                    currentSZ.sz.Severity = 4;
+                    currentSZ.sz.Severity = 4; // Racine scale 4 -SH
                 }
-                else if (radioButton5.Checked)
+                else if (scaleButton5.Checked)
                 {
-                    currentSZ.sz.Severity = 5;
+                    currentSZ.sz.Severity = 5; // Racine scale 5 -SH
                 }
-                else if (radioButton6.Checked)
+                else if (scaleButton5pop.Checked)
                 {
-                    currentSZ.sz.Severity = 0;
+                    currentSZ.sz.Severity = 6; //5 with popcorn -SH
                 }
-                else if (radioButton7.Checked)
+                else if (scaleButtonDravet.Checked)
                 {
-                    currentSZ.sz.Severity = -1;
+                    currentSZ.sz.Severity = 7; // Dravet seizure -SH
                 }
+                else if (scaleButtonStatus.Checked)
+                {
+                    currentSZ.sz.Severity = 8; // Status seizure -SH
+                }
+                else if (scaleButton0.Checked)
+                {
+                    currentSZ.sz.Severity = 0; // Nonconvulsive seizure -SH
+                }
+                else if (scaleButtonNA.Checked)
+                {
+                    currentSZ.sz.Severity = -1; // N/A -SH
+                }
+                
 
                 currentSZ.sz.Notes = notesLabel.Text;
 

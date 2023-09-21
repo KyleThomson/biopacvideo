@@ -54,15 +54,15 @@ namespace ProjectManager
             this.conflictDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.conflictBubble = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.conflictNotes = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.szListView = new System.Windows.Forms.ListView();
+            this.SZLVDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.SZLVScore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.SZLVNumber = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel1 = new System.Windows.Forms.Panel();
             this.EditNotesButton = new System.Windows.Forms.Button();
             this.NotesSection = new System.Windows.Forms.Label();
             this.animalListView = new System.Windows.Forms.ListView();
             this.LVAnimal = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.szListView = new System.Windows.Forms.ListView();
-            this.SZLVDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.SZLVScore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.SZLVNumber = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.GalGBox = new System.Windows.Forms.GroupBox();
             this.PauseButton = new System.Windows.Forms.Button();
             this.PlayButton = new System.Windows.Forms.Button();
@@ -91,10 +91,11 @@ namespace ProjectManager
             // ZoomBar
             // 
             this.ZoomBar.AutoSize = false;
-            this.ZoomBar.Location = new System.Drawing.Point(1029, 326);
+            this.ZoomBar.Location = new System.Drawing.Point(1286, 408);
+            this.ZoomBar.Margin = new System.Windows.Forms.Padding(4);
             this.ZoomBar.Maximum = 20;
             this.ZoomBar.Name = "ZoomBar";
-            this.ZoomBar.Size = new System.Drawing.Size(173, 21);
+            this.ZoomBar.Size = new System.Drawing.Size(216, 26);
             this.ZoomBar.TabIndex = 4;
             this.ZoomBar.TabStop = false;
             this.ZoomBar.TickFrequency = 2;
@@ -106,22 +107,24 @@ namespace ProjectManager
             this.myVLC.BackColor = System.Drawing.Color.White;
             this.myVLC.Enabled = false;
             this.myVLC.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.myVLC.Location = new System.Drawing.Point(519, 29);
+            this.myVLC.Location = new System.Drawing.Point(649, 36);
+            this.myVLC.Margin = new System.Windows.Forms.Padding(4);
             this.myVLC.MediaPlayer = null;
             this.myVLC.Name = "myVLC";
-            this.myVLC.Size = new System.Drawing.Size(467, 306);
+            this.myVLC.Size = new System.Drawing.Size(584, 382);
             this.myVLC.TabIndex = 2;
             this.myVLC.Visible = false;
             // 
             // menuStrip1
             // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.infoToolStripMenuItem,
             this.viewToolStripMenuItem,
             this.moreOptionsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1257, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1571, 28);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "PMEEGMenu";
             this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
@@ -131,14 +134,14 @@ namespace ProjectManager
             this.infoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.telemetryToolStripMenuItem1});
             this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-            this.infoToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this.infoToolStripMenuItem.Size = new System.Drawing.Size(49, 24);
             this.infoToolStripMenuItem.Text = "Info";
             // 
             // telemetryToolStripMenuItem1
             // 
             this.telemetryToolStripMenuItem1.CheckOnClick = true;
             this.telemetryToolStripMenuItem1.Name = "telemetryToolStripMenuItem1";
-            this.telemetryToolStripMenuItem1.Size = new System.Drawing.Size(125, 22);
+            this.telemetryToolStripMenuItem1.Size = new System.Drawing.Size(157, 26);
             this.telemetryToolStripMenuItem1.Text = "Telemetry";
             this.telemetryToolStripMenuItem1.Click += new System.EventHandler(this.telemetryToolStripMenuItem1_Click);
             // 
@@ -150,7 +153,7 @@ namespace ProjectManager
             this.galleryView,
             this.animalView});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
             this.viewToolStripMenuItem.Text = "View";
             // 
             // DefaultView
@@ -158,7 +161,7 @@ namespace ProjectManager
             this.DefaultView.Checked = true;
             this.DefaultView.CheckState = System.Windows.Forms.CheckState.Checked;
             this.DefaultView.Name = "DefaultView";
-            this.DefaultView.Size = new System.Drawing.Size(180, 22);
+            this.DefaultView.Size = new System.Drawing.Size(141, 26);
             this.DefaultView.Text = "Default";
             this.DefaultView.Click += new System.EventHandler(this.normalListToolStripMenuItem_Click);
             // 
@@ -166,7 +169,7 @@ namespace ProjectManager
             // 
             this.galleryView.CheckOnClick = true;
             this.galleryView.Name = "galleryView";
-            this.galleryView.Size = new System.Drawing.Size(180, 22);
+            this.galleryView.Size = new System.Drawing.Size(141, 26);
             this.galleryView.Text = "Gallery";
             this.galleryView.Click += new System.EventHandler(this.normalListToolStripMenuItem_Click);
             // 
@@ -175,7 +178,7 @@ namespace ProjectManager
             this.animalView.CheckOnClick = true;
             this.animalView.Enabled = false;
             this.animalView.Name = "animalView";
-            this.animalView.Size = new System.Drawing.Size(180, 22);
+            this.animalView.Size = new System.Drawing.Size(141, 26);
             this.animalView.Text = "Animal";
             this.animalView.Click += new System.EventHandler(this.normalListToolStripMenuItem_Click);
             // 
@@ -186,13 +189,13 @@ namespace ProjectManager
             this.randomizedToolStripMenuItem,
             this.videoSizeToolStripMenuItem});
             this.moreOptionsToolStripMenuItem.Name = "moreOptionsToolStripMenuItem";
-            this.moreOptionsToolStripMenuItem.Size = new System.Drawing.Size(92, 20);
+            this.moreOptionsToolStripMenuItem.Size = new System.Drawing.Size(114, 24);
             this.moreOptionsToolStripMenuItem.Text = "More Options";
             // 
             // randomizedToolStripMenuItem
             // 
             this.randomizedToolStripMenuItem.Name = "randomizedToolStripMenuItem";
-            this.randomizedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.randomizedToolStripMenuItem.Size = new System.Drawing.Size(176, 26);
             this.randomizedToolStripMenuItem.Text = "Randomized";
             // 
             // videoSizeToolStripMenuItem
@@ -202,7 +205,7 @@ namespace ProjectManager
             this.LowRes});
             this.videoSizeToolStripMenuItem.Enabled = false;
             this.videoSizeToolStripMenuItem.Name = "videoSizeToolStripMenuItem";
-            this.videoSizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.videoSizeToolStripMenuItem.Size = new System.Drawing.Size(176, 26);
             this.videoSizeToolStripMenuItem.Text = "Video Size";
             // 
             // HighRes
@@ -210,14 +213,14 @@ namespace ProjectManager
             this.HighRes.Checked = true;
             this.HighRes.CheckState = System.Windows.Forms.CheckState.Checked;
             this.HighRes.Name = "HighRes";
-            this.HighRes.Size = new System.Drawing.Size(99, 22);
+            this.HighRes.Size = new System.Drawing.Size(125, 26);
             this.HighRes.Text = "480p";
             this.HighRes.Click += new System.EventHandler(this.HighRes_Click);
             // 
             // LowRes
             // 
             this.LowRes.Name = "LowRes";
-            this.LowRes.Size = new System.Drawing.Size(99, 22);
+            this.LowRes.Size = new System.Drawing.Size(125, 26);
             this.LowRes.Text = "360p";
             this.LowRes.Click += new System.EventHandler(this.LowRes_Click);
             // 
@@ -228,9 +231,10 @@ namespace ProjectManager
             this.TimeLabel.Enabled = false;
             this.TimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TimeLabel.ForeColor = System.Drawing.Color.Cornsilk;
-            this.TimeLabel.Location = new System.Drawing.Point(620, 338);
+            this.TimeLabel.Location = new System.Drawing.Point(775, 422);
+            this.TimeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.TimeLabel.Name = "TimeLabel";
-            this.TimeLabel.Size = new System.Drawing.Size(87, 18);
+            this.TimeLabel.Size = new System.Drawing.Size(106, 24);
             this.TimeLabel.TabIndex = 7;
             this.TimeLabel.Text = "0:00 / 0:00";
             this.TimeLabel.Visible = false;
@@ -240,9 +244,10 @@ namespace ProjectManager
             this.TimeFrameLabel.AutoSize = true;
             this.TimeFrameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TimeFrameLabel.ForeColor = System.Drawing.Color.Cornsilk;
-            this.TimeFrameLabel.Location = new System.Drawing.Point(34, 3);
+            this.TimeFrameLabel.Location = new System.Drawing.Point(42, 4);
+            this.TimeFrameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.TimeFrameLabel.Name = "TimeFrameLabel";
-            this.TimeFrameLabel.Size = new System.Drawing.Size(161, 18);
+            this.TimeFrameLabel.Size = new System.Drawing.Size(205, 24);
             this.TimeFrameLabel.TabIndex = 11;
             this.TimeFrameLabel.Text = "Time Frame (Seconds)";
             // 
@@ -252,9 +257,10 @@ namespace ProjectManager
             this.ZoomLabel.AutoSize = true;
             this.ZoomLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ZoomLabel.ForeColor = System.Drawing.Color.Cornsilk;
-            this.ZoomLabel.Location = new System.Drawing.Point(1089, 305);
+            this.ZoomLabel.Location = new System.Drawing.Point(1361, 381);
+            this.ZoomLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.ZoomLabel.Name = "ZoomLabel";
-            this.ZoomLabel.Size = new System.Drawing.Size(48, 18);
+            this.ZoomLabel.Size = new System.Drawing.Size(60, 24);
             this.ZoomLabel.TabIndex = 12;
             this.ZoomLabel.Text = "Zoom";
             // 
@@ -262,9 +268,10 @@ namespace ProjectManager
             // 
             this.GVGrouping.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.GVGrouping.Enabled = false;
-            this.GVGrouping.Location = new System.Drawing.Point(510, 22);
+            this.GVGrouping.Location = new System.Drawing.Point(638, 28);
+            this.GVGrouping.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.GVGrouping.Name = "GVGrouping";
-            this.GVGrouping.Size = new System.Drawing.Size(745, 514);
+            this.GVGrouping.Size = new System.Drawing.Size(931, 642);
             this.GVGrouping.TabIndex = 15;
             this.GVGrouping.Text = "label2";
             this.GVGrouping.Visible = false;
@@ -272,10 +279,10 @@ namespace ProjectManager
             // 
             // vScrollBar1
             // 
-            this.vScrollBar1.Location = new System.Drawing.Point(1237, 375);
+            this.vScrollBar1.Location = new System.Drawing.Point(1546, 469);
             this.vScrollBar1.Minimum = 4;
             this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(20, 128);
+            this.vScrollBar1.Size = new System.Drawing.Size(20, 160);
             this.vScrollBar1.TabIndex = 17;
             this.vScrollBar1.Value = 50;
             this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
@@ -286,10 +293,10 @@ namespace ProjectManager
             this.GalArea.Controls.Add(this.ConflictingList);
             this.GalArea.Controls.Add(this.panel1);
             this.GalArea.Controls.Add(this.animalListView);
-            this.GalArea.Controls.Add(this.szListView);
-            this.GalArea.Location = new System.Drawing.Point(0, 24);
+            this.GalArea.Location = new System.Drawing.Point(0, 30);
+            this.GalArea.Margin = new System.Windows.Forms.Padding(4);
             this.GalArea.Name = "GalArea";
-            this.GalArea.Size = new System.Drawing.Size(513, 509);
+            this.GalArea.Size = new System.Drawing.Size(641, 636);
             this.GalArea.TabIndex = 20;
             this.GalArea.Visible = false;
             this.GalArea.Paint += new System.Windows.Forms.PaintEventHandler(this.GalArea_Paint);
@@ -303,9 +310,10 @@ namespace ProjectManager
             this.conflictBubble,
             this.conflictNotes});
             this.ConflictingList.HideSelection = false;
-            this.ConflictingList.Location = new System.Drawing.Point(12, 5);
+            this.ConflictingList.Location = new System.Drawing.Point(15, 6);
+            this.ConflictingList.Margin = new System.Windows.Forms.Padding(4);
             this.ConflictingList.Name = "ConflictingList";
-            this.ConflictingList.Size = new System.Drawing.Size(378, 358);
+            this.ConflictingList.Size = new System.Drawing.Size(614, 446);
             this.ConflictingList.TabIndex = 33;
             this.ConflictingList.UseCompatibleStateImageBehavior = false;
             this.ConflictingList.View = System.Windows.Forms.View.Details;
@@ -331,56 +339,6 @@ namespace ProjectManager
             this.conflictNotes.Text = "Notes Score";
             this.conflictNotes.Width = 80;
             // 
-            // panel1
-            // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel1.Controls.Add(this.EditNotesButton);
-            this.panel1.Controls.Add(this.NotesSection);
-            this.panel1.Location = new System.Drawing.Point(9, 369);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(495, 138);
-            this.panel1.TabIndex = 32;
-            // 
-            // EditNotesButton
-            // 
-            this.EditNotesButton.AutoSize = true;
-            this.EditNotesButton.Enabled = false;
-            this.EditNotesButton.Location = new System.Drawing.Point(445, 8);
-            this.EditNotesButton.Name = "EditNotesButton";
-            this.EditNotesButton.Size = new System.Drawing.Size(36, 23);
-            this.EditNotesButton.TabIndex = 35;
-            this.EditNotesButton.Text = "Edit";
-            this.EditNotesButton.UseVisualStyleBackColor = true;
-            this.EditNotesButton.Click += new System.EventHandler(this.EditNotesButton_Click);
-            // 
-            // NotesSection
-            // 
-            this.NotesSection.BackColor = System.Drawing.SystemColors.Control;
-            this.NotesSection.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.NotesSection.Location = new System.Drawing.Point(3, 8);
-            this.NotesSection.Name = "NotesSection";
-            this.NotesSection.Size = new System.Drawing.Size(438, 110);
-            this.NotesSection.TabIndex = 30;
-            this.NotesSection.Text = " ";
-            // 
-            // animalListView
-            // 
-            this.animalListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.LVAnimal});
-            this.animalListView.HideSelection = false;
-            this.animalListView.Location = new System.Drawing.Point(9, 5);
-            this.animalListView.Name = "animalListView";
-            this.animalListView.Size = new System.Drawing.Size(110, 358);
-            this.animalListView.TabIndex = 0;
-            this.animalListView.UseCompatibleStateImageBehavior = false;
-            this.animalListView.View = System.Windows.Forms.View.Details;
-            this.animalListView.SelectedIndexChanged += new System.EventHandler(this.seizureListView_SelectedIndexChanged);
-            // 
-            // LVAnimal
-            // 
-            this.LVAnimal.Text = "Animal";
-            this.LVAnimal.Width = 103;
-            // 
             // szListView
             // 
             this.szListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -388,9 +346,10 @@ namespace ProjectManager
             this.SZLVScore,
             this.SZLVNumber});
             this.szListView.HideSelection = false;
-            this.szListView.Location = new System.Drawing.Point(125, 5);
+            this.szListView.Location = new System.Drawing.Point(909, 81);
+            this.szListView.Margin = new System.Windows.Forms.Padding(4);
             this.szListView.Name = "szListView";
-            this.szListView.Size = new System.Drawing.Size(379, 358);
+            this.szListView.Size = new System.Drawing.Size(473, 446);
             this.szListView.TabIndex = 1;
             this.szListView.UseCompatibleStateImageBehavior = false;
             this.szListView.View = System.Windows.Forms.View.Details;
@@ -410,22 +369,79 @@ namespace ProjectManager
             this.SZLVNumber.Text = "Seizure Number";
             this.SZLVNumber.Width = 91;
             // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.EditNotesButton);
+            this.panel1.Controls.Add(this.NotesSection);
+            this.panel1.Location = new System.Drawing.Point(11, 461);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(618, 172);
+            this.panel1.TabIndex = 32;
+            // 
+            // EditNotesButton
+            // 
+            this.EditNotesButton.AutoSize = true;
+            this.EditNotesButton.Enabled = false;
+            this.EditNotesButton.Location = new System.Drawing.Point(556, 10);
+            this.EditNotesButton.Margin = new System.Windows.Forms.Padding(4);
+            this.EditNotesButton.Name = "EditNotesButton";
+            this.EditNotesButton.Size = new System.Drawing.Size(52, 34);
+            this.EditNotesButton.TabIndex = 35;
+            this.EditNotesButton.Text = "Edit";
+            this.EditNotesButton.UseVisualStyleBackColor = true;
+            this.EditNotesButton.Click += new System.EventHandler(this.EditNotesButton_Click);
+            // 
+            // NotesSection
+            // 
+            this.NotesSection.BackColor = System.Drawing.SystemColors.Control;
+            this.NotesSection.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NotesSection.Location = new System.Drawing.Point(4, 10);
+            this.NotesSection.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.NotesSection.Name = "NotesSection";
+            this.NotesSection.Size = new System.Drawing.Size(548, 138);
+            this.NotesSection.TabIndex = 30;
+            this.NotesSection.Text = " ";
+            // 
+            // animalListView
+            // 
+            this.animalListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.LVAnimal});
+            this.animalListView.HideSelection = false;
+            this.animalListView.Location = new System.Drawing.Point(11, 6);
+            this.animalListView.Margin = new System.Windows.Forms.Padding(4);
+            this.animalListView.Name = "animalListView";
+            this.animalListView.Size = new System.Drawing.Size(136, 446);
+            this.animalListView.TabIndex = 0;
+            this.animalListView.UseCompatibleStateImageBehavior = false;
+            this.animalListView.View = System.Windows.Forms.View.Details;
+            this.animalListView.SelectedIndexChanged += new System.EventHandler(this.seizureListView_SelectedIndexChanged);
+            // 
+            // LVAnimal
+            // 
+            this.LVAnimal.Text = "Animal";
+            this.LVAnimal.Width = 103;
+            // 
             // GalGBox
             // 
             this.GalGBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.GalGBox.Enabled = false;
-            this.GalGBox.Location = new System.Drawing.Point(519, 353);
+            this.GalGBox.Location = new System.Drawing.Point(649, 441);
+            this.GalGBox.Margin = new System.Windows.Forms.Padding(4);
             this.GalGBox.Name = "GalGBox";
-            this.GalGBox.Size = new System.Drawing.Size(715, 178);
+            this.GalGBox.Padding = new System.Windows.Forms.Padding(4);
+            this.GalGBox.Size = new System.Drawing.Size(894, 222);
             this.GalGBox.TabIndex = 21;
             this.GalGBox.TabStop = false;
             this.GalGBox.Enter += new System.EventHandler(this.GalGBox_Enter);
             // 
             // PauseButton
             // 
-            this.PauseButton.Location = new System.Drawing.Point(568, 336);
+            this.PauseButton.Location = new System.Drawing.Point(710, 420);
+            this.PauseButton.Margin = new System.Windows.Forms.Padding(4);
             this.PauseButton.Name = "PauseButton";
-            this.PauseButton.Size = new System.Drawing.Size(46, 23);
+            this.PauseButton.Size = new System.Drawing.Size(58, 29);
             this.PauseButton.TabIndex = 25;
             this.PauseButton.Text = "Pause";
             this.PauseButton.UseVisualStyleBackColor = true;
@@ -434,9 +450,10 @@ namespace ProjectManager
             // 
             // PlayButton
             // 
-            this.PlayButton.Location = new System.Drawing.Point(519, 336);
+            this.PlayButton.Location = new System.Drawing.Point(649, 420);
+            this.PlayButton.Margin = new System.Windows.Forms.Padding(4);
             this.PlayButton.Name = "PlayButton";
-            this.PlayButton.Size = new System.Drawing.Size(46, 23);
+            this.PlayButton.Size = new System.Drawing.Size(58, 29);
             this.PlayButton.TabIndex = 26;
             this.PlayButton.Text = "Play";
             this.PlayButton.UseVisualStyleBackColor = true;
@@ -446,10 +463,11 @@ namespace ProjectManager
             // TimeFrameBar
             // 
             this.TimeFrameBar.LargeChange = 15;
-            this.TimeFrameBar.Location = new System.Drawing.Point(5, 24);
+            this.TimeFrameBar.Location = new System.Drawing.Point(6, 30);
+            this.TimeFrameBar.Margin = new System.Windows.Forms.Padding(4);
             this.TimeFrameBar.Maximum = 240;
             this.TimeFrameBar.Name = "TimeFrameBar";
-            this.TimeFrameBar.Size = new System.Drawing.Size(191, 45);
+            this.TimeFrameBar.Size = new System.Drawing.Size(239, 56);
             this.TimeFrameBar.TabIndex = 27;
             this.TimeFrameBar.TickFrequency = 30;
             this.TimeFrameBar.Value = 30;
@@ -460,9 +478,10 @@ namespace ProjectManager
             this.TF1s.AutoSize = true;
             this.TF1s.Cursor = System.Windows.Forms.Cursors.Hand;
             this.TF1s.ForeColor = System.Drawing.SystemColors.Control;
-            this.TF1s.Location = new System.Drawing.Point(12, 54);
+            this.TF1s.Location = new System.Drawing.Point(15, 68);
+            this.TF1s.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.TF1s.Name = "TF1s";
-            this.TF1s.Size = new System.Drawing.Size(13, 13);
+            this.TF1s.Size = new System.Drawing.Size(16, 17);
             this.TF1s.TabIndex = 28;
             this.TF1s.Text = "1";
             this.TF1s.Click += new System.EventHandler(this.TFs_Click);
@@ -481,9 +500,10 @@ namespace ProjectManager
             this.TimeFramePanel.Controls.Add(this.TimeFrameLabel);
             this.TimeFramePanel.Controls.Add(this.TF1s);
             this.TimeFramePanel.Controls.Add(this.TimeFrameBar);
-            this.TimeFramePanel.Location = new System.Drawing.Point(1003, 230);
+            this.TimeFramePanel.Location = new System.Drawing.Point(1254, 288);
+            this.TimeFramePanel.Margin = new System.Windows.Forms.Padding(4);
             this.TimeFramePanel.Name = "TimeFramePanel";
-            this.TimeFramePanel.Size = new System.Drawing.Size(240, 72);
+            this.TimeFramePanel.Size = new System.Drawing.Size(300, 90);
             this.TimeFramePanel.TabIndex = 29;
             // 
             // label4
@@ -491,9 +511,10 @@ namespace ProjectManager
             this.label4.AutoSize = true;
             this.label4.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label4.ForeColor = System.Drawing.SystemColors.Control;
-            this.label4.Location = new System.Drawing.Point(172, 52);
+            this.label4.Location = new System.Drawing.Point(215, 65);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(25, 13);
+            this.label4.Size = new System.Drawing.Size(32, 17);
             this.label4.TabIndex = 37;
             this.label4.Text = "240";
             this.label4.Click += new System.EventHandler(this.TFs_Click);
@@ -503,9 +524,10 @@ namespace ProjectManager
             this.label3.AutoSize = true;
             this.label3.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label3.ForeColor = System.Drawing.SystemColors.Control;
-            this.label3.Location = new System.Drawing.Point(151, 52);
+            this.label3.Location = new System.Drawing.Point(189, 65);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(25, 13);
+            this.label3.Size = new System.Drawing.Size(32, 17);
             this.label3.TabIndex = 36;
             this.label3.Text = "210";
             this.label3.Click += new System.EventHandler(this.TFs_Click);
@@ -515,9 +537,10 @@ namespace ProjectManager
             this.label2.AutoSize = true;
             this.label2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(130, 52);
+            this.label2.Location = new System.Drawing.Point(162, 65);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(25, 13);
+            this.label2.Size = new System.Drawing.Size(32, 17);
             this.label2.TabIndex = 35;
             this.label2.Text = "180";
             this.label2.Click += new System.EventHandler(this.TFs_Click);
@@ -527,9 +550,10 @@ namespace ProjectManager
             this.label1.AutoSize = true;
             this.label1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label1.ForeColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(109, 52);
+            this.label1.Location = new System.Drawing.Point(136, 65);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(25, 13);
+            this.label1.Size = new System.Drawing.Size(32, 17);
             this.label1.TabIndex = 34;
             this.label1.Text = "150";
             this.label1.Click += new System.EventHandler(this.TFs_Click);
@@ -539,9 +563,10 @@ namespace ProjectManager
             this.TF90s.AutoSize = true;
             this.TF90s.Cursor = System.Windows.Forms.Cursors.Hand;
             this.TF90s.ForeColor = System.Drawing.SystemColors.Control;
-            this.TF90s.Location = new System.Drawing.Point(71, 52);
+            this.TF90s.Location = new System.Drawing.Point(89, 65);
+            this.TF90s.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.TF90s.Name = "TF90s";
-            this.TF90s.Size = new System.Drawing.Size(19, 13);
+            this.TF90s.Size = new System.Drawing.Size(24, 17);
             this.TF90s.TabIndex = 33;
             this.TF90s.Tag = "testtag";
             this.TF90s.Text = "90";
@@ -552,9 +577,10 @@ namespace ProjectManager
             this.TF30s.AutoSize = true;
             this.TF30s.Cursor = System.Windows.Forms.Cursors.Hand;
             this.TF30s.ForeColor = System.Drawing.SystemColors.Control;
-            this.TF30s.Location = new System.Drawing.Point(31, 53);
+            this.TF30s.Location = new System.Drawing.Point(39, 66);
+            this.TF30s.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.TF30s.Name = "TF30s";
-            this.TF30s.Size = new System.Drawing.Size(19, 13);
+            this.TF30s.Size = new System.Drawing.Size(24, 17);
             this.TF30s.TabIndex = 32;
             this.TF30s.Text = "30";
             this.TF30s.Click += new System.EventHandler(this.TFs_Click);
@@ -564,9 +590,10 @@ namespace ProjectManager
             this.TFLabel.AutoSize = true;
             this.TFLabel.BackColor = System.Drawing.SystemColors.Control;
             this.TFLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TFLabel.Location = new System.Drawing.Point(199, 26);
+            this.TFLabel.Location = new System.Drawing.Point(249, 32);
+            this.TFLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.TFLabel.Name = "TFLabel";
-            this.TFLabel.Size = new System.Drawing.Size(22, 16);
+            this.TFLabel.Size = new System.Drawing.Size(27, 20);
             this.TFLabel.TabIndex = 31;
             this.TFLabel.Text = "30";
             // 
@@ -575,9 +602,10 @@ namespace ProjectManager
             this.TF120s.AutoSize = true;
             this.TF120s.Cursor = System.Windows.Forms.Cursors.Hand;
             this.TF120s.ForeColor = System.Drawing.SystemColors.Control;
-            this.TF120s.Location = new System.Drawing.Point(88, 52);
+            this.TF120s.Location = new System.Drawing.Point(110, 65);
+            this.TF120s.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.TF120s.Name = "TF120s";
-            this.TF120s.Size = new System.Drawing.Size(25, 13);
+            this.TF120s.Size = new System.Drawing.Size(32, 17);
             this.TF120s.TabIndex = 30;
             this.TF120s.Text = "120";
             this.TF120s.Click += new System.EventHandler(this.TFs_Click);
@@ -587,9 +615,10 @@ namespace ProjectManager
             this.TF60s.AutoSize = true;
             this.TF60s.Cursor = System.Windows.Forms.Cursors.Hand;
             this.TF60s.ForeColor = System.Drawing.SystemColors.Control;
-            this.TF60s.Location = new System.Drawing.Point(51, 53);
+            this.TF60s.Location = new System.Drawing.Point(64, 66);
+            this.TF60s.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.TF60s.Name = "TF60s";
-            this.TF60s.Size = new System.Drawing.Size(19, 13);
+            this.TF60s.Size = new System.Drawing.Size(24, 17);
             this.TF60s.TabIndex = 29;
             this.TF60s.Text = "60";
             this.TF60s.Click += new System.EventHandler(this.TFs_Click);
@@ -600,9 +629,10 @@ namespace ProjectManager
             this.ShowBuffer.Checked = true;
             this.ShowBuffer.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ShowBuffer.ForeColor = System.Drawing.SystemColors.Control;
-            this.ShowBuffer.Location = new System.Drawing.Point(241, 837);
+            this.ShowBuffer.Location = new System.Drawing.Point(301, 1046);
+            this.ShowBuffer.Margin = new System.Windows.Forms.Padding(4);
             this.ShowBuffer.Name = "ShowBuffer";
-            this.ShowBuffer.Size = new System.Drawing.Size(84, 17);
+            this.ShowBuffer.Size = new System.Drawing.Size(106, 21);
             this.ShowBuffer.TabIndex = 35;
             this.ShowBuffer.Text = "Show Buffer";
             this.ShowBuffer.UseVisualStyleBackColor = true;
@@ -610,13 +640,14 @@ namespace ProjectManager
             // 
             // PMEEGView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.ClientSize = new System.Drawing.Size(1257, 548);
+            this.ClientSize = new System.Drawing.Size(1571, 685);
             this.Controls.Add(this.PauseButton);
+            this.Controls.Add(this.szListView);
             this.Controls.Add(this.PlayButton);
             this.Controls.Add(this.ShowBuffer);
             this.Controls.Add(this.GalGBox);
@@ -629,11 +660,12 @@ namespace ProjectManager
             this.Controls.Add(this.GalArea);
             this.Controls.Add(this.myVLC);
             this.Controls.Add(this.GVGrouping);
-            this.MaximumSize = new System.Drawing.Size(1920, 1080);
+            this.Margin = new System.Windows.Forms.Padding(4);
+            this.MaximumSize = new System.Drawing.Size(2396, 1338);
             this.Name = "PMEEGView";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "EEG View";
+            this.Text = " PMEEGView";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PMEEGView_Close);
             this.Load += new System.EventHandler(this.PMEEGView_Load);
             this.ResizeEnd += new System.EventHandler(this.PMEEGView_ResizeEnd_2);
