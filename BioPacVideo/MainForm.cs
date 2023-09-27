@@ -784,6 +784,7 @@ namespace BioPacVideo
             frm.ShowDialog(this);
             UpdateINI(BioIni);
             Video.UpdateCameraAssoc();
+            MessageBox.Show("Please restart the software \nbefore continuing"); 
             frm.Dispose();
             
         }
