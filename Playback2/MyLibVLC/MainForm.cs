@@ -19,7 +19,9 @@ namespace SeizurePlayback
         String Reviewer;
         DateTime LastOpen;
         ACQReader ACQ;
+        VideoInfo Video; 
         DetectedSeizureFileType DSF;
+        SzPrompt SzPrompt; 
 
         string[] AVIFiles;
         string AVIMode;
@@ -109,7 +111,9 @@ namespace SeizurePlayback
             this.WindowState = FormWindowState.Maximized;
             ACQ = new ACQReader(); //Class to read from ACQ file
             graph = new Mygraph(); //Small Class for containing EEG area. 
+            Video = new VideoInfo(); // small class for containing video info for processing at file end - SH
             FRgraph = new Mygraph();
+            SzPrompt = new SzPrompt(); 
             DSF = new DetectedSeizureFileType();
             numPerPage = 24;
             HCL = DSF.HCL;
@@ -2152,7 +2156,65 @@ namespace SeizurePlayback
             GetACQ F = new GetACQ();
             F.ShowDialog();
         }
+        public void ProcessVideo(VideoInfo Video)
+        {
+            if (Video.AVImode == "mp4")
+            {
+                Video.StartTime = (int)(Video.Subtractor / 1000F);
 
+            }
+            else
+            {
+                Video.StartTime = (int)((Video.Subtractor - ((float)1000F * (1F + Video.VideoOffset))) / 1000F);
+            }
+            if (Video.StartTime - 30 < 0)
+            {
+                Video.StartTime = 0;
+            }
+            else Video.StartTime -= 30;
+
+            Process p = new Process();
+            string CmdString = " -y -ss " + Video.StartTime.ToString() + " -t " + Video.LengthBuff.ToString();
+            CmdString += " -i \"" + Video.CurrentAVI + "\"";
+            if (Video.AVImode == "mp4")
+            {
+                CmdString += " -sameq \"" + Video.outfile + ".mp4\"";
+            }
+            else
+            {
+                CmdString += " -sameq \"" + Video.outfile + ".avi\"";
+            }
+
+            p.StartInfo.Arguments = CmdString;
+
+            p.StartInfo.FileName = Video.X264path + "\\ffmpeg.exe";
+            p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.ErrorDataReceived += new DataReceivedEventHandler(process_OutputDataReceived);
+            p.Start();
+            p.BeginErrorReadLine();
+            while (!p.WaitForExit(1000)) //This is likely what is slowing down the program - SH
+            { };
+        }
+        private void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            int frames;
+            string X;
+            if (e.Data != null)
+            {
+
+                X = e.Data.ToString();
+                if (X.IndexOf("frame=") != -1)
+                {
+                    if (int.TryParse(X.Substring(X.IndexOf("frame=") + 6, 6), out frames))
+                    {
+                        CurFileProg.Invoke((MethodInvoker)delegate { CurFileProg.Increment(frames); }); // need to figure this out - SH
+                    }
+                }
+            }
+        }
         private void Next_Click(object sender, EventArgs e)
         {
             if (!DSF.isLoaded) return;
@@ -2178,12 +2240,16 @@ namespace SeizurePlayback
                 DetectedSeizureType Sz = new DetectedSeizureType(0, 0, true);
                 while (!pass)
                 {
-                    if (!DSF.Inc())
+                    if (!DSF.Inc()) // maybe add video processing here? - SH
                     {
                         DetSezLabel.Text = "Finished!";
                         PercentCompletion = 100;
                         ColorClear.BackColor = Color.Green;
                         UpdateReviewINI(BioINI);
+                        foreach (VideoInfo v in SzPrompt.VideoList) // adding video processing - SH
+                        {
+                            ProcessVideo(v); 
+                        }
                         Paused = true;
                         RealTime = false;
                         ACQ.Position = (int)ACQ.TotFileTime;
