@@ -128,7 +128,7 @@ namespace SeizurePlayback
             this.Close();
         }
 
-        private void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        private void process_OutputDataReceived(object sender, DataReceivedEventArgs e) // what does this do? - SH
         {
             int frames;
             string X;
@@ -156,10 +156,6 @@ namespace SeizurePlayback
 
         }
 
-        private void CurFileProg_Click(object sender, EventArgs e)
-        {
-
-        }
     }
     public class infopass
     {
