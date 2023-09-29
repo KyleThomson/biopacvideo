@@ -12,7 +12,7 @@ namespace BioPacVideo
 {
     public partial class RecordSelect : Form
     {
-        public RecordSelect(bool[] RecordAC, bool[] RecordingDevice)
+        public RecordSelect(bool[] RecordAC, bool[] RecordingDevice, int RecordingDeviceAll)
         {
             InitializeComponent();
             ChannelAcq1.Checked = RecordAC[0];
@@ -32,6 +32,10 @@ namespace BioPacVideo
             ChannelAcq15.Checked = RecordAC[14];
             ChannelAcq16.Checked = RecordAC[15];
             Telemetry.Checked = RecordingDevice[0];
+            recordingDeviceBox.Items.Add("Rat Telemetry");
+            recordingDeviceBox.Items.Add("Mouse Telemetry");
+            recordingDeviceBox.Items.Add("Teathered"); 
+            recordingDeviceBox.SelectedIndex = RecordingDeviceAll; 
             /*TelemetryCh2.Checked = RecordingDevice[1];
             TelemetryCh3.Checked = RecordingDevice[2];
             TelemetryCh4.Checked = RecordingDevice[3];
@@ -76,6 +80,13 @@ namespace BioPacVideo
             this.Close();
         }
 
+        public int RD()
+        {
+            int RecDevice = new int();
+            RecDevice = recordingDeviceBox.SelectedIndex;
+
+            return RecDevice; 
+        }
     }
 
         

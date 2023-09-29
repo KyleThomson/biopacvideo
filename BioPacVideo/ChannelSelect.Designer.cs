@@ -46,6 +46,7 @@
             this.ChannelAcq9 = new System.Windows.Forms.CheckBox();
             this.ID_OK = new System.Windows.Forms.Button();
             this.Telemetry = new System.Windows.Forms.CheckBox();
+            this.recordingDeviceBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // ChannelAcq1
@@ -237,7 +238,7 @@
             // Telemetry
             // 
             this.Telemetry.AutoSize = true;
-            this.Telemetry.Location = new System.Drawing.Point(58, 221);
+            this.Telemetry.Location = new System.Drawing.Point(69, 221);
             this.Telemetry.Name = "Telemetry";
             this.Telemetry.Size = new System.Drawing.Size(74, 18);
             this.Telemetry.TabIndex = 17;
@@ -245,11 +246,20 @@
             this.Telemetry.UseCompatibleTextRendering = true;
             this.Telemetry.UseVisualStyleBackColor = true;
             // 
+            // recordingDeviceBox
+            // 
+            this.recordingDeviceBox.FormattingEnabled = true;
+            this.recordingDeviceBox.Location = new System.Drawing.Point(38, 221);
+            this.recordingDeviceBox.Name = "recordingDeviceBox";
+            this.recordingDeviceBox.Size = new System.Drawing.Size(121, 21);
+            this.recordingDeviceBox.TabIndex = 18;
+            // 
             // RecordSelect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(207, 302);
+            this.Controls.Add(this.recordingDeviceBox);
             this.Controls.Add(this.Telemetry);
             this.Controls.Add(this.ID_OK);
             this.Controls.Add(this.ChannelAcq16);
@@ -298,5 +308,6 @@
         private System.Windows.Forms.CheckBox ChannelAcq9;
         private System.Windows.Forms.Button ID_OK;
         private System.Windows.Forms.CheckBox Telemetry;
+        private System.Windows.Forms.ComboBox recordingDeviceBox;
     }
 }

@@ -4,7 +4,6 @@ C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\bin\x64\D
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.csproj.AssemblyReference.cache
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.CameraAssc.resources
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.FeederAddress.resources
-C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.FeederForm.resources
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.FeederTester.resources
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.FeederErrorBox.resources
 C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Debug\BioPacVideo.RecordSettings.resources

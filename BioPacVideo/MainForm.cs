@@ -182,7 +182,7 @@ namespace BioPacVideo
             BioIni.IniReadValue("Feeder", "Meal5", out Feeder.Meal5);
             BioIni.IniReadValue("Feeder", "Meal6", out Feeder.Meal6);
             Feeder.PelletsPerGram = BioIni.IniReadValue("Feeder", "PelletsPerGram", 0.02);
-            Feeder.Enabled = BioIni.IniReadValue("Feeder", "Enabled", true);
+            Feeder.Enabled = BioIni.IniReadValue("Feeder", "Enabled", false);
             Feeder.DailyMealCount = BioIni.IniReadValue("Feeder", "DailyMealCount", 4);
             Feeder.ADDC1 = BioIni.IniReadValue("Feeder", "ADDCompound1", "");
             Feeder.Dose1 = BioIni.IniReadValue("Feeder", "ADDDose1", "");
@@ -210,7 +210,7 @@ namespace BioPacVideo
                 }
                 MP.RecordingDevice[i] = false;
             }
-
+            MP.RecordingDeviceAll = BioIni.IniReadValue("Biopac", "RecordingDeviceAll", 2);
             MP.UpdateOffsets();
             for (int i = 0; i < 16; i++)
             {
@@ -292,6 +292,7 @@ namespace BioPacVideo
             {
                 BioIni.IniWriteValue("BioPac", string.Format("RecordingDevice_Channel{0}", i), MP.RecordingDevice[i]);
             }
+            BioIni.IniWriteValue("BioPac", "RecordingDeviceAll", MP.RecordingDeviceAll);
             for (int i = 0; i < 16; i++)
             {
                 BioIni.IniWriteValue("BioPac", string.Format("Channel{0}", i), MP.RecordAC[i]);
@@ -713,10 +714,11 @@ namespace BioPacVideo
         private void selectChannelsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             
-            RecordSelect frm = new RecordSelect(MP.RecordAC, MP.RecordingDevice);
+            RecordSelect frm = new RecordSelect(MP.RecordAC, MP.RecordingDevice, MP.RecordingDeviceAll);
             frm.ShowDialog(this);                
             MP.RecordAC = frm.AC();
             MP.RecordingDevice = frm.RC();
+            MP.RecordingDeviceAll = frm.RD(); 
             frm.Dispose();
             UpdateINI(BioIni);
             IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
@@ -876,6 +878,5 @@ namespace BioPacVideo
             UpdateINI(BioIni); 
             frm.Dispose(); 
         }
-
     }
 }
