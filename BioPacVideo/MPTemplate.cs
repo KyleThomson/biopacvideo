@@ -546,7 +546,6 @@ namespace BioPacVideo
             bool a = true;
             bool b = true;
             bool lasta, lastb;
-            DateTime X;
             AcqChan = TotChan();  //How many channels are we going to acquire   
             VoltageSpacing = (int)(Ymax / (AcqChan));
             Thread BuffDraw = new Thread(new ThreadStart(drawbuffer)); //Set up thread for buffering 
@@ -556,7 +555,8 @@ namespace BioPacVideo
             draw_buffer = new double[BuffSize]; //Place to copy the buffer to, for drawing 
             //Need that so we can do thread-safe operations. 
             Int32 transbuffer = new Int32();  //Translational buffer to write bytes instead of doubles.             
-            MPReturn = MPCLASS.startAcquisition();  //Start actual acquisition        
+            MPReturn = MPCLASS.startAcquisition();  //Start actual acquisition'
+            Console.WriteLine("I GOT HERES!");                                                  
             if (MPReturn != MPCODE.MPSUCCESS) //If acquisition fails, error out. 
             {
                 RecordingSuccess = false;
@@ -630,28 +630,26 @@ namespace BioPacVideo
                             break;
 
                     }
+                    CurrentWriteLoc = BinaryFile.Position;  //Update the current location.
+                    if (FileStop) //Need to have thread safe file closing! Oops!                        
+                    {
+                        updateheader(); //Write sample total
+                        BinaryFile.Close(); //Close 
+                        FileCount = 0;
+                        IsFileWriting = false;
+                        FileStop = false;
+                    }
+                    else if (BinaryFile.Position > (1980 * MBYTE)) //Need to stop file, and restart it
+                    {
+                        updateheader(); //Write the final Stuff
+                        BinaryFile.Close(); //Close the file                         
+                        FileCount++; //Apparently, I don't need this, because the code won't overwrite a file. But, whatever
+                        StartWriting(); //Start a new file!
+                    }
                 }
             
-                CurrentWriteLoc = BinaryFile.Position;  //Update the current location.     
+               
 
-                if (FileStop) //Need to have thread safe file closing! Oops!                        
-                {
-                    updateheader(); //Write sample total
-                    BinaryFile.Close(); //Close 
-                    FileCount = 0;
-                    IsFileWriting = false;
-                    FileStop = false;
-                }
-                else if (BinaryFile.Position > (1980 * MBYTE)) //Need to stop file, and restart it
-                {
-                    updateheader(); //Write the final Stuff
-                    BinaryFile.Close(); //Close the file                         
-                    FileCount++; //Apparently, I don't need this, because the code won't overwrite a file. But, whatever
-                    StartWriting(); //Start a new file!
-                }
-
-                X = DateTime.Now;
-                Console.WriteLine("Start Feeder:" + X.TimeOfDay.ToString());
                 if (Feeder.Enabled)
                 {
                     lasta = a; //These serve as a debounce function. 
