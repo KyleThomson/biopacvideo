@@ -20,7 +20,7 @@ namespace SeizurePlayback
         public bool VideoCapture;
         public infopass Pass;
         public VideoInfo Video;
-        public List<VideoInfo> VideoList; 
+        public List<infopass> VideoList; 
         Thread CT;
         public SzPrompt()
         {
@@ -91,16 +91,8 @@ namespace SeizurePlayback
                                                                                                              //work on fixing video capture
             if (Pass.VideoCapture) // add the video information to a list to be processed at the end - SH
             {
-                Video.StartTime = Pass.StartTime;
-                Video.LengthBuff = LengthBuff;
-                Video.outfile = Pass.outfile;
-                Video.length = Pass.length;
-                Video.CurrentAVI = Pass.CurrentAVI;
-                Video.AVImode = Pass.AVIMode;
-                Video.Subtractor = Pass.Subtractor;
-                Video.X264path = Pass.X264path;
-                Video.VideoOffset = Pass.VideoOffset; 
-                VideoList.Add(Video); 
+                Pass.LengthBuff = LengthBuff;
+                VideoList.Add(Pass); 
             }
             Notes = Notes.Replace(",", string.Empty);
             Result = Pass.Sz + Notes + ", " + Pass.outfile + ", " + Pass.Stage.ToString();
@@ -135,8 +127,24 @@ namespace SeizurePlayback
             Ok = false;
             this.Close();
         }
-        
-        
+
+        private void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            int frames;
+            string X;
+            if (e.Data != null)
+            {
+
+                X = e.Data.ToString();
+                if (X.IndexOf("frame=") != -1)
+                {
+                    if (int.TryParse(X.Substring(X.IndexOf("frame=") + 6, 6), out frames))
+                    {
+                        CurFileProg.Invoke((MethodInvoker)delegate { CurFileProg.Increment(frames); }); // need to figure this out - SH
+                    }
+                }
+            }
+        }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
@@ -172,6 +180,7 @@ namespace SeizurePlayback
         public string AVIMode;
         public string X264path;
         public bool VideoCapture;
+        public int LengthBuff;
         public long subVidOffset;
         public infopass()
         { }
@@ -180,7 +189,7 @@ namespace SeizurePlayback
     public class VideoInfo
     {
         public int StartTime;
-        public int LengthBuff;
+        
         public string outfile;
         public int length;
         public string CurrentAVI;
