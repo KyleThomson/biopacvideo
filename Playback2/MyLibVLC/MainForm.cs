@@ -75,7 +75,7 @@ namespace SeizurePlayback
         int regularReviewReturn = 0;
         bool checkedChange = false;
         List<int> HCL;
-        List<int> SzEndTimes; 
+        public List<infopass> PassVidList; 
         bool testMode = true;
         bool finsihedReview = false;
         bool isMP4 = false;
@@ -112,11 +112,10 @@ namespace SeizurePlayback
             ACQ = new ACQReader(); //Class to read from ACQ file
             graph = new Mygraph(); //Small Class for containing EEG area. 
             FRgraph = new Mygraph();
-            SzPrompt = new SzPrompt(); 
+            PassVidList = new List<infopass>();
             DSF = new DetectedSeizureFileType();
             numPerPage = 24;
             HCL = DSF.HCL;
-            SzEndTimes = new List<int>(); // create an initial value to compare the first seizure to that won't count even if the first seizure is at time = 0 
             FastReviewState = false;
             FastReviewChange = false;
             ButtonLoc = new int[3, 2] { { this.FastReview.Location.X, this.FastReview.Location.Y }, { this.button3.Location.X, this.button3.Location.Y }, { this.button2.Location.X, this.button2.Location.Y } };
@@ -149,7 +148,7 @@ namespace SeizurePlayback
             //Graphics area of the form to display the EEG. It would be better if these were dynamically resized. 
             //I don't have time for that shit. 
             // Haha but maybe i have time for that!
-
+            //....he did not have time for that
             ChanPos = new int[16];
             VisChecks = new CheckBox[16];
             VisChecks[0] = VisChan1;
@@ -340,7 +339,7 @@ namespace SeizurePlayback
             while (true)
             {
                 if (ACQ.Loaded)
-                {
+                {             
                     if (FastReviewState)
                     {
 
@@ -405,12 +404,18 @@ namespace SeizurePlayback
 
                             if (!RealTime)
                             {
-                                if (Step >= MaxDispSize)
+                                if (Step >= MaxDispSize) //this is getting to the end of the page -SH
                                 {
-                                    if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
+                                    if (!ACQ.ReadData(ACQ.Position, MaxDispSize)) // this is when you get to the end of the file while speed up is selected - SH
                                     {
                                         Paused = true;
                                         PercentCompletion = 100;
+                                        ProcessVideoFiles frm = new ProcessVideoFiles(PassVidList);
+                                        frm.ShowDialog(this);
+                                        if (frm.close)
+                                        {
+
+                                        }
                                     }
                                     Step = 0;
                                     Redraw = true;
@@ -438,6 +443,7 @@ namespace SeizurePlayback
                                         {
                                             Paused = true;
                                             PercentCompletion = 100;
+                                            ProcessVideoFiles frm = new ProcessVideoFiles(PassVidList);
                                         }
                                         Redraw = true;
                                         Step = 0;
@@ -480,6 +486,7 @@ namespace SeizurePlayback
                                         {
                                             Paused = true;
                                             PercentCompletion = 100;
+                                            ProcessVideoFiles frm = new ProcessVideoFiles(PassVidList);
                                         }
                                         Redraw = true;
                                         Step = Step - MaxDispSize;
@@ -551,9 +558,9 @@ namespace SeizurePlayback
                                     {
                                         if (!ACQ.ReadData(ACQ.Position, MaxDispSize))
                                             Paused = true;
-                                        Redraw = true;
-                                        Step = 0;
-                                    } else
+                                            Redraw = true;
+                                            Step = 0;
+                                    }else
                                     {
                                         Step = Step - MaxDispSize;
                                         if (ACQ.Position - Step <= 0)
@@ -1304,7 +1311,7 @@ namespace SeizurePlayback
                 }
                 else DetSezLabel.Text = ".det Not Found";
 
-                if (PercentCompletion == 100) // maybe here? - SH
+                if (PercentCompletion == 100) // don't need to process video files here because this is when the file is first open -SH
                 {
                     DetSezLabel.Text = "Finished!";
                     ColorClear.BackColor = Color.Green;
@@ -1665,7 +1672,7 @@ namespace SeizurePlayback
                 P.X264path = X264path;
                 P.ACQ = ACQ;
                 P.VideoOffset = VideoOffset[ACQ.SelectedChan];
-                SzPrompt Frm = new SzPrompt();
+                SzPrompt Frm = new SzPrompt(PassVidList); //pass the video processing list into SzPrompt to add info -SH
                 Frm.Pass = P;
                  
                 Frm.CaptureLen.Text = "Capture Length: " + P.length + " Seconds";
@@ -1716,6 +1723,7 @@ namespace SeizurePlayback
                     ACQ.SeizureHighlights.Add(tempSH);
                     //ACQ.AddSz(HighlightStart, HilightEnd); 
                 }
+                PassVidList = Frm.GetVidList(); //pass the seizure list for video processing back to the mainform -SH
                 Frm.Dispose();
                 Step = MaxDispSize;
                 QuitHighlight();
@@ -1991,7 +1999,7 @@ namespace SeizurePlayback
             Paused = false;
             RealTime = true;
             ACQ.Position = (int)Time.TotalSeconds; //doesn't draw rectangles in the right place
-            Step = MaxDispSize;
+            Step = MaxDispSize; 
 
             SeekToCurrentPos();
             //ACQ.drawbuffer();
@@ -2155,48 +2163,7 @@ namespace SeizurePlayback
             GetACQ F = new GetACQ();
             F.ShowDialog();
         }
-        public void ProcessVideo(infopass Video)
-        {
-            if (Video.AVIMode == "mp4")
-            {
-                Video.StartTime = (int)(Video.Subtractor / 1000F);
 
-            }
-            else
-            {
-                Video.StartTime = (int)((Video.Subtractor - ((float)1000F * (1F + Video.VideoOffset))) / 1000F);
-            }
-            if (Video.StartTime - 30 < 0)
-            {
-                Video.StartTime = 0;
-            }
-            else Video.StartTime -= 30;
-
-            Process p = new Process();
-            string CmdString = " -y -ss " + Video.StartTime.ToString() + " -t " + Video.LengthBuff.ToString();
-            CmdString += " -i \"" + Video.CurrentAVI + "\"";
-            if (Video.AVIMode == "mp4")
-            {
-                CmdString += " -sameq \"" + Video.outfile + ".mp4\"";
-            }
-            else
-            {
-                CmdString += " -sameq \"" + Video.outfile + ".avi\"";
-            }
-
-            p.StartInfo.Arguments = CmdString;
-
-            p.StartInfo.FileName = Video.X264path + "\\ffmpeg.exe";
-            p.StartInfo.CreateNoWindow = true;
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.RedirectStandardError = true;
-            p.ErrorDataReceived += new DataReceivedEventHandler(process_OutputDataReceived); // do we need this? -SH
-            p.Start();
-            p.BeginErrorReadLine();
-            while (!p.WaitForExit(1000)) //This is likely what is slowing down the program - SH
-            { };
-        }
         
         private void Next_Click(object sender, EventArgs e)
         {
@@ -2223,15 +2190,13 @@ namespace SeizurePlayback
                 DetectedSeizureType Sz = new DetectedSeizureType(0, 0, true);
                 while (!pass)
                 {
-                    if (!DSF.Inc()) // maybe add video processing here? - SH
+                    if (!DSF.Inc()) 
                     {
                         DetSezLabel.Text = "Finished!";
                         PercentCompletion = 100;
                         ColorClear.BackColor = Color.Green;
-                        foreach (infopass v in SzPrompt.VideoList) // adding video processing - SH
-                        {
-                            ProcessVideo(v);
-                        }
+                        ProcessVideoFiles frm = new ProcessVideoFiles(PassVidList); // new form that processes the video files -SH
+                     
                         UpdateReviewINI(BioINI);
                         Paused = true;
                         RealTime = false;
@@ -2244,7 +2209,7 @@ namespace SeizurePlayback
                     }
                     Sz = DSF.GetCurrentSeizure();
                     if ((!ACQ.HideChan[Sz.Channel - 1]) && Sz.Display)
-                        pass = true;
+                    pass = true;
                 }
                 //DetSezLabel.Text = (DSF.SeizureNumber + 1).ToString() + " of " + DSF.Count.ToString();
                 DetSezLabel.Text = DSF.FRIndex() + " of " + (DSF.IsDisplayed()).ToString();
@@ -2285,7 +2250,7 @@ namespace SeizurePlayback
             while (!pass)
             {
                 //if (!DSF.Dec()) return;
-                if (PercentCompletion == 100 && finsihedReview)
+                if (PercentCompletion == 100 && finsihedReview) 
                 {
                     ACQ.SelectedChan = 0;
                     ACQ.Position = 0;
@@ -2521,10 +2486,7 @@ namespace SeizurePlayback
                 {
                     DetSezLabel.Text = "Finished!";
                     PercentCompletion = 100;
-                    foreach (infopass v in SzPrompt.VideoList) // adding video processing - SH
-                    {
-                        ProcessVideo(v);
-                    }
+                    ProcessVideoFiles frm = new ProcessVideoFiles(PassVidList);
                     UpdateReviewINI(BioINI);
                     ColorClear.BackColor = Color.Green;
                 }
@@ -2536,10 +2498,7 @@ namespace SeizurePlayback
                         DetSezLabel.Text = "Finished!";
                         PercentCompletion = 100;
                         ColorClear.BackColor = Color.Green;
-                        foreach (infopass v in SzPrompt.VideoList) // adding video processing - SH
-                        {
-                            ProcessVideo(v);
-                        }
+                        ProcessVideoFiles frm = new ProcessVideoFiles(PassVidList);
                         UpdateReviewINI(BioINI);
                         Paused = true;
                         RealTime = false;

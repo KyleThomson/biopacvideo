@@ -280,7 +280,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(661, 233);
+            this.ClientSize = new System.Drawing.Size(677, 272);
             this.Controls.Add(this.ShortCapWarning);
             this.Controls.Add(this.CaptureLen);
             this.Controls.Add(this.VideoSave);

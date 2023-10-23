@@ -19,18 +19,17 @@ namespace SeizurePlayback
         public string Result;
         public bool VideoCapture;
         public infopass Pass;
-        public VideoInfo Video;
-        public List<infopass> VideoList; 
+        public List<infopass> VideoList;
+        //public List<infopass> VideoList;
         Thread CT;
-        public SzPrompt()
+        public SzPrompt(List<infopass> PassList)
         {
             InitializeComponent();
             Notes = "";
             Unknown.Checked = true;
             OKBtn.Enabled = false;
             Ok = false;
-
-
+            VideoList = PassList; 
         }
 
         private void OKBtn_Click(object sender, EventArgs e)
@@ -56,7 +55,7 @@ namespace SeizurePlayback
                 Pass.Stage = 0;
             else if (Unknown.Checked)
                 Pass.Stage = -1;
-            else if (S5Pop.Checked)
+            else if (S5Pop.Checked) // added new seizure classifications - SH
                 Pass.Stage = 6;
             else if (Dravet.Checked)
                 Pass.Stage = 7;
@@ -64,10 +63,20 @@ namespace SeizurePlayback
                 Pass.Stage = 8;
             CT = new Thread(new ThreadStart(ExtractThread));
             CT.Start();
+            if (Pass.VideoCapture)
+            {
+                VideoList.Add(Pass); //add the seizure information to a list for video processing purposes -SH
+            }
+        }
+
+        public List<infopass> GetVidList()
+        {
+            return VideoList; //to pass it back to the mainform - SH
         }
         private void ExtractThread()
         {
             Ok = true;
+
             int BuffDiff = 0;
             Result = Pass.Sz + Notes + "," + Pass.outfile;
             string outfile = Pass.FPath + "\\" + Pass.outfile;
@@ -92,7 +101,6 @@ namespace SeizurePlayback
             if (Pass.VideoCapture) // add the video information to a list to be processed at the end - SH
             {
                 Pass.LengthBuff = LengthBuff;
-                VideoList.Add(Pass); 
             }
             Notes = Notes.Replace(",", string.Empty);
             Result = Pass.Sz + Notes + ", " + Pass.outfile + ", " + Pass.Stage.ToString();
@@ -182,16 +190,4 @@ namespace SeizurePlayback
         { }
     }
 
-    public class VideoInfo
-    {
-        public int StartTime;
-        
-        public string outfile;
-        public int length;
-        public string CurrentAVI;
-        public string AVImode;
-        public float Subtractor;
-        public string X264path;
-        public float VideoOffset; 
-    }
 }

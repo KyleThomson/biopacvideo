@@ -78,3 +78,4 @@ C:\Users\Sarah Haslam\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\ob
 C:\Users\Sarah Haslam\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Debug\SeizurePlayback.VLoadWait.resources
 C:\Users\Sarah Haslam\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Debug\SeizurePlayback.csproj.GenerateResource.cache
 C:\Users\Sarah Haslam\Source\Repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Debug\SeizurePlayback.csproj.CoreCompileInputs.cache
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Debug\SeizurePlayback.ProcessVideoFiles.resources
