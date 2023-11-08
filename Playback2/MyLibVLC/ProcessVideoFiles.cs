@@ -10,6 +10,15 @@ namespace SeizurePlayback
 {
     public partial class ProcessVideoFiles : Form
     {
+        //ProcessVideoFiles Notes:
+        //this form processes the video files when the user makes it to the end of the seizure file and selects "Start Process". If "capture video" was selected during SzPrmopt,
+        //the seizure information was added to a list (VideoList) in the main form (see SzPrompt) and at the end of the file is passed to this form, where an iteration loop runs 
+        //through each of the items and processes them individually. This is to help reduce the amount of time it takes to review a seizure file by having all the video processing,
+        //a more computationally intensive process, happen at the very end.
+
+        //the window is maximized because WinForms is being a stupid dumbass and won't put the form on top of the mainform, no matter what I tried, so the only way I could get the form to 
+        //show up was by having it maximize itself, which puts it on top of the mainform and forces the user to interact with it. - SH
+
         List<infopass> VidList;
 
         public ProcessVideoFiles(List<infopass> VideoList)
@@ -20,33 +29,9 @@ namespace SeizurePlayback
             closeButton.Hide();
             startButton.Show();
             label3.Text = VidList.Count.ToString() + " Videos to Process";
-
-            
-            
         }
-        /*private void StartProcess()
-        {
-            int i = 1; //start the seizure video processing count at 1 for the layman- SH
-            //this.Show(); // maybe this opens the window? -SH
-            processProg.Maximum = VidList.Count;
-            processProg.Value = 0;
-            closeButton.Enabled = false;
-            foreach (infopass v in VidList) //process each video that has been assosciated with a seizure - SH
-            {
-                processProg.Value += 1;
-                processVidLabel.Text = "Processing Video " + i.ToString() + "/" + VidList.Count.ToString();
-                ProcessVideo(v);
-                i++;
-            }
-            if (i == VidList.Count + 1)
-            {
-                processVidLabel.Text = "Complete!"; //once each video has been processed, label as complete - SH
-                closeButton.Enabled = true; //allow the user to click the button to close the program - SH
-                //this.Dispose(); //close the window upon completion - SH
-            }
-        }*/
 
-        public void ProcessVideo(infopass Video)
+        public void ProcessVideo(infopass Video) //this is Kyle's code, copy and pasted from where it existed in the main code before I moved it here for processing at the end - SH
         {
             if (Video.AVIMode == "mp4")
             {
@@ -82,7 +67,7 @@ namespace SeizurePlayback
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.RedirectStandardError = true;
-            //p.ErrorDataReceived += new DataReceivedEventHandler(process_OutputDataReceived); // I think this is just to make the progress bar work and we don't need that - SH
+            //p.ErrorDataReceived += new DataReceivedEventHandler(process_OutputDataReceived); // I think this is just to make the progress bar work and we don't need that anymore - SH
             p.Start();
             p.BeginErrorReadLine();
             while (!p.WaitForExit(1000)) //This is likely what is slowing down the program - SH
@@ -97,7 +82,7 @@ namespace SeizurePlayback
         private void startButton_Click(object sender, EventArgs e)
         {
             label2.Text = "Do not close the program until complete";
-            label2.Update(); 
+            label2.Update(); //this is the only way I was able to get the label text to update - SH
             startButton.Hide();
             label1.Text = "Processing....";
             label1.Update(); 
@@ -106,7 +91,7 @@ namespace SeizurePlayback
             int i = 1; //start the seizure video processing count at 1 for the layman- SH
             foreach (infopass v in VidList) //process each video that has been assosciated with a seizure - SH
             {
-                processProg.Value += 1;
+                processProg.Value += 1; //this is the progress bar which will fill by one increment every time a video is processed - SH
                 processVidLabel.Text = "Processing Video " + i.ToString() + "/" + VidList.Count.ToString();
                 processVidLabel.Update(); 
                 label3.Text = (VidList.Count - i + 1).ToString() + " Videos to Process";
@@ -124,7 +109,6 @@ namespace SeizurePlayback
                 label3.Text = VidList.Count.ToString() + " Videos Processed";
                 label1.Update();
                 label2.Update(); 
-                //this.Dispose(); //close the window upon completion - SH
             }
         }
     }

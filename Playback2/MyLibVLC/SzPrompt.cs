@@ -70,6 +70,7 @@ namespace SeizurePlayback
             if (Pass.VideoCapture)
             {
                 VideoList.Add(Pass); //add the seizure information to a list for video processing purposes -SH
+                // this list is only added to if the video capture button is selected. Otherwise, the information will not be stored for video processing - SH
             }
         }
 

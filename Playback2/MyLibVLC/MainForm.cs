@@ -2199,8 +2199,11 @@ namespace SeizurePlayback
                         DetSezLabel.Text = "Finished!";
                         PercentCompletion = 100;
                         ColorClear.BackColor = Color.Green;
-                        ProcessVideoFiles frm = new ProcessVideoFiles(PassVidList); // new form that processes the video files -SH
-                        frm.ShowDialog(); 
+                        if (PassVidList.Count > 0)
+                        {
+                            ProcessVideoFiles frm = new ProcessVideoFiles(PassVidList); // processes the video files if there are video files to be processed - SH
+                            frm.ShowDialog();
+                        }
                         UpdateReviewINI(BioINI);
                         Paused = true;
                         RealTime = false;
@@ -2490,7 +2493,11 @@ namespace SeizurePlayback
                 {
                     DetSezLabel.Text = "Finished!";
                     PercentCompletion = 100;
-                    ProcessVideoFiles frm = new ProcessVideoFiles(PassVidList);
+                    if (PassVidList.Count > 0)
+                    {
+                        ProcessVideoFiles frm = new ProcessVideoFiles(PassVidList);
+                        frm.ShowDialog();
+                    }
                     UpdateReviewINI(BioINI);
                     ColorClear.BackColor = Color.Green;
                 }
@@ -2502,7 +2509,11 @@ namespace SeizurePlayback
                         DetSezLabel.Text = "Finished!";
                         PercentCompletion = 100;
                         ColorClear.BackColor = Color.Green;
-                        ProcessVideoFiles frm = new ProcessVideoFiles(PassVidList);
+                        if (PassVidList.Count > 0)
+                        {
+                            ProcessVideoFiles frm = new ProcessVideoFiles(PassVidList);
+                            frm.ShowDialog(); 
+                        }
                         UpdateReviewINI(BioINI);
                         Paused = true;
                         RealTime = false;
