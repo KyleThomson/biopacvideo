@@ -173,7 +173,7 @@ namespace BioPacVideo
             MP.Voltage = BioIni.IniReadValue("BioPac", "Voltage(mV)", 500);
             MP.Gain = BioIni.IniReadValue("BioPac", "Gain", 20000);
             MP.Enabled = BioIni.IniReadValue("BioPac", "Enabled", true);
-            MP.Offset = BioIni.IniReadValue("BioPac", "Offset", 0.0);
+            MP.Offset = BioIni.IniReadValue("BioPac", "Offset", 2.0);
             MP.FileSplit = BioIni.IniReadValue("BioPac", "FileSplit", true);
             BioIni.IniReadValue("Feeder", "Meal1", out Feeder.Meal1);
             BioIni.IniReadValue("Feeder", "Meal2", out Feeder.Meal2);

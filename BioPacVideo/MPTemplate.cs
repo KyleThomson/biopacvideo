@@ -614,7 +614,7 @@ namespace BioPacVideo
                             {
                                 rec_buffer[j] = Math.Min(rec_buffer[j], 4); //Make sure we don't exceed the maxes
                                 rec_buffer[j] = Math.Max(rec_buffer[j], 0);//Make sure we don't exceed the minmum
-                                transbuffer = Convert.ToInt32((rec_buffer[j] - Offset) * (double)Int32.MaxValue / 3); //Convert the value
+                                transbuffer = Convert.ToInt32((rec_buffer[j]) * (double)Int32.MaxValue / 3); //Convert the value
                                 BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
                             }
                             break;
