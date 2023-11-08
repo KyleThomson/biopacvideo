@@ -97,7 +97,7 @@ namespace SeizurePlayback
         public bool KeyMouseBusy = false;
         public bool VidFixDisabled = false;
         bool[] ZoomDif = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
-        
+        bool process;
          
         
         
@@ -118,6 +118,7 @@ namespace SeizurePlayback
             HCL = DSF.HCL;
             FastReviewState = false;
             FastReviewChange = false;
+            process = false; // telling the program when to pull up Process Video Files
             ButtonLoc = new int[3, 2] { { this.FastReview.Location.X, this.FastReview.Location.Y }, { this.button3.Location.X, this.button3.Location.Y }, { this.button2.Location.X, this.button2.Location.Y } };
             
             ChanZooms = new TrackBar[] { ZoomChan1, ZoomChan2, ZoomChan3, ZoomChan4, ZoomChan5, ZoomChan6, ZoomChan7, ZoomChan8, ZoomChan9, ZoomChan10, ZoomChan11, ZoomChan12, ZoomChan13, ZoomChan14, ZoomChan15, ZoomChan16};
@@ -335,7 +336,8 @@ namespace SeizurePlayback
             int Delay = 0;
             // int h,m,s;
             Stopwatch st = new Stopwatch();
-            
+            ProcessVideoFiles frm; 
+
             while (true)
             {
                 if (ACQ.Loaded)
@@ -410,11 +412,10 @@ namespace SeizurePlayback
                                     {
                                         Paused = true;
                                         PercentCompletion = 100;
-                                        ProcessVideoFiles frm = new ProcessVideoFiles(PassVidList);
-                                        frm.ShowDialog(this);
-                                        if (frm.close)
+                                        if (PassVidList.Count > 0)
                                         {
-
+                                            frm = new ProcessVideoFiles(PassVidList);
+                                            frm.ShowDialog();
                                         }
                                     }
                                     Step = 0;
@@ -443,7 +444,8 @@ namespace SeizurePlayback
                                         {
                                             Paused = true;
                                             PercentCompletion = 100;
-                                            ProcessVideoFiles frm = new ProcessVideoFiles(PassVidList);
+                                            frm = new ProcessVideoFiles(PassVidList);
+                                            frm.ShowDialog();
                                         }
                                         Redraw = true;
                                         Step = 0;
@@ -486,7 +488,8 @@ namespace SeizurePlayback
                                         {
                                             Paused = true;
                                             PercentCompletion = 100;
-                                            ProcessVideoFiles frm = new ProcessVideoFiles(PassVidList);
+                                            frm = new ProcessVideoFiles(PassVidList);
+                                            frm.ShowDialog();
                                         }
                                         Redraw = true;
                                         Step = Step - MaxDispSize;
@@ -1693,12 +1696,13 @@ namespace SeizurePlayback
                             Frm.ShortCapWarning.Show();
                             break;
                         }
-                        if ((P.StartTime - sz.EndTime >=60 && P.StartTime - sz.EndTime <= 300) || (sz.tS - P.EndTime >= 60 && sz.tS - P.EndTime <= 300)) // can be changed if the definition of status changes - SH
+                        // Hiding this until I can sync the status change with project manager, then we can show this again - SH
+                        /*if ((P.StartTime - sz.EndTime >=60 && P.StartTime - sz.EndTime <= 300) || (sz.tS - P.EndTime >= 60 && sz.tS - P.EndTime <= 300)) // can be changed if the definition of status changes - SH
                         {
                             Frm.ShortCapWarning.Text = "WARNING: Seizure is Less Than 5 Minutes Away From Another Seizure - Consider Status Epilepticus";
                             Frm.ShortCapWarning.Show();
                             break; 
-                        }
+                        }*/
 
                     }
 
@@ -2196,7 +2200,7 @@ namespace SeizurePlayback
                         PercentCompletion = 100;
                         ColorClear.BackColor = Color.Green;
                         ProcessVideoFiles frm = new ProcessVideoFiles(PassVidList); // new form that processes the video files -SH
-                     
+                        frm.ShowDialog(); 
                         UpdateReviewINI(BioINI);
                         Paused = true;
                         RealTime = false;

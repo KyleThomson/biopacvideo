@@ -11,24 +11,20 @@ namespace SeizurePlayback
     public partial class ProcessVideoFiles : Form
     {
         List<infopass> VidList;
-        public bool close;
-        private bool start;
-        Thread CT; 
+
         public ProcessVideoFiles(List<infopass> VideoList)
         {
             InitializeComponent();
-            VidList = VideoList;
+            VidList = new List<infopass>(VideoList);
             closeButton.Enabled = false;
-            close = false;
-            start = false;
-            closeButton.Text = "Close";
-            label1.Text = "Processing VIdeo Files";
-            label2.Show(); 
-            
+            closeButton.Hide();
+            startButton.Show();
+            label3.Text = VidList.Count.ToString() + " Videos to Process";
 
             
+            
         }
-        private void StartProcess()
+        /*private void StartProcess()
         {
             int i = 1; //start the seizure video processing count at 1 for the layman- SH
             //this.Show(); // maybe this opens the window? -SH
@@ -48,7 +44,7 @@ namespace SeizurePlayback
                 closeButton.Enabled = true; //allow the user to click the button to close the program - SH
                 //this.Dispose(); //close the window upon completion - SH
             }
-        }
+        }*/
 
         public void ProcessVideo(infopass Video)
         {
@@ -95,7 +91,41 @@ namespace SeizurePlayback
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            this.Close(); 
+            this.Dispose(); 
+        }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            label2.Text = "Do not close the program until complete";
+            label2.Update(); 
+            startButton.Hide();
+            label1.Text = "Processing....";
+            label1.Update(); 
+            processProg.Maximum = VidList.Count;
+            processProg.Value = 0;
+            int i = 1; //start the seizure video processing count at 1 for the layman- SH
+            foreach (infopass v in VidList) //process each video that has been assosciated with a seizure - SH
+            {
+                processProg.Value += 1;
+                processVidLabel.Text = "Processing Video " + i.ToString() + "/" + VidList.Count.ToString();
+                processVidLabel.Update(); 
+                label3.Text = (VidList.Count - i + 1).ToString() + " Videos to Process";
+                label3.Update(); 
+                ProcessVideo(v);
+                i++;
+            }
+            if (i == VidList.Count + 1)
+            {
+                processVidLabel.Text = "Complete!"; //once each video has been processed, label as complete - SH
+                closeButton.Enabled = true; //allow the user to click the button to close the program - SH
+                closeButton.Show();
+                label1.Text = "Processing Complete";
+                label2.Text = "You may now close the program";
+                label3.Text = VidList.Count.ToString() + " Videos Processed";
+                label1.Update();
+                label2.Update(); 
+                //this.Dispose(); //close the window upon completion - SH
+            }
         }
     }
 }

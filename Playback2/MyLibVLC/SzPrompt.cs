@@ -29,7 +29,11 @@ namespace SeizurePlayback
             Unknown.Checked = true;
             OKBtn.Enabled = false;
             Ok = false;
-            VideoList = PassList; 
+            VideoList = PassList;
+            //hiding controls until I get project manager up to date with these changes, then they can be shown again - SH
+            S5Pop.Hide();
+            Dravet.Hide();
+            Status.Hide(); 
         }
 
         private void OKBtn_Click(object sender, EventArgs e)
