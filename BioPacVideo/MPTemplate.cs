@@ -556,7 +556,6 @@ namespace BioPacVideo
             //Need that so we can do thread-safe operations. 
             Int32 transbuffer = new Int32();  //Translational buffer to write bytes instead of doubles.             
             MPReturn = MPCLASS.startAcquisition();  //Start actual acquisition'
-            Console.WriteLine("I GOT HERES!");                                                  
             if (MPReturn != MPCODE.MPSUCCESS) //If acquisition fails, error out. 
             {
                 RecordingSuccess = false;

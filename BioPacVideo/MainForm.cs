@@ -167,7 +167,7 @@ namespace BioPacVideo
         {
             MP.RecordingDirectory = BioIni.IniReadValue("General", "RecDirectory", Directory.GetCurrentDirectory());
             MP.MPtype = BioIni.IniReadValue("BioPac", "MPType", "MP160");
-            MP.SampleRate = BioIni.IniReadValue("BioPac", "SampleRate", 1000);
+            MP.SampleRate = BioIni.IniReadValue("BioPac", "SampleRate", 500);
             MP.SelectedChannel = BioIni.IniReadValue("BioPac", "Selected Channel", 1);
             MP.DisplayLength = BioIni.IniReadValue("BioPac", "DisplayLength", 10);
             MP.Voltage = BioIni.IniReadValue("BioPac", "Voltage(mV)", 500);
@@ -459,7 +459,9 @@ namespace BioPacVideo
         {
             while (RunClockThread)
             {
-                TimeLabel.Text = DateAndTime.Now.ToString(); 
+                TimeLabel.Text = DateAndTime.Now.ToString();
+                Thread.Sleep(1000);
+              
             }
         }
 
