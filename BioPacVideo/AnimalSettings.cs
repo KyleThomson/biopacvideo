@@ -23,13 +23,15 @@ namespace BioPacVideo
         int totalCages;
         int x;
         int y;
-        bool focusBusy; 
-        public AnimalSettings(FeederTemplate passFeeder)
+        bool focusBusy;
+        bool recordingOn; 
+        public AnimalSettings(FeederTemplate passFeeder, bool Recording)
         {
             InitializeComponent();
             Feeder = passFeeder;
             x = 0;
             y = 0;
+            recordingOn = Recording; 
             
             //List of all the group boxes, one per animal
             groupList = new List<GroupBox> { groupBox1, groupBox2, groupBox3, groupBox4, groupBox5, groupBox6, groupBox7, groupBox8,
@@ -57,6 +59,15 @@ namespace BioPacVideo
             cages_y_text.Text = Feeder.Cages_Y.ToString();
             this.Height = (Feeder.Cages_Y * 216) + 138;
             this.Width = (Feeder.Cages_X * 150) + 88;
+
+            if (recordingOn)
+            {
+                warningLabel.Text = "Animal IDs may not be changed while recording is in progress";
+                foreach(TextBox t in animalID)
+                {
+                    t.Enabled = false; 
+                }
+            }
 
             //groupBox1.MouseHover += delegate (object sender, System.EventArgs e) { groupBox_MouseHover(sender, e, groupBox1); };
             animalID1.LostFocus += delegate (object sender, System.EventArgs e) { weightBox_FocusLeave(sender, e, animalID1); };
@@ -157,6 +168,7 @@ namespace BioPacVideo
             }
 
             groupBox17.Location = new Point(33, 8);
+            warningLabel.Location = new Point(360, 8); 
             submitButton.Location = new Point((150 * (Feeder.Cages_X - 1) + 70), (216 * (Feeder.Cages_Y) + 88));
             instructText.Location = new Point(33, (216 * (Feeder.Cages_Y) + 88));
             instructText.Text = "Please input animal ID and weight. Specify unmedicated or medicated. If both, specify the percent medicated";

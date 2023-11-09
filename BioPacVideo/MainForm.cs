@@ -449,11 +449,11 @@ namespace BioPacVideo
             }
       }
 
-        /****************************************************************************************
-        * 
-        *                              TIMER CHECK THREAD
-        *                  
-        * **************************************************************************************/
+/****************************************************************************************
+* 
+*                              CLOCK THREAD
+*                  
+* **************************************************************************************/
 
         private void ClockThread()
         {
@@ -873,7 +873,7 @@ namespace BioPacVideo
         private void animalSettingsTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
             
-            AnimalSettings frm = new AnimalSettings(Feeder);
+            AnimalSettings frm = new AnimalSettings(Feeder, MP.RecordingSuccess);
             frm.Height = 90;
             frm.Width = 300;
             frm.ShowDialog(this);

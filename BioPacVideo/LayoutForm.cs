@@ -11,7 +11,8 @@ namespace BioPacVideo
 {
     public partial class LayoutForm : Form
     {
-        FeederTemplate Feeder; 
+        FeederTemplate Feeder;
+        MPTemplate MP; 
         
         public LayoutForm(FeederTemplate passFeeder)
         {
@@ -47,7 +48,7 @@ namespace BioPacVideo
 
         private void continueButton_Click(object sender, EventArgs e)
         {
-            AnimalSettings frm = new AnimalSettings(Feeder);
+            AnimalSettings frm = new AnimalSettings(Feeder, MP.RecordingSuccess);
             frm.Height = (Feeder.Cages_Y * 216) + 138;
             frm.Width = (Feeder.Cages_X * 150) + 50;
             frm.ShowDialog(this);
