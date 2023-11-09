@@ -63,6 +63,7 @@ namespace BioPacVideo
 
         public bool RecordingWanted;
         public bool RecordingSuccess;
+        public bool Recording; 
         public bool VideoOff; 
 
 

@@ -31,7 +31,7 @@ namespace BioPacVideo
             Feeder = passFeeder;
             x = 0;
             y = 0;
-            recordingOn = Recording; 
+            recordingOn = Recording;
             
             //List of all the group boxes, one per animal
             groupList = new List<GroupBox> { groupBox1, groupBox2, groupBox3, groupBox4, groupBox5, groupBox6, groupBox7, groupBox8,
