@@ -369,6 +369,7 @@ namespace BioPacVideo
                         }
                     }
                 }
+                // Changing this so the file splits every four hours
                 //If 12AM, restart recording. 
                 if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0))
                 {
@@ -387,6 +388,7 @@ namespace BioPacVideo
                     Update_FreeSpace();
                     Thread.Sleep(120000); //Always Skip the Meal;
                 }
+                // If noon, restart recording
                 else if ((MP.FileSplit) & (DateTime.Now.TimeOfDay.Hours == 12) & (DateTime.Now.TimeOfDay.Minutes == 0))
                 {
                     if (MP.IsFileWriting)
@@ -404,7 +406,79 @@ namespace BioPacVideo
                     Update_FreeSpace();
                     Thread.Sleep(120000); //Always Skip the Meal;
                 }
-                
+                // If 4 am, restart recording
+                else if ((MP.FileSplit) & (DateTime.Now.TimeOfDay.Hours == 4) & (DateTime.Now.TimeOfDay.Minutes == 0))
+                {
+                    if (MP.IsFileWriting)
+                    {
+                        StopRecording();
+                        StartRecording();
+                    }
+                    else
+                    {
+                        MP.Disconnect();
+                        Thread.Sleep(1000);
+                        MP.Connect();
+                    }
+                    //Update Hard Drive
+                    Update_FreeSpace();
+                    Thread.Sleep(120000); //Always Skip the Meal;
+                }
+                // If 8 am, restart recording
+                else if ((MP.FileSplit) & (DateTime.Now.TimeOfDay.Hours == 8) & (DateTime.Now.TimeOfDay.Minutes == 0))
+                {
+                    if (MP.IsFileWriting)
+                    {
+                        StopRecording();
+                        StartRecording();
+                    }
+                    else
+                    {
+                        MP.Disconnect();
+                        Thread.Sleep(1000);
+                        MP.Connect();
+                    }
+                    //Update Hard Drive
+                    Update_FreeSpace();
+                    Thread.Sleep(120000); //Always Skip the Meal;
+                }
+                // If 4 pm, restart recording
+                else if ((MP.FileSplit) & (DateTime.Now.TimeOfDay.Hours == 16) & (DateTime.Now.TimeOfDay.Minutes == 0))
+                {
+                    if (MP.IsFileWriting)
+                    {
+                        StopRecording();
+                        StartRecording();
+                    }
+                    else
+                    {
+                        MP.Disconnect();
+                        Thread.Sleep(1000);
+                        MP.Connect();
+                    }
+                    //Update Hard Drive
+                    Update_FreeSpace();
+                    Thread.Sleep(120000); //Always Skip the Meal;
+                }
+                // If 8 pm, restart recording
+                else if ((MP.FileSplit) & (DateTime.Now.TimeOfDay.Hours == 20) & (DateTime.Now.TimeOfDay.Minutes == 0))
+                {
+                    if (MP.IsFileWriting)
+                    {
+                        StopRecording();
+                        StartRecording();
+                    }
+                    else
+                    {
+                        MP.Disconnect();
+                        Thread.Sleep(1000);
+                        MP.Connect();
+                    }
+                    //Update Hard Drive
+                    Update_FreeSpace();
+                    Thread.Sleep(120000); //Always Skip the Meal;
+                }
+
                 else if (Feeder.Enabled)
                 {
                     if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal1.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal1.Minutes))
