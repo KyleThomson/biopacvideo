@@ -501,6 +501,7 @@ namespace ProjectManager
                 for (int i = 0; i < Frm.DirReturn.Length; i++)
                 {
                     DirectoryLoadText.Text = $"Loading: {i + 1} / {Frm.DirReturn.Length} (Please Wait!)";
+                    DirectoryLoadText.Update(); // this should make it so that this label actually updates as the files are being loaded in -SH 
                     if (DirectoryLoadBar.Value == DirectoryLoadBar.Maximum) DirectoryLoadBar.Value -= 2;
                     DirectoryLoadBar.Value++;
                     //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));

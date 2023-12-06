@@ -519,7 +519,7 @@ namespace ProjectManager
             analysis.SeizureBurdenPValue();
             analysis._analysisDone = true;
         }
-        public void CompareStageConflicts() // this is where we note the discrepencies for the form? -SH
+        public void CompareStageConflicts() // this is where we note the discrepencies for the form and add them to a list -SH
         {
             int tempAnCount = 0;
             foreach (AnimalType A in Animals)

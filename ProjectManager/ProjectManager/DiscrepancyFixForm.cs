@@ -66,7 +66,7 @@ namespace ProjectManager
 
             }
 
-           
+            notesBox.Enabled = false; 
         }
 
 
@@ -100,13 +100,15 @@ namespace ProjectManager
                 return;
             }
 
-            currentSZ = discList[ConflictingList.SelectedIndices[0]];
+            currentSZ = discList[ConflictingList.SelectedIndices[0]]; // I think this is fucked up. Check this out - SH
 
-            notesLabel.Text = currentSZ.sz.Notes;
+            notesBox.Text = currentSZ.sz.Notes;
+            notesBox.Enabled = false; 
 
             if (currentSZ.sz.VidString == null)
             {
                 DialogResult errorBox = MessageBox.Show("NO VIDEO DATA FOUND \n \n \t To view video, you must use Seizure Playback to view this seizure", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //this keeps happening to me - SH
                 vidExists = false;
             }
             else
@@ -173,6 +175,7 @@ namespace ProjectManager
 
         private void submitChangeButton_Click(object sender, EventArgs e)
         {
+            notesBox.Enabled = false; 
             if (scaleButton1.Checked || scaleButton2.Checked || scaleButton3.Checked || scaleButton4.Checked || scaleButton5.Checked || scaleButton0.Checked || scaleButtonNA.Checked
                 || scaleButtonDravet.Checked || scaleButtonStatus.Checked || scaleButton5pop.Checked) // if any of the radio button on the Update Score panel are checked -SH
             {
@@ -219,7 +222,7 @@ namespace ProjectManager
                 }
                 
 
-                currentSZ.sz.Notes = notesLabel.Text;
+                currentSZ.sz.Notes = notesBox.Text;
 
                 animals[currentSZ.anIndex].Sz[currentSZ.szIndex] = currentSZ.sz;
 
@@ -317,6 +320,11 @@ namespace ProjectManager
             }
 
             buttonBusy = false;
+        }
+
+        private void editNotesButton_Click(object sender, EventArgs e)
+        {
+            notesBox.Enabled = true; 
         }
     }
 }

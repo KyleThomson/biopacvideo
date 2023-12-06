@@ -163,14 +163,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ProjectManager.exe" size="203264">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ProjectManager.exe" size="202752">
       <assemblyIdentity name="ProjectManager" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>xGdJ/yJNVtdrlDMZVlj09RiwWpZRGNghc4M1a2Hv8O4=</dsig:DigestValue>
+        <dsig:DigestValue>tK5e1TLa8IPBs4JUmjFkiR9AeL5+J6MJ5I2qw5P9LBE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -222,13 +222,13 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="Accord.dll.config" size="213">
+  <file name="Accord.dll.config" size="220">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>MEnoP5t/qShagvs8d0DpwiW2ajH4BdNYKpv9NLXdjm4=</dsig:DigestValue>
+      <dsig:DigestValue>rXk1gk79Wcezlt/jAmK/WsVZR0elUxDKDqpL2eQSvj4=</dsig:DigestValue>
     </hash>
   </file>
   <file name="libvlc\win-x86\hrtfs\dodeca_and_7channel_3DSL_HRTF.sofa" size="92388">
@@ -1563,13 +1563,13 @@
       <dsig:DigestValue>JAyljc7wn9caGzIq2mbd1pfdiWbv8WfbAx2leuAcqhM=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="libvlc\win-x86\lua\http\requests\browse.json" size="1425">
+  <file name="libvlc\win-x86\lua\http\requests\browse.json" size="1464">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>SNgdElx1FIu8POPHsZFS5zT1MHtbSzgGiAlaXoE+g2s=</dsig:DigestValue>
+      <dsig:DigestValue>y6jwSKO19RQm3XidboCzXC8+J+s/04pu5ckirl51R/Y=</dsig:DigestValue>
     </hash>
   </file>
   <file name="libvlc\win-x86\lua\http\requests\browse.xml" size="1743" writeableType="applicationData">
@@ -1581,13 +1581,13 @@
       <dsig:DigestValue>nSMms5tDBRxogndmFNjhxB0WErUZ7sBHBh9eI1TswEI=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="libvlc\win-x86\lua\http\requests\playlist.json" size="1384">
+  <file name="libvlc\win-x86\lua\http\requests\playlist.json" size="1420">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>Bk4xhiO0DKIyBpSgbNLjLIdEdfcM2vehy1q0LQeVMBY=</dsig:DigestValue>
+      <dsig:DigestValue>w9fV/vs2SYTQZmxXK9qE2LKW2jdLnF+lkgQmpPAguvM=</dsig:DigestValue>
     </hash>
   </file>
   <file name="libvlc\win-x86\lua\http\requests\playlist.xml" size="2316" writeableType="applicationData">
@@ -1617,13 +1617,13 @@
       <dsig:DigestValue>njmPZbVsoJsNQcu1t4ioVUuXt8DKJGS8t3g3H86V1iU=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="libvlc\win-x86\lua\http\requests\status.json" size="1427">
+  <file name="libvlc\win-x86\lua\http\requests\status.json" size="1465">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>XtVYJaFYCY+rdBnGIO1WQdfHCkIyof8d4pDjnkUXo1g=</dsig:DigestValue>
+      <dsig:DigestValue>y9P0AkYLUwlLX7NwpQgy6KQhUR0w2HS0W+kCvBBD34M=</dsig:DigestValue>
     </hash>
   </file>
   <file name="libvlc\win-x86\lua\http\requests\status.xml" size="2775" writeableType="applicationData">

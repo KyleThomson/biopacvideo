@@ -290,13 +290,32 @@ namespace ProjectManager
                 return -1;
 
             // if no negative one then parse stage 'normally'
-            string storeNum = String.Join("", note.Where(char.IsDigit));
+            string storeNum = String.Join("", note.Where(char.IsDigit)); //look at the digit that is included - SH
             if (storeNum.Length > 0)
             {
                 severity = int.Parse(storeNum);
+                if (severity == 5) //if the seizure severity if 5, it could mean popcorn or just stage 5 - SH
+                {
+                    if (note.Contains('p') || note.Contains('P')) // if there is a p in the note, probably means popcorn - SH
+                    {
+                        severity = 6; 
+                    }
+                    else //otherwise it is likely just a 5 - SH
+                    {
+                        severity = 5; 
+                    }
+                }
             }
-            else
-                // if notes are empty just return -1 so it doesn't return 0 and look like a nc seizure
+            // if there is no digit, then it likely means status or dravet
+            else if (note.Contains('d') || note.Contains('D')) // if there is a d in the notes, probably means dravet - SH
+            {
+                severity = 7;
+            }
+            else if (note.Contains("status") || note.Contains("Status") || note.Contains("se") || note.Contains("Se") || note.Contains("SE")) //idk dude - SH
+            {
+                severity = 8; 
+            }
+            else   // if notes are empty just return -1 so it doesn't return 0 and look like a nc seizure
                 return -1;
             return severity;
         }
