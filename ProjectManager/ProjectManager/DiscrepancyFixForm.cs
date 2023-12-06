@@ -100,7 +100,7 @@ namespace ProjectManager
                 return;
             }
 
-            currentSZ = discList[ConflictingList.SelectedIndices[0]]; // I think this is fucked up. Check this out - SH
+            currentSZ = discList[ConflictingList.FocusedItem.Index]; // I think this is fucked up. Check this out - SH
 
             notesBox.Text = currentSZ.sz.Notes;
             notesBox.Enabled = false; 
@@ -224,7 +224,7 @@ namespace ProjectManager
 
                 currentSZ.sz.Notes = notesBox.Text;
 
-                animals[currentSZ.anIndex].Sz[currentSZ.szIndex] = currentSZ.sz;
+                animals[currentSZ.anIndex+1].Sz[currentSZ.szIndex] = currentSZ.sz;
 
 
 

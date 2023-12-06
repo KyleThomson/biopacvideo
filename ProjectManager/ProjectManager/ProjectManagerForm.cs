@@ -573,7 +573,7 @@ namespace ProjectManager
                 DialogResult result = MessageBox.Show("Discrepancies were detected between Racine Scores in one or more files, and must be fixed to maintain accuracy in data. \n \n \t Would you like to fix these now?", "PLEASE FIX SCORES", MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
                 {
-                    using (var DiscForm = new DiscrepancyFixForm(pjt.discrepancyList, pjt.Animals, Directory.GetParent(pjt.Filename).ToString() + "\\Videos\\", pjt.CDatName)) // program keeps crashing here - SH
+                    using (var DiscForm = new DiscrepancyFixForm(pjt.discrepancyList, pjt.Animals, Directory.GetParent(pjt.Filename).ToString() + "\\Videos\\", pjt.CDatName))
                     {
                         var temp = DiscForm.ShowDialog();
                         if (temp == DialogResult.OK)
