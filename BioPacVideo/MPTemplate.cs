@@ -592,55 +592,44 @@ namespace BioPacVideo
                 }
                 samplesize = (int)last_received / AcqChan; //How many samples did we acquire? 
                 samplecount += samplesize;
-                if (IsFileWriting) //If we are writing to the file, we want to handle it immediately. 
-                {
-                    BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin); //Make sure the File writting is in the right place                     
-                }
-                    switch (RecordingDeviceAll)
-                    {
-                        case 0: //Telemetry RAT
-                        for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
-                        {
-                            rec_buffer[j] = Math.Min(rec_buffer[j], 4); //Make sure we don't exceed the maxes
-                            rec_buffer[j] = Math.Max(rec_buffer[j], 0);//Make sure we don't exceed the minmum\
-                            rec_buffer[j] -= Offset;
-                            if (IsFileWriting) //If we are writing to the file, we want to handle it immediately. 
-                            {
-                                transbuffer = Convert.ToInt32((rec_buffer[j]) * (double)Int32.MaxValue / 2); //Convert the value
-                                BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast,     
-                            }
-                        }
-                        break;
-                    case 1: //Mouse Telemetry 
-                        for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
-                        {                         
-                            rec_buffer[j] = Math.Min(rec_buffer[j], 4); //Make sure we don't exceed the maxes
-                            rec_buffer[j] = Math.Max(rec_buffer[j], 0);//Make sure we don't exceed the minmum\
-                            rec_buffer[j] -= Offset;
-                            if (IsFileWriting) //If we are writing to the file, we want to handle it immediately. 
-                            {
-                                transbuffer = Convert.ToInt32((rec_buffer[j]) * (double)Int32.MaxValue / 3); //Convert the value
-                                BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast,     
-                            }
-                        }
-                        break;
-                    case 2: //Tethered 
-                        for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
-                        {
-                            rec_buffer[j] = Math.Min(rec_buffer[j], Int32.MaxValue / Gain); //Make sure we don't exceed the maxes
-                            rec_buffer[j] = Math.Max(rec_buffer[j], Int32.MinValue / Gain);//Make sure we don't exceed the minmum
-                            if (IsFileWriting) //If we are writing to the file, we want to handle it immediately. 
-                            {
-                                transbuffer = Convert.ToInt32((rec_buffer[j]) * Gain); //Convert the value
-                                BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast,     
-                            }                                                        
-                        }
-                        break;
-                }
                 // VideoWrapper.SetSampleCount(samplecount);                
                 if (IsFileWriting) //If we are writing to the file, we want to handle it immediately. 
                 {
-                
+
+                    BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin); //Make sure the File writting is in the right place                     
+                    switch (RecordingDeviceAll)
+                    {
+                        case 0: //Telemetry RAT
+                            for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
+                            {
+                                rec_buffer[j] = Math.Min(rec_buffer[j], 4); //Make sure we don't exceed the maxes
+                                rec_buffer[j] = Math.Max(rec_buffer[j], 0);//Make sure we don't exceed the minmum
+                                transbuffer = Convert.ToInt32((rec_buffer[j] - Offset) * (double)Int32.MaxValue / 2); //Convert the value
+                                BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
+                            }
+                            break;
+                        case 1: //Mouse Telemetry 
+                            for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
+                            {
+                                rec_buffer[j] = Math.Min(rec_buffer[j], 4); //Make sure we don't exceed the maxes
+                                rec_buffer[j] = Math.Max(rec_buffer[j], 0);//Make sure we don't exceed the minmum
+                                transbuffer = Convert.ToInt32((rec_buffer[j]) * (double)Int32.MaxValue / 3); //Convert the value
+                                BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
+                            }
+                            break;
+                        case 2: //Tethered 
+                            for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
+                            {
+                                rec_buffer[j] = Math.Min(rec_buffer[j], Int32.MaxValue / Gain); //Make sure we don't exceed the maxes
+                                rec_buffer[j] = Math.Max(rec_buffer[j], Int32.MinValue / Gain);//Make sure we don't exceed the minmum
+                                transbuffer = Convert.ToInt32((rec_buffer[j]) * Gain); //Convert the value
+                                BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
+                                                                        //better safe than sorry.
+                            }
+                            break;
+
+                    }
+                    CurrentWriteLoc = BinaryFile.Position;  //Update the current location.
                     if (FileStop) //Need to have thread safe file closing! Oops!                        
                     {
                         updateheader(); //Write sample total
