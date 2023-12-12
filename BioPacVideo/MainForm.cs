@@ -510,7 +510,7 @@ namespace BioPacVideo
             DateString = string.Format("{0:yyyy}{0:MM}{0:dd}-{0:HH}{0:mm}{0:ss}", DateTime.Now);
             RecordingDir = MP.RecordingDirectory + "\\" + DateString;
             Directory.CreateDirectory(RecordingDir);
-
+            MP.Recording = true; 
             MP.Filename = MP.RecordingDirectory + "\\" + DateString + "\\" + DateString;
             Feeder.SetLogName(MP.RecordingDirectory + "\\" + DateString + "\\" + DateString + "_Feeder.log");
             //Write INI file once, so we save all the settings                    
@@ -648,6 +648,7 @@ namespace BioPacVideo
                     {
                         //End Recording
                         MP.RecordingWanted = false; // close the eyes and no longer observe data transfer between Biopac and software
+                        MP.Recording = false; 
                         //Console.WriteLine("RecordingWanted = " + MP.RecordingWanted);
                         StopRecording();
                         IDM_SELECTCHANNELS.Enabled = true;
@@ -790,7 +791,7 @@ namespace BioPacVideo
             Video.UpdateCameraAssoc();
             MessageBox.Show("Please restart the software \nbefore continuing"); 
             frm.Dispose();
-            
+           
         }
 
         private void VoltScale_SelectedIndexChanged(object sender, EventArgs e)
@@ -873,7 +874,7 @@ namespace BioPacVideo
         private void animalSettingsTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
             
-            AnimalSettings frm = new AnimalSettings(Feeder, MP.RecordingSuccess);
+            AnimalSettings frm = new AnimalSettings(Feeder, MP.Recording);
             frm.Height = 90;
             frm.Width = 300;
             frm.ShowDialog(this);

@@ -34,7 +34,7 @@ namespace BioPacVideo
             Telemetry.Checked = RecordingDevice[0];
             recordingDeviceBox.Items.Add("Rat Telemetry");
             recordingDeviceBox.Items.Add("Mouse Telemetry");
-            recordingDeviceBox.Items.Add("Teathered"); 
+            recordingDeviceBox.Items.Add("Tethered"); 
             recordingDeviceBox.SelectedIndex = RecordingDeviceAll; 
             /*TelemetryCh2.Checked = RecordingDevice[1];
             TelemetryCh3.Checked = RecordingDevice[2];
