@@ -617,7 +617,7 @@ namespace BioPacVideo
                         for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
                         {
                             rec_buffer[j] = Math.Min(rec_buffer[j], Int32.MaxValue / Gain); //Make sure we don't exceed the maxes
-                            rec_buffer[j] = Math.Max(rec_buffer[j], Int32.MinValue / Gain);//Make sure we don't exceed the mi
+                            rec_buffer[j] = Math.Max(rec_buffer[j], Int32.MinValue / Gain);//Make sure we don't exceed the minimum
                         }
                         break;
                 }

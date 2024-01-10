@@ -188,7 +188,16 @@ namespace BioPacVideo
         {
             Commands.Enqueue((byte)Feeder);
             Commands.Enqueue((byte)Pellets);
-            string Txt = "Feeder-" + Feeder.ToString() + "  Pellets-" + Pellets.ToString();
+            string Txt; 
+            if (AlternateAddress)
+            {
+                Txt = "Feeder-" + AddressTable[Feeder] + 1.ToString() + " Pellets-" + Pellets.ToString();
+                //this shows the feeder based on what was put into the feeder addresses 
+            }
+            else {
+                //translate it from programmer terms into layman terms vis a vis the feeder numbers
+                Txt = "Feeder-" + Feeder + 1.ToString() + " Pellets-" + Pellets.ToString();
+            }
             CommandText.Push(Txt); 
             CommandSize = Commands.Count;
             Activated = true;
