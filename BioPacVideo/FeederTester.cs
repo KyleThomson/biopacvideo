@@ -54,32 +54,32 @@ namespace BioPacVideo
                     if ((e.Y > 55) && (e.Y < 145) && (e.X < 83))
                     {
                         g.DrawRectangle(p, 28, 50, 55, 95);
-                        FeederPos = 1;
+                        FeederPos = 2;
                     }
                     else if ((e.Y > 85) && (e.Y < 185) && (e.X < 120))
                     {
                         g.DrawRectangle(p, 70, 90, 50, 95);
-                        FeederPos = 2;
+                        FeederPos = 1;
                     }
                     else if ((e.Y > 235) && (e.Y < 330) && (e.X < 83))
                     {
                         g.DrawRectangle(p, 28, 235, 50, 95);
-                        FeederPos = 9;
+                        FeederPos = 10;
                     }
                     else if ((e.Y > 270) && (e.Y < 370) && (e.X < 112))
                     {
                         g.DrawRectangle(p, 65, 274, 50, 95);
-                        FeederPos = 10;
+                        FeederPos = 9;
                     }
                     else if ((e.Y > 400) && (e.Y < 501) && (e.X < 80))
                     {
                         g.DrawRectangle(p, 32, 407, 50, 95);
-                        FeederPos = 17;
+                        FeederPos = 18;
                     }
                     else if ((e.Y > 440) && (e.Y < 541) && (e.X < 112))
                     {
                         g.DrawRectangle(p, 70, 445, 50, 95);
-                        FeederPos = 18;
+                        FeederPos = 17;
                     }
                     else
                     {
@@ -91,32 +91,32 @@ namespace BioPacVideo
                     if ((e.Y > 55) && (e.Y < 145) && (e.X < 275))
                     {
                         g.DrawRectangle(p, 227, 50, 50, 95);
-                        FeederPos = 3;
+                        FeederPos = 4;
                     }
                     else if ((e.Y > 85) && (e.Y < 185) && (e.X < 310))
                     {
                         g.DrawRectangle(p, 265, 90, 50, 95);
-                        FeederPos = 4;
+                        FeederPos = 3;
                     }
                     else if ((e.Y > 235) && (e.Y < 330) && (e.X < 278))
                     {
                         g.DrawRectangle(p, 225, 235, 50, 95);
-                        FeederPos = 11;
+                        FeederPos = 12;
                     }
                     else if ((e.Y > 270) && (e.Y < 370) && (e.X < 315))
                     {
                         g.DrawRectangle(p, 265, 272, 50, 95);
-                        FeederPos = 12;
+                        FeederPos = 11;
                     }
                     else if ((e.Y > 400) && (e.Y < 501) && (e.X < 270))
                     {
                         g.DrawRectangle(p, 224, 408, 50, 95);
-                        FeederPos = 19;
+                        FeederPos = 20;
                     }
                     else if ((e.Y > 440) && (e.Y < 541) && (e.X < 305))
                     {
                         g.DrawRectangle(p, 260, 450, 50, 95);
-                        FeederPos = 20;
+                        FeederPos = 19;
                     }
                     else
                     {
@@ -136,32 +136,32 @@ namespace BioPacVideo
                     if ((e.Y > 50) && (e.Y < 145) && (e.X < 535))
                     {
                         g.DrawRectangle(p, 487, 50, 50, 95);
-                        FeederPos = 5;
+                        FeederPos = 6;
                     }
                     else if ((e.Y > 90) && (e.Y < 185) && (e.X < 575))
                     {
                         g.DrawRectangle(p, 525, 90, 50, 95);
-                        FeederPos = 6;
+                        FeederPos = 5;
                     }
                     else if ((e.Y > 235) && (e.Y < 331) && (e.X < 530))
                     {
                         g.DrawRectangle(p, 480, 235, 50, 95);
-                        FeederPos = 13;
+                        FeederPos = 14;
                     }
                     else if ((e.Y > 275) && (e.Y < 371) && (e.X < 565))
                     {
                         g.DrawRectangle(p, 519, 273, 50, 95);
-                        FeederPos = 14;
+                        FeederPos = 13;
                     }
                     else if ((e.Y > 405) && (e.Y < 500) && (e.X < 535))
                     {
                         g.DrawRectangle(p, 486, 405, 50, 95);
-                        FeederPos = 21;
+                        FeederPos = 22;
                     }
                     else if ((e.Y > 445) && (e.Y < 535) && (e.X < 572))
                     {
                         g.DrawRectangle(p, 525, 445, 50, 95);
-                        FeederPos = 22;
+                        FeederPos = 21;
                     }
                     else
                     {
@@ -173,32 +173,32 @@ namespace BioPacVideo
                     if ((e.Y > 50) && (e.Y < 144) && (e.X < 730))
                     {
                         g.DrawRectangle(p, 680, 50, 50, 95);
-                        FeederPos = 7;
+                        FeederPos = 8;
                     }
                     else if ((e.Y > 90) && (e.Y < 181) && (e.X < 765))
                     {
                         g.DrawRectangle(p, 720, 90, 50, 95);
-                        FeederPos = 8;
+                        FeederPos = 7;
                     }
                     else if ((e.Y > 238) && (e.Y < 330) && (e.X < 730))
                     {
                         g.DrawRectangle(p, 680, 235, 50, 95);
-                        FeederPos = 15;
+                        FeederPos = 16;
                     }
                     else if ((e.Y > 277) && (e.Y < 365) && (e.X < 765))
                     {
                         g.DrawRectangle(p, 718, 275, 50, 95);
-                        FeederPos = 16;
+                        FeederPos = 15;
                     }
                     else if ((e.Y > 408) && (e.Y < 502) && (e.X < 725))
                     {
                         g.DrawRectangle(p, 677, 408, 50, 95);
-                        FeederPos = 23;
+                        FeederPos = 24;
                     }
                     else if ((e.Y > 450) && (e.Y < 540) && (e.X < 760))
                     {
                         g.DrawRectangle(p, 715, 450, 50, 95);
-                        FeederPos = 24;
+                        FeederPos = 23;
                     }
                     else
                     {
