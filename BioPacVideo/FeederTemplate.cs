@@ -191,13 +191,13 @@ namespace BioPacVideo
             string Txt; 
             if (AlternateAddress)
             {
-                int n= AddressTable[Feeder] + 1; 
+                int n= AddressTable[Feeder]+= 1; 
                 Txt = "Feeder-" + n.ToString() + " Pellets-" + Pellets.ToString();
                 //this shows the feeder based on what was put into the feeder addresses 
             }
             else {
                 //translate it from programmer terms into layman terms vis a vis the feeder numbers
-                int n = Feeder + 1; 
+                int n = Feeder+=1; 
                 Txt = "Feeder-" + n.ToString() + " Pellets-" + Pellets.ToString();
             }
             CommandText.Push(Txt); 
