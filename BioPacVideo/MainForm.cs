@@ -254,7 +254,7 @@ namespace BioPacVideo
         {
             BioIni.IniWriteValue("General", "RecDirectory", MP.RecordingDirectory);
             BioIni.IniWriteValue("General", "Unit Name", UnitLabel);
-            BioIni.IniWriteValue("General", "Version", 2.2);
+            BioIni.IniWriteValue("General", "Version", "2.2.1");
             //videofix qualifier added
             BioIni.IniWriteValue("BioPac", "VideoFixDisabled", true);
             BioIni.IniWriteValue("BioPac", "MPType", MP.MPtype);

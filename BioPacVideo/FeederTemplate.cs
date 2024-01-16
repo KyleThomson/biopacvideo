@@ -130,7 +130,7 @@ namespace BioPacVideo
         {
             Commands = new Queue<byte>();
             CommandText = new Stack<string>();
-            //Activated = false;
+            Activated = false;
             CommandReady = false;
             ErrorState = false;
             State = 3;
@@ -186,7 +186,7 @@ namespace BioPacVideo
         }
         public void AddCommand(int Feeder, int Pellets)
         {
-            Commands.Enqueue((byte)Feeder);
+            Commands.Enqueue((byte)Feeder); 
             Commands.Enqueue((byte)Pellets);
             string Txt; 
             if (AlternateAddress)
@@ -199,10 +199,10 @@ namespace BioPacVideo
                 //translate it from programmer terms into layman terms vis a vis the feeder numbers
                 int n = Feeder+=1; 
                 Txt = "Feeder-" + n.ToString() + " Pellets-" + Pellets.ToString();
-            }
-            CommandText.Push(Txt); 
+            } 
+            CommandText.Push(Txt);
             CommandSize = Commands.Count;
-            //Activated = true;
+            Activated = true;
         }
         public void ExecuteAction()
         {           
@@ -252,11 +252,11 @@ namespace BioPacVideo
                     {
                         ActualFeeder = Feeder; //Otherwise use default feeder
                     }
-                    while (MealSize > 30)
+                    while (MealSize > 23) // changed from 30
                     {
-                        AddCommand(ActualFeeder, 30);
+                        AddCommand(ActualFeeder, 23);
                         Log("Feeder: " + Feeder + "  Pellets: 30 " + Medi);
-                        MealSize -= 30;
+                        MealSize -= 23;
                     }
                     AddCommand(ActualFeeder, MealSize);
                     Log("Feeder: " + Feeder.ToString() + "  Pellets: " + MealSize.ToString() + " " + Medi);
