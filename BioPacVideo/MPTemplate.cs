@@ -688,7 +688,7 @@ namespace BioPacVideo
                                 Feeder.StateText = "READY";
                                 if (!Feeder.CommandWaitEx()) //Go back into waiting if no commands left in Stack 
                                 {
-                                    Feeder.Activated = false;
+                                    //Feeder.Activated = false;
                                 }
                             }
                             if (!a && b)

@@ -189,11 +189,27 @@ namespace BioPacVideo
                 if (int.TryParse(weightBox[i].Text, out temp))
                 {
                     Feeder.Rats[i].Weight = temp;
+                    if (medCheck[i].Checked && !unmedCheck[i].Checked)
+                    {
+                        Feeder.Rats[i].Medication = 100;
+                    }
+                    else if (!medCheck[i].Checked && unmedCheck[i].Checked)
+                    {
+                        Feeder.Rats[i].Medication = 0;
+                    }
+                    else if (medCheck[i].Checked && unmedCheck[i].Checked)
+                    {
+                        if (int.TryParse(percentBox[i].Text, out temp))
+                        {
+                            Feeder.Rats[i].Medication = temp;
+                        }
+                    }
                 }
                 else
                 {
                     Feeder.Rats[i].Weight = 0; //this might help the feeder code nonsense
                 }
+                
             }
             if (error)
             {

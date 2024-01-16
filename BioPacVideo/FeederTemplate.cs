@@ -130,7 +130,7 @@ namespace BioPacVideo
         {
             Commands = new Queue<byte>();
             CommandText = new Stack<string>();
-            Activated = false;
+            //Activated = false;
             CommandReady = false;
             ErrorState = false;
             State = 3;
@@ -202,7 +202,7 @@ namespace BioPacVideo
             }
             CommandText.Push(Txt); 
             CommandSize = Commands.Count;
-            Activated = true;
+            //Activated = true;
         }
         public void ExecuteAction()
         {           
