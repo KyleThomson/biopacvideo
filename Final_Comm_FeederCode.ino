@@ -5,6 +5,7 @@
   int failattempts = 0; 
   int FailListCount = 0; 
   int State = 3;
+  int innerloop, outerloop;
   boolean resetcount = false;
   boolean Execute = false; //Whether or not to execute a command
   boolean Feeder = true; 
@@ -92,6 +93,19 @@ int val = 0;
    // digitalWrite(EEG4,HIGH);
    // digitalWrite(OUT0, HIGH);
    // digitalWrite(OUT1, HIGH);
+   /* Feeder Test Code: Uncomment to test all feeders on boot
+   for (outerloop=0; outerloop<24; outerloop++)
+   {
+     SetAddress(outerloop);
+     for (innerloop=0; innerloop<40; innerloop++)
+     {
+       //One motor step, 80ms long
+          digitalWrite(STEP, HIGH);   
+          delay(40);              
+          digitalWrite(STEP, LOW);    
+          delay(40);
+     }
+   }*/
   }
   
   
@@ -179,8 +193,7 @@ int val = 0;
         digitalWrite(STEP, LOW); 
        //Turn on the motors         
         digitalWrite(MOTORCONTROL, HIGH);
-        digitalWrite(EEGOut1, LOW); 
-        digitalWrite(EEGOut0, HIGH);
+        
         //Reset the counters
         innercount = 0;
         attempts = 0; 
@@ -188,9 +201,11 @@ int val = 0;
         resetcount = true;
         Fail = false;
         
-  
+       digitalWrite(EEGOut1, LOW); 
+       digitalWrite(EEGOut0, HIGH);
         while (count > 0)
         {
+       
           //One motor step, 80ms long
           digitalWrite(STEP, HIGH);   
           delay(40);              
@@ -204,7 +219,7 @@ int val = 0;
           
           //if we are failing to see a pellet drop within 10 seconds
           //reverse the direction of the motor
-          if (attempts > 150)
+          if (attempts > 200)
           {       
             if (dir)
             {
@@ -232,8 +247,7 @@ int val = 0;
                 resetcount = true;    //Debounce for pellet drop
               }    
         } //While (count > 0)
-        Ack = false;
-        delay(100); //Take a quick break between feeder
+        delay(1000); //Take a quick break between feeder
         if (Fail)
         {
           State = 0;
@@ -247,10 +261,8 @@ int val = 0;
           digitalWrite(EEGOut1,HIGH);
           digitalWrite(EEGOut0,LOW);
         }               
-        while(!Ack)
-        { 
-          delay(100);
-        }
+        delay(5000);
+
     } //While (Commands > 0)
     Execute = false;
     SetAddress(24); //Set to a null address
@@ -291,14 +303,7 @@ int val = 0;
       if (!digitalRead(EEG4)) {Com = Com+16;}   
       if  (Com == 31)
       {
-          if (State == 3)
-          {
-             Execute = true;
-          }
-          else 
-          {
-            Ack = true;  //Kyle thinks this is the mistake 
-          }
+          Execute=true;
       } //Check if an execute command 
       //if Com is 30, that's our ack!!!! 
       else  if (Feeder) //Are we reading a feeder 
@@ -308,18 +313,9 @@ int val = 0;
       }
         else 
       {
-        if (Com  > 0) 
-        {
            PList[Commands] = Com; //Store Pellets number
            Feeder = !Feeder; //Next value is a feeder
            Commands++; //Add a Feeder command
-        }
-        else //if zero pellets are sent, reset the system
-        {
-           Feeder != Feeder;
-           Commands = 0;
-           count = 0; 
-        }              
       }
       GetC = false; //Debounce close
     } 
