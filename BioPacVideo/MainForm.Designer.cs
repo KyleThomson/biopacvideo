@@ -60,11 +60,6 @@ namespace BioPacVideo
             this.SpaceLeft = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_BIOPACSTAT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_MPLASTMESSAGE = new System.Windows.Forms.ToolStripStatusLabel();
-            this.IDT_VIDEOSTATUS = new System.Windows.Forms.ToolStripStatusLabel();
-            this.IDT_VIDEORESULT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.IDT_DEVICECOUNT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.IDT_ENCODERSTATUS = new System.Windows.Forms.ToolStripStatusLabel();
-            this.IDT_ENCSTAT = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_FEEDST = new System.Windows.Forms.ToolStripStatusLabel();
             this.UnitNameStrip = new System.Windows.Forms.ToolStripStatusLabel();
             this.TimeLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -95,9 +90,10 @@ namespace BioPacVideo
             // RecordingButton
             // 
             this.RecordingButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RecordingButton.Location = new System.Drawing.Point(12, 37);
+            this.RecordingButton.Location = new System.Drawing.Point(16, 46);
+            this.RecordingButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.RecordingButton.Name = "RecordingButton";
-            this.RecordingButton.Size = new System.Drawing.Size(109, 59);
+            this.RecordingButton.Size = new System.Drawing.Size(145, 73);
             this.RecordingButton.TabIndex = 0;
             this.RecordingButton.Text = "Start Recording ";
             this.RecordingButton.UseVisualStyleBackColor = true;
@@ -105,6 +101,7 @@ namespace BioPacVideo
             // 
             // menuStrip1
             // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.bioPacToolStripMenuItem,
@@ -113,7 +110,7 @@ namespace BioPacVideo
             this.feedersToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1286, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1715, 28);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -124,25 +121,25 @@ namespace BioPacVideo
             this.toolStripSeparator1,
             this.quitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // selectDirectoryToolStripMenuItem
             // 
             this.selectDirectoryToolStripMenuItem.Name = "selectDirectoryToolStripMenuItem";
-            this.selectDirectoryToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
+            this.selectDirectoryToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
             this.selectDirectoryToolStripMenuItem.Text = "Select &Recording Directory";
             this.selectDirectoryToolStripMenuItem.Click += new System.EventHandler(this.selectDirectoryToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(210, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(266, 6);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(269, 26);
             this.quitToolStripMenuItem.Text = "&Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
@@ -156,46 +153,46 @@ namespace BioPacVideo
             this.toolStripSeparator2,
             this.bioPacEnabledToolStripMenuItem});
             this.bioPacToolStripMenuItem.Name = "bioPacToolStripMenuItem";
-            this.bioPacToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
+            this.bioPacToolStripMenuItem.Size = new System.Drawing.Size(67, 24);
             this.bioPacToolStripMenuItem.Text = "BioPac";
             // 
             // initializeBioPacToolStripMenuItem
             // 
             this.initializeBioPacToolStripMenuItem.Name = "initializeBioPacToolStripMenuItem";
-            this.initializeBioPacToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.initializeBioPacToolStripMenuItem.Size = new System.Drawing.Size(213, 26);
             this.initializeBioPacToolStripMenuItem.Text = "Connect BioPac";
             this.initializeBioPacToolStripMenuItem.Click += new System.EventHandler(this.initializeBioPacToolStripMenuItem_Click);
             // 
             // IDM_DISCONNECTBIOPAC
             // 
             this.IDM_DISCONNECTBIOPAC.Name = "IDM_DISCONNECTBIOPAC";
-            this.IDM_DISCONNECTBIOPAC.Size = new System.Drawing.Size(172, 22);
+            this.IDM_DISCONNECTBIOPAC.Size = new System.Drawing.Size(213, 26);
             this.IDM_DISCONNECTBIOPAC.Text = "Disconnect BioPac";
             this.IDM_DISCONNECTBIOPAC.Click += new System.EventHandler(this.disconnectBioPacToolStripMenuItem_Click);
             // 
             // IDM_SETTINGS
             // 
             this.IDM_SETTINGS.Name = "IDM_SETTINGS";
-            this.IDM_SETTINGS.Size = new System.Drawing.Size(172, 22);
+            this.IDM_SETTINGS.Size = new System.Drawing.Size(213, 26);
             this.IDM_SETTINGS.Text = "Settings";
             this.IDM_SETTINGS.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // IDM_SELECTCHANNELS
             // 
             this.IDM_SELECTCHANNELS.Name = "IDM_SELECTCHANNELS";
-            this.IDM_SELECTCHANNELS.Size = new System.Drawing.Size(172, 22);
+            this.IDM_SELECTCHANNELS.Size = new System.Drawing.Size(213, 26);
             this.IDM_SELECTCHANNELS.Text = "Select Channels";
             this.IDM_SELECTCHANNELS.Click += new System.EventHandler(this.selectChannelsToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(169, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(210, 6);
             // 
             // bioPacEnabledToolStripMenuItem
             // 
             this.bioPacEnabledToolStripMenuItem.Name = "bioPacEnabledToolStripMenuItem";
-            this.bioPacEnabledToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.bioPacEnabledToolStripMenuItem.Size = new System.Drawing.Size(213, 26);
             this.bioPacEnabledToolStripMenuItem.Text = "BioPac Enabled";
             this.bioPacEnabledToolStripMenuItem.Click += new System.EventHandler(this.bioPacEnabledToolStripMenuItem_Click);
             // 
@@ -206,13 +203,13 @@ namespace BioPacVideo
             this.videoSettingsToolStripMenuItem,
             this.toolStripSeparator3});
             this.videoToolStripMenuItem.Name = "videoToolStripMenuItem";
-            this.videoToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
+            this.videoToolStripMenuItem.Size = new System.Drawing.Size(62, 24);
             this.videoToolStripMenuItem.Text = "Video";
             // 
             // cameraAssociationsToolStripMenuItem
             // 
             this.cameraAssociationsToolStripMenuItem.Name = "cameraAssociationsToolStripMenuItem";
-            this.cameraAssociationsToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.cameraAssociationsToolStripMenuItem.Size = new System.Drawing.Size(229, 26);
             this.cameraAssociationsToolStripMenuItem.Text = "Camera Associations";
             this.cameraAssociationsToolStripMenuItem.Click += new System.EventHandler(this.cameraAssociationsToolStripMenuItem_Click);
             // 
@@ -220,14 +217,14 @@ namespace BioPacVideo
             // 
             this.videoSettingsToolStripMenuItem.Name = "videoSettingsToolStripMenuItem";
             this.videoSettingsToolStripMenuItem.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.videoSettingsToolStripMenuItem.Size = new System.Drawing.Size(224, 20);
+            this.videoSettingsToolStripMenuItem.Size = new System.Drawing.Size(269, 24);
             this.videoSettingsToolStripMenuItem.Text = "Video Settings";
             this.videoSettingsToolStripMenuItem.Click += new System.EventHandler(this.videoSettingsToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(181, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(226, 6);
             // 
             // automaticFeederToolStripMenuItem
             // 
@@ -236,27 +233,27 @@ namespace BioPacVideo
             this.injectionManagerToolStripMenuItem,
             this.AddPelletCountMenuItem});
             this.automaticFeederToolStripMenuItem.Name = "automaticFeederToolStripMenuItem";
-            this.automaticFeederToolStripMenuItem.Size = new System.Drawing.Size(102, 20);
+            this.automaticFeederToolStripMenuItem.Size = new System.Drawing.Size(127, 24);
             this.automaticFeederToolStripMenuItem.Text = "Animal Settings";
             // 
             // animalSettingsTestToolStripMenuItem
             // 
             this.animalSettingsTestToolStripMenuItem.Name = "animalSettingsTestToolStripMenuItem";
-            this.animalSettingsTestToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.animalSettingsTestToolStripMenuItem.Size = new System.Drawing.Size(212, 26);
             this.animalSettingsTestToolStripMenuItem.Text = "Animal Settings";
             this.animalSettingsTestToolStripMenuItem.Click += new System.EventHandler(this.animalSettingsTestToolStripMenuItem_Click);
             // 
             // injectionManagerToolStripMenuItem
             // 
             this.injectionManagerToolStripMenuItem.Name = "injectionManagerToolStripMenuItem";
-            this.injectionManagerToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.injectionManagerToolStripMenuItem.Size = new System.Drawing.Size(212, 26);
             this.injectionManagerToolStripMenuItem.Text = "Injection Manager";
             this.injectionManagerToolStripMenuItem.Click += new System.EventHandler(this.injectionManagerToolStripMenuItem_Click);
             // 
             // AddPelletCountMenuItem
             // 
             this.AddPelletCountMenuItem.Name = "AddPelletCountMenuItem";
-            this.AddPelletCountMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.AddPelletCountMenuItem.Size = new System.Drawing.Size(212, 26);
             this.AddPelletCountMenuItem.Text = "Add Pellet Count";
             this.AddPelletCountMenuItem.Click += new System.EventHandler(this.AddPelletCountMenuItem_Click);
             // 
@@ -268,7 +265,7 @@ namespace BioPacVideo
             this.feederStatusToolStripMenuItem,
             this.feederMenuToolStripMenuItem});
             this.feedersToolStripMenuItem.Name = "feedersToolStripMenuItem";
-            this.feedersToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
+            this.feedersToolStripMenuItem.Size = new System.Drawing.Size(74, 24);
             this.feedersToolStripMenuItem.Text = "Feeders";
             // 
             // feederTestToolStripMenuItem
@@ -277,61 +274,58 @@ namespace BioPacVideo
             this.ratRoomToolStripMenuItem,
             this.mouseRoomToolStripMenuItem});
             this.feederTestToolStripMenuItem.Name = "feederTestToolStripMenuItem";
-            this.feederTestToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.feederTestToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.feederTestToolStripMenuItem.Text = "Feeder Test";
             // 
             // ratRoomToolStripMenuItem
             // 
             this.ratRoomToolStripMenuItem.Name = "ratRoomToolStripMenuItem";
-            this.ratRoomToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.ratRoomToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
             this.ratRoomToolStripMenuItem.Text = "Rat Room";
             this.ratRoomToolStripMenuItem.Click += new System.EventHandler(this.ratRoomToolStripMenuItem_Click);
             // 
             // mouseRoomToolStripMenuItem
             // 
             this.mouseRoomToolStripMenuItem.Name = "mouseRoomToolStripMenuItem";
-            this.mouseRoomToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.mouseRoomToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
             this.mouseRoomToolStripMenuItem.Text = "Mouse Room";
             this.mouseRoomToolStripMenuItem.Click += new System.EventHandler(this.mouseRoomToolStripMenuItem_Click);
             // 
             // feederAddressToolStripMenuItem
             // 
             this.feederAddressToolStripMenuItem.Name = "feederAddressToolStripMenuItem";
-            this.feederAddressToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.feederAddressToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.feederAddressToolStripMenuItem.Text = "Feeder Address";
             this.feederAddressToolStripMenuItem.Click += new System.EventHandler(this.feederAddressToolStripMenuItem_Click);
             // 
             // feederStatusToolStripMenuItem
             // 
             this.feederStatusToolStripMenuItem.Name = "feederStatusToolStripMenuItem";
-            this.feederStatusToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.feederStatusToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.feederStatusToolStripMenuItem.Text = "Feeder Status";
             this.feederStatusToolStripMenuItem.Click += new System.EventHandler(this.feederStatusToolStripMenuItem_Click);
             // 
             // feederMenuToolStripMenuItem
             // 
             this.feederMenuToolStripMenuItem.Name = "feederMenuToolStripMenuItem";
-            this.feederMenuToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.feederMenuToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.feederMenuToolStripMenuItem.Text = "Feeder Settings";
             this.feederMenuToolStripMenuItem.Click += new System.EventHandler(this.feederMenuToolStripMenuItem_Click);
             // 
             // StatusBar
             // 
+            this.StatusBar.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.StatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.SpaceLeft,
             this.IDT_BIOPACSTAT,
             this.IDT_MPLASTMESSAGE,
-            this.IDT_VIDEOSTATUS,
-            this.IDT_VIDEORESULT,
-            this.IDT_DEVICECOUNT,
-            this.IDT_ENCODERSTATUS,
-            this.IDT_ENCSTAT,
             this.IDT_FEEDST,
             this.UnitNameStrip,
             this.TimeLabel});
-            this.StatusBar.Location = new System.Drawing.Point(0, 859);
+            this.StatusBar.Location = new System.Drawing.Point(0, 1058);
             this.StatusBar.Name = "StatusBar";
-            this.StatusBar.Size = new System.Drawing.Size(1286, 28);
+            this.StatusBar.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+            this.StatusBar.Size = new System.Drawing.Size(1715, 34);
             this.StatusBar.TabIndex = 3;
             this.StatusBar.Text = "statusStrip1";
             // 
@@ -345,7 +339,7 @@ namespace BioPacVideo
             this.SpaceLeft.Name = "SpaceLeft";
             this.SpaceLeft.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
             this.SpaceLeft.RightToLeftAutoMirrorImage = true;
-            this.SpaceLeft.Size = new System.Drawing.Size(108, 23);
+            this.SpaceLeft.Size = new System.Drawing.Size(124, 28);
             this.SpaceLeft.Text = "HD Size";
             // 
             // IDT_BIOPACSTAT
@@ -357,7 +351,7 @@ namespace BioPacVideo
             this.IDT_BIOPACSTAT.Font = new System.Drawing.Font("Tahoma", 10F);
             this.IDT_BIOPACSTAT.Name = "IDT_BIOPACSTAT";
             this.IDT_BIOPACSTAT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_BIOPACSTAT.Size = new System.Drawing.Size(179, 23);
+            this.IDT_BIOPACSTAT.Size = new System.Drawing.Size(208, 28);
             this.IDT_BIOPACSTAT.Text = "BioPac Disconnected";
             // 
             // IDT_MPLASTMESSAGE
@@ -368,63 +362,8 @@ namespace BioPacVideo
             this.IDT_MPLASTMESSAGE.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_MPLASTMESSAGE.Name = "IDT_MPLASTMESSAGE";
             this.IDT_MPLASTMESSAGE.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_MPLASTMESSAGE.Size = new System.Drawing.Size(110, 23);
+            this.IDT_MPLASTMESSAGE.Size = new System.Drawing.Size(129, 28);
             this.IDT_MPLASTMESSAGE.Text = "NO STATUS";
-            // 
-            // IDT_VIDEOSTATUS
-            // 
-            this.IDT_VIDEOSTATUS.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.IDT_VIDEOSTATUS.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-            this.IDT_VIDEOSTATUS.Name = "IDT_VIDEOSTATUS";
-            this.IDT_VIDEOSTATUS.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_VIDEOSTATUS.Size = new System.Drawing.Size(125, 23);
-            this.IDT_VIDEOSTATUS.Text = "VIDEO STATUS";
-            // 
-            // IDT_VIDEORESULT
-            // 
-            this.IDT_VIDEORESULT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.IDT_VIDEORESULT.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-            this.IDT_VIDEORESULT.Name = "IDT_VIDEORESULT";
-            this.IDT_VIDEORESULT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_VIDEORESULT.Size = new System.Drawing.Size(125, 23);
-            this.IDT_VIDEORESULT.Text = "VIDEO RESULT";
-            // 
-            // IDT_DEVICECOUNT
-            // 
-            this.IDT_DEVICECOUNT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.IDT_DEVICECOUNT.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-            this.IDT_DEVICECOUNT.Name = "IDT_DEVICECOUNT";
-            this.IDT_DEVICECOUNT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_DEVICECOUNT.Size = new System.Drawing.Size(108, 23);
-            this.IDT_DEVICECOUNT.Text = "Devices (0)";
-            // 
-            // IDT_ENCODERSTATUS
-            // 
-            this.IDT_ENCODERSTATUS.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.IDT_ENCODERSTATUS.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-            this.IDT_ENCODERSTATUS.Name = "IDT_ENCODERSTATUS";
-            this.IDT_ENCODERSTATUS.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_ENCODERSTATUS.Size = new System.Drawing.Size(108, 23);
-            this.IDT_ENCODERSTATUS.Text = "ENCR STAT";
-            // 
-            // IDT_ENCSTAT
-            // 
-            this.IDT_ENCSTAT.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.IDT_ENCSTAT.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-            this.IDT_ENCSTAT.Name = "IDT_ENCSTAT";
-            this.IDT_ENCSTAT.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_ENCSTAT.Size = new System.Drawing.Size(105, 23);
-            this.IDT_ENCSTAT.Text = "ENCDR RS";
             // 
             // IDT_FEEDST
             // 
@@ -434,7 +373,7 @@ namespace BioPacVideo
             this.IDT_FEEDST.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.IDT_FEEDST.Name = "IDT_FEEDST";
             this.IDT_FEEDST.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.IDT_FEEDST.Size = new System.Drawing.Size(106, 23);
+            this.IDT_FEEDST.Size = new System.Drawing.Size(120, 28);
             this.IDT_FEEDST.Text = "FEEDER";
             // 
             // UnitNameStrip
@@ -444,7 +383,7 @@ namespace BioPacVideo
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.UnitNameStrip.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.UnitNameStrip.Name = "UnitNameStrip";
-            this.UnitNameStrip.Size = new System.Drawing.Size(73, 23);
+            this.UnitNameStrip.Size = new System.Drawing.Size(91, 28);
             this.UnitNameStrip.Text = "UNIT LABEL";
             // 
             // TimeLabel
@@ -454,179 +393,199 @@ namespace BioPacVideo
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.TimeLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
             this.TimeLabel.Name = "TimeLabel";
-            this.TimeLabel.Size = new System.Drawing.Size(37, 23);
+            this.TimeLabel.Size = new System.Drawing.Size(46, 28);
             this.TimeLabel.Text = "TIME";
             // 
             // VoltScale
             // 
             this.VoltScale.FormattingEnabled = true;
-            this.VoltScale.Location = new System.Drawing.Point(12, 115);
+            this.VoltScale.Location = new System.Drawing.Point(16, 142);
+            this.VoltScale.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.VoltScale.Name = "VoltScale";
-            this.VoltScale.Size = new System.Drawing.Size(109, 21);
+            this.VoltScale.Size = new System.Drawing.Size(144, 24);
             this.VoltScale.TabIndex = 4;
             this.VoltScale.SelectedIndexChanged += new System.EventHandler(this.VoltScale_SelectedIndexChanged);
             // 
             // TimeScale
             // 
             this.TimeScale.FormattingEnabled = true;
-            this.TimeScale.Location = new System.Drawing.Point(12, 155);
+            this.TimeScale.Location = new System.Drawing.Point(16, 191);
+            this.TimeScale.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.TimeScale.Name = "TimeScale";
-            this.TimeScale.Size = new System.Drawing.Size(109, 21);
+            this.TimeScale.Size = new System.Drawing.Size(144, 24);
             this.TimeScale.TabIndex = 5;
             this.TimeScale.SelectedIndexChanged += new System.EventHandler(this.TimeScale_SelectedIndexChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 139);
+            this.label2.Location = new System.Drawing.Point(16, 171);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(60, 13);
+            this.label2.Size = new System.Drawing.Size(78, 17);
             this.label2.TabIndex = 7;
             this.label2.Text = "Time Scale";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 99);
+            this.label3.Location = new System.Drawing.Point(16, 122);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(55, 13);
+            this.label3.Size = new System.Drawing.Size(71, 17);
             this.label3.TabIndex = 8;
             this.label3.Text = "Volt Scale";
             // 
             // CloneChannelPanel1
             // 
             this.CloneChannelPanel1.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CloneChannelPanel1.Location = new System.Drawing.Point(127, 37);
+            this.CloneChannelPanel1.Location = new System.Drawing.Point(169, 46);
+            this.CloneChannelPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CloneChannelPanel1.Name = "CloneChannelPanel1";
-            this.CloneChannelPanel1.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel1.Size = new System.Drawing.Size(181, 142);
             this.CloneChannelPanel1.TabIndex = 9;
             // 
             // CloneChannelPanel2
             // 
             this.CloneChannelPanel2.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CloneChannelPanel2.Location = new System.Drawing.Point(269, 37);
+            this.CloneChannelPanel2.Location = new System.Drawing.Point(359, 46);
+            this.CloneChannelPanel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CloneChannelPanel2.Name = "CloneChannelPanel2";
-            this.CloneChannelPanel2.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel2.Size = new System.Drawing.Size(181, 142);
             this.CloneChannelPanel2.TabIndex = 10;
             // 
             // CloneChannelPanel3
             // 
             this.CloneChannelPanel3.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CloneChannelPanel3.Location = new System.Drawing.Point(411, 37);
+            this.CloneChannelPanel3.Location = new System.Drawing.Point(548, 46);
+            this.CloneChannelPanel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CloneChannelPanel3.Name = "CloneChannelPanel3";
-            this.CloneChannelPanel3.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel3.Size = new System.Drawing.Size(181, 142);
             this.CloneChannelPanel3.TabIndex = 10;
             // 
             // CloneChannelPanel4
             // 
             this.CloneChannelPanel4.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CloneChannelPanel4.Location = new System.Drawing.Point(553, 37);
+            this.CloneChannelPanel4.Location = new System.Drawing.Point(737, 46);
+            this.CloneChannelPanel4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CloneChannelPanel4.Name = "CloneChannelPanel4";
-            this.CloneChannelPanel4.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel4.Size = new System.Drawing.Size(181, 142);
             this.CloneChannelPanel4.TabIndex = 10;
             // 
             // CloneChannelPanel6
             // 
             this.CloneChannelPanel6.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CloneChannelPanel6.Location = new System.Drawing.Point(837, 37);
+            this.CloneChannelPanel6.Location = new System.Drawing.Point(1116, 46);
+            this.CloneChannelPanel6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CloneChannelPanel6.Name = "CloneChannelPanel6";
-            this.CloneChannelPanel6.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel6.Size = new System.Drawing.Size(181, 142);
             this.CloneChannelPanel6.TabIndex = 10;
             // 
             // CloneChannelPanel7
             // 
             this.CloneChannelPanel7.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CloneChannelPanel7.Location = new System.Drawing.Point(979, 37);
+            this.CloneChannelPanel7.Location = new System.Drawing.Point(1305, 46);
+            this.CloneChannelPanel7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CloneChannelPanel7.Name = "CloneChannelPanel7";
-            this.CloneChannelPanel7.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel7.Size = new System.Drawing.Size(181, 142);
             this.CloneChannelPanel7.TabIndex = 10;
             // 
             // CloneChannelPanel8
             // 
             this.CloneChannelPanel8.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CloneChannelPanel8.Location = new System.Drawing.Point(1121, 37);
+            this.CloneChannelPanel8.Location = new System.Drawing.Point(1495, 46);
+            this.CloneChannelPanel8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CloneChannelPanel8.Name = "CloneChannelPanel8";
-            this.CloneChannelPanel8.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel8.Size = new System.Drawing.Size(181, 142);
             this.CloneChannelPanel8.TabIndex = 10;
             // 
             // CloneChannelPanel10
             // 
             this.CloneChannelPanel10.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CloneChannelPanel10.Location = new System.Drawing.Point(269, 158);
+            this.CloneChannelPanel10.Location = new System.Drawing.Point(359, 194);
+            this.CloneChannelPanel10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CloneChannelPanel10.Name = "CloneChannelPanel10";
-            this.CloneChannelPanel10.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel10.Size = new System.Drawing.Size(181, 142);
             this.CloneChannelPanel10.TabIndex = 11;
             // 
             // CloneChannelPanel11
             // 
             this.CloneChannelPanel11.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CloneChannelPanel11.Location = new System.Drawing.Point(411, 158);
+            this.CloneChannelPanel11.Location = new System.Drawing.Point(548, 194);
+            this.CloneChannelPanel11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CloneChannelPanel11.Name = "CloneChannelPanel11";
-            this.CloneChannelPanel11.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel11.Size = new System.Drawing.Size(181, 142);
             this.CloneChannelPanel11.TabIndex = 11;
             // 
             // CloneChannelPanel12
             // 
             this.CloneChannelPanel12.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CloneChannelPanel12.Location = new System.Drawing.Point(553, 158);
+            this.CloneChannelPanel12.Location = new System.Drawing.Point(737, 194);
+            this.CloneChannelPanel12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CloneChannelPanel12.Name = "CloneChannelPanel12";
-            this.CloneChannelPanel12.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel12.Size = new System.Drawing.Size(181, 142);
             this.CloneChannelPanel12.TabIndex = 11;
             // 
             // CloneChannelPanel13
             // 
             this.CloneChannelPanel13.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CloneChannelPanel13.Location = new System.Drawing.Point(695, 158);
+            this.CloneChannelPanel13.Location = new System.Drawing.Point(927, 194);
+            this.CloneChannelPanel13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CloneChannelPanel13.Name = "CloneChannelPanel13";
-            this.CloneChannelPanel13.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel13.Size = new System.Drawing.Size(181, 142);
             this.CloneChannelPanel13.TabIndex = 11;
             // 
             // CloneChannelPanel14
             // 
             this.CloneChannelPanel14.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CloneChannelPanel14.Location = new System.Drawing.Point(837, 158);
+            this.CloneChannelPanel14.Location = new System.Drawing.Point(1116, 194);
+            this.CloneChannelPanel14.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CloneChannelPanel14.Name = "CloneChannelPanel14";
-            this.CloneChannelPanel14.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel14.Size = new System.Drawing.Size(181, 142);
             this.CloneChannelPanel14.TabIndex = 11;
             // 
             // CloneChannelPanel15
             // 
             this.CloneChannelPanel15.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CloneChannelPanel15.Location = new System.Drawing.Point(979, 158);
+            this.CloneChannelPanel15.Location = new System.Drawing.Point(1305, 194);
+            this.CloneChannelPanel15.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CloneChannelPanel15.Name = "CloneChannelPanel15";
-            this.CloneChannelPanel15.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel15.Size = new System.Drawing.Size(181, 142);
             this.CloneChannelPanel15.TabIndex = 11;
             // 
             // CloneChannelPanel5
             // 
             this.CloneChannelPanel5.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CloneChannelPanel5.Location = new System.Drawing.Point(695, 37);
+            this.CloneChannelPanel5.Location = new System.Drawing.Point(927, 46);
+            this.CloneChannelPanel5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CloneChannelPanel5.Name = "CloneChannelPanel5";
-            this.CloneChannelPanel5.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel5.Size = new System.Drawing.Size(181, 142);
             this.CloneChannelPanel5.TabIndex = 11;
             // 
             // CloneChannelPanel9
             // 
             this.CloneChannelPanel9.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CloneChannelPanel9.Location = new System.Drawing.Point(127, 158);
+            this.CloneChannelPanel9.Location = new System.Drawing.Point(169, 194);
+            this.CloneChannelPanel9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CloneChannelPanel9.Name = "CloneChannelPanel9";
-            this.CloneChannelPanel9.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel9.Size = new System.Drawing.Size(181, 142);
             this.CloneChannelPanel9.TabIndex = 11;
             // 
             // CloneChannelPanel16
             // 
             this.CloneChannelPanel16.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CloneChannelPanel16.Location = new System.Drawing.Point(1121, 158);
+            this.CloneChannelPanel16.Location = new System.Drawing.Point(1495, 194);
+            this.CloneChannelPanel16.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CloneChannelPanel16.Name = "CloneChannelPanel16";
-            this.CloneChannelPanel16.Size = new System.Drawing.Size(136, 115);
+            this.CloneChannelPanel16.Size = new System.Drawing.Size(181, 142);
             this.CloneChannelPanel16.TabIndex = 12;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1286, 887);
+            this.ClientSize = new System.Drawing.Size(1715, 1092);
             this.Controls.Add(this.CloneChannelPanel16);
             this.Controls.Add(this.CloneChannelPanel9);
             this.Controls.Add(this.CloneChannelPanel5);
@@ -652,6 +611,7 @@ namespace BioPacVideo
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "BioPacVideo";
@@ -683,12 +643,8 @@ namespace BioPacVideo
         private System.Windows.Forms.ToolStripStatusLabel IDT_BIOPACSTAT;
         private System.Windows.Forms.ToolStripMenuItem IDM_SETTINGS;
         private System.Windows.Forms.ToolStripStatusLabel IDT_MPLASTMESSAGE;
-        private System.Windows.Forms.ToolStripStatusLabel IDT_VIDEOSTATUS;
-        private System.Windows.Forms.ToolStripStatusLabel IDT_DEVICECOUNT;
         private System.Windows.Forms.ToolStripMenuItem videoSettingsToolStripMenuItem;
         internal System.Windows.Forms.ToolStripStatusLabel IDT_FEEDST;
-        internal System.Windows.Forms.ToolStripStatusLabel IDT_ENCODERSTATUS;
-        private System.Windows.Forms.ToolStripStatusLabel IDT_VIDEORESULT;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem bioPacEnabledToolStripMenuItem;
@@ -697,7 +653,6 @@ namespace BioPacVideo
         private System.Windows.Forms.ComboBox TimeScale;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        internal System.Windows.Forms.ToolStripStatusLabel IDT_ENCSTAT;
         private System.Windows.Forms.ToolStripMenuItem AddPelletCountMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel SpaceLeft;
         private System.Windows.Forms.ToolStripMenuItem injectionManagerToolStripMenuItem;

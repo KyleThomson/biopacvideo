@@ -68,7 +68,7 @@ namespace BioPacVideo
             IDC_Meal4.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal4); };
             IDC_Meal5.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal5); };
             IDC_Meal6.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal6); };
-
+     
         }
         public FeederTemplate ReturnFeeder()
         {
