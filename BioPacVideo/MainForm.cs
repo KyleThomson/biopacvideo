@@ -352,7 +352,7 @@ namespace BioPacVideo
                 RecordingButton.Text = "Start Recording";
                 RecordingButton.BackColor = Color.Green;
             }
-            else
+            else if (MP.RecordingWanted)
             {
                 e.Cancel = true;
             }
