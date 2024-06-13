@@ -332,6 +332,31 @@ namespace BioPacVideo
             }
         }
 
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (MP.RecordingWanted && MessageBox.Show("Are you sure you want to close? The program is currently recording", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                //Establish new variable values
+                MP.RecordingWanted = false;
+                MP.Recording = false;
+                
+                //Actually Stop recording
+                StopRecording();
+
+                //Make Biopac Adjustments
+                IDM_SELECTCHANNELS.Enabled = true;
+                IDM_SETTINGS.Enabled = true;
+                IDM_DISCONNECTBIOPAC.Enabled = true;
+
+                //Make UI Adjustments
+                RecordingButton.Text = "Start Recording";
+                RecordingButton.BackColor = Color.Green;
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+        }
 
         /****************************************************************************************
         * 

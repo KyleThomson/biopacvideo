@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.buttonSet = new System.Windows.Forms.Button();
+            this.checkBoxAlternateAddress = new System.Windows.Forms.CheckBox();
             this.labelxx = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -98,29 +98,30 @@
             this.FeederSelect = new System.Windows.Forms.ComboBox();
             this.Med = new System.Windows.Forms.ComboBox();
             this.AnimalBox = new System.Windows.Forms.ComboBox();
+            this.buttonMouseRoom = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // button1
+            // buttonSet
             // 
-            this.button1.Location = new System.Drawing.Point(879, 43);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Set";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.buttonSet.Location = new System.Drawing.Point(943, 42);
+            this.buttonSet.Name = "buttonSet";
+            this.buttonSet.Size = new System.Drawing.Size(75, 23);
+            this.buttonSet.TabIndex = 4;
+            this.buttonSet.Text = "Set";
+            this.buttonSet.UseVisualStyleBackColor = true;
+            this.buttonSet.Click += new System.EventHandler(this.buttonSubmit_Click);
             // 
-            // checkBox1
+            // checkBoxAlternateAddress
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox1.Location = new System.Drawing.Point(12, 42);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(210, 24);
-            this.checkBox1.TabIndex = 1;
-            this.checkBox1.Text = "Enable Alternate Address";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.checkBoxAlternateAddress.AutoSize = true;
+            this.checkBoxAlternateAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxAlternateAddress.Location = new System.Drawing.Point(10, 42);
+            this.checkBoxAlternateAddress.Name = "checkBoxAlternateAddress";
+            this.checkBoxAlternateAddress.Size = new System.Drawing.Size(210, 24);
+            this.checkBoxAlternateAddress.TabIndex = 0;
+            this.checkBoxAlternateAddress.Text = "Enable Alternate Address";
+            this.checkBoxAlternateAddress.UseVisualStyleBackColor = true;
+            this.checkBoxAlternateAddress.CheckedChanged += new System.EventHandler(this.checkBoxAlternateAddress_CheckedChanged);
             // 
             // labelxx
             // 
@@ -796,10 +797,10 @@
             // 
             // ResetButton
             // 
-            this.ResetButton.Location = new System.Drawing.Point(960, 42);
+            this.ResetButton.Location = new System.Drawing.Point(1024, 41);
             this.ResetButton.Name = "ResetButton";
             this.ResetButton.Size = new System.Drawing.Size(75, 23);
-            this.ResetButton.TabIndex = 66;
+            this.ResetButton.TabIndex = 5;
             this.ResetButton.Text = "Reset";
             this.ResetButton.UseVisualStyleBackColor = true;
             this.ResetButton.Click += new System.EventHandler(this.ResetButton_Click);
@@ -841,10 +842,10 @@
             "Feeder 29",
             "Feeder 30",
             "Feeder 31"});
-            this.FeederSelect.Location = new System.Drawing.Point(744, 45);
+            this.FeederSelect.Location = new System.Drawing.Point(808, 44);
             this.FeederSelect.Name = "FeederSelect";
             this.FeederSelect.Size = new System.Drawing.Size(121, 21);
-            this.FeederSelect.TabIndex = 67;
+            this.FeederSelect.TabIndex = 3;
             // 
             // Med
             // 
@@ -853,10 +854,10 @@
             this.Med.Items.AddRange(new object[] {
             "Unmedicated",
             "Medicated"});
-            this.Med.Location = new System.Drawing.Point(617, 45);
+            this.Med.Location = new System.Drawing.Point(681, 44);
             this.Med.Name = "Med";
             this.Med.Size = new System.Drawing.Size(121, 21);
-            this.Med.TabIndex = 68;
+            this.Med.TabIndex = 2;
             // 
             // AnimalBox
             // 
@@ -880,16 +881,27 @@
             "Animal 14",
             "Animal 15",
             "Animal 16"});
-            this.AnimalBox.Location = new System.Drawing.Point(490, 45);
+            this.AnimalBox.Location = new System.Drawing.Point(554, 44);
             this.AnimalBox.Name = "AnimalBox";
             this.AnimalBox.Size = new System.Drawing.Size(121, 21);
-            this.AnimalBox.TabIndex = 69;
+            this.AnimalBox.TabIndex = 1;
+            // 
+            // buttonMouseRoom
+            // 
+            this.buttonMouseRoom.Location = new System.Drawing.Point(1105, 41);
+            this.buttonMouseRoom.Name = "buttonMouseRoom";
+            this.buttonMouseRoom.Size = new System.Drawing.Size(87, 23);
+            this.buttonMouseRoom.TabIndex = 66;
+            this.buttonMouseRoom.Text = "Mouse Room";
+            this.buttonMouseRoom.UseVisualStyleBackColor = true;
+            this.buttonMouseRoom.Click += new System.EventHandler(this.buttonMouseRoom_Click);
             // 
             // FeederAddress
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1283, 620);
+            this.Controls.Add(this.buttonMouseRoom);
             this.Controls.Add(this.AnimalBox);
             this.Controls.Add(this.Med);
             this.Controls.Add(this.FeederSelect);
@@ -958,11 +970,10 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.labelxx);
-            this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.checkBoxAlternateAddress);
+            this.Controls.Add(this.buttonSet);
             this.Name = "FeederAddress";
             this.Text = "Feeder Address Settings";
-            this.Load += new System.EventHandler(this.FeederAddress_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -970,8 +981,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Button buttonSet;
+        private System.Windows.Forms.CheckBox checkBoxAlternateAddress;
         private System.Windows.Forms.Label labelxx;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -1040,5 +1051,6 @@
         private System.Windows.Forms.ComboBox FeederSelect;
         private System.Windows.Forms.ComboBox Med;
         private System.Windows.Forms.ComboBox AnimalBox;
+        private System.Windows.Forms.Button buttonMouseRoom;
     }
 }

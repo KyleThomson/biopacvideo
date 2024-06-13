@@ -231,7 +231,7 @@ namespace BioPacVideo
             this.percentBox1.Location = new System.Drawing.Point(9, 152);
             this.percentBox1.Name = "percentBox1";
             this.percentBox1.Size = new System.Drawing.Size(53, 20);
-            this.percentBox1.TabIndex = 6;
+            this.percentBox1.TabIndex = 4;
             this.percentBox1.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck1
@@ -240,7 +240,7 @@ namespace BioPacVideo
             this.unmedCheck1.Location = new System.Drawing.Point(9, 129);
             this.unmedCheck1.Name = "unmedCheck1";
             this.unmedCheck1.Size = new System.Drawing.Size(89, 17);
-            this.unmedCheck1.TabIndex = 5;
+            this.unmedCheck1.TabIndex = 3;
             this.unmedCheck1.Text = "Unmedicated";
             this.unmedCheck1.UseVisualStyleBackColor = true;
             this.unmedCheck1.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -251,7 +251,7 @@ namespace BioPacVideo
             this.medCheck1.Location = new System.Drawing.Point(9, 106);
             this.medCheck1.Name = "medCheck1";
             this.medCheck1.Size = new System.Drawing.Size(76, 17);
-            this.medCheck1.TabIndex = 4;
+            this.medCheck1.TabIndex = 2;
             this.medCheck1.Text = "Medicated";
             this.medCheck1.UseVisualStyleBackColor = true;
             this.medCheck1.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -261,7 +261,7 @@ namespace BioPacVideo
             this.weightBox1.Location = new System.Drawing.Point(6, 80);
             this.weightBox1.Name = "weightBox1";
             this.weightBox1.Size = new System.Drawing.Size(100, 20);
-            this.weightBox1.TabIndex = 3;
+            this.weightBox1.TabIndex = 1;
             this.weightBox1.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label2
@@ -278,7 +278,7 @@ namespace BioPacVideo
             this.animalID1.Location = new System.Drawing.Point(6, 32);
             this.animalID1.Name = "animalID1";
             this.animalID1.Size = new System.Drawing.Size(100, 20);
-            this.animalID1.TabIndex = 1;
+            this.animalID1.TabIndex = 0;
             // 
             // label1
             // 
@@ -319,7 +319,7 @@ namespace BioPacVideo
             this.percentBox11.Location = new System.Drawing.Point(9, 152);
             this.percentBox11.Name = "percentBox11";
             this.percentBox11.Size = new System.Drawing.Size(53, 20);
-            this.percentBox11.TabIndex = 6;
+            this.percentBox11.TabIndex = 4;
             this.percentBox11.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck11
@@ -328,7 +328,7 @@ namespace BioPacVideo
             this.unmedCheck11.Location = new System.Drawing.Point(9, 129);
             this.unmedCheck11.Name = "unmedCheck11";
             this.unmedCheck11.Size = new System.Drawing.Size(89, 17);
-            this.unmedCheck11.TabIndex = 5;
+            this.unmedCheck11.TabIndex = 3;
             this.unmedCheck11.Text = "Unmedicated";
             this.unmedCheck11.UseVisualStyleBackColor = true;
             this.unmedCheck11.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -339,7 +339,7 @@ namespace BioPacVideo
             this.medCheck11.Location = new System.Drawing.Point(9, 106);
             this.medCheck11.Name = "medCheck11";
             this.medCheck11.Size = new System.Drawing.Size(76, 17);
-            this.medCheck11.TabIndex = 4;
+            this.medCheck11.TabIndex = 2;
             this.medCheck11.Text = "Medicated";
             this.medCheck11.UseVisualStyleBackColor = true;
             this.medCheck11.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -349,7 +349,7 @@ namespace BioPacVideo
             this.weightBox11.Location = new System.Drawing.Point(6, 80);
             this.weightBox11.Name = "weightBox11";
             this.weightBox11.Size = new System.Drawing.Size(100, 20);
-            this.weightBox11.TabIndex = 3;
+            this.weightBox11.TabIndex = 1;
             this.weightBox11.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label5
@@ -366,7 +366,7 @@ namespace BioPacVideo
             this.animalID11.Location = new System.Drawing.Point(6, 32);
             this.animalID11.Name = "animalID11";
             this.animalID11.Size = new System.Drawing.Size(100, 20);
-            this.animalID11.TabIndex = 1;
+            this.animalID11.TabIndex = 0;
             // 
             // label6
             // 
@@ -390,7 +390,7 @@ namespace BioPacVideo
             this.groupBox12.Location = new System.Drawing.Point(516, 212);
             this.groupBox12.Name = "groupBox12";
             this.groupBox12.Size = new System.Drawing.Size(117, 178);
-            this.groupBox12.TabIndex = 11;
+            this.groupBox12.TabIndex = 12;
             this.groupBox12.TabStop = false;
             // 
             // label7
@@ -407,7 +407,7 @@ namespace BioPacVideo
             this.percentBox12.Location = new System.Drawing.Point(9, 152);
             this.percentBox12.Name = "percentBox12";
             this.percentBox12.Size = new System.Drawing.Size(53, 20);
-            this.percentBox12.TabIndex = 6;
+            this.percentBox12.TabIndex = 4;
             this.percentBox12.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck12
@@ -416,7 +416,7 @@ namespace BioPacVideo
             this.unmedCheck12.Location = new System.Drawing.Point(9, 129);
             this.unmedCheck12.Name = "unmedCheck12";
             this.unmedCheck12.Size = new System.Drawing.Size(89, 17);
-            this.unmedCheck12.TabIndex = 5;
+            this.unmedCheck12.TabIndex = 3;
             this.unmedCheck12.Text = "Unmedicated";
             this.unmedCheck12.UseVisualStyleBackColor = true;
             this.unmedCheck12.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -427,7 +427,7 @@ namespace BioPacVideo
             this.medCheck12.Location = new System.Drawing.Point(9, 106);
             this.medCheck12.Name = "medCheck12";
             this.medCheck12.Size = new System.Drawing.Size(76, 17);
-            this.medCheck12.TabIndex = 4;
+            this.medCheck12.TabIndex = 2;
             this.medCheck12.Text = "Medicated";
             this.medCheck12.UseVisualStyleBackColor = true;
             this.medCheck12.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -437,7 +437,7 @@ namespace BioPacVideo
             this.weightBox12.Location = new System.Drawing.Point(6, 80);
             this.weightBox12.Name = "weightBox12";
             this.weightBox12.Size = new System.Drawing.Size(100, 20);
-            this.weightBox12.TabIndex = 3;
+            this.weightBox12.TabIndex = 1;
             this.weightBox12.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label8
@@ -454,7 +454,7 @@ namespace BioPacVideo
             this.animalID12.Location = new System.Drawing.Point(6, 32);
             this.animalID12.Name = "animalID12";
             this.animalID12.Size = new System.Drawing.Size(100, 20);
-            this.animalID12.TabIndex = 1;
+            this.animalID12.TabIndex = 0;
             // 
             // label9
             // 
@@ -478,7 +478,7 @@ namespace BioPacVideo
             this.groupBox13.Location = new System.Drawing.Point(655, 212);
             this.groupBox13.Name = "groupBox13";
             this.groupBox13.Size = new System.Drawing.Size(117, 178);
-            this.groupBox13.TabIndex = 12;
+            this.groupBox13.TabIndex = 13;
             this.groupBox13.TabStop = false;
             // 
             // label10
@@ -495,7 +495,7 @@ namespace BioPacVideo
             this.percentBox13.Location = new System.Drawing.Point(9, 152);
             this.percentBox13.Name = "percentBox13";
             this.percentBox13.Size = new System.Drawing.Size(53, 20);
-            this.percentBox13.TabIndex = 6;
+            this.percentBox13.TabIndex = 4;
             this.percentBox13.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck13
@@ -504,7 +504,7 @@ namespace BioPacVideo
             this.unmedCheck13.Location = new System.Drawing.Point(9, 129);
             this.unmedCheck13.Name = "unmedCheck13";
             this.unmedCheck13.Size = new System.Drawing.Size(89, 17);
-            this.unmedCheck13.TabIndex = 5;
+            this.unmedCheck13.TabIndex = 3;
             this.unmedCheck13.Text = "Unmedicated";
             this.unmedCheck13.UseVisualStyleBackColor = true;
             this.unmedCheck13.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -515,7 +515,7 @@ namespace BioPacVideo
             this.medCheck13.Location = new System.Drawing.Point(9, 106);
             this.medCheck13.Name = "medCheck13";
             this.medCheck13.Size = new System.Drawing.Size(76, 17);
-            this.medCheck13.TabIndex = 4;
+            this.medCheck13.TabIndex = 2;
             this.medCheck13.Text = "Medicated";
             this.medCheck13.UseVisualStyleBackColor = true;
             this.medCheck13.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -525,7 +525,7 @@ namespace BioPacVideo
             this.weightBox13.Location = new System.Drawing.Point(6, 80);
             this.weightBox13.Name = "weightBox13";
             this.weightBox13.Size = new System.Drawing.Size(100, 20);
-            this.weightBox13.TabIndex = 3;
+            this.weightBox13.TabIndex = 1;
             this.weightBox13.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label11
@@ -542,7 +542,7 @@ namespace BioPacVideo
             this.animalID13.Location = new System.Drawing.Point(6, 32);
             this.animalID13.Name = "animalID13";
             this.animalID13.Size = new System.Drawing.Size(100, 20);
-            this.animalID13.TabIndex = 1;
+            this.animalID13.TabIndex = 0;
             // 
             // label12
             // 
@@ -566,7 +566,7 @@ namespace BioPacVideo
             this.groupBox14.Location = new System.Drawing.Point(798, 212);
             this.groupBox14.Name = "groupBox14";
             this.groupBox14.Size = new System.Drawing.Size(117, 178);
-            this.groupBox14.TabIndex = 13;
+            this.groupBox14.TabIndex = 14;
             this.groupBox14.TabStop = false;
             // 
             // label13
@@ -583,7 +583,7 @@ namespace BioPacVideo
             this.percentBox14.Location = new System.Drawing.Point(9, 152);
             this.percentBox14.Name = "percentBox14";
             this.percentBox14.Size = new System.Drawing.Size(53, 20);
-            this.percentBox14.TabIndex = 6;
+            this.percentBox14.TabIndex = 4;
             this.percentBox14.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck14
@@ -592,7 +592,7 @@ namespace BioPacVideo
             this.unmedCheck14.Location = new System.Drawing.Point(9, 129);
             this.unmedCheck14.Name = "unmedCheck14";
             this.unmedCheck14.Size = new System.Drawing.Size(89, 17);
-            this.unmedCheck14.TabIndex = 5;
+            this.unmedCheck14.TabIndex = 3;
             this.unmedCheck14.Text = "Unmedicated";
             this.unmedCheck14.UseVisualStyleBackColor = true;
             this.unmedCheck14.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -603,7 +603,7 @@ namespace BioPacVideo
             this.medCheck14.Location = new System.Drawing.Point(9, 106);
             this.medCheck14.Name = "medCheck14";
             this.medCheck14.Size = new System.Drawing.Size(76, 17);
-            this.medCheck14.TabIndex = 4;
+            this.medCheck14.TabIndex = 2;
             this.medCheck14.Text = "Medicated";
             this.medCheck14.UseVisualStyleBackColor = true;
             this.medCheck14.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -613,7 +613,7 @@ namespace BioPacVideo
             this.weightBox14.Location = new System.Drawing.Point(6, 80);
             this.weightBox14.Name = "weightBox14";
             this.weightBox14.Size = new System.Drawing.Size(100, 20);
-            this.weightBox14.TabIndex = 3;
+            this.weightBox14.TabIndex = 1;
             this.weightBox14.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label14
@@ -630,7 +630,7 @@ namespace BioPacVideo
             this.animalID14.Location = new System.Drawing.Point(6, 32);
             this.animalID14.Name = "animalID14";
             this.animalID14.Size = new System.Drawing.Size(100, 20);
-            this.animalID14.TabIndex = 1;
+            this.animalID14.TabIndex = 0;
             // 
             // label15
             // 
@@ -654,7 +654,7 @@ namespace BioPacVideo
             this.groupBox15.Location = new System.Drawing.Point(937, 212);
             this.groupBox15.Name = "groupBox15";
             this.groupBox15.Size = new System.Drawing.Size(117, 178);
-            this.groupBox15.TabIndex = 14;
+            this.groupBox15.TabIndex = 15;
             this.groupBox15.TabStop = false;
             // 
             // label16
@@ -671,7 +671,7 @@ namespace BioPacVideo
             this.percentBox15.Location = new System.Drawing.Point(9, 152);
             this.percentBox15.Name = "percentBox15";
             this.percentBox15.Size = new System.Drawing.Size(53, 20);
-            this.percentBox15.TabIndex = 6;
+            this.percentBox15.TabIndex = 4;
             this.percentBox15.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck15
@@ -680,7 +680,7 @@ namespace BioPacVideo
             this.unmedCheck15.Location = new System.Drawing.Point(9, 129);
             this.unmedCheck15.Name = "unmedCheck15";
             this.unmedCheck15.Size = new System.Drawing.Size(89, 17);
-            this.unmedCheck15.TabIndex = 5;
+            this.unmedCheck15.TabIndex = 3;
             this.unmedCheck15.Text = "Unmedicated";
             this.unmedCheck15.UseVisualStyleBackColor = true;
             this.unmedCheck15.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -691,7 +691,7 @@ namespace BioPacVideo
             this.medCheck15.Location = new System.Drawing.Point(9, 106);
             this.medCheck15.Name = "medCheck15";
             this.medCheck15.Size = new System.Drawing.Size(76, 17);
-            this.medCheck15.TabIndex = 4;
+            this.medCheck15.TabIndex = 2;
             this.medCheck15.Text = "Medicated";
             this.medCheck15.UseVisualStyleBackColor = true;
             this.medCheck15.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -701,7 +701,7 @@ namespace BioPacVideo
             this.weightBox15.Location = new System.Drawing.Point(6, 80);
             this.weightBox15.Name = "weightBox15";
             this.weightBox15.Size = new System.Drawing.Size(100, 20);
-            this.weightBox15.TabIndex = 3;
+            this.weightBox15.TabIndex = 1;
             this.weightBox15.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label17
@@ -718,7 +718,7 @@ namespace BioPacVideo
             this.animalID15.Location = new System.Drawing.Point(6, 32);
             this.animalID15.Name = "animalID15";
             this.animalID15.Size = new System.Drawing.Size(100, 20);
-            this.animalID15.TabIndex = 1;
+            this.animalID15.TabIndex = 0;
             // 
             // label18
             // 
@@ -759,7 +759,7 @@ namespace BioPacVideo
             this.percentBox3.Location = new System.Drawing.Point(9, 152);
             this.percentBox3.Name = "percentBox3";
             this.percentBox3.Size = new System.Drawing.Size(53, 20);
-            this.percentBox3.TabIndex = 6;
+            this.percentBox3.TabIndex = 4;
             this.percentBox3.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck3
@@ -768,7 +768,7 @@ namespace BioPacVideo
             this.unmedCheck3.Location = new System.Drawing.Point(9, 129);
             this.unmedCheck3.Name = "unmedCheck3";
             this.unmedCheck3.Size = new System.Drawing.Size(89, 17);
-            this.unmedCheck3.TabIndex = 5;
+            this.unmedCheck3.TabIndex = 3;
             this.unmedCheck3.Text = "Unmedicated";
             this.unmedCheck3.UseVisualStyleBackColor = true;
             this.unmedCheck3.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -779,7 +779,7 @@ namespace BioPacVideo
             this.medCheck3.Location = new System.Drawing.Point(9, 106);
             this.medCheck3.Name = "medCheck3";
             this.medCheck3.Size = new System.Drawing.Size(76, 17);
-            this.medCheck3.TabIndex = 4;
+            this.medCheck3.TabIndex = 2;
             this.medCheck3.Text = "Medicated";
             this.medCheck3.UseVisualStyleBackColor = true;
             this.medCheck3.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -789,7 +789,7 @@ namespace BioPacVideo
             this.weightBox3.Location = new System.Drawing.Point(6, 80);
             this.weightBox3.Name = "weightBox3";
             this.weightBox3.Size = new System.Drawing.Size(100, 20);
-            this.weightBox3.TabIndex = 3;
+            this.weightBox3.TabIndex = 1;
             this.weightBox3.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label20
@@ -806,7 +806,7 @@ namespace BioPacVideo
             this.animalID3.Location = new System.Drawing.Point(6, 32);
             this.animalID3.Name = "animalID3";
             this.animalID3.Size = new System.Drawing.Size(100, 20);
-            this.animalID3.TabIndex = 1;
+            this.animalID3.TabIndex = 0;
             // 
             // label21
             // 
@@ -847,7 +847,7 @@ namespace BioPacVideo
             this.percentBox4.Location = new System.Drawing.Point(9, 152);
             this.percentBox4.Name = "percentBox4";
             this.percentBox4.Size = new System.Drawing.Size(53, 20);
-            this.percentBox4.TabIndex = 6;
+            this.percentBox4.TabIndex = 4;
             this.percentBox4.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck4
@@ -856,7 +856,7 @@ namespace BioPacVideo
             this.unmedCheck4.Location = new System.Drawing.Point(9, 129);
             this.unmedCheck4.Name = "unmedCheck4";
             this.unmedCheck4.Size = new System.Drawing.Size(89, 17);
-            this.unmedCheck4.TabIndex = 5;
+            this.unmedCheck4.TabIndex = 3;
             this.unmedCheck4.Text = "Unmedicated";
             this.unmedCheck4.UseVisualStyleBackColor = true;
             this.unmedCheck4.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -867,7 +867,7 @@ namespace BioPacVideo
             this.medCheck4.Location = new System.Drawing.Point(9, 106);
             this.medCheck4.Name = "medCheck4";
             this.medCheck4.Size = new System.Drawing.Size(76, 17);
-            this.medCheck4.TabIndex = 4;
+            this.medCheck4.TabIndex = 2;
             this.medCheck4.Text = "Medicated";
             this.medCheck4.UseVisualStyleBackColor = true;
             this.medCheck4.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -877,7 +877,7 @@ namespace BioPacVideo
             this.weightBox4.Location = new System.Drawing.Point(6, 80);
             this.weightBox4.Name = "weightBox4";
             this.weightBox4.Size = new System.Drawing.Size(100, 20);
-            this.weightBox4.TabIndex = 3;
+            this.weightBox4.TabIndex = 1;
             this.weightBox4.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label23
@@ -894,7 +894,7 @@ namespace BioPacVideo
             this.animalID4.Location = new System.Drawing.Point(6, 32);
             this.animalID4.Name = "animalID4";
             this.animalID4.Size = new System.Drawing.Size(100, 20);
-            this.animalID4.TabIndex = 1;
+            this.animalID4.TabIndex = 0;
             // 
             // label24
             // 
@@ -935,7 +935,7 @@ namespace BioPacVideo
             this.percentBox5.Location = new System.Drawing.Point(9, 152);
             this.percentBox5.Name = "percentBox5";
             this.percentBox5.Size = new System.Drawing.Size(53, 20);
-            this.percentBox5.TabIndex = 6;
+            this.percentBox5.TabIndex = 4;
             this.percentBox5.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck5
@@ -944,7 +944,7 @@ namespace BioPacVideo
             this.unmedCheck5.Location = new System.Drawing.Point(9, 129);
             this.unmedCheck5.Name = "unmedCheck5";
             this.unmedCheck5.Size = new System.Drawing.Size(89, 17);
-            this.unmedCheck5.TabIndex = 5;
+            this.unmedCheck5.TabIndex = 3;
             this.unmedCheck5.Text = "Unmedicated";
             this.unmedCheck5.UseVisualStyleBackColor = true;
             this.unmedCheck5.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -955,7 +955,7 @@ namespace BioPacVideo
             this.medCheck5.Location = new System.Drawing.Point(9, 106);
             this.medCheck5.Name = "medCheck5";
             this.medCheck5.Size = new System.Drawing.Size(76, 17);
-            this.medCheck5.TabIndex = 4;
+            this.medCheck5.TabIndex = 2;
             this.medCheck5.Text = "Medicated";
             this.medCheck5.UseVisualStyleBackColor = true;
             this.medCheck5.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -965,7 +965,7 @@ namespace BioPacVideo
             this.weightBox5.Location = new System.Drawing.Point(6, 80);
             this.weightBox5.Name = "weightBox5";
             this.weightBox5.Size = new System.Drawing.Size(100, 20);
-            this.weightBox5.TabIndex = 3;
+            this.weightBox5.TabIndex = 1;
             this.weightBox5.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label26
@@ -982,7 +982,7 @@ namespace BioPacVideo
             this.animalID5.Location = new System.Drawing.Point(6, 32);
             this.animalID5.Name = "animalID5";
             this.animalID5.Size = new System.Drawing.Size(100, 20);
-            this.animalID5.TabIndex = 1;
+            this.animalID5.TabIndex = 0;
             // 
             // label27
             // 
@@ -1023,7 +1023,7 @@ namespace BioPacVideo
             this.percentBox7.Location = new System.Drawing.Point(9, 152);
             this.percentBox7.Name = "percentBox7";
             this.percentBox7.Size = new System.Drawing.Size(53, 20);
-            this.percentBox7.TabIndex = 6;
+            this.percentBox7.TabIndex = 4;
             this.percentBox7.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck7
@@ -1032,7 +1032,7 @@ namespace BioPacVideo
             this.unmedCheck7.Location = new System.Drawing.Point(9, 129);
             this.unmedCheck7.Name = "unmedCheck7";
             this.unmedCheck7.Size = new System.Drawing.Size(89, 17);
-            this.unmedCheck7.TabIndex = 5;
+            this.unmedCheck7.TabIndex = 3;
             this.unmedCheck7.Text = "Unmedicated";
             this.unmedCheck7.UseVisualStyleBackColor = true;
             this.unmedCheck7.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -1043,7 +1043,7 @@ namespace BioPacVideo
             this.medCheck7.Location = new System.Drawing.Point(9, 106);
             this.medCheck7.Name = "medCheck7";
             this.medCheck7.Size = new System.Drawing.Size(76, 17);
-            this.medCheck7.TabIndex = 4;
+            this.medCheck7.TabIndex = 2;
             this.medCheck7.Text = "Medicated";
             this.medCheck7.UseVisualStyleBackColor = true;
             this.medCheck7.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -1053,7 +1053,7 @@ namespace BioPacVideo
             this.weightBox7.Location = new System.Drawing.Point(6, 80);
             this.weightBox7.Name = "weightBox7";
             this.weightBox7.Size = new System.Drawing.Size(100, 20);
-            this.weightBox7.TabIndex = 3;
+            this.weightBox7.TabIndex = 1;
             this.weightBox7.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label29
@@ -1070,7 +1070,7 @@ namespace BioPacVideo
             this.animalID7.Location = new System.Drawing.Point(6, 32);
             this.animalID7.Name = "animalID7";
             this.animalID7.Size = new System.Drawing.Size(100, 20);
-            this.animalID7.TabIndex = 1;
+            this.animalID7.TabIndex = 0;
             // 
             // label30
             // 
@@ -1111,7 +1111,7 @@ namespace BioPacVideo
             this.percentBox6.Location = new System.Drawing.Point(9, 152);
             this.percentBox6.Name = "percentBox6";
             this.percentBox6.Size = new System.Drawing.Size(53, 20);
-            this.percentBox6.TabIndex = 6;
+            this.percentBox6.TabIndex = 4;
             this.percentBox6.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck6
@@ -1120,7 +1120,7 @@ namespace BioPacVideo
             this.unmedCheck6.Location = new System.Drawing.Point(9, 129);
             this.unmedCheck6.Name = "unmedCheck6";
             this.unmedCheck6.Size = new System.Drawing.Size(89, 17);
-            this.unmedCheck6.TabIndex = 5;
+            this.unmedCheck6.TabIndex = 3;
             this.unmedCheck6.Text = "Unmedicated";
             this.unmedCheck6.UseVisualStyleBackColor = true;
             this.unmedCheck6.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -1131,7 +1131,7 @@ namespace BioPacVideo
             this.medCheck6.Location = new System.Drawing.Point(9, 106);
             this.medCheck6.Name = "medCheck6";
             this.medCheck6.Size = new System.Drawing.Size(76, 17);
-            this.medCheck6.TabIndex = 4;
+            this.medCheck6.TabIndex = 2;
             this.medCheck6.Text = "Medicated";
             this.medCheck6.UseVisualStyleBackColor = true;
             this.medCheck6.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -1141,7 +1141,7 @@ namespace BioPacVideo
             this.weightBox6.Location = new System.Drawing.Point(6, 80);
             this.weightBox6.Name = "weightBox6";
             this.weightBox6.Size = new System.Drawing.Size(100, 20);
-            this.weightBox6.TabIndex = 3;
+            this.weightBox6.TabIndex = 1;
             this.weightBox6.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label32
@@ -1158,7 +1158,7 @@ namespace BioPacVideo
             this.animalID6.Location = new System.Drawing.Point(6, 32);
             this.animalID6.Name = "animalID6";
             this.animalID6.Size = new System.Drawing.Size(100, 20);
-            this.animalID6.TabIndex = 1;
+            this.animalID6.TabIndex = 0;
             // 
             // label33
             // 
@@ -1199,7 +1199,7 @@ namespace BioPacVideo
             this.percentBox2.Location = new System.Drawing.Point(9, 152);
             this.percentBox2.Name = "percentBox2";
             this.percentBox2.Size = new System.Drawing.Size(53, 20);
-            this.percentBox2.TabIndex = 6;
+            this.percentBox2.TabIndex = 4;
             this.percentBox2.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck2
@@ -1208,7 +1208,7 @@ namespace BioPacVideo
             this.unmedCheck2.Location = new System.Drawing.Point(9, 129);
             this.unmedCheck2.Name = "unmedCheck2";
             this.unmedCheck2.Size = new System.Drawing.Size(89, 17);
-            this.unmedCheck2.TabIndex = 5;
+            this.unmedCheck2.TabIndex = 3;
             this.unmedCheck2.Text = "Unmedicated";
             this.unmedCheck2.UseVisualStyleBackColor = true;
             this.unmedCheck2.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -1219,7 +1219,7 @@ namespace BioPacVideo
             this.medCheck2.Location = new System.Drawing.Point(9, 106);
             this.medCheck2.Name = "medCheck2";
             this.medCheck2.Size = new System.Drawing.Size(76, 17);
-            this.medCheck2.TabIndex = 4;
+            this.medCheck2.TabIndex = 2;
             this.medCheck2.Text = "Medicated";
             this.medCheck2.UseVisualStyleBackColor = true;
             this.medCheck2.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -1229,7 +1229,7 @@ namespace BioPacVideo
             this.weightBox2.Location = new System.Drawing.Point(6, 80);
             this.weightBox2.Name = "weightBox2";
             this.weightBox2.Size = new System.Drawing.Size(100, 20);
-            this.weightBox2.TabIndex = 3;
+            this.weightBox2.TabIndex = 1;
             this.weightBox2.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label35
@@ -1246,7 +1246,7 @@ namespace BioPacVideo
             this.animalID2.Location = new System.Drawing.Point(6, 32);
             this.animalID2.Name = "animalID2";
             this.animalID2.Size = new System.Drawing.Size(100, 20);
-            this.animalID2.TabIndex = 1;
+            this.animalID2.TabIndex = 0;
             // 
             // label36
             // 
@@ -1287,7 +1287,7 @@ namespace BioPacVideo
             this.percentBox10.Location = new System.Drawing.Point(9, 152);
             this.percentBox10.Name = "percentBox10";
             this.percentBox10.Size = new System.Drawing.Size(53, 20);
-            this.percentBox10.TabIndex = 6;
+            this.percentBox10.TabIndex = 4;
             this.percentBox10.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck10
@@ -1296,7 +1296,7 @@ namespace BioPacVideo
             this.unmedCheck10.Location = new System.Drawing.Point(9, 129);
             this.unmedCheck10.Name = "unmedCheck10";
             this.unmedCheck10.Size = new System.Drawing.Size(89, 17);
-            this.unmedCheck10.TabIndex = 5;
+            this.unmedCheck10.TabIndex = 3;
             this.unmedCheck10.Text = "Unmedicated";
             this.unmedCheck10.UseVisualStyleBackColor = true;
             this.unmedCheck10.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -1307,7 +1307,7 @@ namespace BioPacVideo
             this.medCheck10.Location = new System.Drawing.Point(9, 106);
             this.medCheck10.Name = "medCheck10";
             this.medCheck10.Size = new System.Drawing.Size(76, 17);
-            this.medCheck10.TabIndex = 4;
+            this.medCheck10.TabIndex = 2;
             this.medCheck10.Text = "Medicated";
             this.medCheck10.UseVisualStyleBackColor = true;
             this.medCheck10.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -1317,7 +1317,7 @@ namespace BioPacVideo
             this.weightBox10.Location = new System.Drawing.Point(6, 80);
             this.weightBox10.Name = "weightBox10";
             this.weightBox10.Size = new System.Drawing.Size(100, 20);
-            this.weightBox10.TabIndex = 3;
+            this.weightBox10.TabIndex = 1;
             this.weightBox10.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label38
@@ -1334,7 +1334,7 @@ namespace BioPacVideo
             this.animalID10.Location = new System.Drawing.Point(6, 32);
             this.animalID10.Name = "animalID10";
             this.animalID10.Size = new System.Drawing.Size(100, 20);
-            this.animalID10.TabIndex = 1;
+            this.animalID10.TabIndex = 0;
             // 
             // label39
             // 
@@ -1375,7 +1375,7 @@ namespace BioPacVideo
             this.percentBox9.Location = new System.Drawing.Point(9, 152);
             this.percentBox9.Name = "percentBox9";
             this.percentBox9.Size = new System.Drawing.Size(53, 20);
-            this.percentBox9.TabIndex = 6;
+            this.percentBox9.TabIndex = 4;
             this.percentBox9.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck9
@@ -1384,7 +1384,7 @@ namespace BioPacVideo
             this.unmedCheck9.Location = new System.Drawing.Point(9, 129);
             this.unmedCheck9.Name = "unmedCheck9";
             this.unmedCheck9.Size = new System.Drawing.Size(89, 17);
-            this.unmedCheck9.TabIndex = 5;
+            this.unmedCheck9.TabIndex = 3;
             this.unmedCheck9.Text = "Unmedicated";
             this.unmedCheck9.UseVisualStyleBackColor = true;
             this.unmedCheck9.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -1395,7 +1395,7 @@ namespace BioPacVideo
             this.medCheck9.Location = new System.Drawing.Point(9, 106);
             this.medCheck9.Name = "medCheck9";
             this.medCheck9.Size = new System.Drawing.Size(76, 17);
-            this.medCheck9.TabIndex = 4;
+            this.medCheck9.TabIndex = 2;
             this.medCheck9.Text = "Medicated";
             this.medCheck9.UseVisualStyleBackColor = true;
             this.medCheck9.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -1405,7 +1405,7 @@ namespace BioPacVideo
             this.weightBox9.Location = new System.Drawing.Point(6, 80);
             this.weightBox9.Name = "weightBox9";
             this.weightBox9.Size = new System.Drawing.Size(100, 20);
-            this.weightBox9.TabIndex = 3;
+            this.weightBox9.TabIndex = 1;
             this.weightBox9.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label41
@@ -1422,7 +1422,7 @@ namespace BioPacVideo
             this.animalID9.Location = new System.Drawing.Point(6, 32);
             this.animalID9.Name = "animalID9";
             this.animalID9.Size = new System.Drawing.Size(100, 20);
-            this.animalID9.TabIndex = 1;
+            this.animalID9.TabIndex = 0;
             // 
             // label42
             // 
@@ -1446,7 +1446,7 @@ namespace BioPacVideo
             this.groupBox16.Location = new System.Drawing.Point(1076, 212);
             this.groupBox16.Name = "groupBox16";
             this.groupBox16.Size = new System.Drawing.Size(117, 178);
-            this.groupBox16.TabIndex = 15;
+            this.groupBox16.TabIndex = 16;
             this.groupBox16.TabStop = false;
             // 
             // label43
@@ -1463,7 +1463,7 @@ namespace BioPacVideo
             this.percentBox16.Location = new System.Drawing.Point(9, 152);
             this.percentBox16.Name = "percentBox16";
             this.percentBox16.Size = new System.Drawing.Size(53, 20);
-            this.percentBox16.TabIndex = 6;
+            this.percentBox16.TabIndex = 4;
             this.percentBox16.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck16
@@ -1472,7 +1472,7 @@ namespace BioPacVideo
             this.unmedCheck16.Location = new System.Drawing.Point(9, 129);
             this.unmedCheck16.Name = "unmedCheck16";
             this.unmedCheck16.Size = new System.Drawing.Size(89, 17);
-            this.unmedCheck16.TabIndex = 5;
+            this.unmedCheck16.TabIndex = 3;
             this.unmedCheck16.Text = "Unmedicated";
             this.unmedCheck16.UseVisualStyleBackColor = true;
             this.unmedCheck16.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -1483,7 +1483,7 @@ namespace BioPacVideo
             this.medCheck16.Location = new System.Drawing.Point(9, 106);
             this.medCheck16.Name = "medCheck16";
             this.medCheck16.Size = new System.Drawing.Size(76, 17);
-            this.medCheck16.TabIndex = 4;
+            this.medCheck16.TabIndex = 2;
             this.medCheck16.Text = "Medicated";
             this.medCheck16.UseVisualStyleBackColor = true;
             this.medCheck16.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -1493,7 +1493,7 @@ namespace BioPacVideo
             this.weightBox16.Location = new System.Drawing.Point(6, 80);
             this.weightBox16.Name = "weightBox16";
             this.weightBox16.Size = new System.Drawing.Size(100, 20);
-            this.weightBox16.TabIndex = 3;
+            this.weightBox16.TabIndex = 1;
             this.weightBox16.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label44
@@ -1510,7 +1510,7 @@ namespace BioPacVideo
             this.animalID16.Location = new System.Drawing.Point(6, 32);
             this.animalID16.Name = "animalID16";
             this.animalID16.Size = new System.Drawing.Size(100, 20);
-            this.animalID16.TabIndex = 1;
+            this.animalID16.TabIndex = 0;
             // 
             // label45
             // 
@@ -1551,7 +1551,7 @@ namespace BioPacVideo
             this.percentBox8.Location = new System.Drawing.Point(9, 152);
             this.percentBox8.Name = "percentBox8";
             this.percentBox8.Size = new System.Drawing.Size(53, 20);
-            this.percentBox8.TabIndex = 6;
+            this.percentBox8.TabIndex = 4;
             this.percentBox8.Leave += new System.EventHandler(this.percentBox_TextChanged);
             // 
             // unmedCheck8
@@ -1560,7 +1560,7 @@ namespace BioPacVideo
             this.unmedCheck8.Location = new System.Drawing.Point(9, 129);
             this.unmedCheck8.Name = "unmedCheck8";
             this.unmedCheck8.Size = new System.Drawing.Size(89, 17);
-            this.unmedCheck8.TabIndex = 5;
+            this.unmedCheck8.TabIndex = 3;
             this.unmedCheck8.Text = "Unmedicated";
             this.unmedCheck8.UseVisualStyleBackColor = true;
             this.unmedCheck8.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -1571,7 +1571,7 @@ namespace BioPacVideo
             this.medCheck8.Location = new System.Drawing.Point(9, 106);
             this.medCheck8.Name = "medCheck8";
             this.medCheck8.Size = new System.Drawing.Size(76, 17);
-            this.medCheck8.TabIndex = 4;
+            this.medCheck8.TabIndex = 2;
             this.medCheck8.Text = "Medicated";
             this.medCheck8.UseVisualStyleBackColor = true;
             this.medCheck8.CheckedChanged += new System.EventHandler(this.checkBox_Change);
@@ -1581,7 +1581,7 @@ namespace BioPacVideo
             this.weightBox8.Location = new System.Drawing.Point(6, 80);
             this.weightBox8.Name = "weightBox8";
             this.weightBox8.Size = new System.Drawing.Size(100, 20);
-            this.weightBox8.TabIndex = 3;
+            this.weightBox8.TabIndex = 1;
             this.weightBox8.TextChanged += new System.EventHandler(this.weightBox_TextChange);
             // 
             // label47
@@ -1598,7 +1598,7 @@ namespace BioPacVideo
             this.animalID8.Location = new System.Drawing.Point(6, 32);
             this.animalID8.Name = "animalID8";
             this.animalID8.Size = new System.Drawing.Size(100, 20);
-            this.animalID8.TabIndex = 1;
+            this.animalID8.TabIndex = 0;
             // 
             // label48
             // 
@@ -1614,7 +1614,7 @@ namespace BioPacVideo
             this.submitButton.Location = new System.Drawing.Point(1118, 405);
             this.submitButton.Name = "submitButton";
             this.submitButton.Size = new System.Drawing.Size(75, 23);
-            this.submitButton.TabIndex = 9;
+            this.submitButton.TabIndex = 17;
             this.submitButton.Text = "Submit";
             this.submitButton.UseVisualStyleBackColor = true;
             this.submitButton.Click += new System.EventHandler(this.submitButton_Click);
@@ -1624,7 +1624,7 @@ namespace BioPacVideo
             this.refreshButton.Location = new System.Drawing.Point(98, 39);
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(105, 23);
-            this.refreshButton.TabIndex = 11;
+            this.refreshButton.TabIndex = 4;
             this.refreshButton.Text = "Refresh Layout";
             this.refreshButton.UseVisualStyleBackColor = true;
             this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
@@ -1639,7 +1639,7 @@ namespace BioPacVideo
             this.instructText.Multiline = true;
             this.instructText.Name = "instructText";
             this.instructText.Size = new System.Drawing.Size(100, 20);
-            this.instructText.TabIndex = 12;
+            this.instructText.TabIndex = 18;
             // 
             // label49
             // 
@@ -1647,7 +1647,7 @@ namespace BioPacVideo
             this.label49.Location = new System.Drawing.Point(154, 16);
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(92, 13);
-            this.label49.TabIndex = 20;
+            this.label49.TabIndex = 2;
             this.label49.Text = "Columns of Cages";
             // 
             // label50
@@ -1656,7 +1656,7 @@ namespace BioPacVideo
             this.label50.Location = new System.Drawing.Point(4, 15);
             this.label50.Name = "label50";
             this.label50.Size = new System.Drawing.Size(79, 13);
-            this.label50.TabIndex = 19;
+            this.label50.TabIndex = 0;
             this.label50.Text = "Rows of Cages";
             // 
             // cages_x_text
@@ -1664,14 +1664,14 @@ namespace BioPacVideo
             this.cages_x_text.Location = new System.Drawing.Point(252, 13);
             this.cages_x_text.Name = "cages_x_text";
             this.cages_x_text.Size = new System.Drawing.Size(39, 20);
-            this.cages_x_text.TabIndex = 18;
+            this.cages_x_text.TabIndex = 3;
             // 
             // cages_y_text
             // 
             this.cages_y_text.Location = new System.Drawing.Point(89, 13);
             this.cages_y_text.Name = "cages_y_text";
             this.cages_y_text.Size = new System.Drawing.Size(39, 20);
-            this.cages_y_text.TabIndex = 17;
+            this.cages_y_text.TabIndex = 1;
             // 
             // groupBox17
             // 
