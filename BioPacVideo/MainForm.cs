@@ -225,7 +225,6 @@ namespace BioPacVideo
                 {
                     Feeder.Rats[i].Meals[j] = BioIni.IniReadValue("Rats", "Rat" + i + "Meal" + j, false);
                 }
-
             }
             Feeder.Cages_X = BioIni.IniReadValue("Rats", "CagesX", 4);
             Feeder.Cages_Y = BioIni.IniReadValue("Rats", "CagesY", 4);
@@ -324,7 +323,6 @@ namespace BioPacVideo
                 BioIni.IniWriteValue("Video", string.Format("Channel{0}", i), Video.CameraAssociation[i]);
             for (int i = 0; i < 32; i++)
             {
-
                 BioIni.IniWriteValue("Video", string.Format("Bright{0}", i), Video.Brightness[i]);
                 BioIni.IniWriteValue("Video", string.Format("Contrast{0}", i), Video.Contrast[i]);
                 BioIni.IniWriteValue("Video", string.Format("Hue{0}", i), Video.Hue[i]);
