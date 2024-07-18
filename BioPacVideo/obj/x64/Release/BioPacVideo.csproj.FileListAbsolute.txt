@@ -174,7 +174,6 @@ C:\Users\Ben\Source\Repos\biopacvideo\BioPacVideo\bin\x64\Release\BioPacVideo.ex
 C:\Users\Ben\Source\Repos\biopacvideo\BioPacVideo\bin\x64\Release\QCAP.NET.X64.DLL
 C:\Users\Ben\Source\Repos\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.csproj.AssemblyReference.cache
 C:\Users\Ben\Source\Repos\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.AnimalSettings.resources
-C:\Users\Ben\Source\Repos\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.CameraAssc.resources
 C:\Users\Ben\Source\Repos\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.CameraAssosciation.resources
 C:\Users\Ben\Source\Repos\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.FeederAddress.resources
 C:\Users\Ben\Source\Repos\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.FeederMenu.resources
