@@ -55,7 +55,7 @@ namespace BioPacVideo
             this.executeAckButton.TabIndex = 2;
             this.executeAckButton.Text = "Execute Ack";
             this.executeAckButton.UseVisualStyleBackColor = true;
-            this.executeAckButton.Click += new System.EventHandler(this.button1_Click);
+            this.executeAckButton.Click += new System.EventHandler(this.executeAck_Click);
             // 
             // pelletLabel
             // 
