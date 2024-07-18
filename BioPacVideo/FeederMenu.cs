@@ -12,14 +12,17 @@ namespace BioPacVideo
 {
     public partial class FeederMenu : Form
     {
+        #region Properties
         private FeederTemplate Feeder;
         private TimeSpan midnight;
         private TimeSpan mid_ten;
         private TimeSpan noon;
         private TimeSpan noon_ten;
         List<TextBox> MealTime;
-        List<TimeSpan> FeederTime; 
+        List<TimeSpan> FeederTime;
+        #endregion
 
+        #region Lifecycle
         public FeederMenu(FeederTemplate Pass_feeder)
         {
             InitializeComponent();
@@ -70,10 +73,18 @@ namespace BioPacVideo
             IDC_Meal6.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal6); };
      
         }
+
+        /// <summary>
+        /// Gets the current Feeder Template and returns it
+        /// </summary>
+        /// <returns>The current Feeder Template</returns>
         public FeederTemplate ReturnFeeder()
         {
             return Feeder;
         }
+        #endregion
+
+        #region Input Handlers
         private void IDC_Meal_TextChanged(object sender, EventArgs e, TextBox tb)
         {
             TimeSpan TestTime;
@@ -168,6 +179,6 @@ namespace BioPacVideo
                 this.Dispose(true);
             }
         }
-
+        #endregion
     }
 }
