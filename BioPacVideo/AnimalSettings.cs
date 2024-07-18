@@ -11,6 +11,7 @@ namespace BioPacVideo
 {
     public partial class AnimalSettings : Form
     {
+        #region Properties
         private FeederTemplate Feeder;
         List<GroupBox> groupList;
         List<TextBox> animalID;
@@ -24,7 +25,10 @@ namespace BioPacVideo
         int x;
         int y;
         bool focusBusy;
-        bool recordingOn; 
+        bool recordingOn;
+        #endregion
+
+        #region Lifecycle
         public AnimalSettings(FeederTemplate passFeeder, bool Recording)
         {
             InitializeComponent();
@@ -51,7 +55,6 @@ namespace BioPacVideo
             //List of all the percentage text boxes
             percentBox = new List<TextBox> {percentBox1, percentBox2, percentBox3, percentBox4, percentBox5, percentBox6, percentBox7, percentBox8,
             percentBox9, percentBox10, percentBox11, percentBox12, percentBox13, percentBox14, percentBox15, percentBox16};
-
 
             totalCages = (Feeder.Cages_X) * (Feeder.Cages_Y);
             access = Enumerable.Repeat(false, 16).ToArray();
@@ -178,7 +181,9 @@ namespace BioPacVideo
             instructText.Enabled = false;
             //refreshButton.Location = new Point(130, 45); 
         }
+        #endregion
 
+        #region Input Handlers
         private void submitButton_Click(object sender, EventArgs e)
         {
             bool error = false; 
@@ -221,6 +226,7 @@ namespace BioPacVideo
             }
             
         }
+
         private void weightBox_TextChange(object sender, EventArgs e)
         {
             for (int i = 0; i < totalCages; i++)
@@ -269,6 +275,7 @@ namespace BioPacVideo
                 
             }
         }
+
         private void weightBox_FocusLeave(object sender, EventArgs e, TextBox tb) // this actually refers to focus leave on animal ID box, no idea why its called this 
         {
             if (focusBusy) return;
@@ -317,6 +324,7 @@ namespace BioPacVideo
             }
             focusBusy = false; 
         }
+
         private void checkBox_FocusLeave(object sender, EventArgs e, CheckBox cb) // the idea was there, but its glitchy and not worth it 
         {
             int i = medCheck.IndexOf(cb);
@@ -405,6 +413,17 @@ namespace BioPacVideo
             
         }
 
+        private void animalID_TextChanged(object sender, EventArgs e, TextBox tb)
+        {
+            int i = animalID.IndexOf(tb);
+            weightBox[i].Enabled = true;
+        }
+        #endregion
+
+        #region UIFunctions
+        /// <summary>
+        /// Populates the form with the available data and formats the screen to show the correct cage layout
+        /// </summary>
         private void RefreshForm()
         {
             x = 0; y = 0; int i = 0; 
@@ -475,11 +494,6 @@ namespace BioPacVideo
             this.Invalidate();
             this.Refresh();
         }
-
-        private void animalID_TextChanged(object sender, EventArgs e, TextBox tb)
-        {
-            int i = animalID.IndexOf(tb);
-            weightBox[i].Enabled = true; 
-        }
+        #endregion
     }
 }
