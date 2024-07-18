@@ -666,6 +666,9 @@ namespace BioPacVideo
         #endregion
 
         #region Thread Functions
+        /// <summary>
+        /// A permanent loop that checks recording status, feeder meals, and recording filesplit 
+        /// </summary>
         private void TimerCheckThread()
         {
             while (true)
@@ -772,17 +775,23 @@ namespace BioPacVideo
                 Thread.Sleep(10000);
             }
       }
-
+        
+        /// <summary>
+        /// A Loop dependent on the RunClockThread Variable that updates the time every second
+        /// </summary>
         private void ClockThread()
         {
             while (RunClockThread)
             {
                 TimeLabel.Text = DateAndTime.Now.ToString();
                 Thread.Sleep(1000);
-              
             }
         }
 
+        /// <summary>
+        /// A function that loops based on the variable RunDisplayThread 
+        /// that updates the Camera streams, EEG Data displays, Video Status text label, and Feeder State text label
+        /// </summary>
         private void DisplayThread()
         {
             int Cm; //To hold current camera. 
@@ -805,6 +814,11 @@ namespace BioPacVideo
         #endregion
 
         #region Recording Functions
+        /// <summary>
+        /// Creates a new Directory named YYYYMMDD-HHMMSS based on the current date, 
+        /// then it establishes the same naming scheme or _Feeder.log, and _Settings.txt files. 
+        /// the current MPTemplate is updated and ACQ, and Video recording are started to the current directory
+        /// </summary>
         private void StartRecording()
         {
             IniFile WriteOnce;
@@ -829,6 +843,9 @@ namespace BioPacVideo
             MP.isstreaming = MP.StartWriting();
         }
 
+        /// <summary>
+        /// Stops recording, waits for the biopac to finish writing the ACQ file then reconnects to the biopac
+        /// </summary>
         private void StopRecording()
         {
             MP.StopWriting();
@@ -843,6 +860,9 @@ namespace BioPacVideo
         #endregion
 
         #region UI Functions
+        /// <summary>
+        /// Checks the available free space for the recording directory then updates the color and text of the UI to reflect the new free space
+        /// </summary>
         private void Update_FreeSpace()
         {
             long DriveSpace;
@@ -870,6 +890,9 @@ namespace BioPacVideo
             else this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.LightGreen; }));
         }
 
+        /// <summary>
+        /// Updates the Video on the camera placeholder elements
+        /// </summary>
         public void UpdateGUI()
         {
             Panel TempPanel;
