@@ -168,6 +168,7 @@
     <Compile Include="RecordSettings.Designer.cs">
       <DependentUpon>RecordSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="ResourceManager.cs" />
     <Compile Include="VideoSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -281,6 +282,14 @@
   <ItemGroup>
     <Content Include="BPV_Icon.ico" />
     <Content Include="mpdev.dll" />
+    <EmbeddedResource Include="Resources\dll\AMESDK.X64.DLL" />
+    <EmbeddedResource Include="Resources\dll\mpdev.dll" />
+    <EmbeddedResource Include="Resources\dll\QCAP.NET.X64.DLL" />
+    <EmbeddedResource Include="Resources\dll\QCAP.X64.DLL" />
+    <EmbeddedResource Include="Resources\dll\xerces-c_3_1.dll" />
+    <EmbeddedResource Include="Resources\Images\FeederTester.png" />
+    <EmbeddedResource Include="Resources\Images\FeederTester_Mouse_Large.png" />
+    <EmbeddedResource Include="Resources\Images\FeederTester_Rat.png" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -307,6 +316,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

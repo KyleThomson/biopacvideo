@@ -162,7 +162,7 @@ namespace BioPacVideo
             this.initializeBioPacToolStripMenuItem.Name = "initializeBioPacToolStripMenuItem";
             this.initializeBioPacToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.initializeBioPacToolStripMenuItem.Text = "Connect BioPac";
-            this.initializeBioPacToolStripMenuItem.Click += new System.EventHandler(this.initializeBioPacToolStripMenuItem_Click);
+            this.initializeBioPacToolStripMenuItem.Click += new System.EventHandler(this.connectBioPacToolStripMenuItem_Click);
             // 
             // IDM_DISCONNECTBIOPAC
             // 
@@ -311,7 +311,7 @@ namespace BioPacVideo
             this.feederMenuToolStripMenuItem.Name = "feederMenuToolStripMenuItem";
             this.feederMenuToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.feederMenuToolStripMenuItem.Text = "Feeder Settings";
-            this.feederMenuToolStripMenuItem.Click += new System.EventHandler(this.feederMenuToolStripMenuItem_Click);
+            this.feederMenuToolStripMenuItem.Click += new System.EventHandler(this.feederSettingsMenuToolStripMenuItem_Click);
             // 
             // StatusBar
             // 
