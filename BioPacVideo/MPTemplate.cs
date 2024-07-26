@@ -524,7 +524,7 @@ namespace BioPacVideo
             isstreaming = true;         
         }
 
-        public void StopRecording()
+        public void StopStreaming()
         {
             isstreaming = false; //next recording block, streaming will stop
             while (AcqThread.IsAlive)

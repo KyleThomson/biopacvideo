@@ -284,14 +284,30 @@
   <ItemGroup>
     <Content Include="BPV_Icon.ico" />
     <Content Include="mpdev.dll" />
-    <EmbeddedResource Include="Resources\dll\AMESDK.X64.DLL" />
-    <EmbeddedResource Include="Resources\dll\mpdev.dll" />
-    <EmbeddedResource Include="Resources\dll\QCAP.NET.X64.DLL" />
-    <EmbeddedResource Include="Resources\dll\QCAP.X64.DLL" />
-    <EmbeddedResource Include="Resources\dll\xerces-c_3_1.dll" />
-    <EmbeddedResource Include="Resources\Images\FeederTester.png" />
-    <EmbeddedResource Include="Resources\Images\FeederTester_Mouse_Large.png" />
-    <EmbeddedResource Include="Resources\Images\FeederTester_Rat.png" />
+    <EmbeddedResource Include="Resources\dll\AMESDK.X64.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\dll\mpdev.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\dll\QCAP.NET.X64.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\dll\QCAP.X64.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\dll\xerces-c_3_1.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Images\FeederTester.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Images\FeederTester_Mouse_Large.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Images\FeederTester_Rat.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

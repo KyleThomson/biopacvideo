@@ -194,7 +194,7 @@ namespace BioPacVideo
                 ThreadClock.Abort();
                 if (MP.isstreaming)
                 {
-                    MP.StopRecording();
+                    MP.StopStreaming();
                 }
                 if (MP.isconnected)
                 {
@@ -708,6 +708,7 @@ namespace BioPacVideo
                     }
                     else
                     {
+                        MP.StopStreaming();
                         MP.Disconnect();                        
                         Thread.Sleep(1000);
                         MP.Connect();
@@ -835,7 +836,7 @@ namespace BioPacVideo
             MP.StopWriting();
             Video.StopRecording();
             while (MP.IsFileWriting) { };
-            MP.StopRecording();
+            MP.StopStreaming();
             MP.Disconnect();
             Thread.Sleep(1000);
             MP.Connect();
