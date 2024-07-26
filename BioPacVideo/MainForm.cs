@@ -678,11 +678,11 @@ namespace BioPacVideo
                     if (MP.VideoOff)
                     {
                         Video.StopRecording();
-                        this.RecordingButton.Invoke((MethodInvoker)delegate 
-                        { 
+                        this.RecordingButton.Invoke((MethodInvoker)delegate
+                        {
                             RecordingButton.Enabled = false; RecordingButton.BackColor = Color.Gray; RecordingButton.Text = "Recording Error";
                         });
-                        MP.VideoOff = false; 
+                        MP.VideoOff = false;
                     }
                     if (MP.Connect())
                     {
@@ -699,7 +699,7 @@ namespace BioPacVideo
                     }
                 }
                 //If 12AM, restart recording. 
-                if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0))
+                if ((((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0)))  || (((MP.FileSplit) & (DateTime.Now.TimeOfDay.Hours == 12) & (DateTime.Now.TimeOfDay.Minutes == 0))))
                 {
                     if (MP.IsFileWriting)
                     {
@@ -711,28 +711,12 @@ namespace BioPacVideo
                         MP.Disconnect();                        
                         Thread.Sleep(1000);
                         MP.Connect();
+                        MP.CommunicateBioPac(); 
                     }
                     //Update Hard Drive
                     Update_FreeSpace();
                     Thread.Sleep(120000); //Always Skip the Meal;
-                }
-                else if ((MP.FileSplit) & (DateTime.Now.TimeOfDay.Hours == 12) & (DateTime.Now.TimeOfDay.Minutes == 0))
-                {
-                    if (MP.IsFileWriting)
-                    {
-                        StopRecording();
-                        StartRecording();
-                    }
-                    else
-                    {
-                        MP.Disconnect();
-                        Thread.Sleep(1000);
-                        MP.Connect();
-                    }
-                    //Update Hard Drive
-                    Update_FreeSpace();
-                    Thread.Sleep(120000); //Always Skip the Meal;
-                } 
+                }                
                 else if (Feeder.Enabled)
                 {
                     if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal1.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal1.Minutes))
