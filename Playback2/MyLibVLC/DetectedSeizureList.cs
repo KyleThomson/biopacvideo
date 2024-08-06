@@ -97,6 +97,20 @@ namespace SeizurePlayback
             }
             return true;
         }
+        public bool NextChannelSeizure(int Channel)
+        {
+            int Position;           
+            Position = 0; 
+            foreach (DetectedSeizureType x in DetectedSeizures)
+            {                
+                if (Channel==x.Channel)
+                {
+                    break; 
+                }
+                Position++;
+            }
+            return SetSeizureNumber(Position);
+        }
         public bool SetSeizureNumber(int Number)
         {
 

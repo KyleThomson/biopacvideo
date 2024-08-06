@@ -1,10 +1,8 @@
 C:\biopacvideo\Playback2\MyLibVLC\bin\x86\Release\SeizurePlayback.exe.config
 C:\biopacvideo\Playback2\MyLibVLC\bin\x86\Release\SeizurePlayback.exe
 C:\biopacvideo\Playback2\MyLibVLC\bin\x86\Release\SeizurePlayback.pdb
-C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\ResolveAssemblyReference.cache
 C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.AddDate.resources
 C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.AdvanceSettings.resources
-C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.Calendar.resources
 C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.Compression.resources
 C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.CompressionManager.resources
 C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.Exporter.resources
@@ -21,8 +19,6 @@ C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.SzRvwFrm.resou
 C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.Properties.Resources.resources
 C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.SzPrompt.resources
 C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.WeightAdd.resources
-C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\GenerateResource.read.1.tlog
-C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\GenerateResource.write.1.tlog
 C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.exe
 C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.pdb
 C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.AddGroup.resources
@@ -317,3 +313,10 @@ C:\Users\Sarah\source\repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\R
 C:\Users\Sarah\source\repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.csproj.CoreCompileInputs.cache
 C:\Users\Sarah\source\repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.exe
 C:\Users\Sarah\source\repos\KyleThomson\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.pdb
+C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.csproj.AssemblyReference.cache
+C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.FRZero.resources
+C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.ShortGuide.resources
+C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.SzDetPrompt.resources
+C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.VLoadWait.resources
+C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.csproj.GenerateResource.cache
+C:\biopacvideo\Playback2\MyLibVLC\obj\x86\Release\SeizurePlayback.csproj.CoreCompileInputs.cache

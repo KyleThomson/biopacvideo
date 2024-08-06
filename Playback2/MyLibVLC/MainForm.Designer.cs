@@ -125,6 +125,7 @@ namespace SeizurePlayback
             this.Rewind_ChangeBox = new System.Windows.Forms.FlowLayoutPanel();
             this.Rewind_Dec = new System.Windows.Forms.Button();
             this.Rewind_Inc = new System.Windows.Forms.Button();
+            this.FastReview2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomScale)).BeginInit();
             this.FRButtonGroup.SuspendLayout();
@@ -155,9 +156,10 @@ namespace SeizurePlayback
             this.Play.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Play.BackColor = System.Drawing.Color.DarkGray;
             this.Play.ForeColor = System.Drawing.Color.Black;
-            this.Play.Location = new System.Drawing.Point(832, 631);
+            this.Play.Location = new System.Drawing.Point(1456, 1104);
+            this.Play.Margin = new System.Windows.Forms.Padding(5);
             this.Play.Name = "Play";
-            this.Play.Size = new System.Drawing.Size(75, 23);
+            this.Play.Size = new System.Drawing.Size(131, 40);
             this.Play.TabIndex = 0;
             this.Play.Text = "Play";
             this.Play.UseVisualStyleBackColor = false;
@@ -167,9 +169,10 @@ namespace SeizurePlayback
             // 
             this.VideoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VideoPanel.BackColor = System.Drawing.Color.DarkGray;
-            this.VideoPanel.Location = new System.Drawing.Point(12, 589);
+            this.VideoPanel.Location = new System.Drawing.Point(21, 1031);
+            this.VideoPanel.Margin = new System.Windows.Forms.Padding(5);
             this.VideoPanel.Name = "VideoPanel";
-            this.VideoPanel.Size = new System.Drawing.Size(480, 360);
+            this.VideoPanel.Size = new System.Drawing.Size(840, 630);
             this.VideoPanel.TabIndex = 2;
             this.VideoPanel.Click += new System.EventHandler(this.VideoPanel_Click);
             // 
@@ -178,9 +181,10 @@ namespace SeizurePlayback
             this.Open.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Open.BackColor = System.Drawing.Color.DarkGray;
             this.Open.ForeColor = System.Drawing.Color.Black;
-            this.Open.Location = new System.Drawing.Point(669, 599);
+            this.Open.Location = new System.Drawing.Point(1171, 1048);
+            this.Open.Margin = new System.Windows.Forms.Padding(5);
             this.Open.Name = "Open";
-            this.Open.Size = new System.Drawing.Size(156, 23);
+            this.Open.Size = new System.Drawing.Size(273, 40);
             this.Open.TabIndex = 3;
             this.Open.Text = "Select Directory";
             this.Open.UseVisualStyleBackColor = false;
@@ -191,9 +195,10 @@ namespace SeizurePlayback
             this.Pause.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Pause.BackColor = System.Drawing.Color.DarkGray;
             this.Pause.ForeColor = System.Drawing.Color.Black;
-            this.Pause.Location = new System.Drawing.Point(832, 599);
+            this.Pause.Location = new System.Drawing.Point(1456, 1048);
+            this.Pause.Margin = new System.Windows.Forms.Padding(5);
             this.Pause.Name = "Pause";
-            this.Pause.Size = new System.Drawing.Size(75, 23);
+            this.Pause.Size = new System.Drawing.Size(131, 40);
             this.Pause.TabIndex = 0;
             this.Pause.Text = "Pause";
             this.Pause.UseVisualStyleBackColor = false;
@@ -203,10 +208,11 @@ namespace SeizurePlayback
             // 
             this.TimeBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.TimeBar.LargeChange = 1;
-            this.TimeBar.Location = new System.Drawing.Point(498, 811);
+            this.TimeBar.Location = new System.Drawing.Point(872, 1419);
+            this.TimeBar.Margin = new System.Windows.Forms.Padding(5);
             this.TimeBar.Maximum = 9;
             this.TimeBar.Name = "TimeBar";
-            this.TimeBar.Size = new System.Drawing.Size(924, 45);
+            this.TimeBar.Size = new System.Drawing.Size(1617, 80);
             this.TimeBar.TabIndex = 13;
             this.TimeBar.Scroll += new System.EventHandler(this.TimeBar_Scroll);
             // 
@@ -216,9 +222,10 @@ namespace SeizurePlayback
             this.Rewind.AutoSize = true;
             this.Rewind.BackColor = System.Drawing.Color.DarkGray;
             this.Rewind.ForeColor = System.Drawing.Color.Black;
-            this.Rewind.Location = new System.Drawing.Point(913, 599);
+            this.Rewind.Location = new System.Drawing.Point(1598, 1048);
+            this.Rewind.Margin = new System.Windows.Forms.Padding(5);
             this.Rewind.Name = "Rewind";
-            this.Rewind.Size = new System.Drawing.Size(75, 23);
+            this.Rewind.Size = new System.Drawing.Size(131, 40);
             this.Rewind.TabIndex = 15;
             this.Rewind.Text = "Rewind 30s";
             this.Rewind.UseVisualStyleBackColor = false;
@@ -229,9 +236,10 @@ namespace SeizurePlayback
             this.SpeedUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.SpeedUp.BackColor = System.Drawing.Color.DarkGray;
             this.SpeedUp.ForeColor = System.Drawing.Color.Black;
-            this.SpeedUp.Location = new System.Drawing.Point(913, 631);
+            this.SpeedUp.Location = new System.Drawing.Point(1598, 1104);
+            this.SpeedUp.Margin = new System.Windows.Forms.Padding(5);
             this.SpeedUp.Name = "SpeedUp";
-            this.SpeedUp.Size = new System.Drawing.Size(75, 23);
+            this.SpeedUp.Size = new System.Drawing.Size(131, 40);
             this.SpeedUp.TabIndex = 16;
             this.SpeedUp.Text = "Speed Up";
             this.SpeedUp.UseVisualStyleBackColor = false;
@@ -242,10 +250,11 @@ namespace SeizurePlayback
             this.TimeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.TimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TimeLabel.ForeColor = System.Drawing.Color.White;
-            this.TimeLabel.Location = new System.Drawing.Point(532, 599);
+            this.TimeLabel.Location = new System.Drawing.Point(931, 1048);
+            this.TimeLabel.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.TimeLabel.Name = "TimeLabel";
             this.TimeLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.TimeLabel.Size = new System.Drawing.Size(127, 24);
+            this.TimeLabel.Size = new System.Drawing.Size(222, 42);
             this.TimeLabel.TabIndex = 17;
             this.TimeLabel.Text = "        Time";
             this.TimeLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -263,9 +272,10 @@ namespace SeizurePlayback
             "10m",
             "30m ",
             "60m"});
-            this.TimeBox.Location = new System.Drawing.Point(498, 768);
+            this.TimeBox.Location = new System.Drawing.Point(872, 1344);
+            this.TimeBox.Margin = new System.Windows.Forms.Padding(5);
             this.TimeBox.Name = "TimeBox";
-            this.TimeBox.Size = new System.Drawing.Size(161, 21);
+            this.TimeBox.Size = new System.Drawing.Size(279, 32);
             this.TimeBox.TabIndex = 18;
             this.TimeBox.TabStop = false;
             this.TimeBox.SelectedIndexChanged += new System.EventHandler(this.TimeBox_SelectedIndexChanged);
@@ -279,9 +289,10 @@ namespace SeizurePlayback
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label1.Location = new System.Drawing.Point(500, 741);
+            this.label1.Location = new System.Drawing.Point(875, 1297);
+            this.label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(105, 24);
+            this.label1.Size = new System.Drawing.Size(188, 39);
             this.label1.TabIndex = 19;
             this.label1.Text = "Time Scale";
             // 
@@ -290,9 +301,10 @@ namespace SeizurePlayback
             this.SzCaptureButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.SzCaptureButton.BackColor = System.Drawing.Color.DarkGray;
             this.SzCaptureButton.ForeColor = System.Drawing.Color.Black;
-            this.SzCaptureButton.Location = new System.Drawing.Point(669, 659);
+            this.SzCaptureButton.Location = new System.Drawing.Point(1171, 1153);
+            this.SzCaptureButton.Margin = new System.Windows.Forms.Padding(5);
             this.SzCaptureButton.Name = "SzCaptureButton";
-            this.SzCaptureButton.Size = new System.Drawing.Size(156, 23);
+            this.SzCaptureButton.Size = new System.Drawing.Size(273, 40);
             this.SzCaptureButton.TabIndex = 20;
             this.SzCaptureButton.Text = "Capture Seizure";
             this.SzCaptureButton.UseVisualStyleBackColor = false;
@@ -303,9 +315,10 @@ namespace SeizurePlayback
             this.DetectionLoadButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.DetectionLoadButton.BackColor = System.Drawing.Color.DarkGray;
             this.DetectionLoadButton.ForeColor = System.Drawing.Color.Black;
-            this.DetectionLoadButton.Location = new System.Drawing.Point(669, 629);
+            this.DetectionLoadButton.Location = new System.Drawing.Point(1171, 1101);
+            this.DetectionLoadButton.Margin = new System.Windows.Forms.Padding(5);
             this.DetectionLoadButton.Name = "DetectionLoadButton";
-            this.DetectionLoadButton.Size = new System.Drawing.Size(156, 23);
+            this.DetectionLoadButton.Size = new System.Drawing.Size(273, 40);
             this.DetectionLoadButton.TabIndex = 21;
             this.DetectionLoadButton.Text = "Load Detection File";
             this.DetectionLoadButton.UseVisualStyleBackColor = false;
@@ -316,9 +329,10 @@ namespace SeizurePlayback
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button2.BackColor = System.Drawing.Color.DarkGray;
             this.button2.ForeColor = System.Drawing.Color.Black;
-            this.button2.Location = new System.Drawing.Point(913, 690);
+            this.button2.Location = new System.Drawing.Point(1598, 1208);
+            this.button2.Margin = new System.Windows.Forms.Padding(5);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(131, 40);
             this.button2.TabIndex = 22;
             this.button2.Text = "Next";
             this.button2.UseVisualStyleBackColor = false;
@@ -329,9 +343,10 @@ namespace SeizurePlayback
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button3.BackColor = System.Drawing.Color.DarkGray;
             this.button3.ForeColor = System.Drawing.Color.Black;
-            this.button3.Location = new System.Drawing.Point(832, 690);
+            this.button3.Location = new System.Drawing.Point(1456, 1208);
+            this.button3.Margin = new System.Windows.Forms.Padding(5);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.Size = new System.Drawing.Size(131, 40);
             this.button3.TabIndex = 23;
             this.button3.Text = "Previous";
             this.button3.UseVisualStyleBackColor = false;
@@ -343,9 +358,10 @@ namespace SeizurePlayback
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(672, 741);
+            this.label2.Location = new System.Drawing.Point(1176, 1297);
+            this.label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(105, 24);
+            this.label2.Size = new System.Drawing.Size(185, 39);
             this.label2.TabIndex = 24;
             this.label2.Text = "Time Jump";
             // 
@@ -353,9 +369,10 @@ namespace SeizurePlayback
             // 
             this.TimeJump.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.TimeJump.Enabled = false;
-            this.TimeJump.Location = new System.Drawing.Point(669, 768);
+            this.TimeJump.Location = new System.Drawing.Point(1171, 1344);
+            this.TimeJump.Margin = new System.Windows.Forms.Padding(5);
             this.TimeJump.Name = "TimeJump";
-            this.TimeJump.Size = new System.Drawing.Size(161, 20);
+            this.TimeJump.Size = new System.Drawing.Size(279, 29);
             this.TimeJump.TabIndex = 25;
             this.TimeJump.LostFocus += new System.EventHandler(this.TimeJump_TextChanged);
             // 
@@ -364,9 +381,10 @@ namespace SeizurePlayback
             this.VisChan1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan1.AutoSize = true;
             this.VisChan1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan1.Location = new System.Drawing.Point(502, 859);
+            this.VisChan1.Location = new System.Drawing.Point(878, 1504);
+            this.VisChan1.Margin = new System.Windows.Forms.Padding(5);
             this.VisChan1.Name = "VisChan1";
-            this.VisChan1.Size = new System.Drawing.Size(74, 17);
+            this.VisChan1.Size = new System.Drawing.Size(128, 29);
             this.VisChan1.TabIndex = 26;
             this.VisChan1.Text = "Channel 1";
             this.VisChan1.UseVisualStyleBackColor = true;
@@ -377,9 +395,10 @@ namespace SeizurePlayback
             this.VisChan2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan2.AutoSize = true;
             this.VisChan2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan2.Location = new System.Drawing.Point(503, 882);
+            this.VisChan2.Location = new System.Drawing.Point(880, 1545);
+            this.VisChan2.Margin = new System.Windows.Forms.Padding(5);
             this.VisChan2.Name = "VisChan2";
-            this.VisChan2.Size = new System.Drawing.Size(74, 17);
+            this.VisChan2.Size = new System.Drawing.Size(128, 29);
             this.VisChan2.TabIndex = 27;
             this.VisChan2.Text = "Channel 2";
             this.VisChan2.UseVisualStyleBackColor = true;
@@ -390,9 +409,10 @@ namespace SeizurePlayback
             this.VisChan3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan3.AutoSize = true;
             this.VisChan3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan3.Location = new System.Drawing.Point(503, 905);
+            this.VisChan3.Location = new System.Drawing.Point(880, 1585);
+            this.VisChan3.Margin = new System.Windows.Forms.Padding(5);
             this.VisChan3.Name = "VisChan3";
-            this.VisChan3.Size = new System.Drawing.Size(74, 17);
+            this.VisChan3.Size = new System.Drawing.Size(128, 29);
             this.VisChan3.TabIndex = 28;
             this.VisChan3.Text = "Channel 3";
             this.VisChan3.UseVisualStyleBackColor = true;
@@ -403,9 +423,10 @@ namespace SeizurePlayback
             this.VisChan4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan4.AutoSize = true;
             this.VisChan4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan4.Location = new System.Drawing.Point(503, 928);
+            this.VisChan4.Location = new System.Drawing.Point(880, 1625);
+            this.VisChan4.Margin = new System.Windows.Forms.Padding(5);
             this.VisChan4.Name = "VisChan4";
-            this.VisChan4.Size = new System.Drawing.Size(74, 17);
+            this.VisChan4.Size = new System.Drawing.Size(128, 29);
             this.VisChan4.TabIndex = 29;
             this.VisChan4.Text = "Channel 4";
             this.VisChan4.UseVisualStyleBackColor = true;
@@ -416,9 +437,10 @@ namespace SeizurePlayback
             this.VisChan5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan5.AutoSize = true;
             this.VisChan5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan5.Location = new System.Drawing.Point(584, 859);
+            this.VisChan5.Location = new System.Drawing.Point(1022, 1504);
+            this.VisChan5.Margin = new System.Windows.Forms.Padding(5);
             this.VisChan5.Name = "VisChan5";
-            this.VisChan5.Size = new System.Drawing.Size(74, 17);
+            this.VisChan5.Size = new System.Drawing.Size(128, 29);
             this.VisChan5.TabIndex = 30;
             this.VisChan5.Text = "Channel 5";
             this.VisChan5.UseVisualStyleBackColor = true;
@@ -429,9 +451,10 @@ namespace SeizurePlayback
             this.VisChan6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan6.AutoSize = true;
             this.VisChan6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan6.Location = new System.Drawing.Point(583, 882);
+            this.VisChan6.Location = new System.Drawing.Point(1020, 1545);
+            this.VisChan6.Margin = new System.Windows.Forms.Padding(5);
             this.VisChan6.Name = "VisChan6";
-            this.VisChan6.Size = new System.Drawing.Size(74, 17);
+            this.VisChan6.Size = new System.Drawing.Size(128, 29);
             this.VisChan6.TabIndex = 31;
             this.VisChan6.Text = "Channel 6";
             this.VisChan6.UseVisualStyleBackColor = true;
@@ -442,9 +465,10 @@ namespace SeizurePlayback
             this.VisChan7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan7.AutoSize = true;
             this.VisChan7.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan7.Location = new System.Drawing.Point(583, 905);
+            this.VisChan7.Location = new System.Drawing.Point(1020, 1585);
+            this.VisChan7.Margin = new System.Windows.Forms.Padding(5);
             this.VisChan7.Name = "VisChan7";
-            this.VisChan7.Size = new System.Drawing.Size(74, 17);
+            this.VisChan7.Size = new System.Drawing.Size(128, 29);
             this.VisChan7.TabIndex = 32;
             this.VisChan7.Text = "Channel 7";
             this.VisChan7.UseVisualStyleBackColor = true;
@@ -455,9 +479,10 @@ namespace SeizurePlayback
             this.VisChan8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan8.AutoSize = true;
             this.VisChan8.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan8.Location = new System.Drawing.Point(583, 928);
+            this.VisChan8.Location = new System.Drawing.Point(1020, 1625);
+            this.VisChan8.Margin = new System.Windows.Forms.Padding(5);
             this.VisChan8.Name = "VisChan8";
-            this.VisChan8.Size = new System.Drawing.Size(74, 17);
+            this.VisChan8.Size = new System.Drawing.Size(128, 29);
             this.VisChan8.TabIndex = 33;
             this.VisChan8.Text = "Channel 8";
             this.VisChan8.UseVisualStyleBackColor = true;
@@ -468,9 +493,10 @@ namespace SeizurePlayback
             this.VisChan16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan16.AutoSize = true;
             this.VisChan16.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan16.Location = new System.Drawing.Point(745, 928);
+            this.VisChan16.Location = new System.Drawing.Point(1304, 1625);
+            this.VisChan16.Margin = new System.Windows.Forms.Padding(5);
             this.VisChan16.Name = "VisChan16";
-            this.VisChan16.Size = new System.Drawing.Size(80, 17);
+            this.VisChan16.Size = new System.Drawing.Size(139, 29);
             this.VisChan16.TabIndex = 41;
             this.VisChan16.Text = "Channel 16";
             this.VisChan16.UseVisualStyleBackColor = true;
@@ -481,9 +507,10 @@ namespace SeizurePlayback
             this.VisChan15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan15.AutoSize = true;
             this.VisChan15.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan15.Location = new System.Drawing.Point(745, 905);
+            this.VisChan15.Location = new System.Drawing.Point(1304, 1585);
+            this.VisChan15.Margin = new System.Windows.Forms.Padding(5);
             this.VisChan15.Name = "VisChan15";
-            this.VisChan15.Size = new System.Drawing.Size(80, 17);
+            this.VisChan15.Size = new System.Drawing.Size(139, 29);
             this.VisChan15.TabIndex = 40;
             this.VisChan15.Text = "Channel 15";
             this.VisChan15.UseVisualStyleBackColor = true;
@@ -494,9 +521,10 @@ namespace SeizurePlayback
             this.VisChan14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan14.AutoSize = true;
             this.VisChan14.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan14.Location = new System.Drawing.Point(745, 882);
+            this.VisChan14.Location = new System.Drawing.Point(1304, 1545);
+            this.VisChan14.Margin = new System.Windows.Forms.Padding(5);
             this.VisChan14.Name = "VisChan14";
-            this.VisChan14.Size = new System.Drawing.Size(80, 17);
+            this.VisChan14.Size = new System.Drawing.Size(139, 29);
             this.VisChan14.TabIndex = 39;
             this.VisChan14.Text = "Channel 14";
             this.VisChan14.UseVisualStyleBackColor = true;
@@ -507,9 +535,10 @@ namespace SeizurePlayback
             this.VisChan13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan13.AutoSize = true;
             this.VisChan13.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan13.Location = new System.Drawing.Point(746, 859);
+            this.VisChan13.Location = new System.Drawing.Point(1306, 1504);
+            this.VisChan13.Margin = new System.Windows.Forms.Padding(5);
             this.VisChan13.Name = "VisChan13";
-            this.VisChan13.Size = new System.Drawing.Size(80, 17);
+            this.VisChan13.Size = new System.Drawing.Size(139, 29);
             this.VisChan13.TabIndex = 38;
             this.VisChan13.Text = "Channel 13";
             this.VisChan13.UseVisualStyleBackColor = true;
@@ -520,9 +549,10 @@ namespace SeizurePlayback
             this.VisChan12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan12.AutoSize = true;
             this.VisChan12.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan12.Location = new System.Drawing.Point(665, 928);
+            this.VisChan12.Location = new System.Drawing.Point(1164, 1625);
+            this.VisChan12.Margin = new System.Windows.Forms.Padding(5);
             this.VisChan12.Name = "VisChan12";
-            this.VisChan12.Size = new System.Drawing.Size(80, 17);
+            this.VisChan12.Size = new System.Drawing.Size(139, 29);
             this.VisChan12.TabIndex = 37;
             this.VisChan12.Text = "Channel 12";
             this.VisChan12.UseVisualStyleBackColor = true;
@@ -533,9 +563,10 @@ namespace SeizurePlayback
             this.VisChan11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan11.AutoSize = true;
             this.VisChan11.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan11.Location = new System.Drawing.Point(665, 905);
+            this.VisChan11.Location = new System.Drawing.Point(1164, 1585);
+            this.VisChan11.Margin = new System.Windows.Forms.Padding(5);
             this.VisChan11.Name = "VisChan11";
-            this.VisChan11.Size = new System.Drawing.Size(80, 17);
+            this.VisChan11.Size = new System.Drawing.Size(139, 29);
             this.VisChan11.TabIndex = 36;
             this.VisChan11.Text = "Channel 11";
             this.VisChan11.UseVisualStyleBackColor = true;
@@ -546,9 +577,10 @@ namespace SeizurePlayback
             this.VisChan10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan10.AutoSize = true;
             this.VisChan10.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan10.Location = new System.Drawing.Point(665, 882);
+            this.VisChan10.Location = new System.Drawing.Point(1164, 1545);
+            this.VisChan10.Margin = new System.Windows.Forms.Padding(5);
             this.VisChan10.Name = "VisChan10";
-            this.VisChan10.Size = new System.Drawing.Size(80, 17);
+            this.VisChan10.Size = new System.Drawing.Size(139, 29);
             this.VisChan10.TabIndex = 35;
             this.VisChan10.Text = "Channel 10";
             this.VisChan10.UseVisualStyleBackColor = true;
@@ -559,9 +591,10 @@ namespace SeizurePlayback
             this.VisChan9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VisChan9.AutoSize = true;
             this.VisChan9.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VisChan9.Location = new System.Drawing.Point(664, 859);
+            this.VisChan9.Location = new System.Drawing.Point(1162, 1504);
+            this.VisChan9.Margin = new System.Windows.Forms.Padding(5);
             this.VisChan9.Name = "VisChan9";
-            this.VisChan9.Size = new System.Drawing.Size(74, 17);
+            this.VisChan9.Size = new System.Drawing.Size(128, 29);
             this.VisChan9.TabIndex = 34;
             this.VisChan9.Text = "Channel 9";
             this.VisChan9.UseVisualStyleBackColor = true;
@@ -574,9 +607,10 @@ namespace SeizurePlayback
             this.label3.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(498, 682);
+            this.label3.Location = new System.Drawing.Point(872, 1194);
+            this.label3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(85, 20);
+            this.label3.Size = new System.Drawing.Size(154, 32);
             this.label3.TabIndex = 42;
             this.label3.Text = "Zoom level";
             this.label3.Click += new System.EventHandler(this.label3_Click);
@@ -584,12 +618,13 @@ namespace SeizurePlayback
             // ZoomScale
             // 
             this.ZoomScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.ZoomScale.Location = new System.Drawing.Point(499, 711);
+            this.ZoomScale.Location = new System.Drawing.Point(873, 1244);
+            this.ZoomScale.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomScale.Maximum = 20;
             this.ZoomScale.Minimum = 1;
             this.ZoomScale.Name = "ZoomScale";
             this.ZoomScale.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.ZoomScale.Size = new System.Drawing.Size(171, 45);
+            this.ZoomScale.Size = new System.Drawing.Size(299, 80);
             this.ZoomScale.TabIndex = 43;
             this.ZoomScale.TabStop = false;
             this.ZoomScale.Value = 10;
@@ -600,9 +635,10 @@ namespace SeizurePlayback
             this.RvwSz.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.RvwSz.BackColor = System.Drawing.Color.DarkGray;
             this.RvwSz.ForeColor = System.Drawing.Color.Black;
-            this.RvwSz.Location = new System.Drawing.Point(669, 689);
+            this.RvwSz.Location = new System.Drawing.Point(1171, 1206);
+            this.RvwSz.Margin = new System.Windows.Forms.Padding(5);
             this.RvwSz.Name = "RvwSz";
-            this.RvwSz.Size = new System.Drawing.Size(156, 23);
+            this.RvwSz.Size = new System.Drawing.Size(273, 40);
             this.RvwSz.TabIndex = 45;
             this.RvwSz.Text = "Review Seizures";
             this.RvwSz.UseVisualStyleBackColor = false;
@@ -614,18 +650,20 @@ namespace SeizurePlayback
             this.OffsetLabel.AutoSize = true;
             this.OffsetLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.OffsetLabel.ForeColor = System.Drawing.Color.White;
-            this.OffsetLabel.Location = new System.Drawing.Point(847, 741);
+            this.OffsetLabel.Location = new System.Drawing.Point(1482, 1297);
+            this.OffsetLabel.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.OffsetLabel.Name = "OffsetLabel";
-            this.OffsetLabel.Size = new System.Drawing.Size(57, 24);
+            this.OffsetLabel.Size = new System.Drawing.Size(106, 39);
             this.OffsetLabel.TabIndex = 47;
             this.OffsetLabel.Text = "Offset";
             // 
             // OffsetBox
             // 
             this.OffsetBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.OffsetBox.Location = new System.Drawing.Point(841, 768);
+            this.OffsetBox.Location = new System.Drawing.Point(1472, 1344);
+            this.OffsetBox.Margin = new System.Windows.Forms.Padding(5);
             this.OffsetBox.Name = "OffsetBox";
-            this.OffsetBox.Size = new System.Drawing.Size(75, 20);
+            this.OffsetBox.Size = new System.Drawing.Size(128, 29);
             this.OffsetBox.TabIndex = 48;
             this.OffsetBox.TextChanged += new System.EventHandler(this.OffsetBox_TextChanged_1);
             this.OffsetBox.LostFocus += new System.EventHandler(this.OffsetBox_TextChanged);
@@ -635,10 +673,11 @@ namespace SeizurePlayback
             this.HighlightLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.HighlightLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.HighlightLabel.ForeColor = System.Drawing.Color.White;
-            this.HighlightLabel.Location = new System.Drawing.Point(530, 624);
+            this.HighlightLabel.Location = new System.Drawing.Point(928, 1092);
+            this.HighlightLabel.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.HighlightLabel.Name = "HighlightLabel";
             this.HighlightLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.HighlightLabel.Size = new System.Drawing.Size(127, 24);
+            this.HighlightLabel.Size = new System.Drawing.Size(222, 42);
             this.HighlightLabel.TabIndex = 50;
             this.HighlightLabel.Text = "        HL";
             this.HighlightLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -649,10 +688,11 @@ namespace SeizurePlayback
             this.DetSezLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.DetSezLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DetSezLabel.ForeColor = System.Drawing.Color.White;
-            this.DetSezLabel.Location = new System.Drawing.Point(499, 652);
+            this.DetSezLabel.Location = new System.Drawing.Point(873, 1141);
+            this.DetSezLabel.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.DetSezLabel.Name = "DetSezLabel";
             this.DetSezLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.DetSezLabel.Size = new System.Drawing.Size(159, 24);
+            this.DetSezLabel.Size = new System.Drawing.Size(278, 42);
             this.DetSezLabel.TabIndex = 56;
             this.DetSezLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.DetSezLabel.Click += new System.EventHandler(this.DetSezLabel_Click);
@@ -662,9 +702,10 @@ namespace SeizurePlayback
             this.Randomization.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Randomization.AutoSize = true;
             this.Randomization.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Randomization.Location = new System.Drawing.Point(994, 653);
+            this.Randomization.Location = new System.Drawing.Point(1740, 1144);
+            this.Randomization.Margin = new System.Windows.Forms.Padding(5);
             this.Randomization.Name = "Randomization";
-            this.Randomization.Size = new System.Drawing.Size(79, 17);
+            this.Randomization.Size = new System.Drawing.Size(136, 29);
             this.Randomization.TabIndex = 57;
             this.Randomization.Text = "Randomize";
             this.Randomization.UseVisualStyleBackColor = true;
@@ -673,10 +714,11 @@ namespace SeizurePlayback
             // AVILoadBar
             // 
             this.AVILoadBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.AVILoadBar.Location = new System.Drawing.Point(1001, 905);
+            this.AVILoadBar.Location = new System.Drawing.Point(1752, 1584);
+            this.AVILoadBar.Margin = new System.Windows.Forms.Padding(5);
             this.AVILoadBar.Maximum = 30;
             this.AVILoadBar.Name = "AVILoadBar";
-            this.AVILoadBar.Size = new System.Drawing.Size(445, 25);
+            this.AVILoadBar.Size = new System.Drawing.Size(779, 44);
             this.AVILoadBar.Step = 1;
             this.AVILoadBar.TabIndex = 58;
             this.AVILoadBar.Visible = false;
@@ -686,9 +728,10 @@ namespace SeizurePlayback
             this.LoadText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.LoadText.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LoadText.ForeColor = System.Drawing.Color.White;
-            this.LoadText.Location = new System.Drawing.Point(1007, 878);
+            this.LoadText.Location = new System.Drawing.Point(1762, 1536);
+            this.LoadText.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.LoadText.Name = "LoadText";
-            this.LoadText.Size = new System.Drawing.Size(439, 24);
+            this.LoadText.Size = new System.Drawing.Size(768, 42);
             this.LoadText.TabIndex = 59;
             this.LoadText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.LoadText.Visible = false;
@@ -698,9 +741,10 @@ namespace SeizurePlayback
             this.FastReview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.FastReview.BackColor = System.Drawing.Color.DarkGray;
             this.FastReview.ForeColor = System.Drawing.Color.Black;
-            this.FastReview.Location = new System.Drawing.Point(832, 661);
+            this.FastReview.Location = new System.Drawing.Point(1456, 1157);
+            this.FastReview.Margin = new System.Windows.Forms.Padding(5);
             this.FastReview.Name = "FastReview";
-            this.FastReview.Size = new System.Drawing.Size(156, 23);
+            this.FastReview.Size = new System.Drawing.Size(132, 40);
             this.FastReview.TabIndex = 60;
             this.FastReview.Text = "Fast Review";
             this.FastReview.UseVisualStyleBackColor = false;
@@ -711,9 +755,10 @@ namespace SeizurePlayback
             this.TelemetryBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.TelemetryBox.AutoSize = true;
             this.TelemetryBox.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.TelemetryBox.Location = new System.Drawing.Point(994, 699);
+            this.TelemetryBox.Location = new System.Drawing.Point(1740, 1224);
+            this.TelemetryBox.Margin = new System.Windows.Forms.Padding(5);
             this.TelemetryBox.Name = "TelemetryBox";
-            this.TelemetryBox.Size = new System.Drawing.Size(78, 17);
+            this.TelemetryBox.Size = new System.Drawing.Size(136, 29);
             this.TelemetryBox.TabIndex = 61;
             this.TelemetryBox.Text = "Telementry";
             this.TelemetryBox.UseVisualStyleBackColor = true;
@@ -724,9 +769,10 @@ namespace SeizurePlayback
             this.VideoFix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.VideoFix.AutoSize = true;
             this.VideoFix.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VideoFix.Location = new System.Drawing.Point(994, 676);
+            this.VideoFix.Location = new System.Drawing.Point(1740, 1184);
+            this.VideoFix.Margin = new System.Windows.Forms.Padding(5);
             this.VideoFix.Name = "VideoFix";
-            this.VideoFix.Size = new System.Drawing.Size(72, 17);
+            this.VideoFix.Size = new System.Drawing.Size(125, 29);
             this.VideoFix.TabIndex = 62;
             this.VideoFix.Text = "Video Fix ";
             this.VideoFix.UseVisualStyleBackColor = true;
@@ -738,9 +784,10 @@ namespace SeizurePlayback
             this.SwitchChan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.SwitchChan.AutoSize = true;
             this.SwitchChan.ForeColor = System.Drawing.Color.Transparent;
-            this.SwitchChan.Location = new System.Drawing.Point(994, 631);
+            this.SwitchChan.Location = new System.Drawing.Point(1740, 1105);
+            this.SwitchChan.Margin = new System.Windows.Forms.Padding(5);
             this.SwitchChan.Name = "SwitchChan";
-            this.SwitchChan.Size = new System.Drawing.Size(131, 17);
+            this.SwitchChan.Size = new System.Drawing.Size(232, 29);
             this.SwitchChan.TabIndex = 63;
             this.SwitchChan.Text = "Channel Name Switch";
             this.SwitchChan.UseVisualStyleBackColor = true;
@@ -767,9 +814,10 @@ namespace SeizurePlayback
             "Index All Videos",
             "Channel Zoom Control",
             "Shortcut Guide"});
-            this.comboBox1.Location = new System.Drawing.Point(931, 767);
+            this.comboBox1.Location = new System.Drawing.Point(1629, 1342);
+            this.comboBox1.Margin = new System.Windows.Forms.Padding(5);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(150, 21);
+            this.comboBox1.Size = new System.Drawing.Size(260, 32);
             this.comboBox1.TabIndex = 64;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.comboBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
@@ -780,9 +828,10 @@ namespace SeizurePlayback
             this.FastReviewFR.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.FastReviewFR.BackColor = System.Drawing.Color.DarkGray;
             this.FastReviewFR.ForeColor = System.Drawing.Color.Black;
-            this.FastReviewFR.Location = new System.Drawing.Point(84, 3);
+            this.FastReviewFR.Location = new System.Drawing.Point(146, 5);
+            this.FastReviewFR.Margin = new System.Windows.Forms.Padding(5);
             this.FastReviewFR.Name = "FastReviewFR";
-            this.FastReviewFR.Size = new System.Drawing.Size(156, 23);
+            this.FastReviewFR.Size = new System.Drawing.Size(273, 40);
             this.FastReviewFR.TabIndex = 65;
             this.FastReviewFR.Text = "Fast Review";
             this.FastReviewFR.UseVisualStyleBackColor = false;
@@ -793,9 +842,10 @@ namespace SeizurePlayback
             this.PreviousFR.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.PreviousFR.BackColor = System.Drawing.Color.DarkGray;
             this.PreviousFR.ForeColor = System.Drawing.Color.Black;
-            this.PreviousFR.Location = new System.Drawing.Point(3, 3);
+            this.PreviousFR.Location = new System.Drawing.Point(5, 5);
+            this.PreviousFR.Margin = new System.Windows.Forms.Padding(5);
             this.PreviousFR.Name = "PreviousFR";
-            this.PreviousFR.Size = new System.Drawing.Size(75, 23);
+            this.PreviousFR.Size = new System.Drawing.Size(131, 40);
             this.PreviousFR.TabIndex = 66;
             this.PreviousFR.Text = "(<-) Previous";
             this.PreviousFR.UseVisualStyleBackColor = false;
@@ -806,9 +856,10 @@ namespace SeizurePlayback
             this.NextFR.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.NextFR.BackColor = System.Drawing.Color.DarkGray;
             this.NextFR.ForeColor = System.Drawing.Color.Black;
-            this.NextFR.Location = new System.Drawing.Point(246, 3);
+            this.NextFR.Location = new System.Drawing.Point(429, 5);
+            this.NextFR.Margin = new System.Windows.Forms.Padding(5);
             this.NextFR.Name = "NextFR";
-            this.NextFR.Size = new System.Drawing.Size(75, 23);
+            this.NextFR.Size = new System.Drawing.Size(131, 40);
             this.NextFR.TabIndex = 67;
             this.NextFR.Text = "Next (->)";
             this.NextFR.UseVisualStyleBackColor = false;
@@ -824,9 +875,10 @@ namespace SeizurePlayback
             this.FRButtonGroup.Controls.Add(this.NextFR);
             this.FRButtonGroup.Controls.Add(this.numPerBox);
             this.FRButtonGroup.Enabled = false;
-            this.FRButtonGroup.Location = new System.Drawing.Point(676, 905);
+            this.FRButtonGroup.Location = new System.Drawing.Point(1183, 1584);
+            this.FRButtonGroup.Margin = new System.Windows.Forms.Padding(5);
             this.FRButtonGroup.Name = "FRButtonGroup";
-            this.FRButtonGroup.Size = new System.Drawing.Size(592, 29);
+            this.FRButtonGroup.Size = new System.Drawing.Size(1036, 51);
             this.FRButtonGroup.TabIndex = 68;
             this.FRButtonGroup.Visible = false;
             // 
@@ -841,21 +893,23 @@ namespace SeizurePlayback
             "24",
             "26",
             "28"});
-            this.numPerBox.Location = new System.Drawing.Point(327, 3);
+            this.numPerBox.Location = new System.Drawing.Point(570, 5);
+            this.numPerBox.Margin = new System.Windows.Forms.Padding(5);
             this.numPerBox.Name = "numPerBox";
-            this.numPerBox.Size = new System.Drawing.Size(121, 21);
+            this.numPerBox.Size = new System.Drawing.Size(209, 32);
             this.numPerBox.TabIndex = 72;
             this.numPerBox.SelectedIndexChanged += new System.EventHandler(this.numPerBox_SelectedIndexChanged);
             // 
             // FRZoomBar
             // 
             this.FRZoomBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.FRZoomBar.Location = new System.Drawing.Point(3, 27);
+            this.FRZoomBar.Location = new System.Drawing.Point(5, 44);
+            this.FRZoomBar.Margin = new System.Windows.Forms.Padding(5);
             this.FRZoomBar.Maximum = 20;
             this.FRZoomBar.Minimum = 1;
             this.FRZoomBar.Name = "FRZoomBar";
             this.FRZoomBar.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.FRZoomBar.Size = new System.Drawing.Size(171, 45);
+            this.FRZoomBar.Size = new System.Drawing.Size(299, 80);
             this.FRZoomBar.TabIndex = 69;
             this.FRZoomBar.TabStop = false;
             this.FRZoomBar.Value = 10;
@@ -868,9 +922,10 @@ namespace SeizurePlayback
             this.FRZoomBlock.Controls.Add(this.FRZoomBar);
             this.FRZoomBlock.Enabled = false;
             this.FRZoomBlock.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.FRZoomBlock.Location = new System.Drawing.Point(496, 882);
+            this.FRZoomBlock.Location = new System.Drawing.Point(868, 1544);
+            this.FRZoomBlock.Margin = new System.Windows.Forms.Padding(5);
             this.FRZoomBlock.Name = "FRZoomBlock";
-            this.FRZoomBlock.Size = new System.Drawing.Size(174, 77);
+            this.FRZoomBlock.Size = new System.Drawing.Size(304, 135);
             this.FRZoomBlock.TabIndex = 70;
             this.FRZoomBlock.Visible = false;
             // 
@@ -880,9 +935,10 @@ namespace SeizurePlayback
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(3, 0);
+            this.label4.Location = new System.Drawing.Point(5, 0);
+            this.label4.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(104, 24);
+            this.label4.Size = new System.Drawing.Size(184, 39);
             this.label4.TabIndex = 71;
             this.label4.Text = "Zoom level";
             // 
@@ -893,10 +949,11 @@ namespace SeizurePlayback
             this.FRPageNum.Enabled = false;
             this.FRPageNum.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FRPageNum.ForeColor = System.Drawing.Color.White;
-            this.FRPageNum.Location = new System.Drawing.Point(758, 882);
+            this.FRPageNum.Location = new System.Drawing.Point(1326, 1544);
+            this.FRPageNum.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.FRPageNum.Name = "FRPageNum";
             this.FRPageNum.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.FRPageNum.Size = new System.Drawing.Size(0, 24);
+            this.FRPageNum.Size = new System.Drawing.Size(0, 39);
             this.FRPageNum.TabIndex = 71;
             this.FRPageNum.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.FRPageNum.Visible = false;
@@ -942,9 +999,10 @@ namespace SeizurePlayback
             this.ZoomChanPanel.Controls.Add(this.ZoomChan2);
             this.ZoomChanPanel.Controls.Add(this.ZoomChan1);
             this.ZoomChanPanel.Enabled = false;
-            this.ZoomChanPanel.Location = new System.Drawing.Point(832, 847);
+            this.ZoomChanPanel.Location = new System.Drawing.Point(1456, 1495);
+            this.ZoomChanPanel.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChanPanel.Name = "ZoomChanPanel";
-            this.ZoomChanPanel.Size = new System.Drawing.Size(548, 112);
+            this.ZoomChanPanel.Size = new System.Drawing.Size(957, 181);
             this.ZoomChanPanel.TabIndex = 73;
             this.ZoomChanPanel.Visible = false;
             // 
@@ -952,9 +1010,10 @@ namespace SeizurePlayback
             // 
             this.ZoomChan16Label.AutoSize = true;
             this.ZoomChan16Label.ForeColor = System.Drawing.Color.White;
-            this.ZoomChan16Label.Location = new System.Drawing.Point(411, 87);
+            this.ZoomChan16Label.Location = new System.Drawing.Point(719, 152);
+            this.ZoomChan16Label.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.ZoomChan16Label.Name = "ZoomChan16Label";
-            this.ZoomChan16Label.Size = new System.Drawing.Size(19, 13);
+            this.ZoomChan16Label.Size = new System.Drawing.Size(34, 25);
             this.ZoomChan16Label.TabIndex = 79;
             this.ZoomChan16Label.Text = "16";
             // 
@@ -962,9 +1021,10 @@ namespace SeizurePlayback
             // 
             this.ZoomChan15Label.AutoSize = true;
             this.ZoomChan15Label.ForeColor = System.Drawing.Color.White;
-            this.ZoomChan15Label.Location = new System.Drawing.Point(411, 59);
+            this.ZoomChan15Label.Location = new System.Drawing.Point(719, 103);
+            this.ZoomChan15Label.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.ZoomChan15Label.Name = "ZoomChan15Label";
-            this.ZoomChan15Label.Size = new System.Drawing.Size(19, 13);
+            this.ZoomChan15Label.Size = new System.Drawing.Size(34, 25);
             this.ZoomChan15Label.TabIndex = 80;
             this.ZoomChan15Label.Text = "15";
             // 
@@ -972,9 +1032,10 @@ namespace SeizurePlayback
             // 
             this.ZoomChan14Label.AutoSize = true;
             this.ZoomChan14Label.ForeColor = System.Drawing.Color.White;
-            this.ZoomChan14Label.Location = new System.Drawing.Point(411, 31);
+            this.ZoomChan14Label.Location = new System.Drawing.Point(719, 54);
+            this.ZoomChan14Label.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.ZoomChan14Label.Name = "ZoomChan14Label";
-            this.ZoomChan14Label.Size = new System.Drawing.Size(19, 13);
+            this.ZoomChan14Label.Size = new System.Drawing.Size(34, 25);
             this.ZoomChan14Label.TabIndex = 81;
             this.ZoomChan14Label.Text = "14";
             // 
@@ -982,9 +1043,10 @@ namespace SeizurePlayback
             // 
             this.ZoomChan13Label.AutoSize = true;
             this.ZoomChan13Label.ForeColor = System.Drawing.Color.White;
-            this.ZoomChan13Label.Location = new System.Drawing.Point(411, 3);
+            this.ZoomChan13Label.Location = new System.Drawing.Point(719, 5);
+            this.ZoomChan13Label.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.ZoomChan13Label.Name = "ZoomChan13Label";
-            this.ZoomChan13Label.Size = new System.Drawing.Size(19, 13);
+            this.ZoomChan13Label.Size = new System.Drawing.Size(34, 25);
             this.ZoomChan13Label.TabIndex = 82;
             this.ZoomChan13Label.Text = "13";
             // 
@@ -993,11 +1055,12 @@ namespace SeizurePlayback
             this.ZoomChan16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomChan16.AutoSize = false;
             this.ZoomChan16.CausesValidation = false;
-            this.ZoomChan16.Location = new System.Drawing.Point(424, 87);
+            this.ZoomChan16.Location = new System.Drawing.Point(742, 224);
+            this.ZoomChan16.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChan16.Maximum = 20;
             this.ZoomChan16.Minimum = 1;
             this.ZoomChan16.Name = "ZoomChan16";
-            this.ZoomChan16.Size = new System.Drawing.Size(119, 45);
+            this.ZoomChan16.Size = new System.Drawing.Size(208, 79);
             this.ZoomChan16.TabIndex = 78;
             this.ZoomChan16.TabStop = false;
             this.ZoomChan16.Tag = "12";
@@ -1009,11 +1072,12 @@ namespace SeizurePlayback
             this.ZoomChan15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomChan15.AutoSize = false;
             this.ZoomChan15.CausesValidation = false;
-            this.ZoomChan15.Location = new System.Drawing.Point(424, 59);
+            this.ZoomChan15.Location = new System.Drawing.Point(742, 174);
+            this.ZoomChan15.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChan15.Maximum = 20;
             this.ZoomChan15.Minimum = 1;
             this.ZoomChan15.Name = "ZoomChan15";
-            this.ZoomChan15.Size = new System.Drawing.Size(119, 45);
+            this.ZoomChan15.Size = new System.Drawing.Size(208, 79);
             this.ZoomChan15.TabIndex = 77;
             this.ZoomChan15.TabStop = false;
             this.ZoomChan15.Tag = "11";
@@ -1025,11 +1089,12 @@ namespace SeizurePlayback
             this.ZoomChan14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomChan14.AutoSize = false;
             this.ZoomChan14.CausesValidation = false;
-            this.ZoomChan14.Location = new System.Drawing.Point(424, 31);
+            this.ZoomChan14.Location = new System.Drawing.Point(742, 126);
+            this.ZoomChan14.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChan14.Maximum = 20;
             this.ZoomChan14.Minimum = 1;
             this.ZoomChan14.Name = "ZoomChan14";
-            this.ZoomChan14.Size = new System.Drawing.Size(119, 45);
+            this.ZoomChan14.Size = new System.Drawing.Size(208, 79);
             this.ZoomChan14.TabIndex = 76;
             this.ZoomChan14.TabStop = false;
             this.ZoomChan14.Tag = "10";
@@ -1041,11 +1106,12 @@ namespace SeizurePlayback
             this.ZoomChan13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomChan13.AutoSize = false;
             this.ZoomChan13.CausesValidation = false;
-            this.ZoomChan13.Location = new System.Drawing.Point(424, 3);
+            this.ZoomChan13.Location = new System.Drawing.Point(742, 76);
+            this.ZoomChan13.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChan13.Maximum = 20;
             this.ZoomChan13.Minimum = 1;
             this.ZoomChan13.Name = "ZoomChan13";
-            this.ZoomChan13.Size = new System.Drawing.Size(119, 45);
+            this.ZoomChan13.Size = new System.Drawing.Size(208, 79);
             this.ZoomChan13.TabIndex = 75;
             this.ZoomChan13.TabStop = false;
             this.ZoomChan13.Tag = "9";
@@ -1056,9 +1122,10 @@ namespace SeizurePlayback
             // 
             this.label15.AutoSize = true;
             this.label15.ForeColor = System.Drawing.Color.White;
-            this.label15.Location = new System.Drawing.Point(279, 88);
+            this.label15.Location = new System.Drawing.Point(488, 154);
+            this.label15.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(19, 13);
+            this.label15.Size = new System.Drawing.Size(34, 25);
             this.label15.TabIndex = 74;
             this.label15.Text = "12";
             // 
@@ -1066,9 +1133,10 @@ namespace SeizurePlayback
             // 
             this.label14.AutoSize = true;
             this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(279, 60);
+            this.label14.Location = new System.Drawing.Point(488, 105);
+            this.label14.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(19, 13);
+            this.label14.Size = new System.Drawing.Size(34, 25);
             this.label14.TabIndex = 74;
             this.label14.Text = "11";
             // 
@@ -1076,9 +1144,10 @@ namespace SeizurePlayback
             // 
             this.label13.AutoSize = true;
             this.label13.ForeColor = System.Drawing.Color.White;
-            this.label13.Location = new System.Drawing.Point(279, 32);
+            this.label13.Location = new System.Drawing.Point(488, 56);
+            this.label13.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(19, 13);
+            this.label13.Size = new System.Drawing.Size(34, 25);
             this.label13.TabIndex = 74;
             this.label13.Text = "10";
             // 
@@ -1086,9 +1155,10 @@ namespace SeizurePlayback
             // 
             this.label12.AutoSize = true;
             this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(279, 4);
+            this.label12.Location = new System.Drawing.Point(488, 7);
+            this.label12.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(13, 13);
+            this.label12.Size = new System.Drawing.Size(23, 25);
             this.label12.TabIndex = 74;
             this.label12.Text = "9";
             // 
@@ -1096,9 +1166,10 @@ namespace SeizurePlayback
             // 
             this.label11.AutoSize = true;
             this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(142, 88);
+            this.label11.Location = new System.Drawing.Point(248, 154);
+            this.label11.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(13, 13);
+            this.label11.Size = new System.Drawing.Size(23, 25);
             this.label11.TabIndex = 74;
             this.label11.Text = "8";
             // 
@@ -1106,9 +1177,10 @@ namespace SeizurePlayback
             // 
             this.label10.AutoSize = true;
             this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(142, 60);
+            this.label10.Location = new System.Drawing.Point(248, 105);
+            this.label10.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(13, 13);
+            this.label10.Size = new System.Drawing.Size(23, 25);
             this.label10.TabIndex = 74;
             this.label10.Text = "7";
             // 
@@ -1116,9 +1188,10 @@ namespace SeizurePlayback
             // 
             this.label9.AutoSize = true;
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(142, 32);
+            this.label9.Location = new System.Drawing.Point(248, 56);
+            this.label9.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(13, 13);
+            this.label9.Size = new System.Drawing.Size(23, 25);
             this.label9.TabIndex = 74;
             this.label9.Text = "6";
             // 
@@ -1126,9 +1199,10 @@ namespace SeizurePlayback
             // 
             this.label8.AutoSize = true;
             this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(142, 4);
+            this.label8.Location = new System.Drawing.Point(248, 7);
+            this.label8.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(13, 13);
+            this.label8.Size = new System.Drawing.Size(23, 25);
             this.label8.TabIndex = 74;
             this.label8.Text = "5";
             // 
@@ -1136,9 +1210,10 @@ namespace SeizurePlayback
             // 
             this.label7.AutoSize = true;
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(3, 88);
+            this.label7.Location = new System.Drawing.Point(5, 154);
+            this.label7.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(13, 13);
+            this.label7.Size = new System.Drawing.Size(23, 25);
             this.label7.TabIndex = 74;
             this.label7.Text = "4";
             // 
@@ -1146,9 +1221,10 @@ namespace SeizurePlayback
             // 
             this.label6.AutoSize = true;
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(3, 60);
+            this.label6.Location = new System.Drawing.Point(5, 105);
+            this.label6.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(13, 13);
+            this.label6.Size = new System.Drawing.Size(23, 25);
             this.label6.TabIndex = 74;
             this.label6.Text = "3";
             // 
@@ -1156,9 +1232,10 @@ namespace SeizurePlayback
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(3, 32);
+            this.label5.Location = new System.Drawing.Point(5, 56);
+            this.label5.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(13, 13);
+            this.label5.Size = new System.Drawing.Size(23, 25);
             this.label5.TabIndex = 13;
             this.label5.Text = "2";
             // 
@@ -1166,9 +1243,10 @@ namespace SeizurePlayback
             // 
             this.ZCN1.AutoSize = true;
             this.ZCN1.ForeColor = System.Drawing.Color.White;
-            this.ZCN1.Location = new System.Drawing.Point(3, 4);
+            this.ZCN1.Location = new System.Drawing.Point(5, 7);
+            this.ZCN1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.ZCN1.Name = "ZCN1";
-            this.ZCN1.Size = new System.Drawing.Size(13, 13);
+            this.ZCN1.Size = new System.Drawing.Size(23, 25);
             this.ZCN1.TabIndex = 12;
             this.ZCN1.Text = "1";
             // 
@@ -1177,11 +1255,12 @@ namespace SeizurePlayback
             this.ZoomChan12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomChan12.AutoSize = false;
             this.ZoomChan12.CausesValidation = false;
-            this.ZoomChan12.Location = new System.Drawing.Point(292, 88);
+            this.ZoomChan12.Location = new System.Drawing.Point(511, 225);
+            this.ZoomChan12.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChan12.Maximum = 20;
             this.ZoomChan12.Minimum = 1;
             this.ZoomChan12.Name = "ZoomChan12";
-            this.ZoomChan12.Size = new System.Drawing.Size(119, 28);
+            this.ZoomChan12.Size = new System.Drawing.Size(208, 49);
             this.ZoomChan12.TabIndex = 11;
             this.ZoomChan12.TabStop = false;
             this.ZoomChan12.Tag = "12";
@@ -1193,11 +1272,12 @@ namespace SeizurePlayback
             this.ZoomChan11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomChan11.AutoSize = false;
             this.ZoomChan11.CausesValidation = false;
-            this.ZoomChan11.Location = new System.Drawing.Point(292, 60);
+            this.ZoomChan11.Location = new System.Drawing.Point(511, 176);
+            this.ZoomChan11.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChan11.Maximum = 20;
             this.ZoomChan11.Minimum = 1;
             this.ZoomChan11.Name = "ZoomChan11";
-            this.ZoomChan11.Size = new System.Drawing.Size(119, 45);
+            this.ZoomChan11.Size = new System.Drawing.Size(208, 79);
             this.ZoomChan11.TabIndex = 10;
             this.ZoomChan11.TabStop = false;
             this.ZoomChan11.Tag = "11";
@@ -1209,11 +1289,12 @@ namespace SeizurePlayback
             this.ZoomChan10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomChan10.AutoSize = false;
             this.ZoomChan10.CausesValidation = false;
-            this.ZoomChan10.Location = new System.Drawing.Point(292, 32);
+            this.ZoomChan10.Location = new System.Drawing.Point(511, 127);
+            this.ZoomChan10.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChan10.Maximum = 20;
             this.ZoomChan10.Minimum = 1;
             this.ZoomChan10.Name = "ZoomChan10";
-            this.ZoomChan10.Size = new System.Drawing.Size(119, 45);
+            this.ZoomChan10.Size = new System.Drawing.Size(208, 79);
             this.ZoomChan10.TabIndex = 9;
             this.ZoomChan10.TabStop = false;
             this.ZoomChan10.Tag = "10";
@@ -1225,11 +1306,12 @@ namespace SeizurePlayback
             this.ZoomChan9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomChan9.AutoSize = false;
             this.ZoomChan9.CausesValidation = false;
-            this.ZoomChan9.Location = new System.Drawing.Point(292, 4);
+            this.ZoomChan9.Location = new System.Drawing.Point(511, 78);
+            this.ZoomChan9.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChan9.Maximum = 20;
             this.ZoomChan9.Minimum = 1;
             this.ZoomChan9.Name = "ZoomChan9";
-            this.ZoomChan9.Size = new System.Drawing.Size(119, 45);
+            this.ZoomChan9.Size = new System.Drawing.Size(208, 79);
             this.ZoomChan9.TabIndex = 8;
             this.ZoomChan9.TabStop = false;
             this.ZoomChan9.Tag = "9";
@@ -1241,11 +1323,12 @@ namespace SeizurePlayback
             this.ZoomChan8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomChan8.AutoSize = false;
             this.ZoomChan8.CausesValidation = false;
-            this.ZoomChan8.Location = new System.Drawing.Point(154, 88);
+            this.ZoomChan8.Location = new System.Drawing.Point(270, 225);
+            this.ZoomChan8.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChan8.Maximum = 20;
             this.ZoomChan8.Minimum = 1;
             this.ZoomChan8.Name = "ZoomChan8";
-            this.ZoomChan8.Size = new System.Drawing.Size(119, 45);
+            this.ZoomChan8.Size = new System.Drawing.Size(208, 79);
             this.ZoomChan8.TabIndex = 7;
             this.ZoomChan8.TabStop = false;
             this.ZoomChan8.Tag = "8";
@@ -1257,11 +1340,12 @@ namespace SeizurePlayback
             this.ZoomChan7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomChan7.AutoSize = false;
             this.ZoomChan7.CausesValidation = false;
-            this.ZoomChan7.Location = new System.Drawing.Point(154, 60);
+            this.ZoomChan7.Location = new System.Drawing.Point(270, 176);
+            this.ZoomChan7.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChan7.Maximum = 20;
             this.ZoomChan7.Minimum = 1;
             this.ZoomChan7.Name = "ZoomChan7";
-            this.ZoomChan7.Size = new System.Drawing.Size(119, 45);
+            this.ZoomChan7.Size = new System.Drawing.Size(208, 79);
             this.ZoomChan7.TabIndex = 6;
             this.ZoomChan7.TabStop = false;
             this.ZoomChan7.Tag = "7";
@@ -1273,11 +1357,12 @@ namespace SeizurePlayback
             this.ZoomChan6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomChan6.AutoSize = false;
             this.ZoomChan6.CausesValidation = false;
-            this.ZoomChan6.Location = new System.Drawing.Point(154, 32);
+            this.ZoomChan6.Location = new System.Drawing.Point(270, 127);
+            this.ZoomChan6.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChan6.Maximum = 20;
             this.ZoomChan6.Minimum = 1;
             this.ZoomChan6.Name = "ZoomChan6";
-            this.ZoomChan6.Size = new System.Drawing.Size(119, 45);
+            this.ZoomChan6.Size = new System.Drawing.Size(208, 79);
             this.ZoomChan6.TabIndex = 5;
             this.ZoomChan6.TabStop = false;
             this.ZoomChan6.Tag = "6";
@@ -1289,11 +1374,12 @@ namespace SeizurePlayback
             this.ZoomChan5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomChan5.AutoSize = false;
             this.ZoomChan5.CausesValidation = false;
-            this.ZoomChan5.Location = new System.Drawing.Point(154, 4);
+            this.ZoomChan5.Location = new System.Drawing.Point(270, 78);
+            this.ZoomChan5.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChan5.Maximum = 20;
             this.ZoomChan5.Minimum = 1;
             this.ZoomChan5.Name = "ZoomChan5";
-            this.ZoomChan5.Size = new System.Drawing.Size(119, 45);
+            this.ZoomChan5.Size = new System.Drawing.Size(208, 79);
             this.ZoomChan5.TabIndex = 4;
             this.ZoomChan5.TabStop = false;
             this.ZoomChan5.Tag = "5";
@@ -1305,11 +1391,12 @@ namespace SeizurePlayback
             this.ZoomChan4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomChan4.AutoSize = false;
             this.ZoomChan4.CausesValidation = false;
-            this.ZoomChan4.Location = new System.Drawing.Point(18, 88);
+            this.ZoomChan4.Location = new System.Drawing.Point(32, 225);
+            this.ZoomChan4.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChan4.Maximum = 20;
             this.ZoomChan4.Minimum = 1;
             this.ZoomChan4.Name = "ZoomChan4";
-            this.ZoomChan4.Size = new System.Drawing.Size(119, 45);
+            this.ZoomChan4.Size = new System.Drawing.Size(208, 79);
             this.ZoomChan4.TabIndex = 3;
             this.ZoomChan4.TabStop = false;
             this.ZoomChan4.Tag = "4";
@@ -1321,11 +1408,12 @@ namespace SeizurePlayback
             this.ZoomChan3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomChan3.AutoSize = false;
             this.ZoomChan3.CausesValidation = false;
-            this.ZoomChan3.Location = new System.Drawing.Point(18, 60);
+            this.ZoomChan3.Location = new System.Drawing.Point(32, 176);
+            this.ZoomChan3.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChan3.Maximum = 20;
             this.ZoomChan3.Minimum = 1;
             this.ZoomChan3.Name = "ZoomChan3";
-            this.ZoomChan3.Size = new System.Drawing.Size(119, 45);
+            this.ZoomChan3.Size = new System.Drawing.Size(208, 79);
             this.ZoomChan3.TabIndex = 2;
             this.ZoomChan3.TabStop = false;
             this.ZoomChan3.Tag = "3";
@@ -1337,11 +1425,12 @@ namespace SeizurePlayback
             this.ZoomChan2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ZoomChan2.AutoSize = false;
             this.ZoomChan2.CausesValidation = false;
-            this.ZoomChan2.Location = new System.Drawing.Point(18, 32);
+            this.ZoomChan2.Location = new System.Drawing.Point(32, 127);
+            this.ZoomChan2.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChan2.Maximum = 20;
             this.ZoomChan2.Minimum = 1;
             this.ZoomChan2.Name = "ZoomChan2";
-            this.ZoomChan2.Size = new System.Drawing.Size(119, 45);
+            this.ZoomChan2.Size = new System.Drawing.Size(208, 79);
             this.ZoomChan2.TabIndex = 1;
             this.ZoomChan2.TabStop = false;
             this.ZoomChan2.Tag = "2";
@@ -1352,11 +1441,12 @@ namespace SeizurePlayback
             // 
             this.ZoomChan1.AutoSize = false;
             this.ZoomChan1.CausesValidation = false;
-            this.ZoomChan1.Location = new System.Drawing.Point(18, 4);
+            this.ZoomChan1.Location = new System.Drawing.Point(32, 7);
+            this.ZoomChan1.Margin = new System.Windows.Forms.Padding(5);
             this.ZoomChan1.Maximum = 20;
             this.ZoomChan1.Minimum = 1;
             this.ZoomChan1.Name = "ZoomChan1";
-            this.ZoomChan1.Size = new System.Drawing.Size(119, 45);
+            this.ZoomChan1.Size = new System.Drawing.Size(208, 79);
             this.ZoomChan1.TabIndex = 0;
             this.ZoomChan1.TabStop = false;
             this.ZoomChan1.Tag = "1";
@@ -1367,9 +1457,10 @@ namespace SeizurePlayback
             // 
             this.ColorClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ColorClear.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ColorClear.Location = new System.Drawing.Point(1399, 792);
+            this.ColorClear.Location = new System.Drawing.Point(2448, 1386);
+            this.ColorClear.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.ColorClear.Name = "ColorClear";
-            this.ColorClear.Size = new System.Drawing.Size(20, 16);
+            this.ColorClear.Size = new System.Drawing.Size(34, 26);
             this.ColorClear.TabIndex = 74;
             // 
             // MoreOp
@@ -1378,9 +1469,10 @@ namespace SeizurePlayback
             this.MoreOp.AutoSize = true;
             this.MoreOp.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MoreOp.ForeColor = System.Drawing.Color.White;
-            this.MoreOp.Location = new System.Drawing.Point(927, 741);
+            this.MoreOp.Location = new System.Drawing.Point(1622, 1297);
+            this.MoreOp.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.MoreOp.Name = "MoreOp";
-            this.MoreOp.Size = new System.Drawing.Size(139, 24);
+            this.MoreOp.Size = new System.Drawing.Size(247, 39);
             this.MoreOp.TabIndex = 75;
             this.MoreOp.Text = "More Options...";
             this.MoreOp.Click += new System.EventHandler(this.label16_Click);
@@ -1392,9 +1484,10 @@ namespace SeizurePlayback
             this.VideoSpeedLabel.BackColor = System.Drawing.Color.Black;
             this.VideoSpeedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.VideoSpeedLabel.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.VideoSpeedLabel.Location = new System.Drawing.Point(493, 598);
+            this.VideoSpeedLabel.Location = new System.Drawing.Point(863, 1046);
+            this.VideoSpeedLabel.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.VideoSpeedLabel.Name = "VideoSpeedLabel";
-            this.VideoSpeedLabel.Size = new System.Drawing.Size(16, 15);
+            this.VideoSpeedLabel.Size = new System.Drawing.Size(28, 25);
             this.VideoSpeedLabel.TabIndex = 80;
             this.VideoSpeedLabel.Text = "| |";
             // 
@@ -1402,9 +1495,10 @@ namespace SeizurePlayback
             // 
             this.ShortcutButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ShortcutButton.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ShortcutButton.Location = new System.Drawing.Point(1087, 765);
+            this.ShortcutButton.Location = new System.Drawing.Point(1902, 1339);
+            this.ShortcutButton.Margin = new System.Windows.Forms.Padding(5);
             this.ShortcutButton.Name = "ShortcutButton";
-            this.ShortcutButton.Size = new System.Drawing.Size(67, 23);
+            this.ShortcutButton.Size = new System.Drawing.Size(117, 40);
             this.ShortcutButton.TabIndex = 81;
             this.ShortcutButton.Text = "Shortcuts";
             this.ShortcutButton.UseVisualStyleBackColor = true;
@@ -1416,18 +1510,19 @@ namespace SeizurePlayback
             this.Rewind_ChangeBox.AutoSize = true;
             this.Rewind_ChangeBox.Controls.Add(this.Rewind_Dec);
             this.Rewind_ChangeBox.Controls.Add(this.Rewind_Inc);
-            this.Rewind_ChangeBox.Location = new System.Drawing.Point(992, 599);
+            this.Rewind_ChangeBox.Location = new System.Drawing.Point(1736, 1048);
+            this.Rewind_ChangeBox.Margin = new System.Windows.Forms.Padding(5);
             this.Rewind_ChangeBox.Name = "Rewind_ChangeBox";
-            this.Rewind_ChangeBox.Size = new System.Drawing.Size(51, 29);
+            this.Rewind_ChangeBox.Size = new System.Drawing.Size(89, 51);
             this.Rewind_ChangeBox.TabIndex = 78;
             // 
             // Rewind_Dec
             // 
             this.Rewind_Dec.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Rewind_Dec.Location = new System.Drawing.Point(0, 3);
-            this.Rewind_Dec.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+            this.Rewind_Dec.Location = new System.Drawing.Point(0, 5);
+            this.Rewind_Dec.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.Rewind_Dec.Name = "Rewind_Dec";
-            this.Rewind_Dec.Size = new System.Drawing.Size(24, 23);
+            this.Rewind_Dec.Size = new System.Drawing.Size(42, 40);
             this.Rewind_Dec.TabIndex = 76;
             this.Rewind_Dec.Text = "<";
             this.Rewind_Dec.UseVisualStyleBackColor = true;
@@ -1436,22 +1531,37 @@ namespace SeizurePlayback
             // Rewind_Inc
             // 
             this.Rewind_Inc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Rewind_Inc.Location = new System.Drawing.Point(24, 3);
-            this.Rewind_Inc.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.Rewind_Inc.Location = new System.Drawing.Point(42, 5);
+            this.Rewind_Inc.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
             this.Rewind_Inc.Name = "Rewind_Inc";
-            this.Rewind_Inc.Size = new System.Drawing.Size(24, 23);
+            this.Rewind_Inc.Size = new System.Drawing.Size(42, 40);
             this.Rewind_Inc.TabIndex = 77;
             this.Rewind_Inc.Text = ">";
             this.Rewind_Inc.UseVisualStyleBackColor = true;
             this.Rewind_Inc.Click += new System.EventHandler(this.Rewind_Inc_Click);
             // 
+            // FastReview2
+            // 
+            this.FastReview2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.FastReview2.BackColor = System.Drawing.Color.DarkGray;
+            this.FastReview2.ForeColor = System.Drawing.Color.Black;
+            this.FastReview2.Location = new System.Drawing.Point(1598, 1158);
+            this.FastReview2.Margin = new System.Windows.Forms.Padding(5);
+            this.FastReview2.Name = "FastReview2";
+            this.FastReview2.Size = new System.Drawing.Size(132, 40);
+            this.FastReview2.TabIndex = 82;
+            this.FastReview2.Text = "FastReview2";
+            this.FastReview2.UseVisualStyleBackColor = false;
+            this.FastReview2.Click += new System.EventHandler(this.FastReview2_Click);
+            // 
             // CManage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(168F, 168F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(1584, 961);
+            this.ClientSize = new System.Drawing.Size(2772, 1404);
+            this.Controls.Add(this.FastReview2);
             this.Controls.Add(this.ShortcutButton);
             this.Controls.Add(this.VideoSpeedLabel);
             this.Controls.Add(this.Rewind_ChangeBox);
@@ -1510,6 +1620,7 @@ namespace SeizurePlayback
             this.Controls.Add(this.ZoomScale);
             this.ForeColor = System.Drawing.Color.Black;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "CManage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = " ";
@@ -1647,6 +1758,7 @@ namespace SeizurePlayback
         private System.Windows.Forms.FlowLayoutPanel Rewind_ChangeBox;
         private System.Windows.Forms.Button Rewind_Dec;
         private System.Windows.Forms.Button Rewind_Inc;
+        private System.Windows.Forms.Button FastReview2;
     }
 }
 

@@ -31,8 +31,7 @@ namespace SeizurePlayback
         bool Highlighting;
         bool RealTime;
         bool Redraw;
-        bool FastReviewState, FastReviewChange;
-        int FastReviewPage;
+       
         int[] CamerAssc;
         string[] SzInfo;
         int SzInfoIndex;
@@ -52,8 +51,7 @@ namespace SeizurePlayback
         SzRvwFrm SRF;
         int Step;
         bool CrashWarning;
-        bool VideoCapture;
-        ReviewLogger RL; //Log of reviewer actions
+        bool VideoCapture;        
         bool ignore_change;
         bool Reviewing;
         string CurrentAVI;
@@ -68,8 +66,7 @@ namespace SeizurePlayback
         Mygraph FRgraph;
         float[] VideoOffset;
         float[] Rates = { 0.25F, 0.5F, 1, 2, 5, 10, 20, 30, 50, 100 };
-        int fastReviewCounter;
-        int fastReviewLastPage = 0;
+        
         int regularReviewReturn = 0;
         bool checkedChange = false;
         List<int> HCL;
@@ -81,7 +78,7 @@ namespace SeizurePlayback
         bool[] VLCisLoaded = new bool[16];
         long totms;
         int[,] ButtonLoc;
-        public int numPerPage;
+        
         bool vLoading = false;
         TrackBar[] ChanZooms;
         int RewindVal = 30;
@@ -94,11 +91,15 @@ namespace SeizurePlayback
         public bool KeyMouseBusy = false;
         public bool VidFixDisabled = false;
         bool[] ZoomDif = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
-        
-         
-        
-        
-        
+        //Fast review variables
+        bool FastReviewState, FastReviewChange, FastReviewAlt;
+        int FastReviewPage;
+        int fastReviewCounter, fastReviewChannel;
+        int fastReviewLastPage = 0;
+        public int numPerPage;
+
+
+
 
 
 
@@ -111,7 +112,7 @@ namespace SeizurePlayback
             graph = new Mygraph(); //Small Class for containing EEG area. 
             FRgraph = new Mygraph();
             DSF = new DetectedSeizureFileType();
-            numPerPage = 24;
+            numPerPage = 12;
             HCL = DSF.HCL;
             FastReviewState = false;
             FastReviewChange = false;
@@ -734,7 +735,8 @@ namespace SeizurePlayback
                             Step = MaxDispSize;
                             break;
                     }
-                } else
+                } 
+                else
                 {   //if (!RealTime || player == null || ACQ.SelectedChan == -1)
                     //{
                         switch (e.KeyCode)
@@ -782,7 +784,8 @@ namespace SeizurePlayback
                     
                         
                 }
-            } else
+            } 
+            else
             {
                 if (e.KeyCode == Keys.Left || e.KeyCode == Keys.NumPad4)
                 {
@@ -1345,15 +1348,12 @@ namespace SeizurePlayback
                     //loadVid(DSF.GetChannelNumber((FastReviewPage * numPerPage) + (Y * 2) + X));
                     if (DSF.ChangeDisplaySeizure((FastReviewPage * numPerPage) + (Y * 2) + X))
                     {
-
+                        fastReviewCounter = 0;
                         FastReviewChange = true;
                     }
-
                 }
                 else
-                {
-                    //JOSH
-
+                {                    
                     Paused = true;
                     OffsetBox.Enabled = true;
                     int TempChan = (int)((float)ACQ.VisibleChans * (float)(((float)e.Y - (float)graph.Y1) / (float)(graph.Y2 - graph.Y1)));
@@ -1990,7 +1990,7 @@ namespace SeizurePlayback
             OpenFileDialog FD = new OpenFileDialog();
             FD.InitialDirectory = AVIFiles[0].Substring(0, AVIFiles[0].LastIndexOf("\\"));
             FD.DefaultExt = "det";
-            FD.Filter = "Detection Files (*.det)|*.det|All Files (*.*)|*.*";
+            FD.Filter = "Detection Files (*.det)|*.det|Detection Type 2 Files (*.dt2)|*.dt2|All Files (*.*)|*.*";
             DialogResult Res = FD.ShowDialog();
             if (Res == DialogResult.OK)
             {
@@ -2124,17 +2124,35 @@ namespace SeizurePlayback
 
             if (FastReviewState)
             {
-                if ((FastReviewPage * numPerPage) + numPerPage > DSF.Count) return;
+                if (!FastReviewAlt)
+                {
+                    if ((FastReviewPage * numPerPage) + numPerPage > DSF.Count) return;
 
-                FastReviewPage++;
-
-                //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16 + " of " + DSFoCount).ToString();
-                //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16).ToString() + " of " + (DSF.Count).ToString();
-                string displayPageMin = MinMaxPage("min");
-                string displayPageMax = MinMaxPage("max");
-                FRPageNum.Text = (displayPageMin + " to " + displayPageMax + " of " + (DSF.Count).ToString());
-                FastReviewChange = true;
-                fastReviewLastPage++;
+                    FastReviewPage++;
+                    //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16 + " of " + DSFoCount).ToString();
+                    //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16).ToString() + " of " + (DSF.Count).ToString();
+                    string displayPageMin = MinMaxPage("min");
+                    string displayPageMax = MinMaxPage("max");
+                    FRPageNum.Text = (displayPageMin + " to " + displayPageMax + " of " + (DSF.Count).ToString());
+                    FastReviewChange = true;
+                    fastReviewLastPage++;
+                }
+                else
+                {
+                    fastReviewCounter += numPerPage;
+                    if (fastReviewCounter>80)
+                    {
+                        fastReviewChannel++; 
+                        if (fastReviewChannel>ACQ.Chans)
+                        {
+                            //Disable fast review
+                        }
+                        else
+                        {
+                            DSF.NextChannelSeizure(fastReviewChannel); 
+                        }
+                    }
+                }    
 
             }
             else
@@ -2182,9 +2200,14 @@ namespace SeizurePlayback
 
         private void Previous_Click(object sender, EventArgs e)
         {
-            if (!DSF.isLoaded) return;
+            if (!DSF.isLoaded) return;            
             if (FastReviewState)
             {
+                if (FastReviewAlt)
+                {
+                    MessageBox.Show("Rewinding is currently disabled with Fast Review 2"); 
+                    return;
+                }
                 if (FastReviewPage == 0) return;
                 FastReviewPage--;
                 //DetSezLabel.Text = ((FastReviewPage * 16) + 1).ToString() + " to " + ((FastReviewPage + 1) * 16 + " of " + DSFoCount).ToString();
@@ -2299,15 +2322,16 @@ namespace SeizurePlayback
             Redraw = true;
         }
 
+        private void FastReview2_Click(object sender, EventArgs e)
+        {
 
+        }
 
         private void FastReview_Click(object sender, EventArgs e)
         {
-
+            FastReviewAlt = false; 
 
             DSF.HCLSync(HCL);
-
-
 
             if (!DSF.isLoaded) return; //Don't want to go into fastreview mode if file not loaded
             //if (!Paused) return; //If things are actively playing, it's gonna suck to deal with. 
@@ -2413,12 +2437,7 @@ namespace SeizurePlayback
 
                 FRView(false);
                 g.Clear(Color.Black);
-
-
-
                 DSF.SetSeizureNumber(0);
-
-
                 FastReviewState = false;
                 Play.Enabled = true;
                 SpeedUp.Enabled = true;
@@ -3186,7 +3205,6 @@ namespace SeizurePlayback
                 }
             }
         }
-
         private void Rewind_Inc_Click(object sender, EventArgs e)
         {
 
