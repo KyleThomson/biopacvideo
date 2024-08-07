@@ -17,6 +17,7 @@ namespace BioPacVideo
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         public static extern void OutputDebugString(string message);
         public Int32[] PanelHandles;
+        public Int32[] panelhandlesnew; 
         static readonly VideoWrapper instance = new VideoWrapper();
         public uint maxdevices = 16;
         public uint i = 0;
@@ -267,10 +268,6 @@ namespace BioPacVideo
             HwUnInitialize();
         }
 
-        private void SetupControlClosed(object sender, FormClosedEventArgs e)
-        {
-           
-        }
         public void UpdateCameraAssoc()
         {
             for (int i = 0; i < maxdevices; i++)
@@ -371,8 +368,9 @@ namespace BioPacVideo
             }
             for (i = 0; i < maxdevices; i++)
             {
-                EXPORTS.QCAP_SET_AUDIO_RECORD_PROPERTY(m_hCapDev[i], 0, (uint)EXPORTS.EncoderTypeEnum.QCAP_ENCODER_TYPE_SOFTWARE, (uint)EXPORTS.AudioEncoderFormatEnum.QCAP_ENCODER_FORMAT_AAC);
-                EXPORTS.QCAP_SET_VIDEO_HARDWARE_ENCODER_PROPERTY(m_hCapDev[i], 0, (uint)EXPORTS.VideoEncoderFormatEnum.QCAP_ENCODER_FORMAT_H264, (uint)EXPORTS.RecordModeEnum.QCAP_RECORD_MODE_VBR, (uint)Quality,  (uint)Bitrate * 1024 * 1024, 30, 4, 3, (uint)EXPORTS.DownScaleModeEnum.QCAP_DOWNSCALE_MODE_OFF, 0, 0);
+                //EXPORTS.QCAP_SET_AUDIO_RECORD_PROPERTY(m_hCapDev[i], 0, (uint)EXPORTS.EncoderTypeEnum.QCAP_ENCODER_TYPE_SOFTWARE, (uint)EXPORTS.AudioEncoderFormatEnum.QCAP_ENCODER_FORMAT_AAC);
+                EXPORTS.QCAP_SET_AUDIO_RECORD_PROPERTY_EX(m_hCapDev[i], 0, (uint)EXPORTS.EncoderTypeEnum.QCAP_ENCODER_TYPE_SOFTWARE, (uint)EXPORTS.AudioEncoderFormatEnum.QCAP_ENCODER_FORMAT_AAC, 2);
+                EXPORTS.QCAP_SET_VIDEO_HARDWARE_ENCODER_PROPERTY(m_hCapDev[i], 0, (uint)EXPORTS.VideoEncoderFormatEnum.QCAP_ENCODER_FORMAT_H264, (uint)EXPORTS.RecordModeEnum.QCAP_RECORD_MODE_VBR, (uint)Quality,  (uint)Bitrate * 1024 * 1024, 99, 4, 3, (uint)EXPORTS.DownScaleModeEnum.QCAP_DOWNSCALE_MODE_OFF, 0, 0);
             }
 
             for (i = 0; i < maxdevices; i++)
@@ -431,8 +429,29 @@ namespace BioPacVideo
                     }
                 }
             }
-                
         }
+        
+        public void NewCloneVideo(bool show)
+        {
+            int i;
+            if (show)
+            {
+                for (i = 0; i < maxdevices; i++)
+                {
+                    EXPORTS.QCAP_CREATE_CLONE(m_hCapDev[i], (uint)panelhandlesnew[i], ref m_hCloneCapDev_temp, 1);
+                    // this should be saying camera one goes to panel one, etc, all the way to the max devices 
+
+                    if (m_hCloneCapDev_temp != 0)
+                    {
+                        EXPORTS.QCAP_RUN(m_hCloneCapDev_temp);
+                        //this should be telling the video marker to run the video 
+                    }
+                }
+            }
+            
+
+        }
+        
         public void TempCloneVideo(int channel, Int32 panelhandlet)
         {
             
@@ -444,6 +463,7 @@ namespace BioPacVideo
 
             }
         }
+
         public void DestroyTempCloneVideo()
         {
             EXPORTS.QCAP_STOP(m_hCloneCapDev_temp);

@@ -33,3 +33,26 @@ C:\Users\addlab\Desktop\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.Prop
 C:\Users\addlab\Desktop\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.csproj.GenerateResource.Cache
 C:\Users\addlab\Desktop\biopacvideo\BioPacVideo\bin\Release\QCAP.NET.X64.DLL
 C:\Users\addlab\Desktop\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.MyChannelControl.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\bin\Release\BioPacVideo.exe
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\bin\Release\BioPacVideo.pdb
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\bin\Release\QCAP.NET.X64.DLL
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.csproj.AssemblyReference.cache
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.CameraAssc.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.CameraAssosciationTest.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.FeederAddress.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.FeederForm.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.FeederTester.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.FeederErrorBox.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.RecordSettings.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.VideoSettings.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.InjectionManager.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.MainForm.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.RecordSelect.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.MyChannelControl.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.PelletCounts.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.Properties.Resources.resources
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.csproj.GenerateResource.cache
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.csproj.CoreCompileInputs.cache
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.csproj.CopyComplete
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.exe
+C:\Users\Sarah Haslam\source\repos\KyleThomson\biopacvideo\BioPacVideo\obj\x86\Release\BioPacVideo.pdb

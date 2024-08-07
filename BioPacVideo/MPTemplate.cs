@@ -27,7 +27,8 @@ namespace BioPacVideo
     "SOCKETERROR","UNDERFLOW","PRESETERROR","XMLERROR" };
         static EventWaitHandle _DrawHandle = new AutoResetEvent(false);
         public EventWaitHandle _DisplayHandle = new AutoResetEvent(false);
-        public bool[] RecordingDevice; 
+        public bool[] RecordingDevice;
+        public Int32 RecordingDeviceAll;
         public double Offset;
         public bool[] FeederTest;
         private bool[] DigitalChannel;
@@ -48,7 +49,8 @@ namespace BioPacVideo
         bool FileStop;
         public bool isstreaming = false;
         public bool isconnected = false;
-        
+        //private bool Sending = true;
+         
         public int samplesize;
         public bool ClearDisplay;
         private float Xmax;
@@ -57,8 +59,12 @@ namespace BioPacVideo
         public int Voltage;
         private long CurrentWriteLoc;
         uint BuffSize;
-        private FeederErrorBox FEB; 
+        private FeederErrorBox FEB;
 
+        public bool RecordingWanted;
+        public bool RecordingSuccess;
+        public bool Recording; 
+        public bool VideoOff; 
 
 
         //GRAPHICS VARIABLES
@@ -84,7 +90,6 @@ namespace BioPacVideo
         private double[] DispOffset;
 
 
-
         public MPTemplate() //Constructor
         {
             wavePen = new Pen(Color.Black);
@@ -95,6 +100,7 @@ namespace BioPacVideo
             FeederTest = new bool[8];
             DigitalChannel = new bool[16];
             RecordingDevice = new bool[16];
+            RecordingDeviceAll = new Int32();
             DispOffset = new double[16];
             wavePen = new Pen(Color.Black);            
             for (int i = 0; i < 16; i++)
@@ -128,6 +134,7 @@ namespace BioPacVideo
 
         public void ResetDisplaySize()
         {
+            ClearDisplay = true; 
             MaxDrawSize = SampleRate * DisplayLength;
             WaveCords = new PointF[MaxDrawSize];
             PointSpacing = Convert.ToSingle(Xmax / MaxDrawSize);                     
@@ -349,12 +356,6 @@ namespace BioPacVideo
             //result = (result < minPixel) ? minPixel: result;
             return (result);
         }
-
-        private void GenerateXML()
-        {
-        }
-
-
   
         private void drawbuffer()
         {
@@ -477,7 +478,7 @@ namespace BioPacVideo
                 return false;
         }
       
-        public bool StartRecording() //Start Data Acquisition
+        public bool CommunicateBioPac() //Start Data Acquisition
         {
             AcqThread = new Thread(new ThreadStart(RecordingThread)); //Initialize recording thread
             AcqThread.Priority = ThreadPriority.Highest; //Need to make sure that the computer makes this most important    
@@ -508,6 +509,7 @@ namespace BioPacVideo
             return true;
         }
 
+
         public bool StartWriting() //Not much is needed to start a file - open it and write. 
         {            
             open_ACQ_file(); //Open a new file
@@ -522,86 +524,142 @@ namespace BioPacVideo
             isstreaming = true;         
         }
 
+        public void StopStreaming()
+        {
+            isstreaming = false; //next recording block, streaming will stop
+            while (AcqThread.IsAlive)
+            {
+                //Pause to wait for thread to close
+            }
+
+        }
 
 
-/******************************************************************************
- * 
- *                  RECORDING THREAD!
- *                  
- * ****************************************************************************/
+        /******************************************************************************
+         * 
+         *                  RECORDING THREAD!
+         *                  
+         * ****************************************************************************/
 
         private void RecordingThread()
         {
             uint received;
             bool a = true;
             bool b = true;
-            bool lasta, lastb;         
+            bool lasta, lastb;
             AcqChan = TotChan();  //How many channels are we going to acquire   
-            VoltageSpacing =(int)(Ymax / (AcqChan));
+            VoltageSpacing = (int)(Ymax / (AcqChan));
             Thread BuffDraw = new Thread(new ThreadStart(drawbuffer)); //Set up thread for buffering 
             BuffDraw.Start(); //and then start it 
-            BuffSize = ((uint)(SampleRate/UpdateSpeed))*(uint)AcqChan; //Need to determine the right buffer size.
+            BuffSize = ((uint)(SampleRate / UpdateSpeed)) * (uint)AcqChan; //Need to determine the right buffer size.
             rec_buffer = new double[BuffSize]; //Place to copy the buffer of recieved data 
             draw_buffer = new double[BuffSize]; //Place to copy the buffer to, for drawing 
             //Need that so we can do thread-safe operations. 
             Int32 transbuffer = new Int32();  //Translational buffer to write bytes instead of doubles.             
-            MPReturn = MPCLASS.startAcquisition();  //Start actual acquisition        
+            MPReturn = MPCLASS.startAcquisition();  //Start actual acquisition'
             if (MPReturn != MPCODE.MPSUCCESS) //If acquisition fails, error out. 
-            { 
+            {
+                RecordingSuccess = false;
+                Console.WriteLine("startAcquisition failed");
             }
             while (isstreaming) //Thread stopping variable - set to false to end the recording thread. 
-            {                                                                
+            {
                 MPReturn = MPCLASS.receiveMPData(rec_buffer, BuffSize, out received); //Get the latest buffer
                 //This function pauses until the buffer is full - making the 'recieved' variable somewhat useless.                 
                 //If this fails, the recieved will be smaller than the buffsize, but you have bigger issues.                 
                 if (MPReturn != MPCODE.MPSUCCESS) //Make sure we were successful in getting the buffer. 
                 {
-                    MessageBox.Show(MPReturn.ToString() + "   " + MPCLASS.getMPDaemonLastError().ToString());
-                    MPReturn = MPCLASS.stopAcquisition(); //Have to restart the aquisition. 
+                    //MessageBox.Show(MPReturn.ToString() + "   " + MPCLASS.getMPDaemonLastError().ToString());
+                    MPReturn = MPCLASS.stopAcquisition(); //Have to restart the aquisition.
+                    updateheader(); //Write sample total
+                    BinaryFile.Close(); //Close 
+                    FileCount = 0;
+                    IsFileWriting = false;
+                    FileStop = false;
+                    BuffDraw.Abort();
+                    VideoOff = true;
+                    isstreaming = false;
+                    Disconnect();
+                    Thread.Sleep(10000);
+                    RecordingSuccess = false;
+                    //Console.WriteLine("RecordingSuccess = " + RecordingSuccess + Environment.NewLine + "Recording Wanted = " + RecordingWanted);
                     return;
                 }
                 last_received = received; //For the draw buffer
-                if (last_received % AcqChan > 0) 
+                //RecordingSuccess = true; // we have recieved the data successfully 
+                if (last_received % AcqChan > 0)
                 {
-                    Console.WriteLine("Buffer Mismatch: " + (last_received % AcqChan).ToString()); 
+                    Console.WriteLine("Buffer Mismatch: " + (last_received % AcqChan).ToString());
                 }
                 samplesize = (int)last_received / AcqChan; //How many samples did we acquire? 
                 samplecount += samplesize;
+                switch (RecordingDeviceAll)
+                {
+                    case 0: //Telemetry RAT
+                        for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
+                        {
+                            rec_buffer[j] = Math.Min(rec_buffer[j], 4); //Make sure we don't exceed the maxes
+                            rec_buffer[j] = Math.Max(rec_buffer[j], 0);//Make sure we don't exceed the minmum
+                            rec_buffer[j] = (rec_buffer[j]) - Offset;
+
+                        }
+                        break;
+                    case 1: //Mouse Telemetry 
+                        for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
+                        {
+                            rec_buffer[j] = Math.Min(rec_buffer[j], 4); //Make sure we don't exceed the maxes
+                            rec_buffer[j] = Math.Max(rec_buffer[j], 0);//Make sure we don't exceed the minmum
+                            rec_buffer[j] = (rec_buffer[j]) - Offset;
+
+                        }
+                        break;
+                    case 2: //Tethered 
+                        for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
+                        {
+                            rec_buffer[j] = Math.Min(rec_buffer[j], Int32.MaxValue / Gain); //Make sure we don't exceed the maxes
+                            rec_buffer[j] = Math.Max(rec_buffer[j], Int32.MinValue / Gain);//Make sure we don't exceed the minimum
+                        }
+                        break;
+                }
                 // VideoWrapper.SetSampleCount(samplecount);                
                 if (IsFileWriting) //If we are writing to the file, we want to handle it immediately. 
                 {
-
                     BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin); //Make sure the File writting is in the right place                     
-                    
-                        for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
-                        {
-                            if (RecordingDevice[j%AcqChan]) //Telemetry - This may be temporary. 
-                            {                            
-                                rec_buffer[j] = Math.Min(rec_buffer[j], 4); //Make sure we don't exceed the maxes
-                                rec_buffer[j] = Math.Max(rec_buffer[j], 0);//Make sure we don't exceed the minmum
-                                transbuffer = Convert.ToInt32((rec_buffer[j] - Offset) * (double)Int32.MaxValue / 2); //Convert the value
+                    switch (RecordingDeviceAll)
+                    {
+                        case 0: //Telemetry RAT
+                            for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
+                            {                     
+                                transbuffer = Convert.ToInt32((rec_buffer[j]) * (double)Int32.MaxValue / 2); //Convert the value
                                 BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
-                                //better safe than sorry. 
                             }
-                    
-                            else
-                            {                        
-                                rec_buffer[j] = Math.Min(rec_buffer[j], Int32.MaxValue / Gain); //Make sure we don't exceed the maxes
-                                rec_buffer[j] = Math.Max(rec_buffer[j], Int32.MinValue / Gain);//Make sure we don't exceed the minmum
+                            break;
+                        case 1: //Mouse Telemetry 
+                            for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
+                            {
+                               
+                                transbuffer = Convert.ToInt32((rec_buffer[j]) - Offset * (double)Int32.MaxValue / 3); //Convert the value
+                                BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
+                            }
+                            break;
+                        case 2: //Tethered 
+                            for (int j = 0; j < BuffSize; j++) //Cycle through the buffer. 
+                            {                            
                                 transbuffer = Convert.ToInt32((rec_buffer[j]) * Gain); //Convert the value
                                 BinaryFileID.Write((Int32)transbuffer); //Write the bytes to the file. The int16 probably isn't necessary to cast, 
-                                //better safe than sorry. 
+                                                                        //better safe than sorry.
                             }
-                         }
-                    CurrentWriteLoc = BinaryFile.Position;  //Update the current location.     
-                    
+                            break;
+
+                    }
+                    CurrentWriteLoc = BinaryFile.Position;  //Update the current location.
                     if (FileStop) //Need to have thread safe file closing! Oops!                        
                     {
                         updateheader(); //Write sample total
                         BinaryFile.Close(); //Close 
-                        FileCount = 0; 
+                        FileCount = 0;
                         IsFileWriting = false;
-                        FileStop = false;                        
+                        FileStop = false;
                     }
                     else if (BinaryFile.Position > (1980 * MBYTE)) //Need to stop file, and restart it
                     {
@@ -609,11 +667,12 @@ namespace BioPacVideo
                         BinaryFile.Close(); //Close the file                         
                         FileCount++; //Apparently, I don't need this, because the code won't overwrite a file. But, whatever
                         StartWriting(); //Start a new file!
-
                     }
-                    
                 }
-                if (true)
+            
+               
+
+                if (Feeder.Enabled)
                 {
                     lasta = a; //These serve as a debounce function. 
                     lastb = b; //Without debounce, you get multiple states in a single transistion
@@ -642,8 +701,10 @@ namespace BioPacVideo
                                 if (Feeder.State != 2)
                                 {
                                     string Result = "SUCCESS - " + Feeder.GetLastCommandText() + " - ";
+                                    //Breaks Everything
+                                    //Feeder.Log(Result);
                                     FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Status(Result); }));
-                                    Feeder.ExecuteAck();
+                                    Feeder.ExecuteAction();
                                 }
                                 Feeder.State = 2;
                                 Feeder.StateText = "SUCCESS";
@@ -652,19 +713,23 @@ namespace BioPacVideo
                             {
                                 if (Feeder.State == 3) //If the feeder goes from ready to Error, something happened with the infrared sensors
                                 {
+                                    //Breaks Everything
+                                    //Feeder.Log("Infrared Sensors offline - ");
                                     FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error("Infrared Sensors offline - "); }));
                                 }
                                 else if (Feeder.State == 1) //if something went wrong during execution, then the feeder failed to deliver pellets. 
                                 {
                                     string Result = "FAIL - " + Feeder.GetLastCommandText() + " - ";
+                                    //Breaks Everything
+                                    //Feeder.Log(Result);
                                     FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error(Result); }));
-                                    Feeder.ExecuteAck();
+                                    Feeder.ExecuteAction();
                                 }
                                 Feeder.State = 0;
                                 Feeder.StateText = "ERROR";
                                 if ((!Feeder.CommandWaitEx()) && (!Feeder.CommandReady)) //Go back into waiting  if no commands left in Stack  
                                 {
-                                    //Feeder.Activated = false; 
+                                    Feeder.Activated = false; 
                                 }
                             }
                         }
@@ -685,31 +750,22 @@ namespace BioPacVideo
                             {
                                 Feeder.CommandReady = false;
                             }
-                        } 
+                        }
                     }
                     else if (Feeder.gap > 0) //only want to send the feeding commands once every 4 cycles 
                     {
                         Feeder.gap++;
                         if (Feeder.gap == 4) { Feeder.gap = 0; }
                     }
-                }            
+                }
                 Buffer.BlockCopy(rec_buffer, 0, draw_buffer, 0, (int)received * 8);  //copy the Buffer to the drawing area                      
-                _DrawHandle.Set(); //let the drawing thread know that data is available.                                       
-                
+                _DrawHandle.Set(); //let the drawing thread know that data is available.
             }
-            BuffDraw.Abort();            
+            BuffDraw.Abort();
             MPReturn = MPCLASS.stopAcquisition();  //We won't get here unless the thread stops. 
             return;
         }
-        public void StopRecording()
-            {
-                isstreaming = false; //next recording block, streaming will stop
-            while (AcqThread.IsAlive)
-            {
-                //Pause to wait for thread to close
-            }                     
-                       
-        }
+        
     
     }
 }  

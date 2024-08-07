@@ -19,7 +19,7 @@ namespace ProjectManager
         T39,
         UNDEFINED
     }
-    /****************************************************************************************************************8
+    /*****************************************************************************************************************
      *
      * 
      * Start project definition
@@ -31,7 +31,7 @@ namespace ProjectManager
 
 
     public class Project
-    {
+    {       
         public string P;
         public string Filename;
         public List<FileType> Files;
@@ -55,8 +55,7 @@ namespace ProjectManager
 
         public Project(string Inpt, bool newP)
         {
-            _fileChanged = false; // initialize file as not changed
-
+            _fileChanged = false; // initialize file as not changed            
             if (newP)
             {
                 Filename = Inpt + ".pjt";
@@ -684,6 +683,9 @@ namespace ProjectManager
             return Percent;
 
         }
+        /****** 
+         * BEN LOOK AT ME
+         * **********************/
         public int ImportDirectory(string Dir, bool RejectIncomplete, bool vidImport)
         {
             ACQReader TempACQ = new ACQReader();
@@ -726,8 +728,7 @@ namespace ProjectManager
 
                 TempACQ.closeACQ();
                 FileType Fs = Files.Find(delegate (FileType Ft) {
-                    return ((DateTime.Compare(Ft.Start, F.Start) == 0) &&
-(string.Compare(F.AnimalIDs[0], Ft.AnimalIDs[0]) == 0));
+                    return ((DateTime.Compare(Ft.Start, F.Start) == 0) && (string.Compare(F.AnimalIDs[0], Ft.AnimalIDs[0]) == 0));
                 });
                 //Determine if duplicate file - compare animal name and file start
                 if (Fs != null)

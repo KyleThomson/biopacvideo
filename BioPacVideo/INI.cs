@@ -3,15 +3,15 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
-
 namespace Ini
 {
-   
-
     class IniFile
     {
+        #region Properties
         public string path;
+        #endregion
 
+        #region DLL Imports
         [DllImport("kernel32")]
         private static extern long WritePrivateProfileString(string section,
             string key, string val, string filePath);
@@ -19,17 +19,19 @@ namespace Ini
         private static extern int GetPrivateProfileString(string section,
                  string key, string def, StringBuilder retVal,
             int size, string filePath);
-       
+        #endregion
+
+        #region Initializers
         public IniFile(string INIPath)
         {
             this.path = INIPath;
-        } 
+        }
+        #endregion
 
         public void IniWriteValue(string Section, string Key, string Value)
         {
             WritePrivateProfileString(Section, Key, Value, this.path);
         }
-
         public string IniReadValue(string Section, string Key, string Def)
         {
             StringBuilder temp = new StringBuilder(255);
@@ -70,7 +72,6 @@ namespace Ini
                 New = TimeSpan.MaxValue;
             }            
         }
-        
         public void IniWriteValue(string Section, string Key, int Value)
         {
             IniWriteValue(Section, Key, Value.ToString());
@@ -100,6 +101,5 @@ namespace Ini
             else
                 return false;
         }
-
     }
 }

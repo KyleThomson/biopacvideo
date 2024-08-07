@@ -1,18 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{19150BB9-2F70-4C0D-B53C-3E8E0A211398}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BioPacVideo</RootNamespace>
     <AssemblyName>BioPacVideo</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -25,7 +27,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -38,6 +39,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -48,6 +50,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>true</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -55,10 +58,45 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <PlatformTarget>x64</PlatformTarget>
     <OutputPath>bin\x64\Debug\</OutputPath>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <PlatformTarget>x64</PlatformTarget>
     <OutputPath>bin\x64\Release\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>false</Optimize>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug2|x86'">
+    <OutputPath>bin\x86\Debug2\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug2|x64'">
+    <OutputPath>bin\x64\Debug2\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug2|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug2\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>BPV_Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
@@ -79,17 +117,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CameraAssc.cs">
+    <Compile Include="AnimalSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CameraAssc.Designer.cs">
-      <DependentUpon>CameraAssc.cs</DependentUpon>
+    <Compile Include="AnimalSettings.Designer.cs">
+      <DependentUpon>AnimalSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="FeederForm.cs">
+    <Compile Include="CameraAssosciation.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FeederForm.Designer.cs">
-      <DependentUpon>FeederForm.cs</DependentUpon>
+    <Compile Include="CameraAssosciation.Designer.cs">
+      <DependentUpon>CameraAssosciation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FeederMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FeederMenu.Designer.cs">
+      <DependentUpon>FeederMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="FeederTemplate.cs" />
     <Compile Include="FeederTester.cs">
@@ -110,12 +154,25 @@
     <Compile Include="FeederAddress.Designer.cs">
       <DependentUpon>FeederAddress.cs</DependentUpon>
     </Compile>
+    <Compile Include="FeederTester_Mouse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FeederTester_Mouse.Designer.cs">
+      <DependentUpon>FeederTester_Mouse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LayoutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LayoutForm.Designer.cs">
+      <DependentUpon>LayoutForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="RecordSettings.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="RecordSettings.Designer.cs">
       <DependentUpon>RecordSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="ResourceManager.cs" />
     <Compile Include="VideoSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,16 +214,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatTemplate.cs" />
     <Compile Include="VideoWrapper.cs" />
-    <EmbeddedResource Include="CameraAssc.resx">
-      <DependentUpon>CameraAssc.cs</DependentUpon>
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="AnimalSettings.resx">
+      <DependentUpon>AnimalSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CameraAssosciation.resx">
+      <DependentUpon>CameraAssosciation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FeederAddress.resx">
       <DependentUpon>FeederAddress.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FeederForm.resx">
-      <DependentUpon>FeederForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="FeederMenu.resx">
+      <DependentUpon>FeederMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FeederTester.resx">
       <DependentUpon>FeederTester.cs</DependentUpon>
@@ -174,6 +232,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FeederErrorBox.resx">
       <DependentUpon>FeederErrorBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FeederTester_Mouse.resx">
+      <DependentUpon>FeederTester_Mouse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LayoutForm.resx">
+      <DependentUpon>LayoutForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RecordSettings.resx">
       <DependentUpon>RecordSettings.cs</DependentUpon>
@@ -204,7 +268,9 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -216,7 +282,32 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BPV_Icon.ico" />
     <Content Include="mpdev.dll" />
+    <EmbeddedResource Include="Resources\dll\AMESDK.X64.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\dll\mpdev.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\dll\QCAP.NET.X64.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\dll\QCAP.X64.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\dll\xerces-c_3_1.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Images\FeederTester.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Images\FeederTester_Mouse_Large.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Images\FeederTester_Rat.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -243,6 +334,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

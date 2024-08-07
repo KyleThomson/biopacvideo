@@ -45,7 +45,12 @@
             this.ChannelAcq10 = new System.Windows.Forms.CheckBox();
             this.ChannelAcq9 = new System.Windows.Forms.CheckBox();
             this.ID_OK = new System.Windows.Forms.Button();
+<<<<<<< HEAD
+            this.Telemetry = new System.Windows.Forms.CheckBox();
+            this.recordingDeviceBox = new System.Windows.Forms.ComboBox();
+=======
             this.TelemetryCheck = new System.Windows.Forms.CheckBox();
+>>>>>>> master
             this.SuspendLayout();
             // 
             // ChannelAcq1
@@ -139,7 +144,7 @@
             // ChannelAcq16
             // 
             this.ChannelAcq16.AutoSize = true;
-            this.ChannelAcq16.Location = new System.Drawing.Point(205, 181);
+            this.ChannelAcq16.Location = new System.Drawing.Point(110, 181);
             this.ChannelAcq16.Name = "ChannelAcq16";
             this.ChannelAcq16.Size = new System.Drawing.Size(81, 18);
             this.ChannelAcq16.TabIndex = 15;
@@ -150,7 +155,7 @@
             // ChannelAcq15
             // 
             this.ChannelAcq15.AutoSize = true;
-            this.ChannelAcq15.Location = new System.Drawing.Point(205, 157);
+            this.ChannelAcq15.Location = new System.Drawing.Point(110, 157);
             this.ChannelAcq15.Name = "ChannelAcq15";
             this.ChannelAcq15.Size = new System.Drawing.Size(81, 18);
             this.ChannelAcq15.TabIndex = 14;
@@ -161,7 +166,7 @@
             // ChannelAcq14
             // 
             this.ChannelAcq14.AutoSize = true;
-            this.ChannelAcq14.Location = new System.Drawing.Point(205, 133);
+            this.ChannelAcq14.Location = new System.Drawing.Point(110, 133);
             this.ChannelAcq14.Name = "ChannelAcq14";
             this.ChannelAcq14.Size = new System.Drawing.Size(81, 18);
             this.ChannelAcq14.TabIndex = 13;
@@ -172,7 +177,7 @@
             // ChannelAcq13
             // 
             this.ChannelAcq13.AutoSize = true;
-            this.ChannelAcq13.Location = new System.Drawing.Point(205, 109);
+            this.ChannelAcq13.Location = new System.Drawing.Point(110, 109);
             this.ChannelAcq13.Name = "ChannelAcq13";
             this.ChannelAcq13.Size = new System.Drawing.Size(81, 18);
             this.ChannelAcq13.TabIndex = 12;
@@ -183,7 +188,7 @@
             // ChannelAcq12
             // 
             this.ChannelAcq12.AutoSize = true;
-            this.ChannelAcq12.Location = new System.Drawing.Point(205, 85);
+            this.ChannelAcq12.Location = new System.Drawing.Point(110, 85);
             this.ChannelAcq12.Name = "ChannelAcq12";
             this.ChannelAcq12.Size = new System.Drawing.Size(81, 18);
             this.ChannelAcq12.TabIndex = 11;
@@ -194,7 +199,7 @@
             // ChannelAcq11
             // 
             this.ChannelAcq11.AutoSize = true;
-            this.ChannelAcq11.Location = new System.Drawing.Point(205, 61);
+            this.ChannelAcq11.Location = new System.Drawing.Point(110, 61);
             this.ChannelAcq11.Name = "ChannelAcq11";
             this.ChannelAcq11.Size = new System.Drawing.Size(81, 18);
             this.ChannelAcq11.TabIndex = 10;
@@ -205,7 +210,7 @@
             // ChannelAcq10
             // 
             this.ChannelAcq10.AutoSize = true;
-            this.ChannelAcq10.Location = new System.Drawing.Point(205, 37);
+            this.ChannelAcq10.Location = new System.Drawing.Point(110, 36);
             this.ChannelAcq10.Name = "ChannelAcq10";
             this.ChannelAcq10.Size = new System.Drawing.Size(81, 18);
             this.ChannelAcq10.TabIndex = 9;
@@ -216,7 +221,7 @@
             // ChannelAcq9
             // 
             this.ChannelAcq9.AutoSize = true;
-            this.ChannelAcq9.Location = new System.Drawing.Point(205, 13);
+            this.ChannelAcq9.Location = new System.Drawing.Point(110, 12);
             this.ChannelAcq9.Name = "ChannelAcq9";
             this.ChannelAcq9.Size = new System.Drawing.Size(75, 18);
             this.ChannelAcq9.TabIndex = 8;
@@ -226,7 +231,7 @@
             // 
             // ID_OK
             // 
-            this.ID_OK.Location = new System.Drawing.Point(139, 214);
+            this.ID_OK.Location = new System.Drawing.Point(47, 262);
             this.ID_OK.Name = "ID_OK";
             this.ID_OK.Size = new System.Drawing.Size(96, 28);
             this.ID_OK.TabIndex = 16;
@@ -234,6 +239,26 @@
             this.ID_OK.UseVisualStyleBackColor = true;
             this.ID_OK.Click += new System.EventHandler(this.ID_OK_Click);
             // 
+<<<<<<< HEAD
+            // Telemetry
+            // 
+            this.Telemetry.AutoSize = true;
+            this.Telemetry.Location = new System.Drawing.Point(69, 221);
+            this.Telemetry.Name = "Telemetry";
+            this.Telemetry.Size = new System.Drawing.Size(74, 18);
+            this.Telemetry.TabIndex = 17;
+            this.Telemetry.Text = "Telemetry";
+            this.Telemetry.UseCompatibleTextRendering = true;
+            this.Telemetry.UseVisualStyleBackColor = true;
+            // 
+            // recordingDeviceBox
+            // 
+            this.recordingDeviceBox.FormattingEnabled = true;
+            this.recordingDeviceBox.Location = new System.Drawing.Point(38, 221);
+            this.recordingDeviceBox.Name = "recordingDeviceBox";
+            this.recordingDeviceBox.Size = new System.Drawing.Size(121, 21);
+            this.recordingDeviceBox.TabIndex = 18;
+=======
             // TelemetryCheck
             // 
             this.TelemetryCheck.AutoSize = true;
@@ -244,13 +269,20 @@
             this.TelemetryCheck.Text = "Telemetry";
             this.TelemetryCheck.UseCompatibleTextRendering = true;
             this.TelemetryCheck.UseVisualStyleBackColor = true;
+>>>>>>> master
             // 
             // RecordSelect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+<<<<<<< HEAD
+            this.ClientSize = new System.Drawing.Size(207, 302);
+            this.Controls.Add(this.recordingDeviceBox);
+            this.Controls.Add(this.Telemetry);
+=======
             this.ClientSize = new System.Drawing.Size(383, 254);
             this.Controls.Add(this.TelemetryCheck);
+>>>>>>> master
             this.Controls.Add(this.ID_OK);
             this.Controls.Add(this.ChannelAcq16);
             this.Controls.Add(this.ChannelAcq15);
@@ -297,6 +329,11 @@
         private System.Windows.Forms.CheckBox ChannelAcq10;
         private System.Windows.Forms.CheckBox ChannelAcq9;
         private System.Windows.Forms.Button ID_OK;
+<<<<<<< HEAD
+        private System.Windows.Forms.CheckBox Telemetry;
+        private System.Windows.Forms.ComboBox recordingDeviceBox;
+=======
         private System.Windows.Forms.CheckBox TelemetryCheck;
+>>>>>>> master
     }
 }
