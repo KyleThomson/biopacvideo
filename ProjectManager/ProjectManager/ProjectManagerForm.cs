@@ -94,6 +94,7 @@ namespace ProjectManager
                 UpdateMainList();
                 EnableFileTools();
                 if (pjt.CDatExists) eEGViewToolStripMenuItem.Enabled = true;
+                checkDiscrepancy();
             }
         }
 
@@ -500,6 +501,7 @@ namespace ProjectManager
                 for (int i = 0; i < Frm.DirReturn.Length; i++)
                 {
                     DirectoryLoadText.Text = $"Loading: {i + 1} / {Frm.DirReturn.Length} (Please Wait!)";
+                    DirectoryLoadText.Update(); // this should make it so that this label actually updates as the files are being loaded in -SH 
                     if (DirectoryLoadBar.Value == DirectoryLoadBar.Maximum) DirectoryLoadBar.Value -= 2;
                     DirectoryLoadBar.Value++;
                     //  File.Copy(F.FileName, pjt.P + "\\Data\\" + Path.GetFileName(F.FileName));
@@ -542,7 +544,7 @@ namespace ProjectManager
                 tempB.Close();
                 tempF.Close();
                 pjt.Save(pjt.Filename);
-
+                pjt.CompareStageConflicts();
 
                 ChangeTitleText(pjt.Filename);
             }
@@ -555,6 +557,45 @@ namespace ProjectManager
                 DuplicateDirectoryCount.ToString() + " duplicate directories skipped. " +
                 NotImported.ToString() + " directories not imported."; ;
             if (pjt.CDatExists) eEGViewToolStripMenuItem.Enabled = true;
+
+            checkDiscrepancy();
+            
+
+            
+
+
+        }
+
+        public bool checkDiscrepancy()
+        {
+            if (pjt.discrepancyList.Count > 0)
+            {
+                DialogResult result = MessageBox.Show("Discrepancies were detected between Racine Scores in one or more files, and must be fixed to maintain accuracy in data. \n \n \t Would you like to fix these now?", "PLEASE FIX SCORES", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    using (var DiscForm = new DiscrepancyFixForm(pjt.discrepancyList, pjt.Animals, Directory.GetParent(pjt.Filename).ToString() + "\\Videos\\", pjt.CDatName))
+                    {
+                        var temp = DiscForm.ShowDialog();
+                        if (temp == DialogResult.OK)
+                        {
+                            pjt.Animals = DiscForm.animals;
+                            pjt.Save(pjt.Filename);
+                        }
+                    }
+
+
+                    return false;
+                }
+                else
+                {
+                    DiscrepButton.Show();
+
+                    return true;
+                }
+            } else
+            {
+                return false;
+            }
         }
 
         private void mergeProjectToolStripMenuItem_Click(object sender, EventArgs e)

@@ -12,11 +12,13 @@ namespace SeizurePlayback
         public int Channel;
         public int tS;
         public int tE;
-        public SeizureHighlight(int c, int s, int e)
+        public int EndTime;
+        public SeizureHighlight(int c, int s, int e, int et)
         {
             Channel = c;
             tS = s;
             tE = e;
+            EndTime = et; 
         }
     }
 
@@ -484,7 +486,7 @@ namespace SeizurePlayback
             FOUT_ID.Close();
             FOUT.Close();
         }
-        public void sethighlight(int Start, int End)
+        public void sethighlight (int Start, int End)
         {
             HLS = Start;
             HLE = End;
@@ -595,13 +597,6 @@ namespace SeizurePlayback
                         
                             
                          }
-
-
-                      
-
-
-
-
                                 if (j == SelectedChan)
                              g.DrawLines(SelectedPen, WaveC[j]);
                          else
@@ -619,8 +614,6 @@ namespace SeizurePlayback
                             g.FillRectangle(TextBackBrush, new Rectangle((int)temp.X, (int)temp.Y, 70, 20));
                             g.DrawString(ID[j], F, B, new PointF(1, .75F + (j - NotDisp) * (Ymax / VisibleChans)));
                         }
-
-
 
                     }
                      else

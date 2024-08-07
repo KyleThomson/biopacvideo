@@ -76,7 +76,7 @@ namespace ProjectManager
             graph.X1 = 5;
             graph.X2 = this.Size.Width - 25;
             graph.Y1 = this.menuStrip1.Location.X + (this.menuStrip1.Height + 5);
-            graph.Y2 = this.BottomLabel.Location.Y - 10;
+            graph.Y2 = this.Location.Y - 10;
             GalGraph = new MyGraph();
             GalGraph.X1 = this.GalGBox.Location.X + 2;
             GalGraph.X2 = this.GalGBox.Location.X + GalGBox.Width - 2;
@@ -127,19 +127,12 @@ namespace ProjectManager
             //ThreadDisplay.Start();
             Redraw = true;
 
-            pg.Text = (pageNum + 1) + " / " + pageCalc();
 
             UpdateDisplay();
             ThreadDisplay = new Thread(new ThreadStart(DisplayThread));
             ThreadDisplay.Start();
             threadLock = false;
             
-
-
-        }
-
-        private void MainForm_Resize(object sender, EventArgs e)
-        {
 
 
         }
@@ -299,8 +292,6 @@ namespace ProjectManager
                         seconds = -1;
                         EditNotesButton.Enabled = false;
                         NotesSection.ResetText();
-                        ANLabel.ResetText();
-                        RacineLabel.ResetText();
                         CurrentAnimal = -1;
                     }
                     else
@@ -309,11 +300,7 @@ namespace ProjectManager
                         SelectedTotal = temp;
                         Offset[temp].Selected = true;
                         ListViewItem tempL = new ListViewItem();
-                        ANLabel.Text = (Animals[Offset[temp].AnimalIndex].ID);
                         NotesSection.ResetText();
-                        ANLabel.ResetText();
-                        RacineLabel.ResetText();
-                        RacineLabel.Text = (Animals[Offset[temp].AnimalIndex].Sz[Offset[temp].SZNum].Severity.ToString());
                         NotesSection.Text = Animals[Offset[temp].AnimalIndex].Sz[Offset[temp].SZNum].Notes;
                         EditNotesButton.Enabled = true;
                         CurrentAnimal = temp;
@@ -468,7 +455,6 @@ namespace ProjectManager
             Redraw = true;
 
             UpdateDisplay();
-            pg.Text = (pageNum + 1) + " / " + pageCalc();
             if (ViewMode == 1) Gg.Clear(Color.White);
             threadLock = false;
 
@@ -500,7 +486,6 @@ namespace ProjectManager
             Redraw = true;
 
             UpdateDisplay();
-            pg.Text = (pageNum + 1) + " / " + pageCalc();
             ResetChosenVid();
             if (ViewMode == 1) Gg.Clear(Color.White);
             threadLock = false;
@@ -764,10 +749,9 @@ namespace ProjectManager
                         for (int i = 0; i < numPerPage; i++)
                         {
                             if (count >= Offset.Count) break;
-                            DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, 0, i, Offset[count].Selected, vidShow[i], ShowBuffer.Checked);
-
-
-
+                            SeizureType tempSZ = Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum];
+                           // DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, 0, i, Offset[count].Selected, vidShow[i], ShowBuffer.Checked, );
+                            DAT.DrawSZ(tempSZ, 0, i, Offset[count].Selected, vidShow[i], ShowBuffer.Checked);
 
                             count++;
                         }
@@ -824,7 +808,8 @@ namespace ProjectManager
                         for (int i = 0; i < numPerPage; i++)
                         {
                             if (count >= Offset.Count) break;
-                            DAT.DrawSZ(Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].Offset, Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum].length, i % 2, i / 2, Offset[count].Selected, false, ShowBuffer.Checked);
+                            SeizureType tempSZ = Animals[Offset[count].AnimalIndex].Sz[Offset[count].SZNum];
+                            DAT.DrawSZ(tempSZ, i % 2, i / 2, Offset[count].Selected, false, ShowBuffer.Checked);
 
                             count++;
                         }
@@ -897,11 +882,11 @@ namespace ProjectManager
                     numPerPage = 8;
                     DAT.numPerPage = numPerPage;
                     DAT.drawMode = 0;
+                    label1.Hide();
                     GraphResize(0);
                     Redraw = true;
                     UpdateDisplay();
                     videoSizeToolStripMenuItem.Enabled = false;
-                    pg.Text = (pageNum + 1) + " / " + pageCalc();
 
 
 
@@ -918,7 +903,7 @@ namespace ProjectManager
                     DefaultView.Checked = false;
                     animalView.Checked = false;
                     galleryView.Checked = true;
-                   
+                    label1.Show();
 
                     VideoMode(true);
                     GraphResize(1);
@@ -928,8 +913,6 @@ namespace ProjectManager
                     Redraw = true;
                     UpdateDisplay();
                     videoSizeToolStripMenuItem.Enabled = true;
-                    pg.Text = (pageNum + 1) + " / " + pageCalc();
-                    AnimalViewPanel.Hide();
                     break;
                 case "Animal":
                     ViewMode = 2;
@@ -937,16 +920,12 @@ namespace ProjectManager
                     animalView.Checked = true;
                     galleryView.Checked = false;
                     GraphResize(2);
+                    label1.Show();
                     DAT.drawMode = 2;
-                    pg.Text = (pageNum + 1) + " / " + pageCalc();
-                    AnimalViewPanel.Show();
-                    aLComboBox.Items.Clear();
 
                     foreach (AnimalType A in Animals)
                     {
-                        aLComboBox.Items.Add(A.ID);
                     }
-                    aLComboBox.SelectedIndex = 0;
 
                     break;
             }
@@ -961,7 +940,7 @@ namespace ProjectManager
             if (mode == 0)
             {
                 graph.X2 = this.Size.Width - 25;
-                graph.Y2 = this.BottomLabel.Location.Y - 10;
+                
                 g.Dispose();
                 g = this.CreateGraphics();
                 DAT.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1);
@@ -1015,11 +994,6 @@ namespace ProjectManager
         }
 
 
-
-        private void GalleryBox_Enter(object sender, EventArgs e)
-        {
-
-        }
 
 
 
@@ -1161,20 +1135,9 @@ namespace ProjectManager
             }
         }
 
-        private void button2_Click_1(object sender, EventArgs e)
-        {
-
-
-        }
-
         private void PMEEGView_ResizeBegin(object sender, EventArgs e)
         {
 
-            threadLock = true;
-            while (!TDDone)
-            {
-
-            }
         }
 
         private void PMEEGView_ResizeEnd(object sender, EventArgs e)
@@ -1273,12 +1236,6 @@ namespace ProjectManager
 
 
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-
-        }
-
 
         private void GalGBox_Enter(object sender, EventArgs e)
         {
@@ -1308,35 +1265,6 @@ namespace ProjectManager
 
         private void PMEEGView_ResizeEnd_1(object sender, EventArgs e)
         {
-            threadLock = true;
-            while (!TDDone)
-            {
-                Thread.Sleep(10);
-            }
-
-            graph.X1 = 5;
-            graph.X2 = this.Size.Width - 25;
-            graph.Y1 = this.menuStrip1.Location.X + (this.menuStrip1.Height + 5);
-            graph.Y2 = this.BottomLabel.Location.Y - 10;
-            
-            GalGraph.X1 = this.GalGBox.Location.X + 2;
-            GalGraph.X2 = this.GalGBox.Location.X + GalGBox.Width - 2;
-            GalGraph.Y1 = this.GalGBox.Location.Y + 2;
-            GalGraph.Y2 = this.GalGBox.Location.Y + GalGBox.Height;
-            g.Dispose();
-            Gg.Dispose();
-            g = this.CreateGraphics();
-            Gg = GalGBox.CreateGraphics();
-            
-
-
-            DAT.initDisplay(graph.X2 - graph.X1, graph.Y2 - graph.Y1, GalGBox.Width - 2, GalGBox.Height);
-            g.DrawImage(DAT.offscreen, graph.X1, graph.Y1);
-            Gg.DrawImage(DAT.GOffscreen, GalGraph.X1, GalGraph.Y1);
-
-            Redraw = true;
-            UpdateDisplay();
-            threadLock = false;
 
         }
 
@@ -1386,9 +1314,7 @@ namespace ProjectManager
             
             int temp;
             ;
-            if (!int.TryParse(RacineLabel.Text, out temp)) temp = 0;
 
-            ENF = new EditNotesForm(this, temp, ANLabel.Text, NotesSection.Text);
             ENF.Show();
         }
 
@@ -1398,8 +1324,6 @@ namespace ProjectManager
 
             Animals[Offset[CurrentAnimal].AnimalIndex].Sz[Offset[CurrentAnimal].SZNum].Severity = r;
             Animals[Offset[CurrentAnimal].AnimalIndex].Sz[Offset[CurrentAnimal].SZNum].Notes = n;
-            ANLabel.Text = (Animals[Offset[CurrentAnimal].AnimalIndex].ID);
-            RacineLabel.Text = (Animals[Offset[CurrentAnimal].AnimalIndex].Sz[Offset[CurrentAnimal].SZNum].Severity.ToString());
             NotesSection.Text = Animals[Offset[CurrentAnimal].AnimalIndex].Sz[Offset[CurrentAnimal].SZNum].Notes;
 
             Prnt.pjt.Animals = Animals;
@@ -1422,45 +1346,7 @@ namespace ProjectManager
             int tot = 0;
 
 
-            foreach (SeizureType s in Animals[aLComboBox.SelectedIndex].Sz)
-            {
-                switch (s.Severity)
-                {
-                    case 0:
-                        s0++;
-                        tot++;
-                        break;
-                    case 1:
-                        s1++;
-                        tot++;
-                        break;
-                    case 2:
-                        s2++;
-                        tot++;
-                        break;
-                    case 3:
-                        s3++;
-                        tot++;
-                        break;
-                    case 4:
-                        s4++;
-                        tot++;
-                        break;
-                    case 5:
-                        s5++;
-                        tot++;
-                        break;
 
-                }
-            }
-
-            S0Label.Text = s0.ToString();
-            S1Label.Text = s1.ToString();
-            S2Label.Text = s2.ToString();
-            S3Label.Text = s3.ToString();
-            S4Label.Text = s4.ToString();
-            S5Label.Text = s5.ToString();
-            TotalSLabel.Text = tot.ToString();
 
             Redraw = true;
             UpdateDisplay();
@@ -1480,6 +1366,11 @@ namespace ProjectManager
         {
             Redraw = true;
             UpdateDisplay();
+        }
+
+        private void seizureListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
 
 

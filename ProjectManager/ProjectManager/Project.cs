@@ -47,6 +47,7 @@ namespace ProjectManager
         public BinaryWriter BBigDAT;
         public long Offset;
         public string CDatName;
+        public List<DiscrepancyItem> discrepancyList;
 
         public int DatCount;
         public bool CDatExists;
@@ -79,7 +80,7 @@ namespace ProjectManager
                 }
             }
 
-
+            discrepancyList = new List<DiscrepancyItem>();
             Animals = new List<AnimalType>();
             Files = new List<FileType>();
             Groups = new List<GroupType>();
@@ -102,56 +103,6 @@ namespace ProjectManager
 
         }
 
-        //public void checkCD(bool exists)
-        //{
-        //    P = Path.GetDirectoryName(Filename);
-
-        //    if (exists)
-        //    {
-        //        char[] splitter = new char[2];
-        //        splitter[0] = '\\';
-        //        splitter[1] = '.';
-        //        string[] pathA = P.ToString().Split(splitter);
-
-        //        string[] fileA = Filename.Split(splitter);
-        //        if (!fileA[fileA.Length-1].Equals(".pjt"))
-        //        {
-        //            string[] temp = new string[fileA.Length + 1];
-        //            for (int i = 0; i < fileA.Length; i++)
-        //            {
-        //                temp[i] = fileA[i];
-        //            }
-        //            temp[temp.Length - 1] = ".pjt";
-        //            fileA = temp;
-        //        }
-
-        //        //if (!pathA[pathA.Length - 1].Equals(fileA[fileA.Length - 2]))
-        //        if (!pathA[pathA.Length-1].Equals("PM_" + fileA[fileA.Length-2]))
-        //        {
-
-        //        Console.WriteLine("File Before: " + Filename);
-        //        Directory.CreateDirectory(P + "\\PM_" + fileA[fileA.Length - 2]);
-        //        P = P + "\\PM_" + fileA[fileA.Length - 2];
-        //        Console.WriteLine(P);
-        //        //File tempFI = new File(Filename);
-        //        File.Move(Filename, P + "\\" + fileA[fileA.Length-2] + ".pjt");
-        //        //tempFI.mo(P + "\\" + fileA[fileA.Length - 2] + @".pjt");
-        //            string[] fName1 = Directory.GetFiles(P + "\\", "*.pjt");
-        //            Filename = fName1[0];
-        //            Console.WriteLine(P);
-        //            Console.WriteLine("File After: " + Filename);
-        //        }
-
-
-
-
-
-        //    } else
-        //    {
-
-        //    }
-
-        //}
 
         public void createCDat(string name) //IMPORTANT! First 4 Bytes of the CDat are reserved for DATCount
         {
@@ -568,18 +519,30 @@ namespace ProjectManager
             analysis.SeizureBurdenPValue();
             analysis._analysisDone = true;
         }
-        public void CompareStageConflicts()
+        public void CompareStageConflicts() // this is where we note the discrepencies for the form and add them to a list -SH
         {
+            int tempAnCount = 0;
             foreach (AnimalType A in Animals)
             {
+                int tempSzCount = 0;
                 foreach (SeizureType S in A.Sz)
                 {
                     // ask user for the seizure severity
-                    int finalStage = analysis.CompareSeizures(S, A.ID);
-
-                    // set new severity
-                    S.Severity = finalStage;
+                    int[] finalStage = analysis.CompareSeizures(S, A.ID);
+                    
+                    if (finalStage[0] == 1)
+                    {
+                        // set new severity if the notes section is empty
+                        S.Severity = finalStage[1];
+                    } else
+                    {
+                        DiscrepancyItem tempD = new DiscrepancyItem(S, finalStage[1], A, tempAnCount, tempSzCount);
+                        discrepancyList.Add(tempD);
+                    }
+                    tempSzCount++;
+                    
                 }
+                tempAnCount++;
             }
             // Save the changes made to severity
             Save(Filename);
@@ -714,7 +677,7 @@ namespace ProjectManager
                 TempACQ.closeACQ();
                 FileType Fs = Files.Find(delegate (FileType Ft) {
                     return ((DateTime.Compare(Ft.Start, F.Start) == 0) &&
-(string.Compare(F.AnimalIDs[0], Ft.AnimalIDs[0]) == 0));
+                    (string.Compare(F.AnimalIDs[0], Ft.AnimalIDs[0]) == 0));
                 });
                 //Determine if duplicate file - compare animal name and file start
                 if (Fs != null)
@@ -895,7 +858,7 @@ namespace ProjectManager
                     S = new SeizureType(dt.ToString(), t.ToString(), TmpStr[5], TmpStr[4], TmpStr[6], TmpStr[7], offset, BuffLen);
                 }
 
-                Animals[CurrentAnimal].Sz.Add(S);
+                
 
                 if (vidImport)
                 {
@@ -925,11 +888,13 @@ namespace ProjectManager
                         Console.WriteLine(ThreadPool.QueueUserWorkItem(MoveVidThread, new object[] { tempVid, vidCop }));
 
 
-                    }
-
+                    }  
 
 
                 }
+
+
+                Animals[CurrentAnimal].Sz.Add(S);
                 //This should be part of S 
 
                 //Animals[CurrentAnimal].SZF.Add(Dir +  TmpStr[6].Replace(" ", string.Empty));
@@ -1624,6 +1589,56 @@ namespace ProjectManager
 
         }
 
+        //public void checkCD(bool exists)
+        //{
+        //    P = Path.GetDirectoryName(Filename);
+
+        //    if (exists)
+        //    {
+        //        char[] splitter = new char[2];
+        //        splitter[0] = '\\';
+        //        splitter[1] = '.';
+        //        string[] pathA = P.ToString().Split(splitter);
+
+        //        string[] fileA = Filename.Split(splitter);
+        //        if (!fileA[fileA.Length-1].Equals(".pjt"))
+        //        {
+        //            string[] temp = new string[fileA.Length + 1];
+        //            for (int i = 0; i < fileA.Length; i++)
+        //            {
+        //                temp[i] = fileA[i];
+        //            }
+        //            temp[temp.Length - 1] = ".pjt";
+        //            fileA = temp;
+        //        }
+
+        //        //if (!pathA[pathA.Length - 1].Equals(fileA[fileA.Length - 2]))
+        //        if (!pathA[pathA.Length-1].Equals("PM_" + fileA[fileA.Length-2]))
+        //        {
+
+        //        Console.WriteLine("File Before: " + Filename);
+        //        Directory.CreateDirectory(P + "\\PM_" + fileA[fileA.Length - 2]);
+        //        P = P + "\\PM_" + fileA[fileA.Length - 2];
+        //        Console.WriteLine(P);
+        //        //File tempFI = new File(Filename);
+        //        File.Move(Filename, P + "\\" + fileA[fileA.Length-2] + ".pjt");
+        //        //tempFI.mo(P + "\\" + fileA[fileA.Length - 2] + @".pjt");
+        //            string[] fName1 = Directory.GetFiles(P + "\\", "*.pjt");
+        //            Filename = fName1[0];
+        //            Console.WriteLine(P);
+        //            Console.WriteLine("File After: " + Filename);
+        //        }
+
+
+
+
+
+        //    } else
+        //    {
+
+        //    }
+
+        //}
     }
 }
 

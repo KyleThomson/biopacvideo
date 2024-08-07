@@ -95,6 +95,12 @@
     <Compile Include="FRZero.Designer.cs">
       <DependentUpon>FRZero.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProcessVideoFiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProcessVideoFiles.Designer.cs">
+      <DependentUpon>ProcessVideoFiles.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProjectManager\AddDate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -247,6 +253,9 @@
     </Compile>
     <EmbeddedResource Include="FRZero.resx">
       <DependentUpon>FRZero.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProcessVideoFiles.resx">
+      <DependentUpon>ProcessVideoFiles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProjectManager\AddDate.resx">
       <DependentUpon>AddDate.cs</DependentUpon>

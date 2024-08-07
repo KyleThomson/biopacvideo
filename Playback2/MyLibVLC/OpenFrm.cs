@@ -26,7 +26,7 @@ namespace SeizurePlayback
             }
             if (warning)
             {
-                WarningLabel.Text = "Warning: Video playback may break";
+                WarningLabel.Text = "Warning: Video playback may break"; // lol
             }
             else
             {

@@ -31,6 +31,7 @@ namespace BioPacVideo
             ChannelAcq14.Checked = RecordAC[13];
             ChannelAcq15.Checked = RecordAC[14];
             ChannelAcq16.Checked = RecordAC[15];
+<<<<<<< HEAD
             Telemetry.Checked = RecordingDevice[0];
             /*TelemetryCh2.Checked = RecordingDevice[1];
             TelemetryCh3.Checked = RecordingDevice[2];
@@ -47,6 +48,10 @@ namespace BioPacVideo
             TelemetryCh14.Checked = RecordingDevice[13];
             TelemetryCh15.Checked = RecordingDevice[14];
             TelemetryCh16.Checked = RecordingDevice[15];*/
+=======
+            TelemetryCheck.Checked = RecordingDevice[0];
+
+>>>>>>> ProjectManager_Sarah
         }
         public bool[] AC()
         {
@@ -59,6 +64,7 @@ namespace BioPacVideo
         }
         public bool[] RC()
         {
+<<<<<<< HEAD
             bool[] allchan = new bool[16]; 
             for (int i=0; i<16; i++)
             {
@@ -69,13 +75,15 @@ namespace BioPacVideo
                 TelemetryCh12.Checked, TelemetryCh13.Checked, TelemetryCh14.Checked, TelemetryCh15.Checked, TelemetryCh16.Checked};*/
             }
 
+=======
+            bool[] allchan = new bool[] {TelemetryCheck.Checked};
+>>>>>>> ProjectManager_Sarah
             return allchan;
         }
         private void ID_OK_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
     }
 
         
