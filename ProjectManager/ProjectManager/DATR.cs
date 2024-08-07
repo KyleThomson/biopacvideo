@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Drawing;
@@ -29,11 +30,11 @@ namespace ProjectManager
     public class DATR
     {
         public string FullName;
-       
+
         public string[] ID;
         //holds the alternative ID for the channels
         public bool ChanID = false;
-        
+
         public int SelectedChan;
         public int SampleRate;
         public bool Randomized;
@@ -41,21 +42,21 @@ namespace ProjectManager
         public int[] RandomOrder;
         private BinaryReader FID;
         private FileStream FILES;
-        
-        
+
+
         long EOF;
         public float Zoom;
-        
+
         public int FileTime;
         public int TotFileTime;
-        
+
         public int Position;
         private int DataStart;
         private int MaxDrawSize;
         private float PointSpacing;
         private int DisplayLength;
         private int SampleSize;
-        
+
         public bool Loaded;
         Pen WavePen, SelectedPen;
         private int VoltageSpacing;
@@ -65,12 +66,12 @@ namespace ProjectManager
         private int DataType;
         public Bitmap offscreen;
         public Bitmap GOffscreen;
-        
+
         public Graphics g;
         public Graphics Gg;
         public int numPerPage;
         public int PosInSample = 0;
-        
+
         Int32[] TData;
         public int yOff = 50;
         public bool MasterZoom = true;
@@ -78,8 +79,9 @@ namespace ProjectManager
         public int totalFiles;
         public int drawMode = 0;
         public bool oneCol = false;
-        
-        
+        public bool bufferExists = true;
+
+
 
         public DATR(string Fname)
         {
@@ -114,9 +116,20 @@ namespace ProjectManager
 
         }
 
-        public void DrawSZ(long offset, int length, int X, int Y, bool display, bool vidSelect, bool ShowBuff)
+        public void DrawSZ(SeizureType sZ, int X, int Y, bool display, bool vidSelect, bool ShowBuff)
         {
+
+            long offset = sZ.Offset;
+            long buffLen = sZ.BufferLen;
+            int length = sZ.length;
             PointF[] WaveC;
+            if ((length * 500 * 4) < buffLen)
+            {
+                bufferExists = true;
+                if (ShowBuff) length += 60;
+            }
+            else bufferExists = false;
+
             int expectedSampleSize = DisplayLength * SampleRate;
             int YBoxMax = (Ymax / (numPerPage / 2));
             float YPoint;
@@ -134,7 +147,7 @@ namespace ProjectManager
             if (drawMode == 1) xOff = 1;
             long averageLine = ReadData(offset, 0, SampleSize, ShowBuff) / expectedSampleSize;
             float YDraw;
-            
+
             WaveC = new PointF[expectedSampleSize];
             YDraw = (Ymax / (numPerPage / 2)) * Y;
             if (SampleSize < expectedSampleSize)
@@ -145,7 +158,7 @@ namespace ProjectManager
                 for (int i = 0; i < expectedSampleSize; i++)
                 {
 
-                   
+
 
                     if (i < DiffF)
                     {
@@ -167,10 +180,10 @@ namespace ProjectManager
                         j++;
                     }
 
-                    
-                    if (YPoint > (Ymax / (numPerPage / 2))) YPoint = ((float)Ymax / ((float)numPerPage / 2f) - YDraw);         //Kyle's Mistake                                                                        
+
+                    if (YPoint > (Ymax / (numPerPage / 2))) YPoint = ((float)Ymax / ((float)numPerPage / 2f) - YDraw);
                     if (YPoint < 0) YPoint = 0;
-                    
+
                     PointF TempPoint = new PointF((float)(i + (X * expectedSampleSize)) / xOff * PointSpacing, YDraw + YPoint);
                     WaveC[i] = TempPoint;
                 }
@@ -188,7 +201,7 @@ namespace ProjectManager
                     YPoint += yOff;
 
 
-                    if (YPoint > Ymax / (numPerPage / 2)) YPoint = ((float)Ymax / ((float)numPerPage / 2f) - YDraw);       //Kyle's Mistake                                                                        
+                    if (YPoint > Ymax / (numPerPage / 2)) YPoint = ((float)Ymax / ((float)numPerPage / 2f) - YDraw);
                     if (YPoint < 0) YPoint = 0;
                     PointF TempPoint = new PointF((float)(i + (X * expectedSampleSize)) / xOff * PointSpacing, YDraw + YPoint);
                     if (TempPoint.X > offscreen.Width)
@@ -255,46 +268,144 @@ namespace ProjectManager
 
         }
 
+
+        public void DrawOneSZ(SeizureType sZ, int X, int Y, bool ShowBuff)
+        {
+
+            long offset = sZ.Offset;
+            long buffLen = sZ.BufferLen;
+            int length = sZ.length;
+            PointF[] WaveC;
+            if ((length * 500 * 4) < buffLen)
+            {
+                bufferExists = true;
+                if (ShowBuff) length += 60;
+            }
+            else bufferExists = false;
+
+            int YBoxMax = Ymax;
+            float YPoint;
+            Pen BoxPen = new Pen(Color.Red, 3);
+            Pen empty = new Pen(Color.LightGray, 1);
+            SampleSize = length * SampleRate;
+
+            TData = new Int32[SampleSize];
+
+            long averageLine = ReadData(offset, 0, SampleSize, ShowBuff) / SampleSize;
+            
+            WaveC = new PointF[SampleSize];
+
+            float VSPointSpacing;
+            VSPointSpacing = (float)Xmax / (SampleSize);
+            
+            WaveC = new PointF[SampleSize];
+            X = 0;
+
+            float preBuff = 0;
+            float postBuff = 0;
+            for (int i = 0; i < SampleSize; i++)
+            {
+
+
+                YPoint = ScaleVoltsToPixel(Convert.ToSingle(TData[i]), (Ymax));
+
+                YPoint += yOff;
+                if (i % 500 == 0) Console.WriteLine("TRUE! " + YPoint);
+
+                if (YPoint > Ymax) YPoint = (Ymax);        //Kyle's Mistake                                                                        
+                if (YPoint < 0) YPoint = 0;
+                //PointF TempPoint = new PointF((float)(i + (X * SampleSize)) / xOff * PointSpacing, GYmax + YPoint);
+                PointF TempPoint = new PointF((float)(i) * VSPointSpacing, YPoint);
+                if (TempPoint.X > offscreen.Width)
+                {
+
+                }
+
+                if ((i / 2000) == (30)) {
+                    Console.WriteLine("YES!"); //need to fix bufferzone
+                    preBuff = TempPoint.X;
+                }
+                if ((i / (SampleRate * 4)) == (sZ.length + 30))
+                {
+                    postBuff = TempPoint.X;
+                }
+                WaveC[i] = TempPoint;
+
+            }
+
+            if (ShowBuff)
+            {
+                Console.WriteLine(preBuff);
+                g.FillRectangle(empty.Brush, 0, Ymax, preBuff, 300);
+            }
+            g.DrawLines(WavePen, WaveC);
+
+            //else g.DrawRectangle(BoxPen, 3 + X * (Xmax / xOff), 3 + YDraw, Xmax / xOff - 6, Ymax / (numPerPage / 2) - 6);
+            //Console.WriteLine("Sample Size: " + SampleSize);
+            TData = null;            
+
+        }
+
         public long ReadData(long pos, long average, int SampSize, bool ShowBuff)
         {
             FILES.Seek(pos, 0);
-            Int32 BufferCheck = FID.ReadInt32();
+            //Int32 BufferCheck = FID.ReadInt32();
 
-            if (BufferCheck > SampleSize)
+            //if (BufferCheck > SampleSize)
+            //{
+            if (ShowBuff)
             {
-                if (ShowBuff)
+                //SampleSize = BufferCheck;
+                //TData = new Int32[SampleSize];
+                for (int i = 0; i < SampleSize; i++)
                 {
-                    SampleSize = BufferCheck;
-                    TData = new Int32[BufferCheck];
-                    for (int i = 0; i < BufferCheck; i++)
+                    if (i + pos >= EOF)
                     {
-                        if (i + pos > EOF) return average;
+                        TData[i] = (int)average / SampleSize;
+                        
+                    }
+                    else
+                    {
                         TData[i] = FID.ReadInt32();
                         average += TData[i];
                     }
-                } else
-                {
-                    FILES.Seek(pos + (30 * 500 * 4), 0);
-                    for (int i = 0; i < SampleSize; i++)
-                        {
-                            if (i + pos > EOF) return average;
-                            TData[i] = FID.ReadInt32();
-                            average += TData[i];
-                        }
-                }
+                    
 
-                
+                }
             }
             else
             {
 
+
+                if (bufferExists) FILES.Seek(pos + (30 * 500 * 4), 0);
+
                 for (int i = 0; i < SampleSize; i++)
                 {
-                    if (i + pos > EOF) return average;
-                    TData[i] = FID.ReadInt32();
-                    average += TData[i];
+                    if (i + pos >= EOF)
+                    {
+                        TData[i] = (int)average / SampleSize;
+                    }
+                    else
+                    {
+                        TData[i] = FID.ReadInt32();
+                        average += TData[i];
+                    }
+
                 }
             }
+
+
+            //  }
+            //else
+            //{
+
+            //    for (int i = 0; i < SampleSize; i++)
+            //    {
+            //        if (i + pos > EOF) return average;
+            //        TData[i] = FID.ReadInt32();
+            //        average += TData[i];
+            //    }
+            //}
             return average;
         }
 
@@ -339,7 +450,7 @@ namespace ProjectManager
             if (offscreen != null) offscreen.Dispose();
             offscreen = new Bitmap(Math.Max(X, 1), Math.Max(1, Y));
 
-
+            
             Xmax = X;
             Ymax = Y;
 
