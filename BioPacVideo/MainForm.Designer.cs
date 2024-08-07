@@ -28,6 +28,7 @@ namespace BioPacVideo
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.RecordingButton = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -161,7 +162,7 @@ namespace BioPacVideo
             this.initializeBioPacToolStripMenuItem.Name = "initializeBioPacToolStripMenuItem";
             this.initializeBioPacToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.initializeBioPacToolStripMenuItem.Text = "Connect BioPac";
-            this.initializeBioPacToolStripMenuItem.Click += new System.EventHandler(this.initializeBioPacToolStripMenuItem_Click);
+            this.initializeBioPacToolStripMenuItem.Click += new System.EventHandler(this.connectBioPacToolStripMenuItem_Click);
             // 
             // IDM_DISCONNECTBIOPAC
             // 
@@ -310,7 +311,7 @@ namespace BioPacVideo
             this.feederMenuToolStripMenuItem.Name = "feederMenuToolStripMenuItem";
             this.feederMenuToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.feederMenuToolStripMenuItem.Text = "Feeder Settings";
-            this.feederMenuToolStripMenuItem.Click += new System.EventHandler(this.feederMenuToolStripMenuItem_Click);
+            this.feederMenuToolStripMenuItem.Click += new System.EventHandler(this.feederSettingsMenuToolStripMenuItem_Click);
             // 
             // StatusBar
             // 
@@ -589,9 +590,11 @@ namespace BioPacVideo
             this.Controls.Add(this.RecordingButton);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "MainForm";
+            this.ShowIcon = false;
             this.Text = "BioPacVideo";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);

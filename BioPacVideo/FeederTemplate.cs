@@ -9,6 +9,7 @@ namespace BioPacVideo
 {
     public class FeederTemplate
     {
+        #region Properties
         static readonly FeederTemplate instance = new FeederTemplate();
         public TimeSpan Meal1; //Breakfast time, in  seconds
         public TimeSpan Meal2; //Lunch time, in seconds
@@ -46,12 +47,49 @@ namespace BioPacVideo
         private string LogFileName;
         public int Cages_X;
         public int Cages_Y;
+        #endregion
+
+        #region Initilizers
+        public static FeederTemplate Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
+        public FeederTemplate()
+        {
+            Commands = new Queue<byte>();
+            CommandText = new Stack<string>();
+            Activated = false;
+            CommandReady = false;
+            ErrorState = false;
+            State = 3;
+            StateText = "READY";
+            AddressTable = new int[32];
+            Rats = RatTemplate.NewInitArray(16);
+            LogFileName = "";
+            Randomizer = new Random();
+        }
+        #endregion
+
+        #region Getters
+        /// <summary>
+        /// Gets the current day of the week as an integer
+        /// </summary>
+        /// <returns>The current day as an integer</returns>
         public int GetDay()
         {
             DateTime X = DateTime.Now;
             int Day = ((int)X.DayOfWeek + 6) % 7; //Shift the date so Monday is the start of a new week
             return Day;
         }
+
+        /// <summary>
+        /// Gets the last meal that occured as an Integer
+        /// </summary>
+        /// <returns>The last meal to occur as an Integer</returns>
         public int LastMeal()
         {
             int Meal = 0;
@@ -83,63 +121,11 @@ namespace BioPacVideo
             }            
             return Meal;
         }
-        public void GenMeals(int Rat, bool MidWeek)
-        {
-            Random random = new Random(Randomizer.Next(0,Int32.MaxValue));
-            for (int i = 0; i < 7 * 6; i++)
-            {
-                Rats[Rat].Meals[i] = false;
-            }
-            int MealsLeft;
-            int StartPoint; 
-            if (MidWeek)
-            {
-                //Where are we in the week?     
-                StartPoint = ((GetDay() * DailyMealCount) + LastMeal()); 
-                MealsLeft = DailyMealCount * 7 - StartPoint;             
-            }
-            else
-            {
-                MealsLeft = DailyMealCount * 7;
-                StartPoint = 0;
-            } 
-            List<int> MealMatrix = new List<int>();
-            for (int i = StartPoint; i < DailyMealCount * 7; i++)
-            {
-                MealMatrix.Add(i);
-            }
-            int MedMeals = (int)Math.Round((double)(MealsLeft * Rats[Rat].Medication)/100);                
-            int R;
-            for (int i = 0; i < MedMeals; i++)
-            {
-                R = random.Next(0,MealMatrix.Count-1);
-                Rats[Rat].Meals[MealMatrix[R]] = true;
-                MealMatrix.RemoveAt(R);
-            }                
-
-        }
-        public static FeederTemplate Instance        
-        {
-            get
-            {
-                return instance;
-            }
-        }
-
-        public FeederTemplate()
-        {
-            Commands = new Queue<byte>();
-            CommandText = new Stack<string>();
-            Activated = false;
-            CommandReady = false;
-            ErrorState = false;
-            State = 3;
-            StateText = "READY";
-            AddressTable = new int[32];
-            Rats = RatTemplate.NewInitArray(16);
-            LogFileName = "";
-            Randomizer = new Random(); 
-        }
+        
+        /// <summary>
+        /// Gets the last message from the arduino
+        /// </summary>
+        /// <returns>The last message from the arduino</returns>
         public string GetLastCommandText()
         {
             if (CommandText.Count > 0)
@@ -147,6 +133,64 @@ namespace BioPacVideo
             else
                 return "No Text in Stack";
         }
+
+        /// <summary>
+        /// Gets the last command from the arduino
+        /// </summary>
+        /// <returns>The last command from the arduino as a byte</returns>
+        public byte GetTopCommand()
+        {
+            CommandSize--;
+            byte v = Commands.Dequeue();
+            return v;
+        }
+        #endregion
+
+        #region Control Functions
+        /// <summary>
+        /// Generates the meals per week and can be randomized to test for drug adherence
+        /// </summary>
+        /// <param name="Rat">Rat to Gen meals for as an Int</param>
+        /// <param name="MidWeek">Bool to declare if we are past the middle of the week</param>
+        public void GenMeals(int Rat, bool MidWeek)
+        {
+            Random random = new Random(Randomizer.Next(0, Int32.MaxValue));
+            for (int i = 0; i < 7 * 6; i++)
+            {
+                Rats[Rat].Meals[i] = false;
+            }
+            int MealsLeft;
+            int StartPoint;
+            if (MidWeek)
+            {
+                //Where are we in the week?     
+                StartPoint = ((GetDay() * DailyMealCount) + LastMeal());
+                MealsLeft = DailyMealCount * 7 - StartPoint;
+            }
+            else
+            {
+                MealsLeft = DailyMealCount * 7;
+                StartPoint = 0;
+            }
+            List<int> MealMatrix = new List<int>();
+            for (int i = StartPoint; i < DailyMealCount * 7; i++)
+            {
+                MealMatrix.Add(i);
+            }
+            int MedMeals = (int)Math.Round((double)(MealsLeft * Rats[Rat].Medication) / 100);
+            int R;
+            for (int i = 0; i < MedMeals; i++)
+            {
+                R = random.Next(0, MealMatrix.Count - 1);
+                Rats[Rat].Meals[MealMatrix[R]] = true;
+                MealMatrix.RemoveAt(R);
+            }
+        }
+
+        /// <summary>
+        /// Waits for the command sent to the arduino to be executed
+        /// </summary>
+        /// <returns>A boolean saying wheather its the last command or not</returns>
         public bool CommandWaitEx()
         {
             if (CommandText.Count>0)
@@ -158,16 +202,20 @@ namespace BioPacVideo
                 return false; 
             }
         }
-        public byte GetTopCommand()
-        {
-            CommandSize--;
-            byte v = Commands.Dequeue();          
-            return v;
-        }
+        
+        /// <summary>
+        /// Sets the name for the feeder log
+        /// </summary>
+        /// <param name="FName">The file name for the feeder log</param>
         public void SetLogName(string FName)
         {
             LogFileName = FName;
         }
+
+        /// <summary>
+        /// Logs the text provided
+        /// </summary>
+        /// <param name="Command">The text to log to the feeder log</param>
         public void Log(string Command)
         {
             if (LogFileName == "") { return; }
@@ -184,6 +232,12 @@ namespace BioPacVideo
             log.WriteLine(DateTime.Now.ToString() + "  " + Command);
             log.Close();
         }
+
+        /// <summary>
+        /// Adds a pellete delivery command to the arduino command stack
+        /// </summary>
+        /// <param name="Feeder">Feeder to deliver pelletes from</param>
+        /// <param name="Pellets">Number of pelletes to deliver</param>
         public void AddCommand(int Feeder, int Pellets)
         {
             Commands.Enqueue((byte)Feeder); 
@@ -204,13 +258,20 @@ namespace BioPacVideo
             CommandSize = Commands.Count;
             Activated = true;
         }
+
+        /// <summary>
+        /// Executes the command on the arduino
+        /// </summary>
         public void ExecuteAction()
         {           
             Commands.Enqueue((byte)31);
             CommandSize = Commands.Count;
-            CommandReady = true;
-            
+            CommandReady = true;            
         }
+
+        /// <summary>
+        /// Asks the arduino to acknowledge that it recieved the pellet and the feeder
+        /// </summary>
         public void ArduinoAckowledge()
         {
             //The software asks the arduino to acknowledge that it recieved the pellet and the feeder 
@@ -219,6 +280,11 @@ namespace BioPacVideo
             CommandReady = true;
             //ArduinoAck = false; 
         }
+
+        /// <summary>
+        /// Executes a feeding
+        /// </summary>
+        /// <param name="MealNum">Which meal should be executed</param>
         public void GoMeal(int MealNum) // something is going wrong in here 
         {
             int MealSize;
@@ -265,10 +331,9 @@ namespace BioPacVideo
                         GenMeals(RC, false);
                     }
                 }
-
             }
             ExecuteAction();            
         }
-
+        #endregion
     }
 }

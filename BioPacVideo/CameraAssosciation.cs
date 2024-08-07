@@ -12,12 +12,15 @@ namespace BioPacVideo
 {
     public partial class CameraAssosciation : Form
     {
+        #region Properties
         Graphics g;
         private VideoWrapper Video;
         public List<ComboBox> comboList;
         int[] comboTracker;
-        bool trigger = false; 
-        
+        bool trigger = false;
+        #endregion
+
+        #region Lifecycle
         public CameraAssosciation()
         {
             InitializeComponent();
@@ -133,7 +136,9 @@ namespace BioPacVideo
             for (int i = 0; i < 16; i++)
                 textBox1.Text += "Channel " + (i + 1).ToString() + " = Camera " + (Video.CameraAssociation[i]+1).ToString() + Environment.NewLine;
         }
+        #endregion
 
+        #region Input Handlers
         private void setButton_Click(object sender, EventArgs e)
         {
                 //change camera assosciation to match what has been selected in the combo boxes
@@ -161,11 +166,17 @@ namespace BioPacVideo
                     textBox1.Text += "Channel " + (i + 1).ToString() + " = Camera " + (Video.CameraAssociation[i] + 1).ToString() + Environment.NewLine;
         }
 
+        /// <summary>
+        /// This event triggers when one of the combo boxes is changed to a new value
+        /// It checks to see what other combo box has that value that isn't itself
+        /// And it changes that combo box to have the value that it previously had by calling upon an array, comboTracker
+        /// i.e. if combo box 3 changes its value from 3 to 4, then combo box 4 will change its value from 4 to 3, etc. 
+        /// </summary>
+        /// <param name="sender">combobox that triggered the event</param>
+        /// <param name="e">Arguments attached to the event</param>
+        /// <param name="cb">combobox that triggered the event</param>
         public void TestEvent(object sender, EventArgs e, ComboBox cb)
-        { // This event triggers when one of the combo boxes is changed to a new value
-            //It checks to see what other combo box has that value that isn't itself
-            //And it changes that combo box to have the value that it previously had by calling upon an array, comboTracker
-            //i.e. if combo box 3 changes its value from 3 to 4, then combo box 4 will change its value from 4 to 3, etc. 
+        {
             if (trigger)
             {
                 return;
@@ -173,8 +184,6 @@ namespace BioPacVideo
             trigger = true; 
             foreach (ComboBox c in comboList)
             {
-
-
                 if (c.Equals(cb))
                 {
                     //if the combo box it's looking at is itself, do nothing 
@@ -207,5 +216,6 @@ namespace BioPacVideo
             Video.DestroyTempCloneVideo();
             this.Close(); //Close the program. Which will update the ini file with the new camera assosciations 
         }
+        #endregion
     }
 }

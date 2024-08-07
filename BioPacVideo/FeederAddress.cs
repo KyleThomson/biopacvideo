@@ -13,9 +13,13 @@ namespace BioPacVideo
 {
     public partial class FeederAddress : Form
     {
+        #region Properties
         private ArrayList FeederLabels;
         private FeederTemplate Feeder; 
         private Label TempLabel;
+        #endregion
+
+        #region Lifecycle
         public FeederAddress(FeederTemplate Pass_feeder)
         {
             Feeder = Pass_feeder;            
@@ -25,7 +29,58 @@ namespace BioPacVideo
             AnimalBox.SelectedIndex = 0;
             Med.SelectedIndex = 0;
             FeederSelect.SelectedIndex = 0;
-        }                
+        }
+        #endregion
+
+        #region Input Handlers
+        private void checkBoxAlternateAddress_CheckedChanged(object sender, EventArgs e)
+        {
+            Feeder.AlternateAddress = checkBoxAlternateAddress.Checked;
+        }
+
+        private void ResetButton_Click(object sender, EventArgs e)
+        {
+            checkBoxAlternateAddress.Checked = false;
+            AnimalBox.SelectedIndex = 0;
+            Med.SelectedIndex = 0;
+            FeederSelect.SelectedIndex = 0;
+
+            for (int i = 0; i < 32; i++)
+            {
+                Feeder.AddressTable[i] = i;
+            }
+            UpdateLabels();
+        }
+
+        private void buttonSubmit_Click(object sender, EventArgs e)
+        {
+            Feeder.AddressTable[((2 * AnimalBox.SelectedIndex) + Med.SelectedIndex)] = FeederSelect.SelectedIndex;
+            UpdateLabels();
+            checkBoxAlternateAddress.Checked = true;
+        }
+
+        private void buttonMouseRoom_Click(object sender, EventArgs e)
+        {
+            checkBoxAlternateAddress.Checked = true;
+            int[] feederPattern = { 0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16, 17, 18, 20 };
+            for (int i = 0; i < feederPattern.Length; i++)
+            {
+                Feeder.AddressTable[2 * i] = feederPattern[i];
+                Feeder.AddressTable[2 * i + 1] = feederPattern[i];
+            }
+
+            for (Int16 i = 0; i < 32; i++)
+            {
+                TempLabel = FeederLabels[i] as Label;
+                TempLabel.Text = "Feeder " + Feeder.AddressTable[i].ToString();
+            }
+        }
+        #endregion
+
+        #region UI Functions
+        /// <summary>
+        /// Adds all Feeder Labels to ArrayList of Feeder Labels then calls Update Labels Function
+        /// </summary>
         private void FeederInit()
         {
             checkBoxAlternateAddress.Checked = Feeder.AlternateAddress;
@@ -63,23 +118,10 @@ namespace BioPacVideo
             FeederLabels.Add(FeederLabel31);
             UpdateLabels();
         }
-        private void checkBoxAlternateAddress_CheckedChanged(object sender, EventArgs e)
-        {            
-            Feeder.AlternateAddress = checkBoxAlternateAddress.Checked;            
-        }
-        private void ResetButton_Click(object sender, EventArgs e)
-        {
-            checkBoxAlternateAddress.Checked = false;
-            AnimalBox.SelectedIndex = 0;
-            Med.SelectedIndex = 0;
-            FeederSelect.SelectedIndex = 0;
 
-            for (int i=0; i<32; i++)
-            {
-                Feeder.AddressTable[i] = i; 
-            }
-            UpdateLabels();
-        }
+        /// <summary>
+        /// Updates feeder labels to the values retrieved from the address table
+        /// </summary>
         private void UpdateLabels()
         {
             for (Int16 i = 0; i < 32; i++)
@@ -88,29 +130,6 @@ namespace BioPacVideo
                 TempLabel.Text = "Feeder " + Feeder.AddressTable[i].ToString();
             }
         }
-
-        private void buttonSubmit_Click(object sender, EventArgs e)
-        {
-            Feeder.AddressTable[((2*AnimalBox.SelectedIndex)+Med.SelectedIndex)] = FeederSelect.SelectedIndex;
-            UpdateLabels();
-            checkBoxAlternateAddress.Checked = true;
-        }
-
-        private void buttonMouseRoom_Click(object sender, EventArgs e)
-        {
-            checkBoxAlternateAddress.Checked = true;
-            int[] feederPattern = { 0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16, 17, 18, 20 };
-            for (int i = 0; i < feederPattern.Length; i++)
-            {
-                Feeder.AddressTable[2 * i] = feederPattern[i];
-                Feeder.AddressTable[2 * i + 1] = feederPattern[i];
-            }
-
-            for (Int16 i = 0; i < 32; i++)
-            {
-                TempLabel = FeederLabels[i] as Label;
-                TempLabel.Text = "Feeder " + Feeder.AddressTable[i].ToString();
-            }
-        }
+        #endregion
     }
 }

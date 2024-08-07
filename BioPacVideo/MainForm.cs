@@ -11,9 +11,8 @@ using System.IO;
 using System.Windows.Forms;
 using System.Threading;
 using System.Management;
-
+using System.Reflection;
 using Ini;
-
 using MPCLASS = Biopac.API.MPDevice.MPDevImports;
 using MPCODE = Biopac.API.MPDevice.MPDevImports.MPRETURNCODE;
 using Microsoft.VisualBasic;
@@ -24,6 +23,7 @@ namespace BioPacVideo
 {
     public partial class MainForm : Form
     {
+        #region Properties
         IniFile BioIni; //Main Ini File
         MPTemplate MP;
         VideoWrapper Video; 
@@ -44,8 +44,9 @@ namespace BioPacVideo
         public static int[] DisplayLengthSize = new int[] { 1, 5, 10, 30, 60 };
         private static ManualResetEvent mre = new ManualResetEvent(false);
         public string UnitLabel;
-        
+        #endregion
 
+        #region Lifecycle
         public MainForm() //Form Constructior
         {
             //********** INIT VARIABLES ****************
@@ -151,18 +152,348 @@ namespace BioPacVideo
 
            
         }
+
         ~MainForm()
         {
             ThreadDisplay.Abort();
             this.Dispose(true);
         }
-        /****************************************************************************************
-        * 
-        *                              INI FILE
-        *                  
-        * **************************************************************************************/
 
-        //Read presets from INI file
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (MP.RecordingWanted && MessageBox.Show("Are you sure you want to close? The program is currently recording", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                //Establish new variable values
+                MP.RecordingWanted = false;
+                MP.Recording = false;
+
+                //Actually Stop recording
+                StopRecording();
+
+                //Make Biopac Adjustments
+                IDM_SELECTCHANNELS.Enabled = true;
+                IDM_SETTINGS.Enabled = true;
+                IDM_DISCONNECTBIOPAC.Enabled = true;
+
+                //Make UI Adjustments
+                RecordingButton.Text = "Start Recording";
+                RecordingButton.BackColor = Color.Green;
+            }
+            else if (MP.RecordingWanted)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                TimerThread.Abort();
+                ThreadDisplay.Abort();
+                ThreadClock.Abort();
+                if (MP.isstreaming)
+                {
+                    MP.StopStreaming();
+                }
+                if (MP.isconnected)
+                {
+                    MP.Disconnect();
+                }
+                UpdateINI(BioIni);
+                if (disposing && (components != null))
+                {
+                    components.Dispose();
+                }
+                base.Dispose(disposing);
+            }
+        }
+        #endregion
+
+        #region Input Handlers
+        #region File
+        private void selectDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FBD = new FolderBrowserDialog();
+            this.FBD.SelectedPath = MP.RecordingDirectory;
+            DialogResult result = FBD.ShowDialog(this);
+            if (result == DialogResult.OK)
+            {
+                MP.RecordingDirectory = FBD.SelectedPath;
+            }
+            UpdateINI(BioIni);
+            Update_FreeSpace();
+        }
+
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Dispose(true);
+        }
+        #endregion
+
+        #region BioPac
+        private void connectBioPacToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!MP.isconnected)
+            {
+                MP.isconnected = MP.Connect();
+            }
+            if (!MP.isconnected)
+            {
+                MessageBox.Show("BioPac failed to connect.\nError was " + MPTemplate.MPRET[(int)MP.MPReturn], "BioPac Comnmunication Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            else
+            {
+                IDT_BIOPACSTAT.Text = "BioPac Connected";
+            }
+            IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
+        }
+
+        private void disconnectBioPacToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MP.isconnected)
+            {
+                MP.isconnected = MP.Disconnect();
+            }
+            if (MP.isconnected)
+            {
+                MessageBox.Show("BioPac failed to disconnect.\nError was " + MPTemplate.MPRET[(int)MP.MPReturn], "BioPac Comnmunication Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            else
+            {
+                IDT_BIOPACSTAT.Text = "BioPac Not Connected";
+            }
+            IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RecordSettings frm = new RecordSettings();
+            frm.ShowDialog(this);
+            frm.Dispose();
+            UpdateINI(BioIni); // this must be what is crashing the program 
+            MessageBox.Show("Please restart the software \nbefore continuing.");
+            IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
+        }
+
+        private void selectChannelsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            RecordSelect frm = new RecordSelect(MP.RecordAC, MP.RecordingDevice, MP.RecordingDeviceAll);
+            frm.ShowDialog(this);
+            MP.RecordAC = frm.AC();
+            MP.RecordingDevice = frm.RC();
+            MP.RecordingDeviceAll = frm.RD();
+            frm.Dispose();
+            UpdateINI(BioIni);
+            IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
+            UpdateGUI();
+        }
+
+        private void bioPacEnabledToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bioPacEnabledToolStripMenuItem.Checked = !bioPacEnabledToolStripMenuItem.Checked;
+            MP.Enabled = bioPacEnabledToolStripMenuItem.Checked;
+            if (MP.Enabled)
+            {
+                if (MP.IsFileWriting)
+                    MP.StopWriting();
+                if (MP.isconnected)
+                    MP.Disconnect();
+            }
+        }
+        #endregion
+
+        #region Video
+        private void cameraAssociationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CameraAssosciation frm = new CameraAssosciation();
+            frm.ShowDialog(this);
+            UpdateINI(BioIni);
+            Video.UpdateCameraAssoc();
+            MessageBox.Show("Please restart the software \nbefore continuing");
+            frm.Dispose();
+
+        }
+
+        private void videoSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            VideoSettings frm = new VideoSettings();
+            frm.ShowDialog(this);
+            if (frm.DialogResult == DialogResult.OK) UpdateINI(BioIni);
+            frm.Dispose();
+        }
+        #endregion
+
+        #region Animal Settings
+        private void animalSettingsTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            AnimalSettings frm = new AnimalSettings(Feeder, MP.Recording);
+            frm.Height = 90;
+            frm.Width = 300;
+            frm.ShowDialog(this);
+            UpdateINI(BioIni);
+            frm.Dispose();
+        }
+
+        private void injectionManagerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            InjectionManager Frm = new InjectionManager();
+            Frm.ShowDialog(this);
+            Frm.Dispose();
+            UpdateINI(BioIni);
+        }
+
+        private void AddPelletCountMenuItem_Click(object sender, EventArgs e)
+        {
+            PelletCounts Frm = new PelletCounts();
+            Frm.ShowDialog(this);
+            Frm.Dispose();
+        }
+        #endregion
+
+        #region Feeders
+        #region Feeder Test
+        private void ratRoomToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FeederTester frm = new FeederTester();
+            frm.ShowDialog(this);
+            frm.Dispose();
+        }
+
+        private void mouseRoomToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FeederTester_Mouse frm = new FeederTester_Mouse();
+            frm.ShowDialog(this);
+            frm.Dispose();
+        }
+        #endregion
+
+        private void feederAddressToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FeederAddress Frm = new FeederAddress(Feeder);
+            Frm.ShowDialog(this);
+            Frm.Dispose();
+            UpdateINI(BioIni);
+        }
+
+        private void feederStatusToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MP.ShowFeederStatus();
+        }
+
+        private void feederSettingsMenuToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FeederMenu frm = new FeederMenu(Feeder);
+            frm.ShowDialog(this);
+            Feeder = frm.ReturnFeeder();
+            int M = 0;
+            if (!((Feeder.Meal1.Hours == 0) && (Feeder.Meal1.Minutes == 0)))
+                M++;
+            if (!((Feeder.Meal2.Hours == 0) && (Feeder.Meal2.Minutes == 0)))
+                M++;
+            if (!((Feeder.Meal3.Hours == 0) && (Feeder.Meal3.Minutes == 0)))
+                M++;
+            if (!((Feeder.Meal4.Hours == 0) && (Feeder.Meal4.Minutes == 0)))
+                M++;
+            if (!((Feeder.Meal5.Hours == 0) && (Feeder.Meal5.Minutes == 0)))
+                M++;
+            if (!((Feeder.Meal6.Hours == 0) && (Feeder.Meal6.Minutes == 0)))
+                M++;
+            Feeder.DailyMealCount = M;
+            frm.Dispose();
+            UpdateINI(BioIni);
+            frm.Dispose();
+        }
+        #endregion
+
+        private void RecordingButton_Click(object sender, EventArgs e)
+        {
+
+            if (MP.isconnected)
+            {
+                if (!MP.IsFileWriting)
+                {
+                    //IDT_VIDEOSTATUS.Text = Video.GetResText();                      
+                    //Visual Stuff, so we know we are recording. 
+                    if (MP.RecordingDirectory == "C:\\")
+                    {
+                        MessageBox.Show("Please Select a Recording Directory", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        RecordingButton.Text = "Stop Recording";
+                        IDM_SELECTCHANNELS.Enabled = false;
+                        IDM_SETTINGS.Enabled = false;
+                        IDM_DISCONNECTBIOPAC.Enabled = false;
+                        RecordingButton.BackColor = Color.Red;
+                        //Start the actual recording
+                        MP.RecordingWanted = true; //open the eyes to observe data transfer between Biopac and software
+                                                   //Console.WriteLine("RecordingWanted = " + MP.RecordingWanted);
+                        StartRecording();
+                    }
+                }
+                else
+                {
+                    DialogResult dr = MessageBox.Show("Are you sure you wish to stop recording?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+                    if (dr == DialogResult.Yes)
+                    {
+                        //End Recording
+                        MP.RecordingWanted = false; // close the eyes and no longer observe data transfer between Biopac and software
+                        MP.Recording = false;
+                        //Console.WriteLine("RecordingWanted = " + MP.RecordingWanted);
+                        StopRecording();
+                        IDM_SELECTCHANNELS.Enabled = true;
+                        IDM_SETTINGS.Enabled = true;
+                        IDM_DISCONNECTBIOPAC.Enabled = true;
+                        //IDT_ENCODERSTATUS.Text = Video.EncoderStatus();
+                        // IDT_FEEDST.Text = Video.EncoderResult();
+                        RecordingButton.Text = "Start Recording";
+                        RecordingButton.BackColor = Color.Green;
+                    }
+                    else
+                    {
+                        return;
+                    }
+
+                }
+            }
+            else
+            {
+                if (!MP.isconnected)
+                {
+                    MessageBox.Show("Please Connect BioPac " + MP.MPtype, "BioPac Not Connected",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                /* if (!Video.CapSDKStatus)
+                 {
+                     MessageBox.Show("Please Initialize Video Card.", "Video Card Not Initialized.",
+                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                 }*/
+            }
+            IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
+        }
+
+        private void VoltScale_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            MP.Voltage = VoltageSettings[VoltScale.SelectedIndex];
+        }
+
+        private void TimeScale_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            MP.DisplayLength = DisplayLengthSize[TimeScale.SelectedIndex];
+            MP.ResetDisplaySize();
+        }
+        #endregion
+
+        #region INI Functions
+        /// <summary>
+        /// Reads All INI Values from INI File on disk and populates them to the Program INI Variable
+        /// </summary>
+        /// <param name="BioIni">The INI File to populate the values of</param>
         private void ReadINI(IniFile BioIni)
         {
             MP.RecordingDirectory = BioIni.IniReadValue("General", "RecDirectory", Directory.GetCurrentDirectory());
@@ -225,7 +556,6 @@ namespace BioPacVideo
                 {
                     Feeder.Rats[i].Meals[j] = BioIni.IniReadValue("Rats", "Rat" + i + "Meal" + j, false);
                 }
-
             }
             Feeder.Cages_X = BioIni.IniReadValue("Rats", "CagesX", 4);
             Feeder.Cages_Y = BioIni.IniReadValue("Rats", "CagesY", 4);
@@ -249,7 +579,10 @@ namespace BioPacVideo
 
         }
 
-        //Write INI file - used for settings and saving recording settings in recording directory
+        /// <summary>
+        /// Updates the values of the INI File both on the disk and for the variable passed in
+        /// </summary>
+        /// <param name="BioIni">The INI File to update the values of</param>
         private void UpdateINI(IniFile BioIni)
         {
             BioIni.IniWriteValue("General", "RecDirectory", MP.RecordingDirectory);
@@ -324,49 +657,20 @@ namespace BioPacVideo
                 BioIni.IniWriteValue("Video", string.Format("Channel{0}", i), Video.CameraAssociation[i]);
             for (int i = 0; i < 32; i++)
             {
-
                 BioIni.IniWriteValue("Video", string.Format("Bright{0}", i), Video.Brightness[i]);
                 BioIni.IniWriteValue("Video", string.Format("Contrast{0}", i), Video.Contrast[i]);
                 BioIni.IniWriteValue("Video", string.Format("Hue{0}", i), Video.Hue[i]);
                 BioIni.IniWriteValue("Video", string.Format("Satur{0}", i), Video.Saturation[i]);
             }
         }
+        #endregion
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (MP.RecordingWanted && MessageBox.Show("Are you sure you want to close? The program is currently recording", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                //Establish new variable values
-                MP.RecordingWanted = false;
-                MP.Recording = false;
-                
-                //Actually Stop recording
-                StopRecording();
-
-                //Make Biopac Adjustments
-                IDM_SELECTCHANNELS.Enabled = true;
-                IDM_SETTINGS.Enabled = true;
-                IDM_DISCONNECTBIOPAC.Enabled = true;
-
-                //Make UI Adjustments
-                RecordingButton.Text = "Start Recording";
-                RecordingButton.BackColor = Color.Green;
-            }
-            else if (MP.RecordingWanted)
-            {
-                e.Cancel = true;
-            }
-        }
-
-        /****************************************************************************************
-        * 
-        *                              TIMER CHECK THREAD
-        *                  
-        * **************************************************************************************/
-
+        #region Thread Functions
+        /// <summary>
+        /// A permanent loop that checks recording status, feeder meals, and recording filesplit 
+        /// </summary>
         private void TimerCheckThread()
         {
-                       
             while (true)
             {
                 if (MP.RecordingWanted && !MP.RecordingSuccess) // we want to be recording but the recording was unsuccessful
@@ -374,11 +678,11 @@ namespace BioPacVideo
                     if (MP.VideoOff)
                     {
                         Video.StopRecording();
-                        this.RecordingButton.Invoke((MethodInvoker)delegate 
-                        { 
+                        this.RecordingButton.Invoke((MethodInvoker)delegate
+                        {
                             RecordingButton.Enabled = false; RecordingButton.BackColor = Color.Gray; RecordingButton.Text = "Recording Error";
                         });
-                        MP.VideoOff = false; 
+                        MP.VideoOff = false;
                     }
                     if (MP.Connect())
                     {
@@ -395,7 +699,7 @@ namespace BioPacVideo
                     }
                 }
                 //If 12AM, restart recording. 
-                if ((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0))
+                if ((((DateTime.Now.TimeOfDay.Hours == 0) & (DateTime.Now.TimeOfDay.Minutes == 0)))  || (((MP.FileSplit) & (DateTime.Now.TimeOfDay.Hours == 12) & (DateTime.Now.TimeOfDay.Minutes == 0))))
                 {
                     if (MP.IsFileWriting)
                     {
@@ -404,32 +708,16 @@ namespace BioPacVideo
                     }
                     else
                     {
+                        MP.StopStreaming();
                         MP.Disconnect();                        
                         Thread.Sleep(1000);
                         MP.Connect();
+                        MP.CommunicateBioPac(); 
                     }
                     //Update Hard Drive
                     Update_FreeSpace();
                     Thread.Sleep(120000); //Always Skip the Meal;
-                }
-                else if ((MP.FileSplit) & (DateTime.Now.TimeOfDay.Hours == 12) & (DateTime.Now.TimeOfDay.Minutes == 0))
-                {
-                    if (MP.IsFileWriting)
-                    {
-                        StopRecording();
-                        StartRecording();
-                    }
-                    else
-                    {
-                        MP.Disconnect();
-                        Thread.Sleep(1000);
-                        MP.Connect();
-                    }
-                    //Update Hard Drive
-                    Update_FreeSpace();
-                    Thread.Sleep(120000); //Always Skip the Meal;
-                }
-                
+                }                
                 else if (Feeder.Enabled)
                 {
                     if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal1.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal1.Minutes))
@@ -470,32 +758,25 @@ namespace BioPacVideo
                     }
                 }
                 Thread.Sleep(10000);
-                
             }
       }
-
-/****************************************************************************************
-* 
-*                              CLOCK THREAD
-*                  
-* **************************************************************************************/
-
+        
+        /// <summary>
+        /// A Loop dependent on the RunClockThread Variable that updates the time every second
+        /// </summary>
         private void ClockThread()
         {
             while (RunClockThread)
             {
                 TimeLabel.Text = DateAndTime.Now.ToString();
                 Thread.Sleep(1000);
-              
             }
         }
 
- /****************************************************************************************
-* 
-*                              DISPLAY THREAD
-*                  
-* **************************************************************************************/
-
+        /// <summary>
+        /// A function that loops based on the variable RunDisplayThread 
+        /// that updates the Camera streams, EEG Data displays, Video Status text label, and Feeder State text label
+        /// </summary>
         private void DisplayThread()
         {
             int Cm; //To hold current camera. 
@@ -515,15 +796,14 @@ namespace BioPacVideo
                 Cm = 0;
            } 
         }
+        #endregion
 
-
-
-        /****************************************************************************************
-        * 
-        *                              RECORDING FUNCTIONS
-        *                  
-        * **************************************************************************************/
-        
+        #region Recording Functions
+        /// <summary>
+        /// Creates a new Directory named YYYYMMDD-HHMMSS based on the current date, 
+        /// then it establishes the same naming scheme or _Feeder.log, and _Settings.txt files. 
+        /// the current MPTemplate is updated and ACQ, and Video recording are started to the current directory
+        /// </summary>
         private void StartRecording()
         {
             IniFile WriteOnce;
@@ -548,42 +828,26 @@ namespace BioPacVideo
             MP.isstreaming = MP.StartWriting();
         }
 
+        /// <summary>
+        /// Stops recording, waits for the biopac to finish writing the ACQ file then reconnects to the biopac
+        /// </summary>
         private void StopRecording()
         {
             MP.StopWriting();
             Video.StopRecording();
             while (MP.IsFileWriting) { };
-            MP.StopRecording();
+            MP.StopStreaming();
             MP.Disconnect();
             Thread.Sleep(1000);
             MP.Connect();
             MP.CommunicateBioPac();
         }
+        #endregion
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                TimerThread.Abort();
-                ThreadDisplay.Abort();
-                ThreadClock.Abort(); 
-                if (MP.isstreaming)
-                {
-                    MP.StopRecording();
-                }
-                if (MP.isconnected)
-                {
-                    MP.Disconnect();
-                }
-                UpdateINI(BioIni);
-                if (disposing && (components != null))
-                {
-                    components.Dispose();
-                }
-                base.Dispose(disposing);
-            }
-        }
-
+        #region UI Functions
+        /// <summary>
+        /// Checks the available free space for the recording directory then updates the color and text of the UI to reflect the new free space
+        /// </summary>
         private void Update_FreeSpace()
         {
             long DriveSpace;
@@ -611,12 +875,9 @@ namespace BioPacVideo
             else this.Invoke(new MethodInvoker(delegate { SpaceLeft.BackColor = Color.LightGreen; }));
         }
 
-        /****************************************************************************************
-        * 
-        *                              GUI FUNCTIONS
-        *                  
-        * **************************************************************************************/
-
+        /// <summary>
+        /// Updates the Video on the camera placeholder elements
+        /// </summary>
         public void UpdateGUI()
         {
             Panel TempPanel;
@@ -639,272 +900,6 @@ namespace BioPacVideo
             }
             Video.UpdateCameraAssoc();
         }
-        
-        private void RecordingButton_Click(object sender, EventArgs e)
-        {
-               
-            if (MP.isconnected)
-            {
-                if (!MP.IsFileWriting)
-                {            
-                    //IDT_VIDEOSTATUS.Text = Video.GetResText();                      
-                    //Visual Stuff, so we know we are recording. 
-                    if(MP.RecordingDirectory == "C:\\")
-                    {
-                        MessageBox.Show("Please Select a Recording Directory", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
-                    }
-                    else
-                    {
-                        RecordingButton.Text = "Stop Recording";
-                        IDM_SELECTCHANNELS.Enabled = false;
-                        IDM_SETTINGS.Enabled = false;
-                        IDM_DISCONNECTBIOPAC.Enabled = false;
-                        RecordingButton.BackColor = Color.Red;
-                        //Start the actual recording
-                        MP.RecordingWanted = true; //open the eyes to observe data transfer between Biopac and software
-                                                   //Console.WriteLine("RecordingWanted = " + MP.RecordingWanted);
-                        StartRecording();
-                    }
-                }
-                else
-                {
-                    DialogResult dr = MessageBox.Show("Are you sure you wish to stop recording?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2); 
-                    if (dr == DialogResult.Yes)
-                    {
-                        //End Recording
-                        MP.RecordingWanted = false; // close the eyes and no longer observe data transfer between Biopac and software
-                        MP.Recording = false; 
-                        //Console.WriteLine("RecordingWanted = " + MP.RecordingWanted);
-                        StopRecording();
-                        IDM_SELECTCHANNELS.Enabled = true;
-                        IDM_SETTINGS.Enabled = true;
-                        IDM_DISCONNECTBIOPAC.Enabled = true;
-                        //IDT_ENCODERSTATUS.Text = Video.EncoderStatus();
-                        // IDT_FEEDST.Text = Video.EncoderResult();
-                        RecordingButton.Text = "Start Recording";
-                        RecordingButton.BackColor = Color.Green;
-                    }
-                    else
-                    {
-                        return; 
-                    }
-                    
-                }
-            }
-            else
-            {
-                if (!MP.isconnected)
-                {
-                    MessageBox.Show("Please Connect BioPac " + MP.MPtype, "BioPac Not Connected",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-               /* if (!Video.CapSDKStatus)
-                {
-                    MessageBox.Show("Please Initialize Video Card.", "Video Card Not Initialized.",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }*/
-            }
-            IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
-        }
-        
-        private void selectDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FBD = new FolderBrowserDialog();
-            this.FBD.SelectedPath = MP.RecordingDirectory;
-            DialogResult result = FBD.ShowDialog(this);
-            if (result == DialogResult.OK)
-            {
-                MP.RecordingDirectory = FBD.SelectedPath;
-            }
-            UpdateINI(BioIni);
-            Update_FreeSpace(); 
-        }
-        
-        private void initializeBioPacToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (!MP.isconnected)
-            {
-                MP.isconnected = MP.Connect();
-            }
-            if (!MP.isconnected)
-            {
-                MessageBox.Show("BioPac failed to connect.\nError was " + MPTemplate.MPRET[(int)MP.MPReturn], "BioPac Comnmunication Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-            else
-            {
-                IDT_BIOPACSTAT.Text = "BioPac Connected";
-            }
-            IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
-        }
-
-
-        private void selectChannelsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            
-            RecordSelect frm = new RecordSelect(MP.RecordAC, MP.RecordingDevice, MP.RecordingDeviceAll);
-            frm.ShowDialog(this);                
-            MP.RecordAC = frm.AC();
-            MP.RecordingDevice = frm.RC();
-            MP.RecordingDeviceAll = frm.RD(); 
-            frm.Dispose();
-            UpdateINI(BioIni);
-            IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
-            UpdateGUI(); 
-        }
-
-
-        private void disconnectBioPacToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (MP.isconnected)
-            {
-                MP.isconnected = MP.Disconnect();
-            }
-            if (MP.isconnected)
-            {
-                MessageBox.Show("BioPac failed to disconnect.\nError was " + MPTemplate.MPRET[(int)MP.MPReturn], "BioPac Comnmunication Error",
-                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-            else
-            {
-                IDT_BIOPACSTAT.Text = "BioPac Not Connected";
-            }
-            IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
-        }
-
-        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
-        {                   
-            this.Dispose(true);
-        }
-
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            RecordSettings frm = new RecordSettings();
-            frm.ShowDialog(this);         
-            frm.Dispose();
-            UpdateINI(BioIni); // this must be what is crashing the program 
-            MessageBox.Show("Please restart the software \nbefore continuing.");
-            IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn];
-        }
-
-        private void videoSettingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            VideoSettings frm = new VideoSettings();         
-            frm.ShowDialog(this);
-            if (frm.DialogResult == DialogResult.OK) UpdateINI(BioIni); 
-            frm.Dispose();
-        }
-
-        private void bioPacEnabledToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            bioPacEnabledToolStripMenuItem.Checked = !bioPacEnabledToolStripMenuItem.Checked;
-            MP.Enabled = bioPacEnabledToolStripMenuItem.Checked;
-            if (MP.Enabled)
-            {
-                if (MP.IsFileWriting)
-                    MP.StopWriting();
-                if (MP.isconnected)
-                    MP.Disconnect();
-            }
-        }
-
-        private void cameraAssociationsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CameraAssosciation frm = new CameraAssosciation();
-            frm.ShowDialog(this);
-            UpdateINI(BioIni);
-            Video.UpdateCameraAssoc();
-            MessageBox.Show("Please restart the software \nbefore continuing"); 
-            frm.Dispose();
-           
-        }
-
-        private void VoltScale_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            MP.Voltage = VoltageSettings[VoltScale.SelectedIndex];
-        }
-
-        private void TimeScale_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            MP.DisplayLength = DisplayLengthSize[TimeScale.SelectedIndex];
-            MP.ResetDisplaySize();
-        }
-
-        private void AddPelletCountMenuItem_Click(object sender, EventArgs e)
-        {
-            PelletCounts Frm = new PelletCounts();
-            Frm.ShowDialog(this);
-            Frm.Dispose();
-        }
-
-        private void injectionManagerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            InjectionManager Frm = new InjectionManager();
-            Frm.ShowDialog(this);
-            Frm.Dispose();
-            UpdateINI(BioIni);
-        }
-
-        private void feederAddressToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FeederAddress Frm = new FeederAddress(Feeder);
-            Frm.ShowDialog(this);
-            Frm.Dispose();
-            UpdateINI(BioIni);
-        }
-
-        private void feederStatusToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MP.ShowFeederStatus();
-        }
-
-        private void ratRoomToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FeederTester frm = new FeederTester();
-            frm.ShowDialog(this);
-            frm.Dispose();
-        }
-
-        private void mouseRoomToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FeederTester_Mouse frm = new FeederTester_Mouse();
-            frm.ShowDialog(this);
-            frm.Dispose();
-        }
-
-        private void feederMenuToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FeederMenu frm = new FeederMenu(Feeder);
-            frm.ShowDialog(this);
-            Feeder = frm.ReturnFeeder();
-            int M = 0;
-            if (!((Feeder.Meal1.Hours == 0) && (Feeder.Meal1.Minutes == 0)))
-                M++;
-            if (!((Feeder.Meal2.Hours == 0) && (Feeder.Meal2.Minutes == 0)))
-                M++;
-            if (!((Feeder.Meal3.Hours == 0) && (Feeder.Meal3.Minutes == 0)))
-                M++;
-            if (!((Feeder.Meal4.Hours == 0) && (Feeder.Meal4.Minutes == 0)))
-                M++;
-            if (!((Feeder.Meal5.Hours == 0) && (Feeder.Meal5.Minutes == 0)))
-                M++;
-            if (!((Feeder.Meal6.Hours == 0) && (Feeder.Meal6.Minutes == 0)))
-                M++;
-            Feeder.DailyMealCount = M;
-            frm.Dispose();
-            UpdateINI(BioIni);
-            frm.Dispose();
-        }
-
-        private void animalSettingsTestToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            
-            AnimalSettings frm = new AnimalSettings(Feeder, MP.Recording);
-            frm.Height = 90;
-            frm.Width = 300;
-            frm.ShowDialog(this);
-            UpdateINI(BioIni); 
-            frm.Dispose(); 
-        }
+        #endregion
     }
 }

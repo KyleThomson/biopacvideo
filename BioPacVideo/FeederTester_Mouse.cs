@@ -16,6 +16,7 @@ namespace BioPacVideo
 {
     public partial class FeederTester_Mouse : Form
     {
+        #region Properties
         MPTemplate MP;
         FeederTemplate Feeder;
         Graphics g;
@@ -24,8 +25,9 @@ namespace BioPacVideo
         int CagePos = -1;
         Bitmap RoomImage;
         List<int> FeederLabel;
+        #endregion
 
-
+        #region Lifecycle
         public FeederTester_Mouse()
         {
             InitializeComponent();
@@ -38,6 +40,7 @@ namespace BioPacVideo
             FeederLabel = new List<int>() { 1, 2, 3, -1, 4, 5, 6, -1, 7, 8, 9, -1, 10, 11, 12 };
 
         }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             // If there is an image and it has a location,  
@@ -45,6 +48,9 @@ namespace BioPacVideo
             base.OnPaint(e);
             e.Graphics.DrawImage(RoomImage, 15, 40);
         }
+        #endregion
+
+        #region Input Handlers
         private void MouseDownHandler(object sender, MouseEventArgs e)
         {
             g.DrawImage(RoomImage, 15, 40);
@@ -142,6 +148,7 @@ namespace BioPacVideo
             }
 
         }
+
         private void IDC_RUNTEST_Click(object sender, EventArgs e)
         {
 
@@ -167,9 +174,10 @@ namespace BioPacVideo
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void executeAck_Click(object sender, EventArgs e)
         {
             Feeder.ExecuteAction();
         }
+        #endregion
     }
 }

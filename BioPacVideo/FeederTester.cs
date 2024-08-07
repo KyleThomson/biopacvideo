@@ -16,13 +16,16 @@ namespace BioPacVideo
 {
     public partial class FeederTester : Form
     {
-
+        #region Properties
         MPTemplate MP;
         FeederTemplate Feeder;      
         Graphics g;
         Pen p; 
         int FeederPos = -1;
         Bitmap RoomImage;
+        #endregion
+
+        #region Lifecyle
         public FeederTester()
         {
             InitializeComponent();
@@ -35,6 +38,7 @@ namespace BioPacVideo
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownHandler);
             
         }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             // If there is an image and it has a location,  
@@ -42,9 +46,11 @@ namespace BioPacVideo
             base.OnPaint(e);
             e.Graphics.DrawImage(RoomImage,15,25);           
         }
+        #endregion
+
+        #region Input Handlers
         private void MouseDownHandler(object sender, MouseEventArgs e)
         {
-
             g.DrawImage(RoomImage, 15, 25);
             // feeders on the left side of the shelves 
             if (e.X < 465)
@@ -226,6 +232,7 @@ namespace BioPacVideo
             }
 
         }
+
         private void IDC_RUNTEST_Click(object sender, EventArgs e)
         {
             if ((FeederPos == -1))
@@ -247,11 +254,12 @@ namespace BioPacVideo
                 MessageBox.Show("Please Input Number of Pellets");
                 return;
             }
-
         }
-        private void button1_Click(object sender, EventArgs e)
+
+        private void executeAck_Click(object sender, EventArgs e)
         {
             Feeder.ExecuteAction();
         }
+        #endregion
     }
 }

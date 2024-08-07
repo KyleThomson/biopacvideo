@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-
 namespace BioPacVideo
 {
     public partial class RecordSelect : Form
     {
+        #region Lifecylce
         public RecordSelect(bool[] RecordAC, bool[] RecordingDevice, int RecordingDeviceAll)
         {
             InitializeComponent();
@@ -52,6 +52,13 @@ namespace BioPacVideo
             TelemetryCh15.Checked = RecordingDevice[14];
             TelemetryCh16.Checked = RecordingDevice[15];*/
         }
+        #endregion
+
+        #region Checkbox Lists
+        /// <summary>
+        /// Checks wheater a channel is enabled or disabled
+        /// </summary>
+        /// <returns>Returns a Boolean array of all recording channels in order up to 16 and weather they are enabled or not</returns>
         public bool[] AC()
         {
             bool[] allchan = new bool[] {ChannelAcq1.Checked, ChannelAcq2.Checked, ChannelAcq3.Checked,ChannelAcq4.Checked,
@@ -61,6 +68,11 @@ namespace BioPacVideo
 
             return allchan;
         }
+
+        /// <summary>
+        /// Gets the status of Telemetry Checked
+        /// </summary>
+        /// <returns>A Boolean array of weather Telemetry is in use on the given cameras in order for all 16 channels</returns>
         public bool[] RC()
         {
             bool[] allchan = new bool[16]; 
@@ -75,11 +87,11 @@ namespace BioPacVideo
 
             return allchan;
         }
-        private void ID_OK_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
 
+        /// <summary>
+        /// Gets the current recording device
+        /// </summary>
+        /// <returns>The current recording device as an integer</returns>
         public int RD()
         {
             int RecDevice = new int();
@@ -87,8 +99,13 @@ namespace BioPacVideo
 
             return RecDevice; 
         }
-    }
+        #endregion
 
-        
-       
+        #region Input Handlers
+        private void ID_OK_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        #endregion
+    }
 }
