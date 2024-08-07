@@ -86,7 +86,6 @@
             this.CurFileProg.Name = "CurFileProg";
             this.CurFileProg.Size = new System.Drawing.Size(382, 25);
             this.CurFileProg.TabIndex = 3;
-            this.CurFileProg.Click += new System.EventHandler(this.CurFileProg_Click);
             // 
             // PleaseWait
             // 
@@ -281,7 +280,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(661, 233);
+            this.ClientSize = new System.Drawing.Size(677, 272);
             this.Controls.Add(this.ShortCapWarning);
             this.Controls.Add(this.CaptureLen);
             this.Controls.Add(this.VideoSave);

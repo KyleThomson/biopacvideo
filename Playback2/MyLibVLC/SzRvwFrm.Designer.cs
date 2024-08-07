@@ -51,7 +51,7 @@
             this.SzBox.HorizontalScrollbar = true;
             this.SzBox.Location = new System.Drawing.Point(12, 10);
             this.SzBox.Name = "SzBox";
-            this.SzBox.Size = new System.Drawing.Size(192, 199);
+            this.SzBox.Size = new System.Drawing.Size(192, 238);
             this.SzBox.TabIndex = 0;
             this.SzBox.Visible = false;
             this.SzBox.SelectedIndexChanged += new System.EventHandler(this.SzBox_SelectedIndexChanged);
@@ -137,7 +137,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.BackColor = System.Drawing.SystemColors.ControlText;
-            this.ClientSize = new System.Drawing.Size(1130, 235);
+            this.ClientSize = new System.Drawing.Size(1146, 274);
             this.Controls.Add(this.SzListView);
             this.Controls.Add(this.SzBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;

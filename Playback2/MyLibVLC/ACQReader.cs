@@ -486,7 +486,7 @@ namespace SeizurePlayback
             FOUT_ID.Close();
             FOUT.Close();
         }
-        public void sethighlight(int Start, int End)
+        public void sethighlight (int Start, int End)
         {
             HLS = Start;
             HLE = End;

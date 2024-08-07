@@ -15,20 +15,25 @@ namespace SeizurePlayback
     public partial class SzPrompt : Form
     {
         public string Notes;
-        public bool Ok;        
+        public bool Ok;
         public string Result;
-        public bool VideoCapture; 
+        public bool VideoCapture;
         public infopass Pass;
-        Thread CT;        
-        public SzPrompt()
-        {            
+        public List<infopass> VideoList;
+        //public List<infopass> VideoList;
+        Thread CT;
+        public SzPrompt(List<infopass> PassList)
+        {
             InitializeComponent();
             Notes = "";
             Unknown.Checked = true;
             OKBtn.Enabled = false;
             Ok = false;
-            
-            
+            VideoList = PassList;
+            //hiding controls until I get project manager up to date with these changes, then they can be shown again - SH
+            S5Pop.Hide();
+            Dravet.Hide();
+            Status.Hide(); 
         }
 
         private void OKBtn_Click(object sender, EventArgs e)
@@ -38,7 +43,7 @@ namespace SeizurePlayback
             OKBtn.Enabled = false;
             CancelBtn.Enabled = false;
             Pass.VideoCapture = VideoSave.Checked;
-            VideoCapture = VideoSave.Checked; 
+            VideoCapture = VideoSave.Checked;
             CurFileProg.Maximum = Pass.length * 30;
             if (S1.Checked)
                 Pass.Stage = 1;
@@ -54,18 +59,29 @@ namespace SeizurePlayback
                 Pass.Stage = 0;
             else if (Unknown.Checked)
                 Pass.Stage = -1;
-            else if (S5Pop.Checked)
+            else if (S5Pop.Checked) // added new seizure classifications - SH
                 Pass.Stage = 6;
             else if (Dravet.Checked)
                 Pass.Stage = 7;
             else if (Status.Checked)
-                Pass.Stage = 8; 
+                Pass.Stage = 8;
             CT = new Thread(new ThreadStart(ExtractThread));
             CT.Start();
+            if (Pass.VideoCapture)
+            {
+                VideoList.Add(Pass); //add the seizure information to a list for video processing purposes -SH
+                // this list is only added to if the video capture button is selected. Otherwise, the information will not be stored for video processing - SH
+            }
+        }
+
+        public List<infopass> GetVidList()
+        {
+            return VideoList; //to pass it back to the mainform - SH
         }
         private void ExtractThread()
         {
             Ok = true;
+
             int BuffDiff = 0;
             Result = Pass.Sz + Notes + "," + Pass.outfile;
             string outfile = Pass.FPath + "\\" + Pass.outfile;
@@ -85,54 +101,13 @@ namespace SeizurePlayback
             }
             //Pass.ACQ.DumpData(outfile + ".dat", Pass.ACQ.SelectedChan, Pass.StartTime, Pass.HighlightEnd - Pass.HighlightStart + 1);
             Pass.ACQ.DumpData(outfile + ".dat", Pass.ACQ.SelectedChan, StartTimeBuff, LengthBuff, BuffDiff); //BuffDiff Serves the edge case of a seizure buffer that extends before or after the seizure. If 
-                                                                                                 // it is negative, it indicates the extension is at the start, positive is at the end. 0 is no difference
-            //work on fixing video capture
-            if (Pass.VideoCapture)
-            { 
-                if (Pass.AVIMode == "mp4")
-                    {
-                        //StartTime = (int)(((float)Pass.StartTime * 1000F - Pass.Subtractor) / 1000F);
-                        StartTime = (int)(Pass.Subtractor/1000F);
-                        
-                    }
-                    else
-                    {
-                        //StartTime = (int)((((float)Pass.StartTime * 1000F * (1F + Pass.VideoOffset)) - Pass.Subtractor) / 1000F);
-                        StartTime = (int)((Pass.Subtractor - ((float)1000F * (1F + Pass.VideoOffset))) / 1000F);
-                    }
-                if (StartTime - 30 < 0)
-                {
-                    StartTime = 0;
-                }
-                else StartTime -= 30;
-
-            Process p = new Process();
-                //string CmdString = " -y -ss " + StartTime.ToString() + " -t " + Pass.length.ToString();
-                string CmdString = " -y -ss " + StartTime.ToString() + " -t " + LengthBuff.ToString();
-                CmdString += " -i \"" + Pass.CurrentAVI + "\"";
-                if (Pass.AVIMode == "mp4")
-                {
-                    CmdString += " -sameq \"" + outfile + ".mp4\""; 
-                }
-                else
-                {
-                    CmdString += " -sameq \"" + outfile + ".avi\"";
-                }
-
-                p.StartInfo.Arguments = CmdString;
-
-                p.StartInfo.FileName = Pass.X264path + "\\ffmpeg.exe";
-                p.StartInfo.CreateNoWindow = true;
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.RedirectStandardError = true;
-                p.ErrorDataReceived += new DataReceivedEventHandler(process_OutputDataReceived);
-                p.Start();
-                p.BeginErrorReadLine();
-                while (!p.WaitForExit(1000))
-                { };
+                                                                                                             // it is negative, it indicates the extension is at the start, positive is at the end. 0 is no difference
+                                                                                                             //work on fixing video capture
+            if (Pass.VideoCapture) // add the video information to a list to be processed at the end - SH
+            {
+                Pass.LengthBuff = LengthBuff;
             }
-            Notes = Notes.Replace(",", string.Empty);                      
+            Notes = Notes.Replace(",", string.Empty);
             Result = Pass.Sz + Notes + ", " + Pass.outfile + ", " + Pass.Stage.ToString();
             PleaseWait.Invoke((MethodInvoker)delegate { PleaseWait.Text = "Finished!"; });
             Thread.Sleep(300);
@@ -147,7 +122,7 @@ namespace SeizurePlayback
         {
             OKBtn.Enabled = true;
 
-            
+
         }
         private void RadioButtonClicked(object sender, EventArgs e)
         {
@@ -162,24 +137,25 @@ namespace SeizurePlayback
 
         private void Cancel_Click(object sender, EventArgs e)
         {
-            Ok = false;            
+            Ok = false;
             this.Close();
         }
-        private void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+
+        private void process_OutputDataReceived(object sender, DataReceivedEventArgs e) // what does this do? - SH
         {
             int frames;
             string X;
             if (e.Data != null)
             {
 
-                X = e.Data.ToString();             
+                X = e.Data.ToString();
                 if (X.IndexOf("frame=") != -1)
-                {                    
+                {
                     if (int.TryParse(X.Substring(X.IndexOf("frame=") + 6, 6), out frames))
                     {
-                        CurFileProg.Invoke((MethodInvoker)delegate { CurFileProg.Increment(frames); });
-                    }                    
-                }         
+                        CurFileProg.Invoke((MethodInvoker)delegate { CurFileProg.Increment(frames); }); // need to figure this out - SH
+                    }
+                }
             }
         }
 
@@ -193,14 +169,10 @@ namespace SeizurePlayback
 
         }
 
-        private void CurFileProg_Click(object sender, EventArgs e)
-        {
-
-        }
     }
     public class infopass
     {
-        public ACQReader ACQ;       
+        public ACQReader ACQ;
         public string outfile;
         public string Sz;
         public string FPath;
@@ -211,14 +183,16 @@ namespace SeizurePlayback
         public float VideoOffset;
         public int length;
         public int StartTime;
-        public int EndTime; 
+        public int EndTime;
         public int Stage;
         public double duration;
         public string AVIMode;
         public string X264path;
         public bool VideoCapture;
+        public int LengthBuff;
         public long subVidOffset;
         public infopass()
         { }
     }
+
 }
