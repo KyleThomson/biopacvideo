@@ -93,6 +93,11 @@ C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\
 C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.csproj.CoreCompileInputs.cache
 C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVi.FE785F59.Up2Date
 C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.exe
+C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.AnimalSettings.resources
+C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.CameraAssosciation.resources
+C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.FeederMenu.resources
+C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.FeederTester_Mouse.resources
+C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.LayoutForm.resources
 C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\bin\x64\Release\Resources\dll\AMESDK.X64.DLL
 C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\bin\x64\Release\Resources\dll\mpdev.dll
 C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\bin\x64\Release\Resources\dll\QCAP.NET.X64.DLL
@@ -102,8 +107,3 @@ C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\bin\x64\Release\
 C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\bin\x64\Release\Resources\Images\FeederTester_Mouse_Large.png
 C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\bin\x64\Release\Resources\Images\FeederTester_Rat.png
 C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\bin\x64\Release\BioPacVideo.exe.config
-C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.AnimalSettings.resources
-C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.CameraAssosciation.resources
-C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.FeederMenu.resources
-C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.FeederTester_Mouse.resources
-C:\Users\bener\Source\Repos\KyleThomson\biopacvideo\BioPacVideo\obj\x64\Release\BioPacVideo.LayoutForm.resources

@@ -287,52 +287,80 @@ namespace BioPacVideo
         /// <param name="MealNum">Which meal should be executed</param>
         public void GoMeal(int MealNum) // something is going wrong in here 
         {
-            int MealSize;
-            int Feeder;
-            string Medi;
-            int ActualFeeder; //Need to keep track of the feeder we're sending to
+            Log(MealNum.ToString());
+            int MealSize;     // Variable to store the calculated meal size (number of pellets)
+            int Feeder;       // Variable to store the index of the feeder being used
+            string Medi;      // Variable to indicate whether the meal is medicated or unmedicated
+            int ActualFeeder; // Variable to store the actual feeder address used (can be translated from AddressTable)
 
-            //int a, b, tmp;            
-            DateTime Start = DateTime.Now;                        
+            DateTime Start = DateTime.Now;   // Capture the current time for logging or timing purposes
+            Log(Start.ToString());
+
+            // Loop over all 16 rats (assuming Rats array has 16 elements)
             for (int RC = 0; RC < 16; RC++)
             {
+                Log("Current Loop Iteration: " + RC.ToString());
+                Log("Weight: " + Rats[RC].Weight.ToString());
+                // Check if the rat has a non-zero weight (i.e., if the rat is valid and needs feeding)
                 if (Rats[RC].Weight > 0)
                 {
-                    Feeder = RC * 2;
-                    
+                    Log("Rat Was above 0 Grams");
+                    Feeder = RC * 2; // Calculate the feeder index based on the rat's position (each rat has 2 feeders)
+                    Log("Feeder: " + Feeder.ToString());
+                    // Calculate the number of pellets based on the rat's weight and PelletsPerGram
                     MealSize = (int)Math.Round(Rats[RC].Weight * PelletsPerGram);
+                    Log("Meal Size: " +  MealSize.ToString());
+                    // Determine if the meal is medicated based on the rat's meal schedule
                     if (Rats[RC].Meals[MealNum])
                     {
-                        Feeder = Feeder + 1;
-                        Medi = "Medicated";
+                        Log("Rat should recieve medicated: " + Rats[RC].Meals[MealNum].ToString());
+                        Feeder = Feeder + 1; // Use the alternate feeder (medicated)
+                        Medi = "Medicated";  // Set the meal type as medicated
+                        Log("Feeder to use: " + Feeder.ToString());
+                        Log("Medi????: " + Medi.ToString());
                     }
                     else
-                    {                        
-                        Medi = "Unmedicated";
+                    {
+                        Medi = "Unmedicated"; // Set the meal type as unmedicated
+                        Log("Rat should not recieve medicated: " + Rats[RC].Meals[MealNum].ToString());
+                        Log("Feeder to use: " + Feeder.ToString());
+                        Log("Medi????: " + Medi.ToString());
                     }
+                    // Determine the actual feeder to use based on whether AlternateAddress is true
                     if (AlternateAddress)
                     {
-                        ActualFeeder = AddressTable[Feeder]; //Translate new address from the table
+                        Log("Alternate addresses are enabled");
+                        ActualFeeder = AddressTable[Feeder]; // Translate the feeder index using AddressTable
+                        Log("Will actually use feeder: " + ActualFeeder.ToString());
                     }
                     else
                     {
-                        ActualFeeder = Feeder; //Otherwise use default feeder
+                        Log("Alternate addresses are disabled");
+                        ActualFeeder = Feeder; // Use the default feeder index
+                        Log("Will actually use feeder: " + ActualFeeder.ToString());
                     }
-                    while (MealSize > 23) // changed from 30
+                    // Add commands to deliver pellets while there are more than 23 pellets to deliver
+                    while (MealSize > 23)
                     {
-                        AddCommand(ActualFeeder, 23);
-                        Log("Feeder: " + Feeder + "  Pellets: 30 " + Medi);
-                        MealSize -= 23;
+                        AddCommand(ActualFeeder, 23); // Add a command to deliver 23 pellets
+                        Log("Feeder: " + Feeder + "  Pellets: 30 " + Medi); // Log the delivery of 23 pellets
+                        MealSize -= 23; // Subtract 23 from MealSize to account for the pellets just queued
                     }
+                    // Add the final command to deliver the remaining pellets (less than or equal to 23)
                     AddCommand(ActualFeeder, MealSize);
-                    Log("Feeder: " + Feeder.ToString() + "  Pellets: " + MealSize.ToString() + " " + Medi);
+                    Log("Feeder to be used: " + ActualFeeder.ToString());
+                    Log("Meal Size: " +  MealSize.ToString());
+                    Log("Feeder: " + Feeder.ToString() + "  Pellets: " + MealSize.ToString() + " " + Medi); // Log the final delivery
+
+                    // If this is the last meal of the week, generate the next week's meals for the rat
                     if (MealNum + 1 == DailyMealCount * 7)
                     {
-                        GenMeals(RC, false);
+                        Log("Generating meals");
+                        GenMeals(RC, false); // Generate new meal schedule for the rat
                     }
                 }
             }
-            ExecuteAction();            
+            ExecuteAction(); // Execute all the commands that have been queued           
         }
         #endregion
     }
