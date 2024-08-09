@@ -31,7 +31,6 @@ namespace BioPacVideo
             ChannelAcq14.Checked = RecordAC[13];
             ChannelAcq15.Checked = RecordAC[14];
             ChannelAcq16.Checked = RecordAC[15];
-<<<<<<< HEAD
             Telemetry.Checked = RecordingDevice[0];
             recordingDeviceBox.Items.Add("Rat Telemetry");
             recordingDeviceBox.Items.Add("Mouse Telemetry");
@@ -52,10 +51,6 @@ namespace BioPacVideo
             TelemetryCh14.Checked = RecordingDevice[13];
             TelemetryCh15.Checked = RecordingDevice[14];
             TelemetryCh16.Checked = RecordingDevice[15];*/
-=======
-            TelemetryCheck.Checked = RecordingDevice[0];
-
->>>>>>> master
         }
         #endregion
 
@@ -80,7 +75,6 @@ namespace BioPacVideo
         /// <returns>A Boolean array of weather Telemetry is in use on the given cameras in order for all 16 channels</returns>
         public bool[] RC()
         {
-<<<<<<< HEAD
             bool[] allchan = new bool[16]; 
             for (int i=0; i<16; i++)
             {
@@ -91,9 +85,6 @@ namespace BioPacVideo
                 TelemetryCh12.Checked, TelemetryCh13.Checked, TelemetryCh14.Checked, TelemetryCh15.Checked, TelemetryCh16.Checked};*/
             }
 
-=======
-            bool[] allchan = new bool[] {TelemetryCheck.Checked};
->>>>>>> master
             return allchan;
         }
 
@@ -115,9 +106,6 @@ namespace BioPacVideo
         {
             this.Close();
         }
-<<<<<<< HEAD
         #endregion
-=======
->>>>>>> master
     }
 }
