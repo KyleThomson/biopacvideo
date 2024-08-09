@@ -293,6 +293,7 @@ namespace SeizurePlayback
             Compressed = F.IniReadValue("Review", "Compressed", false);
             
             VidFixDisabled = F.IniReadValue("BioPac", "VideoFixDisabled", false);
+            //Console.WriteLine(VidFixDisabled); 
             
             
            
