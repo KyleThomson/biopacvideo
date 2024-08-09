@@ -34,4 +34,5 @@ ProjectManager/.vs/ProjectManager/v16/.suo
 #!**/packages/build/
 # Uncomment if necessary however generally it will be regenerated when needed
 #!**/packages/repositories.config
-*.vs
+.vs/
+bin/
