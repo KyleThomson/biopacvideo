@@ -64,6 +64,7 @@
             this.Info = new System.Windows.Forms.ToolStripStatusLabel();
             this.DirectoryLoadBar = new System.Windows.Forms.ProgressBar();
             this.DirectoryLoadText = new System.Windows.Forms.Label();
+            this.DiscrepButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -372,11 +373,24 @@
             this.DirectoryLoadText.Text = "Loading: 0/0 (Please Wait)";
             this.DirectoryLoadText.Visible = false;
             // 
+            // DiscrepButton
+            // 
+            this.DiscrepButton.BackColor = System.Drawing.Color.DarkRed;
+            this.DiscrepButton.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.DiscrepButton.Location = new System.Drawing.Point(361, 348);
+            this.DiscrepButton.Name = "DiscrepButton";
+            this.DiscrepButton.Size = new System.Drawing.Size(101, 23);
+            this.DiscrepButton.TabIndex = 13;
+            this.DiscrepButton.Text = "Fix Discrepancies";
+            this.DiscrepButton.UseVisualStyleBackColor = false;
+            this.DiscrepButton.Visible = false;
+            // 
             // ProjectManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(555, 393);
+            this.Controls.Add(this.DiscrepButton);
             this.Controls.Add(this.DirectoryLoadText);
             this.Controls.Add(this.DirectoryLoadBar);
             this.Controls.Add(this.statusStrip1);
@@ -437,5 +451,6 @@
         private System.Windows.Forms.ToolStripMenuItem eEGViewToolStripMenuItem;
         public System.Windows.Forms.ProgressBar DirectoryLoadBar;
         public System.Windows.Forms.Label DirectoryLoadText;
+        private System.Windows.Forms.Button DiscrepButton;
     }
 }
