@@ -285,7 +285,6 @@
             this.Text = "Select Channels";
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion
