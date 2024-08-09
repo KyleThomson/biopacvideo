@@ -72,18 +72,18 @@ namespace BioPacVideo
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(41, 85);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 13);
+            this.label1.Size = new System.Drawing.Size(39, 13);
             this.label1.TabIndex = 71;
-            this.label1.Text = "Time Meal 1";
+            this.label1.Text = "Meal 1";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(41, 139);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 13);
+            this.label2.Size = new System.Drawing.Size(39, 13);
             this.label2.TabIndex = 72;
-            this.label2.Text = "Time Meal 2";
+            this.label2.Text = "Meal 2";
             // 
             // IDC_Meal2
             // 
@@ -97,9 +97,9 @@ namespace BioPacVideo
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(41, 192);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(65, 13);
+            this.label3.Size = new System.Drawing.Size(39, 13);
             this.label3.TabIndex = 74;
-            this.label3.Text = "Time Meal 3";
+            this.label3.Text = "Meal 3";
             // 
             // IDC_Meal3
             // 
@@ -113,9 +113,9 @@ namespace BioPacVideo
             this.label44.AutoSize = true;
             this.label44.Location = new System.Drawing.Point(41, 247);
             this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(65, 13);
+            this.label44.Size = new System.Drawing.Size(39, 13);
             this.label44.TabIndex = 104;
-            this.label44.Text = "Time Meal 4";
+            this.label44.Text = "Meal 4";
             // 
             // IDC_Meal4
             // 
@@ -129,9 +129,9 @@ namespace BioPacVideo
             this.label45.AutoSize = true;
             this.label45.Location = new System.Drawing.Point(41, 301);
             this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(65, 13);
+            this.label45.Size = new System.Drawing.Size(39, 13);
             this.label45.TabIndex = 106;
-            this.label45.Text = "Time Meal 5";
+            this.label45.Text = "Meal 5";
             // 
             // IDC_Meal5
             // 
@@ -145,9 +145,9 @@ namespace BioPacVideo
             this.label46.AutoSize = true;
             this.label46.Location = new System.Drawing.Point(41, 359);
             this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(65, 13);
+            this.label46.Size = new System.Drawing.Size(39, 13);
             this.label46.TabIndex = 108;
-            this.label46.Text = "Time Meal 6";
+            this.label46.Text = "Meal 6";
             // 
             // IDC_Meal6
             // 

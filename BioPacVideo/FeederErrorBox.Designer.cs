@@ -37,21 +37,25 @@
             // 
             // ErrorList
             // 
+            this.ErrorList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.ErrorList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.ErrorList.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ErrorList.ForeColor = System.Drawing.Color.Black;
-            this.ErrorList.Location = new System.Drawing.Point(5, 25);
+            this.ErrorList.Location = new System.Drawing.Point(12, 25);
             this.ErrorList.Multiline = true;
             this.ErrorList.Name = "ErrorList";
             this.ErrorList.ReadOnly = true;
-            this.ErrorList.Size = new System.Drawing.Size(360, 391);
+            this.ErrorList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.ErrorList.Size = new System.Drawing.Size(375, 391);
             this.ErrorList.TabIndex = 0;
             // 
             // Dismiss
             // 
+            this.Dismiss.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.Dismiss.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Dismiss.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-            this.Dismiss.Location = new System.Drawing.Point(291, 422);
+            this.Dismiss.Location = new System.Drawing.Point(325, 422);
             this.Dismiss.Name = "Dismiss";
             this.Dismiss.Size = new System.Drawing.Size(140, 28);
             this.Dismiss.TabIndex = 1;
@@ -61,14 +65,17 @@
             // 
             // StatusList
             // 
+            this.StatusList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.StatusList.BackColor = System.Drawing.Color.White;
             this.StatusList.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StatusList.ForeColor = System.Drawing.Color.Black;
-            this.StatusList.Location = new System.Drawing.Point(371, 25);
+            this.StatusList.Location = new System.Drawing.Point(397, 25);
             this.StatusList.Multiline = true;
             this.StatusList.Name = "StatusList";
             this.StatusList.ReadOnly = true;
-            this.StatusList.Size = new System.Drawing.Size(360, 391);
+            this.StatusList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.StatusList.Size = new System.Drawing.Size(375, 391);
             this.StatusList.TabIndex = 2;
             // 
             // label1
@@ -83,9 +90,10 @@
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(367, 2);
+            this.label2.Location = new System.Drawing.Point(393, 2);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(72, 20);
             this.label2.TabIndex = 4;
@@ -95,15 +103,16 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(750, 458);
+            this.ClientSize = new System.Drawing.Size(784, 461);
             this.ControlBox = false;
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.StatusList);
             this.Controls.Add(this.Dismiss);
             this.Controls.Add(this.ErrorList);
-            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(800, 50000);
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(800, 500);
             this.Name = "FeederErrorBox";
             this.Text = "Feeder Status";
             this.ResumeLayout(false);
