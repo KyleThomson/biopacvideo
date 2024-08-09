@@ -45,12 +45,8 @@
             this.ChannelAcq10 = new System.Windows.Forms.CheckBox();
             this.ChannelAcq9 = new System.Windows.Forms.CheckBox();
             this.ID_OK = new System.Windows.Forms.Button();
-<<<<<<< HEAD
             this.Telemetry = new System.Windows.Forms.CheckBox();
             this.recordingDeviceBox = new System.Windows.Forms.ComboBox();
-=======
-            this.TelemetryCheck = new System.Windows.Forms.CheckBox();
->>>>>>> master
             this.SuspendLayout();
             // 
             // ChannelAcq1
@@ -239,7 +235,6 @@
             this.ID_OK.UseVisualStyleBackColor = true;
             this.ID_OK.Click += new System.EventHandler(this.ID_OK_Click);
             // 
-<<<<<<< HEAD
             // Telemetry
             // 
             this.Telemetry.AutoSize = true;
@@ -258,31 +253,14 @@
             this.recordingDeviceBox.Name = "recordingDeviceBox";
             this.recordingDeviceBox.Size = new System.Drawing.Size(121, 21);
             this.recordingDeviceBox.TabIndex = 18;
-=======
-            // TelemetryCheck
-            // 
-            this.TelemetryCheck.AutoSize = true;
-            this.TelemetryCheck.Location = new System.Drawing.Point(92, 13);
-            this.TelemetryCheck.Name = "TelemetryCheck";
-            this.TelemetryCheck.Size = new System.Drawing.Size(74, 18);
-            this.TelemetryCheck.TabIndex = 17;
-            this.TelemetryCheck.Text = "Telemetry";
-            this.TelemetryCheck.UseCompatibleTextRendering = true;
-            this.TelemetryCheck.UseVisualStyleBackColor = true;
->>>>>>> master
             // 
             // RecordSelect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-<<<<<<< HEAD
             this.ClientSize = new System.Drawing.Size(207, 302);
             this.Controls.Add(this.recordingDeviceBox);
             this.Controls.Add(this.Telemetry);
-=======
-            this.ClientSize = new System.Drawing.Size(383, 254);
-            this.Controls.Add(this.TelemetryCheck);
->>>>>>> master
             this.Controls.Add(this.ID_OK);
             this.Controls.Add(this.ChannelAcq16);
             this.Controls.Add(this.ChannelAcq15);
@@ -329,11 +307,7 @@
         private System.Windows.Forms.CheckBox ChannelAcq10;
         private System.Windows.Forms.CheckBox ChannelAcq9;
         private System.Windows.Forms.Button ID_OK;
-<<<<<<< HEAD
         private System.Windows.Forms.CheckBox Telemetry;
         private System.Windows.Forms.ComboBox recordingDeviceBox;
-=======
-        private System.Windows.Forms.CheckBox TelemetryCheck;
->>>>>>> master
     }
 }
