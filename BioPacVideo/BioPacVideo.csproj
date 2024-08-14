@@ -193,12 +193,14 @@
     <Compile Include="VideoWrapper.cs" />
     <EmbeddedResource Include="AnimalSettings.resx">
       <DependentUpon>AnimalSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="CameraAssosciation.resx">
       <DependentUpon>CameraAssosciation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FeederAddress.resx">
       <DependentUpon>FeederAddress.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FeederMenu.resx">
       <DependentUpon>FeederMenu.cs</DependentUpon>
@@ -209,6 +211,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FeederErrorBox.resx">
       <DependentUpon>FeederErrorBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FeederTester_Mouse.resx">
       <DependentUpon>FeederTester_Mouse.cs</DependentUpon>

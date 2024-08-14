@@ -374,7 +374,7 @@ namespace BioPacVideo
 
         private void feederAddressToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FeederAddress Frm = new FeederAddress(Feeder);
+            FeederAddress Frm = new FeederAddress(this.Feeder);
             Frm.ShowDialog(this);
             Frm.Dispose();
             UpdateINI(BioIni);
