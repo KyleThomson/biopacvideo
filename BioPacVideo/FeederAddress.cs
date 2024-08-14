@@ -22,7 +22,7 @@ namespace BioPacVideo
         #region Lifecycle
         public FeederAddress(FeederTemplate Pass_feeder)
         {
-            Feeder = Pass_feeder;            
+            this.Feeder = Pass_feeder;            
             InitializeComponent();
             FeederLabels = new ArrayList();
             FeederInit();
