@@ -724,36 +724,37 @@ namespace BioPacVideo
                     {
                         Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount);
                         Thread.Sleep(120000);
+                        //Breakfast
                     }
                     if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal2.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal2.Minutes))
                     {
-                        Feeder.GoMeal(Feeder.GetDay() * 4 + 1);
+                        Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount + 1);
                         Thread.Sleep(120000);
-                        //Lunch
+                        //Brunch
                     }
                     if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal3.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal3.Minutes))
                     {
                         Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount + 2);
                         Thread.Sleep(120000);
-                        //Dinner
+                        //Lunch
                     }
                     if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal4.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal4.Minutes))
                     {
                         Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount + 3);
                         Thread.Sleep(120000);
-                        //Brunch
+                        //Hobbits 2nd Lunch
                     }
                     if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal5.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal5.Minutes))
                     {
                         Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount + 4);
                         Thread.Sleep(120000);
-                        //Midnight Snack 
+                        //Dinner 
                     }
                     if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal6.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal6.Minutes))
                     {
                         Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount + 5);
                         Thread.Sleep(120000);
-                        //Hobbits 2nd Lunch
+                        //Midnight Snack
                         //PO - TA - TOES
                     }
                 }
