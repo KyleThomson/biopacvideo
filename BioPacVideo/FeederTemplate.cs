@@ -218,19 +218,25 @@ namespace BioPacVideo
         /// <param name="Command">The text to log to the feeder log</param>
         public void Log(string Command)
         {
-            if (LogFileName == "") { return; }
-            if (!File.Exists(LogFileName))
+            if (String.IsNullOrEmpty(LogFileName)) 
             {
-                log = new StreamWriter(LogFileName);
+                return; 
             }
             else
             {
-                log = File.AppendText(LogFileName);
-            }
+                if (!File.Exists(LogFileName))
+                {
+                    log = new StreamWriter(LogFileName);
+                }
+                else
+                {
+                    log = File.AppendText(LogFileName);
+                }
 
-            // Write to the file:
-            log.WriteLine(DateTime.Now.ToString() + "  " + Command);
-            log.Close();
+                // Write to the file:
+                log.WriteLine(DateTime.Now.ToString() + "  " + Command);
+                log.Close();
+            }
         }
 
         /// <summary>
@@ -293,14 +299,11 @@ namespace BioPacVideo
             string Medi;      // Variable to indicate whether the meal is medicated or unmedicated
             int ActualFeeder; // Variable to store the actual feeder address used (can be translated from AddressTable)
 
-            DateTime Start = DateTime.Now;   // Capture the current time for logging or timing purposes
-            Log(Start.ToString());
-
-            // Loop over all 16 rats (assuming Rats array has 16 elements)
+            //int a, b, tmp;
+            DateTime Start = DateTime.Now;
             for (int RC = 0; RC < 16; RC++)
             {
-                // Check if the rat has a non-zero weight (i.e., if the rat is valid and needs feeding)
-                if (Rats[RC].Weight > 0)
+                if (Rats[RC].Weight > 0 && Rats[RC].ID.ToLower() != "e" && Rats[RC].ID.ToLower() != "empty")
                 {
                     Feeder = RC * 2; // Calculate the feeder index based on the rat's position (each rat has 2 feeders)
                     // Calculate the number of pellets based on the rat's weight and PelletsPerGram
