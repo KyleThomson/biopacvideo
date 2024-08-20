@@ -9,9 +9,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("BioPac Video")]
 [assembly: AssemblyDescription("BioPac Video is a software designed to synchronize EEG data recording with corresponding video feeds, while also managing automated feedings, specifically optimized for seizure monitoring and analysis using Biopac systems.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Kyle E. Thomson")]
+[assembly: AssemblyCompany("Dr. Kyle Thomson PhD")]
 [assembly: AssemblyProduct("BioPacVideo")]
-[assembly: AssemblyCopyright("Copyright ©  2011")]
+[assembly: AssemblyCopyright("© 2024 Dr. Kyle Thomson PhD")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -33,6 +33,6 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.1.1.1")]
-[assembly: AssemblyFileVersion("2.1.1.1")]
+[assembly: AssemblyVersion("2.1.0.0")]
+[assembly: AssemblyFileVersion("2.1.0.0")]
 [assembly: NeutralResourcesLanguage("en")]

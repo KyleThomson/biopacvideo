@@ -229,6 +229,13 @@ namespace BioPacVideo
         {
             this.Dispose(true);
         }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            About about = new About();
+            about.Show();
+            about.Location = new Point(this.Location.X + this.Size.Width/2 - about.Size.Width/2, this.Location.Y + this.Size.Height/2 - about.Size.Height/2);
+        }
         #endregion
 
         #region BioPac
@@ -430,6 +437,7 @@ namespace BioPacVideo
                         IDM_SETTINGS.Enabled = false;
                         IDM_DISCONNECTBIOPAC.Enabled = false;
                         RecordingButton.BackColor = Color.Red;
+                        RecordingButton.TabStop = false;
                         //Start the actual recording
                         MP.RecordingWanted = true; //open the eyes to observe data transfer between Biopac and software
                                                    //Console.WriteLine("RecordingWanted = " + MP.RecordingWanted);
@@ -453,6 +461,7 @@ namespace BioPacVideo
                         // IDT_FEEDST.Text = Video.EncoderResult();
                         RecordingButton.Text = "Start Recording";
                         RecordingButton.BackColor = Color.Green;
+                        RecordingButton.TabStop = true;
                     }
                     else
                     {
@@ -902,5 +911,6 @@ namespace BioPacVideo
             Video.UpdateCameraAssoc();
         }
         #endregion
+
     }
 }
