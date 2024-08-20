@@ -668,9 +668,7 @@ namespace BioPacVideo
                         FileCount++; //Apparently, I don't need this, because the code won't overwrite a file. But, whatever
                         StartWriting(); //Start a new file!
                     }
-                }
-            
-               
+                }                         
 
                 if (Feeder.Enabled)
                 {

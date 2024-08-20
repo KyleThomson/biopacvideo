@@ -524,7 +524,7 @@ namespace BioPacVideo
             Feeder.Route2 = BioIni.IniReadValue("Feeder", "ADDRoute2", 1);
             Feeder.Solve2 = BioIni.IniReadValue("Feeder", "ADDSolve2", 1);
             Feeder.AlternateAddress = BioIni.IniReadValue("Feeder", "AltEnabled", false);
-            for (int i = 0; i < 31; i++)
+            for (int i = 0; i < 32; i++)
             {
                 Feeder.AddressTable[i] = BioIni.IniReadValue("Feeder", "Address" + i, i);
             }
@@ -617,7 +617,7 @@ namespace BioPacVideo
             BioIni.IniWriteValue("Feeder", "ADDRoute2", Feeder.Route2);
             BioIni.IniWriteValue("Feeder", "ADDSolve2", Feeder.Solve2);
             BioIni.IniWriteValue("Feeder", "AltEnabled", Feeder.AlternateAddress);
-            for (int i = 0; i < 31; i++)
+            for (int i = 0; i < 32; i++)
             {
                 BioIni.IniWriteValue("Feeder", "Address" + i, Feeder.AddressTable[i]);
             }

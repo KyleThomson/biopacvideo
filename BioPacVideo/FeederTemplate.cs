@@ -331,7 +331,7 @@ namespace BioPacVideo
                     while (MealSize > 23)
                     {
                         AddCommand(ActualFeeder, 23); // Add a command to deliver 23 pellets
-                        Log("Feeder: " + Feeder + "  Pellets: 30 " + Medi); // Log the delivery of 23 pellets
+                        Log("Feeder: " + Feeder + "  Pellets: 23 " + Medi); // Log the delivery of 23 pellets
                         MealSize -= 23; // Subtract 23 from MealSize to account for the pellets just queued
                     }
                     // Add the final command to deliver the remaining pellets (less than or equal to 23)
