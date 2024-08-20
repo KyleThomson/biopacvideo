@@ -36,3 +36,4 @@ ProjectManager/.vs/ProjectManager/v16/.suo
 #!**/packages/repositories.config
 .vs/
 bin/
+BioPacVideo/obj/

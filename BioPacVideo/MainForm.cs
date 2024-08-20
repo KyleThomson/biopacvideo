@@ -374,7 +374,7 @@ namespace BioPacVideo
 
         private void feederAddressToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FeederAddress Frm = new FeederAddress(Feeder);
+            FeederAddress Frm = new FeederAddress(this.Feeder);
             Frm.ShowDialog(this);
             Frm.Dispose();
             UpdateINI(BioIni);
@@ -524,7 +524,7 @@ namespace BioPacVideo
             Feeder.Route2 = BioIni.IniReadValue("Feeder", "ADDRoute2", 1);
             Feeder.Solve2 = BioIni.IniReadValue("Feeder", "ADDSolve2", 1);
             Feeder.AlternateAddress = BioIni.IniReadValue("Feeder", "AltEnabled", false);
-            for (int i = 0; i < 31; i++)
+            for (int i = 0; i < 32; i++)
             {
                 Feeder.AddressTable[i] = BioIni.IniReadValue("Feeder", "Address" + i, i);
             }
@@ -617,7 +617,7 @@ namespace BioPacVideo
             BioIni.IniWriteValue("Feeder", "ADDRoute2", Feeder.Route2);
             BioIni.IniWriteValue("Feeder", "ADDSolve2", Feeder.Solve2);
             BioIni.IniWriteValue("Feeder", "AltEnabled", Feeder.AlternateAddress);
-            for (int i = 0; i < 31; i++)
+            for (int i = 0; i < 32; i++)
             {
                 BioIni.IniWriteValue("Feeder", "Address" + i, Feeder.AddressTable[i]);
             }
@@ -724,36 +724,37 @@ namespace BioPacVideo
                     {
                         Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount);
                         Thread.Sleep(120000);
+                        //Breakfast
                     }
                     if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal2.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal2.Minutes))
                     {
-                        Feeder.GoMeal(Feeder.GetDay() * 4 + 1);
+                        Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount + 1);
                         Thread.Sleep(120000);
-                        //Lunch
+                        //Brunch
                     }
                     if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal3.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal3.Minutes))
                     {
                         Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount + 2);
                         Thread.Sleep(120000);
-                        //Dinner
+                        //Lunch
                     }
                     if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal4.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal4.Minutes))
                     {
                         Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount + 3);
                         Thread.Sleep(120000);
-                        //Brunch
+                        //Hobbits 2nd Lunch
                     }
                     if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal5.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal5.Minutes))
                     {
                         Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount + 4);
                         Thread.Sleep(120000);
-                        //Midnight Snack 
+                        //Dinner 
                     }
                     if ((DateTime.Now.TimeOfDay.Hours == Feeder.Meal6.Hours) & (DateTime.Now.TimeOfDay.Minutes == Feeder.Meal6.Minutes))
                     {
                         Feeder.GoMeal(Feeder.GetDay() * Feeder.DailyMealCount + 5);
                         Thread.Sleep(120000);
-                        //Hobbits 2nd Lunch
+                        //Midnight Snack
                         //PO - TA - TOES
                     }
                 }
