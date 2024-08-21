@@ -305,7 +305,7 @@ namespace BioPacVideo
         /// <param name="MealNum">Which meal should be executed</param>
         public void GoMeal(int MealNum) // something is going wrong in here 
         {
-            Log(MealNum.ToString());
+            Log("Executing Meal #" + MealNum.ToString());
             int MealSize;     // Variable to store the calculated meal size (number of pellets)
             int Feeder;       // Variable to store the index of the feeder being used
             string Medi;      // Variable to indicate whether the meal is medicated or unmedicated
