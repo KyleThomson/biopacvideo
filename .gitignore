@@ -37,3 +37,4 @@ ProjectManager/.vs/ProjectManager/v16/.suo
 .vs/
 bin/
 BioPacVideo/obj/
+*.user
