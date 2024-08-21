@@ -158,9 +158,10 @@
     <Compile Include="LayoutForm.Designer.cs">
       <DependentUpon>LayoutForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MyChannelControl.Designer.cs">
-      <DependentUpon>MyChannelControl.cs</DependentUpon>
+    <Compile Include="MyChannelControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="MyChannelControl.Designer.cs" />
     <Compile Include="RecordSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -179,9 +180,6 @@
     </Compile>
     <Compile Include="InjectionManager.Designer.cs">
       <DependentUpon>InjectionManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MyChannelControl.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PelletCounts.cs">
       <SubType>Form</SubType>
@@ -255,10 +253,6 @@
     <EmbeddedResource Include="ChannelSelect.resx">
       <DependentUpon>ChannelSelect.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MyChannelControl.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>MyChannelControl10.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="PelletCounts.resx">
       <DependentUpon>PelletCounts.cs</DependentUpon>
