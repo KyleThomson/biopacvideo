@@ -1721,7 +1721,7 @@ namespace BioPacVideo
             this.Controls.Add(this.groupBox11);
             this.Controls.Add(this.groupBox1);
             this.Name = "AnimalSettings";
-            this.Text = "0";
+            this.Text = "Animal Settings";
             this.TextChanged += new System.EventHandler(this.percentBox_TextChanged);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

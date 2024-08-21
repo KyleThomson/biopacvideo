@@ -237,7 +237,7 @@ namespace BioPacVideo
             this.Controls.Add(this.IDC_Meal1);
             this.Controls.Add(this.label27);
             this.Name = "FeederMenu";
-            this.Text = "Feeder";
+            this.Text = "Meal Times";
             this.ResumeLayout(false);
             this.PerformLayout();
 

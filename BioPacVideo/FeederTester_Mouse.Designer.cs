@@ -103,7 +103,7 @@ namespace BioPacVideo
             this.Controls.Add(this.executeAckButton);
             this.Controls.Add(this.runTestButton);
             this.Name = "FeederTester_Mouse";
-            this.Text = "FeederTester_Mouse";
+            this.Text = "Mouse Feeder Test";
             this.ResumeLayout(false);
             this.PerformLayout();
 

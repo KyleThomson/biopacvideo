@@ -106,7 +106,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FeederTester";
-            this.Text = "Feeder Test";
+            this.Text = "Rat Feeder Test";
             this.ResumeLayout(false);
             this.PerformLayout();
 

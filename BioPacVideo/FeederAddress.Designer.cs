@@ -973,7 +973,7 @@
             this.Controls.Add(this.checkBoxAlternateAddress);
             this.Controls.Add(this.buttonSet);
             this.Name = "FeederAddress";
-            this.Text = "Feeder Address Settings";
+            this.Text = "Feeder Address";
             this.ResumeLayout(false);
             this.PerformLayout();
 

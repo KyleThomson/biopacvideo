@@ -282,9 +282,10 @@
             this.MinimizeBox = false;
             this.Name = "RecordSelect";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "Select Channels";
+            this.Text = "Enabled Channels";
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion

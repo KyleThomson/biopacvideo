@@ -513,7 +513,7 @@ namespace BioPacVideo
             this.comboBox1.Size = new System.Drawing.Size(136, 21);
             this.comboBox1.TabIndex = 7;
             // 
-            // CameraAssosciationTest
+            // CameraAssosciation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -569,8 +569,8 @@ namespace BioPacVideo
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.finishButton);
             this.Controls.Add(this.setButton);
-            this.Name = "CameraAssosciationTest";
-            this.Text = "CameraAssosciationTest";
+            this.Name = "CameraAssosciation";
+            this.Text = "Cammera Associations";
             this.ResumeLayout(false);
             this.PerformLayout();
 
