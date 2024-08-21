@@ -264,7 +264,18 @@ namespace BioPacVideo
             CommandSize = Commands.Count;
             Activated = true;
         }
-
+        public void AddCommand(int Feeder, int Pellets, int ActualFeeder)
+        {
+            Commands.Enqueue((byte)Feeder);
+            Commands.Enqueue((byte)Pellets);
+            string Txt;
+          
+            int n = ActualFeeder + 1;
+            Txt = "Feeder-" + n.ToString() + " Pellets-" + Pellets.ToString();            
+            CommandText.Push(Txt);
+            CommandSize = Commands.Count;
+            Activated = true;
+        }
         /// <summary>
         /// Executes the command on the arduino
         /// </summary>
@@ -322,21 +333,31 @@ namespace BioPacVideo
                     if (AlternateAddress)
                     {
                         ActualFeeder = AddressTable[Feeder]; // Translate the feeder index using AddressTable
+                        while (MealSize > 23)
+                        {
+                            AddCommand(ActualFeeder, 23); // Add a command to deliver 23 pellets
+                            Log("Feeder: " + Feeder + "  Pellets: 23 " + Medi); // Log the delivery of 23 pellets
+                            MealSize -= 23; // Subtract 23 from MealSize to account for the pellets just queued
+                        }
+                        // Add the final command to deliver the remaining pellets (less than or equal to 23)
+                        AddCommand(ActualFeeder, MealSize, Feeder);
+                        Log("Feeder: " + Feeder.ToString() + "  Pellets: " + MealSize.ToString() + " " + Medi); // Log the final delivery
                     }
                     else
                     {
                         ActualFeeder = Feeder; // Use the default feeder index
+                        while (MealSize > 23)
+                        {
+                            AddCommand(ActualFeeder, 23); // Add a command to deliver 23 pellets
+                            Log("Feeder: " + Feeder + "  Pellets: 23 " + Medi); // Log the delivery of 23 pellets
+                            MealSize -= 23; // Subtract 23 from MealSize to account for the pellets just queued
+                        }
+                        // Add the final command to deliver the remaining pellets (less than or equal to 23)
+                        AddCommand(ActualFeeder, MealSize);
+                        Log("Feeder: " + Feeder.ToString() + "  Pellets: " + MealSize.ToString() + " " + Medi); // Log the final delivery
                     }
                     // Add commands to deliver pellets while there are more than 23 pellets to deliver
-                    while (MealSize > 23)
-                    {
-                        AddCommand(ActualFeeder, 23); // Add a command to deliver 23 pellets
-                        Log("Feeder: " + Feeder + "  Pellets: 30 " + Medi); // Log the delivery of 23 pellets
-                        MealSize -= 23; // Subtract 23 from MealSize to account for the pellets just queued
-                    }
-                    // Add the final command to deliver the remaining pellets (less than or equal to 23)
-                    AddCommand(ActualFeeder, MealSize);
-                    Log("Feeder: " + Feeder.ToString() + "  Pellets: " + MealSize.ToString() + " " + Medi); // Log the final delivery
+                    
 
                     // If this is the last meal of the week, generate the next week's meals for the rat
                     if (MealNum + 1 == DailyMealCount * 7)
