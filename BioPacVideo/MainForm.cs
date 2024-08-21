@@ -438,6 +438,7 @@ namespace BioPacVideo
                         IDM_DISCONNECTBIOPAC.Enabled = false;
                         RecordingButton.BackColor = Color.Red;
                         RecordingButton.TabStop = false;
+                        VoltScale.Focus();
                         //Start the actual recording
                         MP.RecordingWanted = true; //open the eyes to observe data transfer between Biopac and software
                                                    //Console.WriteLine("RecordingWanted = " + MP.RecordingWanted);
@@ -462,6 +463,7 @@ namespace BioPacVideo
                         RecordingButton.Text = "Start Recording";
                         RecordingButton.BackColor = Color.Green;
                         RecordingButton.TabStop = true;
+                        RecordingButton.Focus();
                     }
                     else
                     {
