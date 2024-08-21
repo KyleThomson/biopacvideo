@@ -699,8 +699,7 @@ namespace BioPacVideo
                                 if (Feeder.State != 2)
                                 {
                                     string Result = "SUCCESS - " + Feeder.GetLastCommandText() + " - ";
-                                    //Breaks Everything
-                                    Feeder.Log(Result);
+                                    Feeder.Log(Result.Substring(0, Result.Count() - 3));
                                     FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Status(Result); }));
                                     Feeder.ExecuteAction();
                                 }
@@ -711,15 +710,13 @@ namespace BioPacVideo
                             {
                                 if (Feeder.State == 3) //If the feeder goes from ready to Error, something happened with the infrared sensors
                                 {
-                                    //Breaks Everything
-                                    Feeder.Log("Infrared Sensors offline - ");
+                                    Feeder.Log("Infrared Sensors offline");
                                     FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error("Infrared Sensors offline - "); }));
                                 }
                                 else if (Feeder.State == 1) //if something went wrong during execution, then the feeder failed to deliver pellets. 
                                 {
                                     string Result = "FAIL - " + Feeder.GetLastCommandText() + " - ";
-                                    //Breaks Everything
-                                    Feeder.Log(Result);
+                                    Feeder.Log(Result.Substring(0, Result.Count()-3));
                                     FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error(Result); }));
                                     Feeder.ExecuteAction();
                                 }
