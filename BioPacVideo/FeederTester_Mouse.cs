@@ -163,8 +163,8 @@ namespace BioPacVideo
             if (int.TryParse(PelletsNum.Text, out P))
             {
                 F = FeederLabel.IndexOf(FeederPos);
-                Feeder.AddCommand((byte)F, (byte)P);
-                Feeder.ExecuteAction();
+                MealType M = new MealType(F, P, F, true);
+                Feeder.AddCommand(M);
             }
             else
             {
@@ -176,7 +176,7 @@ namespace BioPacVideo
 
         private void executeAck_Click(object sender, EventArgs e)
         {
-            Feeder.ExecuteAction();
+            Feeder.ArduinoAckowledge();
         }
         #endregion
     }

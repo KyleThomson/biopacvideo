@@ -547,6 +547,9 @@ namespace BioPacVideo
             bool a = true;
             bool b = true;
             bool lasta, lastb;
+            string Result;
+            int TempState;
+            Result = ""; 
             AcqChan = TotChan();  //How many channels are we going to acquire   
             VoltageSpacing = (int)(Ymax / (AcqChan));
             Thread BuffDraw = new Thread(new ThreadStart(drawbuffer)); //Set up thread for buffering 
@@ -672,6 +675,24 @@ namespace BioPacVideo
 
                 if (Feeder.Enabled)
                 {
+                    if (Feeder.CommandSize > 0) 
+                    {
+                        byte v;
+                        v = Feeder.GetTopCommand();
+                        Feeder.gap++;
+                        for (byte k = 0; k < 5; k++)   //Step through the bits of the command                    
+                        {
+                            bool x = !((v & (1 << k)) > 0); //mathematical way to make x the kth bit                              
+                            MPCLASS.setDigitalIO((uint)k, x, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //set it on the MP150
+                        }
+                        MPCLASS.setDigitalIO(7, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //pulse the data ready bit
+                        Thread.Sleep(1);
+                        MPCLASS.setDigitalIO(7, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //finish pulse 
+                        if (Feeder.CommandSize < 1)
+                        {
+                            Feeder.CommandReady = false;
+                        }
+                    }
                     lasta = a; //These serve as a debounce function. 
                     lastb = b; //Without debounce, you get multiple states in a single transistion
                     if (Feeder.gap == 0)
@@ -680,72 +701,58 @@ namespace BioPacVideo
                         MPCLASS.getDigitalIO(8, out b, MPCLASS.DIGITALOPT.READ_HIGH_BITS); //read the low bit for state
                         if ((lastb == b) && (lasta == a))
                         {
-                            if (a && b) //11, feeder ready 
+                            TempState = 0; 
+                            if (a) { TempState = 2; }
+                            if (b) { TempState++; }                             
+                            if (TempState!=Feeder.State)
                             {
-                                Feeder.State = 3;
-                                Feeder.StateText = "READY";
-                                if (!Feeder.CommandWaitEx()) //Go back into waiting if no commands left in Stack 
+                                switch (TempState)
                                 {
-                                    Feeder.Activated = false;
+                                    case 0:
+                                        if (Feeder.State == 3) //If the feeder goes from ready to Error, something happened with the infrared sensors
+                                        {
+                                            Feeder.Log("Infrared Sensors offline");
+                                            FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error("Infrared Sensors offline - "); }));
+                                        }
+                                        else if (Feeder.State == 1) //if something went wrong during execution, then the feeder failed to deliver pellets. 
+                                        {
+                                            Result = "FAIL - " + Feeder.GetLastCommandText() + " - ";
+                                            Feeder.Log(Result.Substring(0, Result.Count() - 3));
+                                            FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error(Result); }));
+                                            Feeder.ArduinoAckowledge();
+                                        }
+                                        Feeder.StateText = "ERROR";
+                                        break;
+                                    case 1:
+                                        Feeder.StateText = "EXECUTING";
+                                        break;
+                                    case 2:
+                                        if (Feeder.State == 1) //If we're executing, that was a success
+                                        {
+                                            Result = "SUCCESS - " + Feeder.GetLastCommandText() + " - ";
+                                            Feeder.Log(Result.Substring(0, Result.Count() - 3));
+                                            FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Status(Result); }));
+                                            Feeder.ArduinoAckowledge();
+                                            Feeder.StateText = "SUCCESS";
+                                            if (Feeder.WaitingMeal)
+                                            {
+                                                Feeder.RunNextMeal();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Result = "ACK seen by Feeder";
+                                            FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Status(Result); }));
+                                        }
+                                        break; 
+                                    case 3:                                        
+                                        Feeder.StateText = "READY";
+                                        break;
                                 }
-                            }
-                            if (!a && b)
-                            {
-                                Feeder.State = 1;
-                                Feeder.StateText = "EXECUTING";
-                            }
-                            if (a && !b)
-                            {
-                                if (Feeder.State != 2)
-                                {
-                                    string Result = "SUCCESS - " + Feeder.GetLastCommandText() + " - ";
-                                    Feeder.Log(Result.Substring(0, Result.Count() - 3));
-                                    FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Status(Result); }));
-                                    Feeder.ExecuteAction();
-                                }
-                                Feeder.State = 2;
-                                Feeder.StateText = "SUCCESS";
-                            }
-                            if (!a && !b)
-                            {
-                                if (Feeder.State == 3) //If the feeder goes from ready to Error, something happened with the infrared sensors
-                                {
-                                    Feeder.Log("Infrared Sensors offline");
-                                    FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error("Infrared Sensors offline - "); }));
-                                }
-                                else if (Feeder.State == 1) //if something went wrong during execution, then the feeder failed to deliver pellets. 
-                                {
-                                    string Result = "FAIL - " + Feeder.GetLastCommandText() + " - ";
-                                    Feeder.Log(Result.Substring(0, Result.Count()-3));
-                                    FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error(Result); }));
-                                    Feeder.ExecuteAction();
-                                }
-                                Feeder.State = 0;
-                                Feeder.StateText = "ERROR";
-                                if ((!Feeder.CommandWaitEx()) && (!Feeder.CommandReady)) //Go back into waiting  if no commands left in Stack  
-                                {
-                                    Feeder.Activated = false; 
-                                }
+                                Feeder.State = TempState;                                                      
                             }
                         }
-                        if ((Feeder.CommandSize > 0) && Feeder.CommandReady)
-                        {
-                            byte v;
-                            v = Feeder.GetTopCommand();
-                            Feeder.gap++;
-                            for (byte k = 0; k < 5; k++)   //Step through the bits of the command                    
-                            {
-                                bool x = !((v & (1 << k)) > 0); //mathematical way to make x the kth bit                              
-                                MPCLASS.setDigitalIO((uint)k, x, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //set it on the MP150
-                            }
-                            MPCLASS.setDigitalIO(7, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //pulse the data ready bit
-                            Thread.Sleep(1);
-                            MPCLASS.setDigitalIO(7, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //finish pulse 
-                            if (Feeder.CommandSize < 1)
-                            {
-                                Feeder.CommandReady = false;
-                            }
-                        }
+                        
                     }
                     else if (Feeder.gap > 0) //only want to send the feeding commands once every 4 cycles 
                     {

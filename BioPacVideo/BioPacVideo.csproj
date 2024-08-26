@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{19150BB9-2F70-4C0D-B53C-3E8E0A211398}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BioPacVideo</RootNamespace>
     <AssemblyName>BioPacVideo</AssemblyName>
@@ -103,6 +103,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdvancedFeederControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdvancedFeederControl.Designer.cs">
+      <DependentUpon>AdvancedFeederControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="AnimalSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -208,6 +214,9 @@
     <Compile Include="VideoWrapper.cs" />
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AdvancedFeederControl.resx">
+      <DependentUpon>AdvancedFeederControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AnimalSettings.resx">
       <DependentUpon>AnimalSettings.cs</DependentUpon>

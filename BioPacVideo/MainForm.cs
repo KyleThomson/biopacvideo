@@ -914,5 +914,10 @@ namespace BioPacVideo
         }
         #endregion
 
+        private void advancedFeederControlToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form Advanced = new AdvancedFeederControl();
+            Advanced.Show();
+        }
     }
 }

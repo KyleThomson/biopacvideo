@@ -4,9 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace BioPacVideo
 {
+    public class MealType
+    {
+        public int Pellets;
+        public int Feeder;
+        public int IndicatedFeeder;
+        public bool Test;
+        public MealType(int F, int P, int I) { Feeder = F; Pellets = P; IndicatedFeeder = I; Test = false; }
+        public MealType(int F, int P, int I, bool T) { Feeder = F; Pellets = P; IndicatedFeeder = I; Test = T; }
+    }
     public class FeederTemplate
     {
         #region Properties
@@ -21,8 +31,8 @@ namespace BioPacVideo
         public double PelletsPerGram;
         public bool ErrorState;
         public bool Enabled;
-        public bool Activated;
         public int State;
+        public int LastState; 
         //public int RecievingState; 
         public string StateText;
         public string ADDC1;
@@ -47,6 +57,8 @@ namespace BioPacVideo
         private string LogFileName;
         public int Cages_X;
         public int Cages_Y;
+        public bool WaitingMeal;
+        private Queue<MealType> Meals;
         #endregion
 
         #region Initilizers
@@ -62,7 +74,6 @@ namespace BioPacVideo
         {
             Commands = new Queue<byte>();
             CommandText = new Stack<string>();
-            Activated = false;
             CommandReady = false;
             ErrorState = false;
             State = 3;
@@ -133,11 +144,17 @@ namespace BioPacVideo
             else
                 return "No Text in Stack";
         }
+        
+        public void SendDirectCommand(byte Command)
+        {
+            Commands.Enqueue(Command);
+            CommandSize++; 
+        }
 
         /// <summary>
-        /// Gets the last command from the arduino
+        /// Gets the most recent command for the arduino
         /// </summary>
-        /// <returns>The last command from the arduino as a byte</returns>
+        /// <returns>The most recent command to send to the arduimo as a byte</returns>
         public byte GetTopCommand()
         {
             CommandSize--;
@@ -186,7 +203,15 @@ namespace BioPacVideo
                 MealMatrix.RemoveAt(R);
             }
         }
-
+        public void RunNextMeal()
+        {
+            MealType M=Meals.Dequeue();
+            AddCommand(M);
+            if (Meals.Count==0)
+            {
+                WaitingMeal = false; 
+            }
+        }
         /// <summary>
         /// Waits for the command sent to the arduino to be executed
         /// </summary>
@@ -244,45 +269,31 @@ namespace BioPacVideo
         /// </summary>
         /// <param name="Feeder">Feeder to deliver pelletes from</param>
         /// <param name="Pellets">Number of pelletes to deliver</param>
-        public void AddCommand(int Feeder, int Pellets)
+        public void AddCommand(MealType M)
         {
-            Commands.Enqueue((byte)Feeder);
-            Commands.Enqueue((byte)Pellets);
             string Txt;
-            if (AlternateAddress)
-            {
-                int n = AddressTable[Feeder] + 1;
-                Txt = "Feeder-" + n.ToString() + " Pellets-" + Pellets.ToString();
-                //this shows the feeder based on what was put into the feeder addresses 
-            }
-            else
-            {
-                //translate it from programmer terms into layman terms vis a vis the feeder numbers
-                int n = Feeder + 1;
-                Txt = "Feeder-" + n.ToString() + " Pellets-" + Pellets.ToString();
-            }
-            CommandText.Push(Txt);
+            Commands.Enqueue((byte)24); //Feeder 
+            Commands.Enqueue((byte)M.Feeder);
+            Commands.Enqueue((byte)25); //Pellets
+            Commands.Enqueue((byte)M.Pellets);
+            Commands.Enqueue((byte)26);
+            Commands.Enqueue((byte)31); //Execute
             CommandSize = Commands.Count;
-            Activated = true;
-        }
-        public void AddCommand(int Feeder, int Pellets, int ActualFeeder)
-        {
-            Commands.Enqueue((byte)Feeder);
-            Commands.Enqueue((byte)Pellets);
-            string Txt;
-
-            int n = ActualFeeder + 1;
-            Txt = "Feeder-" + n.ToString() + " Pellets-" + Pellets.ToString();
-            CommandText.Push(Txt);
-            CommandSize = Commands.Count;
-            Activated = true;
-        }
+            Console.WriteLine(M.Feeder.ToString() + " " + M.Pellets.ToString() + " " + CommandSize);
+            //This is to disable logging during testing meals 
+            if (!M.Test)
+            {
+                Txt = "Feeder-" + (M.IndicatedFeeder + 1).ToString() + " Pellets-" + M.Pellets.ToString();
+                CommandText.Push(Txt);
+            }
+             
+        }        
         /// <summary>
         /// Executes the command on the arduino
         /// </summary>
-        public void ExecuteAction()
+        public void ExecuteAction()  //This is likely depreciated 
         {
-            Commands.Enqueue((byte)31);
+            Commands.Enqueue((byte)31); 
             CommandSize = Commands.Count;
             CommandReady = true;
         }
@@ -310,6 +321,7 @@ namespace BioPacVideo
             int Feeder;       // Variable to store the index of the feeder being used
             string Medi;      // Variable to indicate whether the meal is medicated or unmedicated
             int ActualFeeder; // Variable to store the actual feeder address used (can be translated from AddressTable)
+            MealType M;
 
             //int a, b, tmp;
             DateTime Start = DateTime.Now;
@@ -331,35 +343,18 @@ namespace BioPacVideo
                         Medi = "Unmedicated"; // Set the meal type as unmedicated
                     }
                     // Determine the actual feeder to use based on whether AlternateAddress is true
-                    if (AlternateAddress)
+                    ActualFeeder = AlternateAddress ? AddressTable[Feeder] : Feeder;                
+                    while (MealSize > 23)
                     {
-                        ActualFeeder = AddressTable[Feeder]; // Translate the feeder index using AddressTable
-                        while (MealSize > 23)
-                        {
-                            AddCommand(ActualFeeder, 23); // Add a command to deliver 23 pellets
-                            Log("Feeder: " + Feeder + "  Pellets: 23 " + Medi); // Log the delivery of 23 pellets
-                            MealSize -= 23; // Subtract 23 from MealSize to account for the pellets just queued
-                        }
-                        // Add the final command to deliver the remaining pellets (less than or equal to 23)
-                        AddCommand(ActualFeeder, MealSize, Feeder);
-                        Log("Feeder: " + Feeder.ToString() + "  Pellets: " + MealSize.ToString() + " " + Medi); // Log the final delivery
+                        M = new MealType(ActualFeeder, 23, Feeder);
+                        Meals.Enqueue(M);   // Add a command to deliver 23 pellets
+                        Log("Feeder: " + Feeder + "  Pellets: 23 " + Medi); // Log the delivery of 23 pellets
+                        MealSize -= 23; // Subtract 23 from MealSize to account for the pellets just queued
                     }
-                    else
-                    {
-                        ActualFeeder = Feeder; // Use the default feeder index
-                        while (MealSize > 23)
-                        {
-                            AddCommand(ActualFeeder, 23); // Add a command to deliver 23 pellets
-                            Log("Feeder: " + Feeder + "  Pellets: 23 " + Medi); // Log the delivery of 23 pellets
-                            MealSize -= 23; // Subtract 23 from MealSize to account for the pellets just queued
-                        }
-                        // Add the final command to deliver the remaining pellets (less than or equal to 23)
-                        AddCommand(ActualFeeder, MealSize);
-                        Log("Feeder: " + Feeder.ToString() + "  Pellets: " + MealSize.ToString() + " " + Medi); // Log the final delivery
-                    }
-                    // Add commands to deliver pellets while there are more than 23 pellets to deliver
-
-
+                    // Add the final command to deliver the remaining pellets (less than or equal to 23)
+                    M = new MealType(ActualFeeder, MealSize, Feeder);    
+                    Meals.Enqueue(M);  
+                    Log("Feeder: " + Feeder.ToString() + "  Pellets: " + MealSize.ToString() + " " + Medi); // Log the final delivery                   
                     // If this is the last meal of the week, generate the next week's meals for the rat
                     if (MealNum + 1 == DailyMealCount * 7)
                     {
@@ -367,7 +362,8 @@ namespace BioPacVideo
                     }
                 }
             }
-            ExecuteAction(); // Execute all the commands that have been queued           
+            WaitingMeal = true;
+            RunNextMeal(); 
         }
         #endregion
     }
