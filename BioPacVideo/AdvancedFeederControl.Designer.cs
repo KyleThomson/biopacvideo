@@ -42,6 +42,7 @@
             this.CommandValue.Name = "CommandValue";
             this.CommandValue.Size = new System.Drawing.Size(476, 20);
             this.CommandValue.TabIndex = 0;
+            this.CommandValue.TextChanged += new System.EventHandler(this.CommandValue_TextChanged);
             this.CommandValue.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CommandValue_KeyPressed);
             // 
             // buttonSend

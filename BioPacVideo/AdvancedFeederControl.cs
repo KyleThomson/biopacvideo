@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -65,7 +66,18 @@ namespace BioPacVideo
 
         private void comboBoxCommonCommands_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CommandValue.Text = comboBoxCommonCommands.SelectedItem.ToString().Substring(0,2);
+            if (comboBoxCommonCommands.SelectedItem.ToString() != "")
+            {
+                CommandValue.Text = comboBoxCommonCommands.SelectedItem.ToString().Substring(0, 2);
+            }
+        }
+
+        private void CommandValue_TextChanged(object sender, EventArgs e)
+        {
+            if (CommandValue.Text.Length <= 1)
+            {
+                comboBoxCommonCommands.SelectedItem = "";
+            }
         }
     }
 }
