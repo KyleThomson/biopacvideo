@@ -62,5 +62,10 @@ namespace BioPacVideo
                 CommandValue.SelectionStart = CommandValue.Text.Length;
             }            
         }
+
+        private void comboBoxCommonCommands_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CommandValue.Text = comboBoxCommonCommands.SelectedItem.ToString().Substring(0,2);
+        }
     }
 }

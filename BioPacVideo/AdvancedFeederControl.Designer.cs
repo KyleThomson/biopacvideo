@@ -31,15 +31,16 @@
             this.CommandValue = new System.Windows.Forms.TextBox();
             this.buttonSend = new System.Windows.Forms.Button();
             this.textBoxHistory = new System.Windows.Forms.TextBox();
+            this.comboBoxCommonCommands = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // CommandValue
             // 
             this.CommandValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.CommandValue.Location = new System.Drawing.Point(12, 429);
+            this.CommandValue.Location = new System.Drawing.Point(182, 429);
             this.CommandValue.Name = "CommandValue";
-            this.CommandValue.Size = new System.Drawing.Size(646, 20);
+            this.CommandValue.Size = new System.Drawing.Size(476, 20);
             this.CommandValue.TabIndex = 0;
             this.CommandValue.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CommandValue_KeyPressed);
             // 
@@ -68,11 +69,32 @@
             this.textBoxHistory.Size = new System.Drawing.Size(762, 406);
             this.textBoxHistory.TabIndex = 2;
             // 
+            // comboBoxCommonCommands
+            // 
+            this.comboBoxCommonCommands.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.comboBoxCommonCommands.FormattingEnabled = true;
+            this.comboBoxCommonCommands.Items.AddRange(new object[] {
+            "",
+            "24 - Feeder",
+            "25 - Pellet",
+            "26 - Increment Commands",
+            "27 - Cycle All States",
+            "28 - Run All Feeders",
+            "29 - Reset",
+            "30 - Set Ready",
+            "31 - Acknoledge"});
+            this.comboBoxCommonCommands.Location = new System.Drawing.Point(12, 429);
+            this.comboBoxCommonCommands.Name = "comboBoxCommonCommands";
+            this.comboBoxCommonCommands.Size = new System.Drawing.Size(164, 21);
+            this.comboBoxCommonCommands.TabIndex = 3;
+            this.comboBoxCommonCommands.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommonCommands_SelectedIndexChanged);
+            // 
             // AdvancedFeederControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(786, 461);
+            this.Controls.Add(this.comboBoxCommonCommands);
             this.Controls.Add(this.textBoxHistory);
             this.Controls.Add(this.buttonSend);
             this.Controls.Add(this.CommandValue);
@@ -89,5 +111,6 @@
         private System.Windows.Forms.TextBox CommandValue;
         private System.Windows.Forms.Button buttonSend;
         private System.Windows.Forms.TextBox textBoxHistory;
+        private System.Windows.Forms.ComboBox comboBoxCommonCommands;
     }
 }
