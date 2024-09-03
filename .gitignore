@@ -38,3 +38,4 @@ ProjectManager/.vs/ProjectManager/v16/.suo
 bin/
 BioPacVideo/obj/
 *.user
+*.pfx
