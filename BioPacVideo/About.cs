@@ -22,7 +22,7 @@ namespace BioPacVideo
 
         private void About_Load(object sender, EventArgs e)
         {
-            pictureBoxBPVLogo.Image = Image.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Images", "BPVIcon.jpg"));
+            pictureBoxBPVLogo.Image = Image.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BPVIcon.jpg"));
             labelVersionNumber.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
         #endregion
