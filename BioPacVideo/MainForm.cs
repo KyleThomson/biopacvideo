@@ -54,8 +54,12 @@ namespace BioPacVideo
             Video = VideoWrapper.Instance; //Same for Video                        
             MP = MPTemplate.Instance; //Pull Instance from MP Template - So we only have a single instance in all code            
             Feeder = FeederTemplate.Instance; //Same for Feeders 
-            BoxPen = new Pen(Brushes.Black, 4);            
-            BioIni = new IniFile(Directory.GetCurrentDirectory() + "\\BioPacVideo.ini"); //Standard Ini Settings
+            BoxPen = new Pen(Brushes.Black, 4);
+            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string iniFilePath = Path.Combine(appDataFolder, "BioPacVideo", "BioPacVideo.ini");
+            Directory.CreateDirectory(Path.GetDirectoryName(iniFilePath));
+            Console.WriteLine(iniFilePath);
+            BioIni = new IniFile(iniFilePath); //Standard Ini Settings
             
             Video.PanelHandles = new Int32[16];
             Video.PanelHandles[0] = CloneChannelPanel1.Handle.ToInt32();

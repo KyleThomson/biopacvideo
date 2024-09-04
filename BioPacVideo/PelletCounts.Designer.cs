@@ -115,7 +115,7 @@
             this.Comments11 = new System.Windows.Forms.TextBox();
             this.Comments10 = new System.Windows.Forms.TextBox();
             this.Comments9 = new System.Windows.Forms.TextBox();
-            this.CancelButton = new System.Windows.Forms.Button();
+            this.ButtonCancel = new System.Windows.Forms.Button();
             this.label23 = new System.Windows.Forms.Label();
             this.MedBox16 = new System.Windows.Forms.TextBox();
             this.MedBox15 = new System.Windows.Forms.TextBox();
@@ -823,15 +823,15 @@
             this.Comments9.Size = new System.Drawing.Size(60, 20);
             this.Comments9.TabIndex = 49;
             // 
-            // CancelButton
+            // ButtonCancel
             // 
-            this.CancelButton.Location = new System.Drawing.Point(281, 474);
-            this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(103, 21);
-            this.CancelButton.TabIndex = 65;
-            this.CancelButton.Text = "Cancel";
-            this.CancelButton.UseVisualStyleBackColor = true;
-            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            this.ButtonCancel.Location = new System.Drawing.Point(281, 474);
+            this.ButtonCancel.Name = "ButtonCancel";
+            this.ButtonCancel.Size = new System.Drawing.Size(103, 21);
+            this.ButtonCancel.TabIndex = 65;
+            this.ButtonCancel.Text = "Cancel";
+            this.ButtonCancel.UseVisualStyleBackColor = true;
+            this.ButtonCancel.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // label23
             // 
@@ -976,7 +976,7 @@
             this.Controls.Add(this.MedBox2);
             this.Controls.Add(this.MedBox1);
             this.Controls.Add(this.label23);
-            this.Controls.Add(this.CancelButton);
+            this.Controls.Add(this.ButtonCancel);
             this.Controls.Add(this.Comments16);
             this.Controls.Add(this.Comments15);
             this.Controls.Add(this.Comments14);
@@ -1163,7 +1163,7 @@
         private System.Windows.Forms.TextBox Comments11;
         private System.Windows.Forms.TextBox Comments10;
         private System.Windows.Forms.TextBox Comments9;
-        private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button ButtonCancel;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.TextBox MedBox16;
         private System.Windows.Forms.TextBox MedBox15;

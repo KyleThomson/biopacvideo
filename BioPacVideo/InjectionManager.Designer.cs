@@ -145,7 +145,7 @@
             this.Inj2VBox5 = new System.Windows.Forms.TextBox();
             this.Inj1VBox6 = new System.Windows.Forms.TextBox();
             this.Inj1VBox7 = new System.Windows.Forms.TextBox();
-            this.Close = new System.Windows.Forms.Button();
+            this.ButtonClose = new System.Windows.Forms.Button();
             this.LastEntry = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.SetInjectionButton = new System.Windows.Forms.Button();
@@ -1278,15 +1278,15 @@
             this.Inj1VBox7.TabIndex = 28;
             this.Inj1VBox7.TabStop = false;
             // 
-            // Close
+            // ButtonClose
             // 
-            this.Close.Location = new System.Drawing.Point(747, 697);
-            this.Close.Name = "Close";
-            this.Close.Size = new System.Drawing.Size(75, 23);
-            this.Close.TabIndex = 70;
-            this.Close.Text = "Close";
-            this.Close.UseVisualStyleBackColor = true;
-            this.Close.Click += new System.EventHandler(this.Close_Click);
+            this.ButtonClose.Location = new System.Drawing.Point(747, 697);
+            this.ButtonClose.Name = "ButtonClose";
+            this.ButtonClose.Size = new System.Drawing.Size(75, 23);
+            this.ButtonClose.TabIndex = 70;
+            this.ButtonClose.Text = "ButtonClose";
+            this.ButtonClose.UseVisualStyleBackColor = true;
+            this.ButtonClose.Click += new System.EventHandler(this.Close_Click);
             // 
             // LastEntry
             // 
@@ -1823,7 +1823,7 @@
             this.Controls.Add(this.SetInjectionButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.LastEntry);
-            this.Controls.Add(this.Close);
+            this.Controls.Add(this.ButtonClose);
             this.Controls.Add(this.Inj1VBox7);
             this.Controls.Add(this.Inj1VBox6);
             this.Controls.Add(this.Inj2VBox5);
@@ -2060,7 +2060,7 @@
         private System.Windows.Forms.TextBox Inj2VBox5;
         private System.Windows.Forms.TextBox Inj1VBox6;
         private System.Windows.Forms.TextBox Inj1VBox7;
-        private System.Windows.Forms.Button Close;
+        private System.Windows.Forms.Button ButtonClose;
         private System.Windows.Forms.TextBox LastEntry;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button SetInjectionButton;

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 163 257">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #eb3434;
+      }
+
+      .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2, .cls-5 {
+        stroke: #fff;
+      }
+
+      .cls-2, .cls-9 {
+        fill: #fff;
+      }
+
+      .cls-3, .cls-4, .cls-6, .cls-7, .cls-8 {
+        stroke: #000;
+      }
+
+      .cls-4 {
+        fill: #0994eb;
+      }
+
+      .cls-10 {
+        letter-spacing: -.05em;
+      }
+
+      .cls-5 {
+        fill: #ebebeb;
+      }
+
+      .cls-11 {
+        letter-spacing: 0em;
+      }
+
+      .cls-9 {
+        font-family: SourceSansPro-Bold, 'Source Sans Pro';
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .cls-6 {
+        fill: #eba009;
+      }
+
+      .cls-7 {
+        fill: #666;
+      }
+
+      .cls-8 {
+        fill: #24eb09;
+      }
+    </style>
+  </defs>
+  <g id="BIOPAC">
+    <rect id="Biopic" class="cls-7" x=".5" y=".5" width="162" height="256"/>
+    <rect id="Label" class="cls-4" x="28.74" y="15.46" width="105.52" height="228"/>
+    <g id="Indicators">
+      <ellipse id="Power" class="cls-8" cx="55.1" cy="188.76" rx="5.94" ry="5.04"/>
+      <ellipse id="Activity" class="cls-6" cx="117.52" cy="198.85" rx="5.94" ry="5.04"/>
+      <ellipse id="Busy" class="cls-3" cx="117.52" cy="211.46" rx="5.94" ry="5.04"/>
+    </g>
+    <g id="Camera_lens">
+      <circle id="Lens_highlight" class="cls-2" cx="81.5" cy="66.25" r="37.5"/>
+      <circle id="Camera_lens-2" data-name="Camera_lens" class="cls-5" cx="81.5" cy="66.25" r="33.75"/>
+      <path id="Lens_artifact" class="cls-2" d="M61.12,47.59c.7-.7,5.67,2.47,4.92,3.55-3.5,4.98-5.91,20.74-1.11,31.12.53,1.14-3.46,3.42-4.36,2.53-6.24-6.24-7.21-29.44.55-37.2Z"/>
+      <circle id="Camera_reflection" class="cls-2" cx="103.07" cy="66.25" r="3.75"/>
+    </g>
+    <rect id="Separation_line" class="cls-1" x="33.2" y="131.92" width="96.61" height="2.52"/>
+  </g>
+  <text class="cls-9" transform="translate(48.51 128.42)"><tspan x="0" y="0">BIO</tspan><tspan class="cls-10" x="32" y="0">P</tspan><tspan class="cls-11" x="43" y="0">A</tspan><tspan x="54.32" y="0">C</tspan></text>
+  <text class="cls-9" transform="translate(54.09 151.42)"><tspan x="0" y="0">VIDEO</tspan></text>
+</svg>

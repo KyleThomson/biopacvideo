@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BioPacVideo", "BioPacVideo\BioPacVideo.csproj", "{19150BB9-2F70-4C0D-B53C-3E8E0A211398}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "BioPacVideoInstaller", "BioPacVideoInstaller\BioPacVideoInstaller.vdproj", "{5514BE7F-7914-4F79-9203-9508CF14E1DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,12 @@ Global
 		{19150BB9-2F70-4C0D-B53C-3E8E0A211398}.Release|x64.Build.0 = Release|x64
 		{19150BB9-2F70-4C0D-B53C-3E8E0A211398}.Release|x86.ActiveCfg = Release|x86
 		{19150BB9-2F70-4C0D-B53C-3E8E0A211398}.Release|x86.Build.0 = Release|x86
+		{5514BE7F-7914-4F79-9203-9508CF14E1DF}.Debug|Any CPU.ActiveCfg = Debug
+		{5514BE7F-7914-4F79-9203-9508CF14E1DF}.Debug|x64.ActiveCfg = Debug
+		{5514BE7F-7914-4F79-9203-9508CF14E1DF}.Debug|x86.ActiveCfg = Debug
+		{5514BE7F-7914-4F79-9203-9508CF14E1DF}.Release|Any CPU.ActiveCfg = Release
+		{5514BE7F-7914-4F79-9203-9508CF14E1DF}.Release|x64.ActiveCfg = Release
+		{5514BE7F-7914-4F79-9203-9508CF14E1DF}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
