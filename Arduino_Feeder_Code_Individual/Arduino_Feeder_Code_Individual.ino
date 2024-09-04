@@ -4,6 +4,7 @@ int innercount = 0;
 int attempts = 0;
 int failattempts = 0;
 int FailListCount = 0;
+int SpecialCom=0; 
 //State 0 - Fail
 //State 1 = Executing
 //State 2 = Success
@@ -58,8 +59,9 @@ void setup() {
   pinMode(MOTORCONTROL, OUTPUT);            //Initialize Motor Power Pin
   digitalWrite(MOTORCONTROL, LOW);          //Turn the motors off ASAP
   attachInterrupt(1, GetCommand, FALLING);  //Turn on command recieve interrupt
-
+  SpecialCom=0; 
   //Initialize Pins
+  pinMode(LED_BUILTIN, OUTPUT);             //Control the ONboard LED for Debugging
   pinMode(DIR, OUTPUT);
   pinMode(STEP, OUTPUT);
   pinMode(AddA, OUTPUT);
@@ -144,6 +146,80 @@ void loop() {
     State = 0;
     digitalWrite(EEGOut0, LOW);
     digitalWrite(EEGOut1, LOW);
+  }
+  if (SpecialCom)
+  {
+    switch (SpecialCom)
+    {
+
+      case 24: //Send Feeder Next
+        Feeder=true; 
+        break; 
+      case 25: //Send pellet next
+        Feeder=false; 
+        break; 
+      case 26: 
+        Commands++; 
+        break; 
+      case 27: 
+          digitalWrite(EEGOut1, LOW);
+          digitalWrite(EEGOut0, LOW);
+          delay(10000);
+          digitalWrite(EEGOut1, LOW);
+          digitalWrite(EEGOut0, HIGH);
+          delay(10000);
+          digitalWrite(EEGOut1, HIGH);
+          digitalWrite(EEGOut0, LOW);
+          delay(10000);
+          digitalWrite(EEGOut1, HIGH);
+          digitalWrite(EEGOut0, HIGH);
+          delay(10000);           
+          break; 
+      case 28: //Run ALL feeders 
+        for (count=24; count>0; count--)
+        {
+          PList[count-1]=3; 
+          FList[count-1]=count-1; 
+        }
+        count = 0; 
+        Commands=24; 
+        break; 
+      case 29: //Reset
+        count=0;             
+        AddressTemp = 24;
+        innercount = 0;
+        attempts = 0;
+        failattempts = 0;
+        FailListCount = 0;
+        State = 3;
+        resetcount = false;
+        Execute = false;  //Whether or not to execute a command
+        Feeder = true;
+        Fail = false;
+        Ack = false;
+        PelletCount = false;
+        Commands = 0; 
+          Execute = false;
+        SetAddress(24);  //Set to a null address    
+        digitalWrite(MOTORCONTROL, LOW);  //Turn off power to the motors
+        detachInterrupt(0);               //Turn off Pellet IR sensor           
+        break; 
+      case 30:
+        if (State==3)
+        {
+            digitalWrite(EEGOut1, HIGH);
+            digitalWrite(EEGOut0, LOW);
+            delay(10000);
+            digitalWrite(EEGOut1, HIGH);
+            digitalWrite(EEGOut0, HIGH);                
+        }
+        Ack = true; 
+        break; 
+      case 31:             
+        Execute = true;
+        break;       
+      }
+      SpecialCom=0; 
   }
   if (Execute)  //Recieved final command, good to execute
   {
@@ -267,6 +343,7 @@ void GetCommand() {
   {
     GetC = true;  //Debounce set high - don't want to repeat the command
     int Com = 0;  //Clear last command
+    SpecialCom=0; //Ensure SpecialCom is empty    
     //Convert Message from BioPac to number
     if (!digitalRead(EEG0)) { Com = Com + 1; }
     if (!digitalRead(EEG1)) { Com = Com + 2; }
@@ -285,78 +362,8 @@ void GetCommand() {
     }
     else
     {
-      switch (Com)
-      {
-          case 24: //Send Feeder Next
-            Feeder=true; 
-            break; 
-          case 25: //Send pellet next
-            Feeder=false; 
-            break; 
-          case 26: 
-            Commands++; 
-            break; 
-          case 27: 
-              digitalWrite(EEGOut1, LOW);
-              digitalWrite(EEGOut0, LOW);
-              delay(5000000);
-              digitalWrite(EEGOut1, LOW);
-              digitalWrite(EEGOut0, HIGH);
-              delay(5000000);
-              digitalWrite(EEGOut1, HIGH);
-              digitalWrite(EEGOut0, LOW);
-              delay(5000000);
-              digitalWrite(EEGOut1, HIGH);
-              digitalWrite(EEGOut0, HIGH);
-              delay(5000000);           
-              break; 
-          case 28: //Run ALL feeders 
-            for (count=24; count>0; count--)
-            {
-               PList[count-1]=3; 
-               FList[count-1]=count-1; 
-            }
-            count = 0; 
-            Commands=24; 
-            break; 
-          case 29: //Reset
-            count=0;             
-            AddressTemp = 24;
-            innercount = 0;
-            attempts = 0;
-            failattempts = 0;
-            FailListCount = 0;
-            State = 3;
-            resetcount = false;
-            Execute = false;  //Whether or not to execute a command
-            Feeder = true;
-            Fail = false;
-            Ack = false;
-            PelletCount = false;
-            Commands = 0; 
-               Execute = false;
-            SetAddress(24);  //Set to a null address    
-            digitalWrite(MOTORCONTROL, LOW);  //Turn off power to the motors
-            detachInterrupt(0);               //Turn off Pellet IR sensor           
-            break; 
-          case 30:
-            if (State==3)
-            {
-                digitalWrite(EEGOut1, HIGH);
-                digitalWrite(EEGOut0, LOW);
-                delay(10000);
-                digitalWrite(EEGOut1, HIGH);
-                digitalWrite(EEGOut0, HIGH);                
-            }
-            Ack = true; 
-            break; 
-          case 31:             
-            Execute = true;
-            break;             
-          
-      }
-      //Check if an execute command            
-  }
-  GetC = false;  //Debounce close
+        SpecialCom=Com;        
+    }              
+    GetC = false;  //Debounce close
   }
 }
