@@ -58,7 +58,6 @@ namespace BioPacVideo
             string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             string iniFilePath = Path.Combine(appDataFolder, "BioPacVideo", "BioPacVideo.ini");
             Directory.CreateDirectory(Path.GetDirectoryName(iniFilePath));
-            Console.WriteLine(iniFilePath);
             BioIni = new IniFile(iniFilePath); //Standard Ini Settings
             
             Video.PanelHandles = new Int32[16];

@@ -45,12 +45,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_679959782C55C73E458036C616C7B78F"
-        "OwnerKey" = "8:_C7F8CBAC0E7F48B99D5C4E4191E5D835"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_6E09621F2E8E497D91E9B148C3410B4B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -59,12 +53,6 @@
         {
         "MsmKey" = "8:_A48A6101D99E41F9875EDF257E3E93D0"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A90A40797C46FE2F9394BBD0780EA7D2"
-        "OwnerKey" = "8:_C7F8CBAC0E7F48B99D5C4E4191E5D835"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -89,24 +77,6 @@
         {
         "MsmKey" = "8:_FF88B083D437445192BD50C668B37927"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C7F8CBAC0E7F48B99D5C4E4191E5D835"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A90A40797C46FE2F9394BBD0780EA7D2"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_679959782C55C73E458036C616C7B78F"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -304,37 +274,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_679959782C55C73E458036C616C7B78F"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Microsoft.VisualBasic.PowerPacks.Vs, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_679959782C55C73E458036C616C7B78F"
-                    {
-                    "Name" = "8:Microsoft.VisualBasic.PowerPacks.Vs.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Microsoft.VisualBasic.PowerPacks.Vs.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_EB366082F96C4D478BA00F6EE3C89691"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6E09621F2E8E497D91E9B148C3410B4B"
             {
             "SourcePath" = "8:..\\BioPacVideo\\AMESDK.X64.DLL"
@@ -373,37 +312,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A90A40797C46FE2F9394BBD0780EA7D2"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:QCAP.NET.X64, Version=1.1.0.183, Culture=neutral, processorArchitecture=AMD64"
-                "ScatterAssemblies"
-                {
-                    "_A90A40797C46FE2F9394BBD0780EA7D2"
-                    {
-                    "Name" = "8:QCAP.NET.X64.DLL"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:QCAP.NET.X64.DLL"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_EB366082F96C4D478BA00F6EE3C89691"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ED2E2A132B7245BDA54DCF0C1DA85CEE"
@@ -496,7 +404,7 @@
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_EB366082F96C4D478BA00F6EE3C89691"
             {
-            "DefaultLocation" = "8:[ProgramFiles64Folder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFiles64Folder]\\[ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -540,7 +448,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:Syncs EEG Data with Camera feeds"
         "ARPURLINFOABOUT" = "8:"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_3F17DA6E97E642E9943FB1A8C7952B50"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
