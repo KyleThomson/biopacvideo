@@ -8,6 +8,22 @@ using System.Security.Cryptography;
 
 namespace BioPacVideo
 {
+    public enum MEALSTATE
+    {
+        NONE=0,
+        WAITING=1, 
+        EXECUTING=2,
+        FINISHED=3
+    }
+
+    public enum FEEDERSTATE : int
+    {
+        FAIL=0,
+        EXECUTING=1,
+        SUCCESS=2,
+        READY=3
+    }
+
     public class MealType
     {
         public int Pellets;
@@ -17,6 +33,7 @@ namespace BioPacVideo
         public MealType(int F, int P, int I) { Feeder = F; Pellets = P; IndicatedFeeder = I; Test = false; }
         public MealType(int F, int P, int I, bool T) { Feeder = F; Pellets = P; IndicatedFeeder = I; Test = T; }
     }
+
     public class FeederTemplate
     {
         #region Properties
@@ -48,7 +65,7 @@ namespace BioPacVideo
         private Queue<byte> Commands;
         private Stack<string> CommandText;
         public int CommandSize = 0;  //Number of commands left to run. 
-        public bool CommandReady; //Set once all commands queued.
+
         public int gap = 0;
         private Random Randomizer;
         public RatTemplate[] Rats;
@@ -57,7 +74,7 @@ namespace BioPacVideo
         private string LogFileName;
         public int Cages_X;
         public int Cages_Y;
-        public bool WaitingMeal;
+        public MEALSTATE MealState; 
         private Queue<MealType> Meals;
         #endregion
 
@@ -72,9 +89,10 @@ namespace BioPacVideo
 
         public FeederTemplate()
         {
+            Meals = new Queue<MealType>();
             Commands = new Queue<byte>();
             CommandText = new Stack<string>();
-            CommandReady = false;
+            MealState = MEALSTATE.NONE; 
             ErrorState = false;
             State = 3;
             StateText = "READY";
@@ -157,8 +175,10 @@ namespace BioPacVideo
         /// <returns>The most recent command to send to the arduimo as a byte</returns>
         public byte GetTopCommand()
         {
+            
             CommandSize--;
             byte v = Commands.Dequeue();
+            Console.WriteLine("FEEDER COMMAND: " + v.ToString()); 
             return v;
         }
         #endregion
@@ -206,11 +226,13 @@ namespace BioPacVideo
         public void RunNextMeal()
         {
             MealType M=Meals.Dequeue();
+            Console.WriteLine("FEEDING:" + M.Feeder.ToString());
             AddCommand(M);
-            if (Meals.Count==0)
-            {
-                WaitingMeal = false; 
-            }
+           
+        }
+        public int CheckMealsCount()
+        {
+            return Meals.Count; 
         }
         /// <summary>
         /// Waits for the command sent to the arduino to be executed
@@ -272,6 +294,7 @@ namespace BioPacVideo
         public void AddCommand(MealType M)
         {
             string Txt;
+            MealState = MEALSTATE.EXECUTING; 
             Commands.Enqueue((byte)24); //Feeder 
             Commands.Enqueue((byte)M.Feeder);
             Commands.Enqueue((byte)25); //Pellets
@@ -295,7 +318,6 @@ namespace BioPacVideo
         {
             Commands.Enqueue((byte)31); 
             CommandSize = Commands.Count;
-            CommandReady = true;
         }
 
         /// <summary>
@@ -306,7 +328,7 @@ namespace BioPacVideo
             //The software asks the arduino to acknowledge that it recieved the pellet and the feeder 
             Commands.Enqueue((byte)30); //gotta figure out the numbering system here
             CommandSize = Commands.Count;
-            CommandReady = true;
+            
             //ArduinoAck = false; 
         }
 
@@ -362,8 +384,8 @@ namespace BioPacVideo
                     }
                 }
             }
-            WaitingMeal = true;
-            RunNextMeal(); 
+            MealState = MEALSTATE.WAITING;
+            
         }
         #endregion
     }

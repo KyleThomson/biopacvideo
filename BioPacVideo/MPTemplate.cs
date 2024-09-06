@@ -435,7 +435,7 @@ namespace BioPacVideo
         {
             for (int i = 0; i < TotChan(); i++) //for each channel update the header info
             {
-                BinaryFile.Seek(ChannelDataSizeLocation[GetChan(i)], SeekOrigin.Begin);
+                dd BinaryFile.Seek(ChannelDataSizeLocation[GetChan(i)], SeekOrigin.Begin);
                 BinaryFileID.Write((Int32)(samplecount));   
             }            
         }
@@ -549,7 +549,8 @@ namespace BioPacVideo
             bool lasta, lastb;
             string Result;
             int TempState;
-            Result = ""; 
+            Result = "";
+            Feeder.gap = 0; 
             AcqChan = TotChan();  //How many channels are we going to acquire   
             VoltageSpacing = (int)(Ymax / (AcqChan));
             Thread BuffDraw = new Thread(new ThreadStart(drawbuffer)); //Set up thread for buffering 
@@ -675,28 +676,32 @@ namespace BioPacVideo
 
                 if (Feeder.Enabled)
                 {
-                    if (Feeder.CommandSize > 0) 
+
+                    if (Feeder.State==3)
                     {
-                        byte v;
-                        v = Feeder.GetTopCommand();
-                        Feeder.gap++;
-                        for (byte k = 0; k < 5; k++)   //Step through the bits of the command                    
-                        {
-                            bool x = !((v & (1 << k)) > 0); //mathematical way to make x the kth bit                              
-                            MPCLASS.setDigitalIO((uint)k, x, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //set it on the MP150
-                        }
-                        MPCLASS.setDigitalIO(7, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //pulse the data ready bit
-                        Thread.Sleep(1);
-                        MPCLASS.setDigitalIO(7, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //finish pulse 
-                        if (Feeder.CommandSize < 1)
-                        {
-                            Feeder.CommandReady = false;
-                        }
+                        if (Feeder.MealState == MEALSTATE.WAITING)
+                            Feeder.RunNextMeal();
                     }
+                   
                     lasta = a; //These serve as a debounce function. 
                     lastb = b; //Without debounce, you get multiple states in a single transistion
                     if (Feeder.gap == 0)
                     {
+                        Feeder.gap++;
+                        if (Feeder.CommandSize > 0)
+                        {
+                            byte v;
+                            v = Feeder.GetTopCommand();
+
+                            for (byte k = 0; k < 5; k++)   //Step through the bits of the command                    
+                            {
+                                bool x = !((v & (1 << k)) > 0); //mathematical way to make x the kth bit                              
+                                MPCLASS.setDigitalIO((uint)k, x, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //set it on the MP150
+                            }
+                            MPCLASS.setDigitalIO(7, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //pulse the data ready bit
+                            Thread.Sleep(1);
+                            MPCLASS.setDigitalIO(7, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //finish pulse                          
+                        }
                         MPCLASS.getDigitalIO(9, out a, MPCLASS.DIGITALOPT.READ_HIGH_BITS); //read the high bit for state
                         MPCLASS.getDigitalIO(8, out b, MPCLASS.DIGITALOPT.READ_HIGH_BITS); //read the low bit for state
                         if ((lastb == b) && (lasta == a))
@@ -720,6 +725,14 @@ namespace BioPacVideo
                                             Feeder.Log(Result.Substring(0, Result.Count() - 3));
                                             FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error(Result); }));
                                             Feeder.ArduinoAckowledge();
+                                            if (Feeder.CheckMealsCount() == 0)
+                                            {
+                                                Feeder.MealState=MEALSTATE.NONE;
+                                            }
+                                            else
+                                            {
+                                                Feeder.MealState = MEALSTATE.WAITING;
+                                            }
                                         }
                                         Feeder.StateText = "ERROR";
                                         break;
@@ -734,9 +747,13 @@ namespace BioPacVideo
                                             FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Status(Result); }));
                                             Feeder.ArduinoAckowledge();
                                             Feeder.StateText = "SUCCESS";
-                                            if (Feeder.WaitingMeal)
+                                            if (Feeder.CheckMealsCount() == 0)
                                             {
-                                                Feeder.RunNextMeal();
+                                                Feeder.MealState = MEALSTATE.NONE;
+                                            }
+                                            else
+                                            {
+                                                Feeder.MealState = MEALSTATE.WAITING;
                                             }
                                         }
                                         else
@@ -745,8 +762,8 @@ namespace BioPacVideo
                                             FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Status(Result); }));
                                         }
                                         break; 
-                                    case 3:                                        
-                                        Feeder.StateText = "READY";
+                                    case 3:
+                                        Feeder.StateText = "READY";                                       
                                         break;
                                 }
                                 Feeder.State = TempState;                                                      
@@ -754,10 +771,11 @@ namespace BioPacVideo
                         }
                         
                     }
-                    else if (Feeder.gap > 0) //only want to send the feeding commands once every 4 cycles 
+                    else  //only want to send the feeding commands once every 4 cycles 
                     {
                         Feeder.gap++;
-                        if (Feeder.gap == 4) { Feeder.gap = 0; }
+                        if (Feeder.gap >=5) { Feeder.gap = 0; }
+                        
                     }
                 }
                 Buffer.BlockCopy(rec_buffer, 0, draw_buffer, 0, (int)received * 8);  //copy the Buffer to the drawing area                      
