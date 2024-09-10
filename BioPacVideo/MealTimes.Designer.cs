@@ -1,7 +1,7 @@
 ﻿
 namespace BioPacVideo
 {
-    partial class FeederMenu
+    partial class MealTimes
     {
         /// <summary>
         /// Required designer variable.
@@ -47,18 +47,18 @@ namespace BioPacVideo
             this.IDX_FEEDERENABLE = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.okayButton = new System.Windows.Forms.Button();
+            this.ButtonSubmit = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label27
             // 
             this.label27.AutoSize = true;
             this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label27.Location = new System.Drawing.Point(40, 9);
+            this.label27.Location = new System.Drawing.Point(55, 9);
             this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(138, 20);
+            this.label27.Size = new System.Drawing.Size(99, 20);
             this.label27.TabIndex = 69;
-            this.label27.Text = "Feeder Settings";
+            this.label27.Text = "Meal Times";
             // 
             // IDC_Meal1
             // 
@@ -171,7 +171,6 @@ namespace BioPacVideo
             this.IDC_PPG.Name = "IDC_PPG";
             this.IDC_PPG.Size = new System.Drawing.Size(134, 20);
             this.IDC_PPG.TabIndex = 111;
-            this.IDC_PPG.LostFocus += new System.EventHandler(this.IDC_PPG_TextChanged);
             // 
             // IDX_FEEDERENABLE
             // 
@@ -182,7 +181,6 @@ namespace BioPacVideo
             this.IDX_FEEDERENABLE.TabIndex = 112;
             this.IDX_FEEDERENABLE.Text = "Enable Feeders";
             this.IDX_FEEDERENABLE.UseVisualStyleBackColor = true;
-            this.IDX_FEEDERENABLE.CheckedChanged += new System.EventHandler(this.IDX_FEEDERENABLE_CheckedChanged);
             // 
             // label4
             // 
@@ -202,22 +200,22 @@ namespace BioPacVideo
             this.label5.TabIndex = 114;
             this.label5.Text = "0:00:00 and 23:59:59";
             // 
-            // okayButton
+            // ButtonSubmit
             // 
-            this.okayButton.Location = new System.Drawing.Point(44, 502);
-            this.okayButton.Name = "okayButton";
-            this.okayButton.Size = new System.Drawing.Size(134, 29);
-            this.okayButton.TabIndex = 115;
-            this.okayButton.Text = "OK";
-            this.okayButton.UseVisualStyleBackColor = true;
-            this.okayButton.Click += new System.EventHandler(this.okayButton_Click);
+            this.ButtonSubmit.Location = new System.Drawing.Point(44, 502);
+            this.ButtonSubmit.Name = "ButtonSubmit";
+            this.ButtonSubmit.Size = new System.Drawing.Size(134, 29);
+            this.ButtonSubmit.TabIndex = 115;
+            this.ButtonSubmit.Text = "Submit";
+            this.ButtonSubmit.UseVisualStyleBackColor = true;
+            this.ButtonSubmit.Click += new System.EventHandler(this.ButtonSubmit_Click);
             // 
-            // FeederMenu
+            // MealTimes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(216, 536);
-            this.Controls.Add(this.okayButton);
+            this.Controls.Add(this.ButtonSubmit);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.IDX_FEEDERENABLE);
@@ -236,7 +234,7 @@ namespace BioPacVideo
             this.Controls.Add(this.label1);
             this.Controls.Add(this.IDC_Meal1);
             this.Controls.Add(this.label27);
-            this.Name = "FeederMenu";
+            this.Name = "MealTimes";
             this.Text = "Meal Times";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -263,6 +261,6 @@ namespace BioPacVideo
         private System.Windows.Forms.CheckBox IDX_FEEDERENABLE;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button okayButton;
+        private System.Windows.Forms.Button ButtonSubmit;
     }
 }

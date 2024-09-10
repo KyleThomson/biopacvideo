@@ -5,12 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Collections; 
+using System.Collections;
 using System.Windows.Forms;
 
 namespace BioPacVideo
 {
-    public partial class FeederMenu : Form
+    public partial class MealTimes : Form
     {
         #region Properties
         private FeederTemplate Feeder;
@@ -23,7 +23,7 @@ namespace BioPacVideo
         #endregion
 
         #region Lifecycle
-        public FeederMenu(FeederTemplate Pass_feeder)
+        public MealTimes(FeederTemplate Pass_feeder)
         {
             InitializeComponent();
             Feeder = Pass_feeder;
@@ -64,15 +64,17 @@ namespace BioPacVideo
             IDX_FEEDERENABLE.Checked = Feeder.Enabled;
             IDC_PPG.Text = string.Format("{0:0.000}", Feeder.PelletsPerGram);
             FeederTime = new List<TimeSpan> { Feeder.Meal1, Feeder.Meal2, Feeder.Meal3, Feeder.Meal4, Feeder.Meal5, Feeder.Meal6 }; //I ended up doing case switches instead of this 
-            MealTime = new List<TextBox> { IDC_Meal1, IDC_Meal2, IDC_Meal3, IDC_Meal4, IDC_Meal5, IDC_Meal6 }; 
+            MealTime = new List<TextBox> { IDC_Meal1, IDC_Meal2, IDC_Meal3, IDC_Meal4, IDC_Meal5, IDC_Meal6 };
             IDC_Meal1.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal1); };
             IDC_Meal2.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal2); };
             IDC_Meal3.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal3); };
             IDC_Meal4.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal4); };
             IDC_Meal5.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal5); };
             IDC_Meal6.LostFocus += delegate (object sender, System.EventArgs e) { IDC_Meal_TextChanged(sender, e, IDC_Meal6); };
-     
-        }
+            IDC_PPG.LostFocus += delegate (object sender, System.EventArgs e) { IDC_PPG_TextChanged(sender, e); };
+            IDX_FEEDERENABLE.CheckedChanged += delegate (object sender, System.EventArgs e) { IDX_FEEDERENABLE_CheckedChanged(sender, e); };
+
+            }
 
         /// <summary>
         /// Gets the current Feeder Template and returns it
@@ -85,36 +87,39 @@ namespace BioPacVideo
         #endregion
 
         #region Input Handlers
-        private void IDC_Meal_TextChanged(object sender, EventArgs e, TextBox tb)
+        private void IDC_Meal_TextChanged(object sender, EventArgs e, TextBox tb, Boolean ShouldSave = false)
         {
             TimeSpan TestTime;
-            int i = MealTime.IndexOf(tb); 
+            int i = MealTime.IndexOf(tb);
             if (TimeSpan.TryParse(MealTime[i].Text, out TestTime))
             {
-                if(TestTime >= noon && TestTime <= noon_ten)
+                if (TestTime >= noon && TestTime <= noon_ten)
                 {
                     MessageBox.Show("Feeders Cannot be Set to the Following Times:\n12:00-12:10\n0:00-0:10", "Feeder Time Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    MealTime[i].Text = FeederTime[i].ToString(); 
+                    MealTime[i].Text = FeederTime[i].ToString();
                 }
                 else if (TestTime > midnight && TestTime <= mid_ten)
                 {
                     MessageBox.Show("Feeders Cannot be Set to the Following Times:\n12:00-12:10\n0:00-0:10", "Feeder Time Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    MealTime[i].Text = FeederTime[i].ToString(); 
+                    MealTime[i].Text = FeederTime[i].ToString();
                 }
                 else
                 {
                     MealTime[i].Text = TestTime.ToString();
-                    switch (i)
+                    if (ShouldSave)
                     {
-                        case 0: Feeder.Meal1 = TestTime; break;
-                        case 1: Feeder.Meal2 = TestTime; break;
-                        case 2: Feeder.Meal3 = TestTime; break;
-                        case 3: Feeder.Meal4 = TestTime; break;
-                        case 4: Feeder.Meal5 = TestTime; break;
-                        case 5: Feeder.Meal6 = TestTime; break;
+                        switch (i)
+                        {
+                            case 0: Feeder.Meal1 = TestTime; break;
+                            case 1: Feeder.Meal2 = TestTime; break;
+                            case 2: Feeder.Meal3 = TestTime; break;
+                            case 3: Feeder.Meal4 = TestTime; break;
+                            case 4: Feeder.Meal5 = TestTime; break;
+                            case 5: Feeder.Meal6 = TestTime; break;
+                        }
                     }
-                }    
-                
+                }
+
             }
             else if (MealTime[i].Text == "" || MealTime[i].Text == " " || MealTime[i].Text == "0")
             {
@@ -122,8 +127,8 @@ namespace BioPacVideo
                 FeederTime[i] = midnight;
                 switch (i)
                 {
-                    case 0: Feeder.Meal1 = midnight; break; 
-                    case 1: Feeder.Meal2 = midnight; break; 
+                    case 0: Feeder.Meal1 = midnight; break;
+                    case 1: Feeder.Meal2 = midnight; break;
                     case 2: Feeder.Meal3 = midnight; break;
                     case 3: Feeder.Meal4 = midnight; break;
                     case 4: Feeder.Meal5 = midnight; break;
@@ -133,30 +138,35 @@ namespace BioPacVideo
             else
                 MealTime[i].Text = FeederTime[i].ToString();
         }
-        
-        private void IDX_FEEDERENABLE_CheckedChanged(object sender, EventArgs e)
+
+        private void IDX_FEEDERENABLE_CheckedChanged(object sender, EventArgs e, bool ShouldSave = false)
         {
-            Feeder.Enabled = IDX_FEEDERENABLE.Checked;
+            if (ShouldSave)
+            {
+                Feeder.Enabled = IDX_FEEDERENABLE.Checked;
+            }
         }
 
-        private void IDC_PPG_TextChanged(object sender, EventArgs e)
+        private void IDC_PPG_TextChanged(object sender, EventArgs e, bool ShouldSave = false)
         {
             Double TestDouble;
             if (Double.TryParse(IDC_PPG.Text, out TestDouble))
             {
                 IDC_PPG.Text = string.Format("{0:0.0000}", TestDouble);
-                Feeder.PelletsPerGram = TestDouble;
+                if (ShouldSave)
+                {
+                    Feeder.PelletsPerGram = TestDouble;
+                }                
             }
             else
             {
                 IDC_PPG.Text = string.Format("{0:0.00}", Feeder.PelletsPerGram);
             }
         }
-       
-        private void okayButton_Click(object sender, EventArgs e)
-        {
 
-            for (int i = 0; i<6; i++)
+        private void ButtonSubmit_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < 6; i++)
             {
                 if (MealTime[i].Text == "")
                 {
@@ -173,9 +183,17 @@ namespace BioPacVideo
                     }
                 }
             }
-            DialogResult dr = MessageBox.Show("Are all meal times input correctly?", "Check", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            DialogResult dr = MessageBox.Show("Are all meal times input correctly?", "Check Meal Times", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (dr == DialogResult.Yes)
             {
+                IDC_Meal_TextChanged(sender, e, IDC_Meal1, true);
+                IDC_Meal_TextChanged(sender, e, IDC_Meal2, true);
+                IDC_Meal_TextChanged(sender, e, IDC_Meal3, true);
+                IDC_Meal_TextChanged(sender, e, IDC_Meal4, true);
+                IDC_Meal_TextChanged(sender, e, IDC_Meal5, true);
+                IDC_Meal_TextChanged(sender, e, IDC_Meal6, true);
+                IDC_PPG_TextChanged(sender, e, true);
+                IDX_FEEDERENABLE_CheckedChanged(sender, e, true);
                 this.Dispose(true);
             }
         }

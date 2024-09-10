@@ -58,6 +58,7 @@ namespace BioPacVideo
             this.feederAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.feederStatusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.feederMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.advancedFeederControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusBar = new System.Windows.Forms.StatusStrip();
             this.SpaceLeft = new System.Windows.Forms.ToolStripStatusLabel();
             this.IDT_BIOPACSTAT = new System.Windows.Forms.ToolStripStatusLabel();
@@ -85,7 +86,6 @@ namespace BioPacVideo
             this.CloneChannelPanel5 = new System.Windows.Forms.Panel();
             this.CloneChannelPanel9 = new System.Windows.Forms.Panel();
             this.CloneChannelPanel16 = new System.Windows.Forms.Panel();
-            this.advancedFeederControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -321,8 +321,15 @@ namespace BioPacVideo
             // 
             this.feederMenuToolStripMenuItem.Name = "feederMenuToolStripMenuItem";
             this.feederMenuToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-            this.feederMenuToolStripMenuItem.Text = "Feeder &Settings";
+            this.feederMenuToolStripMenuItem.Text = "&Meal Times";
             this.feederMenuToolStripMenuItem.Click += new System.EventHandler(this.feederSettingsMenuToolStripMenuItem_Click);
+            // 
+            // advancedFeederControlToolStripMenuItem
+            // 
+            this.advancedFeederControlToolStripMenuItem.Name = "advancedFeederControlToolStripMenuItem";
+            this.advancedFeederControlToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.advancedFeederControlToolStripMenuItem.Text = "Advanced Feeder Control";
+            this.advancedFeederControlToolStripMenuItem.Click += new System.EventHandler(this.advancedFeederControlToolStripMenuItem_Click);
             // 
             // StatusBar
             // 
@@ -570,13 +577,6 @@ namespace BioPacVideo
             this.CloneChannelPanel16.Name = "CloneChannelPanel16";
             this.CloneChannelPanel16.Size = new System.Drawing.Size(136, 115);
             this.CloneChannelPanel16.TabIndex = 12;
-            // 
-            // advancedFeederControlToolStripMenuItem
-            // 
-            this.advancedFeederControlToolStripMenuItem.Name = "advancedFeederControlToolStripMenuItem";
-            this.advancedFeederControlToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-            this.advancedFeederControlToolStripMenuItem.Text = "Advanced Feeder Control";
-            this.advancedFeederControlToolStripMenuItem.Click += new System.EventHandler(this.advancedFeederControlToolStripMenuItem_Click);
             // 
             // MainForm
             // 

@@ -397,7 +397,7 @@ namespace BioPacVideo
 
         private void feederSettingsMenuToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FeederMenu frm = new FeederMenu(Feeder);
+            MealTimes frm = new MealTimes(Feeder);
             frm.ShowDialog(this);
             Feeder = frm.ReturnFeeder();
             int M = 0;

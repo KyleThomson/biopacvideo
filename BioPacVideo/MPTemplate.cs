@@ -435,21 +435,16 @@ namespace BioPacVideo
         {
             for (int i = 0; i < TotChan(); i++) //for each channel update the header info
             {
-                dd BinaryFile.Seek(ChannelDataSizeLocation[GetChan(i)], SeekOrigin.Begin);
+                BinaryFile.Seek(ChannelDataSizeLocation[GetChan(i)], SeekOrigin.Begin);
                 BinaryFileID.Write((Int32)(samplecount));   
             }            
         }
 
-
-
-
-
-
         /**********************************************************************
-         * 
+         *
          *  Connection/Recording functions
-         *  
-         ***********************************************************************/
+         *
+         ************************************************************************/
         public bool Connect()
         {
             //connect to the MP Device
