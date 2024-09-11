@@ -701,20 +701,20 @@ namespace BioPacVideo
                         MPCLASS.getDigitalIO(8, out b, MPCLASS.DIGITALOPT.READ_HIGH_BITS); //read the low bit for state
                         if ((lastb == b) && (lasta == a))
                         {
-                            TempState = 0; 
-                            if (a) { TempState = 2; }
-                            if (b) { TempState++; }                             
+                            TempState = (int)FEEDERSTATE.FAIL;
+                            if (a) { TempState = (int)FEEDERSTATE.SUCCESS; }
+                            if (b) { TempState++; }
                             if (TempState!=Feeder.State)
                             {
                                 switch (TempState)
                                 {
                                     case 0:
-                                        if (Feeder.State == 3) //If the feeder goes from ready to Error, something happened with the infrared sensors
+                                        if (Feeder.State == (int)FEEDERSTATE.READY) //If the feeder goes from ready to Error, something happened with the infrared sensors
                                         {
                                             Feeder.Log("Infrared Sensors offline");
                                             FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error("Infrared Sensors offline - "); }));
                                         }
-                                        else if (Feeder.State == 1) //if something went wrong during execution, then the feeder failed to deliver pellets. 
+                                        else if (Feeder.State == (int)FEEDERSTATE.EXECUTING) //if something went wrong during execution, then the feeder failed to deliver pellets. 
                                         {
                                             Result = "FAIL - " + Feeder.GetLastCommandText() + " - ";
                                             Feeder.Log(Result.Substring(0, Result.Count() - 3));
@@ -735,7 +735,7 @@ namespace BioPacVideo
                                         Feeder.StateText = "EXECUTING";
                                         break;
                                     case 2:
-                                        if (Feeder.State == 1) //If we're executing, that was a success
+                                        if (Feeder.State == (int)FEEDERSTATE.EXECUTING) //If we're executing, that was a success
                                         {
                                             Result = "SUCCESS - " + Feeder.GetLastCommandText() + " - ";
                                             Feeder.Log(Result.Substring(0, Result.Count() - 3));
