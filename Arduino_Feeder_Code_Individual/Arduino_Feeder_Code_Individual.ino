@@ -316,7 +316,7 @@ void GetCommand() {
 #ifdef DEBUGMODE
   Serial.println("Recieved command " + String(Command));
 #endif
-  if (Command == ACKNOWLEDGE) Ack = true;
+  ProcessCommand();
 }
 
 void stepCurrentMotor() {
@@ -385,6 +385,7 @@ void executeFeeding() {
     Serial.println(String(StepAttempts));
 
     if (StepAttempts > STEPFAILATTEMPTS) {
+      dir = !dir;
       if (dir) {
 #ifdef DEBUGMODE
         Serial.println("Going Counter Clockwise Now");
@@ -396,7 +397,6 @@ void executeFeeding() {
 #endif
         digitalWrite(DIR, LOW);
       }
-      dir = !dir;
       StepAttempts = 0;
       DirectionAttempts++;
 
@@ -417,9 +417,6 @@ void executeFeeding() {
   }
 
   while (Ack == false) {
-    if (Command == 30) {
-      Ack = true;
-    }
     delay(LOOPDELAYTIME);
   }
   Ack = false;
@@ -439,7 +436,6 @@ void executeFeeding() {
 
 void loop() {
   checkIRStatus();
-  ProcessCommand();
   if (execute)  //Recived both a feeder number and a pellete amount okay to execute
   {
     if (FeederNumber != -1 && Pellets != -1) {
