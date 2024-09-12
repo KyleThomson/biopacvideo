@@ -64,8 +64,6 @@ namespace BioPacVideo
         public int[] AddressTable;
         private Queue<byte> Commands;
         private Stack<string> CommandText;
-        public int CommandSize = 0;  //Number of commands left to run. 
-
         public int gap = 0;
         private Random Randomizer;
         public RatTemplate[] Rats;
@@ -104,6 +102,10 @@ namespace BioPacVideo
         #endregion
 
         #region Getters
+        public int GetCommandSize()
+        {
+            return Commands.Count();
+        }
         /// <summary>
         /// Gets the current day of the week as an integer
         /// </summary>
@@ -166,7 +168,6 @@ namespace BioPacVideo
         public void SendDirectCommand(byte Command)
         {
             Commands.Enqueue(Command);
-            CommandSize++; 
         }
 
         /// <summary>
@@ -175,8 +176,6 @@ namespace BioPacVideo
         /// <returns>The most recent command to send to the arduimo as a byte</returns>
         public byte GetTopCommand()
         {
-            
-            CommandSize--;
             byte v = Commands.Dequeue();
             Console.WriteLine("FEEDER COMMAND: " + v.ToString()); 
             return v;
@@ -295,29 +294,26 @@ namespace BioPacVideo
         {
             string Txt;
             MealState = MEALSTATE.EXECUTING; 
-            Commands.Enqueue((byte)24); //Feeder 
+            Commands.Enqueue((byte)25); //Feeder 
             Commands.Enqueue((byte)M.Feeder);
-            Commands.Enqueue((byte)25); //Pellets
+            Commands.Enqueue((byte)26); //Pellets
             Commands.Enqueue((byte)M.Pellets);
-            Commands.Enqueue((byte)26);
-            Commands.Enqueue((byte)31); //Execute
-            CommandSize = Commands.Count;
-            Console.WriteLine(M.Feeder.ToString() + " " + M.Pellets.ToString() + " " + CommandSize);
+            Commands.Enqueue((byte)29);
+            Console.WriteLine(M.Feeder.ToString() + " " + M.Pellets.ToString());
             //This is to disable logging during testing meals 
             if (!M.Test)
             {
                 Txt = "Feeder-" + (M.IndicatedFeeder + 1).ToString() + " Pellets-" + M.Pellets.ToString();
                 CommandText.Push(Txt);
-            }
-             
-        }        
+            }             
+        }
+        
         /// <summary>
         /// Executes the command on the arduino
         /// </summary>
         public void ExecuteAction()  //This is likely depreciated 
         {
-            Commands.Enqueue((byte)31); 
-            CommandSize = Commands.Count;
+            Commands.Enqueue((byte)29);
         }
 
         /// <summary>
@@ -326,8 +322,7 @@ namespace BioPacVideo
         public void ArduinoAckowledge()
         {
             //The software asks the arduino to acknowledge that it recieved the pellet and the feeder 
-            Commands.Enqueue((byte)30); //gotta figure out the numbering system here
-            CommandSize = Commands.Count;
+            Commands.Enqueue((byte)28);
             
             //ArduinoAck = false; 
         }

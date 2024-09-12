@@ -9,7 +9,7 @@
 #define DEBOUNCETIME 50
 #define STEPTIME 40
 #define MOTORPOWERUPTIME 500
-#define LOOPDELAYTIME 500
+#define LOOPDELAYTIME 50
 
 //Command Values
 #define RUNALL 24

@@ -683,7 +683,7 @@ namespace BioPacVideo
                     if (Feeder.gap == 0)
                     {
                         Feeder.gap++;
-                        if (Feeder.CommandSize > 0)
+                        if (Feeder.GetCommandSize() > 0)
                         {
                             byte v;
                             v = Feeder.GetTopCommand();
