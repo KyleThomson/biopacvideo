@@ -1,11 +1,15 @@
 //Compiler Flags
-//#define DEBUGMODE //Turn on and off serial monitor
+#define DEBUGMODE  //Turn on and off serial monitor
 
 //Values to trigger fails on feeders
 #define STEPFAILATTEMPTS 200  //Motor takes 200 steps for 1 rotation
 #define DIRFAILATTEMPTS 4     //Change Direction 4 times before Giving up
 
-#define DELAYTIME 5000
+#define DELAYTIME 1000
+#define DEBOUNCETIME 50
+#define STEPTIME 40
+#define MOTORPOWERUPTIME 500
+#define LOOPDELAYTIME 500
 
 //Command Values
 #define RUNALL 24
@@ -58,11 +62,9 @@
 #define EEGOut0 19
 #define EEGOut1 1
 
-volatile int innercount = 0;
 volatile int StepAttempts = 0;
 volatile int DirectionAttempts = 0;
-volatile int Command = -1;  //Command
-volatile int PrevCommand = -1;
+volatile int Command = -1;
 volatile int State;
 volatile boolean IRDebounce = false;  //Used to debounce the IR Sensors
 volatile boolean NextCommandIsFeederNumber = false;
@@ -208,6 +210,14 @@ void SetState(int newState) {
   }
 }
 
+void RunAllFeeders() {
+  Pellets = 1;
+  for (int Feeder = 0; Feeder < 24; Feeder++) {
+    FeederNumber = Feeder;
+    executeFeeding();
+  }
+}
+
 void ProcessCommand() {
   if (Command != -1) {
 #ifdef DEBUGMODE
@@ -221,10 +231,10 @@ void ProcessCommand() {
         Pellets = Command;  //Store Number of Pellets to be delivered
       }
     } else {
-#ifdef DEBUGMODE
-      Serial.println("Command is a Switch command");
-#endif
       switch (Command) {
+        case RUNALL:
+          RunAllFeeders();
+          break;
         case ACKNOWLEDGE:
 #ifdef DEBUGMODE
           Serial.println("Acknowledge recieved");
@@ -232,7 +242,7 @@ void ProcessCommand() {
           Ack = true;
           if (State == READY) {
             SetState(SUCCESS);
-            delay(5000);
+            delay(DELAYTIME);
             SetState(READY);
           }
           break;
@@ -310,14 +320,11 @@ void GetCommand() {
 }
 
 void stepCurrentMotor() {
-#ifdef DEBUGMODE
-  Serial.println("Stepping Motor");
-#endif
   //One motor step, 80ms long
   digitalWrite(STEP, HIGH);
-  delay(40);
+  delay(STEPTIME);
   digitalWrite(STEP, LOW);
-  delay(40);
+  delay(STEPTIME);
 }
 
 void checkIRStatus() {
@@ -338,8 +345,8 @@ void IRBroken() {
 #ifdef DEBUGMODE
       Serial.println("IR Pellet Drop Detected");
 #endif
+      delay(DEBOUNCETIME);
       IRDebounce = true;
-      innercount = 0;    //Reset the counter
       Pellets--;         //Subtract a pellet
       StepAttempts = 0;  //Reset the number of attempts to get a pellet
       IRDebounce = false;
@@ -358,7 +365,7 @@ void executeFeeding() {
   //Attach Interupt for IR Sensors
   ignoreFirstDrop = true;
   attachInterrupt(digitalPinToInterrupt(PelletIR), IRBroken, FALLING);  //Turn on pellet IR
-  delay(50);
+  delay(DEBOUNCETIME);
   //Set the Feeder we are Feeding to
   SetAddress(FeederNumber);
   //Set the Motor Step Pin Low
@@ -369,26 +376,30 @@ void executeFeeding() {
 #endif
   SetState(EXECUTING);
   //Wait for Motor Power up
-  delay(500);
+  delay(MOTORPOWERUPTIME);
 
   ignoreFirstDrop = false;
   while (Pellets > 0) {
     stepCurrentMotor();
-    //increment attempts count
     StepAttempts++;
+    Serial.println(String(StepAttempts));
 
-    //If After a full 360 rotation no pellets have dropped reverse direction
     if (StepAttempts > STEPFAILATTEMPTS) {
       if (dir) {
+#ifdef DEBUGMODE
+        Serial.println("Going Counter Clockwise Now");
+#endif
         digitalWrite(DIR, HIGH);
       } else {
+#ifdef DEBUGMODE
+        Serial.println("Going Clockwise Now");
+#endif
         digitalWrite(DIR, LOW);
       }
       dir = !dir;
       StepAttempts = 0;
       DirectionAttempts++;
 
-      //Berek reset to 9
       if (DirectionAttempts > DIRFAILATTEMPTS)  //We've failed completely, time to move on.
       {
         Fail = true;
@@ -409,10 +420,9 @@ void executeFeeding() {
     if (Command == 30) {
       Ack = true;
     }
-    delay(500);
+    delay(LOOPDELAYTIME);
   }
   Ack = false;
-  innercount = 0;
   StepAttempts = 0;
   DirectionAttempts = 0;
   Fail = false;
@@ -442,5 +452,5 @@ void loop() {
     }
   }
   Ack = false;
-  delay(500);
+  delay(LOOPDELAYTIME);
 }

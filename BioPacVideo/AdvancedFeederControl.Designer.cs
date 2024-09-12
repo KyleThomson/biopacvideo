@@ -76,14 +76,14 @@
             this.comboBoxCommonCommands.FormattingEnabled = true;
             this.comboBoxCommonCommands.Items.AddRange(new object[] {
             "",
-            "24 - Feeder",
-            "25 - Pellet",
-            "26 - Increment Commands",
-            "27 - Cycle All States",
-            "28 - Run All Feeders",
-            "29 - Reset",
-            "30 - Set Ready",
-            "31 - Acknoledge"});
+            "24 - Run All Feeders",
+            "25 - Feeder",
+            "26 - Pellet",
+            "27 - Test States",
+            "28 - Acknowledge",
+            "29 - Execute",
+            "30 - Blink LED",
+            "31 - Null Command"});
             this.comboBoxCommonCommands.Location = new System.Drawing.Point(12, 429);
             this.comboBoxCommonCommands.Name = "comboBoxCommonCommands";
             this.comboBoxCommonCommands.Size = new System.Drawing.Size(164, 21);
