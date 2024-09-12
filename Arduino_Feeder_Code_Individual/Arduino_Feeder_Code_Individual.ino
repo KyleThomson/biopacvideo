@@ -1,24 +1,47 @@
-//For Testing Faster Fails: 
-#define STEPFAILATTEMPTS 150 //Number of steps before changing direction
-#define DIRFAILATTEMPTS 10 //Number of attempts to change direction
+//Compiler Flags
+//#define DEBUGMODE //Turn on and off serial monitor
 
-#define DataRecInt 3
+//Values to trigger fails on feeders
+#define STEPFAILATTEMPTS 200  //Motor takes 200 steps for 1 rotation
+#define DIRFAILATTEMPTS 4     //Change Direction 4 times before Giving up
+
+#define DELAYTIME 5000
+
+//Command Values
+#define RUNALL 24
+#define FEEDER 25
+#define PELLET 26
+#define TESTSTATES 27
+#define ACKNOWLEDGE 28
+#define EXECUTE 29
+#define BLINKLED 30
+#define NULL 31
+
+//Feeder Null Address Value
+#define NullAddress 24
+
+//IR Pin
 #define PelletIR 2
+
+//Command Pulse Pin
+#define CommandPulse 3
 
 //Address lines
 #define AddA 11
 #define AddB 10
 
-//Main Controls
+//Motor Controls
 #define STEP 12
 #define DIR 13
+//#define MOTORCONTROL 0  //Power for the motors
 
-#define MOTORCONTROL 0  //Power for the motors
+//Feeder States
 #define FAIL 0
 #define EXECUTING 1
 #define SUCCESS 2
 #define READY 3
 
+//Break out board pins
 #define BO1 9
 #define BO2 8
 #define BO3 7
@@ -35,47 +58,35 @@
 #define EEGOut0 19
 #define EEGOut1 1
 
-volatile int count = 0;
-volatile int AddressTemp = 24;
 volatile int innercount = 0;
-volatile int attempts = 0;
-volatile int failattempts = 0;
-volatile int FailListCount = 0;
-volatile int SpecialCom = 0;
-volatile int Com = 0;     //Command
-
-//State 0 - Fail
-//State 1 = Executing
-//State 2 = Success
-//State 3 = Ready
+volatile int StepAttempts = 0;
+volatile int DirectionAttempts = 0;
+volatile int Command = -1;  //Command
+volatile int PrevCommand = -1;
 volatile int State;
-volatile boolean resetcount = false;
-volatile boolean Execute = false;  //Whether or not to execute a command
-volatile boolean Feeder = true;
-volatile boolean Fail = false;
+volatile boolean IRDebounce = false;  //Used to debounce the IR Sensors
+volatile boolean NextCommandIsFeederNumber = false;
 volatile boolean Ack = false;
-volatile  boolean PelletCount = false;
+volatile boolean dir = false;  //Direction
+volatile boolean ignoreFirstDrop = true;
+volatile boolean execute = false;
+volatile int Pellets = -1;       //Pellets per Feeder List
+volatile int FeederNumber = -1;  //Feeder to deliver pellets from
+volatile int IRValue = 0;
 
-volatile boolean dir = false;   //Direction
-volatile  boolean GetC = false;  //Get Command
+void setup() {
+#ifdef DEBUGMODE
+  Serial.begin(9600);
+#endif
+//setup all pins
+#ifdef MOTORCONTROL
+  pinMode(MOTORCONTROL, OUTPUT);    //Initialize Motor Power Pin
+  digitalWrite(MOTORCONTROL, LOW);  //Turn the motors off ASAP
+#endif
 
-volatile int PList[128];  //Pellets per Feeder List
-volatile int FList[128];
-volatile  int Commands = 0;
-//Breakout boards - Pin Association
-
-int val = 0;
-
-
-
-void setup() 
-{
-  //setup all pins
-  pinMode(MOTORCONTROL, OUTPUT);            //Initialize Motor Power Pin
-  digitalWrite(MOTORCONTROL, LOW);          //Turn the motors off ASAP
-  attachInterrupt(1, GetCommand, RISING);  //Turn on command recieve interrupt  
-  SpecialCom = 0;
   //Initialize Pins
+  pinMode(CommandPulse, INPUT_PULLUP);
+  pinMode(PelletIR, INPUT_PULLUP);
   pinMode(LED_BUILTIN, OUTPUT);  //Control the ONboard LED for Debugging
   pinMode(DIR, OUTPUT);
   pinMode(STEP, OUTPUT);
@@ -87,11 +98,11 @@ void setup()
   pinMode(BO4, OUTPUT);
   pinMode(BO5, OUTPUT);
   pinMode(BO6, OUTPUT);
-  pinMode(EEG0, INPUT);
-  pinMode(EEG1, INPUT);
-  pinMode(EEG2, INPUT);
-  pinMode(EEG3, INPUT);
-  pinMode(EEG4, INPUT);
+  pinMode(EEG0, INPUT_PULLUP);
+  pinMode(EEG1, INPUT_PULLUP);
+  pinMode(EEG2, INPUT_PULLUP);
+  pinMode(EEG3, INPUT_PULLUP);
+  pinMode(EEG4, INPUT_PULLUP);
   pinMode(EEGOut0, OUTPUT);
   pinMode(EEGOut1, OUTPUT);
 
@@ -106,10 +117,19 @@ void setup()
   digitalWrite(BO4, LOW);
   digitalWrite(BO5, LOW);
   digitalWrite(BO6, LOW);
+
+  //Attach interupts
+  attachInterrupt(digitalPinToInterrupt(CommandPulse), GetCommand, FALLING);  //Turn on command recieve interrupt
+#ifdef DEBUGMODE
+  Serial.println("");
+  Serial.println("Setup Complete");
+#endif
 }
 
-void SetAddress(int Addy)
- {
+void SetAddress(int Address) {
+#ifdef DEBUGMODE
+  Serial.println("Setting Address to " + String(Address));
+#endif
   digitalWrite(BO1, LOW);
   digitalWrite(BO2, LOW);
   digitalWrite(BO3, LOW);
@@ -117,9 +137,9 @@ void SetAddress(int Addy)
   digitalWrite(BO5, LOW);
   digitalWrite(BO6, LOW);
 
-  int BO = Addy / 4;  //Divide by 4, low 2 bytes feeder, high bits breakout boards.
-  int Ad = Addy % 4;  //Get feeder count (% is remainder
-  switch (BO) {
+  int Board = Address / 4;   //Divide by 4, low 2 bytes feeder, high bits breakout boards.
+  int Feeder = Address % 4;  //Get feeder count (% is remainder)
+  switch (Board) {
     case 0:
       digitalWrite(BO1, HIGH);
       break;
@@ -139,250 +159,288 @@ void SetAddress(int Addy)
       digitalWrite(BO6, HIGH);
       break;
   }
-  if ((Ad & 1) == 1) {
+  if ((Feeder & 1) == 1) {
     digitalWrite(AddA, HIGH);
   } else {
     digitalWrite(AddA, LOW);
   }
-  if ((Ad & 2) == 2) {
+  if ((Feeder & 2) == 2) {
     digitalWrite(AddB, HIGH);
   } else {
     digitalWrite(AddB, LOW);
   }
+#ifdef DEBUGMODE
+  Serial.println(("Address set to " + String(Address)));
+#endif
 }
 
-void loop() 
-{
-  delay(1000);
-  val = digitalRead(PelletIR);
-  if (val == HIGH) {
+void SetState(int newState) {
+  if (newState != State) {
+#ifdef DEBUGMODE
+    Serial.println("Setting new state to " + String(newState));
+#endif
+    //State 0 - Fail
+    //State 1 = Executing
+    //State 2 = Success
+    //State 3 = Ready
+    switch (newState) {
+      case FAIL:
+        digitalWrite(EEGOut1, LOW);
+        digitalWrite(EEGOut0, LOW);
+        break;
+      case EXECUTING:
+        digitalWrite(EEGOut1, LOW);
+        digitalWrite(EEGOut0, HIGH);
+        break;
+      case SUCCESS:
+        digitalWrite(EEGOut1, HIGH);
+        digitalWrite(EEGOut0, LOW);
+        break;
+      case READY:
+        digitalWrite(EEGOut1, HIGH);
+        digitalWrite(EEGOut0, HIGH);
+        break;
+    }
+    State = newState;
+#ifdef DEBUGMODE
+    Serial.println("State set to " + String(newState));
+#endif
+  }
+}
+
+void ProcessCommand() {
+  if (Command != -1) {
+#ifdef DEBUGMODE
+    Serial.println("Processing Command " + String(Command));
+#endif
+    if (Command < 24) {
+      if (NextCommandIsFeederNumber)  //Are we reading a feeder
+      {
+        FeederNumber = Command;  //Store Feeder to deliver pellets from
+      } else {
+        Pellets = Command;  //Store Number of Pellets to be delivered
+      }
+    } else {
+#ifdef DEBUGMODE
+      Serial.println("Command is a Switch command");
+#endif
+      switch (Command) {
+        case ACKNOWLEDGE:
+#ifdef DEBUGMODE
+          Serial.println("Acknowledge recieved");
+#endif
+          Ack = true;
+          if (State == READY) {
+            SetState(SUCCESS);
+            delay(5000);
+            SetState(READY);
+          }
+          break;
+        case FEEDER:
+#ifdef DEBUGMODE
+          Serial.println("Command 25 Feeder set to True");
+#endif
+          NextCommandIsFeederNumber = true;
+          break;
+        case PELLET:
+#ifdef DEBUGMODE
+          Serial.println("Command 26 Feeder set to false");
+#endif
+          NextCommandIsFeederNumber = false;
+          break;
+        case TESTSTATES:
+#ifdef DEBUGMODE
+          Serial.println("Command 27 Cycling all states");
+#endif
+          SetState(FAIL);
+          delay(DELAYTIME);
+          SetState(EXECUTING);
+          delay(DELAYTIME);
+          SetState(SUCCESS);
+          delay(DELAYTIME);
+          SetState(READY);
+          delay(DELAYTIME);
+          break;
+
+        case EXECUTE:
+          execute = true;
+#ifdef DEBUGMODE
+          Serial.println("Execute is now true");
+          Serial.println("Feeder is set to: " + String(FeederNumber));
+          Serial.println("Pellets is set to: " + String(Pellets));
+#endif
+          break;
+        case BLINKLED:  //Reset to default values
+#ifdef DEBUGMODE
+          Serial.println("Command 29 BLINK LED");
+#endif
+          digitalWrite(LED_BUILTIN, HIGH);
+          delay(DELAYTIME);
+          digitalWrite(LED_BUILTIN, LOW);
+          break;
+        case NULL:
+#ifdef DEBUGMODE
+          Serial.println("A Null Command Was sent");
+#endif
+          break;
+      }
+    }
+#ifdef DEBUGMODE
+    Serial.println("Command Reset");
+#endif
+    Command = -1;
+  }
+}
+
+void GetCommand() {
+#ifdef DEBUGMODE
+  Serial.println("Command Available Reading Command");
+#endif
+  Command = 0;
+  //Convert Message from BioPac to integer
+  if (!digitalRead(EEG0)) { Command = Command + 1; }
+  if (!digitalRead(EEG1)) { Command = Command + 2; }
+  if (!digitalRead(EEG2)) { Command = Command + 4; }
+  if (!digitalRead(EEG3)) { Command = Command + 8; }
+  if (!digitalRead(EEG4)) { Command = Command + 16; }
+#ifdef DEBUGMODE
+  Serial.println("Recieved command " + String(Command));
+#endif
+  if (Command == ACKNOWLEDGE) Ack = true;
+}
+
+void stepCurrentMotor() {
+#ifdef DEBUGMODE
+  Serial.println("Stepping Motor");
+#endif
+  //One motor step, 80ms long
+  digitalWrite(STEP, HIGH);
+  delay(40);
+  digitalWrite(STEP, LOW);
+  delay(40);
+}
+
+void checkIRStatus() {
+  IRValue = digitalRead(PelletIR);
+  if (IRValue == HIGH) {
     SetState(READY);
   } else {
+#ifdef DEBUGMODE
+    Serial.println("IR Broken");
+#endif
     SetState(FAIL);
   }
-  if (SpecialCom) {
-    switch (SpecialCom) {
-      case 24:  //Send Feeder Next
-        Feeder = true;
-        break;
-      case 25:  //Send pellet next
-        Feeder = false;
-        break;
-      case 26:
-        Commands++;
-        break;
-      case 27:
-        SetState(FAIL);
-        delay(10000);
-        SetState(EXECUTING);
-        delay(10000);
-        SetState(SUCCESS);
-        delay(10000);
-        SetState(READY);
-        delay(10000);
-        break;
-      case 28:  //Run ALL feeders
-        for (count = 24; count > 0; count--) {
-          PList[count - 1] = 3;
-          FList[count - 1] = count - 1;
-        }
-        count = 0;
-        Commands = 24;
-        break;
-      case 29:  //Reset
-        count = 0;
-        AddressTemp = 24;
-        innercount = 0;
-        attempts = 0;
-        failattempts = 0;
-        FailListCount = 0;       
-        resetcount = false;
-        Execute = false;  //Whether or not to execute a command
-        Feeder = true;
-        Fail = false;
-        Ack = false;
-        PelletCount = false;
-        Commands = 0;
-        Execute = false;
-        SetAddress(24);                   //Set to a null address
-        digitalWrite(MOTORCONTROL, LOW);  //Turn off power to the motors      
-        SetState(READY);
-        break;
-      case 30:
-        if (State == READY) 
-        {
-          SetState(SUCCESS);
-          delay(10000);
-          SetState(READY);
-        }
-        Ack=false; 
-        break;         
-      }
-      SpecialCom = 0;
+}
+
+void IRBroken() {
+  if (!ignoreFirstDrop) {
+    if (!IRDebounce) {
+#ifdef DEBUGMODE
+      Serial.println("IR Pellet Drop Detected");
+#endif
+      IRDebounce = true;
+      innercount = 0;    //Reset the counter
+      Pellets--;         //Subtract a pellet
+      StepAttempts = 0;  //Reset the number of attempts to get a pellet
+      IRDebounce = false;
     }
-  if (Execute)  //Recieved final command, good to execute
-  {
-    
-    delay(1000);                              //Probably not necessary, for safety.
-    innercount = 0;
-    attempts = 0;
-    failattempts = 0;
-    resetcount = true;
+  }
+}
+
+void executeFeeding() {
+#ifdef DEBUGMODE
+  Serial.println("Executing Feeding");
+#endif
+  //Init Variables for feeding
+  StepAttempts = 0;
+  DirectionAttempts = 0;
+  bool Fail = false;
+  //Attach Interupt for IR Sensors
+  ignoreFirstDrop = true;
+  attachInterrupt(digitalPinToInterrupt(PelletIR), IRBroken, FALLING);  //Turn on pellet IR
+  delay(50);
+  //Set the Feeder we are Feeding to
+  SetAddress(FeederNumber);
+  //Set the Motor Step Pin Low
+  digitalWrite(STEP, LOW);
+//Turn on the motors
+#ifdef MOTORCONTROL
+  digitalWrite(MOTORCONTROL, HIGH);
+#endif
+  SetState(EXECUTING);
+  //Wait for Motor Power up
+  delay(500);
+
+  ignoreFirstDrop = false;
+  while (Pellets > 0) {
+    stepCurrentMotor();
+    //increment attempts count
+    StepAttempts++;
+
+    //If After a full 360 rotation no pellets have dropped reverse direction
+    if (StepAttempts > STEPFAILATTEMPTS) {
+      if (dir) {
+        digitalWrite(DIR, HIGH);
+      } else {
+        digitalWrite(DIR, LOW);
+      }
+      dir = !dir;
+      StepAttempts = 0;
+      DirectionAttempts++;
+
+      //Berek reset to 9
+      if (DirectionAttempts > DIRFAILATTEMPTS)  //We've failed completely, time to move on.
+      {
+        Fail = true;
+        Pellets = 0;
+        DirectionAttempts = 0;
+      }
+    }
+  }
+  Ack = false;
+  if (Fail) {
+    SetState(FAIL);
     Fail = false;
-    while (Commands > 0)  //While we have commands enqued
-    {
-      attachInterrupt(0, PelletDrop, FALLING);  //Turn on pellet IR
-      digitalWrite(LED_BUILTIN,LOW);        
-      Commands--;  //Remove a command //does this break out of the while loop if Commands = 1 to start?
-      //Get the current command
-      AddressTemp = FList[Commands];
-      count = PList[Commands];
-      SetAddress(AddressTemp);
-      digitalWrite(STEP, LOW);
-      //Turn on the motors
-      digitalWrite(MOTORCONTROL, HIGH);
-      SetState(EXECUTING);
-      delay(2000);
-      //Reset the counters
-      while (count > 0) {
-        //One motor step, 80ms long
-        digitalWrite(STEP, HIGH);
-        delay(40);
-        digitalWrite(STEP, LOW);
-        delay(40);
-
-        //increment debounce
-        innercount++;
-
-        //increment attempts count
-        attempts++;
-
-        //if we are failing to see a pellet drop within 10 seconds
-        //reverse the direction of the motor
-        //BEREK 150
-        if (attempts > STEPFAILATTEMPTS) {
-          if (dir) {
-            digitalWrite(DIR, HIGH);
-          } else {
-            digitalWrite(DIR, LOW);
-          }
-          dir = !dir;
-          attempts = 0;
-          failattempts = failattempts + 1;
-          //Berek reset to 9
-          if (failattempts > DIRFAILATTEMPTS)  //We've failed completely, time to move on.
-          {
-            Fail = true;
-            count = 0;
-            failattempts = 0;
-          }
-        }
-        if (innercount > 4)  //Must wait for 4 rotations
-        {
-          resetcount = true;  //Debounce for pellet drop
-        }
-      }  //While (count > 0)
-      Ack = false;
-      if (Fail) {
-        SetState(FAIL);
-        Fail = false;
-      } else {
-        SetState(SUCCESS);
-      } 
-      digitalWrite(LED_BUILTIN,LOW);        
-      while (Ack==false) {                
-        delay(2000); 
-      }
-      Ack = false;
-      innercount = 0;
-      attempts = 0;
-      failattempts = 0;
-      resetcount = true;
-      Fail = false;
-    }  //While (Commands > 0)
-    Execute = false;
-    SetAddress(24);  //Set to a null address
-    // FAIL LOOP
-    digitalWrite(MOTORCONTROL, LOW);  //Turn off power to the motors
-    detachInterrupt(0);               //Turn off Pellet IR sensor
-    SetState(READY);
-    digitalWrite(LED_BUILTIN,LOW);        
-  }                                   //if (Execute)
-}
-
-//Pellet drop IR sensor break
-void PelletDrop() 
-{
-  if (resetcount)  //Need to see 4 steps, before a pellet will be counted
-  {
-    resetcount = false;  //Pellet Debounce - always first.
-    innercount = 0;      //Reset the counter
-    count--;             //Subtract a pellet
-    attempts = 0;        //Reset the number of attempts to get a pellet
+  } else {
+    SetState(SUCCESS);
   }
-}
 
-void GetCommand() 
-{
-   Com=0; 
-    SpecialCom = 0;  //Ensure SpecialCom is empty
-    //Convert Message from BioPac to number
-    if (!digitalRead(EEG0)) { Com = Com + 1; }
-    if (!digitalRead(EEG1)) { Com = Com + 2; }
-    if (!digitalRead(EEG2)) { Com = Com + 4; }
-    if (!digitalRead(EEG3)) { Com = Com + 8; }
-    if (!digitalRead(EEG4)) { Com = Com + 16; }
-    if (Com < 24) 
-    {
-      if (Feeder)  //Are we reading a feeder
-      {
-        FList[Commands] = Com;  //Store feeder number
-      } else {
-        PList[Commands] = Com;  //Store Pellets number
-      }
-    } 
-    else 
-    {
-      digitalWrite(LED_BUILTIN,HIGH); 
-      switch(Com)
-      {
-        case 30:
-          Ack = true;                        
-          break;
-        case 31:
-          Execute = true;
-          break; 
-      }
-      SpecialCom = Com;
-    }    
-}
-
-
-
-void SetState(int newState) 
-{
-  //State 0 - Fail
-  //State 1 = Executing
-  //State 2 = Success
-  //State 3 = Ready
-  switch (newState) 
-  {
-    case FAIL:
-      digitalWrite(EEGOut1, LOW);
-      digitalWrite(EEGOut0, LOW);
-      break;
-    case EXECUTING:
-      digitalWrite(EEGOut1, LOW);
-      digitalWrite(EEGOut0, HIGH);
-      break;
-    case SUCCESS:
-      digitalWrite(EEGOut1, HIGH);
-      digitalWrite(EEGOut0, LOW);
-      break;
-    case READY:
-      digitalWrite(EEGOut1, HIGH);
-      digitalWrite(EEGOut0, HIGH);
-      break;
+  while (Ack == false) {
+    if (Command == 30) {
+      Ack = true;
+    }
+    delay(500);
   }
-  State = newState;
+  Ack = false;
+  innercount = 0;
+  StepAttempts = 0;
+  DirectionAttempts = 0;
+  Fail = false;
+  FeederNumber = -1;
+  Pellets = -1;
+  execute = false;
+  SetAddress(NullAddress);  //Set to a null address
+#ifdef MOTORCONTROL
+  digitalWrite(MOTORCONTROL, LOW);  //Turn off power to the motors
+#endif
+  detachInterrupt(digitalPinToInterrupt(PelletIR));  //Turn off Pellet IR sensor
+  SetState(READY);
+}
+
+void loop() {
+  checkIRStatus();
+  ProcessCommand();
+  if (execute)  //Recived both a feeder number and a pellete amount okay to execute
+  {
+    if (FeederNumber != -1 && Pellets != -1) {
+      executeFeeding();
+    } else {
+      execute = false;
+      SetState(FAIL);
+      delay(DELAYTIME);
+      SetState(READY);
+    }
+  }
+  Ack = false;
+  delay(500);
 }
