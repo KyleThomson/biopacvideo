@@ -671,11 +671,12 @@ namespace BioPacVideo
 
                 if (Feeder.Enabled)
                 {
-
                     if (Feeder.State==3)
                     {
                         if (Feeder.MealState == MEALSTATE.WAITING)
+                        {
                             Feeder.RunNextMeal();
+                        }
                     }
                    
                     lasta = a; //These serve as a debounce function. 
@@ -683,20 +684,6 @@ namespace BioPacVideo
                     if (Feeder.gap == 0)
                     {
                         Feeder.gap++;
-                        if (Feeder.GetCommandSize() > 0)
-                        {
-                            byte v;
-                            v = Feeder.GetTopCommand();
-
-                            for (byte k = 0; k < 5; k++)   //Step through the bits of the command                    
-                            {
-                                bool x = !((v & (1 << k)) > 0); //mathematical way to make x the kth bit                              
-                                MPCLASS.setDigitalIO((uint)k, x, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //set it on the MP150
-                            }
-                            MPCLASS.setDigitalIO(7, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //pulse the data ready bit
-                            Thread.Sleep(1);
-                            MPCLASS.setDigitalIO(7, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //finish pulse                          
-                        }
                         MPCLASS.getDigitalIO(9, out a, MPCLASS.DIGITALOPT.READ_HIGH_BITS); //read the high bit for state
                         MPCLASS.getDigitalIO(8, out b, MPCLASS.DIGITALOPT.READ_HIGH_BITS); //read the low bit for state
                         if ((lastb == b) && (lasta == a))
@@ -706,9 +693,12 @@ namespace BioPacVideo
                             if (b) { TempState++; }
                             if (TempState!=Feeder.State)
                             {
+                                Console.WriteLine(TempState);
+                                Console.WriteLine();
                                 switch (TempState)
                                 {
-                                    case 0:
+                                    case 0: //Error
+                                        Feeder.StateText = "ERROR";
                                         if (Feeder.State == (int)FEEDERSTATE.READY) //If the feeder goes from ready to Error, something happened with the infrared sensors
                                         {
                                             Feeder.Log("Infrared Sensors offline");
@@ -728,20 +718,19 @@ namespace BioPacVideo
                                             {
                                                 Feeder.MealState = MEALSTATE.WAITING;
                                             }
-                                        }
-                                        Feeder.StateText = "ERROR";
+                                        }                                        
                                         break;
-                                    case 1:
+                                    case 1: //Executing
                                         Feeder.StateText = "EXECUTING";
                                         break;
-                                    case 2:
+                                    case 2: //Success
+                                        Feeder.StateText = "SUCCESS";
                                         if (Feeder.State == (int)FEEDERSTATE.EXECUTING) //If we're executing, that was a success
                                         {
                                             Result = "SUCCESS - " + Feeder.GetLastCommandText() + " - ";
                                             Feeder.Log(Result.Substring(0, Result.Count() - 3));
                                             FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Status(Result); }));
                                             Feeder.ArduinoAckowledge();
-                                            Feeder.StateText = "SUCCESS";
                                             if (Feeder.CheckMealsCount() == 0)
                                             {
                                                 Feeder.MealState = MEALSTATE.NONE;
@@ -757,19 +746,32 @@ namespace BioPacVideo
                                             FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Status(Result); }));
                                         }
                                         break; 
-                                    case 3:
-                                        Feeder.StateText = "READY";                                       
+                                    case 3: //Ready
+                                        Feeder.StateText = "READY";
                                         break;
                                 }
                                 Feeder.State = TempState;                                                      
                             }
                         }
-                        
+                        if (Feeder.GetCommandSize() > 0 && Feeder.State != 1)
+                        {
+                            byte v;
+                            v = Feeder.GetTopCommand();
+
+                            for (byte k = 0; k < 5; k++)   //Step through the bits of the command                    
+                            {
+                                bool x = !((v & (1 << k)) > 0); //mathematical way to make x the kth bit                              
+                                MPCLASS.setDigitalIO((uint)k, x, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //set it on the MP150
+                            }
+                            MPCLASS.setDigitalIO(7, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //pulse the data ready bit
+                            Thread.Sleep(1);
+                            MPCLASS.setDigitalIO(7, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //finish pulse
+                        }
                     }
                     else  //only want to send the feeding commands once every 4 cycles 
                     {
                         Feeder.gap++;
-                        if (Feeder.gap >=5) { Feeder.gap = 0; }
+                        if (Feeder.gap >=4) { Feeder.gap = 0; }
                         
                     }
                 }

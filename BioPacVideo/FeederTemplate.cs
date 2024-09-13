@@ -18,6 +18,7 @@ namespace BioPacVideo
 
     public enum FEEDERSTATE : int
     {
+        DISCONNECTED = -1,
         FAIL=0,
         EXECUTING=1,
         SUCCESS=2,
@@ -92,8 +93,8 @@ namespace BioPacVideo
             CommandText = new Stack<string>();
             MealState = MEALSTATE.NONE; 
             ErrorState = false;
-            State = 3;
-            StateText = "READY";
+            State = -1;
+            StateText = "DISCONNECTED";
             AddressTable = new int[32];
             Rats = RatTemplate.NewInitArray(16);
             LogFileName = "";
