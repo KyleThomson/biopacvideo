@@ -15,11 +15,12 @@ namespace BioPacVideo
     {
         FeederTemplate Feeder;
         int CurrentIndex = -1;
-
+        int Count; 
         public AdvancedFeederControl()
         {
             InitializeComponent();
             Feeder = FeederTemplate.Instance;
+            Count = Feeder.FeederStateWindowOutputCount;             
             this.AcceptButton = buttonSend;
         }
 
@@ -27,11 +28,32 @@ namespace BioPacVideo
         {
             if (int.TryParse(CommandValue.Text, out int result))
             {
-                if ((result < 0) || (result > 31))
+                if (result < 0)
+                {
                     return;
-                Feeder.SendDirectCommand((byte)result);
-                textBoxHistory.Text = CommandValue.Text + Environment.NewLine + textBoxHistory.Text;
-                CommandValue.Text = "";
+                }
+                else if (result < 31)
+                {
+
+                    Feeder.SendDirectCommand((byte)result);
+                    textBoxHistory.Text = CommandValue.Text + Environment.NewLine + textBoxHistory.Text;
+                    CommandValue.Text = "";
+                }
+                else //Handle Biopac internal feeder cmmand
+                {
+                    switch (result)
+                    {
+                        case 32:
+
+                            break;
+                        case 33:
+
+                            break; 
+                        default:
+                            Console.WriteLine("INVALID COMMAND");
+                            break;
+                    }
+                }
             }
         }
 

@@ -38,7 +38,7 @@ namespace BioPacVideo
         Graphics g;
         DriveInfo DI;
         bool RunDisplayThread;
-        bool RunClockThread; 
+        bool RunClockThread;
         private ArrayList Panels; 
         public static int[] VoltageSettings = new int[] { 1, 10, 50, 100, 250, 500, 1000, 2000, 3000, 4000, 5000};
         public static int[] DisplayLengthSize = new int[] { 1, 5, 10, 30, 60 };
@@ -417,6 +417,12 @@ namespace BioPacVideo
             frm.Dispose();
             UpdateINI(BioIni);
             frm.Dispose();
+        }
+
+        private void advancedFeederControlToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form Advanced = new AdvancedFeederControl();
+            Advanced.Show();
         }
         #endregion
 
@@ -915,12 +921,6 @@ namespace BioPacVideo
             }
             Video.UpdateCameraAssoc();
         }
-        #endregion
-
-        private void advancedFeederControlToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Form Advanced = new AdvancedFeederControl();
-            Advanced.Show();
-        }
+        #endregion        
     }
 }

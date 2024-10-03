@@ -3,10 +3,10 @@
 #define DIRFAILATTEMPTS 4     //Change Direction 4 times before Giving up
 
 #define DELAYTIME 1000
-#define DEBOUNCETIME 50
+#define DEBOUNCETIME 30
 #define STEPTIME 40
 #define MOTORPOWERUPTIME 500
-#define LOOPDELAYTIME 50
+#define LOOPDELAYTIME 10
 
 //Command Values
 #define RUNALL 24
@@ -61,15 +61,16 @@
 
 volatile int StepAttempts = 0;
 volatile int DirectionAttempts = 0;
-volatile int Command = -1;
+volatile byte Command = -1;
 volatile int State;
-volatile boolean IRDebounce = false;  //Used to debounce the IR Sensors
+volatile unsigned long lastIRTriggerTime = 0;
+volatile bool IRDebounce = false;
 volatile boolean NextCommandIsFeederNumber = false;
 volatile boolean Ack = false;
 volatile boolean dir = false;  //Direction
 volatile boolean ignoreFirstDrop = true;
 volatile boolean execute = false;
-volatile int Pellets = -1;       //Pellets per Feeder List
+volatile byte Pellets = -1;       //Pellets per Feeder List
 volatile int FeederNumber = -1;  //Feeder to deliver pellets from
 volatile int IRValue = 0;
 
@@ -81,8 +82,6 @@ void setup() {
 
   //Initialize Pins
   pinMode(CommandPulse, INPUT_PULLUP);
-  pinMode(PelletIR, OUTPUT);
-  digitalWrite(PelletIR, HIGH);
   pinMode(PelletIR, INPUT_PULLUP);
   pinMode(LED_BUILTIN, OUTPUT);  //Control the ONboard LED for Debugging
   pinMode(DIR, OUTPUT);
@@ -118,9 +117,11 @@ void setup() {
 
   //Attach interupts
   attachInterrupt(digitalPinToInterrupt(CommandPulse), GetCommand, FALLING);  //Turn on command recieve interrupt
+  /*
   SetState(FAIL);
   delay(500);
   SetState(READY);
+  */
 }
 
 void SetAddress(int Address) {
@@ -280,22 +281,29 @@ void stepCurrentMotor() {
 void checkIRStatus() {
   IRValue = digitalRead(PelletIR);
   if (IRValue == HIGH) {
+    digitalWrite(LED_BUILTIN, LOW);
     SetState(READY);
   } else {
+    digitalWrite(LED_BUILTIN, HIGH);
     SetState(FAIL);
   }
 }
 
 void IRBroken() {
-  if (!ignoreFirstDrop) {
-    if (!IRDebounce) {
-      delay(DEBOUNCETIME);
+  if (!ignoreFirstDrop && !IRDebounce) {
       IRDebounce = true;
+      lastIRTriggerTime = millis();
       Pellets--;         //Subtract a pellet
       StepAttempts = 0;  //Reset the number of attempts to get a pellet
-      IRDebounce = false;
-    }
   }
+}
+
+void waitForACK() {
+  Ack = false;
+  while (Ack == false) {
+    delay(LOOPDELAYTIME);
+  }
+  Ack = false;
 }
 
 void executeFeeding() {
@@ -322,6 +330,9 @@ void executeFeeding() {
   while (Pellets > 0) {
     stepCurrentMotor();
     StepAttempts++;
+    if (IRDebounce && (millis() - lastIRTriggerTime >= DEBOUNCETIME)) {
+      IRDebounce = false;
+    }
     if (StepAttempts > STEPFAILATTEMPTS) {
       dir = !dir;
       if (dir) {
@@ -339,8 +350,7 @@ void executeFeeding() {
         DirectionAttempts = 0;
       }
     }
-  }
-  Ack = false;
+  }  
   if (Fail) {
     SetState(FAIL);
     Fail = false;
@@ -348,34 +358,37 @@ void executeFeeding() {
     SetState(SUCCESS);
   }
 
-  while (Ack == false) {
-    delay(LOOPDELAYTIME);
-  }
-  Ack = false;
+  waitForACK();
+
   StepAttempts = 0;
   DirectionAttempts = 0;
   Fail = false;
   FeederNumber = -1;
   Pellets = -1;
   execute = false;
-  SetAddress(NullAddress);                           //Set to a null address
   digitalWrite(MOTORCONTROL, LOW);                   //Turn off power to the motors
+  SetAddress(NullAddress);                           //Set to a null address  
   detachInterrupt(digitalPinToInterrupt(PelletIR));  //Turn off Pellet IR sensor
   SetState(READY);
 }
 
 void loop() {
   checkIRStatus();
-  ProcessCommand();
+  ProcessCommand();  
   if (execute)  //Recived both a feeder number and a pellete amount okay to execute
   {
     if (FeederNumber != -1 && Pellets != -1) {
       executeFeeding();
-    } else {
+    } else { //Invalid Command
       execute = false;
-      SetState(FAIL);
-      delay(DELAYTIME);
-      SetState(READY);
+      //Kyle says this is a bad idea
+      //FeederNumber = -1;
+      //Pellets = -1;
+      //SetState(EXECUTING);
+      //delay(DELAYTIME);
+      //SetState(FAIL);
+      //waitForACK();
+      //SetState(READY);
     }
   }
   Ack = false;

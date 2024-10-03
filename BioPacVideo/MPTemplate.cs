@@ -12,16 +12,16 @@ using System.Xml;
 
 using MPCLASS = Biopac.API.MPDevice.MPDevImports;
 using MPCODE = Biopac.API.MPDevice.MPDevImports.MPRETURNCODE;
+using System.Net.NetworkInformation;
 
 
 namespace BioPacVideo
 {
-
     class MPTemplate
     {
-        
-         static readonly MPTemplate instance=new MPTemplate();
-         const long MBYTE = 1024 * 1024; 
+        #region Properties
+        static readonly MPTemplate instance=new MPTemplate();
+         const long MBYTE = 1024 * 1024;
         public static string[] MPRET = new string[] {"NULL", "SUCCESS", "DRIVERERROR", "DLLBUSY","INVALIDPARAM", "MP_NOT_CONNECTED","MPREADY","PRETRIGGER",
     "TRIGGER","BUSY","NOACTIVECHANNELS","COMERROR", "INVTYPE", "NO_NETWORK_CONNECT", "OVERWROTESAMPLES","MEMERROR",
     "SOCKETERROR","UNDERFLOW","PRESETERROR","XMLERROR" };
@@ -32,12 +32,12 @@ namespace BioPacVideo
         public double Offset;
         public bool[] FeederTest;
         private bool[] DigitalChannel;
-        private int MaxDrawSize;         
+        private int MaxDrawSize;
         Thread AcqThread = null;
         FeederTemplate Feeder;
         public bool FileSplit;
         public String Filename;
-        public String MPtype; 
+        public String MPtype;
         public String RecordingDirectory;
         private BinaryWriter BinaryFileID;
         private FileStream BinaryFile;
@@ -45,7 +45,7 @@ namespace BioPacVideo
         public int Gain;
         public bool Enabled;
         //Booleans are used to communicate across threads. This way, all writing is done by blocks, defined by BuffSize. Keeps things thread-safe.
-        public bool IsFileWriting; 
+        public bool IsFileWriting;
         bool FileStop;
         public bool isstreaming = false;
         public bool isconnected = false;
@@ -63,11 +63,10 @@ namespace BioPacVideo
 
         public bool RecordingWanted;
         public bool RecordingSuccess;
-        public bool Recording; 
-        public bool VideoOff; 
+        public bool Recording;
+        public bool VideoOff;
 
-
-        //GRAPHICS VARIABLES
+        #region Graphic Variables
         int CurPointPos;
         int UpdateSpeed = 30;
         Pen wavePen;
@@ -80,6 +79,7 @@ namespace BioPacVideo
         private double[] draw_buffer;        
         public MPCODE MPReturn;
         public bool[] RecordAC = new bool[17];
+        private bool PauseCommandDelivery = false;
         public int SampleRate;
         public int DisplayLength;
         private Single PointSpacing;         
@@ -88,8 +88,10 @@ namespace BioPacVideo
         private int AcqChan;
         private int VoltageSpacing;
         private double[] DispOffset;
+        #endregion
+        #endregion
 
-
+        #region Lifecyle
         public MPTemplate() //Constructor
         {
             wavePen = new Pen(Color.Black);
@@ -107,7 +109,7 @@ namespace BioPacVideo
             {
                 DigitalChannel[i] = false; //Don't want to acquire any digital channels
             }
-            FEB = new FeederErrorBox();
+            FEB = new FeederErrorBox(Feeder);
             FEB.Show();
             FEB.Hide();
         }
@@ -119,12 +121,9 @@ namespace BioPacVideo
                 return instance;
             }
         }
-        public void ShowFeederStatus()
-        {
-            if (!FEB.Visible)
-                FEB.Show();
-        }
+        #endregion
 
+        #region ACQ Functions
         public void InitializeDisplay(int X, int Y)
         {
             offscreen = new Bitmap((int)(X - 60), Y-350);
@@ -149,6 +148,7 @@ namespace BioPacVideo
             }
             return Tot;
         }
+
         private int GetChan(int ChanNum)
         {
             int CurChan = 0;
@@ -169,6 +169,7 @@ namespace BioPacVideo
             }
 
         }
+
         public void UpdateOffsets() //This function is used to separate telemeter recordings from non-telemeter recordings via the offset
         {
             for (int i = 0; i < 16; i++)
@@ -342,8 +343,6 @@ namespace BioPacVideo
             CurrentWriteLoc = BinaryFile.Position;
         }
 
-
-
         private float ScaleVoltsToPixel(float volt, float pixelHeight)
         {
             float maxPixel = (pixelHeight * .15F); 
@@ -439,12 +438,9 @@ namespace BioPacVideo
                 BinaryFileID.Write((Int32)(samplecount));   
             }            
         }
+        #endregion
 
-        /**********************************************************************
-         *
-         *  Connection/Recording functions
-         *
-         ************************************************************************/
+        #region BioPac Functions
         public bool Connect()
         {
             //connect to the MP Device
@@ -504,7 +500,6 @@ namespace BioPacVideo
             return true;
         }
 
-
         public bool StartWriting() //Not much is needed to start a file - open it and write. 
         {            
             open_ACQ_file(); //Open a new file
@@ -513,6 +508,7 @@ namespace BioPacVideo
             IsFileWriting = true; //set File to be writing - will begin next buffer
             return true; 
         }
+
         public void StopWriting()
         {
             FileStop = true; //Send info to thread to stop file write after the next buffer finishes 
@@ -528,23 +524,115 @@ namespace BioPacVideo
             }
 
         }
+        #endregion
 
+        #region Feeder Functions
+        public void ShowFeederStatus()
+        {
+            if (!FEB.Visible)
+                FEB.Show();
+        }
 
-        /******************************************************************************
-         * 
-         *                  RECORDING THREAD!
-         *                  
-         * ****************************************************************************/
+        private void updateFeederState(int newState)
+        {
+            string Result;
+            switch (newState)
+            {
+                case (int)FEEDERSTATE.ERROR: //Error
+                    Feeder.StateText = "ERROR";
+                    if (Feeder.State == (int)FEEDERSTATE.READY) //If the Arduino sends an Error from pinStateA Ready state it means the last command sent was an invalid format
+                    {
+                        Feeder.Log("Infared Sensors Interrupted");
+                        Feeder.sendMessage(new FeederMessage("Infared Sensors Interrupted - ", MessageType.ERROR));
+                    }
+                    else if (Feeder.State == (int)FEEDERSTATE.EXECUTING) //if something went wrong during execution, then the feeder failed to deliver pellets. 
+                    {
+                        Result = "FAIL - " + Feeder.GetLastCommandText() + " - ";
+                        Feeder.Log(Result.Substring(0, Result.Count() - 3));
+                        Feeder.sendMessage(new FeederMessage(Result, MessageType.ERROR));
+                        Feeder.ArduinoAckowledge();
+                        if (Feeder.CheckMealsCount() == 0)
+                        {
+                            Feeder.MealState = MEALSTATE.NONE;
+                        }
+                        else
+                        {
+                            Feeder.MealState = MEALSTATE.WAITING;
+                        }
+                    }
+                    PauseCommandDelivery = false;
+                    break;
+                case (int)FEEDERSTATE.EXECUTING: //Executing
+                    Feeder.StateText = "EXECUTING";
+                    break;
+                case (int)FEEDERSTATE.SUCCESS: //Success
+                    Feeder.StateText = "SUCCESS";
+                    if (Feeder.State == (int)FEEDERSTATE.READY) //If the Arduino sends pinStateA Success State from pinStateA Ready state it means the Infared sensors detected an interuption
+                    {
+                        Feeder.sendMessage(new FeederMessage("ACK seen by feeder - ", MessageType.STATUS));
+                    }
+                    else if (Feeder.State == (int)FEEDERSTATE.EXECUTING) //If we're executing, that was pinStateA success
+                    {
+                        Result = "SUCCESS - " + Feeder.GetLastCommandText() + " - ";
+                        Feeder.Log(Result.Substring(0, Result.Count() - 3));
+                        Feeder.sendMessage(new FeederMessage(Result, MessageType.STATUS));
+                        Feeder.ArduinoAckowledge();
+                        if (Feeder.CheckMealsCount() == 0)
+                        {
+                            Feeder.MealState = MEALSTATE.NONE;
+                        }
+                        else
+                        {
+                            Feeder.MealState = MEALSTATE.WAITING;
+                        }
+                    }
+                    PauseCommandDelivery = false;
+                    break;
+                case 3: //Ready
+                    Feeder.StateText = "READY";
+                    PauseCommandDelivery = false;
+                    break;
+            }
+            Feeder.State = newState;
+        }
 
+        private int getState(bool a, bool b)
+        {
+            int TempState = (int)FEEDERSTATE.ERROR;
+            if (a) { TempState = (int)FEEDERSTATE.SUCCESS; }
+            if (b) { TempState++; }
+            return TempState;
+        }
+
+        private void deliverNextFeederCommand()
+        {
+            byte command;
+            command = Feeder.GetTopCommand();
+
+            for (byte k = 0; k < 5; k++)   //Step through the bits of the command
+            {
+                bool x = !((command & (1 << k)) > 0); //mathematical way to make x the kth bit
+                MPCLASS.setDigitalIO((uint)k, x, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //set it on the MP150
+            }
+            MPCLASS.setDigitalIO(7, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //pulse the data ready bit
+            Thread.Sleep(1);
+            MPCLASS.setDigitalIO(7, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //finish pulse
+            if (command == 29)
+            {
+                PauseCommandDelivery = true;
+            }
+        }
+        #endregion
+
+        #region Recording Thread
         private void RecordingThread()
         {
             uint received;
-            bool a = true;
-            bool b = true;
-            bool lasta, lastb;
-            string Result;
-            int TempState;
-            Result = "";
+            bool pinStateA = true;
+            bool pinStateB = true;
+            bool lastPinStateA = false;
+            bool lastPinStateB = false;
+            int newState;
             Feeder.gap = 0; 
             AcqChan = TotChan();  //How many channels are we going to acquire   
             VoltageSpacing = (int)(Ymax / (AcqChan));
@@ -671,118 +759,48 @@ namespace BioPacVideo
 
                 if (Feeder.Enabled)
                 {
-                    if (Feeder.State==3)
+                    if (Feeder.State==(int) FEEDERSTATE.READY)
                     {
                         if (Feeder.MealState == MEALSTATE.WAITING)
                         {
                             Feeder.RunNextMeal();
                         }
                     }
-                   
-                    lasta = a; //These serve as a debounce function. 
-                    lastb = b; //Without debounce, you get multiple states in a single transistion
+                                       
                     if (Feeder.gap == 0)
                     {
                         Feeder.gap++;
-                        MPCLASS.getDigitalIO(9, out a, MPCLASS.DIGITALOPT.READ_HIGH_BITS); //read the high bit for state
-                        MPCLASS.getDigitalIO(8, out b, MPCLASS.DIGITALOPT.READ_HIGH_BITS); //read the low bit for state
-                        if ((lastb == b) && (lasta == a))
+                        MPCLASS.getDigitalIO(9, out pinStateA, MPCLASS.DIGITALOPT.READ_HIGH_BITS); //read the high bit for state
+                        MPCLASS.getDigitalIO(8, out pinStateB, MPCLASS.DIGITALOPT.READ_HIGH_BITS); //read the low bit for state
+                        if ((lastPinStateB == pinStateB) && (lastPinStateA == pinStateA))
                         {
-                            TempState = (int)FEEDERSTATE.FAIL;
-                            if (a) { TempState = (int)FEEDERSTATE.SUCCESS; }
-                            if (b) { TempState++; }
-                            if (TempState!=Feeder.State)
+                            newState = getState(pinStateA, pinStateB);
+                            if (newState != Feeder.State)
                             {
-                                Console.WriteLine(TempState);
-                                Console.WriteLine();
-                                switch (TempState)
-                                {
-                                    case 0: //Error
-                                        Feeder.StateText = "ERROR";
-                                        if (Feeder.State == (int)FEEDERSTATE.READY) //If the feeder goes from ready to Error, something happened with the infrared sensors
-                                        {
-                                            Feeder.Log("Infrared Sensors offline");
-                                            FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error("Infrared Sensors offline - "); }));
-                                        }
-                                        else if (Feeder.State == (int)FEEDERSTATE.EXECUTING) //if something went wrong during execution, then the feeder failed to deliver pellets. 
-                                        {
-                                            Result = "FAIL - " + Feeder.GetLastCommandText() + " - ";
-                                            Feeder.Log(Result.Substring(0, Result.Count() - 3));
-                                            FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Error(Result); }));
-                                            Feeder.ArduinoAckowledge();
-                                            if (Feeder.CheckMealsCount() == 0)
-                                            {
-                                                Feeder.MealState=MEALSTATE.NONE;
-                                            }
-                                            else
-                                            {
-                                                Feeder.MealState = MEALSTATE.WAITING;
-                                            }
-                                        }                                        
-                                        break;
-                                    case 1: //Executing
-                                        Feeder.StateText = "EXECUTING";
-                                        break;
-                                    case 2: //Success
-                                        Feeder.StateText = "SUCCESS";
-                                        if (Feeder.State == (int)FEEDERSTATE.EXECUTING) //If we're executing, that was a success
-                                        {
-                                            Result = "SUCCESS - " + Feeder.GetLastCommandText() + " - ";
-                                            Feeder.Log(Result.Substring(0, Result.Count() - 3));
-                                            FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Status(Result); }));
-                                            Feeder.ArduinoAckowledge();
-                                            if (Feeder.CheckMealsCount() == 0)
-                                            {
-                                                Feeder.MealState = MEALSTATE.NONE;
-                                            }
-                                            else
-                                            {
-                                                Feeder.MealState = MEALSTATE.WAITING;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            Result = "ACK seen by Feeder";
-                                            FEB.Invoke(new MethodInvoker(delegate { FEB.Add_Status(Result); }));
-                                        }
-                                        break; 
-                                    case 3: //Ready
-                                        Feeder.StateText = "READY";
-                                        break;
-                                }
-                                Feeder.State = TempState;                                                      
+                                updateFeederState(newState);
                             }
                         }
-                        if (Feeder.GetCommandSize() > 0 && Feeder.State != 1)
+                        lastPinStateA = pinStateA; //These serve as pinStateA debounce function. 
+                        lastPinStateB = pinStateB; //Without debounce, you get multiple states in pinStateA single transistion
+                        if (!PauseCommandDelivery && ((Feeder.GetCommandSize() > 0 && Feeder.State == 3) || (Feeder.GetCommandSize() > 0 && Feeder.PeekNextCommand() == 28)))
                         {
-                            byte v;
-                            v = Feeder.GetTopCommand();
-
-                            for (byte k = 0; k < 5; k++)   //Step through the bits of the command                    
-                            {
-                                bool x = !((v & (1 << k)) > 0); //mathematical way to make x the kth bit                              
-                                MPCLASS.setDigitalIO((uint)k, x, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //set it on the MP150
-                            }
-                            MPCLASS.setDigitalIO(7, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //pulse the data ready bit
-                            Thread.Sleep(1);
-                            MPCLASS.setDigitalIO(7, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //finish pulse
+                            deliverNextFeederCommand();
                         }
                     }
-                    else  //only want to send the feeding commands once every 4 cycles 
+                    else  //only want to send the feeding commands once every 4 cycles ~
                     {
                         Feeder.gap++;
-                        if (Feeder.gap >=4) { Feeder.gap = 0; }
-                        
+                        if (Feeder.gap >= 4) { Feeder.gap = 0; }
                     }
                 }
-                Buffer.BlockCopy(rec_buffer, 0, draw_buffer, 0, (int)received * 8);  //copy the Buffer to the drawing area                      
+                Buffer.BlockCopy(rec_buffer, 0, draw_buffer, 0, (int)received * 8);  //copy the Buffer to the drawing area
                 _DrawHandle.Set(); //let the drawing thread know that data is available.
             }
             BuffDraw.Abort();
-            MPReturn = MPCLASS.stopAcquisition();  //We won't get here unless the thread stops. 
+            MPReturn = MPCLASS.stopAcquisition();  //We won't get here unless the thread stops.
             return;
-        }
+        }        
         
-    
+        #endregion
     }
-}  
+}

@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 
 namespace BioPacVideo
 {
+    #region Custom Data Types
     public enum MEALSTATE
     {
         NONE=0,
@@ -19,10 +20,29 @@ namespace BioPacVideo
     public enum FEEDERSTATE : int
     {
         DISCONNECTED = -1,
-        FAIL=0,
+        ERROR=0,
         EXECUTING=1,
         SUCCESS=2,
         READY=3
+    }
+
+    public enum MessageType
+    {
+        ADVANCED,
+        STATUS,
+        ERROR
+    }
+
+    public class FeederMessage
+    {
+        public string Message { get; set; }
+        public MessageType Type { get; set; }
+
+        public FeederMessage(string message, MessageType type)
+        {
+            Message = message;
+            Type = type;
+        }
     }
 
     public class MealType
@@ -34,6 +54,7 @@ namespace BioPacVideo
         public MealType(int F, int P, int I) { Feeder = F; Pellets = P; IndicatedFeeder = I; Test = false; }
         public MealType(int F, int P, int I, bool T) { Feeder = F; Pellets = P; IndicatedFeeder = I; Test = T; }
     }
+    #endregion
 
     public class FeederTemplate
     {
@@ -63,7 +84,7 @@ namespace BioPacVideo
         public int Solve2;
         public bool AlternateAddress;
         public int[] AddressTable;
-        private Queue<byte> Commands;
+        private List<byte> Commands;
         private Stack<string> CommandText;
         public int gap = 0;
         private Random Randomizer;
@@ -75,6 +96,11 @@ namespace BioPacVideo
         public int Cages_Y;
         public MEALSTATE MealState; 
         private Queue<MealType> Meals;
+        public string FeederStateWindowOutputInfromation;
+        public int FeederStateWindowOutputCount;
+
+        public delegate void FeederMessageHandler(FeederMessage message);
+        public event FeederMessageHandler MessageSent;
         #endregion
 
         #region Initilizers
@@ -89,7 +115,7 @@ namespace BioPacVideo
         public FeederTemplate()
         {
             Meals = new Queue<MealType>();
-            Commands = new Queue<byte>();
+            Commands = new List<byte>();
             CommandText = new Stack<string>();
             MealState = MEALSTATE.NONE; 
             ErrorState = false;
@@ -163,12 +189,17 @@ namespace BioPacVideo
             if (CommandText.Count > 0)
                 return CommandText.Pop();
             else
-                return "No Text in Stack";
+                return "";
         }
         
         public void SendDirectCommand(byte Command)
         {
-            Commands.Enqueue(Command);
+            Commands.Add(Command);
+        }
+
+        public byte PeekNextCommand()
+        {
+            return Commands.First();
         }
 
         /// <summary>
@@ -177,8 +208,8 @@ namespace BioPacVideo
         /// <returns>The most recent command to send to the arduimo as a byte</returns>
         public byte GetTopCommand()
         {
-            byte v = Commands.Dequeue();
-            Console.WriteLine("FEEDER COMMAND: " + v.ToString()); 
+            byte v = Commands.First();
+            Commands.RemoveAt(0);
             return v;
         }
         #endregion
@@ -223,13 +254,16 @@ namespace BioPacVideo
                 MealMatrix.RemoveAt(R);
             }
         }
+
         public void RunNextMeal()
         {
             MealType M=Meals.Dequeue();
+            
             Console.WriteLine("FEEDING:" + M.Feeder.ToString());
             AddCommand(M);
            
         }
+
         public int CheckMealsCount()
         {
             return Meals.Count; 
@@ -265,6 +299,7 @@ namespace BioPacVideo
         /// <param name="Command">The text to log to the feeder log</param>
         public void Log(string Command)
         {
+            Console.WriteLine(Command);
             if (String.IsNullOrEmpty(LogFileName))
             {
                 return;
@@ -295,26 +330,28 @@ namespace BioPacVideo
         {
             string Txt;
             MealState = MEALSTATE.EXECUTING; 
-            Commands.Enqueue((byte)25); //Feeder 
-            Commands.Enqueue((byte)M.Feeder);
-            Commands.Enqueue((byte)26); //Pellets
-            Commands.Enqueue((byte)M.Pellets);
-            Commands.Enqueue((byte)29);
-            Console.WriteLine(M.Feeder.ToString() + " " + M.Pellets.ToString());
+            Commands.Add((byte)25); //Feeder 
+            Commands.Add((byte)M.Feeder);
+            Commands.Add((byte)26); //Pellets
+            Commands.Add((byte)M.Pellets);
+            Commands.Add((byte)29);
             //This is to disable logging during testing meals 
             if (!M.Test)
             {
                 Txt = "Feeder-" + (M.IndicatedFeeder + 1).ToString() + " Pellets-" + M.Pellets.ToString();
                 CommandText.Push(Txt);
-            }             
+            } else
+            {
+                CommandText.Push($"TEST Feeder-{M.Feeder} Pellets-{M.Pellets}");
+            }          
         }
         
         /// <summary>
         /// Executes the command on the arduino
         /// </summary>
-        public void ExecuteAction()  //This is likely depreciated 
+        public void ExecuteAction()
         {
-            Commands.Enqueue((byte)29);
+            Commands.Add((byte)29);
         }
 
         /// <summary>
@@ -323,8 +360,7 @@ namespace BioPacVideo
         public void ArduinoAckowledge()
         {
             //The software asks the arduino to acknowledge that it recieved the pellet and the feeder 
-            Commands.Enqueue((byte)28);
-            
+            Commands.Insert(0, (byte)28);
             //ArduinoAck = false; 
         }
 
@@ -347,7 +383,7 @@ namespace BioPacVideo
             {
                 if (Rats[RC].Weight > 0 && Rats[RC].ID.ToLower() != "e" && Rats[RC].ID.ToLower() != "empty")
                 {
-                    Feeder = RC * 2; // Calculate the feeder index based on the rat's position (each rat has 2 feeders)
+                    Feeder = RC * 2; // Calculate the feeder index based on the rat's position (each rat has 2 f eeders)
                     // Calculate the number of pellets based on the rat's weight and PelletsPerGram
                     MealSize = (int)Math.Round(Rats[RC].Weight * PelletsPerGram);
                     // Determine if the meal is medicated based on the rat's meal schedule
@@ -366,13 +402,12 @@ namespace BioPacVideo
                     {
                         M = new MealType(ActualFeeder, 23, Feeder);
                         Meals.Enqueue(M);   // Add a command to deliver 23 pellets
-                        Log("Feeder: " + Feeder + "  Pellets: 23 " + Medi); // Log the delivery of 23 pellets
                         MealSize -= 23; // Subtract 23 from MealSize to account for the pellets just queued
                     }
                     // Add the final command to deliver the remaining pellets (less than or equal to 23)
                     M = new MealType(ActualFeeder, MealSize, Feeder);    
                     Meals.Enqueue(M);  
-                    Log("Feeder: " + Feeder.ToString() + "  Pellets: " + MealSize.ToString() + " " + Medi); // Log the final delivery                   
+                    Log("Rat: " + RC + "  Pellets: " + MealSize.ToString() + " " + Medi); // Log the final delivery                   
                     // If this is the last meal of the week, generate the next week's meals for the rat
                     if (MealNum + 1 == DailyMealCount * 7)
                     {
@@ -382,6 +417,15 @@ namespace BioPacVideo
             }
             MealState = MEALSTATE.WAITING;
             
+        }
+        #endregion
+
+        #region Comunication Functions
+        public void sendMessage(FeederMessage message)
+        {
+            if (MessageSent != null) { // If anyone is listening
+                MessageSent(message);  // Tell them the message
+            }
         }
         #endregion
     }
