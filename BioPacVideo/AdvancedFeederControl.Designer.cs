@@ -62,6 +62,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxHistory.Enabled = false;
+            this.textBoxHistory.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxHistory.ForeColor = System.Drawing.SystemColors.MenuText;
+            this.textBoxHistory.HideSelection = false;
             this.textBoxHistory.Location = new System.Drawing.Point(12, 12);
             this.textBoxHistory.Multiline = true;
             this.textBoxHistory.Name = "textBoxHistory";
@@ -83,7 +86,8 @@
             "28 - Acknowledge",
             "29 - Execute",
             "30 - Blink LED",
-            "31 - Null Command"});
+            "31 - Null Command",
+            "32 - Print Command Queue"});
             this.comboBoxCommonCommands.Location = new System.Drawing.Point(12, 429);
             this.comboBoxCommonCommands.Name = "comboBoxCommonCommands";
             this.comboBoxCommonCommands.Size = new System.Drawing.Size(164, 21);

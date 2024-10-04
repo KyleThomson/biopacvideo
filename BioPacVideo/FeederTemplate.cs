@@ -30,7 +30,8 @@ namespace BioPacVideo
     {
         ADVANCED,
         STATUS,
-        ERROR
+        ERROR,
+        LOG
     }
 
     public class FeederMessage
@@ -129,6 +130,10 @@ namespace BioPacVideo
         #endregion
 
         #region Getters
+        public List<byte> getCommandQueu()
+        {
+            return Commands;
+        }
         public int GetCommandSize()
         {
             return Commands.Count();
@@ -368,9 +373,9 @@ namespace BioPacVideo
         /// Executes a feeding
         /// </summary>
         /// <param name="MealNum">Which meal should be executed</param>
-        public void GoMeal(int MealNum) // something is going wrong in here 
+        public void GoMeal(int MealNum) // something is going wrong in here
         {
-            Log("Executing Meal #" + MealNum.ToString());
+            sendMessage(new FeederMessage($"Executing Meal #{MealNum.ToString()}", MessageType.LOG));
             int MealSize;     // Variable to store the calculated meal size (number of pellets)
             int Feeder;       // Variable to store the index of the feeder being used
             string Medi;      // Variable to indicate whether the meal is medicated or unmedicated
@@ -406,8 +411,8 @@ namespace BioPacVideo
                     }
                     // Add the final command to deliver the remaining pellets (less than or equal to 23)
                     M = new MealType(ActualFeeder, MealSize, Feeder);    
-                    Meals.Enqueue(M);  
-                    Log("Rat: " + RC + "  Pellets: " + MealSize.ToString() + " " + Medi); // Log the final delivery                   
+                    Meals.Enqueue(M);
+                    sendMessage(new FeederMessage("Rat: " + RC + "  Pellets: " + MealSize.ToString() + " " + Medi, MessageType.LOG)); // Log the final delivery
                     // If this is the last meal of the week, generate the next week's meals for the rat
                     if (MealNum + 1 == DailyMealCount * 7)
                     {
@@ -423,6 +428,11 @@ namespace BioPacVideo
         #region Comunication Functions
         public void sendMessage(FeederMessage message)
         {
+            if (message.Type != MessageType.ADVANCED)
+            {
+                Log($"{message.Type} - {message.Message}");
+            }
+
             if (MessageSent != null) { // If anyone is listening
                 MessageSent(message);  // Tell them the message
             }

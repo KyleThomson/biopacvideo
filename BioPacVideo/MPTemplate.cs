@@ -542,13 +542,11 @@ namespace BioPacVideo
                     Feeder.StateText = "ERROR";
                     if (Feeder.State == (int)FEEDERSTATE.READY) //If the Arduino sends an Error from pinStateA Ready state it means the last command sent was an invalid format
                     {
-                        Feeder.Log("Infared Sensors Interrupted");
                         Feeder.sendMessage(new FeederMessage("Infared Sensors Interrupted - ", MessageType.ERROR));
                     }
                     else if (Feeder.State == (int)FEEDERSTATE.EXECUTING) //if something went wrong during execution, then the feeder failed to deliver pellets. 
                     {
                         Result = "FAIL - " + Feeder.GetLastCommandText() + " - ";
-                        Feeder.Log(Result.Substring(0, Result.Count() - 3));
                         Feeder.sendMessage(new FeederMessage(Result, MessageType.ERROR));
                         Feeder.ArduinoAckowledge();
                         if (Feeder.CheckMealsCount() == 0)
@@ -574,7 +572,6 @@ namespace BioPacVideo
                     else if (Feeder.State == (int)FEEDERSTATE.EXECUTING) //If we're executing, that was pinStateA success
                     {
                         Result = "SUCCESS - " + Feeder.GetLastCommandText() + " - ";
-                        Feeder.Log(Result.Substring(0, Result.Count() - 3));
                         Feeder.sendMessage(new FeederMessage(Result, MessageType.STATUS));
                         Feeder.ArduinoAckowledge();
                         if (Feeder.CheckMealsCount() == 0)
@@ -617,9 +614,11 @@ namespace BioPacVideo
             MPCLASS.setDigitalIO(7, true, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //pulse the data ready bit
             Thread.Sleep(1);
             MPCLASS.setDigitalIO(7, false, true, MPCLASS.DIGITALOPT.SET_LOW_BITS); //finish pulse
+            Feeder.sendMessage(new FeederMessage($"Command Delivered: {command}", MessageType.ADVANCED));
             if (command == 29)
             {
                 PauseCommandDelivery = true;
+                Feeder.sendMessage(new FeederMessage("Pause Command Delivery Set True", MessageType.ADVANCED));
             }
         }
         #endregion
@@ -774,10 +773,11 @@ namespace BioPacVideo
                         MPCLASS.getDigitalIO(8, out pinStateB, MPCLASS.DIGITALOPT.READ_HIGH_BITS); //read the low bit for state
                         if ((lastPinStateB == pinStateB) && (lastPinStateA == pinStateA))
                         {
-                            newState = getState(pinStateA, pinStateB);
+                            newState = getState(pinStateA, pinStateB);                            
                             if (newState != Feeder.State)
                             {
                                 updateFeederState(newState);
+                                Feeder.sendMessage(new FeederMessage($"State Updated: {newState}", MessageType.ADVANCED));
                             }
                         }
                         lastPinStateA = pinStateA; //These serve as pinStateA debounce function. 
