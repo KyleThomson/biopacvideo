@@ -13,27 +13,43 @@ namespace BioPacVideo
 {
     public partial class AdvancedFeederControl : Form
     {
+        #region Properties
         FeederTemplate Feeder;
         int CurrentIndex = -1;
-        int Count;
         List<byte> sentCommands = new List<byte>();
+        #endregion
+
+        #region Lifecyle
         public AdvancedFeederControl()
         {
             InitializeComponent();
             Feeder = FeederTemplate.Instance;
-            Feeder.MessageSent += OnFeederMessageRecieved;
-            Count = Feeder.FeederStateWindowOutputCount;             
+            Feeder.MessageSent += OnFeederMessageRecieved;      
             this.AcceptButton = buttonSend;
         }
 
+        private void AdvancedFeederControl_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Feeder.MessageSent -= OnFeederMessageRecieved;
+        }
+        #endregion
+
         private void OnFeederMessageRecieved(FeederMessage message)
+        {
+            addLine($"{message.Type} - {message.Message}");
+        }
+
+        private void addLine(string line)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new MethodInvoker(() => OnFeederMessageRecieved(message)));
-            } else
+                this.Invoke(new MethodInvoker(() => addLine(line)));
+            }
+            else
             {
-                textBoxHistory.Text += $"{message.Type} - {message.Message}{Environment.NewLine}";
+                textBoxHistory.Text += $"{line}{Environment.NewLine}";
+                textBoxHistory.SelectionStart = textBoxHistory.Text.Length;
+                textBoxHistory.ScrollToCaret();
             }
         }
 
@@ -42,7 +58,7 @@ namespace BioPacVideo
             if (Byte.TryParse(CommandValue.Text, out byte result))
             {
                 sentCommands.Insert(0, result);
-                textBoxHistory.Text += result + Environment.NewLine;
+                addLine(result.ToString());
                 if (result < 0)
                 {
                     return;
@@ -50,7 +66,7 @@ namespace BioPacVideo
                 else if (result < 31)
                 {
                     Feeder.SendDirectCommand(result);
-                    textBoxHistory.Text += CommandValue.Text + Environment.NewLine;
+                    addLine(CommandValue.Text);
                 }
                 else //Handle Biopac internal feeder cmmand
                 {
@@ -59,66 +75,64 @@ namespace BioPacVideo
                         case 32: //Print Command Queue
                             if (Feeder.GetCommandSize() > 0)
                             {
-                                textBoxHistory.Text += Environment.NewLine + "Current Command queue: " + Environment.NewLine;
+                                addLine("");
+                                addLine("Current Command queue: ");
                                 foreach (byte command in Feeder.getCommandQueu())
                                 {
-                                    textBoxHistory.Text += command + Environment.NewLine;
+                                    addLine(command.ToString());
                                 }
-                                textBoxHistory.Text += Environment.NewLine;
+                                addLine("");
                             } else
                             {
-                                textBoxHistory.Text += "No Commands In Queue" + Environment.NewLine;
+                                addLine("No Commands In Queue");
                             }
                             break;
                         default:
-                            textBoxHistory.Text += "INVALID COMMAND" + Environment.NewLine;
+                            addLine("INVALID COMMAND");
                             break;
                     }
                 }
                 CommandValue.Text = "";
+                CurrentIndex = -1;
             }
         }
 
         private void CommandValue_KeyPressed(object sender, KeyEventArgs e)
         {
-            if (sentCommands.Count() > 0)
+            if (sentCommands.Count() > 0 && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down))
             {
                 if (e.KeyCode == Keys.Up && CurrentIndex == -1)
                 {
                     CurrentIndex = 0;
-                    applyHistory(true);
                 }
                 else if (e.KeyCode == Keys.Up && CurrentIndex < sentCommands.Count() - 1)
                 {
-                    applyHistory(true);
+                    CurrentIndex += 1;
                 }
                 else if (e.KeyCode == Keys.Down && CurrentIndex > 0)
                 {
-                    applyHistory(false);
+                    CurrentIndex -= 1;
+                } else if (e.KeyCode == Keys.Down && CurrentIndex == 0 && sentCommands.Count > 0)
+                {
+                    CurrentIndex = -1;
                 }
-            } else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
-            {
-                CommandValue.SelectionStart = CommandValue.Text.Length;  // This doesn't work, I declare this Someone elses problem
+                applyHistory();
             }
         }
 
-        private void applyHistory(bool add)
+        private void applyHistory()
         {
             if (CurrentIndex == -1)
             {
-                CurrentIndex = sentCommands.Count() - 1;
-            }
-            else if (add == true)
+                CommandValue.Text = "";
+            } else
             {
-                CurrentIndex += 1;
-            }
-            else if (add == false)
+                CommandValue.Text = sentCommands[CurrentIndex].ToString();
+            }                
+            CommandValue.BeginInvoke(new Action(() =>
             {
-                CurrentIndex -= 1;
-            }
-
-            CommandValue.Text = sentCommands[CurrentIndex].ToString();
-            CommandValue.SelectionStart = CommandValue.Text.Length; // This doesn't work, I declare this Someone elses problem
+                CommandValue.SelectionStart = CommandValue.Text.Length;
+            }));
         }
 
         private void comboBoxCommonCommands_SelectedIndexChanged(object sender, EventArgs e)

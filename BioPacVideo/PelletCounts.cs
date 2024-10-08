@@ -198,11 +198,5 @@ namespace BioPacVideo
         {
 
         }
-
-        
-    
-
-
-       
     }
 }

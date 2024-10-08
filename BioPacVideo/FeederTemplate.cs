@@ -130,14 +130,24 @@ namespace BioPacVideo
         #endregion
 
         #region Getters
+        /// <summary>
+        /// Returns the Entire Command Queue
+        /// </summary>
+        /// <returns>List of Bytes that is the current command queue</returns>
         public List<byte> getCommandQueu()
         {
             return Commands;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public int GetCommandSize()
         {
             return Commands.Count();
         }
+
         /// <summary>
         /// Gets the current day of the week as an integer
         /// </summary>
@@ -263,16 +273,15 @@ namespace BioPacVideo
         public void RunNextMeal()
         {
             MealType M=Meals.Dequeue();
-            
-            Console.WriteLine("FEEDING:" + M.Feeder.ToString());
-            AddCommand(M);
-           
+            sendMessage(new FeederMessage($"FEEDING: {M.Feeder.ToString()}", MessageType.ADVANCED));
+            AddCommand(M);           
         }
 
         public int CheckMealsCount()
         {
             return Meals.Count; 
         }
+
         /// <summary>
         /// Waits for the command sent to the arduino to be executed
         /// </summary>
@@ -304,7 +313,7 @@ namespace BioPacVideo
         /// <param name="Command">The text to log to the feeder log</param>
         public void Log(string Command)
         {
-            Console.WriteLine(Command);
+            //Console.WriteLine()
             if (String.IsNullOrEmpty(LogFileName))
             {
                 return;
@@ -412,7 +421,7 @@ namespace BioPacVideo
                     // Add the final command to deliver the remaining pellets (less than or equal to 23)
                     M = new MealType(ActualFeeder, MealSize, Feeder);    
                     Meals.Enqueue(M);
-                    sendMessage(new FeederMessage("Rat: " + RC + "  Pellets: " + MealSize.ToString() + " " + Medi, MessageType.LOG)); // Log the final delivery
+                    sendMessage(new FeederMessage($"Rat: {RC} Pellets: {MealSize.ToString()} Medicated: {Medi} Feeder: {ActualFeeder}", MessageType.LOG)); // Log the final delivery
                     // If this is the last meal of the week, generate the next week's meals for the rat
                     if (MealNum + 1 == DailyMealCount * 7)
                     {
@@ -420,8 +429,7 @@ namespace BioPacVideo
                     }
                 }
             }
-            MealState = MEALSTATE.WAITING;
-            
+            MealState = MEALSTATE.WAITING;            
         }
         #endregion
 
