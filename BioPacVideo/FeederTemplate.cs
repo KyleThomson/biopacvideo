@@ -272,9 +272,9 @@ namespace BioPacVideo
 
         public void RunNextMeal()
         {
-            MealType M=Meals.Dequeue();
-            sendMessage(new FeederMessage($"FEEDING: {M.Feeder.ToString()}", MessageType.ADVANCED));
-            AddCommand(M);           
+            MealType Meal=Meals.Dequeue();
+            sendMessage(new FeederMessage($"FEEDING: {Meal.Feeder.ToString()}", MessageType.LOG));
+            AddCommand(Meal);           
         }
 
         public int CheckMealsCount()
@@ -369,20 +369,18 @@ namespace BioPacVideo
         }
 
         /// <summary>
-        /// Asks the arduino to acknowledge that it recieved the pellet and the feeder
+        /// Forces an Acknowledge command to be placed first in the queue
         /// </summary>
         public void ArduinoAckowledge()
         {
-            //The software asks the arduino to acknowledge that it recieved the pellet and the feeder 
             Commands.Insert(0, (byte)28);
-            //ArduinoAck = false; 
         }
 
         /// <summary>
         /// Executes a feeding
         /// </summary>
         /// <param name="MealNum">Which meal should be executed</param>
-        public void GoMeal(int MealNum) // something is going wrong in here
+        public void GoMeal(int MealNum)
         {
             sendMessage(new FeederMessage($"Executing Meal #{MealNum.ToString()}", MessageType.LOG));
             int MealSize;     // Variable to store the calculated meal size (number of pellets)
@@ -397,7 +395,7 @@ namespace BioPacVideo
             {
                 if (Rats[RC].Weight > 0 && Rats[RC].ID.ToLower() != "e" && Rats[RC].ID.ToLower() != "empty")
                 {
-                    Feeder = RC * 2; // Calculate the feeder index based on the rat's position (each rat has 2 f eeders)
+                    Feeder = RC * 2; // Calculate the feeder index based on the rat's position (each rat has 2 feeders)
                     // Calculate the number of pellets based on the rat's weight and PelletsPerGram
                     MealSize = (int)Math.Round(Rats[RC].Weight * PelletsPerGram);
                     // Determine if the meal is medicated based on the rat's meal schedule

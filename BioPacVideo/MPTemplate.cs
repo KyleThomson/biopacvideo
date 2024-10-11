@@ -677,7 +677,7 @@ namespace BioPacVideo
                 {
                     Console.WriteLine("Buffer Mismatch: " + (last_received % AcqChan).ToString());
                 }
-                samplesize = (int)last_received / AcqChan; //How many samples did we acquire? 
+                samplesize = (int)last_received / AcqChan; //How many samples did we acquire?
                 samplecount += samplesize;
                 switch (RecordingDeviceAll)
                 {
@@ -707,7 +707,7 @@ namespace BioPacVideo
                         }
                         break;
                 }
-                // VideoWrapper.SetSampleCount(samplecount);                
+                // VideoWrapper.SetSampleCount(samplecount);
                 if (IsFileWriting) //If we are writing to the file, we want to handle it immediately. 
                 {
                     BinaryFile.Seek(CurrentWriteLoc, SeekOrigin.Begin); //Make sure the File writting is in the right place                     
@@ -754,7 +754,7 @@ namespace BioPacVideo
                         FileCount++; //Apparently, I don't need this, because the code won't overwrite a file. But, whatever
                         StartWriting(); //Start a new file!
                     }
-                }                         
+                }
 
                 if (Feeder.Enabled)
                 {

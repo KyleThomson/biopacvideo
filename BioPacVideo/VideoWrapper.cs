@@ -14,7 +14,11 @@ namespace BioPacVideo
 {
     public class VideoWrapper
     {
+        #region DLL Imports
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        #endregion
+
+        #region Properties
         public static extern void OutputDebugString(string message);
         public Int32[] PanelHandles;
         public Int32[] panelhandlesnew; 
@@ -23,34 +27,19 @@ namespace BioPacVideo
         public uint i = 0;
         MPTemplate MP = MPTemplate.Instance; 
         public bool m_bIsMaximizedForm = false;
-
-        public bool[] m_bIsMaximizedChannelWindow = new bool [16];
-        
+        public bool[] m_bIsMaximizedChannelWindow = new bool [16];        
         public bool[] m_bNoSignal = new bool[16];
-
         public string[] m_strFormatChangedOutput = new string[16];
-
         public bool[] m_bShareRecordCH = new bool[16];
-
         public bool m_bShowClone = false;
-
         public bool m_bIsShareRecord = false;
-
         public uint m_nVideoWidth = 1920;
-
         public uint m_nVideoHeight = 1080;
-
         public double m_dVideoFrameRate = 60.0;
-
         public uint m_bVideoIsInterleaved = 0;
-
         public uint m_nAudioChannels = 2;
-
         public uint m_nAudioBitsPerSample = 16;
-
         public uint m_nAudioSampleFrequency = 48000;
-        
-
         public int[] CameraAssociation;
         public bool Enabled;
         public int XRes;
@@ -67,7 +56,9 @@ namespace BioPacVideo
         public string Filename;
         public int LengthWise;
         public MyChannelControl[] m_pChannelControl_LIVE = new MyChannelControl[16];
+        #endregion
 
+        #region Lifecycles
         public VideoWrapper()
         {
             CameraAssociation = new int[16];
@@ -83,6 +74,7 @@ namespace BioPacVideo
                 return instance;
             }
         }
+        #endregion
 
         // FOURCC MARCO
         //
@@ -114,19 +106,15 @@ namespace BioPacVideo
         string m_strChipName = "MZ0380 PCI";
 
         // DEVICE PROPERTY
-        //
-        public ulong[] m_hCapDev = new ulong[16];                         // STREAM CAPTURE DEVICE
-
-        public ulong[] m_hCloneCapDev = new ulong[16];                // CLONE STREAM CAPTURE DEVICE
+        public ulong[] m_hCapDev = new ulong[16];       // STREAM CAPTURE DEVICE
+        public ulong[] m_hCloneCapDev = new ulong[16];  // CLONE STREAM CAPTURE DEVICE
         public ulong m_hCloneCapDev_temp = new ulong(); 
         //  FORMAT CHANGED CALLBACK FUNCTION
-        //
         EXPORTS.ReturnOfCallbackEnum on_process_format_changed(ulong pDevice, uint nVideoInput, uint nAudioInput, uint nVideoWidth, uint nVideoHeight, uint bVideoIsInterleaved, double dVideoFrameRate, uint nAudioChannels, uint nAudioBitsPerSample, uint nAudioSampleFrequency, ulong pUserData)
         {
             ulong nCH = pUserData;
 
             // OUTPUT FORMAT CHANGED MESSAGE
-            //
             string strOutput = "CH" + (nCH + 1).ToString() + " -> FORMAT CHANGED : pDevice : " + pDevice.ToString() + " , " + "nVideoInput : " + nVideoInput.ToString() + " , " +
 
                                         "nAudioInput : " + nAudioInput.ToString() + " , " + "nVideoWidth : " + nVideoWidth.ToString() + " , " +
@@ -140,25 +128,16 @@ namespace BioPacVideo
                                         "pUserData : " + pUserData.ToString() + " \n";
 
             OutputDebugString(strOutput);
-
             m_nVideoWidth = nVideoWidth;
-
             m_nVideoHeight = nVideoHeight;
-
             m_dVideoFrameRate = dVideoFrameRate;
-
             m_bVideoIsInterleaved = bVideoIsInterleaved;
-
             m_nAudioChannels = nAudioChannels;
-
             m_nAudioBitsPerSample = nAudioBitsPerSample;
-
             m_nAudioSampleFrequency = nAudioSampleFrequency;
 
             uint nVH = 0;
-
             string strFrameType = " P ";
-
             string strVideoInput = "", strAudioInput = "";
 
             if (nVideoInput == 0) { strVideoInput = "COMPOSITE"; }
@@ -186,7 +165,6 @@ namespace BioPacVideo
                 " VIDEO INPUT : " + strVideoInput + " , " + " AUDIO INPUT : " + strAudioInput + " \n";
 
             // NO SIGNAL
-            //       
             if (nVideoWidth == 0 && nVideoHeight == 0 && dVideoFrameRate == 0.0 && nAudioChannels == 0 && nAudioBitsPerSample == 0 && nAudioSampleFrequency == 0)
             {
                 m_bNoSignal[nCH] = true;
@@ -200,7 +178,6 @@ namespace BioPacVideo
         }
 
         // PREVIEW VIDEO CALLBACK FUNCTION
-        //
         EXPORTS.ReturnOfCallbackEnum on_process_preview_video_buffer(ulong pDevice, double dSampleTime, ulong pFrameBuffer, uint nFrameBufferLen, ulong pUserData)
         {
             ulong nCH = pUserData;
@@ -218,7 +195,6 @@ namespace BioPacVideo
         }
 
         // VIDEO HARDWARE ENCODER CALLBACK FUNCTION
-        //
         EXPORTS.ReturnOfCallbackEnum on_process_hardware_encoder_video_buffer(ulong pDevice, uint iRecNum, double dSampleTime, ulong pStreamBuffer, uint nStreamBufferLen, uint bIsKeyFrame, ulong pUserData)
         {
             ulong nCH = pUserData;
@@ -227,10 +203,8 @@ namespace BioPacVideo
         }
 
         // PREVIEW AUDIO CALLBACK FUNCTION
-        //
 
         // NO SIGNAL DETEACTED CALLBACK FUNCTION
-        //
         EXPORTS.ReturnOfCallbackEnum on_process_no_signal_detected(ulong pDevice, uint nVideoInput, uint nAudioInput, ulong pUserData)
         {
             ulong nCH = pUserData;
@@ -243,7 +217,6 @@ namespace BioPacVideo
         }
 
         // SIGNAL REMOVED CALLBACK FUNCTION
-        //
         EXPORTS.ReturnOfCallbackEnum on_process_signal_removed(ulong pDevice, uint nVideoInput, uint nAudioInput, ulong pUserData)
         {
             ulong nCH = pUserData;
@@ -254,11 +227,7 @@ namespace BioPacVideo
 
             return EXPORTS.ReturnOfCallbackEnum.QCAP_RT_OK;
         }
-
-   
-       
-            
-
+        
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             //timerCheckSignal.Enabled = false;
@@ -275,8 +244,7 @@ namespace BioPacVideo
                 if (m_hCloneCapDev[i] != 0) { EXPORTS.QCAP_STOP(m_hCloneCapDev[i]); EXPORTS.QCAP_DESTROY(m_hCloneCapDev[i]); }
             }
             ShowCloneVideo(true);
-          }
-
+        }
         
         public void StopRecording()
         {
@@ -285,6 +253,7 @@ namespace BioPacVideo
                 EXPORTS.QCAP_STOP_RECORD(m_hCapDev[CameraAssociation[i]], 0);
             }
         }
+
         public bool HwInitialize()
         {
             for (i = 0; i < maxdevices; i++) { m_hCapDev[i] = 0x00000000; }
@@ -381,24 +350,46 @@ namespace BioPacVideo
 
             return true;
         }
+
         public void StartRecording()
         {
-            int i;
             string pszNULL = null;
             string FN;
 
-            for (i = 0; i < 16; i++)
+            for (int i = 0; i < 16; i++)
             {
                 if ((MP.RecordAC[i]) && (CameraAssociation[i] < maxdevices))
                 {
                     FN = Filename + "_" + i.ToString("D3") + ".mp4"; //JOSH  
-                    //FN = Filename + "_" + CameraAssociation[i].ToString("D3") + ".mp4"; I think this makes it makes sense for FixedChan = CamerAssc[CamerAssc[ACQ.SelectedChan]];
-                    EXPORTS.QCAP_SET_VIDEO_RECORD_PROPERTY(m_hCapDev[CameraAssociation[i]], 0, (uint)EXPORTS.EncoderTypeEnum.QCAP_ENCODER_TYPE_HARDWARE, (uint)EXPORTS.VideoEncoderFormatEnum.QCAP_ENCODER_FORMAT_H264, (uint)EXPORTS.RecordModeEnum.QCAP_RECORD_MODE_VBR, (uint)Quality, (uint)Bitrate*1024*1024, 30, 4, 3, (uint)EXPORTS.DownScaleModeEnum.QCAP_DOWNSCALE_MODE_OFF);
-                    EXPORTS.QCAP_START_RECORD(m_hCapDev[CameraAssociation[i]], 0, ref FN, (uint)EXPORTS.RecordFlagEnum.QCAP_RECORD_FLAG_FULL, 0.0, 0.0, 0.0, 256000, ref pszNULL);
+                                                                     //FN = Filename + "_" + CameraAssociation[i].ToString("D3") + ".mp4"; I think this makes it makes sense for FixedChan = CamerAssc[CamerAssc[ACQ.SelectedChan]];
+                    EXPORTS.QCAP_SET_VIDEO_RECORD_PROPERTY(
+                        m_hCapDev[CameraAssociation[i]],
+                        0,
+                        (uint)EXPORTS.EncoderTypeEnum.QCAP_ENCODER_TYPE_HARDWARE,
+                        (uint)EXPORTS.VideoEncoderFormatEnum.QCAP_ENCODER_FORMAT_H264,
+                        (uint)EXPORTS.RecordModeEnum.QCAP_RECORD_MODE_VBR,
+                        (uint)Quality,
+                        (uint)Bitrate * 1024 * 1024,
+                        30,
+                        4,
+                        3,
+                        (uint)EXPORTS.DownScaleModeEnum.QCAP_DOWNSCALE_MODE_OFF
+                    );
+                    EXPORTS.QCAP_START_RECORD(
+                        m_hCapDev[CameraAssociation[i]],
+                        0,
+                        ref FN,
+                        (uint)EXPORTS.RecordFlagEnum.QCAP_RECORD_FLAG_FULL,
+                        0.0,
+                        0.0,
+                        7200.0, // Limit recording duration to 2 hours (in seconds)
+                        0, // You can only split by size or time we want time, so the size limit is disabled
+                        ref pszNULL
+                    );
                 }
             }
-
         }
+
         public bool HwUnInitialize()
         {
             for (int i = 0; i < maxdevices; i++)

@@ -234,6 +234,10 @@ namespace BioPacVideo
             this.Controls.Add(this.label1);
             this.Controls.Add(this.IDC_Meal1);
             this.Controls.Add(this.label27);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(232, 575);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(232, 575);
             this.Name = "MealTimes";
             this.Text = "Meal Times";
             this.ResumeLayout(false);
