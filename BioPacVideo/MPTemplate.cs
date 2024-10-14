@@ -540,13 +540,13 @@ namespace BioPacVideo
             {
                 case (int)FEEDERSTATE.ERROR: //Error
                     Feeder.StateText = "ERROR";
-                    if (Feeder.State == (int)FEEDERSTATE.READY) //If the Arduino sends an Error from pinStateA Ready state it means the last command sent was an invalid format
+                    if (Feeder.State == (int)FEEDERSTATE.READY) //If the Arduino sends an Error from Ready state it means the IR Sensors where interupted
                     {
-                        Feeder.sendMessage(new FeederMessage("Infared Sensors Interrupted - ", MessageType.ERROR));
+                        Feeder.sendMessage(new FeederMessage("Infared Sensors Interrupted", MessageType.ERROR));
                     }
                     else if (Feeder.State == (int)FEEDERSTATE.EXECUTING) //if something went wrong during execution, then the feeder failed to deliver pellets. 
                     {
-                        Result = "FAIL - " + Feeder.GetLastCommandText() + " - ";
+                        Result = "FAIL - " + Feeder.GetLastCommandText();
                         Feeder.sendMessage(new FeederMessage(Result, MessageType.ERROR));
                         Feeder.ArduinoAckowledge();
                         if (Feeder.CheckMealsCount() == 0)
@@ -565,13 +565,13 @@ namespace BioPacVideo
                     break;
                 case (int)FEEDERSTATE.SUCCESS: //Success
                     Feeder.StateText = "SUCCESS";
-                    if (Feeder.State == (int)FEEDERSTATE.READY) //If the Arduino sends pinStateA Success State from pinStateA Ready state it means the Infared sensors detected an interuption
+                    if (Feeder.State == (int)FEEDERSTATE.READY) //If the Arduino sends Success State from Ready state it means the Infared sensors detected an interuption
                     {
-                        Feeder.sendMessage(new FeederMessage("ACK seen by feeder - ", MessageType.STATUS));
+                        Feeder.sendMessage(new FeederMessage("ACK seen by feeder", MessageType.STATUS));
                     }
-                    else if (Feeder.State == (int)FEEDERSTATE.EXECUTING) //If we're executing, that was pinStateA success
+                    else if (Feeder.State == (int)FEEDERSTATE.EXECUTING) //If we're executing, that was success
                     {
-                        Result = "SUCCESS - " + Feeder.GetLastCommandText() + " - ";
+                        Result = "SUCCESS - " + Feeder.GetLastCommandText();
                         Feeder.sendMessage(new FeederMessage(Result, MessageType.STATUS));
                         Feeder.ArduinoAckowledge();
                         if (Feeder.CheckMealsCount() == 0)
@@ -586,6 +586,21 @@ namespace BioPacVideo
                     PauseCommandDelivery = false;
                     break;
                 case 3: //Ready
+                    if (Feeder.State == (int)FEEDERSTATE.EXECUTING) //Handle Arduino reset mid feeding
+                    {
+                        Result = "FAIL - " + Feeder.GetLastCommandText();
+                        Feeder.sendMessage(new FeederMessage(Result, MessageType.ERROR));
+                        PauseCommandDelivery = false;
+                        Feeder.gap = -200; //Give the Arduino time to reboot (200 is overkill)
+                        if (Feeder.CheckMealsCount() == 0)
+                        {
+                            Feeder.MealState = MEALSTATE.NONE;
+                        }
+                        else
+                        {
+                            Feeder.MealState = MEALSTATE.WAITING;
+                        }
+                    }
                     Feeder.StateText = "READY";
                     PauseCommandDelivery = false;
                     break;

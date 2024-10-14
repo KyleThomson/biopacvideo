@@ -63,7 +63,7 @@ namespace BioPacVideo
             if (this.Visible == false)
                 this.Show();             
             string value = DateTime.Now.ToString("HH:mm");
-            ErrorList.Text += ErrorText + value + "\r\n";            
+            ErrorList.Text += ErrorText + " - " + value + "\r\n";            
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace BioPacVideo
         private void Add_Status(string StatusText)
         {
             string value = DateTime.Now.ToString("HH:mm");
-            StatusList.Text += StatusText + value + "\r\n";
+            StatusList.Text += StatusText + " - " + value + "\r\n";
         }
         #endregion                
     }

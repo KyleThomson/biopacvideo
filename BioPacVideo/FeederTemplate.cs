@@ -273,8 +273,8 @@ namespace BioPacVideo
         public void RunNextMeal()
         {
             MealType Meal=Meals.Dequeue();
-            sendMessage(new FeederMessage($"FEEDING: {Meal.Feeder.ToString()}", MessageType.LOG));
-            AddCommand(Meal);           
+            sendMessage(new FeederMessage($"Feeder: {Meal.Feeder.ToString()}", MessageType.ADVANCED));
+            AddCommand(Meal);
         }
 
         public int CheckMealsCount()
@@ -409,7 +409,8 @@ namespace BioPacVideo
                         Medi = "Unmedicated"; // Set the meal type as unmedicated
                     }
                     // Determine the actual feeder to use based on whether AlternateAddress is true
-                    ActualFeeder = AlternateAddress ? AddressTable[Feeder] : Feeder;                
+                    ActualFeeder = AlternateAddress ? AddressTable[Feeder] : Feeder;
+                    sendMessage(new FeederMessage($"Rat: {RC} Pellets: {MealSize.ToString()} Medicated: {Medi} Feeder: {ActualFeeder}", MessageType.LOG));
                     while (MealSize > 23)
                     {
                         M = new MealType(ActualFeeder, 23, Feeder);
@@ -419,7 +420,7 @@ namespace BioPacVideo
                     // Add the final command to deliver the remaining pellets (less than or equal to 23)
                     M = new MealType(ActualFeeder, MealSize, Feeder);    
                     Meals.Enqueue(M);
-                    sendMessage(new FeederMessage($"Rat: {RC} Pellets: {MealSize.ToString()} Medicated: {Medi} Feeder: {ActualFeeder}", MessageType.LOG)); // Log the final delivery
+                    
                     // If this is the last meal of the week, generate the next week's meals for the rat
                     if (MealNum + 1 == DailyMealCount * 7)
                     {
