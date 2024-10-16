@@ -222,7 +222,7 @@ namespace BioPacVideo
                 if (OTHI2.Checked) Solvent = "OTH";                
                 Command = "Inj2," + a.ToString() + "," + Feeder.Rats[a-1].ID + "," + Injection2ADD.Text + "," + Dose2.Text + "," + Route + "," + Solvent + "," + IVTemp.Text;
             }                
-            Feeder.Log(Command);
+            Feeder.sendMessage(new FeederMessage(Command, MessageType.LOG));
             LastEntry.Text = Command;
         }
         private void Injection2(object sender, EventArgs e)
