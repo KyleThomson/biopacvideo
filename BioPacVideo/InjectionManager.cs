@@ -17,9 +17,11 @@ namespace BioPacVideo
         private ArrayList Injection1Buttons;
         private ArrayList Injection2Buttons;
         private ArrayList Inj1VolumeBoxes;
-        private ArrayList Inj2VolumeBoxes; 
+        private ArrayList Inj2VolumeBoxes;
         private bool Startup;
-        private bool SetInjection; 
+        private bool SetInjection;
+        private bool hasBeenWarned = true;
+
         public InjectionManager()
         {
             Startup = true; 
@@ -33,7 +35,14 @@ namespace BioPacVideo
             CreateArrays();
             TextBox IDB;
             Injection1ADD.Text = Feeder.ADDC1;
-            Injection2ADD.Text = Feeder.ADDC2;
+            if (string.IsNullOrEmpty(Feeder.ADDC2))
+            {
+                Injection2ADD.Text = "Vehicle";
+            }
+            else
+            {
+                Injection2ADD.Text = Feeder.ADDC2;
+            }
             Dose1.Text = Feeder.Dose1;
             Dose2.Text = Feeder.Dose2;
             if (Feeder.Route1 == 4)
@@ -141,6 +150,7 @@ namespace BioPacVideo
 
             Startup = false;
             TextChangedIVB(null, null);
+            hasBeenWarned = false;
         }
         private void TextChangedIVB(object sender, EventArgs e)
         {
@@ -425,13 +435,23 @@ namespace BioPacVideo
             SetInjection = !SetInjection;
         }
 
-       
-          
-
-        
-        
-
-        
-       
+        private void Injection2ADD_TextChanged(object sender, EventArgs e)
+        {
+            if (!hasBeenWarned)
+            {
+                var result = MessageBox.Show("Changing this value will result in errors in data processing, are you sure you want to change it?", "Are you sure you want to change this?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                if (result == DialogResult.OK)
+                {
+                    hasBeenWarned = true;
+                } else
+                {
+                    hasBeenWarned = true;
+                    Injection2ADD.Text = "Vehicle";
+                    Injection1ADD.Focus();
+                    hasBeenWarned = false;
+                }
+                
+            }
+        }
     }
 }

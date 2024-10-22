@@ -435,6 +435,7 @@
             this.Injection2ADD.Name = "Injection2ADD";
             this.Injection2ADD.Size = new System.Drawing.Size(93, 20);
             this.Injection2ADD.TabIndex = 12;
+            this.Injection2ADD.TextChanged += new System.EventHandler(this.Injection2ADD_TextChanged);
             // 
             // Dose2
             // 
