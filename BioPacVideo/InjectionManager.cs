@@ -449,8 +449,7 @@ namespace BioPacVideo
                     Injection2ADD.Text = "Vehicle";
                     Injection1ADD.Focus();
                     hasBeenWarned = false;
-                }
-                
+                }                
             }
         }
     }

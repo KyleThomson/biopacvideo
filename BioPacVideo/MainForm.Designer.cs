@@ -86,6 +86,7 @@ namespace BioPacVideo
             this.CloneChannelPanel5 = new System.Windows.Forms.Panel();
             this.CloneChannelPanel9 = new System.Windows.Forms.Panel();
             this.CloneChannelPanel16 = new System.Windows.Forms.Panel();
+            this.checkBoxFilter = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -578,12 +579,24 @@ namespace BioPacVideo
             this.CloneChannelPanel16.Size = new System.Drawing.Size(136, 115);
             this.CloneChannelPanel16.TabIndex = 12;
             // 
+            // checkBoxFilter
+            // 
+            this.checkBoxFilter.AutoSize = true;
+            this.checkBoxFilter.Location = new System.Drawing.Point(12, 182);
+            this.checkBoxFilter.Name = "checkBoxFilter";
+            this.checkBoxFilter.Size = new System.Drawing.Size(76, 17);
+            this.checkBoxFilter.TabIndex = 13;
+            this.checkBoxFilter.Text = "60Hz Filter";
+            this.checkBoxFilter.UseVisualStyleBackColor = true;
+            this.checkBoxFilter.CheckedChanged += new System.EventHandler(this.checkBoxFilter_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1286, 862);
+            this.Controls.Add(this.checkBoxFilter);
             this.Controls.Add(this.CloneChannelPanel16);
             this.Controls.Add(this.CloneChannelPanel9);
             this.Controls.Add(this.CloneChannelPanel5);
@@ -684,6 +697,7 @@ namespace BioPacVideo
         private System.Windows.Forms.ToolStripStatusLabel TimeLabel;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem advancedFeederControlToolStripMenuItem;
+        private System.Windows.Forms.CheckBox checkBoxFilter;
     }
 }
 

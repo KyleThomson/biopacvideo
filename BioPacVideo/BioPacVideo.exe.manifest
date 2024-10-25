@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="BioPacVideo.exe" size="22497752">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="BioPacVideo.exe" size="22498264">
       <assemblyIdentity name="BioPacVideo" version="2.1.0.0" language="neutral" processorArchitecture="amd64" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>0gW4YTuJKXpsodPqnCAGKdjj5AgnoWckvxjsbkP19iQ=</dsig:DigestValue>
+        <dsig:DigestValue>LlKJxyGqatNuPtS0fQruSISpTWq70HxEZG13OH2eggU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

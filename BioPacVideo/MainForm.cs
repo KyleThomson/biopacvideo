@@ -44,6 +44,7 @@ namespace BioPacVideo
         public static int[] DisplayLengthSize = new int[] { 1, 5, 10, 30, 60 };
         private static ManualResetEvent mre = new ManualResetEvent(false);
         public string UnitLabel;
+        private bool enableFilter = false;
         #endregion
 
         #region Lifecycle
@@ -808,14 +809,14 @@ namespace BioPacVideo
             {
                 this.Invoke(new MethodInvoker(delegate { IDT_MPLASTMESSAGE.Text = MPTemplate.MPRET[(int)MP.MPReturn]; }));
                 //this.Invoke(new MethodInvoker(delegate { IDT_VIDEOSTATUS.Text = Video.GetResText(); }));
-               // this.Invoke(new MethodInvoker(delegate { IDT_ENCSTAT.Text = Video.EncoderStatus(); }));
+                // this.Invoke(new MethodInvoker(delegate { IDT_ENCSTAT.Text = Video.EncoderStatus(); }));
                 this.Invoke(new MethodInvoker(delegate { IDT_FEEDST.Text = Feeder.StateText; }));
                 //this.Invoke(new MethodInvoker(delegate { IDT_ENCODERSTATUS.Text = VideoWrapper.GetEncRes().ToString(); }));                       
                 MP._DisplayHandle.WaitOne();
                 //if (Still != null)                    
                     g.DrawImage(MP.offscreen, 30, 280);
                 Cm = 0;
-           } 
+           }
         }
         #endregion
 
@@ -921,6 +922,11 @@ namespace BioPacVideo
             }
             Video.UpdateCameraAssoc();
         }
-        #endregion        
+        #endregion
+
+        private void checkBoxFilter_CheckedChanged(object sender, EventArgs e)
+        {
+            MP.applyFilter = checkBoxFilter.Checked;
+        }
     }
 }

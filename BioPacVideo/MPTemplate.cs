@@ -49,6 +49,7 @@ namespace BioPacVideo
         bool FileStop;
         public bool isstreaming = false;
         public bool isconnected = false;
+        public bool applyFilter = false;
         //private bool Sending = true;
          
         public int samplesize;
@@ -355,12 +356,43 @@ namespace BioPacVideo
             //result = (result < minPixel) ? minPixel: result;
             return (result);
         }
-  
+
         private void drawbuffer()
         {
             PointF[][] WaveC;
-            Font F = new Font("Arial",10); 
+            Font F = new Font("Arial", 10);
             SolidBrush B = new SolidBrush(Color.Red);
+
+            // FIR Filter design parameters
+            double f0 = 60.0;   // Notch frequency
+            double Fs = 500.0;  // Sampling frequency
+            int N = 15;         // Filter order
+            int filterLength = N + 1;
+            double omega = 2 * Math.PI * f0 / Fs;
+
+            // Compute filter coefficients
+            double[] h = new double[filterLength];
+            for (int n = 0; n <= N; n++)
+            {
+                if (n == N / 2)
+                {
+                    h[n] = 1 - 2 * (f0 / Fs);
+                }
+                else
+                {
+                    h[n] = -2 * (f0 / Fs) * Math.Cos(omega * (n - N / 2)) / (Math.PI * (n - N / 2));
+                }
+                // Apply Hamming window
+                h[n] *= (0.54 - 0.46 * Math.Cos(2 * Math.PI * n / N));
+            }
+
+            // Initialize filter state variables per channel
+            float[][] xBuffer = new float[AcqChan][];
+            for (int i = 0; i < AcqChan; i++)
+            {
+                xBuffer[i] = new float[filterLength];
+            }
+
             while (true)
             {
                 _DrawHandle.WaitOne();
@@ -369,7 +401,7 @@ namespace BioPacVideo
                     lock (g)
                         g.Clear(Color.White);
                     for (int i = 0; i < AcqChan; i++)
-                        g.DrawString(Feeder.Rats[i].ID, F, B, new PointF(1, (i+.25F) * (Ymax / AcqChan)));
+                        g.DrawString(Feeder.Rats[i].ID, F, B, new PointF(1, (i + .25F) * (Ymax / AcqChan)));
                     CurPointPos = 0;
                     ClearDisplay = false;
                 }
@@ -379,7 +411,7 @@ namespace BioPacVideo
                     SamplesLeft = (samplesize + CurPointPos - MaxDrawSize);
                     g.Clear(Color.White);
                     for (int i = 0; i < AcqChan; i++)
-                        g.DrawString(Feeder.Rats[i].ID, F, B, new PointF(1, (i+.25F) * (Ymax / AcqChan)));
+                        g.DrawString(Feeder.Rats[i].ID, F, B, new PointF(1, (i + .25F) * (Ymax / AcqChan)));
                     CurPointPos = 0;
                 }
                 else
@@ -393,31 +425,58 @@ namespace BioPacVideo
                 }
                 int SamplePos = 0;
                 for (int i = 0; i < last_received; i++)
-                {                                       
-                    
-                        if (SamplesLeft < samplesize)
+                {
+                    int channel = i % AcqChan;
+                    float sampleValue = Convert.ToSingle(draw_buffer[i] - DispOffset[channel]);
+
+                    if (applyFilter)
+                    {
+                        // Shift the buffer and insert the new sample
+                        for (int k = filterLength - 1; k > 0; k--)
                         {
-                            if (i / AcqChan >= samplesize - SamplesLeft)
-                            {
-                                PointF TempPoint = new PointF(CurPointPos * PointSpacing, VoltageSpacing * ((i % AcqChan) - (float)0.5) + ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]-DispOffset[i % AcqChan]), Ymax/(AcqChan+1)));
-                                WaveC[i % AcqChan][SamplePos] = TempPoint;
-                                if (i % AcqChan == AcqChan - 1)
-                                {
-                                    SamplePos++;
-                                    CurPointPos++;
-                                }
-                            }
+                            xBuffer[channel][k] = xBuffer[channel][k - 1];
                         }
-                        else
+                        xBuffer[channel][0] = sampleValue;
+
+                        // Apply the FIR filter
+                        double y = 0.0;
+                        for (int k = 0; k < filterLength; k++)
                         {
-                            PointF TempPoint = new PointF(CurPointPos * PointSpacing, VoltageSpacing * ((i % AcqChan) + (float)0.5) +  ScaleVoltsToPixel(Convert.ToSingle(draw_buffer[i]-DispOffset[i % AcqChan]), Ymax/(AcqChan+1)));
-                            WaveC[i % AcqChan][SamplePos] = TempPoint;
-                            if (i % AcqChan == AcqChan-1) 
+                            y += h[k] * xBuffer[channel][k];
+                        }
+
+                        sampleValue = (float)y;
+                    }
+
+                    if (SamplesLeft < samplesize)
+                    {
+                        if (i / AcqChan >= samplesize - SamplesLeft)
+                        {
+                            PointF TempPoint = new PointF(
+                                CurPointPos * PointSpacing,
+                                VoltageSpacing * (channel - 0.5f) + ScaleVoltsToPixel(sampleValue, Ymax / (AcqChan + 1))
+                            );
+                            WaveC[channel][SamplePos] = TempPoint;
+                            if (channel == AcqChan - 1)
                             {
                                 SamplePos++;
                                 CurPointPos++;
                             }
-                        }                    
+                        }
+                    }
+                    else
+                    {
+                        PointF TempPoint = new PointF(
+                            CurPointPos * PointSpacing,
+                            VoltageSpacing * (channel + 0.5f) + ScaleVoltsToPixel(sampleValue, Ymax / (AcqChan + 1))
+                        );
+                        WaveC[channel][SamplePos] = TempPoint;
+                        if (channel == AcqChan - 1)
+                        {
+                            SamplePos++;
+                            CurPointPos++;
+                        }
+                    }
                 }
                 if (SamplePos > 2)
                 {
@@ -425,7 +484,6 @@ namespace BioPacVideo
                         for (int i = 0; i < AcqChan; i++)
                             g.DrawLines(wavePen, WaveC[i]);
                     _DisplayHandle.Set();
-              
                 }
             }
         }
