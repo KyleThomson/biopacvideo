@@ -397,7 +397,6 @@ namespace BioPacVideo
                     EXPORTS.QCAP_START_RECORD(m_hCapDev[CameraAssociation[i]], 0, ref FN, (uint)EXPORTS.RecordFlagEnum.QCAP_RECORD_FLAG_FULL, 0.0, 0.0, 0.0, 256000, ref pszNULL);
                 }
             }
-
         }
         public bool HwUnInitialize()
         {
