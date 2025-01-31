@@ -585,8 +585,8 @@ namespace BioPacVideo
             Video.XRes = BioIni.IniReadValue("Video", "XRes", 320);
             Video.LengthWise = BioIni.IniReadValue("Video", "LengthWise", 8);
             Video.YRes = BioIni.IniReadValue("Video", "YRes", 240);
-            Video.Quality = BioIni.IniReadValue("Video", "Quality", 4000);
-            Video.Bitrate = BioIni.IniReadValue("Video", "Bitrate", 2);
+            Video.Quality = BioIni.IniReadValue("Video", "Quality", 2500);
+            Video.Bitrate = BioIni.IniReadValue("Video", "Bitrate", 0);
             Video.KeyFrames = BioIni.IniReadValue("Video", "KeyFrames", 100);
             for (int i = 0; i < 16; i++)
                 Video.CameraAssociation[i] = BioIni.IniReadValue("Video", string.Format("Channel{0}", i), i);
@@ -922,11 +922,11 @@ namespace BioPacVideo
             }
             Video.UpdateCameraAssoc();
         }
-        #endregion
 
         private void checkBoxFilter_CheckedChanged(object sender, EventArgs e)
         {
             MP.applyFilter = checkBoxFilter.Checked;
         }
+        #endregion
     }
 }
