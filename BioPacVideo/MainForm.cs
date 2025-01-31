@@ -597,7 +597,6 @@ namespace BioPacVideo
                 Video.Hue[i] = BioIni.IniReadValue("Video", string.Format("Hue{0}", i), 50);
                 Video.Saturation[i] = BioIni.IniReadValue("Video", string.Format("Satur{0}", i), 50);
             }
-
         }
 
         /// <summary>
