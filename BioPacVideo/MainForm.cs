@@ -565,8 +565,7 @@ namespace BioPacVideo
             Video.LengthWise = BioIni.IniReadValue("Video", "LengthWise", 8);
             Video.YRes = BioIni.IniReadValue("Video", "YRes", 240);
             Video.Quality = BioIni.IniReadValue("Video", "Quality", 4000);
-            Video.
-                = BioIni.IniReadValue("Video", "Bitrate", 0);
+            Video.Bitrate = BioIni.IniReadValue("Video", "Bitrate", 0);
             Video.KeyFrames = BioIni.IniReadValue("Video", "KeyFrames", 100);
             for (int i = 0; i < 16; i++)
                 Video.CameraAssociation[i] = BioIni.IniReadValue("Video", string.Format("Channel{0}", i), i);
